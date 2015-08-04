@@ -5,6 +5,8 @@ set (sources
   Angle.cc
   Box.cc
   BoxPrivate.cc
+  FrameGraph.cc
+  FrameGraphPrivate.cc
   Frustum.cc
   Helpers.cc
   Kmeans.cc
