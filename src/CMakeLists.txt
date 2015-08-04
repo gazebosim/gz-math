@@ -22,6 +22,7 @@ set (gtest_sources
   Angle_TEST.cc
   Box_TEST.cc
   Filter_TEST.cc
+  FrameGraph_TEST.cc
   Frustum_TEST.cc
   Helpers_TEST.cc
   Kmeans_TEST.cc
