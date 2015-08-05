@@ -24,20 +24,35 @@ using namespace ignition;
 using namespace math;
 
 /////////////////////////////////////////////////
-TEST(FrameGraphTest, Constructor)
+TEST(FrameGraphTest, ConstructTest)
 {
   FrameGraph frameGraph;
 
-  EXPECT_EQ(0, 0);
-  EXPECT_EQ(1, 1);
-  EXPECT_EQ(2, 42);
+  // frameGraph comes with a built-in "world" frame
+  Pose3d px1(1,0,0,0,0,0);
+  frameGraph.AddFrame("x1", px1);
+
+  Pose3d px2(1,0,0,0,0,0);
+  bool r = frameGraph.AddFrame("x2", px2, "x1");
+  EXPECT_TRUE(r);
+
+  Pose3d p;
+  r = frameGraph.Pose("x2", "x1", p);
+  EXPECT_TRUE(r);
+
+  std::cout << "POSE p: " << p << std::endl;
+  EXPECT_EQ(p.Pos().X(), 2);
+
+  Pose3d px = px2 + px1;
+  std::cout << "POSE px: " << px << std::endl;
 }
 
+//  EXPECT_EQ(2, 42);
 //  EXPECT_DOUBLE_EQ(frustum.AspectRatio(), 1.3434);
 
 
 /////////////////////////////////////////////////
-TEST(FrameGraphTest, Poseur)
+TEST(FrameGraphTest, Poseing)
 {
-  std::cout << "OUT!" << std::endl;
+  std::cout << "===== POSE TEST =====" << std::endl;
 }

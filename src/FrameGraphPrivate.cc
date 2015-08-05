@@ -19,7 +19,21 @@
 using namespace ignition;
 using namespace math;
 
+
 /////////////////////////////////////////////////
-FrameGraphPrivate::FrameGraphPrivate()
+Frame::Frame(const std::string &_name,
+                    const Pose3d& _pose,
+                    Frame *_parent)
+  :name(_name), pose(_pose), parent(_parent)
 {
 }
+
+/////////////////////////////////////////////////
+FrameGraphPrivate::FrameGraphPrivate()
+  :worldFrame("world", Pose3d(), NULL)
+{
+
+  this->frames["world"] =  &this->worldFrame;
+}
+
+

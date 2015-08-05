@@ -33,12 +33,27 @@ namespace ignition
       /// \brief Default constructor. With the following default values:
       public: FrameGraph();
 
-      /// \brief Copy Constructor
-      /// \param[in] _p FrameGraph to copy.
-      public: FrameGraph(const FrameGraph &_copy);
-
       /// \brief Destructor
       public: virtual ~FrameGraph();
+
+      /// \brief Adds a new frame to the graph
+      /// \param[in]
+      public: bool  AddFrame( const std::string &_name,
+                              const Pose3d &_pose,
+                              const std::string &_parent = "world");
+
+      /// \brief Find a relative pose between 2 frames
+      public: bool  Pose(const std::string &_srcFrame,
+                         const std::string &_dstFrame,
+                         Pose3d &_result) const;
+
+      /// \brief Copy Constructor (not allowed)
+      /// \param[in] _copy FrameGraph to copy.
+      private: FrameGraph(const FrameGraph &_copy);
+
+      /// \brief Assignment operator (not allowed)
+      /// \param[in] _assign FrameGraph to get values from
+      private: FrameGraph &operator=(const FrameGraph &_assign);
 
       /// \internal
       /// \brief Private data pointer

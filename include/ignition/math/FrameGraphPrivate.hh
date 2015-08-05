@@ -18,20 +18,36 @@
 #define _IGNITION_FRAMEGRAPH_PRIVATE_HH_
 
 #include <array>
-
+#include <map>
 #include <ignition/math/Pose3.hh>
 
 namespace ignition
 {
   namespace math
   {
+
+    class Frame
+    {
+      public: Frame(const std::string &_name,
+                    const Pose3d& _pose,
+                    Frame *_parent);
+
+      public: std::string name;
+      public: Pose3d pose;
+      public: Frame *parent;
+
+    };
+
     /// \internal
     /// \brief Private data for the Frustum class
     class FrameGraphPrivate
     {
       /// \brief Constructor
       public: FrameGraphPrivate();
+      public: Frame worldFrame;
+      public: std::map<std::string, Frame*> frames;
     };
   }
 }
+
 #endif
