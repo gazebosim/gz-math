@@ -29,12 +29,17 @@ namespace ignition
     class Frame
     {
       public: Frame(const std::string &_name,
+                    const std::string &_parent,
                     const Pose3d& _pose,
-                    Frame *_parent);
+                    Frame *_parentFrame);
 
       public: std::string name;
+      public: std::string parent;
       public: Pose3d pose;
-      public: Frame *parent;
+
+      // this is a direct pointer to the parent
+      // frame, that speeds up lookup.
+      public: Frame *parentFrame;
 
     };
 
@@ -45,6 +50,7 @@ namespace ignition
       /// \brief Constructor
       public: FrameGraphPrivate();
       public: Frame worldFrame;
+      public: Frame unknownFrame;
       public: std::map<std::string, Frame*> frames;
     };
   }

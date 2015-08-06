@@ -47,7 +47,6 @@ FrameGraph &FrameGraph::operator=(const FrameGraph &_assign)
   // private method... should not be called
 }
 
-
 /////////////////////////////////////////////////
 bool FrameGraph::AddFrame( const std::string &_name,
                            const Pose3d &_pose,
@@ -56,22 +55,43 @@ bool FrameGraph::AddFrame( const std::string &_name,
 
   std::cout << "AddFrame " << std::endl;
 
+  Frame *parentFrame = &this->dataPtr->unknownFrame;
   // look for the parent frame.
-  Frame *parentFrame = NULL;
   auto it = this->dataPtr->frames.find(_parent);
   if(it != this->dataPtr->frames.end())
   {
       parentFrame = it->second;
   }
-  // create a parent frame
-  else
-  {
-    parentFrame = new Frame(_parent, Pose3d(), NULL);
-    this->dataPtr->frames[_parent] = parentFrame;
-  }
-  auto frame = new Frame(_name, _pose, parentFrame);
-  this->dataPtr->frames[_name] =  frame;
+
+  auto frame = new Frame(_name, _parent, _pose, parentFrame);
+  this->dataPtr->frames[_name] = frame;
 }
+
+/*
+/////////////////////////////////////////////////
+Frame *FrameGraph::GetFrame(const std::string &_name)
+{
+  auto it = this->dataPtr->frames.find(_name);
+  if(it != this->dataPtr->frames.end())
+  {
+      // found it
+      Frame *frame = it->second;
+      // check to see if its parent frame has been
+      // resolved
+
+      if ( !frame->parentFrame)
+      {
+        auto it = this->dataPtr->frames.find(frame->parent);
+        if(it != this->dataPtr->frames.end())
+        {
+          frame->parentFrame = it->second;
+        }
+      }
+      return frame;
+  }
+  // if we come here, the frame is new
+}
+*/
 
 /////////////////////////////////////////////////
 bool FrameGraph::Pose(const std::string &_srcFrame,

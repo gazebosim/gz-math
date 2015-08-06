@@ -22,18 +22,21 @@ using namespace math;
 
 /////////////////////////////////////////////////
 Frame::Frame(const std::string &_name,
+             const std::string &_parent,
                     const Pose3d& _pose,
-                    Frame *_parent)
-  :name(_name), pose(_pose), parent(_parent)
+                    Frame *_parentFrame)
+  :name(_name), parent(_parent), pose(_pose), parentFrame(_parentFrame)
 {
 }
 
 /////////////////////////////////////////////////
 FrameGraphPrivate::FrameGraphPrivate()
-  :worldFrame("world", Pose3d(), NULL)
+  :worldFrame("world", "", Pose3d(), NULL),
+   unknownFrame("unknown", "", Pose3d(), NULL)
 {
 
   this->frames["world"] =  &this->worldFrame;
+  this->frames["unknown"] = &this->unknownFrame;
 }
 
 
