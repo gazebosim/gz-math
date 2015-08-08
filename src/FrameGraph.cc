@@ -55,6 +55,13 @@ bool FrameGraph::AddFrame( const std::string &_name,
 
   std::cout << "AddFrame " << std::endl;
 
+  // does it already exist?
+  if (this->dataPtr->frames.find(_parent) == this->dataPtr->frames.end())
+  {
+    std::cerr << "Frame \"" << _name << "\" already exists" << std::endl;
+    return false;
+  }
+
   Frame *parentFrame = &this->dataPtr->unknownFrame;
   // look for the parent frame.
   auto it = this->dataPtr->frames.find(_parent);
@@ -65,33 +72,8 @@ bool FrameGraph::AddFrame( const std::string &_name,
 
   auto frame = new Frame(_name, _parent, _pose, parentFrame);
   this->dataPtr->frames[_name] = frame;
+  return true;
 }
-
-/*
-/////////////////////////////////////////////////
-Frame *FrameGraph::GetFrame(const std::string &_name)
-{
-  auto it = this->dataPtr->frames.find(_name);
-  if(it != this->dataPtr->frames.end())
-  {
-      // found it
-      Frame *frame = it->second;
-      // check to see if its parent frame has been
-      // resolved
-
-      if ( !frame->parentFrame)
-      {
-        auto it = this->dataPtr->frames.find(frame->parent);
-        if(it != this->dataPtr->frames.end())
-        {
-          frame->parentFrame = it->second;
-        }
-      }
-      return frame;
-  }
-  // if we come here, the frame is new
-}
-*/
 
 /////////////////////////////////////////////////
 bool FrameGraph::Pose(const std::string &_srcFrame,
@@ -124,6 +106,14 @@ bool FrameGraph::Pose(const std::string &_srcFrame,
 
   _result =  dframe.pose + sframe.pose;
   return true;
+}
+
+/////////////////////////////////////////////////
+bool FrameGraph::Parent(const std::string &_frame,
+            std::string &_parent, bool canonical) const
+{
+  std::cerr << "FrameGraph::Parent not implemented " << std::endl;
+  return false;
 }
 
 

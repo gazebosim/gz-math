@@ -32,16 +32,24 @@ TEST(FrameGraphTest, ConstructTest)
   Pose3d px1(1,0,0,0,0,0);
   frameGraph.AddFrame("x1", px1, "world");
 
-  Pose3d px2(1,0,0,0,0,0);
-  bool r = frameGraph.AddFrame("x2", px2, "x1");
+  Pose3d px2(0,1,0,0,0,0);
+  bool r = frameGraph.AddFrame("y1", px2, "x1");
   EXPECT_TRUE(r);
 
   Pose3d p;
-  r = frameGraph.Pose("x2", "world", p);
+  r = frameGraph.Pose("x1", "world", p);
   EXPECT_TRUE(r);
 
-  std::cout << "POSE p: " << p << std::endl;
-  EXPECT_EQ(2, p.Pos().X());
+  std::cout << "POSE x1::world " << p << std::endl;
+  EXPECT_EQ(1, p.Pos().X());
+
+  r = frameGraph.Pose("y1", "world", p);
+  EXPECT_TRUE(r);
+
+  std::cout << "POSE y1::world " << p << std::endl;
+  EXPECT_EQ(1, p.Pos().Y());
+  EXPECT_EQ(1, p.Pos().X());
+
 
   Pose3d px = px2 + px1;
   std::cout << "POSE px: " << px << std::endl;

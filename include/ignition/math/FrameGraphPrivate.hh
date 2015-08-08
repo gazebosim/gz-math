@@ -25,7 +25,6 @@ namespace ignition
 {
   namespace math
   {
-
     class Frame
     {
       public: Frame(const std::string &_name,
@@ -36,11 +35,9 @@ namespace ignition
       public: std::string name;
       public: std::string parent;
       public: Pose3d pose;
-
       // this is a direct pointer to the parent
       // frame, that speeds up lookup.
       public: Frame *parentFrame;
-
     };
 
     /// \internal
@@ -49,6 +46,7 @@ namespace ignition
     {
       /// \brief Constructor
       public: FrameGraphPrivate();
+      public: ~FrameGraphPrivate();
       public: Frame worldFrame;
       public: Frame unknownFrame;
       public: std::map<std::string, Frame*> frames;

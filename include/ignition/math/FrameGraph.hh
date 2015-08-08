@@ -42,10 +42,18 @@ namespace ignition
                               const Pose3d &_pose,
                               const std::string &_parent = "world");
 
-      /// \brief Find a relative pose between 2 frames
-      public: bool  Pose(const std::string &_srcFrame,
+      /// \brief Computes a relative pose between 2 frames
+      /// \param[in] _srcFrame The name of the source frame
+      /// \param[in] _dstFrame The name of the destination frame
+      /// \param[out] The pose between the frames, if it exists
+      /// \return True if a pose exists beteen the frames
+      public: bool Pose(const std::string &_srcFrame,
                          const std::string &_dstFrame,
                          Pose3d &_result) const;
+
+
+      public: bool Parent(const std::string &_frame,
+                         std::string &_parent, bool canonical=false) const;
 
       /// \brief Copy Constructor (not allowed)
       /// \param[in] _copy FrameGraph to copy.

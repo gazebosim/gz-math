@@ -30,6 +30,12 @@ Frame::Frame(const std::string &_name,
 }
 
 /////////////////////////////////////////////////
+FrameGraphPrivate::~FrameGraphPrivate()
+{
+  std::cout << "======== ~FrameGraphPrivate() ======================= " << std::endl;
+}
+
+/////////////////////////////////////////////////
 FrameGraphPrivate::FrameGraphPrivate()
   :worldFrame("world", "", Pose3d(), NULL),
    unknownFrame("unknown", "", Pose3d(), NULL)
