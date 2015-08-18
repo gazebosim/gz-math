@@ -25,18 +25,27 @@ namespace ignition
 {
   namespace math
   {
-    class Frame
+    class FramePrivate
     {
-      public: Frame(const std::string &_name,
-                    const Pose3d& _pose,
-                    Frame *_parentFrame);
+      public: FramePrivate(const std::string &_name,
+                        const Pose3d& _pose,
+                        FramePrivate*_parentFrame);
       public: std::string name;
       public: Pose3d pose;
       // this is a direct pointer to the parent
       // frame, that speeds up lookup.
-      public: Frame *parentFrame;
+      public: FramePrivate *parentFrame;
 
-      public: std::map<std::string, Frame*> chidren;
+      public: std::map<std::string, FramePrivate*> chidren;
+    };
+
+    class RelativePosePrivate
+    {
+      public: RelativePosePrivate(FramePrivate *_src, FramePrivate *_dst);
+      public: Pose3d Compute() const;
+
+      private: std::vector<FramePrivate *> up;
+      private: std::vector<FramePrivate *> down;
     };
 
     /// \internal
@@ -47,7 +56,8 @@ namespace ignition
       public: FrameGraphPrivate();
       public: ~FrameGraphPrivate();
 
-      public: Frame invalid;
+      public: FramePrivate world;
+      // public: RelativePosePrivate invalid;
       // public: Frame worldFrame;
       // public: Frame unknownFrame;
     };

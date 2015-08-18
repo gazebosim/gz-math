@@ -26,21 +26,26 @@ namespace ignition
     // Forward declaration of private data
     class FrameGraphPrivate;
 
-    class IGNITION_VISIBLE Transform
+    class RelativePosePrivate;
+
+    class IGNITION_VISIBLE RelativePose
     {
 
-      friend bool operator == (Transform &_a, Transform &_b);
+      friend bool operator == (RelativePose &_a, RelativePose &_b);
 
-      friend bool operator != (Transform &_a, Transform &_b);
+      friend bool operator != (RelativePose &_a, RelativePose &_b);
 
       public: virtual Pose3d Compute() const;
 
-      private: Transform();
-    }
+      /// \brief private constructor. The
+      private: RelativePose();
 
-    bool operator != (Transform &_a, Transform &_b);
+      private: RelativePosePrivate *dataPtr;
+    };
 
-    bool operator == (Transform &_a, Transform &_b);
+    bool operator != (RelativePose &_a, RelativePose &_b);
+
+    bool operator == (RelativePose &_a, RelativePose &_b);
 
     /// \brief Mathematical representation of a frustum and related functions.
     /// This is also known as a view frustum.
@@ -68,14 +73,14 @@ namespace ignition
                          Pose3d &_result) const;
 
       /// \brief
-      public: Transform &Transform(const std::string &_srcFrame,
-                                   const std::string &_dstFrame)
+      public: RelativePose &FrameTransform(const std::string &_srcFrame,
+                                   const std::string &_dstFrame);
 
 
       public: bool Parent(const std::string &_frame,
                          std::string &_parent, bool canonical=false) const;
 
-      public: Transform &invalid();
+      public: RelativePose &invalid();
 
       /// \brief Copy Constructor (not allowed)
       /// \param[in] _copy FrameGraph to copy.

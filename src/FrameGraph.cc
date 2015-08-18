@@ -55,6 +55,10 @@ bool FrameGraph::AddFrame( const std::string &_name,
 
   std::cout << "AddFrame " << std::endl;
 
+  bool impl = false;
+  if(!impl)
+    return false;
+/*
   // does it already exist?
   if (this->dataPtr->frames.find(_parent) == this->dataPtr->frames.end())
   {
@@ -72,6 +76,9 @@ bool FrameGraph::AddFrame( const std::string &_name,
 
   auto frame = new Frame(_name, _parent, _pose, parentFrame);
   this->dataPtr->frames[_name] = frame;
+*/
+
+  // success
   return true;
 }
 
@@ -82,6 +89,10 @@ bool FrameGraph::Pose(const std::string &_srcFrame,
 {
 
   std::cout << "FrameGraph::Pose " << _srcFrame << " " << _dstFrame << std::endl;
+
+  if (true)
+    return false;
+/*
   // find frames
   auto src = this->dataPtr->frames.find(_srcFrame);
   auto dst = this->dataPtr->frames.find(_dstFrame);
@@ -105,6 +116,7 @@ bool FrameGraph::Pose(const std::string &_srcFrame,
   std::cout << "dframe << " << dframe.pose << std::endl;
 
   _result =  dframe.pose + sframe.pose;
+*/
   return true;
 }
 
