@@ -26,6 +26,22 @@ namespace ignition
     // Forward declaration of private data
     class FrameGraphPrivate;
 
+    class IGNITION_VISIBLE Transform
+    {
+
+      friend bool operator == (Transform &_a, Transform &_b);
+
+      friend bool operator != (Transform &_a, Transform &_b);
+
+      public: virtual Pose3d Compute() const;
+
+      private: Transform();
+    }
+
+    bool operator != (Transform &_a, Transform &_b);
+
+    bool operator == (Transform &_a, Transform &_b);
+
     /// \brief Mathematical representation of a frustum and related functions.
     /// This is also known as a view frustum.
     class IGNITION_VISIBLE FrameGraph
@@ -51,9 +67,15 @@ namespace ignition
                          const std::string &_dstFrame,
                          Pose3d &_result) const;
 
+      /// \brief
+      public: Transform &Transform(const std::string &_srcFrame,
+                                   const std::string &_dstFrame)
+
 
       public: bool Parent(const std::string &_frame,
                          std::string &_parent, bool canonical=false) const;
+
+      public: Transform &invalid();
 
       /// \brief Copy Constructor (not allowed)
       /// \param[in] _copy FrameGraph to copy.
