@@ -17,6 +17,7 @@
 #ifndef _IGNITION_FRAMEGRAPH_PRIVATE_HH_
 #define _IGNITION_FRAMEGRAPH_PRIVATE_HH_
 
+#include <mutex>
 #include <array>
 #include <map>
 #include <ignition/math/Pose3.hh>
@@ -57,6 +58,9 @@ namespace ignition
       public: ~FrameGraphPrivate();
 
       public: FramePrivate world;
+
+      public: mutable std::mutex mutex;
+
       // public: RelativePosePrivate invalid;
       // public: Frame worldFrame;
       // public: Frame unknownFrame;

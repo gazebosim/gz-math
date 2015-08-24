@@ -53,11 +53,16 @@ bool FrameGraph::AddFrame( const std::string &_name,
                            const std::string &_parent)
 {
 
+
   std::cout << "AddFrame " << std::endl;
+
+  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
+  // find
 
   bool impl = false;
   if(!impl)
     return false;
+
 /*
   // does it already exist?
   if (this->dataPtr->frames.find(_parent) == this->dataPtr->frames.end())
