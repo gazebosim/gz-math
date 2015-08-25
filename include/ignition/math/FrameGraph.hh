@@ -58,10 +58,14 @@ namespace ignition
       public: virtual ~FrameGraph();
 
       /// \brief Adds a new frame to the graph
-      /// \param[in]
+      /// \param[in] _name The full path of the frame
+      /// \param[in] _pose The pose of the frame, relative to the parent frame
+      /// \param[in] _parent The parent frame's path. This path can be absolute
+      /// or relative. This path must exist.
+      /// \return True if the frame is valid, false otherwise.
       public: bool  AddFrame( const std::string &_name,
                               const Pose3d &_pose,
-                              const std::string &_parent = "world");
+                              const std::string &_parent = "/world");
 
       /// \brief Computes a relative pose between 2 frames
       /// \param[in] _srcFrame The name of the source frame

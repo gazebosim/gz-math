@@ -26,14 +26,30 @@ using namespace math;
 /////////////////////////////////////////////////
 TEST(FrameGraphTest, ConstructTest)
 {
-  FrameGraph frameGraph;
+  // store result of various calls
+  bool r;
 
   // frameGraph comes with a built-in "world" frame
-  Pose3d px1(1,0,0,0,0,0);
+  FrameGraph frameGraph;
+
+  Pose3d px1(1, 0, 0, 0, 0, 0);
+
+  // this path is not fully qualified
+  EXPECT_FALSE(frameGraph.AddFrame("x1", px1, "/world"));
+  // this path's parent is incorrect
+  EXPECT_FALSE(frameGraph.AddFrame("x1", px1, "world"));
+  // this is OK
+  EXPECT_TRUE(frameGraph.AddFrame("/x1", px1, "/world"));
+
+
+
+  frameGraph.AddFrame("x1", px1, "world");
+  frameGraph.AddFrame("x1", px1, "world");
   frameGraph.AddFrame("x1", px1, "world");
 
-  Pose3d px2(0,1,0,0,0,0);
-  bool r = frameGraph.AddFrame("y1", px2, "x1");
+
+  Pose3d px2(0, 1, 0, 0, 0, 0);
+  r = frameGraph.AddFrame("y1", px2, "x1");
   EXPECT_TRUE(r);
 
   Pose3d p;

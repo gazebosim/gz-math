@@ -15,11 +15,29 @@
  *
 */
 
+
 #include "ignition/math/FrameGraph.hh"
 #include "ignition/math/FrameGraphPrivate.hh"
 
 using namespace ignition;
 using namespace math;
+
+#define gzerr std::cerr
+#define gzinfo std::cout
+
+class Tokens
+{
+  public: Tokens(const std::string &_s)
+          {
+          }
+
+  public: const std::vector<std::string> & Elems() const
+          {
+            return pathElems;
+          }
+
+  private: std::vector<std::string> pathElems;
+};
 
 /////////////////////////////////////////////////
 FrameGraph::FrameGraph()
@@ -53,11 +71,29 @@ bool FrameGraph::AddFrame( const std::string &_name,
                            const std::string &_parent)
 {
 
+  std::cout << "AddFrame "
+    << _name << ", "
+    << _pose << ", "
+    << _parent << ", "
+    << std::endl;
 
-  std::cout << "AddFrame " << std::endl;
 
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
-  // find
+
+  // Is it a good name?
+  Tokens toks(_name);
+  if (toks.Elems().size() == 0)
+  {
+    gzerr << "Error adding frame: path \"" << _name << "\" is empty"
+      << std::endl;
+    return false;
+  }
+
+  for (size_t i=0; i < toks.Elems().size() -1; ++i)
+  {
+    gzerr << i << ": " << toks.Elems()[i] << std::endl;
+  }
+
 
   bool impl = false;
   if(!impl)
@@ -95,6 +131,8 @@ bool FrameGraph::Pose(const std::string &_srcFrame,
 
   std::cout << "FrameGraph::Pose " << _srcFrame << " " << _dstFrame << std::endl;
 
+  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
+
   if (true)
     return false;
 /*
@@ -129,6 +167,8 @@ bool FrameGraph::Pose(const std::string &_srcFrame,
 bool FrameGraph::Parent(const std::string &_frame,
             std::string &_parent, bool canonical) const
 {
+
+  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   std::cerr << "FrameGraph::Parent not implemented " << std::endl;
   return false;
 }
