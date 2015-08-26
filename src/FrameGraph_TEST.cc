@@ -38,23 +38,21 @@ TEST(FrameGraphTest, ConstructTest)
   EXPECT_FALSE(frameGraph.AddFrame("x1", px1, "/world"));
   // this path's parent is incorrect
   EXPECT_FALSE(frameGraph.AddFrame("x1", px1, "world"));
-  // this is OK
-  EXPECT_TRUE(frameGraph.AddFrame("/x1", px1, "/world"));
+  // this path as an undefined frame
+  EXPECT_FALSE(frameGraph.AddFrame("/world/unknown/x1", px1, "/world"));
 
-
-
-  frameGraph.AddFrame("x1", px1, "world");
-  frameGraph.AddFrame("x1", px1, "world");
-  frameGraph.AddFrame("x1", px1, "world");
-
-
-  Pose3d px2(0, 1, 0, 0, 0, 0);
-  r = frameGraph.AddFrame("y1", px2, "x1");
-  EXPECT_TRUE(r);
+  // this path adds x1 to the built in "/world" frame
+  EXPECT_TRUE(frameGraph.AddFrame("/world/x1", px1, "/world"));
 
   Pose3d p;
-  r = frameGraph.Pose("x1", "world", p);
-  EXPECT_TRUE(r);
+  EXPECT_TRUE(frameGraph.Pose("/world/x1", "/world", p));
+  EXPECT_TRUE(p == px1);
+
+/*
+
+  Pose3d px2(0, 1, 0, 0, 0, 0);
+  EXPECT_TRUE(frameGraph.AddFrame("/world/xx1", px2, "x1"));
+
 
   std::cout << "POSE x1::world " << p << std::endl;
   EXPECT_EQ(1, p.Pos().X());
@@ -69,6 +67,7 @@ TEST(FrameGraphTest, ConstructTest)
 
   Pose3d px = px2 + px1;
   std::cout << "POSE px: " << px << std::endl;
+*/
 }
 
 //  EXPECT_EQ(2, 42);

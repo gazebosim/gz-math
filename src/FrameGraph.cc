@@ -15,6 +15,7 @@
  *
 */
 
+#include <sstream>
 
 #include "ignition/math/FrameGraph.hh"
 #include "ignition/math/FrameGraphPrivate.hh"
@@ -28,15 +29,69 @@ using namespace math;
 class Tokens
 {
   public: Tokens(const std::string &_s)
-          {
-          }
+  {
+    std::stringstream ss(_s);
+    std::string item;
+    while (std::getline(ss, item, '/'))
+    {
+      if (item == "")
+        continue;
+      if (item == ".")
+        continue;
+      this->pathElems.push_back(item);
+    }
+  }
 
   public: const std::vector<std::string> & Elems() const
-          {
-            return pathElems;
-          }
+  {
+    return pathElems;
+  }
+
+  public: const std::string &Root() const
+  {
+    return this->pathElems[0];
+  }
+
+  public: const std::string & Leaf() const
+  {
+    return this->pathElems[this->pathElems.size() -1];
+  }
+
+  public: bool IsFull() const
+  {
+    // Dump();
+    // is it empty?
+    if (this->pathElems.size() == 0)
+    {
+      return false;
+    }
+    // does it start with world?
+    if (this->pathElems[0] != "world")
+    {
+      return false;
+    }
+    for (const std::string &s : this->pathElems)
+    {
+      if (s == "..")
+      {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private: void Dump() const
+  {
+    int i = 0;
+    for (const std::string &e : this->pathElems)
+    {
+      gzerr << i << "] " << e << std::endl;
+      i++;
+    }
+  }
 
   private: std::vector<std::string> pathElems;
+
 };
 
 /////////////////////////////////////////////////
@@ -70,34 +125,44 @@ bool FrameGraph::AddFrame( const std::string &_name,
                            const Pose3d &_pose,
                            const std::string &_parent)
 {
-
   std::cout << "AddFrame "
     << _name << ", "
     << _pose << ", "
     << _parent << ", "
     << std::endl;
 
-
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
 
   // Is it a good name?
-  Tokens toks(_name);
-  if (toks.Elems().size() == 0)
+  Tokens path(_name);
+  if (!path.IsFull())
   {
-    gzerr << "Error adding frame: path \"" << _name << "\" is empty"
+    gzerr << "Error adding frame: path \"" << _name
+      << "\" is not a valid, fully qualified path"
       << std::endl;
     return false;
   }
-
-  for (size_t i=0; i < toks.Elems().size() -1; ++i)
+  // we know the path is full and thus it starts with the world frame
+  FramePrivate *srcFrame = &this->dataPtr->world;
+  for (size_t i=1; i < path.Elems().size() -1; ++i)
   {
-    gzerr << i << ": " << toks.Elems()[i] << std::endl;
+    auto &children = srcFrame->children;
+    std::string e = path.Elems()[i];
+    gzerr << "] *** " << i << ": " << e << std::endl;
+    if(children.find(e) == children.end())
+    {
+      gzerr << "Missing frame element: \"" << e
+        << "\" in path \"" << _name << "\""  << std::endl;
+      return false;
+    }
   }
+  FramePrivate *parentFrame = NULL;
+  auto frame = new FramePrivate(path.Leaf(), _pose, parentFrame);
+  srcFrame->children[path.Leaf()] = frame;
+  // success
+  return true;
+}
 
-
-  bool impl = false;
-  if(!impl)
-    return false;
 
 /*
   // does it already exist?
@@ -118,10 +183,6 @@ bool FrameGraph::AddFrame( const std::string &_name,
   auto frame = new Frame(_name, _parent, _pose, parentFrame);
   this->dataPtr->frames[_name] = frame;
 */
-
-  // success
-  return true;
-}
 
 /////////////////////////////////////////////////
 bool FrameGraph::Pose(const std::string &_srcFrame,

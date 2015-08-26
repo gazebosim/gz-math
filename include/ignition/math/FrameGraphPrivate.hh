@@ -37,7 +37,7 @@ namespace ignition
       // frame, that speeds up lookup.
       public: FramePrivate *parentFrame;
 
-      public: std::map<std::string, FramePrivate*> chidren;
+      public: std::map<std::string, FramePrivate*> children;
     };
 
     class RelativePosePrivate
