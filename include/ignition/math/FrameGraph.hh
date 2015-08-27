@@ -25,7 +25,6 @@ namespace ignition
   {
     // Forward declaration of private data
     class FrameGraphPrivate;
-
     class RelativePosePrivate;
 
     class IGNITION_VISIBLE RelativePose
@@ -77,14 +76,15 @@ namespace ignition
                          Pose3d &_result) const;
 
       /// \brief
-      public: RelativePose &FrameTransform(const std::string &_srcFrame,
-                                   const std::string &_dstFrame);
+      public: RelativePose FrameTransform(const std::string &_srcFrame,
+                                   const std::string &_dstFrame) const;
 
 
       public: bool Parent(const std::string &_frame,
                          std::string &_parent, bool canonical=false) const;
 
-      public: RelativePose &invalid();
+      public: RelativePose &Invalid() const;
+
 
       /// \brief Copy Constructor (not allowed)
       /// \param[in] _copy FrameGraph to copy.

@@ -15,7 +15,6 @@
  *
 */
 
-#include <sstream>
 
 #include "ignition/math/FrameGraph.hh"
 #include "ignition/math/FrameGraphPrivate.hh"
@@ -25,74 +24,6 @@ using namespace math;
 
 #define gzerr std::cerr
 #define gzinfo std::cout
-
-class Tokens
-{
-  public: Tokens(const std::string &_s)
-  {
-    std::stringstream ss(_s);
-    std::string item;
-    while (std::getline(ss, item, '/'))
-    {
-      if (item == "")
-        continue;
-      if (item == ".")
-        continue;
-      this->pathElems.push_back(item);
-    }
-  }
-
-  public: const std::vector<std::string> & Elems() const
-  {
-    return pathElems;
-  }
-
-  public: const std::string &Root() const
-  {
-    return this->pathElems[0];
-  }
-
-  public: const std::string & Leaf() const
-  {
-    return this->pathElems[this->pathElems.size() -1];
-  }
-
-  public: bool IsFull() const
-  {
-    // Dump();
-    // is it empty?
-    if (this->pathElems.size() == 0)
-    {
-      return false;
-    }
-    // does it start with world?
-    if (this->pathElems[0] != "world")
-    {
-      return false;
-    }
-    for (const std::string &s : this->pathElems)
-    {
-      if (s == "..")
-      {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  private: void Dump() const
-  {
-    int i = 0;
-    for (const std::string &e : this->pathElems)
-    {
-      gzerr << i << "] " << e << std::endl;
-      i++;
-    }
-  }
-
-  private: std::vector<std::string> pathElems;
-
-};
 
 /////////////////////////////////////////////////
 FrameGraph::FrameGraph()
@@ -134,7 +65,7 @@ bool FrameGraph::AddFrame( const std::string &_name,
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
 
   // Is it a good name?
-  Tokens path(_name);
+  PathPrivate path(_name);
   if (!path.IsFull())
   {
     gzerr << "Error adding frame: path \"" << _name
@@ -142,47 +73,24 @@ bool FrameGraph::AddFrame( const std::string &_name,
       << std::endl;
     return false;
   }
-  // we know the path is full and thus it starts with the world frame
-  FramePrivate *srcFrame = &this->dataPtr->world;
-  for (size_t i=1; i < path.Elems().size() -1; ++i)
-  {
-    auto &children = srcFrame->children;
-    std::string e = path.Elems()[i];
-    gzerr << "] *** " << i << ": " << e << std::endl;
-    if(children.find(e) == children.end())
-    {
-      gzerr << "Missing frame element: \"" << e
-        << "\" in path \"" << _name << "\""  << std::endl;
-      return false;
-    }
-  }
-  FramePrivate *parentFrame = NULL;
-  auto frame = new FramePrivate(path.Leaf(), _pose, parentFrame);
-  srcFrame->children[path.Leaf()] = frame;
-  // success
-  return true;
-}
 
-
-/*
-  // does it already exist?
-  if (this->dataPtr->frames.find(_parent) == this->dataPtr->frames.end())
+  FramePrivate *srcFrame = this->dataPtr->FrameFromAbsolutePath(path);
+  if(!srcFrame)
   {
-    std::cerr << "Frame \"" << _name << "\" already exists" << std::endl;
+    gzerr << "Path \"" << _name << "\" is not valid" << std::endl;
     return false;
   }
 
-  Frame *parentFrame = &this->dataPtr->unknownFrame;
-  // look for the parent frame.
-  auto it = this->dataPtr->frames.find(_parent);
-  if(it != this->dataPtr->frames.end())
-  {
-      parentFrame = it->second;
-  }
+  PathPrivate rpath(_parent);
+  FramePrivate *parentFrame = this->dataPtr->FrameFromRelativePath(srcFrame,
+                                                                   rpath);
 
-  auto frame = new Frame(_name, _parent, _pose, parentFrame);
-  this->dataPtr->frames[_name] = frame;
-*/
+  const std::string &leaf = path.Leaf();
+  FramePrivate *frame = new FramePrivate(leaf, _pose, parentFrame);
+  srcFrame->children[leaf] = frame;
+  // success
+  return true;
+}
 
 /////////////////////////////////////////////////
 bool FrameGraph::Pose(const std::string &_srcFrame,
@@ -191,11 +99,30 @@ bool FrameGraph::Pose(const std::string &_srcFrame,
 {
 
   std::cout << "FrameGraph::Pose " << _srcFrame << " " << _dstFrame << std::endl;
-
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
-
-  if (true)
+  auto &relativePose = this->FrameTransform(_srcFrame, _dstFrame);
+  if( relativePose == this->Invalid())
+  {
     return false;
+  }
+  _result = relativePose.Compute();
+  return true;
+}
+
+/////////////////////////////////////////////////
+RelativePose FrameGraph::FrameTransform(const std::string &_srcFrame,
+                                   const std::string &_dstFrame) const
+{
+  return this->Invalid();
+}
+
+/////////////////////////////////////////////////
+RelativePose FrameGraph::Invalid() const
+{
+  RelativePose x;
+  retutn x;
+}
+
 /*
   // find frames
   auto src = this->dataPtr->frames.find(_srcFrame);
@@ -221,8 +148,6 @@ bool FrameGraph::Pose(const std::string &_srcFrame,
 
   _result =  dframe.pose + sframe.pose;
 */
-  return true;
-}
 
 /////////////////////////////////////////////////
 bool FrameGraph::Parent(const std::string &_frame,
@@ -235,3 +160,44 @@ bool FrameGraph::Parent(const std::string &_frame,
 }
 
 
+/*
+/////////////////////////////////////////////////
+FramePrivate* FrameGraph::FrameFromAbsolutePath(
+                                               const std::string &_path) const
+{
+
+  // Is it a good name?
+  Tokens path(_path);
+  if (!path.IsFull())
+  {
+    gzerr << "Error: frame path \"" << _name
+      << "\" is not a valid, fully qualified path"
+      << std::endl;
+    return false;
+  }
+
+  // we know the path is full and thus it starts with the world frame
+  FramePrivate *srcFrame = this->world;
+  for (size_t i=1; i < path.Elems().size() -1; ++i)
+  {
+    auto &children = srcFrame->children;
+    std::string e = path.Elems()[i];
+    gzerr << "] *** " << i << ": " << e << std::endl;
+    if(children.find(e) == children.end())
+    {
+      gzerr << "Missing frame element: \"" << e
+        << "\" in path \"" << _name << "\""  << std::endl;
+      return NULL;
+    }
+  }
+  return srcFrame;
+}
+
+
+/////////////////////////////////////////////////
+FramePrivate* FrameGraph::FrameFromRelativePath( FramePrivate *_frame,
+                                               const std::string &_path) const
+{
+  return NULL;
+}
+*/

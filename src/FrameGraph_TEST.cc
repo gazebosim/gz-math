@@ -43,7 +43,7 @@ TEST(FrameGraphTest, ConstructTest)
 
   // this path adds x1 to the built in "/world" frame
   EXPECT_TRUE(frameGraph.AddFrame("/world/x1", px1, "/world"));
-
+std::cerr << "sdfsdf\n" ;
   Pose3d p;
   EXPECT_TRUE(frameGraph.Pose("/world/x1", "/world", p));
   EXPECT_TRUE(p == px1);

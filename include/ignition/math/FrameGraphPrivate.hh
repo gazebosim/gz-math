@@ -26,18 +26,31 @@ namespace ignition
 {
   namespace math
   {
+    class PathPrivate
+    {
+      public: PathPrivate(const std::string &_path);
+      public: const std::vector<std::string> & Elems() const;
+      public: const std::string &Root() const;
+      public: const std::string &Leaf() const;
+      public: const std::string &Path() const;
+      public: bool IsFull() const;
+      private: void Dump() const;
+      private: std::string path;
+      private: std::vector<std::string> pathElems;
+    };
+
     class FramePrivate
     {
       public: FramePrivate(const std::string &_name,
                         const Pose3d& _pose,
-                        FramePrivate*_parentFrame);
+                        const FramePrivate*_parentFrame);
       public: std::string name;
       public: Pose3d pose;
       // this is a direct pointer to the parent
       // frame, that speeds up lookup.
-      public: FramePrivate *parentFrame;
+      public: const FramePrivate *parentFrame;
 
-      public: std::map<std::string, FramePrivate*> children;
+      public: std::map<std::string, const FramePrivate*> children;
     };
 
     class RelativePosePrivate
@@ -57,6 +70,10 @@ namespace ignition
       public: FrameGraphPrivate();
       public: ~FrameGraphPrivate();
 
+      public: FramePrivate* FrameFromAbsolutePath(
+                                               const PathPrivate& _path);
+      public: FramePrivate* FrameFromRelativePath(FramePrivate *_frame,
+                                           const  PathPrivate& _relPath);
       public: FramePrivate world;
 
       public: mutable std::mutex mutex;
