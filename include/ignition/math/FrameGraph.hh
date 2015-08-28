@@ -29,12 +29,13 @@ namespace ignition
 
     class IGNITION_VISIBLE RelativePose
     {
+      friend class FrameGraph;
 
-      friend bool operator == (RelativePose &_a, RelativePose &_b);
+      friend bool operator == (const RelativePose &_a, const RelativePose &_b);
 
-      friend bool operator != (RelativePose &_a, RelativePose &_b);
+      friend bool operator != (const RelativePose &_a, const RelativePose &_b);
 
-      public: virtual Pose3d Compute() const;
+      public: Pose3d Compute() const;
 
       /// \brief private constructor. The
       private: RelativePose();
@@ -42,9 +43,9 @@ namespace ignition
       private: RelativePosePrivate *dataPtr;
     };
 
-    bool operator != (RelativePose &_a, RelativePose &_b);
+    bool operator != (const RelativePose &_a, const RelativePose &_b);
 
-    bool operator == (RelativePose &_a, RelativePose &_b);
+    bool operator == (const RelativePose &_a, const RelativePose &_b);
 
     /// \brief Mathematical representation of a frustum and related functions.
     /// This is also known as a view frustum.
@@ -80,11 +81,12 @@ namespace ignition
                                    const std::string &_dstFrame) const;
 
 
-      public: bool Parent(const std::string &_frame,
+      public: bool ParentFrame(const std::string &_frame,
                          std::string &_parent, bool canonical=false) const;
 
-      public: RelativePose &Invalid() const;
+      public: const RelativePose Invalid() const;
 
+      private: RelativePose invalid;
 
       /// \brief Copy Constructor (not allowed)
       /// \param[in] _copy FrameGraph to copy.

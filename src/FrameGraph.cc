@@ -100,11 +100,12 @@ bool FrameGraph::Pose(const std::string &_srcFrame,
 
   std::cout << "FrameGraph::Pose " << _srcFrame << " " << _dstFrame << std::endl;
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
-  auto &relativePose = this->FrameTransform(_srcFrame, _dstFrame);
+  const auto &relativePose = this->FrameTransform(_srcFrame, _dstFrame);
   if( relativePose == this->Invalid())
   {
     return false;
   }
+  gzerr << "LOOK, its VALID :-)" << std::endl;
   _result = relativePose.Compute();
   return true;
 }
@@ -113,15 +114,75 @@ bool FrameGraph::Pose(const std::string &_srcFrame,
 RelativePose FrameGraph::FrameTransform(const std::string &_srcFrame,
                                    const std::string &_dstFrame) const
 {
+  gzerr << "INVALID!!!" << std::endl;
   return this->Invalid();
 }
 
-/////////////////////////////////////////////////
-RelativePose FrameGraph::Invalid() const
+/*
+bool operator != (RelativePose const &_a, RelativePose const &_b)
 {
-  RelativePose x;
-  retutn x;
+  return !(_a == _b);
 }
+
+bool operator == (RelativePose const &_a, RelativePose const &_b)
+{
+  return &_a == &_b;
+}
+*/
+
+bool ignition::math::operator != (const ignition::math::RelativePose &_a,
+                                const ignition::math::RelativePose &_b)
+{
+  // defer to operator ==
+  return !(_a == _b);
+}
+
+
+bool ignition::math::operator == (const ignition::math::RelativePose &_a,
+                                const ignition::math::RelativePose &_b)
+{
+  // compare pointer values
+  bool r;
+  // invalid RelativePose have a dataPtr NULL
+  if(_a.dataPtr ==  NULL && _b.dataPtr == NULL)
+    r = true;
+  r = false;
+  gzerr << "A dataptr  @" << _a.dataPtr << " B dataptr @" << _b.dataPtr << std::endl;
+  gzerr << "COMPARING @" << &_a << " with @" << &_b  << ": " << r << std::endl;
+  return r;
+}
+
+
+/////////////////////////////////////////////////
+const RelativePose FrameGraph::Invalid() const
+{
+  return this->invalid;
+}
+
+
+/////////////////////////////////////////////////
+bool FrameGraph::ParentFrame(const std::string &_frame,
+            std::string &_parent, bool canonical) const
+{
+
+  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
+  std::cerr << "FrameGraph::Parent not implemented " << std::endl;
+  return false;
+}
+
+RelativePose::RelativePose()
+  :dataPtr(NULL)  // this is the invalid frame
+{
+ gzerr << " RelativePose::RelativePose()\n" ;
+}
+
+Pose3d RelativePose::Compute() const
+{
+  Pose3d p;
+  std::cerr << "DOES NOT COMPUTE!!!" << std::endl;
+  return p;
+}
+
 
 /*
   // find frames
@@ -148,16 +209,6 @@ RelativePose FrameGraph::Invalid() const
 
   _result =  dframe.pose + sframe.pose;
 */
-
-/////////////////////////////////////////////////
-bool FrameGraph::Parent(const std::string &_frame,
-            std::string &_parent, bool canonical) const
-{
-
-  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
-  std::cerr << "FrameGraph::Parent not implemented " << std::endl;
-  return false;
-}
 
 
 /*
