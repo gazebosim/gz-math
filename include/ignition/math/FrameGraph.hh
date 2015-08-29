@@ -26,29 +26,37 @@ namespace ignition
     // Forward declaration of private data
     class FrameGraphPrivate;
     class RelativePosePrivate;
+    class FramePrivate;
 
     class IGNITION_VISIBLE RelativePose
     {
       friend class FrameGraph;
 
-      friend bool operator == (const RelativePose &_a, const RelativePose &_b);
+      public: RelativePose();
 
-      friend bool operator != (const RelativePose &_a, const RelativePose &_b);
+      public: RelativePose(const RelativePose &_c);
 
-      public: Pose3d Compute() const;
+      public: RelativePose& operator = (const RelativePose &_other);
 
-      /// \brief private constructor. The
-      private: RelativePose();
+      /// \brief destructor
+      public : virtual ~RelativePose();
+
+
+      public: bool Compute(Pose3d &_p) const;
+
+      /// \brief private constructor.
+      /// \param[in] The source frame must be a full path but
+      /// the de
+      private: RelativePose(const FramePrivate *_srcFrame,
+                            const FramePrivate *_dstFrame);
 
       private: RelativePosePrivate *dataPtr;
     };
 
-    bool operator != (const RelativePose &_a, const RelativePose &_b);
+//    bool operator != (const RelativePose &_a, const RelativePose &_b);
+//    bool operator == (const RelativePose &_a, const RelativePose &_b);
 
-    bool operator == (const RelativePose &_a, const RelativePose &_b);
-
-    /// \brief Mathematical representation of a frustum and related functions.
-    /// This is also known as a view frustum.
+    /// \brief A collection of Frames, and their relative poses
     class IGNITION_VISIBLE FrameGraph
     {
       /// \brief Default constructor. With the following default values:
@@ -77,16 +85,12 @@ namespace ignition
                          Pose3d &_result) const;
 
       /// \brief
-      public: RelativePose FrameTransform(const std::string &_srcFrame,
-                                   const std::string &_dstFrame) const;
+      public: RelativePose RelativeFrames(const std::string &_srcPath,
+                                   const std::string &_dstPath) const;
 
 
-      public: bool ParentFrame(const std::string &_frame,
-                         std::string &_parent, bool canonical=false) const;
-
-      public: const RelativePose Invalid() const;
-
-      private: RelativePose invalid;
+//      public: bool ParentFrame(const std::string &_frame,
+//                         std::string &_parent, bool canonical=false) const;
 
       /// \brief Copy Constructor (not allowed)
       /// \param[in] _copy FrameGraph to copy.

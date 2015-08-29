@@ -29,13 +29,13 @@ using namespace math;
 FrameGraph::FrameGraph()
   :dataPtr(new FrameGraphPrivate())
 {
+
 }
 
 /////////////////////////////////////////////////
 FrameGraph::~FrameGraph()
 {
   delete this->dataPtr;
-  this->dataPtr = NULL;
 }
 
 /////////////////////////////////////////////////
@@ -93,73 +93,28 @@ bool FrameGraph::AddFrame( const std::string &_name,
 }
 
 /////////////////////////////////////////////////
-bool FrameGraph::Pose(const std::string &_srcFrame,
-                      const std::string &_dstFrame,
+bool FrameGraph::Pose(const std::string &_srcFramePath,
+                      const std::string &_dstFramePath,
                       Pose3d &_result) const
 {
 
-  std::cout << "FrameGraph::Pose " << _srcFrame << " " << _dstFrame << std::endl;
-  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
-  const auto &relativePose = this->FrameTransform(_srcFrame, _dstFrame);
-  if( relativePose == this->Invalid())
-  {
-    return false;
-  }
-  gzerr << "LOOK, its VALID :-)" << std::endl;
-  _result = relativePose.Compute();
-  return true;
+  std::cout << "FrameGraph::Pose " << _srcFramePath << " " << _dstFramePath << std::endl;
+//  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
+  RelativePose relativePose = this->RelativeFrames(_srcFramePath, _dstFramePath);
+  return relativePose.Compute(_result);
 }
 
 /////////////////////////////////////////////////
-RelativePose FrameGraph::FrameTransform(const std::string &_srcFrame,
-                                   const std::string &_dstFrame) const
+RelativePose FrameGraph::RelativeFrames(const std::string &_srcPath,
+                                   const std::string &_dstPath) const
 {
-  gzerr << "INVALID!!!" << std::endl;
-  return this->Invalid();
-}
-
-/*
-bool operator != (RelativePose const &_a, RelativePose const &_b)
-{
-  return !(_a == _b);
-}
-
-bool operator == (RelativePose const &_a, RelativePose const &_b)
-{
-  return &_a == &_b;
-}
-*/
-
-bool ignition::math::operator != (const ignition::math::RelativePose &_a,
-                                const ignition::math::RelativePose &_b)
-{
-  // defer to operator ==
-  return !(_a == _b);
-}
-
-
-bool ignition::math::operator == (const ignition::math::RelativePose &_a,
-                                const ignition::math::RelativePose &_b)
-{
-  // compare pointer values
-  bool r;
-  // invalid RelativePose have a dataPtr NULL
-  if(_a.dataPtr ==  NULL && _b.dataPtr == NULL)
-    r = true;
-  r = false;
-  gzerr << "A dataptr  @" << _a.dataPtr << " B dataptr @" << _b.dataPtr << std::endl;
-  gzerr << "COMPARING @" << &_a << " with @" << &_b  << ": " << r << std::endl;
+  FramePrivate *srcFrame = this->dataPtr->FrameFromAbsolutePath(_srcPath);
+  FramePrivate *dstFrame = this->dataPtr->FrameFromRelativePath(srcFrame, _dstPath);
+  RelativePose r(srcFrame, dstFrame);
   return r;
 }
 
-
-/////////////////////////////////////////////////
-const RelativePose FrameGraph::Invalid() const
-{
-  return this->invalid;
-}
-
-
+/*
 /////////////////////////////////////////////////
 bool FrameGraph::ParentFrame(const std::string &_frame,
             std::string &_parent, bool canonical) const
@@ -169,22 +124,92 @@ bool FrameGraph::ParentFrame(const std::string &_frame,
   std::cerr << "FrameGraph::Parent not implemented " << std::endl;
   return false;
 }
+*/
 
 RelativePose::RelativePose()
-  :dataPtr(NULL)  // this is the invalid frame
+  :dataPtr(new RelativePosePrivate() )
 {
- gzerr << " RelativePose::RelativePose()\n" ;
+
 }
 
-Pose3d RelativePose::Compute() const
+RelativePose::RelativePose(const RelativePose &_other)
 {
-  Pose3d p;
-  std::cerr << "DOES NOT COMPUTE!!!" << std::endl;
-  return p;
+  this->dataPtr->up = _other.dataPtr->up;
+  this->dataPtr->down = _other.dataPtr->down;
 }
 
+RelativePose& RelativePose::operator = (const RelativePose &_other)
+{
+  this->dataPtr->up = _other.dataPtr->up;
+  this->dataPtr->down = _other.dataPtr->down;
+}
+
+
+/////////////////////////////////////////////////
+RelativePose::RelativePose(const FramePrivate* _srcFrame,
+                             const FramePrivate* _dstFrame)
+  :dataPtr(new RelativePosePrivate())  // this is the invalid frame
+{
+
+  this->dataPtr->up.push_back(_srcFrame);
+  this->dataPtr->down.push_back(_dstFrame);
+}
+
+RelativePose::~RelativePose()
+{
+  delete this->dataPtr;
+}
+
+
+/////////////////////////////////////////////////
+bool RelativePose::Compute( Pose3d &_p) const
+{
+
+  {
+    Pose3d r;
+    for (auto p : this->dataPtr->up)
+      r += p->pose;
+    for (auto p : this->dataPtr->down)
+      r -= p->pose;
+    _p = r;
+    return true;
+  }
+}
 
 /*
+/////////////////////////////////////////////////
+bool ignition::math::operator != (const ignition::math::RelativePose &_a,
+                                const ignition::math::RelativePose &_b)
+{
+  // defer to operator ==
+  return !(_a == _b);
+}
+
+
+/////////////////////////////////////////////////
+bool ignition::math::operator == (const ignition::math::RelativePose &_a,
+                                const ignition::math::RelativePose &_b)
+{
+  bool r;
+  // compare pointer values
+  // invalid RelativePose have a dataPtr NULL
+  if(_a.dataPtr ==  NULL && _b.dataPtr == NULL)
+    r = true;
+  r = false;
+  gzerr << "A dataptr  @" << _a.dataPtr << " B dataptr @" << _b.dataPtr << std::endl;
+  gzerr << "COMPARING @" << &_a << " with @" << &_b  << ": " << r << std::endl;
+  return r;
+}
+
+/////////////////////////////////////////////////
+const RelativePose FrameGraph::Invalid() const
+{
+  return this->invalid;
+}
+*/
+
+/*
+
   // find frames
   auto src = this->dataPtr->frames.find(_srcFrame);
   auto dst = this->dataPtr->frames.find(_dstFrame);
@@ -208,10 +233,7 @@ Pose3d RelativePose::Compute() const
   std::cout << "dframe << " << dframe.pose << std::endl;
 
   _result =  dframe.pose + sframe.pose;
-*/
 
-
-/*
 /////////////////////////////////////////////////
 FramePrivate* FrameGraph::FrameFromAbsolutePath(
                                                const std::string &_path) const

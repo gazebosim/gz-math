@@ -55,11 +55,10 @@ namespace ignition
 
     class RelativePosePrivate
     {
-      public: RelativePosePrivate(FramePrivate *_src, FramePrivate *_dst);
-      public: Pose3d Compute() const;
-
-      private: std::vector<FramePrivate *> up;
-      private: std::vector<FramePrivate *> down;
+//    public: RelativePosePrivate();
+//    public: Pose3d Compute() const;
+      public: std::vector<const FramePrivate *> up;
+      public: std::vector<const FramePrivate *> down;
     };
 
     /// \internal
