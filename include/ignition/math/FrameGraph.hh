@@ -17,6 +17,8 @@
 #ifndef _IGNITION_FRAME_GRAPH_HH_
 #define _IGNITION_FRAME_GRAPH_HH_
 
+#include <mutex>
+
 #include <ignition/math/Pose3.hh>
 
 namespace ignition
@@ -41,20 +43,17 @@ namespace ignition
       /// \brief destructor
       public : virtual ~RelativePose();
 
-
       public: bool Compute(Pose3d &_p) const;
 
       /// \brief private constructor.
       /// \param[in] The source frame must be a full path but
       /// the de
-      private: RelativePose(const FramePrivate *_srcFrame,
+      private: RelativePose(std::mutex *mutex,
+                            const FramePrivate *_srcFrame,
                             const FramePrivate *_dstFrame);
 
       private: RelativePosePrivate *dataPtr;
     };
-
-//    bool operator != (const RelativePose &_a, const RelativePose &_b);
-//    bool operator == (const RelativePose &_a, const RelativePose &_b);
 
     /// \brief A collection of Frames, and their relative poses
     class IGNITION_VISIBLE FrameGraph
@@ -84,12 +83,13 @@ namespace ignition
                          const std::string &_dstFrame,
                          Pose3d &_result) const;
 
-      /// \brief
+      /// \brief This method returns a Relative pose instance that is
+      /// initialized to
       public: RelativePose RelativeFrames(const std::string &_srcPath,
                                    const std::string &_dstPath) const;
 
 
-//      public: bool ParentFrame(const std::string &_frame,
+//    public: bool ParentFrame(const std::string &_frame,
 //                         std::string &_parent, bool canonical=false) const;
 
       /// \brief Copy Constructor (not allowed)

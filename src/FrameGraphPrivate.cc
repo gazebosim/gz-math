@@ -121,9 +121,6 @@ FrameGraphPrivate::~FrameGraphPrivate()
 FrameGraphPrivate::FrameGraphPrivate()
   :world("world", Pose3d(), NULL)
 {
-
-//  this->frames["world"] =  &this->worldFrame;
-//  this->frames["unknown"] = &this->unknownFrame;
 }
 
 /////////////////////////////////////////////////
@@ -166,4 +163,12 @@ FramePrivate* FrameGraphPrivate::FrameFromRelativePath( FramePrivate *_frame,
   }
   return NULL;
 }
+
+/////////////////////////////////////////////////
+RelativePosePrivate::RelativePosePrivate()
+  :mutex(NULL)
+{
+
+}
+
 

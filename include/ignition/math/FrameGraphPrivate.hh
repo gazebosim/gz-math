@@ -55,8 +55,9 @@ namespace ignition
 
     class RelativePosePrivate
     {
-//    public: RelativePosePrivate();
-//    public: Pose3d Compute() const;
+      public: RelativePosePrivate();
+      public: ~RelativePosePrivate() = default;
+      public: mutable std::mutex *mutex;
       public: std::vector<const FramePrivate *> up;
       public: std::vector<const FramePrivate *> down;
     };
@@ -76,10 +77,6 @@ namespace ignition
       public: FramePrivate world;
 
       public: mutable std::mutex mutex;
-
-      // public: RelativePosePrivate invalid;
-      // public: Frame worldFrame;
-      // public: Frame unknownFrame;
     };
   }
 }
