@@ -60,7 +60,7 @@ bool FrameGraph::AddFrame( const std::string &_name,
     << _name << ", "
     << _pose << ", "
     << _parent << ", "
-    << std::endl;
+  << std::endl;
 
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
 
@@ -73,18 +73,17 @@ bool FrameGraph::AddFrame( const std::string &_name,
       << std::endl;
     return false;
   }
-
+  // remove last path element, since it does not exist yet
+  path.PopLeaf();
   FramePrivate *srcFrame = this->dataPtr->FrameFromAbsolutePath(path);
   if(!srcFrame)
   {
     gzerr << "Path \"" << _name << "\" is not valid" << std::endl;
     return false;
   }
-
   PathPrivate rpath(_parent);
   FramePrivate *parentFrame = this->dataPtr->FrameFromRelativePath(srcFrame,
                                                                    rpath);
-
   const std::string &leaf = path.Leaf();
   FramePrivate *frame = new FramePrivate(leaf, _pose, parentFrame);
   srcFrame->children[leaf] = frame;
@@ -99,7 +98,6 @@ bool FrameGraph::Pose(const std::string &_srcFramePath,
 {
 
   std::cout << "FrameGraph::Pose " << _srcFramePath << " " << _dstFramePath << std::endl;
-  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   RelativePose relativePose = this->RelativeFrames(_srcFramePath, _dstFramePath);
   return relativePose.Compute(_result);
 }
@@ -108,6 +106,7 @@ bool FrameGraph::Pose(const std::string &_srcFramePath,
 RelativePose FrameGraph::RelativeFrames(const std::string &_srcPath,
                                    const std::string &_dstPath) const
 {
+  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   FramePrivate *srcFrame = this->dataPtr->FrameFromAbsolutePath(_srcPath);
   FramePrivate *dstFrame = this->dataPtr->FrameFromRelativePath(srcFrame, _dstPath);
   RelativePose r(&this->dataPtr->mutex, srcFrame, dstFrame);
@@ -125,12 +124,14 @@ bool FrameGraph::ParentFrame(const std::string &_frame,
 }
 */
 
+/////////////////////////////////////////////////
 RelativePose::RelativePose()
   :dataPtr(new RelativePosePrivate())
 {
 
 }
 
+/////////////////////////////////////////////////
 RelativePose::RelativePose(const RelativePose &_other)
 {
   this->dataPtr->mutex = _other.dataPtr->mutex;
@@ -138,13 +139,13 @@ RelativePose::RelativePose(const RelativePose &_other)
   this->dataPtr->down = _other.dataPtr->down;
 }
 
+/////////////////////////////////////////////////
 RelativePose& RelativePose::operator = (const RelativePose &_other)
 {
   this->dataPtr->mutex = _other.dataPtr->mutex;
   this->dataPtr->up = _other.dataPtr->up;
   this->dataPtr->down = _other.dataPtr->down;
 }
-
 
 /////////////////////////////////////////////////
 RelativePose::RelativePose(std::mutex *mutex,
@@ -153,10 +154,21 @@ RelativePose::RelativePose(std::mutex *mutex,
   :dataPtr(new RelativePosePrivate())  // this is the invalid frame
 {
   this->dataPtr->mutex = mutex;
-  this->dataPtr->up.push_back(_srcFrame);
-  this->dataPtr->down.push_back(_dstFrame);
+gzerr << "== RelativePose::RelativePose @"  << _srcFrame << " to @" << _dstFrame << std::endl;
+gzerr << "   SRC " << _srcFrame->name << std::endl;
+gzerr << "   DST " << _dstFrame->name << std::endl;
+
+  if(_srcFrame)
+  {
+    this->dataPtr->up.push_back(_srcFrame);
+  }
+  if(_dstFrame)
+  {
+    this->dataPtr->down.push_back(_dstFrame);
+  }
 }
 
+/////////////////////////////////////////////////
 RelativePose::~RelativePose()
 {
   delete this->dataPtr;
@@ -166,6 +178,7 @@ RelativePose::~RelativePose()
 /////////////////////////////////////////////////
 bool RelativePose::Compute( Pose3d &_p) const
 {
+  // check if relative pose is valid
   if(!this->dataPtr->mutex)
     return false;
 
@@ -173,12 +186,12 @@ bool RelativePose::Compute( Pose3d &_p) const
   Pose3d r;
   for (auto p : this->dataPtr->up)
   {
-    gzerr << "Applying " << p->name << ": " << p->pose << std::endl;
+    gzerr << "Applying >> " << p->name << ": " << p->pose << std::endl;
     r += p->pose;
   }
   for (auto p : this->dataPtr->down)
   {
-    gzerr << "Applying " << p->name << ": " << p->pose << std::endl;
+    gzerr << "Un applying << " << p->name << ": " << p->pose << std::endl;
     r -= p->pose;
   }
   _p = r;

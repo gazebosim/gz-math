@@ -29,6 +29,10 @@ namespace ignition
     class PathPrivate
     {
       public: PathPrivate(const std::string &_path);
+
+      /// \brief Removes the last element of the path.
+      /// if the path only has one element, nothing is removed.
+      public: void PopLeaf();
       public: const std::vector<std::string> & Elems() const;
       public: const std::string &Root() const;
       public: const std::string &Leaf() const;

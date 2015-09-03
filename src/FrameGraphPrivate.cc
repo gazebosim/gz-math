@@ -42,6 +42,15 @@ PathPrivate::PathPrivate(const std::string &_s)
 }
 
 /////////////////////////////////////////////////
+void PathPrivate::PopLeaf()
+{
+  if (this->pathElems.size() >1)
+  {
+    this->pathElems.pop_back();
+  }
+}
+
+/////////////////////////////////////////////////
 const std::vector<std::string> &  PathPrivate::Elems() const
 {
   return this->pathElems;
@@ -127,7 +136,7 @@ FrameGraphPrivate::FrameGraphPrivate()
 FramePrivate* FrameGraphPrivate::FrameFromAbsolutePath(
                                                const PathPrivate &_path)
 {
-  // Is it a good name?
+  // Is it a good path?
   if (!_path.IsFull())
   {
     gzerr << "Error: frame path \"" << _path.Path()
@@ -138,7 +147,7 @@ FramePrivate* FrameGraphPrivate::FrameFromAbsolutePath(
 
   // we know the path is full and thus it starts with the world frame
   FramePrivate *srcFrame = &this->world;
-  for (size_t i=1; i < _path.Elems().size() -1; ++i)
+  for (size_t i=1; i < _path.Elems().size(); ++i)
   {
     auto &children = srcFrame->children;
     std::string e = _path.Elems()[i];
@@ -149,6 +158,7 @@ FramePrivate* FrameGraphPrivate::FrameFromAbsolutePath(
       return NULL;
     }
   }
+gzerr << "  >> ABS >> " << _path.Path()  << " * * [" << srcFrame->name << "]" << std::endl;
   return srcFrame;
 }
 
