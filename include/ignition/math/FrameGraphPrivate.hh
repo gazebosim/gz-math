@@ -74,12 +74,15 @@ namespace ignition
       public: FrameGraphPrivate();
       public: ~FrameGraphPrivate();
 
-      public: FramePrivate* FrameFromAbsolutePath(
-                                               const PathPrivate& _path);
-      public: FramePrivate* FrameFromRelativePath(FramePrivate *_frame,
-                                           const  PathPrivate& _relPath);
-      public: FramePrivate world;
+      public: const FramePrivate* FrameFromAbsolutePath(
+                                               const PathPrivate& _path) const;
 
+      public: FramePrivate* FrameFromAbsolutePath(const PathPrivate& _path);
+
+      public: const FramePrivate* FrameFromRelativePath(const FramePrivate *_frame,
+                                           const  PathPrivate& _relPath) const;
+
+      public: FramePrivate world;
       public: mutable std::mutex mutex;
     };
   }

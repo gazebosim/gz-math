@@ -85,12 +85,11 @@ namespace ignition
 
       /// \brief This method returns a Relative pose instance that is
       /// initialized to
-      public: RelativePose RelativeFrames(const std::string &_srcPath,
-                                   const std::string &_dstPath) const;
+      public: bool RelativePoses(const std::string &_srcPath,
+                                const std::string &_dstPathi,
+                                RelativePose &_relativePose) const;
 
-
-//    public: bool ParentFrame(const std::string &_frame,
-//                         std::string &_parent, bool canonical=false) const;
+      public: Pose3d *FramePose(const std::string &_path) const;
 
       /// \brief Copy Constructor (not allowed)
       /// \param[in] _copy FrameGraph to copy.

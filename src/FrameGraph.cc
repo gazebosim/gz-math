@@ -54,14 +54,8 @@ FrameGraph &FrameGraph::operator=(const FrameGraph &_assign)
 /////////////////////////////////////////////////
 bool FrameGraph::AddFrame( const std::string &_name,
                            const Pose3d &_pose,
-                           const std::string &_parent)
+                           const std::string &_relative)
 {
-  std::cout << "AddFrame "
-    << _name << ", "
-    << _pose << ", "
-    << _parent << ", "
-  << std::endl;
-
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
 
   // Is it a good name?
@@ -74,19 +68,26 @@ bool FrameGraph::AddFrame( const std::string &_name,
     return false;
   }
   // remove last path element, since it does not exist yet
+  std::string leaf = path.Leaf();
   path.PopLeaf();
-  FramePrivate *srcFrame = this->dataPtr->FrameFromAbsolutePath(path);
-  if(!srcFrame)
+  FramePrivate *srcFrameParent = this->dataPtr->FrameFromAbsolutePath(path);
+  if(!srcFrameParent)
   {
-    gzerr << "Path \"" << _name << "\" is not valid" << std::endl;
+    gzerr << "Error: path \"" << _name << "\" is not valid" << std::endl;
     return false;
   }
-  PathPrivate rpath(_parent);
-  FramePrivate *parentFrame = this->dataPtr->FrameFromRelativePath(srcFrame,
-                                                                   rpath);
-  const std::string &leaf = path.Leaf();
-  FramePrivate *frame = new FramePrivate(leaf, _pose, parentFrame);
-  srcFrame->children[leaf] = frame;
+  if (srcFrameParent->children.find(leaf) != srcFrameParent->children.end())
+  {
+    gzerr << "Error: path \"" << _name << "\" already exists" << std::endl;
+    return false;
+  }
+  PathPrivate rpath(_relative);
+  const FramePrivate *relativeFrame = this->dataPtr->FrameFromRelativePath(
+                                                                srcFrameParent,
+                                                                rpath);
+  FramePrivate *frame = new FramePrivate(leaf, _pose, relativeFrame);
+gzerr << "++++ addframe " << " ..." << srcFrameParent->name << "/" << leaf  << std::endl;
+  srcFrameParent->children[leaf] = frame;
   // success
   return true;
 }
@@ -96,39 +97,46 @@ bool FrameGraph::Pose(const std::string &_srcFramePath,
                       const std::string &_dstFramePath,
                       Pose3d &_result) const
 {
-
   std::cout << "FrameGraph::Pose " << _srcFramePath << " " << _dstFramePath << std::endl;
-  RelativePose relativePose = this->RelativeFrames(_srcFramePath, _dstFramePath);
+  RelativePose relativePose;
+  if (!this->RelativePoses(_srcFramePath, _dstFramePath, relativePose))
+  {
+    return false;
+  }
   return relativePose.Compute(_result);
 }
 
 /////////////////////////////////////////////////
-RelativePose FrameGraph::RelativeFrames(const std::string &_srcPath,
-                                   const std::string &_dstPath) const
+bool FrameGraph::RelativePoses(const std::string &_srcPath,
+                              const std::string &_dstPath,
+                              RelativePose &_relativePose) const
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
-  FramePrivate *srcFrame = this->dataPtr->FrameFromAbsolutePath(_srcPath);
-  FramePrivate *dstFrame = this->dataPtr->FrameFromRelativePath(srcFrame, _dstPath);
+  auto srcFrame = this->dataPtr->FrameFromAbsolutePath(_srcPath);
+  if(!srcFrame)
+    return false;
+  auto dstFrame = this->dataPtr->FrameFromRelativePath(srcFrame, _dstPath);
+  if(!dstFrame)
+    return false;
   RelativePose r(&this->dataPtr->mutex, srcFrame, dstFrame);
-  return r;
+  _relativePose = r;
+  return true;
 }
 
-/*
 /////////////////////////////////////////////////
-bool FrameGraph::ParentFrame(const std::string &_frame,
-            std::string &_parent, bool canonical) const
+Pose3d *FrameGraph::FramePose(const std::string &_path) const
 {
-  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
-  std::cerr << "FrameGraph::Parent not implemented " << std::endl;
-  return false;
+  PathPrivate path(_path);
+  FramePrivate *frame = this->dataPtr->FrameFromAbsolutePath(path);
+  if(!frame)
+    return NULL;
+  return &frame->pose;
 }
-*/
 
 /////////////////////////////////////////////////
 RelativePose::RelativePose()
   :dataPtr(new RelativePosePrivate())
 {
-
 }
 
 /////////////////////////////////////////////////
@@ -151,20 +159,20 @@ RelativePose& RelativePose::operator = (const RelativePose &_other)
 RelativePose::RelativePose(std::mutex *mutex,
                            const FramePrivate* _srcFrame,
                            const FramePrivate* _dstFrame)
-  :dataPtr(new RelativePosePrivate())  // this is the invalid frame
+  :dataPtr(new RelativePosePrivate())
 {
   this->dataPtr->mutex = mutex;
-gzerr << "== RelativePose::RelativePose @"  << _srcFrame << " to @" << _dstFrame << std::endl;
-gzerr << "   SRC " << _srcFrame->name << std::endl;
-gzerr << "   DST " << _dstFrame->name << std::endl;
-
-  if(_srcFrame)
+  auto frame = _srcFrame;
+  while (frame && frame->parentFrame)
   {
-    this->dataPtr->up.push_back(_srcFrame);
+    this->dataPtr->up.push_back(frame);
+    frame = frame->parentFrame;
   }
-  if(_dstFrame)
+  frame = _dstFrame;
+  while (frame && frame->parentFrame)
   {
-    this->dataPtr->down.push_back(_dstFrame);
+    this->dataPtr->down.push_back(frame);
+    frame = frame->parentFrame;
   }
 }
 
@@ -182,6 +190,9 @@ bool RelativePose::Compute( Pose3d &_p) const
   if(!this->dataPtr->mutex)
     return false;
 
+  gzerr << "\nCOMPUTE up:" << this->dataPtr->up.size()
+        << " down:" << this->dataPtr->down.size()
+        << std::endl;
   std::lock_guard<std::mutex> lock(*this->dataPtr->mutex);
   Pose3d r;
   for (auto p : this->dataPtr->up)
@@ -194,7 +205,20 @@ bool RelativePose::Compute( Pose3d &_p) const
     gzerr << "Un applying << " << p->name << ": " << p->pose << std::endl;
     r -= p->pose;
   }
+  gzerr << " computed: " << r << std::endl;
   _p = r;
   return true;
 }
+
+/*
+/////////////////////////////////////////////////
+bool FrameGraph::ParentFrame(const std::string &_frame,
+            std::string &_parent, bool canonical) const
+{
+  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
+  std::cerr << "FrameGraph::Parent not implemented " << std::endl;
+  return false;
+}
+*/
+
 

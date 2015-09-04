@@ -123,7 +123,6 @@ FramePrivate::FramePrivate(const std::string &_name,
 /////////////////////////////////////////////////
 FrameGraphPrivate::~FrameGraphPrivate()
 {
-  std::cout << "======== ~FrameGraphPrivate() ======================= " << std::endl;
 }
 
 /////////////////////////////////////////////////
@@ -133,8 +132,8 @@ FrameGraphPrivate::FrameGraphPrivate()
 }
 
 /////////////////////////////////////////////////
-FramePrivate* FrameGraphPrivate::FrameFromAbsolutePath(
-                                               const PathPrivate &_path)
+const FramePrivate* FrameGraphPrivate::FrameFromAbsolutePath(
+                                               const PathPrivate &_path) const
 {
   // Is it a good path?
   if (!_path.IsFull())
@@ -146,32 +145,62 @@ FramePrivate* FrameGraphPrivate::FrameFromAbsolutePath(
   }
 
   // we know the path is full and thus it starts with the world frame
-  FramePrivate *srcFrame = &this->world;
+  const FramePrivate *srcFrame = &this->world;
   for (size_t i=1; i < _path.Elems().size(); ++i)
   {
     auto &children = srcFrame->children;
     std::string e = _path.Elems()[i];
-    if(children.find(e) == children.end())
+    auto it = children.find(e);
+    if(it != children.end())
+    {
+      srcFrame = it->second;
+    }
+    else
     {
       gzerr << "Missing frame element: \"" << e
         << "\" in path \"" << _path.Path() << "\""  << std::endl;
       return NULL;
     }
   }
-gzerr << "  >> ABS >> " << _path.Path()  << " * * [" << srcFrame->name << "]" << std::endl;
   return srcFrame;
 }
 
+/////////////////////////////////////////////////
+FramePrivate* FrameGraphPrivate::FrameFromAbsolutePath(
+                                               const PathPrivate &_path)
+{
+  const FrameGraphPrivate *me = const_cast<const FrameGraphPrivate*>(this);
+  auto frame = me->FrameFromAbsolutePath(_path);
+  return const_cast<FramePrivate*>(frame);
+}
 
 /////////////////////////////////////////////////
-FramePrivate* FrameGraphPrivate::FrameFromRelativePath( FramePrivate *_frame,
-                                               const PathPrivate &_path)
+const FramePrivate* FrameGraphPrivate::FrameFromRelativePath(
+                                                    const FramePrivate *_frame,
+                                                    const PathPrivate &_path) const
 {
   if(_path.IsFull())
   {
     return this->FrameFromAbsolutePath(_path);
   }
-  return NULL;
+  unsigned int i = 0;
+  const FramePrivate *frame = _frame;
+  const std::vector<std::string> &elems = _path.Elems();
+  for (auto e : elems)
+  {
+    if (e == ".")
+    {
+      continue;
+    }
+    if (e == "..")
+    {
+      if(!frame->parentFrame)
+      {
+        gzerr << "Error: path \"" << _path.Path() << "\" is invalid" << std::endl;
+      }
+    }
+  }
+  return frame;
 }
 
 /////////////////////////////////////////////////
