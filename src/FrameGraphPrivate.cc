@@ -188,6 +188,7 @@ const FramePrivate* FrameGraphPrivate::FrameFromRelativePath(
   const std::vector<std::string> &elems = _path.Elems();
   for (auto e : elems)
   {
+gzerr << "*** *** ***" << _frame->name << " [" << e  << "?]" << std::endl;
     if (e == ".")
     {
       continue;
@@ -197,8 +198,17 @@ const FramePrivate* FrameGraphPrivate::FrameFromRelativePath(
       if(!frame->parentFrame)
       {
         gzerr << "Error: path \"" << _path.Path() << "\" is invalid" << std::endl;
+        return NULL;
       }
+      frame = frame->parentFrame;
+      continue;
     }
+    auto it = frame->children.find(e);
+    if (it == frame->children.end())
+    {
+      gzerr << "Error: path \"" << _path.Path() << "\" contains unknown element \"" << e << "\"" << std::endl;
+    }
+    frame = it->second;
   }
   return frame;
 }

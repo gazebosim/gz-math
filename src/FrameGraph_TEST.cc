@@ -24,7 +24,7 @@ using namespace ignition;
 using namespace math;
 
 /////////////////////////////////////////////////
-TEST(FrameGraphTest, ConstructTest)
+TEST(FrameGraphTest, AbsolutePaths)
 {
   // store result of various calls
   bool r;
@@ -49,63 +49,71 @@ TEST(FrameGraphTest, ConstructTest)
   EXPECT_TRUE(frameGraph.Pose("/world/a", "/world", a2w));
   EXPECT_EQ(pa, a2w);
 
-  // x does not exist
+  // error: x does not exist
   EXPECT_FALSE(frameGraph.Pose("/world/a", "/world/x", p));
 
   Pose3d pb(0, 1, 0, 0, 0, 0);
   EXPECT_TRUE(frameGraph.AddFrame("/world/b", pb, "/world"));
+  Pose3d w2b;
 
-  Pose3d a2b;
-  EXPECT_TRUE(frameGraph.Pose("/world/a", "/world/b", a2b));
+  // Tests using relative paths
+  EXPECT_TRUE(frameGraph.Pose("/world/b", "..", w2b));
+  EXPECT_EQ(pb, w2b);
 
-  EXPECT_TRUE(frameGraph.AddFrame("/world/c", pb, "../a"));
 
-
-  EXPECT_EQ(pa + pb, a2b);
+  Pose3d b2a, b2a2;
+  EXPECT_TRUE(frameGraph.Pose("/world/a", "/world/b", b2a));
+  EXPECT_TRUE(frameGraph.Pose("/world/a", "../b", b2a2));
+  EXPECT_EQ(b2a, b2a2);
 
 }
 
-
-//  EXPECT_EQ(p, px1);
-
+/////////////////////////////////////////////////
+TEST(FrameGraphTest, RelativePaths)
+{
+  //             world
+  //              |
+  //              a
+  //              |
+  //          --------
+  //          |      |
+  //          aa     ab
+  //          |
+  //         aaa
+  FrameGraph frameGraph;
+  Pose3d pa(100, 0, 0, 0, 0, 0);
+  EXPECT_TRUE (frameGraph.AddFrame("/world/a", pa, "."));
+  EXPECT_FALSE(frameGraph.AddFrame("/world/a", pa, ".."));
 /*
-  Pose3d px2(0, 1, 0, 0, 0, 0);
-  EXPECT_TRUE(frameGraph.AddFrame("/world/xx1", px2, "x1"));
+  EXPECT_FALSE(frameGraph.AddFrame("/world", "a", pa, "."));
 
-  std::cout << "POSE x1::world " << p << std::endl;
-  EXPECT_EQ(1, p.Pos().X());
-
-  r = frameGraph.Pose("y1", "world", p);
-  EXPECT_TRUE(r);
-
-  std::cout << "POSE y1::world " << p << std::endl;
-  EXPECT_EQ(1, p.Pos().Y());
-  EXPECT_EQ(1, p.Pos().X());
-
-
-  Pose3d px = px2 + px1;
-  std::cout << "POSE px: " << px << std::endl;
+  EXPECT_TRUE(frameGraph.AddFrame("/world/a", pa, "."));
+  EXPECT_TRUE(frameGraph.AddFrame("/world/a", pa, "."));
+  EXPECT_TRUE(frameGraph.AddFrame("/world/a", pa, "."));
+  EXPECT_TRUE(frameGraph.AddFrame("/world/a", pa, "."));
 */
-
-
-//  EXPECT_EQ(2, 42);
-//  EXPECT_DOUBLE_EQ(frustum.AspectRatio(), 1.3434);
+}
 
 
 /////////////////////////////////////////////////
-TEST(FrameGraphTest, Poseing)
+TEST(FrameGraphTest, SimplePose)
 {
   FrameGraph frameGraph;
 
   std::cout << "===== POSE TEST =====" << std::endl;
+
   Pose3d pa(1, 0, 0, 0, 0, 0);
   EXPECT_TRUE(frameGraph.AddFrame("/world/a", pa, "/world"));
+
+  Pose3d r;
+  EXPECT_TRUE(frameGraph.Pose("/world/a", "/world", r));
+  EXPECT_EQ(pa, r);
 
   Pose3d *p = frameGraph.FramePose("/world/a");
   EXPECT_EQ(pa, *p);
 
   Pose3d dz(0,0,1,0,0,0);
   *p += dz;
-
-
 }
+
+

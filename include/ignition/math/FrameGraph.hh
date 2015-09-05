@@ -18,6 +18,7 @@
 #define _IGNITION_FRAME_GRAPH_HH_
 
 #include <mutex>
+#include <map>
 
 #include <ignition/math/Pose3.hh>
 
@@ -28,7 +29,22 @@ namespace ignition
     // Forward declaration of private data
     class FrameGraphPrivate;
     class RelativePosePrivate;
-    class FramePrivate;
+
+ //   class FramePrivate;
+
+    class FramePrivate
+    {
+      public: FramePrivate(const std::string &_name,
+                        const Pose3d& _pose,
+                        const FramePrivate*_parentFrame);
+      public: std::string name;
+      public: Pose3d pose;
+      // this is a direct pointer to the parent
+      // frame, that speeds up lookup.
+      public: const FramePrivate *parentFrame;
+
+      public: std::map<std::string, const FramePrivate*> children;
+    };
 
     class IGNITION_VISIBLE RelativePose
     {
@@ -89,7 +105,10 @@ namespace ignition
                                 const std::string &_dstPathi,
                                 RelativePose &_relativePose) const;
 
+      /// \brief Returns a pointer to
       public: Pose3d *FramePose(const std::string &_path) const;
+
+      private:
 
       /// \brief Copy Constructor (not allowed)
       /// \param[in] _copy FrameGraph to copy.

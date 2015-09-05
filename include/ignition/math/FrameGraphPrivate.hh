@@ -22,6 +22,8 @@
 #include <map>
 #include <ignition/math/Pose3.hh>
 
+#include <ignition/math/FrameGraph.hh>
+
 namespace ignition
 {
   namespace math
@@ -42,7 +44,7 @@ namespace ignition
       private: std::string path;
       private: std::vector<std::string> pathElems;
     };
-
+/*
     class FramePrivate
     {
       public: FramePrivate(const std::string &_name,
@@ -56,7 +58,8 @@ namespace ignition
 
       public: std::map<std::string, const FramePrivate*> children;
     };
-
+*/
+    /// \internal
     class RelativePosePrivate
     {
       public: RelativePosePrivate();
@@ -72,8 +75,11 @@ namespace ignition
     {
       /// \brief Constructor
       public: FrameGraphPrivate();
+
+      /// \brief destructor
       public: ~FrameGraphPrivate();
 
+      /// \brief
       public: const FramePrivate* FrameFromAbsolutePath(
                                                const PathPrivate& _path) const;
 
