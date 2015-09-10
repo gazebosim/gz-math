@@ -33,37 +33,47 @@ TEST(FrameGraphTest, AbsolutePaths)
   FrameGraph frameGraph;
 
   Pose3d pa(1, 0, 0, 0, 0, 0);
-  // this path is not fully qualified
-  EXPECT_FALSE(frameGraph.AddFrame("x", pa, "/world"));
+
   // this path's parent is incorrect ("world has no /")
-  EXPECT_FALSE(frameGraph.AddFrame("x", pa, "world"));
+  EXPECT_THROW(frameGraph.AddFrame("world", "x", pa), FrameException);
+
+  // this path is not fully qualified
+  EXPECT_THROW(frameGraph.AddFrame("/world/..", "x", pa), FrameException);
+
   // this path as an undefined "unknown" frame
-  EXPECT_FALSE(frameGraph.AddFrame("/world/unknown/x", pa, "/world"));
+  EXPECT_THROW(frameGraph.AddFrame("/world/unknown", "x", pa), FrameException);
 
+  // this path as an illegal "!" frame
+  EXPECT_THROW(frameGraph.AddFrame("/world/!", "x", pa), FrameException);
+
+  // very stupid attempt at getting pose info from inexistant frame
   Pose3d p;
-  EXPECT_FALSE(frameGraph.Pose("/world/x", "/world", p));
+  EXPECT_THROW(p = frameGraph.Pose("/world/x", "/world"), FrameException);
+  EXPECT_THROW(p = frameGraph.Pose("/world", "/world/x"), FrameException);
 
-  // this path adds a to the built in "/world" frame
-  EXPECT_TRUE(frameGraph.AddFrame("/world/a", pa, "/world"));
+  // Finally, this path adds a to the built in "/world" frame
+  frameGraph.AddFrame("/world", "a", pa);
   Pose3d a2w;
-  EXPECT_TRUE(frameGraph.Pose("/world/a", "/world", a2w));
+  // skillfull pose inquiry
+  a2w = frameGraph.Pose("/world/a", "/world");
   EXPECT_EQ(pa, a2w);
 
   // error: x does not exist
-  EXPECT_FALSE(frameGraph.Pose("/world/a", "/world/x", p));
+  EXPECT_THROW(p = frameGraph.Pose("/world/a", "/world/x"), FrameException);
 
+  // add b
   Pose3d pb(0, 1, 0, 0, 0, 0);
-  EXPECT_TRUE(frameGraph.AddFrame("/world/b", pb, "/world"));
-  Pose3d w2b;
+  frameGraph.AddFrame("/world", "b", pb);
 
   // Tests using relative paths
-  EXPECT_TRUE(frameGraph.Pose("/world/b", "..", w2b));
+  Pose3d w2b = frameGraph.Pose("/world/b", "..");
   EXPECT_EQ(pb, w2b);
 
 
+  // Relative path from a to b
   Pose3d b2a, b2a2;
-  EXPECT_TRUE(frameGraph.Pose("/world/a", "/world/b", b2a));
-  EXPECT_TRUE(frameGraph.Pose("/world/a", "../b", b2a2));
+  b2a = frameGraph.Pose("/world/a", "/world/b");
+  b2a2 = frameGraph.Pose("/world/a", "../b");
   EXPECT_EQ(b2a, b2a2);
 
 }
@@ -82,8 +92,10 @@ TEST(FrameGraphTest, RelativePaths)
   //         aaa
   FrameGraph frameGraph;
   Pose3d pa(100, 0, 0, 0, 0, 0);
-  EXPECT_TRUE (frameGraph.AddFrame("/world/a", pa, "."));
-  EXPECT_FALSE(frameGraph.AddFrame("/world/a", pa, ".."));
+  frameGraph.AddFrame("/world", "a", pa);
+  // try to add duplicate frame
+  EXPECT_THROW(frameGraph.AddFrame("/world", "a",  pa), FrameException);
+
 /*
   EXPECT_FALSE(frameGraph.AddFrame("/world", "a", pa, "."));
 
@@ -103,17 +115,15 @@ TEST(FrameGraphTest, SimplePose)
   std::cout << "===== POSE TEST =====" << std::endl;
 
   Pose3d pa(1, 0, 0, 0, 0, 0);
-  EXPECT_TRUE(frameGraph.AddFrame("/world/a", pa, "/world"));
+  frameGraph.AddFrame("/world", "a", pa);
 
   Pose3d r;
-  EXPECT_TRUE(frameGraph.Pose("/world/a", "/world", r));
+  r = frameGraph.Pose("/world/a", "/world");
   EXPECT_EQ(pa, r);
 
-  Pose3d *p = frameGraph.FramePose("/world/a");
-  EXPECT_EQ(pa, *p);
+  Frame &frame = frameGraph.FrameAccess("/world/a");
+  EXPECT_EQ(pa, frame.Pose());
 
-  Pose3d dz(0,0,1,0,0,0);
-  *p += dz;
 }
 
 

@@ -42,68 +42,66 @@ FrameGraph::~FrameGraph()
 FrameGraph::FrameGraph(const FrameGraph &_copy)
   : dataPtr(new FrameGraphPrivate())
 {
-  // private method... should not be called
+  // private method... prevents copying of FrameGraph
 }
 
 /////////////////////////////////////////////////
 FrameGraph &FrameGraph::operator=(const FrameGraph &_assign)
 {
-  // private method... should not be called
+  // private method... prevents copying of FrameGraph
 }
 
 /////////////////////////////////////////////////
-bool FrameGraph::AddFrame( const std::string &_name,
-                           const Pose3d &_pose,
-                           const std::string &_relative)
+void FrameGraph::AddFrame( const std::string &_path,
+                           const std::string &_name,
+                           const Pose3d &_pose)
 {
+
+  // _name, _pose, _relative
+
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
 
   // Is it a good name?
-  PathPrivate path(_name);
+  if (!PathPrivate::CheckName(_name))
+  {
+    std::stringstream ss;
+    ss << "The frame \"" << _name
+      << "\" is not a valid";
+    throw FrameException(ss.str());
+  }
+  // In a good path?
+  PathPrivate path(_path);
   if (!path.IsFull())
   {
-    gzerr << "Error adding frame: path \"" << _name
-      << "\" is not a valid, fully qualified path"
-      << std::endl;
-    return false;
+    std::stringstream ss;
+    ss << "Error adding frame: path \"" << _path
+      << "\" is not a fully qualified path";
+    throw FrameException(ss.str());
   }
   // remove last path element, since it does not exist yet
-  std::string leaf = path.Leaf();
-  path.PopLeaf();
-  FramePrivate *srcFrameParent = this->dataPtr->FrameFromAbsolutePath(path);
-  if(!srcFrameParent)
+  auto &srcFrameParent = this->dataPtr->FrameFromAbsolutePath(path);
+
+  auto it = srcFrameParent.dataPtr->children.find(_name);
+  if (it != srcFrameParent.dataPtr->children.end())
   {
-    gzerr << "Error: path \"" << _name << "\" is not valid" << std::endl;
-    return false;
+    std::stringstream ss;
+    ss << "Error: path \"" << _name << "\" already exists";
+    throw FrameException(ss.str());
   }
-  if (srcFrameParent->children.find(leaf) != srcFrameParent->children.end())
-  {
-    gzerr << "Error: path \"" << _name << "\" already exists" << std::endl;
-    return false;
-  }
-  PathPrivate rpath(_relative);
-  const FramePrivate *relativeFrame = this->dataPtr->FrameFromRelativePath(
-                                                                srcFrameParent,
-                                                                rpath);
-  FramePrivate *frame = new FramePrivate(leaf, _pose, relativeFrame);
-gzerr << "++++ addframe " << " ..." << srcFrameParent->name << "/" << leaf  << std::endl;
-  srcFrameParent->children[leaf] = frame;
-  // success
-  return true;
+  Frame *frame = new Frame(_name, _pose, &srcFrameParent);
+  srcFrameParent.dataPtr->children[_name] = frame;
 }
 
 /////////////////////////////////////////////////
-bool FrameGraph::Pose(const std::string &_srcFramePath,
-                      const std::string &_dstFramePath,
-                      Pose3d &_result) const
+Pose3d FrameGraph::Pose(const std::string &_srcFramePath,
+                      const std::string &_dstFramePath) const
 {
   std::cout << "FrameGraph::Pose " << _srcFramePath << " " << _dstFramePath << std::endl;
   RelativePose relativePose;
-  if (!this->RelativePoses(_srcFramePath, _dstFramePath, relativePose))
-  {
-    return false;
-  }
-  return relativePose.Compute(_result);
+  this->RelativePoses(_srcFramePath, _dstFramePath, relativePose);
+  Pose3d r;
+  relativePose.Compute(r);
+  return r;
 }
 
 /////////////////////////////////////////////////
@@ -112,25 +110,50 @@ bool FrameGraph::RelativePoses(const std::string &_srcPath,
                               RelativePose &_relativePose) const
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
-  auto srcFrame = this->dataPtr->FrameFromAbsolutePath(_srcPath);
-  if(!srcFrame)
-    return false;
-  auto dstFrame = this->dataPtr->FrameFromRelativePath(srcFrame, _dstPath);
-  if(!dstFrame)
-    return false;
-  RelativePose r(&this->dataPtr->mutex, srcFrame, dstFrame);
+  auto &srcFrame = this->dataPtr->FrameFromAbsolutePath(_srcPath);
+  const auto &dstFrame = this->dataPtr->FrameFromRelativePath(&srcFrame, _dstPath);
+  RelativePose r(&this->dataPtr->mutex, &srcFrame, &dstFrame);
   _relativePose = r;
   return true;
 }
 
 /////////////////////////////////////////////////
-Pose3d *FrameGraph::FramePose(const std::string &_path) const
+Frame &FrameGraph::FrameAccess(const std::string &_path) const
 {
   PathPrivate path(_path);
-  FramePrivate *frame = this->dataPtr->FrameFromAbsolutePath(path);
-  if(!frame)
-    return NULL;
-  return &frame->pose;
+  return this->dataPtr->FrameFromAbsolutePath(path);
+}
+
+/////////////////////////////////////////////////
+Frame::Frame(const std::string &_name,
+             const Pose3d &_pose,
+             const Frame *_parentFrame)
+  :dataPtr(new FramePrivate(_name, _pose, _parentFrame))
+{
+}
+
+/////////////////////////////////////////////////
+Frame::~Frame()
+{
+  delete this->dataPtr;
+}
+
+/////////////////////////////////////////////////
+const Frame* Frame::ParentFrame() const
+{
+  return this->dataPtr->parentFrame;
+}
+
+/////////////////////////////////////////////////
+const std::string &Frame::Name() const
+{
+  return this->dataPtr->name;
+}
+
+/////////////////////////////////////////////////
+const Pose3d &Frame::Pose() const
+{
+  return this->dataPtr->pose;
 }
 
 /////////////////////////////////////////////////
@@ -157,22 +180,22 @@ RelativePose& RelativePose::operator = (const RelativePose &_other)
 
 /////////////////////////////////////////////////
 RelativePose::RelativePose(std::mutex *mutex,
-                           const FramePrivate* _srcFrame,
-                           const FramePrivate* _dstFrame)
+                           const Frame* _srcFrame,
+                           const Frame* _dstFrame)
   :dataPtr(new RelativePosePrivate())
 {
   this->dataPtr->mutex = mutex;
   auto frame = _srcFrame;
-  while (frame && frame->parentFrame)
+  while (frame && frame->ParentFrame())
   {
     this->dataPtr->up.push_back(frame);
-    frame = frame->parentFrame;
+    frame = frame->ParentFrame();
   }
   frame = _dstFrame;
-  while (frame && frame->parentFrame)
+  while (frame && frame->ParentFrame())
   {
     this->dataPtr->down.push_back(frame);
-    frame = frame->parentFrame;
+    frame = frame->ParentFrame();
   }
 }
 
@@ -197,13 +220,13 @@ bool RelativePose::Compute( Pose3d &_p) const
   Pose3d r;
   for (auto p : this->dataPtr->up)
   {
-    gzerr << "Applying >> " << p->name << ": " << p->pose << std::endl;
-    r += p->pose;
+    gzerr << "Applying >> " << p->Name() << ": " << p->Pose() << std::endl;
+    r += p->Pose();
   }
   for (auto p : this->dataPtr->down)
   {
-    gzerr << "Un applying << " << p->name << ": " << p->pose << std::endl;
-    r -= p->pose;
+    gzerr << "Un applying << " << p->Name() << ": " << p->Pose() << std::endl;
+    r -= p->Pose();
   }
   gzerr << " computed: " << r << std::endl;
   _p = r;

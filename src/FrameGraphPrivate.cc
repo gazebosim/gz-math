@@ -15,15 +15,10 @@
  *
 */
 
-#include <sstream>
-
 #include "ignition/math/FrameGraphPrivate.hh"
 
 using namespace ignition;
 using namespace math;
-
-#define gzerr std::cerr
-#define gzinfo std::cout
 
 /////////////////////////////////////////////////
 PathPrivate::PathPrivate(const std::string &_s)
@@ -42,12 +37,13 @@ PathPrivate::PathPrivate(const std::string &_s)
 }
 
 /////////////////////////////////////////////////
-void PathPrivate::PopLeaf()
+bool PathPrivate::CheckName(const std::string &_name)
 {
-  if (this->pathElems.size() >1)
-  {
-    this->pathElems.pop_back();
-  }
+  if (_name.empty())
+    return false;
+  if (_name.find_first_of("/!@#$%^&*\t ()\":;'.~`_+=,<>") != std::string::npos)
+    return false;
+  return true;
 }
 
 /////////////////////////////////////////////////
@@ -77,7 +73,9 @@ const std::string & PathPrivate::Path() const
 /////////////////////////////////////////////////
 bool PathPrivate::IsFull() const
 {
-  // Dump();
+  if (this->path[0] != '/')
+    return false;
+
   // is it empty?
   if (this->pathElems.size() == 0)
   {
@@ -104,7 +102,7 @@ void  PathPrivate::Dump() const
   int i = 0;
   for (const std::string &e : this->pathElems)
   {
-    gzerr << i << "] " << e << std::endl;
+    std::cout << i << "] " << e << std::endl;
     i++;
   }
 }
@@ -112,8 +110,8 @@ void  PathPrivate::Dump() const
 
 /////////////////////////////////////////////////
 FramePrivate::FramePrivate(const std::string &_name,
-                           const Pose3d& _pose,
-                           const FramePrivate *_parentFrame)
+             const Pose3d &_pose,
+             const Frame *_parentFrame)
   :name(_name),
    pose(_pose),
    parentFrame(_parentFrame)
@@ -132,23 +130,23 @@ FrameGraphPrivate::FrameGraphPrivate()
 }
 
 /////////////////////////////////////////////////
-const FramePrivate* FrameGraphPrivate::FrameFromAbsolutePath(
+const Frame& FrameGraphPrivate::FrameFromAbsolutePath(
                                                const PathPrivate &_path) const
 {
   // Is it a good path?
   if (!_path.IsFull())
   {
-    gzerr << "Error: frame path \"" << _path.Path()
-      << "\" is not a valid, fully qualified path"
-      << std::endl;
-    return NULL;
+    std::stringstream ss;
+    ss << "Frame path \"" << _path.Path()
+      << "\" is not an absolute, fully qualified path";
+    throw FrameException(ss.str());
   }
 
   // we know the path is full and thus it starts with the world frame
-  const FramePrivate *srcFrame = &this->world;
+  const Frame *srcFrame = &this->world;
   for (size_t i=1; i < _path.Elems().size(); ++i)
   {
-    auto &children = srcFrame->children;
+    auto &children = srcFrame->dataPtr->children;
     std::string e = _path.Elems()[i];
     auto it = children.find(e);
     if(it != children.end())
@@ -157,60 +155,70 @@ const FramePrivate* FrameGraphPrivate::FrameFromAbsolutePath(
     }
     else
     {
-      gzerr << "Missing frame element: \"" << e
-        << "\" in path \"" << _path.Path() << "\""  << std::endl;
-      return NULL;
+      std::stringstream ss;
+      ss << "Missing frame element: \"" << e
+        << "\" in path \"" << _path.Path() << "\"";
+      throw FrameException(ss.str());
     }
   }
-  return srcFrame;
+  return *srcFrame;
 }
 
 /////////////////////////////////////////////////
-FramePrivate* FrameGraphPrivate::FrameFromAbsolutePath(
-                                               const PathPrivate &_path)
+Frame& FrameGraphPrivate::FrameFromAbsolutePath(const PathPrivate &_path)
 {
   const FrameGraphPrivate *me = const_cast<const FrameGraphPrivate*>(this);
-  auto frame = me->FrameFromAbsolutePath(_path);
-  return const_cast<FramePrivate*>(frame);
+  return const_cast<Frame&>(me->FrameFromAbsolutePath(_path));
 }
 
 /////////////////////////////////////////////////
-const FramePrivate* FrameGraphPrivate::FrameFromRelativePath(
-                                                    const FramePrivate *_frame,
-                                                    const PathPrivate &_path) const
+const Frame& FrameGraphPrivate::FrameFromRelativePath(const Frame *_frame,
+                                                const PathPrivate &_path) const
 {
+std::string n = _frame->Name();
+std::cout << "FrameGraphPrivate::FrameFromRelativePath start frame: ";
+std::cout << n;
+std::cout << ", path='";
+std::cout << _path.Path();
+std::cout << "'" << std::endl;
+
   if(_path.IsFull())
   {
     return this->FrameFromAbsolutePath(_path);
   }
   unsigned int i = 0;
-  const FramePrivate *frame = _frame;
+  const Frame *frame = _frame;
   const std::vector<std::string> &elems = _path.Elems();
   for (auto e : elems)
   {
-gzerr << "*** *** ***" << _frame->name << " [" << e  << "?]" << std::endl;
+std::cout << "  " << _frame->dataPtr->name << " [" << e  << "?]" << std::endl;
     if (e == ".")
     {
       continue;
     }
     if (e == "..")
     {
-      if(!frame->parentFrame)
+      if(!frame->dataPtr->parentFrame)
       {
-        gzerr << "Error: path \"" << _path.Path() << "\" is invalid" << std::endl;
-        return NULL;
+        std::stringstream ss;
+        ss << "path \"" << _path.Path() << "\" is invalid ";
+        throw FrameException(ss.str());
       }
-      frame = frame->parentFrame;
+      frame = frame->dataPtr->parentFrame;
       continue;
     }
-    auto it = frame->children.find(e);
-    if (it == frame->children.end())
+    auto it = frame->dataPtr->children.find(e);
+    if (it == frame->dataPtr->children.end())
     {
-      gzerr << "Error: path \"" << _path.Path() << "\" contains unknown element \"" << e << "\"" << std::endl;
+      std::stringstream ss;
+      ss << "Error: path \"" << _path.Path() << "\" contains unknown element \"" << e << "\"";
+      throw FrameException(ss.str());
     }
     frame = it->second;
   }
-  return frame;
+std::cout << "  return frame: " << frame->Name() << std::endl;
+
+  return *frame;
 }
 
 /////////////////////////////////////////////////
@@ -219,5 +227,3 @@ RelativePosePrivate::RelativePosePrivate()
 {
 
 }
-
-

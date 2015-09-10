@@ -19,6 +19,7 @@
 
 #include <mutex>
 #include <map>
+#include <sstream>
 
 #include <ignition/math/Pose3.hh>
 
@@ -29,21 +30,32 @@ namespace ignition
     // Forward declaration of private data
     class FrameGraphPrivate;
     class RelativePosePrivate;
+    class FramePrivate;
 
- //   class FramePrivate;
 
-    class FramePrivate
+    class IGNITION_VISIBLE FrameException : public std::runtime_error
     {
-      public: FramePrivate(const std::string &_name,
-                        const Pose3d& _pose,
-                        const FramePrivate*_parentFrame);
-      public: std::string name;
-      public: Pose3d pose;
-      // this is a direct pointer to the parent
-      // frame, that speeds up lookup.
-      public: const FramePrivate *parentFrame;
+      public: FrameException(const std::string &msg) : std::runtime_error(msg)
+              {}
+    };
 
-      public: std::map<std::string, const FramePrivate*> children;
+    class IGNITION_VISIBLE Frame
+    {
+      friend class FrameGraph;
+      friend class FrameGraphPrivate;
+
+      public: Frame(const std::string &_name,
+                        const Pose3d &_pose,
+                        const Frame *_parentFrame);
+      public: ~Frame();
+
+      public: const std::string& Name() const;
+
+      public: const Pose3d &Pose() const;
+
+      public: const Frame* ParentFrame() const;
+
+      private: FramePrivate *dataPtr;
     };
 
     class IGNITION_VISIBLE RelativePose
@@ -65,8 +77,8 @@ namespace ignition
       /// \param[in] The source frame must be a full path but
       /// the de
       private: RelativePose(std::mutex *mutex,
-                            const FramePrivate *_srcFrame,
-                            const FramePrivate *_dstFrame);
+                            const Frame *_srcFrame,
+                            const Frame *_dstFrame);
 
       private: RelativePosePrivate *dataPtr;
     };
@@ -81,23 +93,21 @@ namespace ignition
       public: virtual ~FrameGraph();
 
       /// \brief Adds a new frame to the graph
-      /// \param[in] _name The full path of the frame
+      /// \param[in] _path The full path of the frame's parent
+      /// \param[in] _name The name of the new frame
       /// \param[in] _pose The pose of the frame, relative to the parent frame
-      /// \param[in] _parent The parent frame's path. This path can be absolute
-      /// or relative. This path must exist.
-      /// \return True if the frame is valid, false otherwise.
-      public: bool  AddFrame( const std::string &_name,
-                              const Pose3d &_pose,
-                              const std::string &_parent = "/world");
+      /// \throws FrameException if one of the path is invalid.
+      public: void  AddFrame( const std::string &_path,
+                              const std::string &_name,
+                              const Pose3d &_pose);
 
       /// \brief Computes a relative pose between 2 frames
       /// \param[in] _srcFrame The name of the source frame
       /// \param[in] _dstFrame The name of the destination frame
-      /// \param[out] The pose between the frames, if it exists
-      /// \return True if a pose exists beteen the frames
-      public: bool Pose(const std::string &_srcFrame,
-                         const std::string &_dstFrame,
-                         Pose3d &_result) const;
+      /// \return The pose between the frames, if it exists
+      public: Pose3d Pose(const std::string &_srcFrame,
+                         const std::string &_dstFrame) const;
+
 
       /// \brief This method returns a Relative pose instance that is
       /// initialized to
@@ -105,10 +115,8 @@ namespace ignition
                                 const std::string &_dstPathi,
                                 RelativePose &_relativePose) const;
 
-      /// \brief Returns a pointer to
-      public: Pose3d *FramePose(const std::string &_path) const;
-
-      private:
+      /// \brief Returns a reference
+      public: Frame &FrameAccess(const std::string &_path) const;
 
       /// \brief Copy Constructor (not allowed)
       /// \param[in] _copy FrameGraph to copy.

@@ -40,33 +40,34 @@ namespace ignition
       public: const std::string &Leaf() const;
       public: const std::string &Path() const;
       public: bool IsFull() const;
+      public: static bool CheckName(const std::string &_name);
       private: void Dump() const;
       private: std::string path;
       private: std::vector<std::string> pathElems;
     };
-/*
+
     class FramePrivate
     {
       public: FramePrivate(const std::string &_name,
                         const Pose3d& _pose,
-                        const FramePrivate*_parentFrame);
+                        const Frame *_parentFrame);
       public: std::string name;
       public: Pose3d pose;
       // this is a direct pointer to the parent
       // frame, that speeds up lookup.
-      public: const FramePrivate *parentFrame;
+      public: const Frame *parentFrame;
 
-      public: std::map<std::string, const FramePrivate*> children;
+      public: std::map<std::string, const Frame*> children;
     };
-*/
+
     /// \internal
     class RelativePosePrivate
     {
       public: RelativePosePrivate();
       public: ~RelativePosePrivate() = default;
       public: mutable std::mutex *mutex;
-      public: std::vector<const FramePrivate *> up;
-      public: std::vector<const FramePrivate *> down;
+      public: std::vector<const Frame *> up;
+      public: std::vector<const Frame *> down;
     };
 
     /// \internal
@@ -80,15 +81,15 @@ namespace ignition
       public: ~FrameGraphPrivate();
 
       /// \brief
-      public: const FramePrivate* FrameFromAbsolutePath(
+      public: const Frame& FrameFromAbsolutePath(
                                                const PathPrivate& _path) const;
 
-      public: FramePrivate* FrameFromAbsolutePath(const PathPrivate& _path);
+      public: Frame& FrameFromAbsolutePath(const PathPrivate& _path);
 
-      public: const FramePrivate* FrameFromRelativePath(const FramePrivate *_frame,
+      public: const Frame& FrameFromRelativePath(const Frame *_frame,
                                            const  PathPrivate& _relPath) const;
 
-      public: FramePrivate world;
+      public: Frame world;
       public: mutable std::mutex mutex;
     };
   }
