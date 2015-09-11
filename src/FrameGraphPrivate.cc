@@ -141,7 +141,6 @@ const Frame& FrameGraphPrivate::FrameFromAbsolutePath(
       << "\" is not an absolute, fully qualified path";
     throw FrameException(ss.str());
   }
-
   // we know the path is full and thus it starts with the world frame
   const Frame *srcFrame = &this->world;
   for (size_t i=1; i < _path.Elems().size(); ++i)
@@ -167,6 +166,7 @@ const Frame& FrameGraphPrivate::FrameFromAbsolutePath(
 /////////////////////////////////////////////////
 Frame& FrameGraphPrivate::FrameFromAbsolutePath(const PathPrivate &_path)
 {
+  // Use const casting to avoid code duplication
   const FrameGraphPrivate *me = const_cast<const FrameGraphPrivate*>(this);
   return const_cast<Frame&>(me->FrameFromAbsolutePath(_path));
 }
@@ -175,13 +175,6 @@ Frame& FrameGraphPrivate::FrameFromAbsolutePath(const PathPrivate &_path)
 const Frame& FrameGraphPrivate::FrameFromRelativePath(const Frame *_frame,
                                                 const PathPrivate &_path) const
 {
-std::string n = _frame->Name();
-std::cout << "FrameGraphPrivate::FrameFromRelativePath start frame: ";
-std::cout << n;
-std::cout << ", path='";
-std::cout << _path.Path();
-std::cout << "'" << std::endl;
-
   if(_path.IsFull())
   {
     return this->FrameFromAbsolutePath(_path);
@@ -191,11 +184,12 @@ std::cout << "'" << std::endl;
   const std::vector<std::string> &elems = _path.Elems();
   for (auto e : elems)
   {
-std::cout << "  " << _frame->dataPtr->name << " [" << e  << "?]" << std::endl;
+    // skip the "current" frame
     if (e == ".")
     {
       continue;
     }
+    // access the "parent" frame
     if (e == "..")
     {
       if(!frame->dataPtr->parentFrame)
@@ -207,6 +201,7 @@ std::cout << "  " << _frame->dataPtr->name << " [" << e  << "?]" << std::endl;
       frame = frame->dataPtr->parentFrame;
       continue;
     }
+    // follow child element e
     auto it = frame->dataPtr->children.find(e);
     if (it == frame->dataPtr->children.end())
     {
@@ -216,8 +211,6 @@ std::cout << "  " << _frame->dataPtr->name << " [" << e  << "?]" << std::endl;
     }
     frame = it->second;
   }
-std::cout << "  return frame: " << frame->Name() << std::endl;
-
   return *frame;
 }
 
