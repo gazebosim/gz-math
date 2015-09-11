@@ -28,34 +28,65 @@ namespace ignition
 {
   namespace math
   {
+    /// \brief A utility class to parse a path like "/world/sphere/center" into
+    /// its components. Paths can be absolute or relative (i.e "../left/right")
     class PathPrivate
     {
+      /// \brief Constructor
       public: PathPrivate(const std::string &_path);
 
-      /// \brief Removes the last element of the path.
-      /// if the path only has one element, nothing is removed.
-      public: void PopLeaf();
+      /// \brief Access to the path elements
+      /// \return A vector of path elements
       public: const std::vector<std::string> & Elems() const;
+
+      /// \brief Access the first element of the path
+      /// \return The first path element
       public: const std::string &Root() const;
+
+      /// \brief Access the last element of the path
       public: const std::string &Leaf() const;
+
+      /// \brief Access the path
+      /// \return The path in a single string (same as used in constructor)
       public: const std::string &Path() const;
+
+      /// \brief Checks if the path is full (starts with "/world")
+      /// \return True if it is a full path
       public: bool IsFull() const;
+
+      /// \brief Checks if a string is a valid path element. It muse constain
+      /// no space, punctuation or special characters
+      /// \return True if the name is valid
       public: static bool CheckName(const std::string &_name);
+
+      /// \brief Outputs the path elements to std::cout. Debugging method.
       private: void Dump() const;
+
+      /// \brief The path string to be parsed
       private: std::string path;
+
+      /// \brief The elements of the path
       private: std::vector<std::string> pathElems;
     };
 
+    /// \brief Private Frame data class.
     class FramePrivate
     {
+      /// \brief Constructor
+      /// \param[in]
       public: FramePrivate(const std::string &_name,
-                        const Pose3d& _pose,
-                        const Frame *_parentFrame);
+                           const Pose3d& _pose,
+                           Frame *_parentFrame);
+
+      /// \brief Name
       public: std::string name;
+
+      /// \brief Pose (offset from the parent frame)
       public: Pose3d pose;
+
       // this is a direct pointer to the parent
       // frame, that speeds up lookup.
-      public: const Frame *parentFrame;
+      public: Frame *parentFrame;
 
       public: std::map<std::string, const Frame*> children;
     };

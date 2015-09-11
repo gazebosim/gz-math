@@ -100,8 +100,7 @@ Pose3d FrameGraph::Pose(const std::string &_srcFramePath,
   RelativePose relativePose;
   this->RelativePoses(_srcFramePath, _dstFramePath, relativePose);
   Pose3d r;
-  relativePose.Compute(r);
-  return r;
+  return relativePose.Compute();
 }
 
 /////////////////////////////////////////////////
@@ -127,7 +126,7 @@ Frame &FrameGraph::FrameAccess(const std::string &_path) const
 /////////////////////////////////////////////////
 Frame::Frame(const std::string &_name,
              const Pose3d &_pose,
-             const Frame *_parentFrame)
+             Frame *_parentFrame)
   :dataPtr(new FramePrivate(_name, _pose, _parentFrame))
 {
 }
@@ -154,6 +153,12 @@ const std::string &Frame::Name() const
 const Pose3d &Frame::Pose() const
 {
   return this->dataPtr->pose;
+}
+
+/////////////////////////////////////////////////
+void Frame::Pose( const Pose3d &_p)
+{
+  this->dataPtr->pose = _p;
 }
 
 /////////////////////////////////////////////////
@@ -207,12 +212,8 @@ RelativePose::~RelativePose()
 
 
 /////////////////////////////////////////////////
-bool RelativePose::Compute( Pose3d &_p) const
+Pose3d RelativePose::Compute() const
 {
-  // check if relative pose is valid
-  if(!this->dataPtr->mutex)
-    return false;
-
   gzerr << "\nCOMPUTE up:" << this->dataPtr->up.size()
         << " down:" << this->dataPtr->down.size()
         << std::endl;
@@ -229,19 +230,6 @@ bool RelativePose::Compute( Pose3d &_p) const
     r -= p->Pose();
   }
   gzerr << " computed: " << r << std::endl;
-  _p = r;
-  return true;
+  return r;
 }
-
-/*
-/////////////////////////////////////////////////
-bool FrameGraph::ParentFrame(const std::string &_frame,
-            std::string &_parent, bool canonical) const
-{
-  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
-  std::cerr << "FrameGraph::Parent not implemented " << std::endl;
-  return false;
-}
-*/
-
 

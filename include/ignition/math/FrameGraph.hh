@@ -46,12 +46,14 @@ namespace ignition
 
       public: Frame(const std::string &_name,
                         const Pose3d &_pose,
-                        const Frame *_parentFrame);
+                        Frame *_parentFrame);
       public: ~Frame();
 
       public: const std::string& Name() const;
 
       public: const Pose3d &Pose() const;
+
+      public: void Pose (const Pose3d &_p);
 
       public: const Frame* ParentFrame() const;
 
@@ -71,7 +73,7 @@ namespace ignition
       /// \brief destructor
       public : virtual ~RelativePose();
 
-      public: bool Compute(Pose3d &_p) const;
+      public: Pose3d Compute() const;
 
       /// \brief private constructor.
       /// \param[in] The source frame must be a full path but

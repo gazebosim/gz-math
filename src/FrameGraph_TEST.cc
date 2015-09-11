@@ -124,6 +124,10 @@ TEST(FrameGraphTest, SimplePose)
   Frame &frame = frameGraph.FrameAccess("/world/a");
   EXPECT_EQ(pa, frame.Pose());
 
+  Pose3d pb(2,0,0,0,0,0);
+  frame.Pose(pb);
+
+  EXPECT_EQ(pb, frame.Pose());
 }
 
 

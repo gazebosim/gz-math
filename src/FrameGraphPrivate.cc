@@ -111,7 +111,7 @@ void  PathPrivate::Dump() const
 /////////////////////////////////////////////////
 FramePrivate::FramePrivate(const std::string &_name,
              const Pose3d &_pose,
-             const Frame *_parentFrame)
+             Frame *_parentFrame)
   :name(_name),
    pose(_pose),
    parentFrame(_parentFrame)
