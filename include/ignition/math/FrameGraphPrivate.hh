@@ -69,14 +69,21 @@ namespace ignition
       private: std::vector<std::string> pathElems;
     };
 
+    /// \internal
     /// \brief Private Frame data class.
     class FramePrivate
     {
       /// \brief Constructor
-      /// \param[in]
+      /// \param[in] _name The frame's short name
+      /// \param[in] _pose The frame's offset from it's parent
+      /// \param[in] _parentFrame The frame's parent
+      /// \param[in] _mutex The lock for the frameGraph
       public: FramePrivate(const std::string &_name,
                            const Pose3d& _pose,
                            Frame *_parentFrame);
+
+      /// \brief Destructor
+      public: ~FramePrivate();
 
       /// \brief Name
       public: std::string name;
@@ -84,19 +91,21 @@ namespace ignition
       /// \brief Pose (offset from the parent frame)
       public: Pose3d pose;
 
-      // this is a direct pointer to the parent
-      // frame, that speeds up lookup.
+      /// \brief this is a direct pointer to the parent
+      /// frame, that speeds up lookup.
       public: Frame *parentFrame;
 
+      /// Children frames, with name
       public: std::map<std::string, const Frame*> children;
     };
 
     /// \internal
+    /// \brief Relative pose between 2 Frames in a FrameGraph.
+    /// It keeps 2 lists of poses
     class RelativePosePrivate
     {
       public: RelativePosePrivate();
       public: ~RelativePosePrivate() = default;
-      public: mutable std::mutex *mutex;
       public: std::vector<const Frame *> up;
       public: std::vector<const Frame *> down;
     };
@@ -121,6 +130,7 @@ namespace ignition
                                            const  PathPrivate& _relPath) const;
 
       public: Frame world;
+
       public: mutable std::mutex mutex;
     };
   }

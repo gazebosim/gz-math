@@ -75,7 +75,6 @@ TEST(FrameGraphTest, AbsolutePaths)
   b2a = frameGraph.Pose("/world/a", "/world/b");
   b2a2 = frameGraph.Pose("/world/a", "../b");
   EXPECT_EQ(b2a, b2a2);
-
 }
 
 /////////////////////////////////////////////////
@@ -95,17 +94,7 @@ TEST(FrameGraphTest, RelativePaths)
   frameGraph.AddFrame("/world", "a", pa);
   // try to add duplicate frame
   EXPECT_THROW(frameGraph.AddFrame("/world", "a",  pa), FrameException);
-
-/*
-  EXPECT_FALSE(frameGraph.AddFrame("/world", "a", pa, "."));
-
-  EXPECT_TRUE(frameGraph.AddFrame("/world/a", pa, "."));
-  EXPECT_TRUE(frameGraph.AddFrame("/world/a", pa, "."));
-  EXPECT_TRUE(frameGraph.AddFrame("/world/a", pa, "."));
-  EXPECT_TRUE(frameGraph.AddFrame("/world/a", pa, "."));
-*/
 }
-
 
 /////////////////////////////////////////////////
 TEST(FrameGraphTest, SimplePose)
@@ -122,12 +111,30 @@ TEST(FrameGraphTest, SimplePose)
   EXPECT_EQ(pa, r);
 
   Frame &frame = frameGraph.FrameAccess("/world/a");
-  EXPECT_EQ(pa, frame.Pose());
+  EXPECT_EQ(pa, frameGraph.Pose(frame));
 
   Pose3d pb(2,0,0,0,0,0);
-  frame.Pose(pb);
+  frameGraph.Pose(frame, pb);
 
-  EXPECT_EQ(pb, frame.Pose());
+  EXPECT_EQ(pb, frameGraph.Pose("/world/a", "/world"));
 }
 
+/////////////////////////////////////////////////
+TEST(FrameGraphTest, SandBox)
+{
+  std::cout << "===== X =====" << std::endl;
+
+  class A
+  {
+    public:
+      A(){ std::cout << "A" << std::endl;}
+      ~A(){std::cout << "~A" << std::endl; }
+  };
+
+  A a;
+  {
+    A &b = a;
+  }
+
+}
 

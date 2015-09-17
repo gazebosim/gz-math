@@ -22,9 +22,6 @@
 using namespace ignition;
 using namespace math;
 
-#define gzerr std::cerr
-#define gzinfo std::cout
-
 /////////////////////////////////////////////////
 FrameGraph::FrameGraph()
   :dataPtr(new FrameGraphPrivate())
@@ -56,9 +53,7 @@ void FrameGraph::AddFrame( const std::string &_path,
                            const std::string &_name,
                            const Pose3d &_pose)
 {
-
   // _name, _pose, _relative
-
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
 
   // Is it a good name?
@@ -96,24 +91,64 @@ void FrameGraph::AddFrame( const std::string &_path,
 Pose3d FrameGraph::Pose(const std::string &_srcFramePath,
                       const std::string &_dstFramePath) const
 {
-  std::cout << "FrameGraph::Pose " << _srcFramePath << " " << _dstFramePath << std::endl;
-  RelativePose relativePose;
-  this->RelativePoses(_srcFramePath, _dstFramePath, relativePose);
-  Pose3d r;
-  return relativePose.Compute();
+  std::cout << "FrameGraph::Pose "
+    << _srcFramePath << " " << _dstFramePath << std::endl;
+
+  RelativePose r = this->RelativePoses(_srcFramePath, _dstFramePath);
+  return this->Pose(r);
 }
 
 /////////////////////////////////////////////////
-bool FrameGraph::RelativePoses(const std::string &_srcPath,
-                              const std::string &_dstPath,
-                              RelativePose &_relativePose) const
+Pose3d FrameGraph::Pose(const RelativePose &_relativePose) const
+{
+  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
+  // the list of frames to traverse are kept in 2 vectors
+  const auto &up = _relativePose.dataPtr->up;
+  const auto &down = _relativePose.dataPtr->down;
+  std::cout << "\nCOMPUTE up:" << up.size()
+        << " down:" << down.size()
+        << std::endl;
+  Pose3d r;
+  for (auto frame : up)
+  {
+    Pose3d p = frame->dataPtr->pose;
+std::cout << " + [" << frame->Name() << "]: " << p << std::endl;
+    r += p;
+  }
+  for (auto frame : down)
+  {
+    Pose3d p = frame->dataPtr->pose;
+std::cout << " - [" << frame->Name() << "]: " << p << std::endl;
+    r -= p;
+  }
+std::cout << " result: " << r << std::endl;
+  return r;
+}
+
+/////////////////////////////////////////////////
+Pose3d FrameGraph::Pose(const Frame& _frame) const
+{
+  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
+  return _frame.dataPtr->pose;
+}
+
+/////////////////////////////////////////////////
+void FrameGraph::Pose(const Frame& _frame, const Pose3d &_p)
+{
+  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
+  _frame.dataPtr->pose = _p;
+}
+
+/////////////////////////////////////////////////
+RelativePose FrameGraph::RelativePoses(const std::string &_srcPath,
+                                       const std::string &_dstPath) const
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   auto &srcFrame = this->dataPtr->FrameFromAbsolutePath(_srcPath);
-  const auto &dstFrame = this->dataPtr->FrameFromRelativePath(&srcFrame, _dstPath);
-  RelativePose r(&this->dataPtr->mutex, &srcFrame, &dstFrame);
-  _relativePose = r;
-  return true;
+  const auto &dstFrame = this->dataPtr->FrameFromRelativePath(&srcFrame,
+                                                              _dstPath);
+  RelativePose r(&srcFrame, &dstFrame);
+  return r;
 }
 
 /////////////////////////////////////////////////
@@ -129,12 +164,31 @@ Frame::Frame(const std::string &_name,
              Frame *_parentFrame)
   :dataPtr(new FramePrivate(_name, _pose, _parentFrame))
 {
+
 }
 
 /////////////////////////////////////////////////
 Frame::~Frame()
 {
   delete this->dataPtr;
+}
+
+
+/////////////////////////////////////////////////
+Frame::Frame(const Frame &_other)
+{
+  this->dataPtr->name = _other.dataPtr->name;
+  this->dataPtr->pose = _other.dataPtr->pose;
+  this->dataPtr->children = _other.dataPtr->children;
+}
+
+/////////////////////////////////////////////////
+Frame &Frame::operator = (const Frame &_other)
+{
+  this->dataPtr->name = _other.dataPtr->name;
+  this->dataPtr->pose = _other.dataPtr->pose;
+  this->dataPtr->children = _other.dataPtr->children;
+  return *this;
 }
 
 /////////////////////////////////////////////////
@@ -150,18 +204,6 @@ const std::string &Frame::Name() const
 }
 
 /////////////////////////////////////////////////
-const Pose3d &Frame::Pose() const
-{
-  return this->dataPtr->pose;
-}
-
-/////////////////////////////////////////////////
-void Frame::Pose( const Pose3d &_p)
-{
-  this->dataPtr->pose = _p;
-}
-
-/////////////////////////////////////////////////
 RelativePose::RelativePose()
   :dataPtr(new RelativePosePrivate())
 {
@@ -170,7 +212,6 @@ RelativePose::RelativePose()
 /////////////////////////////////////////////////
 RelativePose::RelativePose(const RelativePose &_other)
 {
-  this->dataPtr->mutex = _other.dataPtr->mutex;
   this->dataPtr->up = _other.dataPtr->up;
   this->dataPtr->down = _other.dataPtr->down;
 }
@@ -178,18 +219,16 @@ RelativePose::RelativePose(const RelativePose &_other)
 /////////////////////////////////////////////////
 RelativePose& RelativePose::operator = (const RelativePose &_other)
 {
-  this->dataPtr->mutex = _other.dataPtr->mutex;
   this->dataPtr->up = _other.dataPtr->up;
   this->dataPtr->down = _other.dataPtr->down;
+  return *this;
 }
 
 /////////////////////////////////////////////////
-RelativePose::RelativePose(std::mutex *mutex,
-                           const Frame* _srcFrame,
+RelativePose::RelativePose(const Frame* _srcFrame,
                            const Frame* _dstFrame)
   :dataPtr(new RelativePosePrivate())
 {
-  this->dataPtr->mutex = mutex;
   auto frame = _srcFrame;
   while (frame && frame->ParentFrame())
   {
@@ -208,28 +247,5 @@ RelativePose::RelativePose(std::mutex *mutex,
 RelativePose::~RelativePose()
 {
   delete this->dataPtr;
-}
-
-
-/////////////////////////////////////////////////
-Pose3d RelativePose::Compute() const
-{
-  gzerr << "\nCOMPUTE up:" << this->dataPtr->up.size()
-        << " down:" << this->dataPtr->down.size()
-        << std::endl;
-  std::lock_guard<std::mutex> lock(*this->dataPtr->mutex);
-  Pose3d r;
-  for (auto p : this->dataPtr->up)
-  {
-    gzerr << "Applying >> " << p->Name() << ": " << p->Pose() << std::endl;
-    r += p->Pose();
-  }
-  for (auto p : this->dataPtr->down)
-  {
-    gzerr << "Un applying << " << p->Name() << ": " << p->Pose() << std::endl;
-    r -= p->Pose();
-  }
-  gzerr << " computed: " << r << std::endl;
-  return r;
 }
 

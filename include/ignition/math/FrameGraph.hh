@@ -32,56 +32,64 @@ namespace ignition
     class RelativePosePrivate;
     class FramePrivate;
 
-
+    /// \brief Exception class for the FrameGraph and related classes.
     class IGNITION_VISIBLE FrameException : public std::runtime_error
     {
+      /// \b brief Constructor with error message. Most common error is Trying
+      //// to access missing paths..
       public: FrameException(const std::string &msg) : std::runtime_error(msg)
               {}
     };
 
+    /// \brief Frame class. A frame has an offset (a Pose3d) and a parent
+    /// frame. Frames are composed inside the FrameGraph class.
     class IGNITION_VISIBLE Frame
     {
       friend class FrameGraph;
       friend class FrameGraphPrivate;
 
+      /// \brief Create a new Frame to be added
       public: Frame(const std::string &_name,
-                        const Pose3d &_pose,
-                        Frame *_parentFrame);
+                    const Pose3d &_pose,
+                    Frame *_parentFramei);
+
       public: ~Frame();
 
+      public: Frame(const Frame &_other);
+
+      public: Frame& operator = (const Frame &_other);
+
       public: const std::string& Name() const;
-
-      public: const Pose3d &Pose() const;
-
-      public: void Pose (const Pose3d &_p);
 
       public: const Frame* ParentFrame() const;
 
       private: FramePrivate *dataPtr;
     };
 
+    /// \brief Holds the chain of transforms to compute a pose between
+    /// two frames in a FrameGraph
     class IGNITION_VISIBLE RelativePose
     {
       friend class FrameGraph;
 
+      /// constructor
       public: RelativePose();
 
+      /// \brief Copy constructor. Copies the content of the private data.
       public: RelativePose(const RelativePose &_c);
 
+      /// \brief Assignemt operator. Copies the private data.
       public: RelativePose& operator = (const RelativePose &_other);
 
       /// \brief destructor
       public : virtual ~RelativePose();
 
-      public: Pose3d Compute() const;
-
       /// \brief private constructor.
-      /// \param[in] The source frame must be a full path but
-      /// the de
-      private: RelativePose(std::mutex *mutex,
-                            const Frame *_srcFrame,
-                            const Frame *_dstFrame);
+      /// \param[in] The source frame (must be a full path)
+      /// \param[in] The destination frame (can be relative)
+      private: RelativePose(const Frame *_srcFrame, const Frame *_dstFrame);
 
+      /// private data
       private: RelativePosePrivate *dataPtr;
     };
 
@@ -108,14 +116,27 @@ namespace ignition
       /// \param[in] _dstFrame The name of the destination frame
       /// \return The pose between the frames, if it exists
       public: Pose3d Pose(const std::string &_srcFrame,
-                         const std::string &_dstFrame) const;
+                          const std::string &_dstFrame) const;
+
+      /// \brief Computes the relative pose between 2 frames, using
+      /// a RelativePose Instance
+      /// \param[in] _relativePose
+      public: Pose3d Pose(const RelativePose &_relativePose) const;
 
 
-      /// \brief This method returns a Relative pose instance that is
-      /// initialized to
-      public: bool RelativePoses(const std::string &_srcPath,
-                                const std::string &_dstPathi,
-                                RelativePose &_relativePose) const;
+      /// \brief Gets the pose of a Frame (from it's parent frame)
+      /// param[in] _frame The frame reference
+      /// \return The pose of the frame
+      public: Pose3d Pose(const Frame &_frame) const;
+
+      /// \brief Sets the pose of a frame (from it's parent frame)
+      public: void Pose(const Frame &_frame, const Pose3d &_p);
+
+      /// \brief This method returns a Relative pose.
+      /// \param[in] _srcPath The source frame path (must be absolute)
+      /// \param[in] _dstPath The destination frame (can be relative)
+      public: RelativePose RelativePoses(const std::string &_srcPath,
+                                         const std::string &_dstPath) const;
 
       /// \brief Returns a reference
       public: Frame &FrameAccess(const std::string &_path) const;
