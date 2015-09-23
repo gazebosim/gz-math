@@ -17,6 +17,7 @@
 #ifndef _IGNITION_VECTOR4_HH_
 #define _IGNITION_VECTOR4_HH_
 
+#include <algorithm>
 #include <ignition/math/Matrix4.hh>
 
 namespace ignition
@@ -117,6 +118,71 @@ namespace ignition
         this->data[1] = _y;
         this->data[2] = _z;
         this->data[3] = _w;
+      }
+
+      /// \brief Set this vector's components to the maximum of itself and the
+      ///        passed in vector
+      /// \param[in] _v the maximum clamping vector
+      /// \return The new vector.
+      public: Vector4 Max(const Vector4<T> &_v)
+      {
+        if (_v[0] > this->data[0])
+          this->data[0] = _v[0];
+        if (_v[1] > this->data[1])
+          this->data[1] = _v[1];
+        if (_v[2] > this->data[2])
+          this->data[2] = _v[2];
+        if (_v[3] > this->data[3])
+          this->data[3] = _v[3];
+
+        return *this;
+      }
+
+      /// \brief Set this vector's components to the minimum of itself and the
+      ///        passed in vector
+      /// \param[in] _v the minimum clamping vector
+      /// \return The new vector.
+      public: Vector4 Min(const Vector4<T> &_v)
+      {
+        if (_v[0] < this->data[0])
+          this->data[0] = _v[0];
+        if (_v[1] < this->data[1])
+          this->data[1] = _v[1];
+        if (_v[2] < this->data[2])
+          this->data[2] = _v[2];
+        if (_v[3] < this->data[3])
+          this->data[3] = _v[3];
+
+        return *this;
+      }
+
+      /// \brief Clamp this vector's to values between _min and _max.
+      /// This function changes the vector's values, and returns the new
+      /// vector.
+      /// \param[in] _min The minimum allowed values.
+      /// \param[in] _max The maximum allowed values.
+      /// \return The resulting vector.
+      public: Vector4 Clamp(const Vector4<T> &_min,
+                                   const Vector4<T> &_max)
+      {
+        *this = this->Max(_min).Min(_max);
+        return *this;
+      }
+
+      /// \brief Get the maximum value in the vector
+      /// \return the maximum element
+      public: T Max() const
+      {
+        return std::max(std::max(std::max(this->data[0], this->data[1]),
+              this->data[2]), this->data[3]);
+      }
+
+      /// \brief Get the minimum value in the vector
+      /// \return the minimum element
+      public: T Min() const
+      {
+        return std::min(std::min(std::min(this->data[0], this->data[1]),
+              this->data[2]), this->data[3]);
       }
 
       /// \brief Assignment operator

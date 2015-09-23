@@ -17,6 +17,7 @@
 #ifndef _IGNITION_VECTOR2_HH_
 #define _IGNITION_VECTOR2_HH_
 
+#include <algorithm>
 #include <ignition/math/IndexException.hh>
 
 namespace ignition
@@ -254,6 +255,61 @@ namespace ignition
         // need to explicit cast to avoid ambiguity in vc++.
         return std::isfinite(static_cast<double>(this->data[0])) &&
                std::isfinite(static_cast<double>(this->data[1]));
+      }
+
+      /// \brief Set this vector's components to the maximum of itself and the
+      ///        passed in vector
+      /// \param[in] _v the maximum clamping vector
+      /// \return The new vector.
+      public: Vector2 Max(const Vector2<T> &_v)
+      {
+        if (_v[0] > this->data[0])
+          this->data[0] = _v[0];
+        if (_v[1] > this->data[1])
+          this->data[1] = _v[1];
+
+        return *this;
+      }
+
+      /// \brief Set this vector's components to the minimum of itself and the
+      ///        passed in vector
+      /// \param[in] _v the minimum clamping vector
+      /// \return The new vector
+      public: Vector2 Min(const Vector2<T> &_v)
+      {
+        if (_v[0] < this->data[0])
+          this->data[0] = _v[0];
+        if (_v[1] < this->data[1])
+          this->data[1] = _v[1];
+
+        return *this;
+      }
+
+      /// \brief Clamp this vector's to values between _min and _max.
+      /// This function changes the vector's values, and returns the new
+      /// vector.
+      /// \param[in] _min The minimum allowed values.
+      /// \param[in] _max The maximum allowed values.
+      /// \return The resulting vector.
+      public: Vector2 Clamp(const Vector2<T> &_min,
+                            const Vector2<T> &_max)
+      {
+        *this = this->Max(_min).Min(_max);
+        return *this;
+      }
+
+      /// \brief Get the maximum value in the vector
+      /// \return the maximum element
+      public: T Max() const
+      {
+        return std::max(this->data[0], this->data[1]);
+      }
+
+      /// \brief Get the minimum value in the vector
+      /// \return the minimum element
+      public: T Min() const
+      {
+        return std::min(this->data[0], this->data[1]);
       }
 
       /// \brief Array subscript operator

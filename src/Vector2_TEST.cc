@@ -151,3 +151,76 @@ TEST(Vector2Test, OperatorStreamOut)
   stream << v;
   EXPECT_EQ(stream.str(), "0.1 1.2");
 }
+
+/////////////////////////////////////////////////
+TEST(Vector2dTest, Max)
+{
+  math::Vector2d vec1(0.1, 0.2);
+  math::Vector2d vec2(0.2, 0.1);
+  math::Vector2d vec3(0.1, 0.4);
+
+  EXPECT_DOUBLE_EQ(vec1.Max(), 0.2);
+
+  vec1.Max(vec2);
+  EXPECT_EQ(vec1, math::Vector2d(0.2, 0.2));
+
+  vec1.Max(vec3);
+  EXPECT_EQ(vec1, math::Vector2d(0.2, 0.4));
+}
+
+/////////////////////////////////////////////////
+TEST(Vector2dTest, Min)
+{
+  math::Vector2d vec1(0.1, 0.2);
+  math::Vector2d vec2(0.2, 0.1);
+  math::Vector2d vec3(0.05, 0.1);
+
+  EXPECT_DOUBLE_EQ(vec1.Min(), 0.1);
+
+  vec1.Min(vec2);
+  EXPECT_EQ(vec1, math::Vector2d(0.1, 0.1));
+
+  vec1.Min(vec3);
+  EXPECT_EQ(vec1, math::Vector2d(0.05, 0.1));
+}
+
+/////////////////////////////////////////////////
+TEST(Vector2dTest, Clamp)
+{
+  math::Vector2d vec1(0.1, 0.2);
+
+  math::Vector2d min(0, 0);
+  math::Vector2d max(1, 1);
+  math::Vector2d result = vec1.Clamp(min, max);
+  EXPECT_EQ(vec1, result);
+  EXPECT_EQ(vec1, math::Vector2d(0.1, 0.2));
+
+  min.Set(0.1, 0.2);
+  max.Set(0.1, 0.2);
+  result = vec1.Clamp(min, max);
+  EXPECT_EQ(vec1, result);
+  EXPECT_EQ(vec1, math::Vector2d(0.1, 0.2));
+
+  vec1.Set(0.1, 0.2);
+  min.Set(0.11, 0.21);
+  max.Set(0.2, 0.4);
+  result = vec1.Clamp(min, max);
+  EXPECT_EQ(vec1, result);
+  EXPECT_EQ(vec1, math::Vector2d(0.11, 0.21));
+
+  vec1.Set(0.1, 0.2);
+  min.Set(-1, -1);
+  max.Set(0, 0.1);
+  result = vec1.Clamp(min, max);
+  EXPECT_EQ(vec1, result);
+  EXPECT_EQ(vec1, math::Vector2d(0, 0.1));
+  std::cout << "\n\nMax[" << vec1.Max(min) << "]\n\n";
+  std::cout << "\n\nMin[" << vec1.Min(max) << "]\n\n";
+
+  vec1.Set(0.1, 0.2);
+  min.Set(1, 2);
+  max.Set(-1, -2);
+  result = vec1.Clamp(min, max);
+  EXPECT_EQ(vec1, result);
+  EXPECT_EQ(vec1, math::Vector2d(-1, -2));
+}

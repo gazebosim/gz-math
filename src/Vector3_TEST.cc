@@ -284,3 +284,43 @@ TEST(Vector3dTest, IndexException)
 
   EXPECT_THROW(math::equal(v[3], 4.0), math::IndexException);
 }
+
+/////////////////////////////////////////////////
+TEST(Vector3dTest, Clamp)
+{
+  math::Vector3d vec1(0.1, 0.2, 0.3);
+
+  math::Vector3d min(0, 0, 0);
+  math::Vector3d max(1, 1, 1);
+  math::Vector3d result = vec1.Clamp(min, max);
+  EXPECT_EQ(vec1, result);
+  EXPECT_EQ(vec1, math::Vector3d(0.1, 0.2, 0.3));
+
+  vec1.Set(0.1, 0.2, 0.3);
+  min.Set(0.1, 0.2, 0.3);
+  max.Set(0.1, 0.2, 0.3);
+  result = vec1.Clamp(min, max);
+  EXPECT_EQ(vec1, result);
+  EXPECT_EQ(vec1, math::Vector3d(0.1, 0.2, 0.3));
+
+  vec1.Set(0.1, 0.2, 0.3);
+  min.Set(0.11, 0.21, 0.31);
+  max.Set(0.2, 0.4, 0.5);
+  result = vec1.Clamp(min, max);
+  EXPECT_EQ(vec1, result);
+  EXPECT_EQ(vec1, math::Vector3d(0.11, 0.21, 0.31));
+
+  vec1.Set(0.1, 0.2, 0.3);
+  min.Set(-1, -1);
+  max.Set(0, 0.1, 0.2);
+  result = vec1.Clamp(min, max);
+  EXPECT_EQ(vec1, result);
+  EXPECT_EQ(vec1, math::Vector3d(0, 0.1, 0.2));
+
+  vec1.Set(0.1, 0.2, 0.3);
+  min.Set(1, 2, 3);
+  max.Set(-1, -2, -3);
+  result = vec1.Clamp(min, max);
+  EXPECT_EQ(vec1, result);
+  EXPECT_EQ(vec1, math::Vector3d(-1, -2, -3));
+}

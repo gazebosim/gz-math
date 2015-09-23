@@ -264,7 +264,8 @@ namespace ignition
       /// \brief Set this vector's components to the maximum of itself and the
       ///        passed in vector
       /// \param[in] _v the maximum clamping vector
-      public: void Max(const Vector3<T> &_v)
+      /// \return The new vector.
+      public: Vector3 Max(const Vector3<T> &_v)
       {
         if (_v[0] > this->data[0])
           this->data[0] = _v[0];
@@ -272,12 +273,15 @@ namespace ignition
           this->data[1] = _v[1];
         if (_v[2] > this->data[2])
           this->data[2] = _v[2];
+
+        return *this;
       }
 
       /// \brief Set this vector's components to the minimum of itself and the
       ///        passed in vector
       /// \param[in] _v the minimum clamping vector
-      public: void Min(const Vector3<T> &_v)
+      /// \return The new vector.
+      public: Vector3 Min(const Vector3<T> &_v)
       {
         if (_v[0] < this->data[0])
           this->data[0] = _v[0];
@@ -285,6 +289,21 @@ namespace ignition
           this->data[1] = _v[1];
         if (_v[2] < this->data[2])
           this->data[2] = _v[2];
+
+        return *this;
+      }
+
+      /// \brief Clamp this vector's to values between _min and _max.
+      /// This function changes the vector's values, and returns the new
+      /// vector.
+      /// \param[in] _min The minimum allowed values.
+      /// \param[in] _max The maximum allowed values.
+      /// \return The resulting vector.
+      public: Vector3 Clamp(const Vector3<T> &_min,
+                                   const Vector3<T> &_max)
+      {
+        *this = this->Max(_min).Min(_max);
+        return *this;
       }
 
       /// \brief Get the maximum value in the vector

@@ -68,7 +68,7 @@ namespace ignition
       /// \param[in] _max Maximum bound for the random number
       public: static int32_t IntUniform(int _min, int _max);
 
-      /// \brief Get a double from a normal distribution
+      /// \brief Get an integer from a normal distribution
       /// \param[in] _mean Mean value for the distribution
       /// \param[in] _sigma Sigma value for the distribution
       public: static int32_t IntNormal(int _mean, int _sigma);

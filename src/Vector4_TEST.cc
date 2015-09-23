@@ -151,3 +151,84 @@ TEST(Vector4dTest, IndexException)
 
   EXPECT_THROW(math::equal(v[4], 5.0), math::IndexException);
 }
+
+/////////////////////////////////////////////////
+TEST(Vector4dTest, Max)
+{
+  math::Vector4d vec1(0.1, 0.2, 0.4, 0.6);
+  math::Vector4d vec2(0.2, 0.4, 0.4, 0.8);
+  math::Vector4d vec3(0.1, 0.2, 0.4, 0.4);
+
+  EXPECT_DOUBLE_EQ(vec1.Max(), 0.6);
+
+  vec1.Max(vec2);
+  EXPECT_EQ(vec1, math::Vector4d(0.2, 0.4, 0.4, 0.8));
+
+  vec1.Max(vec3);
+  EXPECT_EQ(vec1, math::Vector4d(0.2, 0.4, 0.4, 0.8));
+}
+
+/////////////////////////////////////////////////
+TEST(Vector4dTest, Min)
+{
+  math::Vector4d vec1(0.1, 0.2, 0.4, 0.4);
+  math::Vector4d vec2(0.2, 0.4, 0.4, 0.6);
+  math::Vector4d vec3(0.05, 0.1, 0.2, 0.8);
+
+  EXPECT_DOUBLE_EQ(vec1.Min(), 0.1);
+
+  vec1.Min(vec2);
+  EXPECT_EQ(vec1, math::Vector4d(0.1, 0.2, 0.4, 0.4));
+
+  vec1.Min(vec3);
+  EXPECT_EQ(vec1, math::Vector4d(0.05, 0.1, 0.2, 0.4));
+}
+
+/////////////////////////////////////////////////
+TEST(Vector4dTest, Clamp)
+{
+  math::Vector4d vec1(0.1, 0.2, 0.3, 0.4);
+
+  math::Vector4d min(0, 0, 0, 0);
+  math::Vector4d max(1, 1, 1, 1);
+  math::Vector4d result = vec1.Clamp(min, max);
+  EXPECT_EQ(vec1, result);
+  EXPECT_EQ(vec1, math::Vector4d(0.1, 0.2, 0.3, 0.4));
+
+  vec1.Set(0.1, 0.2, 0.3, 0.4);
+  min.Set(0.1, 0.2, 0.3, 0.4);
+  max.Set(0.1, 0.2, 0.3, 0.4);
+  result = vec1.Clamp(min, max);
+  EXPECT_EQ(vec1, result);
+  EXPECT_EQ(vec1, math::Vector4d(0.1, 0.2, 0.3, 0.4));
+
+  vec1.Set(0.1, 0.2, 0.3, 0.4);
+  min.Set(0.11, 0.21, 0.31, 0.41);
+  max.Set(0.2, 0.4, 0.5, 0.6);
+  result = vec1.Clamp(min, max);
+  EXPECT_EQ(vec1, result);
+  EXPECT_EQ(vec1, math::Vector4d(0.11, 0.21, 0.31, 0.41));
+
+  vec1.Set(0.1, 0.2, 0.3, 0.4);
+  min.Set(-1, -1, -1);
+  max.Set(0, 0.1, 0.2, 0.3);
+  result = vec1.Clamp(min, max);
+  EXPECT_EQ(vec1, result);
+  EXPECT_EQ(vec1, math::Vector4d(0, 0.1, 0.2, 0.3));
+
+  vec1.Set(0.1, 0.2, 0.3, 0.4);
+  min.Set(1, 2, 3, 4);
+  max.Set(-1, -2, -3, -4);
+  result = vec1.Clamp(min, max);
+  EXPECT_EQ(vec1, result);
+  EXPECT_EQ(vec1, math::Vector4d(-1, -2, -3, -4));
+}
+
+/////////////////////////////////////////////////
+TEST(Vector4dTest, OperatorStreamOut)
+{
+  math::Vector4d v(0.1, 1.2, 2.3, 3.4);
+  std::ostringstream stream;
+  stream << v;
+  EXPECT_EQ(stream.str(), "0.1 1.2 2.3 3.4");
+}

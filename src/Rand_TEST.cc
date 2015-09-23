@@ -38,11 +38,10 @@ TEST(RandTest, Rand)
   EXPECT_LE(i, 2);
   EXPECT_GE(i, 1);
 
-  i = math::Rand::IntNormal(2, 3);
-
   {
     // Test setting the random number seed
     math::Rand::Seed(1001);
+
 
     d = math::Rand::DblNormal(2, 3);
 
@@ -52,6 +51,9 @@ TEST(RandTest, Rand)
 #else
     EXPECT_NEAR(d, 3.00618, 1e-5);
 #endif
+
+    i = math::Rand::IntNormal(2, 3);
+    EXPECT_EQ(i, 1);
   }
 }
 
