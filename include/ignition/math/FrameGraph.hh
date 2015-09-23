@@ -138,7 +138,7 @@ namespace ignition
       public: RelativePose RelativePoses(const std::string &_srcPath,
                                          const std::string &_dstPath) const;
 
-      /// \brief Returns a reference
+      /// \brief Returns a reference to a frame instance
       public: Frame &FrameAccess(const std::string &_path) const;
 
       /// \brief Copy Constructor (not allowed)

@@ -91,9 +91,7 @@ void FrameGraph::AddFrame( const std::string &_path,
 Pose3d FrameGraph::Pose(const std::string &_srcFramePath,
                       const std::string &_dstFramePath) const
 {
-  std::cout << "FrameGraph::Pose "
-    << _srcFramePath << " " << _dstFramePath << std::endl;
-
+//  std::cout << "FrameGraph::Pose " << _srcFramePath << " " << _dstFramePath << std::endl;
   RelativePose r = this->RelativePoses(_srcFramePath, _dstFramePath);
   return this->Pose(r);
 }
@@ -105,9 +103,9 @@ Pose3d FrameGraph::Pose(const RelativePose &_relativePose) const
   // the list of frames to traverse are kept in 2 vectors
   const auto &up = _relativePose.dataPtr->up;
   const auto &down = _relativePose.dataPtr->down;
-  std::cout << "\nCOMPUTE up:" << up.size()
-        << " down:" << down.size()
-        << std::endl;
+
+std::cout << "\nCOMPUTE up:" << up.size() << " down:" << down.size() << std::endl;
+
   Pose3d r;
   for (auto frame : up)
   {
@@ -121,7 +119,7 @@ std::cout << " + [" << frame->Name() << "]: " << p << std::endl;
 std::cout << " - [" << frame->Name() << "]: " << p << std::endl;
     r -= p;
   }
-std::cout << " result: " << r << std::endl;
+std::cout << " result: " << r << std::endl << std::endl;
   return r;
 }
 

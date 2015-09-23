@@ -39,10 +39,13 @@ PathPrivate::PathPrivate(const std::string &_s)
 /////////////////////////////////////////////////
 bool PathPrivate::CheckName(const std::string &_name)
 {
+  // frame names should not be empty
   if (_name.empty())
     return false;
+  // and not contain any of these characters
   if (_name.find_first_of("/!@#$%^&*\t ()\":;'.~`_+=,<>") != std::string::npos)
     return false;
+  // good for now
   return true;
 }
 
@@ -106,7 +109,6 @@ void  PathPrivate::Dump() const
     i++;
   }
 }
-
 
 /////////////////////////////////////////////////
 FramePrivate::FramePrivate(const std::string &_name,

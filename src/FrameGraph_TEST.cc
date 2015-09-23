@@ -15,6 +15,7 @@
  *
 */
 
+#include <thread>
 #include <gtest/gtest.h>
 
 #include "ignition/math/Helpers.hh"
@@ -89,19 +90,50 @@ TEST(FrameGraphTest, RelativePaths)
   //          aa     ab
   //          |
   //         aaa
+
+  Pose3d pa   ( 1,  0,  0,  0,  0,  0);
+  Pose3d paa  ( 0,  1,  0,  0,  0,  0);
+  Pose3d pab  ( -1, 0,  0,  0,  0,  0);
+  Pose3d paaa ( 0,  0,  0,  0,  1.570790, 0);
+
   FrameGraph frameGraph;
-  Pose3d pa(100, 0, 0, 0, 0, 0);
+
   frameGraph.AddFrame("/world", "a", pa);
+  frameGraph.AddFrame("/world/a", "aa", paa);
+  frameGraph.AddFrame("/world/a/aa", "aaa", paaa);
+  frameGraph.AddFrame("/world/a", "ab", pab);
+
   // try to add duplicate frame
   EXPECT_THROW(frameGraph.AddFrame("/world", "a",  pa), FrameException);
+  std::cout << frameGraph.Pose("/world/a/aa/aaa", "/world") << std::endl;
+
+  Frame &faa = frameGraph.FrameAccess("/world/a/aa");
+
+  RelativePose rel = frameGraph.RelativePoses("/world/a/aa/aaa", "/world");
+
+  double sweep = 2 * 3.1415926;
+  // varie the local pose of aa, this should move aaa in the world
+  unsigned int steps = 10;
+  for(unsigned int i=0; i < (steps + 1); ++i)
+  {
+    Pose3d p (0, 1, 0, i * (sweep / steps), 0, 0);
+    frameGraph.Pose(faa, p);
+    std::cout << "aa frame: " << p << std::endl;
+    std::cout << "fg pose: " << frameGraph.Pose("/world/a/aa/aaa", "/world") << std::endl;
+    std::cout << "rel pose: " << frameGraph.Pose(rel) << std::endl;
+  }
+
+  Pose3d p0;
+  EXPECT_EQ(p0, frameGraph.Pose("/world/a/ab", "/world"));
 }
 
 /////////////////////////////////////////////////
 TEST(FrameGraphTest, SimplePose)
 {
+  // In a graph with a single frame, the pose of
+  // the frame should be the same as the relative
+  // pose between the frame and the world
   FrameGraph frameGraph;
-
-  std::cout << "===== POSE TEST =====" << std::endl;
 
   Pose3d pa(1, 0, 0, 0, 0, 0);
   frameGraph.AddFrame("/world", "a", pa);
@@ -119,7 +151,47 @@ TEST(FrameGraphTest, SimplePose)
   EXPECT_EQ(pb, frameGraph.Pose("/world/a", "/world"));
 }
 
+void asyncStuff(FrameGraph &frameGraph)
+{
+  std::cout << "asyncStuff" << std::endl;
+  int i = 1000000;
+  while(i > 0)
+  {
+    i --;
+    std::cout << i << std::endl;
+  }
+}
+
 /////////////////////////////////////////////////
+TEST(FrameGraphTest, Multithreads)
+{
+  // In a graph with a single frame, the pose of
+  // the frame should be the same as the relative
+  // pose between the frame and the world
+  FrameGraph frameGraph;
+
+  Pose3d pa(1, 0, 0, 0, 0, 0);
+  frameGraph.AddFrame("/world", "a", pa);
+
+  Pose3d r;
+  r = frameGraph.Pose("/world/a", "/world");
+  EXPECT_EQ(pa, r);
+
+  std::thread t1{asyncStuff, std::ref(frameGraph)};
+
+  Frame &frame = frameGraph.FrameAccess("/world/a");
+  EXPECT_EQ(pa, frameGraph.Pose(frame));
+
+  Pose3d pb(2,0,0,0,0,0);
+  frameGraph.Pose(frame, pb);
+
+  EXPECT_EQ(pb, frameGraph.Pose("/world/a", "/world"));
+
+  t1.join();
+}
+
+/////////////////////////////////////////////////
+/*
 TEST(FrameGraphTest, SandBox)
 {
   std::cout << "===== X =====" << std::endl;
@@ -137,4 +209,4 @@ TEST(FrameGraphTest, SandBox)
   }
 
 }
-
+*/
