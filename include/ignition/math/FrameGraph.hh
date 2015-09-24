@@ -47,6 +47,7 @@ namespace ignition
     {
       friend class FrameGraph;
       friend class FrameGraphPrivate;
+      friend class RelativePose;
 
       /// \brief Create a new Frame to be added
       public: Frame(const std::string &_name,
@@ -61,7 +62,8 @@ namespace ignition
 
       public: const std::string& Name() const;
 
-      public: const Frame* ParentFrame() const;
+      /// OMG!!! this is sooo unsafe!
+      private: const Frame* ParentFrame() const;
 
       private: FramePrivate *dataPtr;
     };
@@ -96,6 +98,8 @@ namespace ignition
     /// \brief A collection of Frames, and their relative poses
     class IGNITION_VISIBLE FrameGraph
     {
+      /// OMG! there is no way to remove a Frame!!!
+
       /// \brief Default constructor. With the following default values:
       public: FrameGraph();
 
