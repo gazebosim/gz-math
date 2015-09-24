@@ -54,17 +54,23 @@ namespace ignition
                     const Pose3d &_pose,
                     Frame *_parentFramei);
 
+      /// \brief Destructor
       public: ~Frame();
 
+      /// \brief Copy constructor
       public: Frame(const Frame &_other);
 
+      /// \brief assignment operator
       public: Frame& operator = (const Frame &_other);
 
+      /// \brief Name getter
+      /// \return The name of the Frame (short name, not a path)
       public: const std::string& Name() const;
 
       /// OMG!!! this is sooo unsafe!
       private: const Frame* ParentFrame() const;
 
+      /// \brief Pimp my class :-(
       private: FramePrivate *dataPtr;
     };
 

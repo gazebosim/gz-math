@@ -96,6 +96,8 @@ namespace ignition
       public: Frame *parentFrame;
 
       /// Children frames, with name
+      /// THIS IS AN OPPORTUNITY FOR SHARED_PTR
+      /// http://stackoverflow.com/questions/20754370/about-race-condition-of-weak-ptr
       public: std::map<std::string, const Frame*> children;
     };
 
@@ -104,9 +106,19 @@ namespace ignition
     /// It keeps 2 lists of poses
     class RelativePosePrivate
     {
+      /// \brief Constructor
       public: RelativePosePrivate();
+
+      /// \brief Destructor
       public: ~RelativePosePrivate() = default;
+
+      /// \brief List of frames to apply in the up direction.
+      /// these are the frames from from the src frame towards
+      /// the common ancestor (possibly the /world frame)
       public: std::vector<const Frame *> up;
+
+      /// \brief List of frames to apply in the down direction,
+      /// towards the
       public: std::vector<const Frame *> down;
     };
 
@@ -117,10 +129,13 @@ namespace ignition
       /// \brief Constructor
       public: FrameGraphPrivate();
 
-      /// \brief destructor
+      /// \brief Destructor
       public: ~FrameGraphPrivate();
 
-      /// \brief
+      /// \brief Given an absolute path (starts with "/world"), This method
+      /// returns a reference to the Frame
+      /// \param[in] _path The path to the frame
+      /// \return The reference to the Frame element if it exists
       public: const Frame& FrameFromAbsolutePath(
                                                const PathPrivate& _path) const;
 
