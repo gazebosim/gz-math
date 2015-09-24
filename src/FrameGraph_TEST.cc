@@ -107,8 +107,7 @@ TEST(FrameGraphTest, RelativePaths)
   EXPECT_THROW(frameGraph.AddFrame("/world", "a",  pa), FrameException);
   std::cout << frameGraph.Pose("/world/a/aa/aaa", "/world") << std::endl;
 
-  Frame &faa = frameGraph.FrameAccess("/world/a/aa");
-
+  const auto &faa = frameGraph.FrameAccess("/world/a/aa");
   RelativePose rel = frameGraph.RelativePoses("/world/a/aa/aaa", "/world");
 
   double sweep = 2 * 3.1415926;
@@ -117,7 +116,7 @@ TEST(FrameGraphTest, RelativePaths)
   for(unsigned int i=0; i < (steps + 1); ++i)
   {
     Pose3d p (0, 1, 0, i * (sweep / steps), 0, 0);
-    frameGraph.Pose(faa, p);
+    frameGraph.SetPose(faa, p);
     std::cout << "aa frame: " << p << std::endl;
     std::cout << "fg pose: " << frameGraph.Pose("/world/a/aa/aaa", "/world") << std::endl;
     std::cout << "rel pose: " << frameGraph.Pose(rel) << std::endl;
@@ -142,11 +141,11 @@ TEST(FrameGraphTest, SimplePose)
   r = frameGraph.Pose("/world/a", "/world");
   EXPECT_EQ(pa, r);
 
-  Frame &frame = frameGraph.FrameAccess("/world/a");
+  const auto &frame = frameGraph.FrameAccess("/world/a");
   EXPECT_EQ(pa, frameGraph.Pose(frame));
 
   Pose3d pb(2,0,0,0,0,0);
-  frameGraph.Pose(frame, pb);
+  frameGraph.SetPose(frame, pb);
 
   EXPECT_EQ(pb, frameGraph.Pose("/world/a", "/world"));
 }
@@ -154,12 +153,13 @@ TEST(FrameGraphTest, SimplePose)
 /////////////////////////////////////////////////
 void asyncStuff(FrameGraph &frameGraph)
 {
-  Frame &frame = frameGraph.FrameAccess("/world/a");
+  const auto &frame = frameGraph.FrameAccess("/world/a");
+
   std::cout << "asyncStuff" << std::endl;
   for (int i=0; i < 10001; ++i)
   {
-    Pose3d pb(i, 0, 0, 0, 0, 0);
-    frameGraph.Pose(frame, pb);
+    Pose3d p(i, 0, 0, 0, 0, 0);
+    frameGraph.SetPose(frame, p);
     // std::cout << "x" << i << std::endl;
   }
 }
@@ -172,7 +172,7 @@ TEST(FrameGraphTest, Multithreads)
   // pose between the frame and the world
   FrameGraph frameGraph;
 
-  Pose3d pa(1, 0, 0, 0, 0, 0);
+  Pose3d pa(0, 0, 0, 0, 0, 0);
   frameGraph.AddFrame("/world", "a", pa);
 
   Pose3d r;
@@ -186,19 +186,22 @@ TEST(FrameGraphTest, Multithreads)
     pool.push_back(std::thread {asyncStuff, std::ref(frameGraph)});
   }
 
-  Frame &frame = frameGraph.FrameAccess("/world/a");
+  const auto &frame = frameGraph.FrameAccess("/world/a");
   EXPECT_EQ(pa, frameGraph.Pose(frame));
 
   // sample the frame position
-  Pose3d p(1,0,0,0,0,0);
-  frameGraph.Pose("/world/a", "/world");
-  EXPECT_EQ(pa, p);
+  //Pose3d p(1,0,0,0,0,0);
+  //frameGraph.Pose("/world/a", "/world");
+  //EXPECT_EQ(pa, p);
+//  Pose3d last = p;
 
+  // Pose3d p;
 
-  Pose3d last = p;
   auto rel = frameGraph.RelativePoses("/world/a", "/world");
+  Pose3d last = frameGraph.Pose(rel);
   for (int i=0; i < 1000; ++i)
   {
+    Pose3d p;
     p = frameGraph.Pose(rel);
     EXPECT_GE(p.Pos().X(), last.Pos().X());
     last = p;
@@ -208,7 +211,7 @@ TEST(FrameGraphTest, Multithreads)
   {
     thread.join();
   }
-  p = frameGraph.Pose(rel);
+  Pose3d p = frameGraph.Pose(rel);
   EXPECT_EQ(p, frameGraph.Pose("/world/a", "/world"));
 }
 

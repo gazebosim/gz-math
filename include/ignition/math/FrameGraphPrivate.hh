@@ -37,18 +37,18 @@ namespace ignition
 
       /// \brief Access to the path elements
       /// \return A vector of path elements
-      public: const std::vector<std::string> & Elems() const;
+      public: const std::vector<std::string> &Elems() const;
 
       /// \brief Access the first element of the path
       /// \return The first path element
-      public: const std::string &Root() const;
+      public: std::string Root() const;
 
       /// \brief Access the last element of the path
-      public: const std::string &Leaf() const;
+      public: std::string Leaf() const;
 
       /// \brief Access the path
       /// \return The path in a single string (same as used in constructor)
-      public: const std::string &Path() const;
+      public: std::string Path() const;
 
       /// \brief Checks if the path is full (starts with "/world")
       /// \return True if it is a full path
@@ -79,8 +79,8 @@ namespace ignition
       /// \param[in] _parentFrame The frame's parent
       /// \param[in] _mutex The lock for the frameGraph
       public: FramePrivate(const std::string &_name,
-                           const Pose3d& _pose,
-                           Frame *_parentFrame);
+                           const Pose3d &_pose,
+                           const FrameWeakPtr &_parentFrame);
 
       /// \brief Destructor
       public: ~FramePrivate();
@@ -93,12 +93,12 @@ namespace ignition
 
       /// \brief this is a direct pointer to the parent
       /// frame, that speeds up lookup.
-      public: Frame *parentFrame;
+      public: FrameWeakPtr parentFrame;
 
       /// Children frames, with name
       /// THIS IS AN OPPORTUNITY FOR SHARED_PTR
       /// http://stackoverflow.com/questions/20754370/about-race-condition-of-weak-ptr
-      public: std::map<std::string, const Frame*> children;
+      public: std::map<std::string, FramePtr> children;
     };
 
     /// \internal
@@ -115,11 +115,11 @@ namespace ignition
       /// \brief List of frames to apply in the up direction.
       /// these are the frames from from the src frame towards
       /// the common ancestor (possibly the /world frame)
-      public: std::vector<const Frame *> up;
+      public: std::vector<FrameWeakPtr> up;
 
       /// \brief List of frames to apply in the down direction,
       /// towards the
-      public: std::vector<const Frame *> down;
+      public: std::vector<FrameWeakPtr> down;
     };
 
     /// \internal
@@ -136,11 +136,11 @@ namespace ignition
       /// returns a reference to the Frame
       /// \param[in] _path The path to the frame
       /// \return The reference to the Frame element if it exists
-      public: const Frame& FrameFromAbsolutePath(
-                                               const PathPrivate& _path) const;
+      public: FrameWeakPtr FrameFromAbsolutePath(
+                                               const PathPrivate &_path) const;
 
       /// \brief non const version of FrameFromAbsolutePath
-      public: Frame& FrameFromAbsolutePath(const PathPrivate& _path);
+      // public: FrameWeakPtr FrameFromAbsolutePath(const PathPrivate& _path);
 
       /// NOTE: _frame SHOULD BE A REFERENCE
 
@@ -149,11 +149,11 @@ namespace ignition
       /// \param[in] _frame The starting Frame
       /// \param[in] _relPath The relative path from the starting Frame
       /// \return The Frame's reference
-      public: const Frame& FrameFromRelativePath(const Frame *_frame,
-                                           const  PathPrivate& _relPath) const;
+      public: FrameWeakPtr FrameFromRelativePath(const FrameWeakPtr &_frame,
+                                           const PathPrivate &_relPath) const;
 
       /// \brief The world frame, root of all frames
-      public: Frame world;
+      public: FramePtr world;
 
       /// \brief Mutex for concurrent access to the graph
       public: mutable std::mutex mutex;

@@ -26,7 +26,6 @@ using namespace math;
 FrameGraph::FrameGraph()
   :dataPtr(new FrameGraphPrivate())
 {
-
 }
 
 /////////////////////////////////////////////////
@@ -74,17 +73,26 @@ void FrameGraph::AddFrame( const std::string &_path,
     throw FrameException(ss.str());
   }
   // remove last path element, since it does not exist yet
-  auto &srcFrameParent = this->dataPtr->FrameFromAbsolutePath(path);
+  const auto &srcFrameParent = this->dataPtr->FrameFromAbsolutePath(path);
+  auto f = srcFrameParent.lock();
 
-  auto it = srcFrameParent.dataPtr->children.find(_name);
-  if (it != srcFrameParent.dataPtr->children.end())
+  if (!f)
+  {
+    std::stringstream ss;
+    ss << "Error: parent path \"" << _path << "\" does not exists";
+    throw FrameException(ss.str());
+  }
+
+  auto it = f->dataPtr->children.find(_name);
+  if (it != f->dataPtr->children.end())
   {
     std::stringstream ss;
     ss << "Error: path \"" << _name << "\" already exists";
     throw FrameException(ss.str());
   }
-  Frame *frame = new Frame(_name, _pose, &srcFrameParent);
-  srcFrameParent.dataPtr->children[_name] = frame;
+
+  FramePtr frame(new Frame(_name, _pose, f));
+  f->dataPtr->children[_name] = frame;
 }
 
 /////////////////////////////////////////////////
@@ -104,37 +112,53 @@ Pose3d FrameGraph::Pose(const RelativePose &_relativePose) const
   const auto &up = _relativePose.dataPtr->up;
   const auto &down = _relativePose.dataPtr->down;
 
-std::cout << "\nCOMPUTE up:" << up.size() << " down:" << down.size() << std::endl;
+//std::cout << "\nCOMPUTE up:" << up.size() << " down:" << down.size() << std::endl;
 
   Pose3d r;
-  for (auto frame : up)
+  for (auto &f : up)
   {
-    Pose3d p = frame->dataPtr->pose;
-std::cout << " + [" << frame->Name() << "]: " << p << std::endl;
-    r += p;
+    auto frame = f.lock();
+    if (frame)
+    {
+      Pose3d p = frame->dataPtr->pose;
+//  std::cout << " + [" << frame->Name() << "]: " << p << std::endl;
+      r += p;
+    }
   }
-  for (auto frame : down)
+  for (auto &f : down)
   {
-    Pose3d p = frame->dataPtr->pose;
-std::cout << " - [" << frame->Name() << "]: " << p << std::endl;
-    r -= p;
+    auto frame = f.lock();
+    if (frame)
+    {
+      Pose3d p = frame->dataPtr->pose;
+//  std::cout << " - [" << frame->Name() << "]: " << p << std::endl;
+      r -= p;
+    }
   }
-std::cout << " result: " << r << std::endl << std::endl;
+//std::cout << " result: " << r << std::endl << std::endl;
   return r;
 }
 
 /////////////////////////////////////////////////
-Pose3d FrameGraph::Pose(const Frame& _frame) const
+Pose3d FrameGraph::Pose(const FrameWeakPtr &_frame) const
 {
+  Pose3d p;
+
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
-  return _frame.dataPtr->pose;
+  auto f = _frame.lock();
+  if (f)
+    p = f->dataPtr->pose;
+
+  return p;
 }
 
 /////////////////////////////////////////////////
-void FrameGraph::Pose(const Frame& _frame, const Pose3d &_p)
+void FrameGraph::SetPose(FrameWeakPtr _frame, const Pose3d &_p)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
-  _frame.dataPtr->pose = _p;
+  auto f = _frame.lock();
+  if (f)
+    f->dataPtr->pose = _p;
 }
 
 /////////////////////////////////////////////////
@@ -142,15 +166,15 @@ RelativePose FrameGraph::RelativePoses(const std::string &_srcPath,
                                        const std::string &_dstPath) const
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
-  auto &srcFrame = this->dataPtr->FrameFromAbsolutePath(_srcPath);
-  const auto &dstFrame = this->dataPtr->FrameFromRelativePath(&srcFrame,
+  const auto &srcFrame = this->dataPtr->FrameFromAbsolutePath(_srcPath);
+  const auto &dstFrame = this->dataPtr->FrameFromRelativePath(srcFrame,
                                                               _dstPath);
-  RelativePose r(&srcFrame, &dstFrame);
+  RelativePose r(srcFrame, dstFrame);
   return r;
 }
 
 /////////////////////////////////////////////////
-Frame &FrameGraph::FrameAccess(const std::string &_path) const
+FrameWeakPtr FrameGraph::FrameAccess(const std::string &_path) const
 {
   PathPrivate path(_path);
   return this->dataPtr->FrameFromAbsolutePath(path);
@@ -159,8 +183,8 @@ Frame &FrameGraph::FrameAccess(const std::string &_path) const
 /////////////////////////////////////////////////
 Frame::Frame(const std::string &_name,
              const Pose3d &_pose,
-             Frame *_parentFrame)
-  :dataPtr(new FramePrivate(_name, _pose, _parentFrame))
+             const FrameWeakPtr &_parentFrame)
+  : dataPtr(new FramePrivate(_name, _pose, _parentFrame))
 {
 
 }
@@ -174,29 +198,31 @@ Frame::~Frame()
 
 /////////////////////////////////////////////////
 Frame::Frame(const Frame &_other)
+  : dataPtr(new FramePrivate(_other.dataPtr->name, _other.dataPtr->pose,
+    FrameWeakPtr()))
 {
-  this->dataPtr->name = _other.dataPtr->name;
-  this->dataPtr->pose = _other.dataPtr->pose;
-  this->dataPtr->children = _other.dataPtr->children;
+  *this->dataPtr = *_other.dataPtr;
 }
 
 /////////////////////////////////////////////////
-Frame &Frame::operator = (const Frame &_other)
+Frame &Frame::operator=(const Frame &_other)
 {
-  this->dataPtr->name = _other.dataPtr->name;
-  this->dataPtr->pose = _other.dataPtr->pose;
-  this->dataPtr->children = _other.dataPtr->children;
+  if (this == &_other)
+    return *this;
+
+  *this->dataPtr = *_other.dataPtr;
+
   return *this;
 }
 
 /////////////////////////////////////////////////
-const Frame* Frame::ParentFrame() const
+FrameWeakPtr Frame::ParentFrame() const
 {
   return this->dataPtr->parentFrame;
 }
 
 /////////////////////////////////////////////////
-const std::string &Frame::Name() const
+std::string Frame::Name() const
 {
   return this->dataPtr->name;
 }
@@ -209,35 +235,38 @@ RelativePose::RelativePose()
 
 /////////////////////////////////////////////////
 RelativePose::RelativePose(const RelativePose &_other)
+  :dataPtr(new RelativePosePrivate())
 {
-  this->dataPtr->up = _other.dataPtr->up;
-  this->dataPtr->down = _other.dataPtr->down;
+  *this->dataPtr = *_other.dataPtr;
 }
 
 /////////////////////////////////////////////////
-RelativePose& RelativePose::operator = (const RelativePose &_other)
+RelativePose& RelativePose::operator=(const RelativePose &_other)
 {
-  this->dataPtr->up = _other.dataPtr->up;
-  this->dataPtr->down = _other.dataPtr->down;
+  if (this == &_other)
+    return *this;
+
+  *this->dataPtr = *_other.dataPtr;
+
   return *this;
 }
 
 /////////////////////////////////////////////////
-RelativePose::RelativePose(const Frame* _srcFrame,
-                           const Frame* _dstFrame)
+RelativePose::RelativePose(const FrameWeakPtr &_srcFrame,
+                           const FrameWeakPtr &_dstFrame)
   :dataPtr(new RelativePosePrivate())
 {
-  auto frame = _srcFrame;
-  while (frame && frame->ParentFrame())
+  auto frame = _srcFrame.lock();
+  while (frame && frame->ParentFrame().lock())
   {
     this->dataPtr->up.push_back(frame);
-    frame = frame->ParentFrame();
+    frame = frame->ParentFrame().lock();
   }
-  frame = _dstFrame;
-  while (frame && frame->ParentFrame())
+  frame = _dstFrame.lock();
+  while (frame && frame->ParentFrame().lock())
   {
     this->dataPtr->down.push_back(frame);
-    frame = frame->ParentFrame();
+    frame = frame->ParentFrame().lock();
   }
 }
 
@@ -246,4 +275,3 @@ RelativePose::~RelativePose()
 {
   delete this->dataPtr;
 }
-
