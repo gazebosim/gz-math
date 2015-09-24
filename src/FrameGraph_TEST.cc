@@ -180,7 +180,7 @@ TEST(FrameGraphTest, Multithreads)
   EXPECT_EQ(pa, r);
 
   std::vector<std::thread> pool;
-  for (int i = 0; i < 10; ++i)
+  for (int i = 0; i < 1; ++i)
   {
     // std::thread t1{asyncStuff, std::ref(frameGraph)};
     pool.push_back(std::thread {asyncStuff, std::ref(frameGraph)});
@@ -208,6 +208,7 @@ TEST(FrameGraphTest, Multithreads)
   {
     thread.join();
   }
+  p = frameGraph.Pose(rel);
   EXPECT_EQ(p, frameGraph.Pose("/world/a", "/world"));
 }
 
