@@ -139,13 +139,23 @@ namespace ignition
       public: const Frame& FrameFromAbsolutePath(
                                                const PathPrivate& _path) const;
 
+      /// \brief non const version of FrameFromAbsolutePath
       public: Frame& FrameFromAbsolutePath(const PathPrivate& _path);
 
+      /// NOTE: _frame SHOULD BE A REFERENCE
+
+      /// \brief Returns a reference to a Frame, given a start Frame and
+      /// a relative path.
+      /// \param[in] _frame The starting Frame
+      /// \param[in] _relPath The relative path from the starting Frame
+      /// \return The Frame's reference
       public: const Frame& FrameFromRelativePath(const Frame *_frame,
                                            const  PathPrivate& _relPath) const;
 
+      /// \brief The world frame, root of all frames
       public: Frame world;
 
+      /// \brief Mutex for concurrent access to the graph
       public: mutable std::mutex mutex;
     };
   }
