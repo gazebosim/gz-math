@@ -28,20 +28,26 @@
 #include <iostream>
 #include <vector>
 
-/// \brief Double maximum value
+/// \brief Double maximum value. This value will be similar to 1.79769e+308
 #define IGN_DBL_MAX std::numeric_limits<double>::max()
 
-/// \brief Double min value
+/// \brief Double min value. This value will be similar to 2.22507e-308
 #define IGN_DBL_MIN std::numeric_limits<double>::min()
+
+/// \brief Double low value, equivalent to -IGN_DBL_MAX
+#define IGN_DBL_LOW std::numeric_limits<double>::lowest()
 
 /// \brief Double positive infinite value
 #define IGN_DBL_INF std::numeric_limits<double>::infinity()
 
-/// \brief Float maximum value
+/// \brief Float maximum value. This value will be similar to 3.40282e+38
 #define IGN_FLT_MAX std::numeric_limits<float>::max()
 
-/// \brief Float minimum value
+/// \brief Float minimum value. This value will be similar to 1.17549e-38
 #define IGN_FLT_MIN std::numeric_limits<float>::min()
+
+/// \brief Float lowest value, equivalent to -IGN_FLT_MAX
+#define IGN_FLT_LOW std::numeric_limits<float>::lowest()
 
 /// \brief 32bit unsigned integer maximum value
 #define IGN_UINT32_MAX std::numeric_limits<uint32_t>::max()
@@ -49,11 +55,19 @@
 /// \brief 32bit unsigned integer minimum value
 #define IGN_UINT32_MIN std::numeric_limits<uint32_t>::min()
 
+/// \brief 32bit unsigned integer lowest value. This is equivalent to
+/// IGN_UINT32_MIN, and is defined here for completeness.
+#define IGN_UINT32_LOW std::numeric_limits<uint32_t>::lowest()
+
 /// \brief 32bit integer maximum value
 #define IGN_INT32_MAX std::numeric_limits<int32_t>::max()
 
 /// \brief 32bit integer minimum value
 #define IGN_INT32_MIN std::numeric_limits<int32_t>::min()
+
+/// \brief 32bit integer minimum value. This is equivalent to IGN_INT32_MIN,
+/// and is defined here for completeness.
+#define IGN_INT32_LOW std::numeric_limits<int32_t>::lowest()
 
 /// \brief Define IGN_PI, IGN_PI_2, and IGN_PI_4.
 /// This was put here for Windows support.
@@ -65,6 +79,15 @@
 #define IGN_PI   3.14159265358979323846
 #define IGN_PI_2 1.57079632679489661923
 #define IGN_PI_4 0.78539816339744830962
+#endif
+
+/// \brief Define IGN_FP_VOLATILE for FP equality comparisons
+/// Use volatile parameters when checking floating point equality on
+/// the 387 math coprocessor to work around bugs from the 387 extra precision
+#if defined __FLT_EVAL_METHOD__  &&  __FLT_EVAL_METHOD__ == 2
+#define IGN_FP_VOLATILE volatile
+#else
+#define IGN_FP_VOLATILE
 #endif
 
 namespace ignition
@@ -144,7 +167,7 @@ namespace ignition
     /// \return True if _v is odd.
     inline bool isOdd(const int _v)
     {
-      return _v % 2;
+      return (_v % 2) != 0;
     }
 
     /// \brief Check if parameter is odd.
@@ -152,7 +175,7 @@ namespace ignition
     /// \return True if _v is odd.
     inline bool isOdd(const unsigned int _v)
     {
-      return _v % 2;
+      return (_v % 2) != 0;
     }
 
     /// \brief get mean of vector of values
@@ -215,7 +238,8 @@ namespace ignition
     inline bool equal(const T &_a, const T &_b,
                       const T &_epsilon = 1e-6)
     {
-      return std::abs(_a - _b) <= _epsilon;
+      IGN_FP_VOLATILE T diff = std::abs(_a - _b);
+      return diff <= _epsilon;
     }
 
     /// \brief get value at a specified precision

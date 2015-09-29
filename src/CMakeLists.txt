@@ -9,6 +9,7 @@ set (sources
   FrameGraphPrivate.cc
   Frustum.cc
   Helpers.cc
+  IndexException.cc
   Kmeans.cc
   Rand.cc
   RotationSpline.cc
@@ -38,6 +39,7 @@ set (gtest_sources
   SignalStats_TEST.cc
   Spline_TEST.cc
   Triangle_TEST.cc
+  Triangle3_TEST.cc
   Vector2_TEST.cc
   Vector3_TEST.cc
   Vector3Stats_TEST.cc
