@@ -154,7 +154,6 @@ TEST(FrameGraphTest, SimplePose)
 void asyncStuff(FrameGraph &frameGraph)
 {
   const auto &frame = frameGraph.FrameAccess("/world/a");
-
   std::cout << "asyncStuff" << std::endl;
   for (int i=0; i < 10001; ++i)
   {
@@ -185,7 +184,6 @@ TEST(FrameGraphTest, Multithreads)
     // std::thread t1{asyncStuff, std::ref(frameGraph)};
     pool.push_back(std::thread {asyncStuff, std::ref(frameGraph)});
   }
-
   const auto &frame = frameGraph.FrameAccess("/world/a");
   EXPECT_EQ(pa, frameGraph.Pose(frame));
 
