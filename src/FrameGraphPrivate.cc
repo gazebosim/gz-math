@@ -22,7 +22,7 @@ using namespace math;
 
 /////////////////////////////////////////////////
 PathPrivate::PathPrivate(const std::string &_s)
-  :path(_s)
+  : path(_s)
 {
   std::stringstream ss(_s);
   std::string item;
@@ -50,25 +50,25 @@ bool PathPrivate::CheckName(const std::string &_name)
 }
 
 /////////////////////////////////////////////////
-const std::vector<std::string> &  PathPrivate::Elems() const
+const std::vector<std::string> &PathPrivate::Elems() const
 {
   return this->pathElems;
 }
 
 /////////////////////////////////////////////////
-const std::string &PathPrivate::Root() const
+std::string PathPrivate::Root() const
 {
   return this->pathElems[0];
 }
 
 /////////////////////////////////////////////////
-const std::string & PathPrivate::Leaf() const
+std::string PathPrivate::Leaf() const
 {
   return this->pathElems[this->pathElems.size() -1];
 }
 
 /////////////////////////////////////////////////
-const std::string & PathPrivate::Path() const
+std::string PathPrivate::Path() const
 {
   return this->path;
 }
@@ -76,6 +76,9 @@ const std::string & PathPrivate::Path() const
 /////////////////////////////////////////////////
 bool PathPrivate::IsFull() const
 {
+  if (this->path.empty())
+    return false;
+
   if (this->path[0] != '/')
     return false;
 
@@ -113,7 +116,7 @@ void  PathPrivate::Dump() const
 /////////////////////////////////////////////////
 FramePrivate::FramePrivate(const std::string &_name,
              const Pose3d &_pose,
-             Frame *_parentFrame)
+             const FrameWeakPtr &_parentFrame)
   :name(_name),
    pose(_pose),
    parentFrame(_parentFrame)
@@ -124,10 +127,10 @@ FramePrivate::FramePrivate(const std::string &_name,
 FramePrivate::~FramePrivate()
 {
   std::cout << "FramePrivate::~FramePrivate()" << this->name << "" << std::endl;
-  for (auto &kv : this->children)
+/*  for (auto &kv : this->children)
   {
     delete kv.second;
-  }
+  }*/
 }
 
 /////////////////////////////////////////////////
@@ -138,13 +141,13 @@ FrameGraphPrivate::~FrameGraphPrivate()
 
 /////////////////////////////////////////////////
 FrameGraphPrivate::FrameGraphPrivate()
-  :world("world", Pose3d(), NULL)
+  : world(new Frame("world", Pose3d(), FrameWeakPtr()))
 {
 }
 
 /////////////////////////////////////////////////
-const Frame& FrameGraphPrivate::FrameFromAbsolutePath(
-                                               const PathPrivate &_path) const
+FrameWeakPtr FrameGraphPrivate::FrameFromAbsolutePath(
+    const PathPrivate &_path) const
 {
   // Is it a good path?
   if (!_path.IsFull())
@@ -155,10 +158,11 @@ const Frame& FrameGraphPrivate::FrameFromAbsolutePath(
     throw FrameException(ss.str());
   }
   // we know the path is full and thus it starts with the world frame
-  const Frame *srcFrame = &this->world;
+  //const Frame *srcFrame = &this->world;
+  auto srcFrame = this->world;
   for (size_t i=1; i < _path.Elems().size(); ++i)
   {
-    auto &children = srcFrame->dataPtr->children;
+    const auto &children = srcFrame->dataPtr->children;
     std::string e = _path.Elems()[i];
     auto it = children.find(e);
     if(it != children.end())
@@ -173,27 +177,31 @@ const Frame& FrameGraphPrivate::FrameFromAbsolutePath(
       throw FrameException(ss.str());
     }
   }
-  return *srcFrame;
+  return srcFrame;
 }
 
-/////////////////////////////////////////////////
-Frame& FrameGraphPrivate::FrameFromAbsolutePath(const PathPrivate &_path)
+/*/////////////////////////////////////////////////
+FrameWeakPtr FrameGraphPrivate::FrameFromAbsolutePath(const PathPrivate &_path)
 {
   // Use const casting to avoid code duplication
-  const FrameGraphPrivate *me = const_cast<const FrameGraphPrivate*>(this);
-  return const_cast<Frame&>(me->FrameFromAbsolutePath(_path));
-}
+  const FrameGraphPrivate *me = const_cast<const FrameGraphPrivate *>(this);
+  return me->FrameFromAbsolutePath(_path);
+}*/
 
 /////////////////////////////////////////////////
-const Frame& FrameGraphPrivate::FrameFromRelativePath(const Frame *_frame,
-                                                const PathPrivate &_path) const
+FrameWeakPtr FrameGraphPrivate::FrameFromRelativePath(
+    const FrameWeakPtr &_frame, const PathPrivate &_path) const
 {
   if(_path.IsFull())
   {
     return this->FrameFromAbsolutePath(_path);
   }
   unsigned int i = 0;
-  const Frame *frame = _frame;
+  auto frame = _frame.lock();
+
+  if (!frame)
+    return FrameWeakPtr();
+
   const std::vector<std::string> &elems = _path.Elems();
   for (auto e : elems)
   {
@@ -205,13 +213,14 @@ const Frame& FrameGraphPrivate::FrameFromRelativePath(const Frame *_frame,
     // access the "parent" frame
     if (e == "..")
     {
-      if(!frame->dataPtr->parentFrame)
+      auto p = frame->dataPtr->parentFrame.lock();
+      if(!p)
       {
         std::stringstream ss;
         ss << "path \"" << _path.Path() << "\" is invalid ";
         throw FrameException(ss.str());
       }
-      frame = frame->dataPtr->parentFrame;
+      frame = p;
       continue;
     }
     // follow child element e
@@ -224,7 +233,7 @@ const Frame& FrameGraphPrivate::FrameFromRelativePath(const Frame *_frame,
     }
     frame = it->second;
   }
-  return *frame;
+  return frame;
 }
 
 /////////////////////////////////////////////////
