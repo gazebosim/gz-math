@@ -17,6 +17,7 @@
 #ifndef _IGNITION_FRAME_GRAPH_HH_
 #define _IGNITION_FRAME_GRAPH_HH_
 
+#include <string>
 #include <memory>
 #include <mutex>
 #include <map>

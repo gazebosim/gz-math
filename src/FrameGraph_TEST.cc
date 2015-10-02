@@ -15,8 +15,8 @@
  *
 */
 
-#include <thread>
 #include <gtest/gtest.h>
+#include <thread>
 
 #include "ignition/math/Helpers.hh"
 #include "ignition/math/FrameGraph.hh"
@@ -91,10 +91,10 @@ TEST(FrameGraphTest, RelativePaths)
   //          |
   //         aaa
 
-  Pose3d pa   ( 1,  0,  0,  0,  0,  0);
-  Pose3d paa  ( 0,  1,  0,  0,  0,  0);
-  Pose3d pab  ( -1, 0,  0,  0,  0,  0);
-  Pose3d paaa ( 0,  0,  0,  0,  1.570790, 0);
+  Pose3d pa(1, 0, 0, 0, 0, 0);
+  Pose3d paa(0, 1, 0, 0, 0, 0);
+  Pose3d pab(-1, 0, 0, 0, 0, 0);
+  Pose3d paaa(0, 0, 0, 0, 1.570790, 0);
 
   FrameGraph frameGraph;
 
@@ -113,13 +113,10 @@ TEST(FrameGraphTest, RelativePaths)
   double sweep = 2 * 3.1415926;
   // varie the local pose of aa, this should move aaa in the world
   unsigned int steps = 10;
-  for(unsigned int i=0; i < (steps + 1); ++i)
+  for (unsigned int i = 0; i < (steps + 1); ++i)
   {
-    Pose3d p (0, 1, 0, i * (sweep / steps), 0, 0);
+    Pose3d p(0, 1, 0, i * (sweep / steps), 0, 0);
     frameGraph.SetPose(faa, p);
-    std::cout << "aa frame: " << p << std::endl;
-    std::cout << "fg pose: " << frameGraph.Pose("/world/a/aa/aaa", "/world") << std::endl;
-    std::cout << "rel pose: " << frameGraph.Pose(rel) << std::endl;
   }
 
   Pose3d p0;
@@ -144,7 +141,7 @@ TEST(FrameGraphTest, SimplePose)
   const auto &frame = frameGraph.FrameAccess("/world/a");
   EXPECT_EQ(pa, frameGraph.Pose(frame));
 
-  Pose3d pb(2,0,0,0,0,0);
+  Pose3d pb(2, 0, 0, 0, 0, 0);
   frameGraph.SetPose(frame, pb);
 
   EXPECT_EQ(pb, frameGraph.Pose("/world/a", "/world"));
@@ -155,7 +152,7 @@ void asyncStuff(FrameGraph &frameGraph)
 {
   const auto &frame = frameGraph.FrameAccess("/world/a");
   std::cout << "asyncStuff" << std::endl;
-  for (int i=0; i < 10001; ++i)
+  for (int i = 0; i < 10001; ++i)
   {
     Pose3d p(i, 0, 0, 0, 0, 0);
     frameGraph.SetPose(frame, p);
@@ -186,18 +183,9 @@ TEST(FrameGraphTest, Multithreads)
   }
   const auto &frame = frameGraph.FrameAccess("/world/a");
   EXPECT_EQ(pa, frameGraph.Pose(frame));
-
-  // sample the frame position
-  //Pose3d p(1,0,0,0,0,0);
-  //frameGraph.Pose("/world/a", "/world");
-  //EXPECT_EQ(pa, p);
-//  Pose3d last = p;
-
-  // Pose3d p;
-
   auto rel = frameGraph.RelativePoses("/world/a", "/world");
   Pose3d last = frameGraph.Pose(rel);
-  for (int i=0; i < 1000; ++i)
+  for (int i = 0; i < 1000; ++i)
   {
     Pose3d p;
     p = frameGraph.Pose(rel);
@@ -205,31 +193,10 @@ TEST(FrameGraphTest, Multithreads)
     last = p;
   }
 
-  for (auto &thread: pool)
+  for (auto &thread : pool)
   {
     thread.join();
   }
   Pose3d p = frameGraph.Pose(rel);
   EXPECT_EQ(p, frameGraph.Pose("/world/a", "/world"));
 }
-
-/////////////////////////////////////////////////
-/*
-TEST(FrameGraphTest, SandBox)
-{
-  std::cout << "===== X =====" << std::endl;
-
-  class A
-  {
-    public:
-      A(){ std::cout << "A" << std::endl;}
-      ~A(){std::cout << "~A" << std::endl; }
-  };
-
-  A a;
-  {
-    A &b = a;
-  }
-
-}
-*/

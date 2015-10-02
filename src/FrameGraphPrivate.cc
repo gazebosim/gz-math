@@ -118,8 +118,8 @@ FramePrivate::FramePrivate(const std::string &_name,
              const Pose3d &_pose,
              const FrameWeakPtr &_parentFrame)
   :name(_name),
-   pose(_pose),
-   parentFrame(_parentFrame)
+  pose(_pose),
+  parentFrame(_parentFrame)
 {
 }
 
@@ -136,7 +136,6 @@ FramePrivate::~FramePrivate()
 /////////////////////////////////////////////////
 FrameGraphPrivate::~FrameGraphPrivate()
 {
-
 }
 
 /////////////////////////////////////////////////
@@ -158,14 +157,14 @@ FrameWeakPtr FrameGraphPrivate::FrameFromAbsolutePath(
     throw FrameException(ss.str());
   }
   // we know the path is full and thus it starts with the world frame
-  //const Frame *srcFrame = &this->world;
+  // const Frame *srcFrame = &this->world;
   auto srcFrame = this->world;
-  for (size_t i=1; i < _path.Elems().size(); ++i)
+  for (size_t i = 1; i < _path.Elems().size(); ++i)
   {
     const auto &children = srcFrame->dataPtr->children;
     std::string e = _path.Elems()[i];
     auto it = children.find(e);
-    if(it != children.end())
+    if (it != children.end())
     {
       srcFrame = it->second;
     }
@@ -180,25 +179,16 @@ FrameWeakPtr FrameGraphPrivate::FrameFromAbsolutePath(
   return srcFrame;
 }
 
-/*/////////////////////////////////////////////////
-FrameWeakPtr FrameGraphPrivate::FrameFromAbsolutePath(const PathPrivate &_path)
-{
-  // Use const casting to avoid code duplication
-  const FrameGraphPrivate *me = const_cast<const FrameGraphPrivate *>(this);
-  return me->FrameFromAbsolutePath(_path);
-}*/
-
 /////////////////////////////////////////////////
 FrameWeakPtr FrameGraphPrivate::FrameFromRelativePath(
     const FrameWeakPtr &_frame, const PathPrivate &_path) const
 {
-  if(_path.IsFull())
+  // path may be full
+  if (_path.IsFull())
   {
     return this->FrameFromAbsolutePath(_path);
   }
-  unsigned int i = 0;
   auto frame = _frame.lock();
-
   if (!frame)
     return FrameWeakPtr();
 
@@ -214,7 +204,7 @@ FrameWeakPtr FrameGraphPrivate::FrameFromRelativePath(
     if (e == "..")
     {
       auto p = frame->dataPtr->parentFrame.lock();
-      if(!p)
+      if (!p)
       {
         std::stringstream ss;
         ss << "path \"" << _path.Path() << "\" is invalid ";
@@ -228,7 +218,8 @@ FrameWeakPtr FrameGraphPrivate::FrameFromRelativePath(
     if (it == frame->dataPtr->children.end())
     {
       std::stringstream ss;
-      ss << "Error: path \"" << _path.Path() << "\" contains unknown element \"" << e << "\"";
+      ss << "Error: path \"" << _path.Path()
+         << "\" contains unknown element \"" << e << "\"";
       throw FrameException(ss.str());
     }
     frame = it->second;
@@ -239,5 +230,4 @@ FrameWeakPtr FrameGraphPrivate::FrameFromRelativePath(
 /////////////////////////////////////////////////
 RelativePosePrivate::RelativePosePrivate()
 {
-
 }

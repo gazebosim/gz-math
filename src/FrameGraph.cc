@@ -48,9 +48,9 @@ FrameGraph &FrameGraph::operator=(const FrameGraph &_assign)
 }
 
 /////////////////////////////////////////////////
-void FrameGraph::AddFrame( const std::string &_path,
-                           const std::string &_name,
-                           const Pose3d &_pose)
+void FrameGraph::AddFrame(const std::string &_path,
+                          const std::string &_name,
+                          const Pose3d &_pose)
 {
   // _name, _pose, _relative
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
@@ -99,7 +99,6 @@ void FrameGraph::AddFrame( const std::string &_path,
 Pose3d FrameGraph::Pose(const std::string &_srcFramePath,
                       const std::string &_dstFramePath) const
 {
-//  std::cout << "FrameGraph::Pose " << _srcFramePath << " " << _dstFramePath << std::endl;
   RelativePose r = this->RelativePoses(_srcFramePath, _dstFramePath);
   return this->Pose(r);
 }
@@ -112,8 +111,6 @@ Pose3d FrameGraph::Pose(const RelativePose &_relativePose) const
   const auto &up = _relativePose.dataPtr->up;
   const auto &down = _relativePose.dataPtr->down;
 
-//std::cout << "\nCOMPUTE up:" << up.size() << " down:" << down.size() << std::endl;
-
   Pose3d r;
   for (auto &f : up)
   {
@@ -121,7 +118,6 @@ Pose3d FrameGraph::Pose(const RelativePose &_relativePose) const
     if (frame)
     {
       Pose3d p = frame->dataPtr->pose;
-//  std::cout << " + [" << frame->Name() << "]: " << p << std::endl;
       r += p;
     }
   }
@@ -131,11 +127,9 @@ Pose3d FrameGraph::Pose(const RelativePose &_relativePose) const
     if (frame)
     {
       Pose3d p = frame->dataPtr->pose;
-//  std::cout << " - [" << frame->Name() << "]: " << p << std::endl;
       r -= p;
     }
   }
-//std::cout << " result: " << r << std::endl << std::endl;
   return r;
 }
 
@@ -186,7 +180,6 @@ Frame::Frame(const std::string &_name,
              const FrameWeakPtr &_parentFrame)
   : dataPtr(new FramePrivate(_name, _pose, _parentFrame))
 {
-
 }
 
 /////////////////////////////////////////////////

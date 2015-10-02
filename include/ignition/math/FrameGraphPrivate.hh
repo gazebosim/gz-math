@@ -17,6 +17,8 @@
 #ifndef _IGNITION_FRAMEGRAPH_PRIVATE_HH_
 #define _IGNITION_FRAMEGRAPH_PRIVATE_HH_
 
+#include <string>
+#include <vector>
 #include <mutex>
 #include <array>
 #include <map>
@@ -47,11 +49,11 @@ namespace ignition
       public: std::string Leaf() const;
 
       /// \brief Access the path
-      /// \return The path in a single string (same as used in constructor)
+      /// \return The path in a single string (string passed in the constructor)
       public: std::string Path() const;
 
       /// \brief Checks if the path is full (starts with "/world")
-      /// \return True if it is a full path
+      /// \return True if it is a full path, false if the path is relative
       public: bool IsFull() const;
 
       /// \brief Checks if a string is a valid path element. It muse constain
@@ -85,7 +87,7 @@ namespace ignition
       /// \brief Destructor
       public: ~FramePrivate();
 
-      /// \brief Name
+      /// \brief Short name of the frame
       public: std::string name;
 
       /// \brief Pose (offset from the parent frame)
@@ -96,7 +98,6 @@ namespace ignition
       public: FrameWeakPtr parentFrame;
 
       /// Children frames, with name
-      /// THIS IS AN OPPORTUNITY FOR SHARED_PTR
       /// http://stackoverflow.com/questions/20754370/about-race-condition-of-weak-ptr
       public: std::map<std::string, FramePtr> children;
     };
