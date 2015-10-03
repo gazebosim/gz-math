@@ -131,16 +131,16 @@ TEST(FrameGraphTest, RelativePaths)
   frameGraph.AddFrame("/world/a/aa", "aaa", paaa);
   frameGraph.AddFrame("/world/a", "ab", pab);
 
-  const auto &faa = frameGraph.FrameAccess("/world/a/aa");
-  RelativePose rel = frameGraph.CreateRelativePose("/world/a/aa/aaa", "/world");
-
   double sweep = 2 * 3.1415926;
-  // varie the local pose of aa, this should move aaa in the world
+  // Let's vary the local pose of aa with a rotation, this should
+  //  move aaa in the world
   unsigned int steps = 10;
   for (unsigned int i = 0; i < (steps + 1); ++i)
   {
     Pose3d p(0, 1, 0, i * (sweep / steps), 0, 0);
-    frameGraph.SetLocalPose(faa, p);
+    frameGraph.SetLocalPose("/world/a/aa", p);
+    std::cout << "aaa " << frameGraph.Pose("/world/a/aa/aaa", "/world")
+              << std::endl;
   }
 
   Pose3d p0;
