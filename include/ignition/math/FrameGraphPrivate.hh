@@ -52,9 +52,9 @@ namespace ignition
       /// \return The path in a single string (string passed in the constructor)
       public: std::string Path() const;
 
-      /// \brief Checks if the path is full (starts with "/world")
+      /// \brief Checks if the path is absolute (starts with "/world")
       /// \return True if it is a full path, false if the path is relative
-      public: bool IsFull() const;
+      public: bool IsAbsolute() const;
 
       /// \brief Checks if a string is a valid path element. It muse constain
       /// no space, punctuation or special characters

@@ -22,6 +22,12 @@
 using namespace ignition;
 using namespace math;
 
+
+/////////////////////////////////////////////////
+FrameException::FrameException(const std::string &_msg)
+  :std::runtime_error(_msg)
+{}
+
 /////////////////////////////////////////////////
 FrameGraph::FrameGraph()
   :dataPtr(new FrameGraphPrivate())
@@ -52,9 +58,6 @@ void FrameGraph::AddFrame(const std::string &_path,
                           const std::string &_name,
                           const Pose3d &_pose)
 {
-  // _name, _pose, _relative
-  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
-
   // Is it a good name?
   if (!PathPrivate::CheckName(_name))
   {
@@ -65,13 +68,15 @@ void FrameGraph::AddFrame(const std::string &_path,
   }
   // In a good path?
   PathPrivate path(_path);
-  if (!path.IsFull())
+  if (!path.IsAbsolute())
   {
     std::stringstream ss;
     ss << "Error adding frame: path \"" << _path
       << "\" is not a fully qualified path";
     throw FrameException(ss.str());
   }
+
+  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   // remove last path element, since it does not exist yet
   const auto &srcFrameParent = this->dataPtr->FrameFromAbsolutePath(path);
   auto f = srcFrameParent.lock();
@@ -95,11 +100,26 @@ void FrameGraph::AddFrame(const std::string &_path,
   f->dataPtr->children[_name] = frame;
 }
 
+
+/////////////////////////////////////////////////
+void FrameGraph::DeleteFrame(const std::string &_path)
+{
+   PathPrivate path(_path);
+  if (!path.IsAbsolute())
+  {
+    std::stringstream ss;
+    ss << "Error deleting frame: path \"" << _path
+      << "\" is not a fully qualified path";
+    throw FrameException(ss.str());
+  }
+  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
+}
+
 /////////////////////////////////////////////////
 Pose3d FrameGraph::Pose(const std::string &_srcFramePath,
                       const std::string &_dstFramePath) const
 {
-  RelativePose r = this->RelativePoses(_srcFramePath, _dstFramePath);
+  RelativePose r = this->CreateRelativePose(_srcFramePath, _dstFramePath);
   return this->Pose(r);
 }
 
@@ -134,7 +154,15 @@ Pose3d FrameGraph::Pose(const RelativePose &_relativePose) const
 }
 
 /////////////////////////////////////////////////
-Pose3d FrameGraph::Pose(const FrameWeakPtr &_frame) const
+Pose3d FrameGraph::LocalPose(const std::string &_path) const
+{
+  auto frame = this->FrameAccess(_path);
+  auto p = this->LocalPose(frame);
+  return p;
+}
+
+/////////////////////////////////////////////////
+Pose3d FrameGraph::LocalPose(const FrameWeakPtr &_frame) const
 {
   Pose3d p;
 
@@ -147,7 +175,7 @@ Pose3d FrameGraph::Pose(const FrameWeakPtr &_frame) const
 }
 
 /////////////////////////////////////////////////
-void FrameGraph::SetPose(FrameWeakPtr _frame, const Pose3d &_p)
+void FrameGraph::SetLocalPose(FrameWeakPtr _frame, const Pose3d &_p)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   auto f = _frame.lock();
@@ -156,7 +184,14 @@ void FrameGraph::SetPose(FrameWeakPtr _frame, const Pose3d &_p)
 }
 
 /////////////////////////////////////////////////
-RelativePose FrameGraph::RelativePoses(const std::string &_srcPath,
+void FrameGraph::SetLocalPose(const std::string &_path, const Pose3d &_p)
+{
+  auto frame = this->FrameAccess(_path);
+  this->SetLocalPose(frame, _p);
+}
+
+/////////////////////////////////////////////////
+RelativePose FrameGraph::CreateRelativePose(const std::string &_srcPath,
                                        const std::string &_dstPath) const
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
@@ -202,16 +237,8 @@ Frame &Frame::operator=(const Frame &_other)
 {
   if (this == &_other)
     return *this;
-
   *this->dataPtr = *_other.dataPtr;
-
   return *this;
-}
-
-/////////////////////////////////////////////////
-FrameWeakPtr Frame::ParentFrame() const
-{
-  return this->dataPtr->parentFrame;
 }
 
 /////////////////////////////////////////////////
@@ -250,16 +277,16 @@ RelativePose::RelativePose(const FrameWeakPtr &_srcFrame,
   :dataPtr(new RelativePosePrivate())
 {
   auto frame = _srcFrame.lock();
-  while (frame && frame->ParentFrame().lock())
+  while (frame && frame->dataPtr->parentFrame.lock())
   {
     this->dataPtr->up.push_back(frame);
-    frame = frame->ParentFrame().lock();
+    frame = frame->dataPtr->parentFrame.lock();
   }
   frame = _dstFrame.lock();
-  while (frame && frame->ParentFrame().lock())
+  while (frame && frame->dataPtr->parentFrame.lock())
   {
     this->dataPtr->down.push_back(frame);
-    frame = frame->ParentFrame().lock();
+    frame = frame->dataPtr->parentFrame.lock();
   }
 }
 

@@ -74,7 +74,7 @@ std::string PathPrivate::Path() const
 }
 
 /////////////////////////////////////////////////
-bool PathPrivate::IsFull() const
+bool PathPrivate::IsAbsolute() const
 {
   if (this->path.empty())
     return false;
@@ -126,11 +126,7 @@ FramePrivate::FramePrivate(const std::string &_name,
 /////////////////////////////////////////////////
 FramePrivate::~FramePrivate()
 {
-  std::cout << "FramePrivate::~FramePrivate()" << this->name << "" << std::endl;
-/*  for (auto &kv : this->children)
-  {
-    delete kv.second;
-  }*/
+std::cout << "FramePrivate::~FramePrivate()" << this->name << "" << std::endl;
 }
 
 /////////////////////////////////////////////////
@@ -149,7 +145,7 @@ FrameWeakPtr FrameGraphPrivate::FrameFromAbsolutePath(
     const PathPrivate &_path) const
 {
   // Is it a good path?
-  if (!_path.IsFull())
+  if (!_path.IsAbsolute())
   {
     std::stringstream ss;
     ss << "Frame path \"" << _path.Path()
@@ -184,7 +180,7 @@ FrameWeakPtr FrameGraphPrivate::FrameFromRelativePath(
     const FrameWeakPtr &_frame, const PathPrivate &_path) const
 {
   // path may be full
-  if (_path.IsFull())
+  if (_path.IsAbsolute())
   {
     return this->FrameFromAbsolutePath(_path);
   }

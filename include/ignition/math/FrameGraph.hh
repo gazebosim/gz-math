@@ -45,17 +45,20 @@ namespace ignition
     {
       /// \b brief Constructor with error message. Most common error is Trying
       //// to access missing paths..
-      public: FrameException(const std::string &msg) : std::runtime_error(msg)
-              {}
+      /// \param[in] _msg The error desciption
+      public: FrameException(const std::string &_msg);
     };
 
     /// \brief Frame class. A frame has an offset (a Pose3d) and a parent
     /// frame. Frames are composed inside the FrameGraph class.
+    /// The Frame class does not have a lot of public methods. The FrameGraph
+    /// class acts as a Facade from which get the Frame information, and
+    /// also performs the thread locking while the Frame data is accessed.
     class IGNITION_VISIBLE Frame
     {
-      friend class FrameGraph;
-      friend class FrameGraphPrivate;
-      friend class RelativePose;
+        friend class FrameGraph;  // adding and deleting Frames
+        friend class FrameGraphPrivate;  // path calculations
+        friend class RelativePose;  // access Frame's parents
 
       /// \brief Create a new Frame to be added
       public: Frame(const std::string &_name,
@@ -75,10 +78,7 @@ namespace ignition
       /// \return The name of the Frame (short name, not a path)
       public: std::string Name() const;
 
-      /// OMG!!! this is sooo unsafe!
-      private: FrameWeakPtr ParentFrame() const;
-
-      /// \brief Pimp my class :-(
+      /// \brief Private data
       private: FramePrivate *dataPtr;
     };
 
@@ -130,6 +130,10 @@ namespace ignition
                              const std::string &_name,
                              const Pose3d &_pose);
 
+      /// \brief Removes a frame and all its children.
+      /// \param[in] _path The absolute path to the frame
+      public: void DeleteFrame(const std::string &_path);
+
       /// \brief Computes a relative pose between 2 frames
       /// \param[in] _srcFrame The name of the source frame
       /// \param[in] _dstFrame The name of the destination frame
@@ -143,22 +147,44 @@ namespace ignition
       public: Pose3d Pose(const RelativePose &_relativePose) const;
 
 
-      /// \brief Gets the pose of a Frame (from it's parent frame)
+      /// \brief Gets the pose of a frame (relative to it's parent frame)
+      /// \param[in] _path The absolute path to the frame
+      /// \return The local pose of the a frame
+      public: Pose3d LocalPose(const std::string &_path) const;
+
+      /// \brief Gets the pose of a Frame (relative to it's parent frame)
       /// param[in] _frame The frame reference
       /// \return The pose of the frame
-      public: Pose3d Pose(const FrameWeakPtr &_frame) const;
+      public: Pose3d LocalPose(const FrameWeakPtr &_frame) const;
 
-      /// \brief Sets the pose of a frame (from it's parent frame)
-      public: void SetPose(FrameWeakPtr _frame, const Pose3d &_p);
+      /// \brief Sets the pose of a frame (relative to it's parent frame)
+      /// \param[in] _path The absolute path to the frame
+      /// \return The local pose
+      public: void SetLocalPose(const std::string &_path, const Pose3d &_p);
 
-      /// \brief This method returns a Relative pose.
+      /// \brief Sets the pose of a frame (relative to it's parent frame)
+      /// \param[in] _frame The frame reference
+      /// \return The local pose
+      public: void SetLocalPose(FrameWeakPtr _frame, const Pose3d &_p);
+
+      /// \brief This method generate a Relative pose between 2 frames.
       /// \param[in] _srcPath The source frame path (must be absolute)
       /// \param[in] _dstPath The destination frame (can be relative)
-      public: RelativePose RelativePoses(const std::string &_srcPath,
+      public: RelativePose CreateRelativePose(const std::string &_srcPath,
                                          const std::string &_dstPath) const;
 
       /// \brief Returns a reference to a frame instance
+      /// \param[in] _path The absolute path to the frame
+      /// \return The frame's weak pointer
       public: FrameWeakPtr FrameAccess(const std::string &_path) const;
+
+
+      /// \brief Returns a reference to a frame instance
+      /// \param[in] _
+      /// \param[in] _relativepath The relative path to the frame
+      /// \return The frame's weak pointer
+      public: FrameWeakPtr FrameAccess(FrameWeakPtr _frame,
+                                       const std::string _relativePath) const;
 
       /// \brief Copy Constructor (not allowed)
       /// \param[in] _copy FrameGraph to copy.
@@ -166,6 +192,7 @@ namespace ignition
 
       /// \brief Assignment operator (not allowed)
       /// \param[in] _assign FrameGraph to get values from
+
       private: FrameGraph &operator=(const FrameGraph &_assign);
 
       /// \internal
