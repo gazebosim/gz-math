@@ -26,7 +26,8 @@ using namespace math;
 
 // LocalPose with string
 // CreateRelative pose
-
+// DeleteFrame
+// AccessFrame relative version
 
 /////////////////////////////////////////////////
 TEST(FrameGraphTest, AbsolutePaths)
@@ -58,10 +59,18 @@ TEST(FrameGraphTest, AbsolutePaths)
 
   // Finally, this path adds a to the built in "/world" frame
   frameGraph.AddFrame("/world", "a", pa);
+
+  // try to add duplicate frame
+  EXPECT_THROW(frameGraph.AddFrame("/world", "a",  pa), FrameException);
+
   Pose3d a2w;
   // skillfull pose inquiry
   a2w = frameGraph.Pose("/world/a", "/world");
   EXPECT_EQ(pa, a2w);
+
+  // the local pose of a relative to its parent is also pa
+  Pose3d localPose = frameGraph.LocalPose("/world/a");
+  EXPECT_EQ(pa, localPose);
 
   // error: x does not exist
   EXPECT_THROW(p = frameGraph.Pose("/world/a", "/world/x"), FrameException);
@@ -74,12 +83,27 @@ TEST(FrameGraphTest, AbsolutePaths)
   Pose3d w2b = frameGraph.Pose("/world/b", "..");
   EXPECT_EQ(pb, w2b);
 
-
   // Relative path from a to b
   Pose3d b2a, b2a2;
   b2a = frameGraph.Pose("/world/a", "/world/b");
   b2a2 = frameGraph.Pose("/world/a", "../b");
   EXPECT_EQ(b2a, b2a2);
+}
+
+/////////////////////////////////////////////////
+TEST(FrameGraphTest, DeleteFrame)
+{
+  Pose3d pa(1, 0, 0, 0, 0, 0);
+  Pose3d paa(0, 1, 0, 0, 0, 0);
+  Pose3d paaa(0, 0, 0, 0, 1.570790, 0);
+
+  FrameGraph frameGraph;
+  frameGraph.AddFrame("/world", "a", pa);
+  frameGraph.AddFrame("/world/a", "aa", paa);
+  frameGraph.AddFrame("/world/a/aa", "aaa", paaa);
+
+  frameGraph.DeleteFrame("/world/a");
+  EXPECT_THROW(frameGraph.AddFrame("/world/a/aa", "aaa", paaa), FrameException);
 }
 
 /////////////////////////////////////////////////
@@ -106,10 +130,6 @@ TEST(FrameGraphTest, RelativePaths)
   frameGraph.AddFrame("/world/a", "aa", paa);
   frameGraph.AddFrame("/world/a/aa", "aaa", paaa);
   frameGraph.AddFrame("/world/a", "ab", pab);
-
-  // try to add duplicate frame
-  EXPECT_THROW(frameGraph.AddFrame("/world", "a",  pa), FrameException);
-  std::cout << frameGraph.Pose("/world/a/aa/aaa", "/world") << std::endl;
 
   const auto &faa = frameGraph.FrameAccess("/world/a/aa");
   RelativePose rel = frameGraph.CreateRelativePose("/world/a/aa/aaa", "/world");
@@ -148,17 +168,17 @@ TEST(FrameGraphTest, SimplePose)
   EXPECT_EQ(pb, frameGraph.Pose("/world/a", "/world"));
 }
 
-/*
+
 /////////////////////////////////////////////////
+// this code executes from a thread
+// it changes the local pose of a frame
 void asyncStuff(FrameGraph &frameGraph)
 {
   const auto &frame = frameGraph.FrameAccess("/world/a");
-  std::cout << "asyncStuff" << std::endl;
-  for (int i = 0; i < 10001; ++i)
+  for (int i = 0; i < 1000001; ++i)
   {
     Pose3d p(i, 0, 0, 0, 0, 0);
     frameGraph.SetLocalPose(frame, p);
-    // std::cout << "x" << i << std::endl;
   }
 }
 
@@ -180,7 +200,6 @@ TEST(FrameGraphTest, Multithreads)
   std::vector<std::thread> pool;
   for (int i = 0; i < 1; ++i)
   {
-    // std::thread t1{asyncStuff, std::ref(frameGraph)};
     pool.push_back(std::thread {asyncStuff, std::ref(frameGraph)});
   }
   const auto &frame = frameGraph.FrameAccess("/world/a");
@@ -202,4 +221,4 @@ TEST(FrameGraphTest, Multithreads)
   Pose3d p = frameGraph.Pose(rel);
   EXPECT_EQ(p, frameGraph.Pose("/world/a", "/world"));
 }
-*/
+

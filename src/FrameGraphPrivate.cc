@@ -126,7 +126,6 @@ FramePrivate::FramePrivate(const std::string &_name,
 /////////////////////////////////////////////////
 FramePrivate::~FramePrivate()
 {
-std::cout << "FramePrivate::~FramePrivate()" << this->name << "" << std::endl;
 }
 
 /////////////////////////////////////////////////

@@ -77,10 +77,8 @@ void FrameGraph::AddFrame(const std::string &_path,
   }
 
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
-  // remove last path element, since it does not exist yet
   const auto &srcFrameParent = this->dataPtr->FrameFromAbsolutePath(path);
   auto f = srcFrameParent.lock();
-
   if (!f)
   {
     std::stringstream ss;
@@ -104,7 +102,7 @@ void FrameGraph::AddFrame(const std::string &_path,
 /////////////////////////////////////////////////
 void FrameGraph::DeleteFrame(const std::string &_path)
 {
-   PathPrivate path(_path);
+  PathPrivate path(_path);
   if (!path.IsAbsolute())
   {
     std::stringstream ss;
@@ -113,6 +111,31 @@ void FrameGraph::DeleteFrame(const std::string &_path)
     throw FrameException(ss.str());
   }
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
+  FrameWeakPtr framePtr = this->dataPtr->FrameFromAbsolutePath(path);
+  std::string name;
+  FrameWeakPtr parentPtr;
+  {
+    auto f = framePtr.lock();
+    if (!f)
+    {
+      std::stringstream ss;
+      ss << "Error: path \"" << _path << "\" does not exists";
+      throw FrameException(ss.str());
+    }
+    name = f->Name();
+    parentPtr = f->dataPtr->parentFrame;
+  }
+
+  // get the name of the frame to remove
+  // remove the frame from its parent
+  auto p = parentPtr.lock();
+  if (!p)
+  {
+    std::stringstream ss;
+    ss << "Error: path \"" << _path << "\" has no parent";
+    throw FrameException(ss.str());
+  }
+  p->dataPtr->children.erase(name);
 }
 
 /////////////////////////////////////////////////
