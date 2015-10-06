@@ -154,14 +154,15 @@ Pose3d FrameGraph::Pose(const RelativePose &_relativePose) const
   const auto &up = _relativePose.dataPtr->up;
   const auto &down = _relativePose.dataPtr->down;
 
-  Pose3d r;
+  Pose3d result;
   for (auto &f : up)
   {
     auto frame = f.lock();
     if (frame)
     {
       Pose3d p = frame->dataPtr->pose;
-      r += p;
+      result += p;
+std::cout << "// +=> " << p << " (" << frame->Name()  << "):" << result << std::endl;
     }
   }
   for (auto &f : down)
@@ -170,10 +171,11 @@ Pose3d FrameGraph::Pose(const RelativePose &_relativePose) const
     if (frame)
     {
       Pose3d p = frame->dataPtr->pose;
-      r -= p;
+      result -= p;
+std::cout << "// -=> " << p << " (" << frame->Name()  << "):" << result << std::endl;
     }
   }
-  return r;
+  return result;
 }
 
 /////////////////////////////////////////////////
@@ -188,12 +190,10 @@ Pose3d FrameGraph::LocalPose(const std::string &_path) const
 Pose3d FrameGraph::LocalPose(const FrameWeakPtr &_frame) const
 {
   Pose3d p;
-
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   auto f = _frame.lock();
   if (f)
     p = f->dataPtr->pose;
-
   return p;
 }
 

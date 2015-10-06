@@ -107,6 +107,68 @@ TEST(FrameGraphTest, DeleteFrame)
 }
 
 /////////////////////////////////////////////////
+std::string p2str(const Pose3d &_p)
+{
+  std::stringstream ss;
+  auto p = _p.Pos();
+  ss << "("<< p.X() << ", " << p.Y() << ", " << p.Z() << ", ";
+  auto r =  _p.Rot().Euler();
+  ss << r.X() << ", " <<  r.Y() << ", " << r.Z() << ")";
+  return ss.str();
+}
+
+std::string link(const Pose3d &_p0, const Pose3d &_p1)
+{
+  std::stringstream ss;
+  auto p0 = _p0.Pos();
+  auto p1 = _p1.Pos();
+  ss << "link(" << p0.X() << ", " << p0.Y() << ", " << p0.Z()
+     << ", " << p1.X() << ", " << p1.Y() << ", " << p1.Z() << ", 1, 1)";
+  return ss.str();
+}
+
+/////////////////////////////////////////////////
+TEST(FrameGraphTest, RelativePose)
+{
+  //             world
+  //              |
+  //              a
+  //              |
+  //          --------
+  //          |      |
+  //          aa     ab
+
+  Pose3d w;  // world
+  Pose3d pa(10, 0, 0, 0, 0, 0);
+  Pose3d paa(10, 0, 0, 0, 0, 0);
+  Pose3d pab(0, 10, 0, 0, 0, 0);
+
+
+
+  FrameGraph frameGraph;
+  frameGraph.AddFrame("/world", "a", pa);
+  frameGraph.AddFrame("/world/a", "aa", paa);
+  frameGraph.AddFrame("/world/a", "ab", pab);
+
+  std::cout << "\n\n";
+  std::cout << link(w, pa) << "; // w to a"<< std::endl;
+  std::cout << link(pa, frameGraph.Pose("/world/a/aa", "/world")) << "; // a to aa" << std::endl;
+  std::cout << link(pa, frameGraph.Pose("/world/a/ab", "/world")) << "; // a to ab" << std::endl;
+  std::cout << std::endl;
+
+  double angle = 0;
+  Pose3d p(10, 0, 0, 0, 0, angle); // (10, 0, 0, angle, angle, 0);
+  frameGraph.SetLocalPose("/world/a", p);
+
+  std::cout << std::endl;
+  auto paa2ab = frameGraph.Pose("/world/a/aa", "/world/a/ab");
+  std::cout << "pose" << p2str(paa2ab) << ";  // aa to ab" << std::endl;
+  std::cout << std::endl;
+//  EXPECT_EQ(p0, frameGraph.Pose("/world/a/ab", "/world"));
+}
+
+
+/////////////////////////////////////////////////
 TEST(FrameGraphTest, RelativePaths)
 {
   //             world
@@ -119,13 +181,12 @@ TEST(FrameGraphTest, RelativePaths)
   //          |
   //         aaa
 
-  Pose3d pa(1, 0, 0, 0, 0, 0);
-  Pose3d paa(0, 1, 0, 0, 0, 0);
-  Pose3d pab(-1, 0, 0, 0, 0, 0);
-  Pose3d paaa(0, 0, 0, 0, 1.570790, 0);
+  Pose3d pa(10, 0, 0, 0, 0, 0);
+  Pose3d paa(10, 0, 0, 0, 0, 0);
+  Pose3d paaa(10, 0, 0, 0, 0, 0);
+  Pose3d pab(0, 10, 0, 0, 0, 0);
 
   FrameGraph frameGraph;
-
   frameGraph.AddFrame("/world", "a", pa);
   frameGraph.AddFrame("/world/a", "aa", paa);
   frameGraph.AddFrame("/world/a/aa", "aaa", paaa);
@@ -134,13 +195,29 @@ TEST(FrameGraphTest, RelativePaths)
   double sweep = 2 * 3.1415926;
   // Let's vary the local pose of aa with a rotation, this should
   //  move aaa in the world
+  Pose3d w(0, 0, 0, 0, 0, 0);
   unsigned int steps = 10;
   for (unsigned int i = 0; i < (steps + 1); ++i)
   {
-    Pose3d p(0, 1, 0, i * (sweep / steps), 0, 0);
-    frameGraph.SetLocalPose("/world/a/aa", p);
-    std::cout << "aaa " << frameGraph.Pose("/world/a/aa/aaa", "/world")
-              << std::endl;
+    auto angle = i * (sweep / steps);
+    Pose3d p(10, 0, 0, 0, 0, angle); // (10, 0, 0, angle, angle, 0);
+    frameGraph.SetLocalPose("/world/a", p);
+
+    auto pa = frameGraph.Pose("/world/a", "/world");
+    std::cout << "pose" << p2str(pa) << "; // a" << std::endl;
+    auto paa = frameGraph.Pose("/world/a/aa", "/world");
+    std::cout << "pose" << p2str(paa) << "; // aa" << std::endl;
+    auto paaa = frameGraph.Pose("/world/a/aa/aaa", "/world");
+    std::cout << "pose" << p2str(paaa) << ";  // aaa" << std::endl;
+    auto pab = frameGraph.Pose("/world/a/ab", "/world");
+    std::cout << "pose" << p2str(pab) << ";  // ab" << std::endl;
+    auto paa2ab = frameGraph.Pose("/world/a/aa", "/world/a/ab");
+    std::cout << "pose" << p2str(paa2ab) << ";  // aa to ab" << std::endl;
+    std::cout << link(w, pa) << "; // world to a " << std::endl;
+    std::cout << link(pa, paa) << "; // a to aa" << std::endl;
+    std::cout << link(paa, paaa) << "; // aa to aaa" << std::endl;
+    std::cout << link(pa, pab) << "; // a to ab" << std::endl;
+    std::cout << std::endl;
   }
 
   Pose3d p0;
@@ -197,7 +274,9 @@ TEST(FrameGraphTest, Multithreads)
   r = frameGraph.Pose("/world/a", "/world");
   EXPECT_EQ(pa, r);
 
+  // a thread pool
   std::vector<std::thread> pool;
+  // starting only one thread, otherswise there are errors
   for (int i = 0; i < 1; ++i)
   {
     pool.push_back(std::thread {asyncStuff, std::ref(frameGraph)});

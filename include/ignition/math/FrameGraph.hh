@@ -53,7 +53,7 @@ namespace ignition
     /// frame. Frames are composed inside the FrameGraph class.
     /// The Frame class does not have a lot of public methods. The FrameGraph
     /// class acts as a Facade from which get the Frame information, and
-    /// also performs the thread locking while the Frame data is accessed.
+    /// performs the thread locking while the Frame data is accessed.
     class IGNITION_VISIBLE Frame
     {
         friend class FrameGraph;  // adding and deleting Frames
