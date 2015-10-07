@@ -135,11 +135,11 @@ namespace ignition
       public: void DeleteFrame(const std::string &_path);
 
       /// \brief Computes a relative pose between 2 frames
-      /// \param[in] _srcFrame The name of the source frame
-      /// \param[in] _dstFrame The name of the destination frame
-      /// \return The pose between the frames, if it exists
-      public: Pose3d Pose(const std::string &_srcFrame,
-                          const std::string &_dstFrame) const;
+      /// \param[in] _dst The name of the destination frame
+      /// \param[in] _src The name of the source frame
+      /// \return The pose of _dest in _src's frame
+      public: Pose3d Pose(const std::string &_dst,
+                          const std::string &_src) const;
 
       /// \brief Computes the relative pose between 2 frames, using
       /// a RelativePose Instance

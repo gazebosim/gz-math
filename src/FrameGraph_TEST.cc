@@ -123,9 +123,57 @@ std::string link(const Pose3d &_p0, const Pose3d &_p1)
   auto p0 = _p0.Pos();
   auto p1 = _p1.Pos();
   ss << "link(" << p0.X() << ", " << p0.Y() << ", " << p0.Z()
-     << ", " << p1.X() << ", " << p1.Y() << ", " << p1.Z() << ", 1, 1)";
+     << ", " << p1.X() << ", " << p1.Y() << ", " << p1.Z() << ")";
   return ss.str();
 }
+
+/////////////////////////////////////////////////
+TEST(FrameGraphTest, Pose1)
+{
+  //
+  //          ---world ---
+  //          |          |
+  //          a          b
+
+  Pose3d w;  // world
+  Pose3d pa(10, 0, 0, 0, 0, 0);
+  Pose3d pb(0, 10, 0, 0, 0, 0);
+
+  std::cout << "\n";
+  FrameGraph frameGraph;
+  frameGraph.AddFrame("/world", "a", pa);
+  frameGraph.AddFrame("/world", "b", pb);
+
+  // pose of a from the world's perspective
+  Pose3d pwa = frameGraph.Pose("/world/a", "/world");
+
+  Pose3d pwb = frameGraph.Pose("/world/b", "/world");
+  Pose3d pwab = frameGraph.Pose("/world/a", "/world/b");
+  Pose3d pwba = frameGraph.Pose("/world/b", "/world/a");
+
+  std::cout << "pose" << p2str(pwa) << ";  // absolute a" << std::endl;
+  std::cout << "pose" << p2str(pwb) << ";  // absolute b" << std::endl;
+  std::cout << "pose" << p2str(pwab) << ";  // absolute ab" << std::endl;
+  std::cout << "pose" << p2str(pwba) << ";  // absolute ba" << std::endl;
+
+  // a expressed in b
+  EXPECT_EQ(pwab, Pose3d(10, -10, 0, 0, 0, 0));
+  //  expressed in a
+  EXPECT_EQ(pwba, Pose3d(-10, 10, 0, 0, 0, 0));
+
+  // now rotate a 90 degrees around z
+  frameGraph.SetLocalPose("/world/a", Pose3d(10, 0, 0, 0, 0, 1.5707 ));
+  pwa = frameGraph.Pose("/world/a", "/world");
+  pwb = frameGraph.Pose("/world/b", "/world");
+  pwab = frameGraph.Pose("/world/a", "/world/b");
+  pwba = frameGraph.Pose("/world/b", "/world/a");
+
+  // a expressed in b
+  EXPECT_EQ(pwab, Pose3d(10, -10, 0, 0, 0, 1.5707));
+  // b expressed in a
+  EXPECT_EQ(pwba, Pose3d(10, 10, 0, 0, 0, -1.5707));
+}
+
 
 /////////////////////////////////////////////////
 TEST(FrameGraphTest, RelativePose)
@@ -143,27 +191,40 @@ TEST(FrameGraphTest, RelativePose)
   Pose3d paa(10, 0, 0, 0, 0, 0);
   Pose3d pab(0, 10, 0, 0, 0, 0);
 
-
-
+  std::cout << "\n";
   FrameGraph frameGraph;
   frameGraph.AddFrame("/world", "a", pa);
   frameGraph.AddFrame("/world/a", "aa", paa);
   frameGraph.AddFrame("/world/a", "ab", pab);
 
-  std::cout << "\n\n";
-  std::cout << link(w, pa) << "; // w to a"<< std::endl;
-  std::cout << link(pa, frameGraph.Pose("/world/a/aa", "/world")) << "; // a to aa" << std::endl;
-  std::cout << link(pa, frameGraph.Pose("/world/a/ab", "/world")) << "; // a to ab" << std::endl;
-  std::cout << std::endl;
-
-  double angle = 0;
+  double angle = 0.523599;
+//  angle = 0;
   Pose3d p(10, 0, 0, 0, 0, angle); // (10, 0, 0, angle, angle, 0);
   frameGraph.SetLocalPose("/world/a", p);
+  std::cout << "// a local pose: " << p << "\n";
+
+  Pose3d pwa = frameGraph.Pose("/world/a", "/world");
+  Pose3d pwaa = frameGraph.Pose("/world/a/aa", "/world");
+  Pose3d pwab = frameGraph.Pose("/world/a/ab", "/world");
+
+  std::cout << "pose" << p2str(pwa) << ";  // absolute a" << std::endl;
+  std::cout << "pose" << p2str(pwaa) << ";  // absolute aa" << std::endl;
+  std::cout << "pose" << p2str(pwab) << ";  // absolute ab" << std::endl;
+  // links
+  std::cout << "color([1,1,0])" << link(w, pwa) << "; // w to a"<< std::endl;
+  std::cout << "color([1,0,0])" << link(pa, pwaa) << "; // a to aa" << std::endl;
+  std::cout << "color([0,1,0])" << link(pa, pwab) << "; // a to ab" << std::endl;
+  std::cout << std::endl;
+
+//  double angle = 0;
+//  Pose3d p(10, 0, 0, 0, 0, angle); // (10, 0, 0, angle, angle, 0);
+//  frameGraph.SetLocalPose("/world/a", p);
 
   std::cout << std::endl;
   auto paa2ab = frameGraph.Pose("/world/a/aa", "/world/a/ab");
   std::cout << "pose" << p2str(paa2ab) << ";  // aa to ab" << std::endl;
   std::cout << std::endl;
+
 //  EXPECT_EQ(p0, frameGraph.Pose("/world/a/ab", "/world"));
 }
 
@@ -180,7 +241,6 @@ TEST(FrameGraphTest, RelativePaths)
   //          aa     ab
   //          |
   //         aaa
-
   Pose3d pa(10, 0, 0, 0, 0, 0);
   Pose3d paa(10, 0, 0, 0, 0, 0);
   Pose3d paaa(10, 0, 0, 0, 0, 0);
@@ -219,7 +279,6 @@ TEST(FrameGraphTest, RelativePaths)
     std::cout << link(pa, pab) << "; // a to ab" << std::endl;
     std::cout << std::endl;
   }
-
   Pose3d p0;
   EXPECT_EQ(p0, frameGraph.Pose("/world/a/ab", "/world"));
 }
