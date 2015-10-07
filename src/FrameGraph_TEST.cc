@@ -162,7 +162,7 @@ TEST(FrameGraphTest, Pose1)
   EXPECT_EQ(pwba, Pose3d(-10, 10, 0, 0, 0, 0));
 
   // now rotate a 90 degrees around z
-  frameGraph.SetLocalPose("/world/a", Pose3d(10, 0, 0, 0, 0, 1.5707 ));
+  frameGraph.SetLocalPose("/world/a", Pose3d(10, 0, 0, 0, 0, 1.5707));
   pwa = frameGraph.Pose("/world/a", "/world");
   pwb = frameGraph.Pose("/world/b", "/world");
   pwab = frameGraph.Pose("/world/a", "/world/b");
@@ -197,9 +197,9 @@ TEST(FrameGraphTest, RelativePose)
   frameGraph.AddFrame("/world/a", "aa", paa);
   frameGraph.AddFrame("/world/a", "ab", pab);
 
+  // rotate 30 degrees
   double angle = 0.523599;
-//  angle = 0;
-  Pose3d p(10, 0, 0, 0, 0, angle); // (10, 0, 0, angle, angle, 0);
+  Pose3d p(10, 0, 0, 0, 0, angle);  // (10, 0, 0, angle, angle, 0);
   frameGraph.SetLocalPose("/world/a", p);
   std::cout << "// a local pose: " << p << "\n";
 
@@ -212,20 +212,14 @@ TEST(FrameGraphTest, RelativePose)
   std::cout << "pose" << p2str(pwab) << ";  // absolute ab" << std::endl;
   // links
   std::cout << "color([1,1,0])" << link(w, pwa) << "; // w to a"<< std::endl;
-  std::cout << "color([1,0,0])" << link(pa, pwaa) << "; // a to aa" << std::endl;
-  std::cout << "color([0,1,0])" << link(pa, pwab) << "; // a to ab" << std::endl;
-  std::cout << std::endl;
-
-//  double angle = 0;
-//  Pose3d p(10, 0, 0, 0, 0, angle); // (10, 0, 0, angle, angle, 0);
-//  frameGraph.SetLocalPose("/world/a", p);
-
+  std::cout << "color([1,0,0])" << link(pa, pwaa)
+    << "; // a to aa" << std::endl;
+  std::cout << "color([0,1,0])" << link(pa, pwab)
+    << "; // a to ab" << std::endl;
   std::cout << std::endl;
   auto paa2ab = frameGraph.Pose("/world/a/aa", "/world/a/ab");
   std::cout << "pose" << p2str(paa2ab) << ";  // aa to ab" << std::endl;
   std::cout << std::endl;
-
-//  EXPECT_EQ(p0, frameGraph.Pose("/world/a/ab", "/world"));
 }
 
 
@@ -241,6 +235,10 @@ TEST(FrameGraphTest, RelativePaths)
   //          aa     ab
   //          |
   //         aaa
+  //
+  // In this test we rotate a around z and check that
+  // aa and ab remain fixed from each other...
+  // also a lot of output to help debugging
   Pose3d pa(10, 0, 0, 0, 0, 0);
   Pose3d paa(10, 0, 0, 0, 0, 0);
   Pose3d paaa(10, 0, 0, 0, 0, 0);
@@ -260,7 +258,7 @@ TEST(FrameGraphTest, RelativePaths)
   for (unsigned int i = 0; i < (steps + 1); ++i)
   {
     auto angle = i * (sweep / steps);
-    Pose3d p(10, 0, 0, 0, 0, angle); // (10, 0, 0, angle, angle, 0);
+    Pose3d p(10, 0, 0, 0, 0, angle);  // (10, 0, 0, angle, angle, 0);
     frameGraph.SetLocalPose("/world/a", p);
 
     auto pa = frameGraph.Pose("/world/a", "/world");
@@ -278,9 +276,9 @@ TEST(FrameGraphTest, RelativePaths)
     std::cout << link(paa, paaa) << "; // aa to aaa" << std::endl;
     std::cout << link(pa, pab) << "; // a to ab" << std::endl;
     std::cout << std::endl;
+
+    EXPECT_EQ(paa2ab, Pose3d(10, -10, 0, 0, 0, 0));
   }
-  Pose3d p0;
-  EXPECT_EQ(p0, frameGraph.Pose("/world/a/ab", "/world"));
 }
 
 /////////////////////////////////////////////////

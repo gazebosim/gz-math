@@ -184,7 +184,7 @@ namespace ignition
       /// \param[in] _relativepath The relative path to the frame
       /// \return The frame's weak pointer
       public: FrameWeakPtr FrameAccess(FrameWeakPtr _frame,
-                                       const std::string _relativePath) const;
+                                       const std::string &_relativePath) const;
 
       /// \brief Copy Constructor (not allowed)
       /// \param[in] _copy FrameGraph to copy.

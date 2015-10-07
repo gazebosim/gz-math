@@ -58,7 +58,6 @@ void FrameGraph::AddFrame(const std::string &_path,
                           const std::string &_name,
                           const Pose3d &_pose)
 {
-std::cout << "// AddFrame: " <<  _path << "/[" << _name << "] " << _pose << std::endl;
   // Is it a good name?
   if (!PathPrivate::CheckName(_name))
   {
@@ -76,7 +75,7 @@ std::cout << "// AddFrame: " <<  _path << "/[" << _name << "] " << _pose << std:
       << "\" is not a fully qualified path";
     throw FrameException(ss.str());
   }
-
+  // Does the path exist?
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   const auto &srcFrameParent = this->dataPtr->FrameFromAbsolutePath(path);
   auto f = srcFrameParent.lock();
@@ -86,7 +85,7 @@ std::cout << "// AddFrame: " <<  _path << "/[" << _name << "] " << _pose << std:
     ss << "Error: parent path \"" << _path << "\" does not exists";
     throw FrameException(ss.str());
   }
-
+  // is the frame a duplicate?
   auto it = f->dataPtr->children.find(_name);
   if (it != f->dataPtr->children.end())
   {
@@ -94,7 +93,7 @@ std::cout << "// AddFrame: " <<  _path << "/[" << _name << "] " << _pose << std:
     ss << "Error: path \"" << _name << "\" already exists";
     throw FrameException(ss.str());
   }
-
+  // just add it
   FramePtr frame(new Frame(_name, _pose, f));
   f->dataPtr->children[_name] = frame;
 }
@@ -196,8 +195,7 @@ Pose3d FrameGraph::Pose(const RelativePose &_relativePose) const
   // the list of frames to traverse are kept in 2 vectors
   const auto &up = _relativePose.dataPtr->up;
   const auto &down = _relativePose.dataPtr->down;
-
-std::cout << "\n// FrameGraph::Pose" << std::endl;
+  // add all the transform from dst to world
   Pose3d ups;
   for (auto &f : up)
   {
@@ -206,9 +204,9 @@ std::cout << "\n// FrameGraph::Pose" << std::endl;
     {
       Pose3d p = frame->dataPtr->pose;
       ups += p;
-std::cout << "// ups (" << frame->Name()  << ") " << p << " : " << ups << std::endl;
     }
   }
+  // add all the transform from src to world (often empty)
   Pose3d downs;
   for (auto &f : down)
   {
@@ -217,12 +215,10 @@ std::cout << "// ups (" << frame->Name()  << ") " << p << " : " << ups << std::e
     {
       Pose3d p = frame->dataPtr->pose;
       downs += p;
-std::cout << "// downs (" << frame->Name()  << ")" << p << " : " << downs << std::endl;
     }
   }
+  // apply the opposite of the downs to the ups
   Pose3d result = ups - downs;
-  // Pose3d result = downs - ups;
-std::cout << "// POSE result (ups - downs) = " << result << std::endl;
   return result;
 }
 
@@ -230,8 +226,6 @@ std::cout << "// POSE result (ups - downs) = " << result << std::endl;
 RelativePose FrameGraph::CreateRelativePose(const std::string &_srcPath,
                                        const std::string &_dstPath) const
 {
-std::cout << "// FrameGraph::CreateRelativePose " << std::endl;
-std::cout << "//   " << _srcPath << ", " << _dstPath << "\n" << std::endl;
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   const auto &srcFrame = this->dataPtr->FrameFromAbsolutePath(_srcPath);
   const auto &dstFrame = this->dataPtr->FrameFromRelativePath(srcFrame,
@@ -250,19 +244,15 @@ RelativePose::RelativePose(const FrameWeakPtr &_srcFrame,
   // the FrameGraph mutex is locked during the
   // FrameGraph::CreateRelativePose call. This method call
   // assumes the lock is acquired.
-
-std::cout << "// RelativePose::RelativePose " << std::endl;
   auto frame = _srcFrame.lock();
   while (frame && frame->dataPtr->parentFrame.lock())
   {
-std::cout << "// up >> " << frame->Name() << std::endl;
     this->dataPtr->up.push_back(frame);
     frame = frame->dataPtr->parentFrame.lock();
   }
   frame = _dstFrame.lock();
   while (frame && frame->dataPtr->parentFrame.lock())
   {
-std::cout << "// down >> " << frame->Name() << std::endl;
     this->dataPtr->down.push_back(frame);
     frame = frame->dataPtr->parentFrame.lock();
   }
@@ -280,9 +270,7 @@ RelativePose& RelativePose::operator=(const RelativePose &_other)
 {
   if (this == &_other)
     return *this;
-
   *this->dataPtr = *_other.dataPtr;
-
   return *this;
 }
 
