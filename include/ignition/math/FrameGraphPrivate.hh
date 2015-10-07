@@ -20,16 +20,15 @@
 #include <string>
 #include <vector>
 #include <mutex>
-#include <array>
 #include <map>
+#include <ignition/math/Types.hh>
 #include <ignition/math/Pose3.hh>
-
-#include <ignition/math/FrameGraph.hh>
 
 namespace ignition
 {
   namespace math
   {
+    /// \internal
     /// \brief A utility class to parse a path like "/world/sphere/center" into
     /// its components. Paths can be absolute or relative (i.e "../left/right")
     class PathPrivate
@@ -98,7 +97,8 @@ namespace ignition
       public: FrameWeakPtr parentFrame;
 
       /// Children frames, with name
-      /// http://stackoverflow.com/questions/20754370/about-race-condition-of-weak-ptr
+      /// http://stackoverflow.com/questions/20754370/
+      /// about-race-condition-of-weak-ptr
       public: std::map<std::string, FramePtr> children;
     };
 
@@ -138,12 +138,7 @@ namespace ignition
       /// \param[in] _path The path to the frame
       /// \return The reference to the Frame element if it exists
       public: FrameWeakPtr FrameFromAbsolutePath(
-                                               const PathPrivate &_path) const;
-
-      /// \brief non const version of FrameFromAbsolutePath
-      // public: FrameWeakPtr FrameFromAbsolutePath(const PathPrivate& _path);
-
-      /// NOTE: _frame SHOULD BE A REFERENCE
+                  const PathPrivate &_path) const;
 
       /// \brief Returns a reference to a Frame, given a start Frame and
       /// a relative path.
@@ -151,7 +146,7 @@ namespace ignition
       /// \param[in] _relPath The relative path from the starting Frame
       /// \return The Frame's reference
       public: FrameWeakPtr FrameFromRelativePath(const FrameWeakPtr &_frame,
-                                           const PathPrivate &_relPath) const;
+                  const PathPrivate &_relPath) const;
 
       /// \brief The world frame, root of all frames
       public: FramePtr world;
@@ -161,5 +156,4 @@ namespace ignition
     };
   }
 }
-
 #endif

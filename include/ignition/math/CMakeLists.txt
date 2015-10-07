@@ -22,6 +22,7 @@ set (headers
   Spline.hh
   Triangle.hh
   Triangle3.hh
+  Types.hh
   Vector2.hh
   Vector3.hh
   Vector4.hh

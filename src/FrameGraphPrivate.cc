@@ -14,7 +14,8 @@
  * limitations under the License.
  *
 */
-
+#include <sstream>
+#include "ignition/math/FrameGraph.hh"
 #include "ignition/math/FrameGraphPrivate.hh"
 
 using namespace ignition;
