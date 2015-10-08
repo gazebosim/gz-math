@@ -37,10 +37,9 @@
 #include <string>
 // #include <vector>
 #include <mutex>
-#include <array>
 #include <map>
 
-#include <ignition/math/Pose3.hh>
+#include <ignition/math/Types.hh>
 #include <ignition/math/FrameGraph.hh>
 
 #include "PathPrivate.hh"
@@ -50,102 +49,6 @@ namespace ignition
 {
   namespace math
   {
-//    class PathPrivate;
-//    class FramePrivate;
-/*
-    /// \brief A utility class to parse a path like "/world/sphere/center" into
-    /// its components. Paths can be absolute or relative (i.e "../left/right")
-    class PathPrivate
-    {
-      /// \brief Constructor
-      public: PathPrivate(const std::string &_path);
-
-      /// \brief Access to the path elements
-      /// \return A vector of path elements
-      public: const std::vector<std::string> &Elems() const;
-
-      /// \brief Access the first element of the path
-      /// \return The first path element
-      public: std::string Root() const;
-
-      /// \brief Access the last element of the path
-      public: std::string Leaf() const;
-
-      /// \brief Access the path
-      /// \return The path in a single string (string passed in the constructor)
-      public: std::string Path() const;
-
-      /// \brief Checks if the path is absolute (starts with "/world")
-      /// \return True if it is a full path, false if the path is relative
-      public: bool IsAbsolute() const;
-
-      /// \brief Checks if a string is a valid path element. It muse constain
-      /// no space, punctuation or special characters
-      /// \return True if the name is valid
-      public: static bool CheckName(const std::string &_name);
-
-      /// \brief Outputs the path elements to std::cout. Debugging method.
-      private: void Dump() const;
-
-      /// \brief The path string to be parsed
-      private: std::string path;
-
-      /// \brief The elements of the path
-      private: std::vector<std::string> pathElems;
-    };
-
-    /// \internal
-    /// \brief Private Frame data class.
-    class FramePrivate
-    {
-      /// \brief Constructor
-      /// \param[in] _name The frame's short name
-      /// \param[in] _pose The frame's offset from it's parent
-      /// \param[in] _parentFrame The frame's parent
-      /// \param[in] _mutex The lock for the frameGraph
-      public: FramePrivate(const std::string &_name,
-                           const Pose3d &_pose,
-                           const FrameWeakPtr &_parentFrame);
-
-      /// \brief Destructor
-      public: ~FramePrivate();
-
-      /// \brief Short name of the frame
-      public: std::string name;
-
-      /// \brief Pose (offset from the parent frame)
-      public: Pose3d pose;
-
-      /// \brief this is a direct pointer to the parent
-      /// frame, that speeds up lookup.
-      public: FrameWeakPtr parentFrame;
-
-      /// Children frames, with name
-      /// http://stackoverflow.com/questions/20754370/about-race-condition-of-weak-ptr
-      public: std::map<std::string, FramePtr> children;
-    };
-
-    /// \internal
-    /// \brief Relative pose between 2 Frames in a FrameGraph.
-    /// It keeps 2 lists of poses
-    class RelativePosePrivate
-    {
-      /// \brief Constructor
-      public: RelativePosePrivate();
-
-      /// \brief Destructor
-      public: ~RelativePosePrivate() = default;
-
-      /// \brief List of frames to apply in the up direction.
-      /// these are the frames from from the src frame towards
-      /// the common ancestor (possibly the /world frame)
-      public: std::vector<FrameWeakPtr> up;
-
-      /// \brief List of frames to apply in the down direction,
-      /// towards the
-      public: std::vector<FrameWeakPtr> down;
-    };
-*/
     /// \internal
     /// \brief Private data for the Frustum class
     class FrameGraphPrivate
@@ -161,7 +64,7 @@ namespace ignition
       /// \param[in] _path The path to the frame
       /// \return The reference to the Frame element if it exists
       public: FrameWeakPtr FrameFromAbsolutePath(
-                                               const PathPrivate &_path) const;
+                  const PathPrivate &_path) const;
 
       /// \brief Returns a reference to a Frame, given a start Frame and
       /// a relative path.
@@ -169,7 +72,7 @@ namespace ignition
       /// \param[in] _relPath The relative path from the starting Frame
       /// \return The Frame's reference
       public: FrameWeakPtr FrameFromRelativePath(const FrameWeakPtr &_frame,
-                                           const PathPrivate &_relPath) const;
+                  const PathPrivate &_relPath) const;
 
       /// \brief The world frame, root of all frames
       public: FramePtr world;
@@ -179,5 +82,4 @@ namespace ignition
     };
   }
 }
-
 #endif

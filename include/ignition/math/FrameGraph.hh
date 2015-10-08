@@ -18,12 +18,10 @@
 #define _IGNITION_FRAME_GRAPH_HH_
 
 #include <string>
-//#include <memory>
 #include <mutex>
 #include <map>
-//#include <sstream>
 
-#include <ignition/math/Pose3.hh>
+#include <ignition/math/Types.hh>
 
 #include "FrameException.hh"
 #include "Frame.hh"
@@ -35,12 +33,9 @@ namespace ignition
   {
     // Forward declaration of private data
     class FrameGraphPrivate;
-
-    /// \brief A collection of Frames, and their relative poses
+    /// \brief A collection of Frames, and their relative poses.
     class IGNITION_VISIBLE FrameGraph
     {
-      /// OMG! there is no way to remove a Frame!!!
-
       /// \brief Default constructor. With the following default values:
       public: FrameGraph();
 
@@ -52,9 +47,9 @@ namespace ignition
       /// \param[in] _name The name of the new frame
       /// \param[in] _pose The pose of the frame, relative to the parent frame
       /// \throws FrameException if one of the path is invalid.
-      public: void  AddFrame(const std::string &_path,
-                             const std::string &_name,
-                             const Pose3d &_pose);
+      public: void AddFrame(const std::string &_path,
+                            const std::string &_name,
+                            const Pose3d &_pose);
 
       /// \brief Removes a frame and all its children.
       /// \param[in] _path The absolute path to the frame
@@ -72,40 +67,38 @@ namespace ignition
       /// \param[in] _relativePose
       public: Pose3d Pose(const RelativePose &_relativePose) const;
 
-
-      /// \brief Gets the pose of a frame (relative to it's parent frame)
+      /// \brief Get the pose of a frame (relative to its parent frame)
       /// \param[in] _path The absolute path to the frame
       /// \return The local pose of the a frame
       public: Pose3d LocalPose(const std::string &_path) const;
 
-      /// \brief Gets the pose of a Frame (relative to it's parent frame)
+      /// \brief Get the pose of a Frame (relative to its parent frame)
       /// param[in] _frame The frame reference
       /// \return The pose of the frame
       public: Pose3d LocalPose(const FrameWeakPtr &_frame) const;
 
-      /// \brief Sets the pose of a frame (relative to it's parent frame)
+      /// \brief Set the pose of a frame (relative to its parent frame)
       /// \param[in] _path The absolute path to the frame
       /// \return The local pose
       public: void SetLocalPose(const std::string &_path, const Pose3d &_p);
 
-      /// \brief Sets the pose of a frame (relative to it's parent frame)
+      /// \brief Set the pose of a frame (relative to its parent frame)
       /// \param[in] _frame The frame reference
       /// \return The local pose
       public: void SetLocalPose(FrameWeakPtr _frame, const Pose3d &_p);
 
-      /// \brief This method generate a Relative pose between 2 frames.
+      /// \brief This method generate a relative pose between two frames.
       /// \param[in] _srcPath The source frame path (must be absolute)
       /// \param[in] _dstPath The destination frame (can be relative)
       public: RelativePose CreateRelativePose(const std::string &_srcPath,
-                                         const std::string &_dstPath) const;
+                  const std::string &_dstPath) const;
 
-      /// \brief Returns a reference to a frame instance
+      /// \brief Get a reference to a frame instance
       /// \param[in] _path The absolute path to the frame
       /// \return The frame's weak pointer
       public: FrameWeakPtr FrameAccess(const std::string &_path) const;
 
-
-      /// \brief Returns a reference to a frame instance
+      /// \brief Get a reference to a frame instance
       /// \param[in] _
       /// \param[in] _relativepath The relative path to the frame
       /// \return The frame's weak pointer
@@ -118,7 +111,6 @@ namespace ignition
 
       /// \brief Assignment operator (not allowed)
       /// \param[in] _assign FrameGraph to get values from
-
       private: FrameGraph &operator=(const FrameGraph &_assign);
 
       /// \internal
@@ -127,5 +119,4 @@ namespace ignition
     };
   }
 }
-
 #endif

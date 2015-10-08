@@ -19,10 +19,7 @@
 
 #include "ignition/math/FrameGraph.hh"
 
-#include "ignition/math/PathPrivate.hh"
-#include "ignition/math/FramePrivate.hh"
 #include "ignition/math/RelativePosePrivate.hh"
-
 #include "ignition/math/FrameGraphPrivate.hh"
 
 using namespace ignition;
