@@ -5,6 +5,9 @@ set (headers
   Angle.hh
   Box.hh
   Filter.hh
+  Frame.hh
+  FrameException.hh
+  FrameGraph.hh
   Frustum.hh
   Helpers.hh
   IndexException.hh
@@ -17,6 +20,7 @@ set (headers
   Pose3.hh
   Quaternion.hh
   Rand.hh
+  RelativePose.hh
   RotationSpline.hh
   SignalStats.hh
   Spline.hh

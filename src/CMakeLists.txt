@@ -5,6 +5,8 @@ set (sources
   Angle.cc
   Box.cc
   BoxPrivate.cc
+  Frame.cc
+  FrameException.cc
   FrameGraph.cc
   FrameGraphPrivate.cc
   Frustum.cc
@@ -12,6 +14,7 @@ set (sources
   IndexException.cc
   Kmeans.cc
   Rand.cc
+  RelativePose.cc
   RotationSpline.cc
   RotationSplinePrivate.cc
   SignalStats.cc

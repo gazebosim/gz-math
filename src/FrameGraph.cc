@@ -15,18 +15,18 @@
  *
 */
 
+#include <sstream>
 
 #include "ignition/math/FrameGraph.hh"
+
+#include "ignition/math/PathPrivate.hh"
+#include "ignition/math/FramePrivate.hh"
+#include "ignition/math/RelativePosePrivate.hh"
+
 #include "ignition/math/FrameGraphPrivate.hh"
 
 using namespace ignition;
 using namespace math;
-
-
-/////////////////////////////////////////////////
-FrameException::FrameException(const std::string &_msg)
-  :std::runtime_error(_msg)
-{}
 
 /////////////////////////////////////////////////
 FrameGraph::FrameGraph()
@@ -51,6 +51,7 @@ FrameGraph::FrameGraph(const FrameGraph &_copy)
 FrameGraph &FrameGraph::operator=(const FrameGraph &_assign)
 {
   // private method... prevents copying of FrameGraph
+  return *this;
 }
 
 /////////////////////////////////////////////////
@@ -221,105 +222,3 @@ Pose3d FrameGraph::Pose(const RelativePose &_relativePose) const
   Pose3d result = ups - downs;
   return result;
 }
-
-/////////////////////////////////////////////////
-RelativePose FrameGraph::CreateRelativePose(const std::string &_srcPath,
-                                       const std::string &_dstPath) const
-{
-  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
-  const auto &srcFrame = this->dataPtr->FrameFromAbsolutePath(_srcPath);
-  const auto &dstFrame = this->dataPtr->FrameFromRelativePath(srcFrame,
-                                                              _dstPath);
-  // create the relative pose object while we have the mutex lock
-  RelativePose r(srcFrame, dstFrame);
-  return r;
-}
-
-/////////////////////////////////////////////////
-RelativePose::RelativePose(const FrameWeakPtr &_srcFrame,
-                           const FrameWeakPtr &_dstFrame)
-  :dataPtr(new RelativePosePrivate())
-{
-  // Shared pointer locking is not thread safe. However
-  // the FrameGraph mutex is locked during the
-  // FrameGraph::CreateRelativePose call. This method call
-  // assumes the lock is acquired.
-  auto frame = _srcFrame.lock();
-  while (frame && frame->dataPtr->parentFrame.lock())
-  {
-    this->dataPtr->up.push_back(frame);
-    frame = frame->dataPtr->parentFrame.lock();
-  }
-  frame = _dstFrame.lock();
-  while (frame && frame->dataPtr->parentFrame.lock())
-  {
-    this->dataPtr->down.push_back(frame);
-    frame = frame->dataPtr->parentFrame.lock();
-  }
-}
-
-/////////////////////////////////////////////////
-RelativePose::RelativePose(const RelativePose &_other)
-  :dataPtr(new RelativePosePrivate())
-{
-  *this->dataPtr = *_other.dataPtr;
-}
-
-/////////////////////////////////////////////////
-RelativePose& RelativePose::operator=(const RelativePose &_other)
-{
-  if (this == &_other)
-    return *this;
-  *this->dataPtr = *_other.dataPtr;
-  return *this;
-}
-
-/////////////////////////////////////////////////
-RelativePose::~RelativePose()
-{
-  delete this->dataPtr;
-}
-/////////////////////////////////////////////////
-Frame::Frame(const std::string &_name,
-             const Pose3d &_pose,
-             const FrameWeakPtr &_parentFrame)
-  : dataPtr(new FramePrivate(_name, _pose, _parentFrame))
-{
-}
-
-/////////////////////////////////////////////////
-Frame::~Frame()
-{
-  delete this->dataPtr;
-}
-
-
-/////////////////////////////////////////////////
-Frame::Frame(const Frame &_other)
-  : dataPtr(new FramePrivate(_other.dataPtr->name, _other.dataPtr->pose,
-    FrameWeakPtr()))
-{
-  *this->dataPtr = *_other.dataPtr;
-}
-
-/////////////////////////////////////////////////
-Frame &Frame::operator=(const Frame &_other)
-{
-  if (this == &_other)
-    return *this;
-  *this->dataPtr = *_other.dataPtr;
-  return *this;
-}
-
-/////////////////////////////////////////////////
-std::string Frame::Name() const
-{
-  return this->dataPtr->name;
-}
-
-/////////////////////////////////////////////////
-RelativePose::RelativePose()
-  :dataPtr(new RelativePosePrivate())
-{
-}
-

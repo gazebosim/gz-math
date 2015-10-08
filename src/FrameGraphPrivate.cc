@@ -15,7 +15,10 @@
  *
 */
 
+#include <sstream>
+
 #include "ignition/math/FrameGraphPrivate.hh"
+#include "ignition/math/RelativePosePrivate.hh"
 
 using namespace ignition;
 using namespace math;
