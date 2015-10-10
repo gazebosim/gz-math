@@ -107,6 +107,36 @@ TEST(FrameGraphTest, DeleteFrame)
 }
 
 /////////////////////////////////////////////////
+// this tests adds coverage to the copy constructor
+// of Frame as well as the assiggment operator
+TEST(FrameGraphTest, CopyFrames)
+{
+  Pose3d pa(1, 0, 0, 0, 0, 0);
+  Pose3d paa(0, 1, 0, 0, 0, 0);
+  Pose3d paaa(0, 0, 0, 0, 1.570790, 0);
+
+  FrameGraph frameGraph;
+  frameGraph.AddFrame("/world", "a", pa);
+  frameGraph.AddFrame("/world/a", "aa", paa);
+  frameGraph.AddFrame("/world/a/aa", "aaa", paaa);
+
+  auto frame1 = frameGraph.FrameAccess("/world/a");
+  auto frame2 = Frame(frame1);
+  auto frame3 = frame2;
+
+  auto rel = frameGraph.CreateRelativePose("/world/a/aa", "/world");
+  Pose3d p;
+  p = frameGraph.Pose(rel);
+  EXPECT_EQ(p, Pose3d(0, 0, 0, 0, 0, 0));
+
+
+
+  frameGraph.DeleteFrame("/world/a");
+  EXPECT_THROW(frameGraph.AddFrame("/world/a/aa", "aaa", paaa), FrameException);
+}
+
+
+/////////////////////////////////////////////////
 std::string p2str(const Pose3d &_p)
 {
   std::stringstream ss;
