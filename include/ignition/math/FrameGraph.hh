@@ -57,23 +57,27 @@ namespace ignition
 
       /// \brief Removes a frame and all its children.
       /// \param[in] _path The absolute path to the frame
+      /// \throws FrameException if the path is invalid
       public: void DeleteFrame(const std::string &_path);
 
       /// \brief Computes a relative pose between 2 frames
       /// \param[in] _dst The name of the destination frame
       /// \param[in] _src The name of the source frame
       /// \return The pose of _dest in _src's frame
+      /// \throws FrameException if one of the path is invalid.
       public: Pose3d Pose(const std::string &_dst,
                           const std::string &_src) const;
 
       /// \brief Computes the relative pose between 2 frames, using
       /// a RelativePose Instance
       /// \param[in] _relativePose
+      /// \throws FrameException if one of the frames has been deleted.
       public: Pose3d Pose(const RelativePose &_relativePose) const;
 
       /// \brief Get the pose of a frame (relative to its parent frame)
       /// \param[in] _path The absolute path to the frame
       /// \return The local pose of the a frame
+      /// \throws FrameException if the path to the frame is invalid.
       public: Pose3d LocalPose(const std::string &_path) const;
 
       /// \brief Get the pose of a Frame (relative to its parent frame)
@@ -84,28 +88,33 @@ namespace ignition
       /// \brief Set the pose of a frame (relative to its parent frame)
       /// \param[in] _path The absolute path to the frame
       /// \return The local pose
+      /// \throws FrameException if the path to the frame is invalid.
       public: void SetLocalPose(const std::string &_path, const Pose3d &_p);
 
       /// \brief Set the pose of a frame (relative to its parent frame)
       /// \param[in] _frame The frame reference
       /// \return The local pose
+      /// \throws FrameException if the frame has been deleted.
       public: void SetLocalPose(FrameWeakPtr _frame, const Pose3d &_p);
 
       /// \brief This method generate a relative pose between two frames.
       /// \param[in] _srcPath The source frame path (must be absolute)
       /// \param[in] _dstPath The destination frame (can be relative)
+      /// \throws FrameException if the paths are not invalid.
       public: RelativePose CreateRelativePose(const std::string &_srcPath,
                   const std::string &_dstPath) const;
 
       /// \brief Get a reference to a frame instance
       /// \param[in] _path The absolute path to the frame
       /// \return The frame's weak pointer
+      /// \throws FrameException if the path to the frame is invalid.
       public: FrameWeakPtr FrameAccess(const std::string &_path) const;
 
       /// \brief Get a reference to a frame instance
       /// \param[in] _frame The start Frame
       /// \param[in] _relativepath The relative path to the frame
       /// \return The frame's weak pointer
+      /// \throws FrameException if the path or the frame is invalid.
       public: FrameWeakPtr FrameAccess(FrameWeakPtr _frame,
                                        const std::string &_relativePath) const;
 
