@@ -29,7 +29,7 @@ namespace ignition
     /// \brief Exception class for the FrameGraph and related classes.
     class IGNITION_VISIBLE FrameException : public std::runtime_error
     {
-      /// \b brief Constructor with error message. Most common error is Trying
+      /// \brief Constructor with error message. Most common error is Trying
       //// to access missing paths..
       /// \param[in] _msg The error desciption
       public: FrameException(const std::string &_msg);

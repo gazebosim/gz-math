@@ -39,9 +39,9 @@ namespace ignition
     /// performs the thread locking while the Frame data is accessed.
     class IGNITION_VISIBLE Frame
     {
-        friend class FrameGraph;  // adding and deleting Frames
-        friend class FrameGraphPrivate;  // path calculations
-        friend class RelativePose;  // access Frame's parents
+      friend class FrameGraph;  // adding and deleting Frames
+      friend class FrameGraphPrivate;  // path calculations
+      friend class RelativePose;  // access Frame's parents
 
       /// \brief Create a new Frame to be added
       public: Frame(const std::string &_name,
