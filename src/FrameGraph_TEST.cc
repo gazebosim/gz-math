@@ -95,7 +95,7 @@ TEST(FrameGraphTest, AbsolutePaths)
 
   // using '.'
   Pose3d b2b = frameGraph.Pose("/world/b", ".");
-  EXPECT_EQ(b2b, Pose3d(0,0,0,0,0,0));
+  EXPECT_EQ(b2b, Pose3d(0, 0, 0, 0, 0, 0));
 
   // using ''
   EXPECT_THROW(frameGraph.Pose("/world/b", ""), FrameException);
@@ -187,7 +187,7 @@ TEST(FrameGraphTest, coverage)
   FrameException x("bad");
 
   FrameGraph frameGraph;
-  frameGraph.AddFrame("/world", "a", Pose3d(0,0,0,0,0,0));
+  frameGraph.AddFrame("/world", "a", Pose3d(0, 0, 0, 0, 0, 0));
   auto f = frameGraph.FrameAccess("/world/a");
   // exercises the '.'
   auto f2 = frameGraph.FrameAccess(f, ".././a");
@@ -195,6 +195,7 @@ TEST(FrameGraphTest, coverage)
   frameGraph.DeleteFrame("/world/a");
   // try to access deleted frame
   EXPECT_THROW(frameGraph.LocalPose("/world/a"), FrameException);
+  EXPECT_THROW(frameGraph.LocalPose(f), FrameException);
 }
 
 /////////////////////////////////////////////////
@@ -423,7 +424,7 @@ TEST(FrameGraphTest, Multithreads)
   EXPECT_EQ(frameGraph.Pose(rel), frameGraph.Pose(rel2));
   RelativePose rel3;  // empty ctor
   rel3 = rel2;  // assignment
-  rel3 = rel3; // assignement to self
+  rel3 = rel3;  // assignement to self
   EXPECT_EQ(frameGraph.Pose(rel), frameGraph.Pose(rel3));
 
   for (auto &thread : pool)

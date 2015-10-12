@@ -18,6 +18,7 @@
 #define _IGNITION_FRAME_HH_
 
 #include <memory>
+#include <string>
 
 #include <ignition/math/Pose3.hh>
 

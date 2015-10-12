@@ -27,7 +27,7 @@ using namespace math;
 PathPrivate::PathPrivate(const std::string &_s)
   : path(_s)
 {
-  if( _s.empty())
+  if (_s.empty())
   {
     std::stringstream ss;
     ss << "Error: path cannot be empty";
@@ -43,7 +43,7 @@ PathPrivate::PathPrivate(const std::string &_s)
     if (item == ".")
       continue;
     // avoid path elements with wrong names
-    if(!this->CheckName(item))
+    if (!this->CheckName(item))
     {
       std::stringstream ss;
       ss << "Error: path \"" << _s << "\" contains an invalid element: \"";
@@ -58,7 +58,7 @@ PathPrivate::PathPrivate(const std::string &_s)
 bool PathPrivate::CheckName(const std::string &_name)
 {
   // authorize special path elements
-  if(_name == "." || _name == "..")
+  if (_name == "." || _name == "..")
     return true;
   // frame names should not be empty
   if (_name.empty())

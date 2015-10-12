@@ -89,7 +89,6 @@ FrameWeakPtr FrameGraphPrivate::FrameFromAbsolutePath(
 FrameWeakPtr FrameGraphPrivate::FrameFromRelativePath(
     const FrameWeakPtr &_frame, const PathPrivate &_path) const
 {
-
   // path may be full
   if (_path.IsAbsolute())
   {

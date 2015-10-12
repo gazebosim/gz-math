@@ -118,8 +118,13 @@ Pose3d FrameGraph::LocalPose(const FrameWeakPtr &_frame) const
   Pose3d p;
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   auto f = _frame.lock();
-  if (f)
-    p = f->dataPtr->pose;
+  if (!f)
+  {
+    std::stringstream ss;
+    ss << "Trying to get pose of a deleted frame";
+    throw FrameException(ss.str());
+  }
+  p = f->dataPtr->pose;
   return p;
 }
 

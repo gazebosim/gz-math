@@ -17,6 +17,8 @@
 #ifndef _IGNITION_RELATIVE_POSE_PRIVATE_HH_
 #define _IGNITION_RELATIVE_POSE_PRIVATE_HH_
 
+#include <vector>
+
 #include <ignition/math/Frame.hh>
 
 namespace ignition
