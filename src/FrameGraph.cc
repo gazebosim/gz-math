@@ -38,20 +38,6 @@ FrameGraph::~FrameGraph()
 }
 
 /////////////////////////////////////////////////
-FrameGraph::FrameGraph(const FrameGraph &_copy)
-  : dataPtr(new FrameGraphPrivate())
-{
-  // private method... prevents copying of FrameGraph
-}
-
-/////////////////////////////////////////////////
-FrameGraph &FrameGraph::operator=(const FrameGraph &_assign)
-{
-  // private method... prevents copying of FrameGraph
-  return *this;
-}
-
-/////////////////////////////////////////////////
 void FrameGraph::AddFrame(const std::string &_path,
                           const std::string &_name,
                           const Pose3d &_pose)
@@ -66,13 +52,6 @@ void FrameGraph::AddFrame(const std::string &_path,
   }
   // In a good path?
   PathPrivate path(_path);
-  if (!path.IsAbsolute())
-  {
-    std::stringstream ss;
-    ss << "Error adding frame: path \"" << _path
-      << "\" is not a fully qualified path";
-    throw FrameException(ss.str());
-  }
   // Does the path exist?
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   const auto &srcFrameParent = this->dataPtr->FrameFromAbsolutePath(path);
@@ -95,7 +74,6 @@ void FrameGraph::AddFrame(const std::string &_path,
   FramePtr frame(new Frame(_name, _pose, f));
   f->dataPtr->children[_name] = frame;
 }
-
 
 /////////////////////////////////////////////////
 void FrameGraph::DeleteFrame(const std::string &_path)
@@ -184,6 +162,19 @@ void FrameGraph::SetLocalPose(const std::string &_path, const Pose3d &_p)
 {
   auto frame = this->FrameAccess(_path);
   this->SetLocalPose(frame, _p);
+}
+
+/////////////////////////////////////////////////
+RelativePose FrameGraph::CreateRelativePose(const std::string &_srcPath,
+                                       const std::string &_dstPath) const
+{
+  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
+  const auto &srcFrame = this->dataPtr->FrameFromAbsolutePath(_srcPath);
+  const auto &dstFrame = this->dataPtr->FrameFromRelativePath(srcFrame,
+                                                              _dstPath);
+  // create the relative pose object while we have the mutex lock
+  RelativePose r(srcFrame, dstFrame);
+  return r;
 }
 
 /////////////////////////////////////////////////

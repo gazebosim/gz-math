@@ -36,13 +36,6 @@ namespace ignition
       /// \return A vector of path elements
       public: const std::vector<std::string> &Elems() const;
 
-      /// \brief Access the first element of the path
-      /// \return The first path element
-      public: std::string Root() const;
-
-      /// \brief Access the last element of the path
-      public: std::string Leaf() const;
-
       /// \brief Access the path
       /// \return The path in a single string (string passed in the constructor)
       public: std::string Path() const;
@@ -55,9 +48,6 @@ namespace ignition
       /// no space, punctuation or special characters
       /// \return True if the name is valid
       public: static bool CheckName(const std::string &_name);
-
-      /// \brief Outputs the path elements to std::cout. Debugging method.
-      private: void Dump() const;
 
       /// \brief The path string to be parsed
       private: std::string path;

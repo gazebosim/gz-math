@@ -28,6 +28,13 @@ using namespace math;
 PathPrivate::PathPrivate(const std::string &_s)
   : path(_s)
 {
+  if( _s.empty())
+  {
+    std::stringstream ss;
+    ss << "Error: path cannot be empty";
+    throw FrameException(ss.str());
+  }
+
   std::stringstream ss(_s);
   std::string item;
   while (std::getline(ss, item, '/'))
@@ -36,6 +43,14 @@ PathPrivate::PathPrivate(const std::string &_s)
       continue;
     if (item == ".")
       continue;
+    // avoid path elements with wrong names
+    if(!this->CheckName(item))
+    {
+      std::stringstream ss;
+      ss << "Error: path \"" << _s << "\" contains an invalid element: \"";
+      ss << item << "\"";
+      throw FrameException(ss.str());
+    }
     this->pathElems.push_back(item);
   }
 }
@@ -43,6 +58,9 @@ PathPrivate::PathPrivate(const std::string &_s)
 /////////////////////////////////////////////////
 bool PathPrivate::CheckName(const std::string &_name)
 {
+  // authorize special path elements
+  if(_name == "." || _name == "..")
+    return true;
   // frame names should not be empty
   if (_name.empty())
     return false;
@@ -60,18 +78,6 @@ const std::vector<std::string> &PathPrivate::Elems() const
 }
 
 /////////////////////////////////////////////////
-std::string PathPrivate::Root() const
-{
-  return this->pathElems[0];
-}
-
-/////////////////////////////////////////////////
-std::string PathPrivate::Leaf() const
-{
-  return this->pathElems[this->pathElems.size() -1];
-}
-
-/////////////////////////////////////////////////
 std::string PathPrivate::Path() const
 {
   return this->path;
@@ -80,17 +86,8 @@ std::string PathPrivate::Path() const
 /////////////////////////////////////////////////
 bool PathPrivate::IsAbsolute() const
 {
-  if (this->path.empty())
-    return false;
-
   if (this->path[0] != '/')
     return false;
-
-  // is it empty?
-  if (this->pathElems.size() == 0)
-  {
-    return false;
-  }
   // does it start with world?
   if (this->pathElems[0] != "world")
   {
@@ -104,17 +101,6 @@ bool PathPrivate::IsAbsolute() const
     }
   }
   return true;
-}
-
-/////////////////////////////////////////////////
-void  PathPrivate::Dump() const
-{
-  int i = 0;
-  for (const std::string &e : this->pathElems)
-  {
-    std::cout << i << "] " << e << std::endl;
-    i++;
-  }
 }
 
 /////////////////////////////////////////////////
@@ -182,6 +168,7 @@ FrameWeakPtr FrameGraphPrivate::FrameFromAbsolutePath(
 FrameWeakPtr FrameGraphPrivate::FrameFromRelativePath(
     const FrameWeakPtr &_frame, const PathPrivate &_path) const
 {
+   
   // path may be full
   if (_path.IsAbsolute())
   {

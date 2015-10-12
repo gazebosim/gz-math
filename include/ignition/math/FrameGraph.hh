@@ -42,6 +42,10 @@ namespace ignition
       /// \brief Destructor
       public: virtual ~FrameGraph();
 
+      public: FrameGraph(const FrameGraph &_x) = delete;
+ 
+      public: FrameGraph& operator=(const FrameGraph &_x) = delete;
+
       /// \brief Adds a new frame to the graph
       /// \param[in] _path The full path of the frame's parent
       /// \param[in] _name The name of the new frame
@@ -104,14 +108,6 @@ namespace ignition
       /// \return The frame's weak pointer
       public: FrameWeakPtr FrameAccess(FrameWeakPtr _frame,
                                        const std::string &_relativePath) const;
-
-      /// \brief Copy Constructor (not allowed)
-      /// \param[in] _copy FrameGraph to copy.
-      private: FrameGraph(const FrameGraph &_copy);
-
-      /// \brief Assignment operator (not allowed)
-      /// \param[in] _assign FrameGraph to get values from
-      private: FrameGraph &operator=(const FrameGraph &_assign);
 
       /// \internal
       /// \brief Private data pointer

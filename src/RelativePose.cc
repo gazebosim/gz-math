@@ -24,19 +24,6 @@ using namespace ignition;
 using namespace math;
 
 /////////////////////////////////////////////////
-RelativePose FrameGraph::CreateRelativePose(const std::string &_srcPath,
-                                       const std::string &_dstPath) const
-{
-  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
-  const auto &srcFrame = this->dataPtr->FrameFromAbsolutePath(_srcPath);
-  const auto &dstFrame = this->dataPtr->FrameFromRelativePath(srcFrame,
-                                                              _dstPath);
-  // create the relative pose object while we have the mutex lock
-  RelativePose r(srcFrame, dstFrame);
-  return r;
-}
-
-/////////////////////////////////////////////////
 RelativePose::RelativePose(const FrameWeakPtr &_srcFrame,
                            const FrameWeakPtr &_dstFrame)
   :dataPtr(new RelativePosePrivate())

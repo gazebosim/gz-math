@@ -36,23 +36,6 @@ Frame::~Frame()
 }
 
 /////////////////////////////////////////////////
-Frame::Frame(const Frame &_other)
-  : dataPtr(new FramePrivate(_other.dataPtr->name, _other.dataPtr->pose,
-    FrameWeakPtr()))
-{
-  *this->dataPtr = *_other.dataPtr;
-}
-
-/////////////////////////////////////////////////
-Frame &Frame::operator=(const Frame &_other)
-{
-  if (this == &_other)
-    return *this;
-  *this->dataPtr = *_other.dataPtr;
-  return *this;
-}
-
-/////////////////////////////////////////////////
 std::string Frame::Name() const
 {
   return this->dataPtr->name;
