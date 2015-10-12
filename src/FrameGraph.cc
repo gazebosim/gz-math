@@ -56,12 +56,6 @@ void FrameGraph::AddFrame(const std::string &_path,
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   const auto &srcFrameParent = this->dataPtr->FrameFromAbsolutePath(path);
   auto f = srcFrameParent.lock();
-  if (!f)
-  {
-    std::stringstream ss;
-    ss << "Error: parent path \"" << _path << "\" does not exists";
-    throw FrameException(ss.str());
-  }
   // is the frame a duplicate?
   auto it = f->dataPtr->children.find(_name);
   if (it != f->dataPtr->children.end())
@@ -90,27 +84,15 @@ void FrameGraph::DeleteFrame(const std::string &_path)
   FrameWeakPtr framePtr = this->dataPtr->FrameFromAbsolutePath(path);
   std::string name;
   FrameWeakPtr parentPtr;
+  // this scope helps keep the life of f as short as possible
   {
     auto f = framePtr.lock();
-    if (!f)
-    {
-      std::stringstream ss;
-      ss << "Error: path \"" << _path << "\" does not exists";
-      throw FrameException(ss.str());
-    }
     name = f->Name();
     parentPtr = f->dataPtr->parentFrame;
   }
-
   // get the name of the frame to remove
   // remove the frame from its parent
   auto p = parentPtr.lock();
-  if (!p)
-  {
-    std::stringstream ss;
-    ss << "Error: path \"" << _path << "\" has no parent";
-    throw FrameException(ss.str());
-  }
   p->dataPtr->children.erase(name);
 }
 
@@ -146,6 +128,14 @@ FrameWeakPtr FrameGraph::FrameAccess(const std::string &_path) const
 {
   PathPrivate path(_path);
   return this->dataPtr->FrameFromAbsolutePath(path);
+}
+
+/////////////////////////////////////////////////
+FrameWeakPtr FrameGraph::FrameAccess(FrameWeakPtr _frame,
+                                     const std::string &_relativepath) const
+{
+  PathPrivate path(_relativepath);
+  return this->dataPtr->FrameFromRelativePath(_frame, path);
 }
 
 /////////////////////////////////////////////////

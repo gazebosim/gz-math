@@ -50,7 +50,7 @@ TEST(FrameGraphTest, AbsolutePaths)
   // '' as a name
   EXPECT_THROW(frameGraph.AddFrame("/world", "", pa), FrameException);
 
-  // this path is not fully qualified  
+  // this path is not fully qualified
   EXPECT_THROW(frameGraph.AddFrame("/universe", "x", pa), FrameException);
 
   // this path is not fully qualified because of ".."
@@ -92,7 +92,7 @@ TEST(FrameGraphTest, AbsolutePaths)
   // Tests using relative paths
   Pose3d w2b = frameGraph.Pose("/world/b", "..");
   EXPECT_EQ(pb, w2b);
-  
+
   // using '.'
   Pose3d b2b = frameGraph.Pose("/world/b", ".");
   EXPECT_EQ(b2b, Pose3d(0,0,0,0,0,0));
@@ -147,6 +147,10 @@ TEST(FrameGraphTest, CopyFrames)
 
   auto rel = frameGraph.CreateRelativePose("/world/a/aa", "/world");
   Pose3d p;
+
+  RelativePose *rp = new RelativePose(rel);
+  delete rp;
+
   p = frameGraph.Pose(rel);
 //  EXPECT_EQ(p, Pose3d(0, 0, 0, 0, 0, 0));
 
@@ -181,8 +185,18 @@ TEST(FrameGraphTest, coverage)
 {
   // this test is only used for coverage
   FrameException x("bad");
+
+  FrameGraph frameGraph;
+  frameGraph.AddFrame("/world", "a", Pose3d(0,0,0,0,0,0));
+  auto f = frameGraph.FrameAccess("/world/a");
+  // exercises the '.'
+  auto f2 = frameGraph.FrameAccess(f, ".././a");
+  // now we remove the framm
+  frameGraph.DeleteFrame("/world/a");
+  // try to access deleted frame
+  EXPECT_THROW(frameGraph.LocalPose("/world/a"), FrameException);
 }
- 
+
 /////////////////////////////////////////////////
 TEST(FrameGraphTest, Pose1)
 {

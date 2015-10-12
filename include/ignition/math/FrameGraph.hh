@@ -43,7 +43,7 @@ namespace ignition
       public: virtual ~FrameGraph();
 
       public: FrameGraph(const FrameGraph &_x) = delete;
- 
+
       public: FrameGraph& operator=(const FrameGraph &_x) = delete;
 
       /// \brief Adds a new frame to the graph
@@ -103,7 +103,7 @@ namespace ignition
       public: FrameWeakPtr FrameAccess(const std::string &_path) const;
 
       /// \brief Get a reference to a frame instance
-      /// \param[in] _
+      /// \param[in] _frame The start Frame
       /// \param[in] _relativepath The relative path to the frame
       /// \return The frame's weak pointer
       public: FrameWeakPtr FrameAccess(FrameWeakPtr _frame,

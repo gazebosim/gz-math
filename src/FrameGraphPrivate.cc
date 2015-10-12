@@ -89,34 +89,20 @@ FrameWeakPtr FrameGraphPrivate::FrameFromAbsolutePath(
 FrameWeakPtr FrameGraphPrivate::FrameFromRelativePath(
     const FrameWeakPtr &_frame, const PathPrivate &_path) const
 {
-   
+
   // path may be full
   if (_path.IsAbsolute())
   {
     return this->FrameFromAbsolutePath(_path);
   }
   auto frame = _frame.lock();
-  if (!frame)
-    return FrameWeakPtr();
-
   const std::vector<std::string> &elems = _path.Elems();
   for (auto e : elems)
   {
-    // skip the "current" frame
-    if (e == ".")
-    {
-      continue;
-    }
     // access the "parent" frame
     if (e == "..")
     {
       auto p = frame->dataPtr->parentFrame.lock();
-      if (!p)
-      {
-        std::stringstream ss;
-        ss << "path \"" << _path.Path() << "\" is invalid ";
-        throw FrameException(ss.str());
-      }
       frame = p;
       continue;
     }
