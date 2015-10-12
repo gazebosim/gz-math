@@ -13,6 +13,7 @@ set (sources
   Helpers.cc
   IndexException.cc
   Kmeans.cc
+  PathPrivate.cc
   Rand.cc
   RelativePose.cc
   RotationSpline.cc
