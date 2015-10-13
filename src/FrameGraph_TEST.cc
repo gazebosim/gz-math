@@ -420,17 +420,17 @@ TEST(FrameGraphTest, Multithreads)
     EXPECT_GE(p.Pos().X(), last.Pos().X());
     last = p;
   }
-  auto rel2 = rel;  // cpy constructor
-  EXPECT_EQ(frameGraph.Pose(rel), frameGraph.Pose(rel2));
-  RelativePose rel3;  // empty ctor
-  rel3 = rel2;  // assignment
-  rel3 = rel3;  // assignement to self
-  EXPECT_EQ(frameGraph.Pose(rel), frameGraph.Pose(rel3));
-
   for (auto &thread : pool)
   {
     thread.join();
   }
+  auto rel2 = rel;  // cpy constructor
+  EXPECT_EQ(frameGraph.Pose(rel2), frameGraph.Pose(rel));
+  RelativePose rel3;  // empty ctor
+  rel3 = rel2;  // assignment
+  rel3 = rel3;  // assignement to self (does nothing)
+  EXPECT_EQ(frameGraph.Pose(rel), frameGraph.Pose(rel3));
+
   Pose3d p = frameGraph.Pose(rel);
   EXPECT_EQ(p, frameGraph.Pose("/world/a", "/world"));
 }
