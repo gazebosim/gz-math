@@ -26,7 +26,7 @@ using namespace math;
 /////////////////////////////////////////////////
 RelativePose::RelativePose(const FrameWeakPtr &_srcFrame,
                            const FrameWeakPtr &_dstFrame)
-  :dataPtr(new RelativePosePrivate())
+  :dataPtr(new RelativePosePrivate)
 {
   // Shared pointer locking is not thread safe. However
   // the FrameGraph mutex is locked during the
@@ -65,7 +65,6 @@ RelativePose& RelativePose::operator=(const RelativePose &_other)
 /////////////////////////////////////////////////
 RelativePose::~RelativePose()
 {
-  delete this->dataPtr;
 }
 
 /////////////////////////////////////////////////

@@ -30,6 +30,7 @@ namespace ignition
     class PathPrivate
     {
       /// \brief Constructor
+      /// \param[in] _path The path
       public: PathPrivate(const std::string &_path);
 
       /// \brief Access to the path elements
@@ -46,6 +47,7 @@ namespace ignition
 
       /// \brief Checks if a string is a valid path element. It muse constain
       /// no space, punctuation or special characters
+      /// \param[in] _name The path element to verify
       /// \return True if the name is valid
       public: static bool CheckName(const std::string &_name);
 

@@ -23,6 +23,7 @@ namespace ignition
   {
     // Forward declaration of private data
     class RelativePosePrivate;
+    using RelativePosePrivatePtr = std::unique_ptr<RelativePosePrivate>;
 
     /// \brief Holds the chain of transforms to compute a pose between
     /// two frames in a FrameGraph
@@ -34,22 +35,24 @@ namespace ignition
       public: RelativePose();
 
       /// \brief Copy constructor. Copies the content of the private data.
+      /// \param[in] _c The copy
       public: RelativePose(const RelativePose &_c);
 
       /// \brief Assignemt operator. Copies the private data.
+      /// \param[in] _other The other
       public: RelativePose& operator=(const RelativePose &_other);
 
       /// \brief destructor
       public : virtual ~RelativePose();
 
       /// \brief private constructor.
-      /// \param[in] The source frame (must be a full path)
-      /// \param[in] The destination frame (can be relative)
+      /// \param[in] _srcFrame The source frame (must be a full path)
+      /// \param[in] _dstFrame The destination frame (can be relative)
       private: RelativePose(const FrameWeakPtr &_srcFrame,
           const FrameWeakPtr &_dstFrame);
 
       /// private data
-      private: RelativePosePrivate *dataPtr;
+      private: RelativePosePrivatePtr dataPtr;
     };
   }
 }

@@ -33,6 +33,9 @@ namespace ignition
       //// to access missing paths..
       /// \param[in] _msg The error desciption
       public: FrameException(const std::string &_msg);
+
+      /// \brief Destructor
+      public: ~FrameException();
     };
   }
 }

@@ -30,12 +30,6 @@ namespace ignition
     /// It keeps 2 lists of poses
     class RelativePosePrivate
     {
-      /// \brief Constructor
-      public: RelativePosePrivate();
-
-      /// \brief Destructor
-      public: ~RelativePosePrivate() = default;
-
       /// \brief List of frames to apply in the up direction.
       /// these are the frames from from the src frame towards
       /// the common ancestor (possibly the /world frame)

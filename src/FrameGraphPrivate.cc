@@ -118,8 +118,3 @@ FrameWeakPtr FrameGraphPrivate::FrameFromRelativePath(
   }
   return frame;
 }
-
-/////////////////////////////////////////////////
-RelativePosePrivate::RelativePosePrivate()
-{
-}

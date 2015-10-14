@@ -30,12 +30,6 @@ Frame::Frame(const std::string &_name,
 }
 
 /////////////////////////////////////////////////
-Frame::~Frame()
-{
-  delete this->dataPtr;
-}
-
-/////////////////////////////////////////////////
 std::string Frame::Name() const
 {
   return this->dataPtr->name;

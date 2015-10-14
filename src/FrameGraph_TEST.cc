@@ -184,7 +184,8 @@ std::string link(const Pose3d &_p0, const Pose3d &_p1)
 TEST(FrameGraphTest, coverage)
 {
   // this test is only used for coverage
-  FrameException x("bad");
+  auto x = new FrameException("bad");
+  delete x;
 
   FrameGraph frameGraph;
   frameGraph.AddFrame("/world", "a", Pose3d(0, 0, 0, 0, 0, 0));

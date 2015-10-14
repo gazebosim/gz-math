@@ -27,15 +27,17 @@ using namespace math;
 
 /////////////////////////////////////////////////
 FrameGraph::FrameGraph()
-  :dataPtr(new FrameGraphPrivate())
+  :dataPtr(new FrameGraphPrivate)
 {
 }
+
 
 /////////////////////////////////////////////////
 FrameGraph::~FrameGraph()
 {
-  delete this->dataPtr;
+//  delete this->dataPtr;
 }
+
 
 /////////////////////////////////////////////////
 void FrameGraph::AddFrame(const std::string &_path,

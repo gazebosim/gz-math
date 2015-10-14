@@ -21,6 +21,7 @@
 #include <string>
 #include <map>
 
+#include <ignition/math/Types.hh>
 #include <ignition/math/Frame.hh>
 
 namespace ignition
@@ -35,7 +36,6 @@ namespace ignition
       /// \param[in] _name The frame's short name
       /// \param[in] _pose The frame's offset from it's parent
       /// \param[in] _parentFrame The frame's parent
-      /// \param[in] _mutex The lock for the frameGraph
       public: FramePrivate(const std::string &_name,
                            const Pose3d &_pose,
                            const FrameWeakPtr &_parentFrame);

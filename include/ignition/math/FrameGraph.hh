@@ -18,8 +18,6 @@
 #define _IGNITION_FRAME_GRAPH_HH_
 
 #include <string>
-#include <mutex>
-#include <map>
 
 #include <ignition/math/Types.hh>
 
@@ -33,6 +31,8 @@ namespace ignition
   {
     // Forward declaration of private data
     class FrameGraphPrivate;
+    using FrameGraphPrivatePtr = std::unique_ptr<FrameGraphPrivate>;
+
     /// \brief A collection of Frames, and their relative poses.
     class IGNITION_VISIBLE FrameGraph
     {
@@ -42,8 +42,10 @@ namespace ignition
       /// \brief Destructor
       public: virtual ~FrameGraph();
 
+      /// \brief Prevent copy construction
       public: FrameGraph(const FrameGraph &_x) = delete;
 
+      /// \brief Prevent assignment
       public: FrameGraph& operator=(const FrameGraph &_x) = delete;
 
       /// \brief Adds a new frame to the graph
@@ -71,12 +73,13 @@ namespace ignition
       /// \brief Computes the relative pose between 2 frames, using
       /// a RelativePose Instance
       /// \param[in] _relativePose
+      /// \return The pose between the 2 frames
       /// \throws FrameException if one of the frames has been deleted.
       public: Pose3d Pose(const RelativePose &_relativePose) const;
 
       /// \brief Get the pose of a frame (relative to its parent frame)
       /// \param[in] _path The absolute path to the frame
-      /// \return The local pose of the a frame
+      /// \return The local pose of the frame
       /// \throws FrameException if the path to the frame is invalid.
       public: Pose3d LocalPose(const std::string &_path) const;
 
@@ -87,12 +90,14 @@ namespace ignition
 
       /// \brief Set the pose of a frame (relative to its parent frame)
       /// \param[in] _path The absolute path to the frame
+      /// \param[in] _p The new local pose
       /// \return The local pose
       /// \throws FrameException if the path to the frame is invalid.
       public: void SetLocalPose(const std::string &_path, const Pose3d &_p);
 
       /// \brief Set the pose of a frame (relative to its parent frame)
       /// \param[in] _frame The frame reference
+      /// \param[in] _p The new pose
       /// \return The local pose
       /// \throws FrameException if the frame has been deleted.
       public: void SetLocalPose(FrameWeakPtr _frame, const Pose3d &_p);
@@ -100,6 +105,7 @@ namespace ignition
       /// \brief This method generate a relative pose between two frames.
       /// \param[in] _srcPath The source frame path (must be absolute)
       /// \param[in] _dstPath The destination frame (can be relative)
+      /// \return A relative pose instance
       /// \throws FrameException if the paths are not invalid.
       public: RelativePose CreateRelativePose(const std::string &_srcPath,
                   const std::string &_dstPath) const;
@@ -120,7 +126,7 @@ namespace ignition
 
       /// \internal
       /// \brief Private data pointer
-      private: FrameGraphPrivate *dataPtr;
+      private: FrameGraphPrivatePtr dataPtr;
     };
   }
 }

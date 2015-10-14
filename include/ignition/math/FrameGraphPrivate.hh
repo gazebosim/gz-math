@@ -34,10 +34,7 @@
 #ifndef _IGNITION_FRAMEGRAPH_PRIVATE_HH_
 #define _IGNITION_FRAMEGRAPH_PRIVATE_HH_
 
-#include <string>
-// #include <vector>
 #include <mutex>
-#include <map>
 
 #include <ignition/math/Types.hh>
 #include <ignition/math/FrameGraph.hh>

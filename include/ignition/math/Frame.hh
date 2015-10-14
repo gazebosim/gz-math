@@ -28,9 +28,12 @@ namespace ignition
   {
     // Forward declaration of private data
     class FramePrivate;
+    // Forward declaration for pointers
     class Frame;
+    // Pointer types
     using FramePtr = std::shared_ptr<Frame>;
     using FrameWeakPtr = std::weak_ptr<Frame>;
+    using FramePrivatePtr = std::unique_ptr<FramePrivate>;
 
     /// \brief Frame class. A frame has an offset (a Pose3d) and a parent
     /// frame. Frames are composed inside the FrameGraph class.
@@ -39,30 +42,27 @@ namespace ignition
     /// performs the thread locking while the Frame data is accessed.
     class IGNITION_VISIBLE Frame
     {
-      friend class FrameGraph;  // adding and deleting Frames
-      friend class FrameGraphPrivate;  // path calculations
-      friend class RelativePose;  // access Frame's parents
+      // adding and deleting Frames
+      friend class FrameGraph;
+      // path calculations
+      friend class FrameGraphPrivate;
+      // access Frame's parents
+      friend class RelativePose;
 
       /// \brief Create a new Frame to be added
+      /// \param[in] _name Short name of the frame
+      /// \param[in] _pose Pose relative to the parent frame
+      /// \param[in] _parentFrame The parent frame
       public: Frame(const std::string &_name,
                     const Pose3d &_pose,
                     const FrameWeakPtr &_parentFrame);
-
-      /// \brief Destructor
-      public: ~Frame();
-
-      /// \brief Copy constructor
-      public: Frame(const Frame &_other);
-
-      /// \brief assignment operator
-      public: Frame& operator=(const Frame &_other);
 
       /// \brief Name getter
       /// \return The name of the Frame (short name, not a path)
       public: std::string Name() const;
 
       /// \brief Private data
-      private: FramePrivate *dataPtr;
+      private: FramePrivatePtr dataPtr;
     };
   }
 }
