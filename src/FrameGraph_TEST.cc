@@ -152,7 +152,7 @@ TEST(FrameGraphTest, CopyFrames)
   delete rp;
 
   p = frameGraph.Pose(rel);
-//  EXPECT_EQ(p, Pose3d(0, 0, 0, 0, 0, 0));
+  EXPECT_EQ(p, Pose3d(1, 1, 0, 0, 0, 0));
 
   frameGraph.DeleteFrame("/world/a");
   EXPECT_THROW(frameGraph.AddFrame("/world/a/aa", "aaa", paaa), FrameException);

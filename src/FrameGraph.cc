@@ -35,7 +35,6 @@ FrameGraph::FrameGraph()
 /////////////////////////////////////////////////
 FrameGraph::~FrameGraph()
 {
-//  delete this->dataPtr;
 }
 
 

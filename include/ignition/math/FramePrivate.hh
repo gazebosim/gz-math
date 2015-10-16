@@ -53,8 +53,7 @@ namespace ignition
       /// frame, that speeds up lookup.
       public: FrameWeakPtr parentFrame;
 
-      /// Children frames, with name
-      /// http://stackoverflow.com/questions/20754370/about-race-condition-of-weak-ptr
+      /// \brief Children frames, with name
       public: std::map<std::string, FramePtr> children;
     };
   }
