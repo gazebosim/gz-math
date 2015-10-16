@@ -45,7 +45,7 @@ namespace ignition
       /// \return True if it is a full path, false if the path is relative
       public: bool IsAbsolute() const;
 
-      /// \brief Checks if a string is a valid path element. It muse constain
+      /// \brief Checks if a string is a valid path element. It must constain
       /// no space, punctuation or special characters
       /// \param[in] _name The path element to verify
       /// \return True if the name is valid
