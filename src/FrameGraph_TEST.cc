@@ -62,7 +62,7 @@ TEST(FrameGraphTest, AbsolutePaths)
   // this path as an illegal "!" frame
   EXPECT_THROW(frameGraph.AddFrame("/world/!", "x", pa), FrameException);
 
-  // very stupid attempt at getting pose info from inexistant frame
+  // very stupid attempt at getting pose info from inexistent frame
   Pose3d p;
   EXPECT_THROW(p = frameGraph.Pose("/world/x", "/world"), FrameException);
   EXPECT_THROW(p = frameGraph.Pose("/world", "/world/x"), FrameException);
@@ -74,7 +74,7 @@ TEST(FrameGraphTest, AbsolutePaths)
   EXPECT_THROW(frameGraph.AddFrame("/world", "a",  pa), FrameException);
 
   Pose3d a2w;
-  // skillfull pose inquiry
+  // skillful pose inquiry
   a2w = frameGraph.Pose("/world/a", "/world");
   EXPECT_EQ(pa, a2w);
 
@@ -101,7 +101,7 @@ TEST(FrameGraphTest, AbsolutePaths)
   EXPECT_THROW(frameGraph.Pose("/world/b", ""), FrameException);
   EXPECT_THROW(frameGraph.Pose("/world/b", "?"), FrameException);
 
-  // Relative path from a to b
+  // Relative path from b to a
   Pose3d b2a, b2a2;
   b2a = frameGraph.Pose("/world/a", "/world/b");
   b2a2 = frameGraph.Pose("/world/a", "../b");
@@ -120,7 +120,7 @@ TEST(FrameGraphTest, DeleteFrame)
   frameGraph.AddFrame("/world/a", "aa", paa);
   frameGraph.AddFrame("/world/a/aa", "aaa", paaa);
 
-  // not an abosulte path
+  // not an absolute path
   EXPECT_THROW(frameGraph.DeleteFrame(".."), FrameException);
   // not a real path
   EXPECT_THROW(frameGraph.DeleteFrame("/world/banana"), FrameException);
@@ -435,4 +435,3 @@ TEST(FrameGraphTest, Multithreads)
   Pose3d p = frameGraph.Pose(rel);
   EXPECT_EQ(p, frameGraph.Pose("/world/a", "/world"));
 }
-

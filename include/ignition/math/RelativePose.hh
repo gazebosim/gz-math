@@ -31,7 +31,7 @@ namespace ignition
     {
       friend class FrameGraph;
 
-      /// constructor
+      /// \brief Constructor
       public: RelativePose();
 
       /// \brief Copy constructor. Copies the content of the private data.
@@ -39,8 +39,8 @@ namespace ignition
       public: RelativePose(const RelativePose &_c);
 
       /// \brief Assignemt operator. Copies the private data.
-      /// \param[in] _other The other
-      public: RelativePose& operator=(const RelativePose &_other);
+      /// \param[in] _other The other RelativePose
+      public: RelativePose &operator=(const RelativePose &_other);
 
       /// \brief destructor
       public : virtual ~RelativePose();
@@ -51,7 +51,7 @@ namespace ignition
       private: RelativePose(const FrameWeakPtr &_srcFrame,
           const FrameWeakPtr &_dstFrame);
 
-      /// private data
+      /// \brief Private data
       private: RelativePosePrivatePtr dataPtr;
     };
   }
