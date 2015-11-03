@@ -24,21 +24,21 @@ using namespace ignition;
 using namespace math;
 
 /////////////////////////////////////////////////
-RelativePose::RelativePose(const FrameWeakPtr &_srcFrame,
-                           const FrameWeakPtr &_dstFrame)
+RelativePose::RelativePose(const FrameWeakPtr &_dstFrame,
+                           const FrameWeakPtr &_srcFrame)
   :dataPtr(new RelativePosePrivate)
 {
   // Shared pointer locking is not thread safe. However
   // the FrameGraph mutex is locked during the
   // FrameGraph::CreateRelativePose call. This method call
   // assumes the lock is acquired.
-  auto frame = _srcFrame.lock();
+  auto frame = _dstFrame.lock();
   while (frame && frame->dataPtr->parentFrame.lock())
   {
     this->dataPtr->up.push_back(frame);
     frame = frame->dataPtr->parentFrame.lock();
   }
-  frame = _dstFrame.lock();
+  frame = _srcFrame.lock();
   while (frame && frame->dataPtr->parentFrame.lock())
   {
     this->dataPtr->down.push_back(frame);

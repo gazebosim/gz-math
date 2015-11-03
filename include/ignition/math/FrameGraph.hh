@@ -63,12 +63,12 @@ namespace ignition
       public: void DeleteFrame(const std::string &_path);
 
       /// \brief Computes a relative pose between 2 frames
-      /// \param[in] _src The name of the source frame
       /// \param[in] _dst The name of the destination frame
+      /// \param[in] _src The name of the source frame
       /// \return The pose of _dest in _src's frame
       /// \throws FrameException if one of the path is invalid.
-      public: Pose3d Pose(const std::string &_src,
-                          const std::string &_dst) const;
+      public: Pose3d Pose(const std::string &_dst,
+                          const std::string &_src) const;
 
       /// \brief Computes the relative pose between 2 frames, using
       /// a RelativePose Instance
@@ -103,12 +103,12 @@ namespace ignition
       public: void SetLocalPose(FrameWeakPtr _frame, const Pose3d &_p);
 
       /// \brief This method generate a relative pose between two frames.
-      /// \param[in] _srcPath The source frame path (must be absolute)
-      /// \param[in] _dstPath The destination frame (can be relative)
+      /// \param[in] _dstPath The destination frame (must be absolute)
+      /// \param[in] _srcPath The source frame path (can be relative)
       /// \return A relative pose instance
       /// \throws FrameException if the paths are not invalid.
-      public: RelativePose CreateRelativePose(const std::string &_srcPath,
-                  const std::string &_dstPath) const;
+      public: RelativePose CreateRelativePose(const std::string &_dstPath,
+                  const std::string &_srcPath) const;
 
       /// \brief Get a reference to a frame instance
       /// \param[in] _path The absolute path to the frame

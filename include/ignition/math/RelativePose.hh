@@ -46,10 +46,10 @@ namespace ignition
       public : virtual ~RelativePose();
 
       /// \brief private constructor.
-      /// \param[in] _srcFrame The source frame (must be a full path)
-      /// \param[in] _dstFrame The destination frame (can be relative)
-      private: RelativePose(const FrameWeakPtr &_srcFrame,
-          const FrameWeakPtr &_dstFrame);
+      /// \param[in] _dstFrame The destination frame
+      /// \param[in] _srcFrame The source frame
+      private: RelativePose(const FrameWeakPtr &_dstFrame,
+          const FrameWeakPtr &_srcFrame);
 
       /// \brief Private data
       private: RelativePosePrivatePtr dataPtr;

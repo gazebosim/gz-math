@@ -144,7 +144,10 @@ TEST(FrameGraphTest, CopyFrames)
   frameGraph.AddFrame("/world/a/aa", "aaa", paaa);
 
   auto frame1 = frameGraph.FrameAccess("/world/a");
-
+  {
+    auto f = frame1.lock();
+    EXPECT_EQ(f->Name(), "a");
+  }
   auto rel = frameGraph.CreateRelativePose("/world/a/aa", "/world");
   Pose3d p;
 

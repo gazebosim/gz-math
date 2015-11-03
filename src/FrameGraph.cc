@@ -98,10 +98,10 @@ void FrameGraph::DeleteFrame(const std::string &_path)
 }
 
 /////////////////////////////////////////////////
-Pose3d FrameGraph::Pose(const std::string &_srcFramePath,
-                      const std::string &_dstFramePath) const
+Pose3d FrameGraph::Pose(const std::string &_dstFramePath,
+                      const std::string &_srcFramePath) const
 {
-  RelativePose r = this->CreateRelativePose(_srcFramePath, _dstFramePath);
+  RelativePose r = this->CreateRelativePose(_dstFramePath, _srcFramePath);
   return this->Pose(r);
 }
 
@@ -161,15 +161,15 @@ void FrameGraph::SetLocalPose(const std::string &_path, const Pose3d &_p)
 }
 
 /////////////////////////////////////////////////
-RelativePose FrameGraph::CreateRelativePose(const std::string &_srcPath,
-                                       const std::string &_dstPath) const
+RelativePose FrameGraph::CreateRelativePose(const std::string &_dstPath,
+                                       const std::string &_srcPath) const
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
-  const auto &srcFrame = this->dataPtr->FrameFromAbsolutePath(_srcPath);
-  const auto &dstFrame = this->dataPtr->FrameFromRelativePath(srcFrame,
-                                                              _dstPath);
+  const auto &dstFrame = this->dataPtr->FrameFromAbsolutePath(_dstPath);
+  const auto &srcFrame = this->dataPtr->FrameFromRelativePath(dstFrame,
+                                                              _srcPath);
   // create the relative pose object while we have the mutex lock
-  RelativePose r(srcFrame, dstFrame);
+  RelativePose r(dstFrame, srcFrame);
   return r;
 }
 
