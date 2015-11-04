@@ -38,7 +38,7 @@ namespace ignition
     /// \brief Frame class. A frame has an offset (a Pose3d) and a parent
     /// frame. Frames are composed inside the FrameGraph class.
     /// The Frame class does not have a lot of public methods. The FrameGraph
-    /// class acts as a Facade from which get the Frame information, and
+    /// class acts as a Facade from which to get the Frame information, and
     /// performs the thread locking while the Frame data is accessed.
     class IGNITION_VISIBLE Frame
     {
