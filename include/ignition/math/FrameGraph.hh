@@ -46,7 +46,7 @@ namespace ignition
       public: FrameGraph(const FrameGraph &_x) = delete;
 
       /// \brief Prevent assignment
-      public: FrameGraph& operator=(const FrameGraph &_x) = delete;
+      public: FrameGraph &operator=(const FrameGraph &_x) = delete;
 
       /// \brief Adds a new frame to the graph
       /// \param[in] _path The full path of the frame's parent
