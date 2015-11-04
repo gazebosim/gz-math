@@ -102,7 +102,7 @@ namespace ignition
       /// \throws FrameException if the frame has been deleted.
       public: void SetLocalPose(FrameWeakPtr _frame, const Pose3d &_p);
 
-      /// \brief This method generate a relative pose between two frames.
+      /// \brief This method generates a relative pose between two frames.
       /// \param[in] _dstPath The destination frame (must be absolute)
       /// \param[in] _srcPath The source frame path (can be relative)
       /// \return A relative pose instance
