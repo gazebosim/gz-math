@@ -143,7 +143,7 @@ TEST(FrameGraphTest, CopyFrames)
   frameGraph.AddFrame("/a", "aa", paa);
   frameGraph.AddFrame("/a/aa", "aaa", paaa);
 
-  auto frame1 = frameGraph.FrameAccess("/a");
+  auto frame1 = frameGraph.Frame("/a");
   {
     auto f = frame1.lock();
     EXPECT_EQ(f->Name(), "a");
@@ -192,9 +192,9 @@ TEST(FrameGraphTest, coverage)
 
   FrameGraph frameGraph;
   frameGraph.AddFrame("/", "a", Pose3d(0, 0, 0, 0, 0, 0));
-  auto f = frameGraph.FrameAccess("/a");
+  auto f = frameGraph.Frame("/a");
   // exercises the '.'
-  auto f2 = frameGraph.FrameAccess(f, ".././a");
+  auto f2 = frameGraph.Frame(f, ".././a");
   // now we remove the framm
   frameGraph.DeleteFrame("/a");
   // try to access deleted frame
@@ -383,7 +383,7 @@ TEST(FrameGraphTest, SimplePose)
 // it changes the local pose of a frame
 void asyncStuff(FrameGraph &frameGraph)
 {
-  const auto &frame = frameGraph.FrameAccess("/a");
+  const auto &frame = frameGraph.Frame("/a");
   for (int i = 0; i < 1000001; ++i)
   {
     Pose3d p(i, 0, 0, 0, 0, 0);
@@ -413,7 +413,7 @@ TEST(FrameGraphTest, Multithreads)
   {
     pool.push_back(std::thread {asyncStuff, std::ref(frameGraph)});
   }
-  const auto &frame = frameGraph.FrameAccess("/a");
+  const auto &frame = frameGraph.Frame("/a");
   EXPECT_EQ(pa, frameGraph.LocalPose(frame));
   auto rel = frameGraph.CreateRelativePose("/a", "/");
   Pose3d last = frameGraph.Pose(rel);

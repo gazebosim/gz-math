@@ -66,7 +66,7 @@ void FrameGraph::AddFrame(const std::string &_path,
     throw FrameException(ss.str());
   }
   // just add it
-  FramePtr frame(new Frame(_name, _pose, f));
+  FramePtr frame(new ignition::math::Frame(_name, _pose, f));
   f->dataPtr->children[_name] = frame;
 }
 
@@ -108,7 +108,7 @@ Pose3d FrameGraph::Pose(const std::string &_dstFramePath,
 /////////////////////////////////////////////////
 Pose3d FrameGraph::LocalPose(const std::string &_path) const
 {
-  auto frame = this->FrameAccess(_path);
+  auto frame = this->Frame(_path);
   auto p = this->LocalPose(frame);
   return p;
 }
@@ -130,14 +130,14 @@ Pose3d FrameGraph::LocalPose(const FrameWeakPtr &_frame) const
 }
 
 /////////////////////////////////////////////////
-FrameWeakPtr FrameGraph::FrameAccess(const std::string &_path) const
+FrameWeakPtr FrameGraph::Frame(const std::string &_path) const
 {
   PathPrivate path(_path);
   return this->dataPtr->FrameFromAbsolutePath(path);
 }
 
 /////////////////////////////////////////////////
-FrameWeakPtr FrameGraph::FrameAccess(FrameWeakPtr _frame,
+FrameWeakPtr FrameGraph::Frame(FrameWeakPtr _frame,
                                      const std::string &_relativepath) const
 {
   PathPrivate path(_relativepath);
@@ -156,7 +156,7 @@ void FrameGraph::SetLocalPose(FrameWeakPtr _frame, const Pose3d &_p)
 /////////////////////////////////////////////////
 void FrameGraph::SetLocalPose(const std::string &_path, const Pose3d &_p)
 {
-  auto frame = this->FrameAccess(_path);
+  auto frame = this->Frame(_path);
   this->SetLocalPose(frame, _p);
 }
 

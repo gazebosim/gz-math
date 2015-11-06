@@ -114,14 +114,14 @@ namespace ignition
       /// \param[in] _path The absolute path to the frame
       /// \return The frame's weak pointer
       /// \throws FrameException if the path to the frame is invalid.
-      public: FrameWeakPtr FrameAccess(const std::string &_path) const;
+      public: FrameWeakPtr Frame(const std::string &_path) const;
 
       /// \brief Get a reference to a frame instance
       /// \param[in] _frame The start Frame
       /// \param[in] _relativepath The relative path to the frame
       /// \return The frame's weak pointer
       /// \throws FrameException if the path or the frame is invalid.
-      public: FrameWeakPtr FrameAccess(FrameWeakPtr _frame,
+      public: FrameWeakPtr Frame(FrameWeakPtr _frame,
                                        const std::string &_relativePath) const;
 
       /// \internal
