@@ -87,11 +87,6 @@ bool PathPrivate::IsAbsolute() const
 {
   if (this->path[0] != '/')
     return false;
-  // does it start with world?
-  if (this->pathElems[0] != "world")
-  {
-    return false;
-  }
   for (const std::string &s : this->pathElems)
   {
     if (s == "..")

@@ -48,63 +48,63 @@ TEST(FrameGraphTest, AbsolutePaths)
   // '' is not a good name
   EXPECT_THROW(frameGraph.AddFrame("", "ho", pa), FrameException);
   // '' as a name
-  EXPECT_THROW(frameGraph.AddFrame("/world", "", pa), FrameException);
+  EXPECT_THROW(frameGraph.AddFrame("/", "", pa), FrameException);
 
   // this path is not fully qualified
   EXPECT_THROW(frameGraph.AddFrame("/universe", "x", pa), FrameException);
 
   // this path is not fully qualified because of ".."
-  EXPECT_THROW(frameGraph.AddFrame("/world/..", "x", pa), FrameException);
+  EXPECT_THROW(frameGraph.AddFrame("/..", "x", pa), FrameException);
 
   // this path as an undefined "unknown" frame
-  EXPECT_THROW(frameGraph.AddFrame("/world/unknown", "x", pa), FrameException);
+  EXPECT_THROW(frameGraph.AddFrame("/unknown", "x", pa), FrameException);
 
   // this path as an illegal "!" frame
-  EXPECT_THROW(frameGraph.AddFrame("/world/!", "x", pa), FrameException);
+  EXPECT_THROW(frameGraph.AddFrame("/!", "x", pa), FrameException);
 
   // very stupid attempt at getting pose info from inexistent frame
   Pose3d p;
-  EXPECT_THROW(p = frameGraph.Pose("/world/x", "/world"), FrameException);
-  EXPECT_THROW(p = frameGraph.Pose("/world", "/world/x"), FrameException);
+  EXPECT_THROW(p = frameGraph.Pose("/x", "/"), FrameException);
+  EXPECT_THROW(p = frameGraph.Pose("/", "/x"), FrameException);
 
-  // Finally, this path adds a to the built in "/world" frame
-  frameGraph.AddFrame("/world", "a", pa);
+  // Finally, this path adds a to the built in "/" frame
+  frameGraph.AddFrame("/", "a", pa);
 
   // try to add duplicate frame
-  EXPECT_THROW(frameGraph.AddFrame("/world", "a",  pa), FrameException);
+  EXPECT_THROW(frameGraph.AddFrame("/", "a",  pa), FrameException);
 
   Pose3d a2w;
   // skillful pose inquiry
-  a2w = frameGraph.Pose("/world/a", "/world");
+  a2w = frameGraph.Pose("/a", "/");
   EXPECT_EQ(pa, a2w);
 
   // the local pose of a relative to its parent is also pa
-  Pose3d localPose = frameGraph.LocalPose("/world/a");
+  Pose3d localPose = frameGraph.LocalPose("/a");
   EXPECT_EQ(pa, localPose);
 
   // error: x does not exist
-  EXPECT_THROW(p = frameGraph.Pose("/world/a", "/world/x"), FrameException);
+  EXPECT_THROW(p = frameGraph.Pose("/a", "/x"), FrameException);
 
   // add b
   Pose3d pb(0, 1, 0, 0, 0, 0);
-  frameGraph.AddFrame("/world", "b", pb);
+  frameGraph.AddFrame("/", "b", pb);
 
   // Tests using relative paths
-  Pose3d w2b = frameGraph.Pose("/world/b", "..");
+  Pose3d w2b = frameGraph.Pose("/b", "..");
   EXPECT_EQ(pb, w2b);
 
   // using '.'
-  Pose3d b2b = frameGraph.Pose("/world/b", ".");
+  Pose3d b2b = frameGraph.Pose("/b", ".");
   EXPECT_EQ(b2b, Pose3d(0, 0, 0, 0, 0, 0));
 
   // using ''
-  EXPECT_THROW(frameGraph.Pose("/world/b", ""), FrameException);
-  EXPECT_THROW(frameGraph.Pose("/world/b", "?"), FrameException);
+  EXPECT_THROW(frameGraph.Pose("/b", ""), FrameException);
+  EXPECT_THROW(frameGraph.Pose("/b", "?"), FrameException);
 
   // Relative path from b to a
   Pose3d b2a, b2a2;
-  b2a = frameGraph.Pose("/world/a", "/world/b");
-  b2a2 = frameGraph.Pose("/world/a", "../b");
+  b2a = frameGraph.Pose("/a", "/b");
+  b2a2 = frameGraph.Pose("/a", "../b");
   EXPECT_EQ(b2a, b2a2);
 }
 
@@ -116,17 +116,17 @@ TEST(FrameGraphTest, DeleteFrame)
   Pose3d paaa(0, 0, 0, 0, 1.570790, 0);
 
   FrameGraph frameGraph;
-  frameGraph.AddFrame("/world", "a", pa);
-  frameGraph.AddFrame("/world/a", "aa", paa);
-  frameGraph.AddFrame("/world/a/aa", "aaa", paaa);
+  frameGraph.AddFrame("/", "a", pa);
+  frameGraph.AddFrame("/a", "aa", paa);
+  frameGraph.AddFrame("/a/aa", "aaa", paaa);
 
   // not an absolute path
   EXPECT_THROW(frameGraph.DeleteFrame(".."), FrameException);
   // not a real path
-  EXPECT_THROW(frameGraph.DeleteFrame("/world/banana"), FrameException);
+  EXPECT_THROW(frameGraph.DeleteFrame("/banana"), FrameException);
 
-  frameGraph.DeleteFrame("/world/a");
-  EXPECT_THROW(frameGraph.AddFrame("/world/a/aa", "aaa", paaa), FrameException);
+  frameGraph.DeleteFrame("/a");
+  EXPECT_THROW(frameGraph.AddFrame("/a/aa", "aaa", paaa), FrameException);
 }
 
 /////////////////////////////////////////////////
@@ -139,16 +139,16 @@ TEST(FrameGraphTest, CopyFrames)
   Pose3d paaa(0, 0, 0, 0, 1.570790, 0);
 
   FrameGraph frameGraph;
-  frameGraph.AddFrame("/world", "a", pa);
-  frameGraph.AddFrame("/world/a", "aa", paa);
-  frameGraph.AddFrame("/world/a/aa", "aaa", paaa);
+  frameGraph.AddFrame("/", "a", pa);
+  frameGraph.AddFrame("/a", "aa", paa);
+  frameGraph.AddFrame("/a/aa", "aaa", paaa);
 
-  auto frame1 = frameGraph.FrameAccess("/world/a");
+  auto frame1 = frameGraph.FrameAccess("/a");
   {
     auto f = frame1.lock();
     EXPECT_EQ(f->Name(), "a");
   }
-  auto rel = frameGraph.CreateRelativePose("/world/a/aa", "/world");
+  auto rel = frameGraph.CreateRelativePose("/a/aa", "/");
   Pose3d p;
 
   RelativePose *rp = new RelativePose(rel);
@@ -157,8 +157,8 @@ TEST(FrameGraphTest, CopyFrames)
   p = frameGraph.Pose(rel);
   EXPECT_EQ(p, Pose3d(1, 1, 0, 0, 0, 0));
 
-  frameGraph.DeleteFrame("/world/a");
-  EXPECT_THROW(frameGraph.AddFrame("/world/a/aa", "aaa", paaa), FrameException);
+  frameGraph.DeleteFrame("/a");
+  EXPECT_THROW(frameGraph.AddFrame("/a/aa", "aaa", paaa), FrameException);
 }
 
 
@@ -191,14 +191,14 @@ TEST(FrameGraphTest, coverage)
   delete x;
 
   FrameGraph frameGraph;
-  frameGraph.AddFrame("/world", "a", Pose3d(0, 0, 0, 0, 0, 0));
-  auto f = frameGraph.FrameAccess("/world/a");
+  frameGraph.AddFrame("/", "a", Pose3d(0, 0, 0, 0, 0, 0));
+  auto f = frameGraph.FrameAccess("/a");
   // exercises the '.'
   auto f2 = frameGraph.FrameAccess(f, ".././a");
   // now we remove the framm
-  frameGraph.DeleteFrame("/world/a");
+  frameGraph.DeleteFrame("/a");
   // try to access deleted frame
-  EXPECT_THROW(frameGraph.LocalPose("/world/a"), FrameException);
+  EXPECT_THROW(frameGraph.LocalPose("/a"), FrameException);
   EXPECT_THROW(frameGraph.LocalPose(f), FrameException);
 }
 
@@ -216,15 +216,15 @@ TEST(FrameGraphTest, Pose1)
 
   std::cout << "\n";
   FrameGraph frameGraph;
-  frameGraph.AddFrame("/world", "a", pa);
-  frameGraph.AddFrame("/world", "b", pb);
+  frameGraph.AddFrame("/", "a", pa);
+  frameGraph.AddFrame("/", "b", pb);
 
   // pose of a from the world's perspective
-  Pose3d pwa = frameGraph.Pose("/world/a", "/world");
+  Pose3d pwa = frameGraph.Pose("/a", "/");
 
-  Pose3d pwb = frameGraph.Pose("/world/b", "/world");
-  Pose3d pwab = frameGraph.Pose("/world/a", "/world/b");
-  Pose3d pwba = frameGraph.Pose("/world/b", "/world/a");
+  Pose3d pwb = frameGraph.Pose("/b", "/");
+  Pose3d pwab = frameGraph.Pose("/a", "/b");
+  Pose3d pwba = frameGraph.Pose("/b", "/a");
 
   std::cout << "pose" << p2str(pwa) << ";  // absolute a" << std::endl;
   std::cout << "pose" << p2str(pwb) << ";  // absolute b" << std::endl;
@@ -237,11 +237,11 @@ TEST(FrameGraphTest, Pose1)
   EXPECT_EQ(pwba, Pose3d(-10, 10, 0, 0, 0, 0));
 
   // now rotate a 90 degrees around z
-  frameGraph.SetLocalPose("/world/a", Pose3d(10, 0, 0, 0, 0, 1.5707));
-  pwa = frameGraph.Pose("/world/a", "/world");
-  pwb = frameGraph.Pose("/world/b", "/world");
-  pwab = frameGraph.Pose("/world/a", "/world/b");
-  pwba = frameGraph.Pose("/world/b", "/world/a");
+  frameGraph.SetLocalPose("/a", Pose3d(10, 0, 0, 0, 0, 1.5707));
+  pwa = frameGraph.Pose("/a", "/");
+  pwb = frameGraph.Pose("/b", "/");
+  pwab = frameGraph.Pose("/a", "/b");
+  pwba = frameGraph.Pose("/b", "/a");
 
   // a expressed in b
   EXPECT_EQ(pwab, Pose3d(10, -10, 0, 0, 0, 1.5707));
@@ -268,19 +268,19 @@ TEST(FrameGraphTest, RelativePose)
 
   std::cout << "\n";
   FrameGraph frameGraph;
-  frameGraph.AddFrame("/world", "a", pa);
-  frameGraph.AddFrame("/world/a", "aa", paa);
-  frameGraph.AddFrame("/world/a", "ab", pab);
+  frameGraph.AddFrame("/", "a", pa);
+  frameGraph.AddFrame("/a", "aa", paa);
+  frameGraph.AddFrame("/a", "ab", pab);
 
   // rotate 30 degrees
   double angle = 0.523599;
   Pose3d p(10, 0, 0, 0, 0, angle);  // (10, 0, 0, angle, angle, 0);
-  frameGraph.SetLocalPose("/world/a", p);
-  std::cout << "// a local pose: " << p << "\n";
+  frameGraph.SetLocalPose("/a", p);
+  std::cout << "/ a local pose: " << p << "\n";
 
-  Pose3d pwa = frameGraph.Pose("/world/a", "/world");
-  Pose3d pwaa = frameGraph.Pose("/world/a/aa", "/world");
-  Pose3d pwab = frameGraph.Pose("/world/a/ab", "/world");
+  Pose3d pwa = frameGraph.Pose("/a", "/");
+  Pose3d pwaa = frameGraph.Pose("/a/aa", "/");
+  Pose3d pwab = frameGraph.Pose("/a/ab", "/");
 
   std::cout << "pose" << p2str(pwa) << ";  // absolute a" << std::endl;
   std::cout << "pose" << p2str(pwaa) << ";  // absolute aa" << std::endl;
@@ -292,7 +292,7 @@ TEST(FrameGraphTest, RelativePose)
   std::cout << "color([0,1,0])" << link(pa, pwab)
     << "; // a to ab" << std::endl;
   std::cout << std::endl;
-  auto paa2ab = frameGraph.Pose("/world/a/aa", "/world/a/ab");
+  auto paa2ab = frameGraph.Pose("/a/aa", "/a/ab");
   std::cout << "pose" << p2str(paa2ab) << ";  // aa to ab" << std::endl;
   std::cout << std::endl;
 }
@@ -320,10 +320,10 @@ TEST(FrameGraphTest, RelativePaths)
   Pose3d pab(0, 10, 0, 0, 0, 0);
 
   FrameGraph frameGraph;
-  frameGraph.AddFrame("/world", "a", pa);
-  frameGraph.AddFrame("/world/a", "aa", paa);
-  frameGraph.AddFrame("/world/a/aa", "aaa", paaa);
-  frameGraph.AddFrame("/world/a", "ab", pab);
+  frameGraph.AddFrame("/", "a", pa);
+  frameGraph.AddFrame("/a", "aa", paa);
+  frameGraph.AddFrame("/a/aa", "aaa", paaa);
+  frameGraph.AddFrame("/a", "ab", pab);
 
   double sweep = 2 * 3.1415926;
   // Let's vary the local pose of aa with a rotation, this should
@@ -334,17 +334,17 @@ TEST(FrameGraphTest, RelativePaths)
   {
     auto angle = i * (sweep / steps);
     Pose3d p(10, 0, 0, 0, 0, angle);  // (10, 0, 0, angle, angle, 0);
-    frameGraph.SetLocalPose("/world/a", p);
+    frameGraph.SetLocalPose("/a", p);
 
-    auto pa = frameGraph.Pose("/world/a", "/world");
+    auto pa = frameGraph.Pose("/a", "/");
     std::cout << "pose" << p2str(pa) << "; // a" << std::endl;
-    auto paa = frameGraph.Pose("/world/a/aa", "/world");
+    auto paa = frameGraph.Pose("/a/aa", "/");
     std::cout << "pose" << p2str(paa) << "; // aa" << std::endl;
-    auto paaa = frameGraph.Pose("/world/a/aa/aaa", "/world");
+    auto paaa = frameGraph.Pose("/a/aa/aaa", "/");
     std::cout << "pose" << p2str(paaa) << ";  // aaa" << std::endl;
-    auto pab = frameGraph.Pose("/world/a/ab", "/world");
+    auto pab = frameGraph.Pose("/a/ab", "/");
     std::cout << "pose" << p2str(pab) << ";  // ab" << std::endl;
-    auto paa2ab = frameGraph.Pose("/world/a/aa", "/world/a/ab");
+    auto paa2ab = frameGraph.Pose("/a/aa", "/a/ab");
     std::cout << "pose" << p2str(paa2ab) << ";  // aa to ab" << std::endl;
     std::cout << link(w, pa) << "; // world to a " << std::endl;
     std::cout << link(pa, paa) << "; // a to aa" << std::endl;
@@ -365,16 +365,16 @@ TEST(FrameGraphTest, SimplePose)
   FrameGraph frameGraph;
 
   Pose3d pa(1, 0, 0, 0, 0, 0);
-  frameGraph.AddFrame("/world", "a", pa);
+  frameGraph.AddFrame("/", "a", pa);
 
   Pose3d r;
-  r = frameGraph.Pose("/world/a", "/world");
+  r = frameGraph.Pose("/a", "/");
   EXPECT_EQ(pa, r);
 
   Pose3d pb(2, 0, 0, 0, 0, 0);
-  frameGraph.SetLocalPose("/world/a", pb);
+  frameGraph.SetLocalPose("/a", pb);
 
-  EXPECT_EQ(pb, frameGraph.Pose("/world/a", "/world"));
+  EXPECT_EQ(pb, frameGraph.Pose("/a", "/"));
 }
 
 
@@ -383,7 +383,7 @@ TEST(FrameGraphTest, SimplePose)
 // it changes the local pose of a frame
 void asyncStuff(FrameGraph &frameGraph)
 {
-  const auto &frame = frameGraph.FrameAccess("/world/a");
+  const auto &frame = frameGraph.FrameAccess("/a");
   for (int i = 0; i < 1000001; ++i)
   {
     Pose3d p(i, 0, 0, 0, 0, 0);
@@ -400,10 +400,10 @@ TEST(FrameGraphTest, Multithreads)
   FrameGraph frameGraph;
 
   Pose3d pa(0, 0, 0, 0, 0, 0);
-  frameGraph.AddFrame("/world", "a", pa);
+  frameGraph.AddFrame("/", "a", pa);
 
   Pose3d r;
-  r = frameGraph.Pose("/world/a", "/world");
+  r = frameGraph.Pose("/a", "/");
   EXPECT_EQ(pa, r);
 
   // a thread pool
@@ -413,9 +413,9 @@ TEST(FrameGraphTest, Multithreads)
   {
     pool.push_back(std::thread {asyncStuff, std::ref(frameGraph)});
   }
-  const auto &frame = frameGraph.FrameAccess("/world/a");
+  const auto &frame = frameGraph.FrameAccess("/a");
   EXPECT_EQ(pa, frameGraph.LocalPose(frame));
-  auto rel = frameGraph.CreateRelativePose("/world/a", "/world");
+  auto rel = frameGraph.CreateRelativePose("/a", "/");
   Pose3d last = frameGraph.Pose(rel);
   for (int i = 0; i < 1000; ++i)
   {
@@ -436,5 +436,5 @@ TEST(FrameGraphTest, Multithreads)
   EXPECT_EQ(frameGraph.Pose(rel), frameGraph.Pose(rel3));
 
   Pose3d p = frameGraph.Pose(rel);
-  EXPECT_EQ(p, frameGraph.Pose("/world/a", "/world"));
+  EXPECT_EQ(p, frameGraph.Pose("/a", "/"));
 }

@@ -46,7 +46,7 @@ FrameGraphPrivate::~FrameGraphPrivate()
 
 /////////////////////////////////////////////////
 FrameGraphPrivate::FrameGraphPrivate()
-  : world(new Frame("world", Pose3d(), FrameWeakPtr()))
+  : world(new Frame("", Pose3d(), FrameWeakPtr()))
 {
 }
 
@@ -65,7 +65,7 @@ FrameWeakPtr FrameGraphPrivate::FrameFromAbsolutePath(
   // we know the path is full and thus it starts with the world frame
   // const Frame *srcFrame = &this->world;
   auto srcFrame = this->world;
-  for (size_t i = 1; i < _path.Elems().size(); ++i)
+  for (size_t i = 0; i < _path.Elems().size(); ++i)
   {
     const auto &children = srcFrame->dataPtr->children;
     std::string e = _path.Elems()[i];
