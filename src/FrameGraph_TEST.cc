@@ -514,3 +514,15 @@ TEST(FrameGraphTest, Print)
 )";
   EXPECT_EQ(str, stream.str());
 }
+
+/////////////////////////////////////////////////
+TEST(FrameGraphTest, FullPathDotdot)
+{
+  FrameGraph frameGraph;
+  frameGraph.AddFrame("/", "a1", Pose3d(1, 0, 0, 0, 0, 0));
+  frameGraph.AddFrame("/a1", "a2", Pose3d(1, 0, 0, 0, 0, 0));
+  frameGraph.AddFrame("/a1/a2", "a3", Pose3d(1, 0, 0, 0, 0, 0));
+
+  frameGraph.AddFrame("/a1/./a2/a3/../../..", "b1", Pose3d(0, 1, 0, 0, 0, 0));
+  EXPECT_EQ(Pose3d(0, 1, 0, 0, 0, 0), frameGraph.Pose("/b1", "/"));
+}

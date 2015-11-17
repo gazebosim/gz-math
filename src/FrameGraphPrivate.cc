@@ -64,6 +64,19 @@ FrameWeakPtr FrameGraphPrivate::FrameFromAbsolutePath(
   for (size_t i = 0; i < _path.Elems().size(); ++i)
   {
     std::string e = _path.Elems()[i];
+
+    if (e == "..")
+    {
+      if (srcFrame->ParentFrame().expired())
+      {
+        throw FrameException("Path '" + _path.Path() + "' is not absolute");
+      }
+      if (auto frame = srcFrame->ParentFrame().lock())
+      {
+        srcFrame = frame;
+      }
+      continue;
+    }
     if (auto frame = srcFrame->Child(e).lock())
     {
       srcFrame = frame;
