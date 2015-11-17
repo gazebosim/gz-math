@@ -17,44 +17,53 @@
 #ifndef _IGNITION_RELATIVEPOSE_HH_
 #define _IGNITION_RELATIVEPOSE_HH_
 
+#include <vector>
+#include <memory>
+
 namespace ignition
 {
   namespace math
   {
     // Forward declaration of private data
     class RelativePosePrivate;
-    using RelativePosePrivatePtr = std::unique_ptr<RelativePosePrivate>;
 
     /// \brief Holds the chain of transforms to compute a pose between
     /// two frames in a FrameGraph
     class IGNITION_VISIBLE RelativePose
     {
-      friend class FrameGraph;
-
       /// \brief Constructor
       public: RelativePose();
+
+      /// \brief Frame constructor.
+      /// \param[in] _dstFrame The destination frame
+      /// \param[in] _srcFrame The source frame
+      public: RelativePose(const FrameWeakPtr &_dstFrame,
+                           const FrameWeakPtr &_srcFrame);
+
+      /// \brief destructor
+      public: virtual ~RelativePose();
 
       /// \brief Copy constructor. Copies the content of the private data.
       /// \param[in] _c The copy
       public: RelativePose(const RelativePose &_c);
 
-      /// \brief Assignemt operator. Copies the private data.
+      /// \brief Assignment operator. Copies the private data.
       /// \param[in] _other The other RelativePose
       public: RelativePose &operator=(const RelativePose &_other);
 
-      /// \brief destructor
-      public : virtual ~RelativePose();
+      /// \brief Get the vector of frames from the destination towards
+      /// the common ancestor.
+      /// \return List of frames to apply in the up direction.
+      public: std::vector<FrameWeakPtr> Up() const;
 
-      /// \brief private constructor.
-      /// \param[in] _dstFrame The destination frame
-      /// \param[in] _srcFrame The source frame
-      private: RelativePose(const FrameWeakPtr &_dstFrame,
-          const FrameWeakPtr &_srcFrame);
+      /// \brief Get the vector of frames from the destination towards
+      /// the common ancestor.
+      /// \return List of frames to apply in the down direction.
+      public: std::vector<FrameWeakPtr> Down() const;
 
       /// \brief Private data
-      private: RelativePosePrivatePtr dataPtr;
+      private: std::unique_ptr<RelativePosePrivate> dataPtr;
     };
   }
 }
-
 #endif

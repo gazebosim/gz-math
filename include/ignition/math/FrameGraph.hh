@@ -21,9 +21,9 @@
 
 #include <ignition/math/Types.hh>
 
-#include "FrameException.hh"
-#include "Frame.hh"
-#include "RelativePose.hh"
+#include <ignition/math/FrameException.hh>
+#include <ignition/math/Frame.hh>
+#include <ignition/math/RelativePose.hh>
 
 namespace ignition
 {
@@ -31,7 +31,6 @@ namespace ignition
   {
     // Forward declaration of private data
     class FrameGraphPrivate;
-    using FrameGraphPrivatePtr = std::unique_ptr<FrameGraphPrivate>;
 
     /// \brief A collection of Frames, and their relative poses.
     class IGNITION_VISIBLE FrameGraph
@@ -62,7 +61,7 @@ namespace ignition
       /// \throws FrameException if the path is invalid
       public: void DeleteFrame(const std::string &_path);
 
-      /// \brief Computes a relative pose between 2 frames
+      /// \brief Computes a relative pose between two frames
       /// \param[in] _dst The name of the destination frame
       /// \param[in] _src The name of the source frame
       /// \return The pose of _dest in _src's frame
@@ -70,10 +69,10 @@ namespace ignition
       public: Pose3d Pose(const std::string &_dst,
                           const std::string &_src) const;
 
-      /// \brief Computes the relative pose between 2 frames, using
+      /// \brief Computes the relative pose between two frames, using
       /// a RelativePose Instance
       /// \param[in] _relativePose
-      /// \return The pose between the 2 frames
+      /// \return The pose between the two frames
       /// \throws FrameException if one of the frames has been deleted.
       public: Pose3d Pose(const RelativePose &_relativePose) const;
 
@@ -122,11 +121,26 @@ namespace ignition
       /// \return The frame's weak pointer
       /// \throws FrameException if the path or the frame is invalid.
       public: FrameWeakPtr Frame(FrameWeakPtr _frame,
-                                       const std::string &_relativePath) const;
+                                 const std::string &_relativePath) const;
+
+      /// \brief Stream insertion operator
+      /// \param[out] _out output stream
+      /// \param[in] _f Frame graph to output
+      /// \return the stream
+      public: friend std::ostream &operator<<(
+                  std::ostream &_out, const ignition::math::FrameGraph &_f)
+      {
+        _f.Print(_out);
+        return _out;
+      }
+
+      /// \brief Helper function to print the frame graph
+      /// \param[out] _out output stream
+      private: void Print(std::ostream &_out) const;
 
       /// \internal
       /// \brief Private data pointer
-      private: FrameGraphPrivatePtr dataPtr;
+      private: std::unique_ptr<FrameGraphPrivate> dataPtr;
     };
   }
 }

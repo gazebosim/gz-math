@@ -14,7 +14,6 @@
  * limitations under the License.
  *
 */
-
 #ifndef _IGNITION_PATH_PRIVATE_HH_
 #define _IGNITION_PATH_PRIVATE_HH_
 
@@ -59,5 +58,4 @@ namespace ignition
     };
   }
 }
-
 #endif

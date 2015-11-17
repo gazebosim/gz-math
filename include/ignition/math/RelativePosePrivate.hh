@@ -31,8 +31,8 @@ namespace ignition
     class RelativePosePrivate
     {
       /// \brief List of frames to apply in the up direction.
-      /// these are the frames from from the src frame towards
-      /// the common ancestor (possibly the /world frame)
+      /// these are the frames from from the dst frame towards
+      /// the common ancestor (possibly the root (/) frame)
       public: std::vector<FrameWeakPtr> up;
 
       /// \brief List of frames to apply in the down direction,

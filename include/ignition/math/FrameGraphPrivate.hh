@@ -14,7 +14,6 @@
  * limitations under the License.
  *
 */
-
 #ifndef _IGNITION_FRAMEGRAPH_PRIVATE_HH_
 #define _IGNITION_FRAMEGRAPH_PRIVATE_HH_
 
@@ -22,9 +21,8 @@
 
 #include <ignition/math/Types.hh>
 #include <ignition/math/FrameGraph.hh>
-
-#include "PathPrivate.hh"
-#include "FramePrivate.hh"
+#include <ignition/math/PathPrivate.hh>
+#include <ignition/math/FramePrivate.hh>
 
 namespace ignition
 {
@@ -40,8 +38,8 @@ namespace ignition
       /// \brief Destructor
       public: ~FrameGraphPrivate();
 
-      /// \brief Given an absolute path (starts with "/world"), This method
-      /// returns a reference to the Frame
+      /// \brief Given an absolute path (starts with "/"), this method
+      /// returns a reference to the Frame.
       /// \param[in] _path The path to the frame
       /// \return The reference to the Frame element if it exists
       public: FrameWeakPtr FrameFromAbsolutePath(
@@ -55,8 +53,8 @@ namespace ignition
       public: FrameWeakPtr FrameFromRelativePath(const FrameWeakPtr &_frame,
                   const PathPrivate &_relPath) const;
 
-      /// \brief The world frame, root of all frames
-      public: FramePtr world;
+      /// \brief The root frame
+      public: FramePtr root;
 
       /// \brief Mutex for concurrent access to the graph
       public: mutable std::mutex mutex;

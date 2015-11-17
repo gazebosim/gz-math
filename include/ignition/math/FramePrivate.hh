@@ -14,7 +14,6 @@
  * limitations under the License.
  *
 */
-
 #ifndef _IGNITION_FRAME_PRIVATE_HH_
 #define _IGNITION_FRAME_PRIVATE_HH_
 
@@ -34,7 +33,7 @@ namespace ignition
     {
       /// \brief Constructor
       /// \param[in] _name The frame's short name
-      /// \param[in] _pose The frame's offset from it's parent
+      /// \param[in] _pose The frame's offset from its parent
       /// \param[in] _parentFrame The frame's parent
       public: FramePrivate(const std::string &_name,
                            const Pose3d &_pose,
@@ -49,14 +48,13 @@ namespace ignition
       /// \brief Pose (offset from the parent frame)
       public: Pose3d pose;
 
-      /// \brief this is a direct pointer to the parent
+      /// \brief This is a direct pointer to the parent
       /// frame, that speeds up lookup.
       public: FrameWeakPtr parentFrame;
 
       /// \brief Children frames, with name
-      public: std::map<std::string, FramePtr> children;
+      public: FrameChildren_M children;
     };
   }
 }
-
 #endif
