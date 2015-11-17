@@ -16,7 +16,6 @@
 */
 
 #include "ignition/math/FrameGraph.hh"
-
 #include "ignition/math/FrameGraphPrivate.hh"
 #include "ignition/math/RelativePosePrivate.hh"
 
@@ -32,17 +31,16 @@ RelativePose::RelativePose(const FrameWeakPtr &_dstFrame,
   // the FrameGraph mutex is locked during the
   // FrameGraph::CreateRelativePose call. This method call
   // assumes the lock is acquired.
-  auto frame = _dstFrame.lock();
-  while (frame && frame->dataPtr->parentFrame.lock())
+  for (auto frame = _dstFrame.lock(); frame;
+       frame = frame->ParentFrame().lock())
   {
     this->dataPtr->up.push_back(frame);
-    frame = frame->dataPtr->parentFrame.lock();
   }
-  frame = _srcFrame.lock();
-  while (frame && frame->dataPtr->parentFrame.lock())
+
+  for (auto frame = _srcFrame.lock(); frame;
+       frame = frame->ParentFrame().lock())
   {
     this->dataPtr->down.push_back(frame);
-    frame = frame->dataPtr->parentFrame.lock();
   }
 }
 
@@ -50,15 +48,15 @@ RelativePose::RelativePose(const FrameWeakPtr &_dstFrame,
 RelativePose::RelativePose(const RelativePose &_other)
   :dataPtr(new RelativePosePrivate())
 {
-  *this->dataPtr = *_other.dataPtr;
+  this->dataPtr->up = _other.dataPtr->up;
+  this->dataPtr->down = _other.dataPtr->down;
 }
 
 /////////////////////////////////////////////////
-RelativePose& RelativePose::operator=(const RelativePose &_other)
+RelativePose &RelativePose::operator=(const RelativePose &_other)
 {
-  if (this == &_other)
-    return *this;
-  *this->dataPtr = *_other.dataPtr;
+  this->dataPtr->up = _other.dataPtr->up;
+  this->dataPtr->down = _other.dataPtr->down;
   return *this;
 }
 
@@ -73,3 +71,14 @@ RelativePose::RelativePose()
 {
 }
 
+/////////////////////////////////////////////////
+std::vector<FrameWeakPtr> RelativePose::Up() const
+{
+  return this->dataPtr->up;
+}
+
+/////////////////////////////////////////////////
+std::vector<FrameWeakPtr> RelativePose::Down() const
+{
+  return this->dataPtr->down;
+}

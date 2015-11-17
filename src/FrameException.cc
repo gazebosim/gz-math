@@ -23,9 +23,5 @@ using namespace math;
 /////////////////////////////////////////////////
 FrameException::FrameException(const std::string &_msg)
   :std::runtime_error(_msg)
-{}
-
-/////////////////////////////////////////////////
-FrameException::~FrameException()
 {
 }

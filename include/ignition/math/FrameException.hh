@@ -30,15 +30,11 @@ namespace ignition
     class IGNITION_VISIBLE FrameException : public std::runtime_error
     {
       /// \brief Constructor with error message. Most common error is trying
-      //// to access missing paths..
-      /// \param[in] _msg The error desciption
+      //// to access missing paths.
+      /// \param[in] _msg The error desciption.
       public: FrameException(const std::string &_msg);
-
-      /// \brief Destructor
-      public: ~FrameException();
     };
   }
 }
 
 #endif
-

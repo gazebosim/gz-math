@@ -14,9 +14,6 @@
  * limitations under the License.
  *
 */
-
-#include <sstream>
-
 #include "ignition/math/FrameGraph.hh"
 #include "ignition/math/RelativePosePrivate.hh"
 #include "ignition/math/FrameGraphPrivate.hh"
@@ -46,7 +43,7 @@ FrameGraphPrivate::~FrameGraphPrivate()
 
 /////////////////////////////////////////////////
 FrameGraphPrivate::FrameGraphPrivate()
-  : world(new Frame("", Pose3d(), FrameWeakPtr()))
+  : root(new Frame("/", Pose3d(), FrameWeakPtr()))
 {
 }
 
@@ -57,29 +54,24 @@ FrameWeakPtr FrameGraphPrivate::FrameFromAbsolutePath(
   // Is it a good path?
   if (!_path.IsAbsolute())
   {
-    std::stringstream ss;
-    ss << "Frame path \"" << _path.Path()
-      << "\" is not an absolute, fully qualified path";
-    throw FrameException(ss.str());
+    throw FrameException("Frame path '" + _path.Path() +
+        "' is not an absolute, fully qualified path");
   }
-  // we know the path is full and thus it starts with the world frame
-  // const Frame *srcFrame = &this->world;
-  auto srcFrame = this->world;
+
+  // we know the path is full and thus it starts with the root frame
+  // const Frame *srcFrame = &this->root;
+  auto srcFrame = this->root;
   for (size_t i = 0; i < _path.Elems().size(); ++i)
   {
-    const auto &children = srcFrame->dataPtr->children;
     std::string e = _path.Elems()[i];
-    auto it = children.find(e);
-    if (it != children.end())
+    if (auto frame = srcFrame->Child(e).lock())
     {
-      srcFrame = it->second;
+      srcFrame = frame;
     }
     else
     {
-      std::stringstream ss;
-      ss << "Missing frame element: \"" << e
-        << "\" in path \"" << _path.Path() << "\"";
-      throw FrameException(ss.str());
+      throw FrameException("Missing frame element: '" + e +
+          "' in path '" + _path.Path() + "'");
     }
   }
   return srcFrame;
@@ -101,20 +93,17 @@ FrameWeakPtr FrameGraphPrivate::FrameFromRelativePath(
     // access the "parent" frame
     if (e == "..")
     {
-      auto p = frame->dataPtr->parentFrame.lock();
+      auto p = frame->ParentFrame().lock();
       frame = p;
       continue;
     }
     // follow child element e
-    auto it = frame->dataPtr->children.find(e);
-    if (it == frame->dataPtr->children.end())
+    auto child = frame->Child(e);
+    if (!(frame = child.lock()))
     {
-      std::stringstream ss;
-      ss << "Error: path \"" << _path.Path()
-         << "\" contains unknown element \"" << e << "\"";
-      throw FrameException(ss.str());
+      throw FrameException("Error: path '" + _path.Path() +
+          "' contains unknown element '" + e + "'");
     }
-    frame = it->second;
   }
   return frame;
 }

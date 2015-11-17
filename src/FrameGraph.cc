@@ -14,9 +14,6 @@
  * limitations under the License.
  *
 */
-
-#include <sstream>
-
 #include "ignition/math/FrameGraph.hh"
 
 #include "ignition/math/RelativePosePrivate.hh"
@@ -31,12 +28,10 @@ FrameGraph::FrameGraph()
 {
 }
 
-
 /////////////////////////////////////////////////
 FrameGraph::~FrameGraph()
 {
 }
-
 
 /////////////////////////////////////////////////
 void FrameGraph::AddFrame(const std::string &_path,
@@ -45,29 +40,23 @@ void FrameGraph::AddFrame(const std::string &_path,
 {
   // Is it a good name?
   if (!PathPrivate::CheckName(_name))
-  {
-    std::stringstream ss;
-    ss << "The frame \"" << _name
-      << "\" is not a valid";
-    throw FrameException(ss.str());
-  }
+    throw FrameException("The frame '" + _name + "' is not a valid");
+
   // In a good path?
   PathPrivate path(_path);
+
   // Does the path exist?
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   const auto &srcFrameParent = this->dataPtr->FrameFromAbsolutePath(path);
   auto f = srcFrameParent.lock();
-  // is the frame a duplicate?
-  auto it = f->dataPtr->children.find(_name);
-  if (it != f->dataPtr->children.end())
-  {
-    std::stringstream ss;
-    ss << "Error: path \"" << _name << "\" already exists";
-    throw FrameException(ss.str());
-  }
+
   // just add it
-  FramePtr frame(new ignition::math::Frame(_name, _pose, f));
-  f->dataPtr->children[_name] = frame;
+  if (!f->AddChild(_name, _pose, f))
+  {
+    // Currently, Frame::AddChild only returns false if the child
+    // name already exists.
+    throw FrameException("Error: path '" + _name + "' already exists");
+  }
 }
 
 /////////////////////////////////////////////////
@@ -76,30 +65,31 @@ void FrameGraph::DeleteFrame(const std::string &_path)
   PathPrivate path(_path);
   if (!path.IsAbsolute())
   {
-    std::stringstream ss;
-    ss << "Error deleting frame: path \"" << _path
-      << "\" is not a fully qualified path";
-    throw FrameException(ss.str());
+    throw FrameException("Error deleting frame: path '" + _path +
+        "' is not a fully qualified path");
   }
+
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   FrameWeakPtr framePtr = this->dataPtr->FrameFromAbsolutePath(path);
   std::string name;
   FrameWeakPtr parentPtr;
+
   // this scope helps keep the life of f as short as possible
   {
     auto f = framePtr.lock();
     name = f->Name();
-    parentPtr = f->dataPtr->parentFrame;
+    parentPtr = f->ParentFrame();
   }
+
   // get the name of the frame to remove
   // remove the frame from its parent
   auto p = parentPtr.lock();
-  p->dataPtr->children.erase(name);
+  p->DeleteChild(name);
 }
 
 /////////////////////////////////////////////////
 Pose3d FrameGraph::Pose(const std::string &_dstFramePath,
-                      const std::string &_srcFramePath) const
+                        const std::string &_srcFramePath) const
 {
   RelativePose r = this->CreateRelativePose(_dstFramePath, _srcFramePath);
   return this->Pose(r);
@@ -108,9 +98,7 @@ Pose3d FrameGraph::Pose(const std::string &_dstFramePath,
 /////////////////////////////////////////////////
 Pose3d FrameGraph::LocalPose(const std::string &_path) const
 {
-  auto frame = this->Frame(_path);
-  auto p = this->LocalPose(frame);
-  return p;
+  return this->LocalPose(this->Frame(_path));
 }
 
 /////////////////////////////////////////////////
@@ -120,12 +108,8 @@ Pose3d FrameGraph::LocalPose(const FrameWeakPtr &_frame) const
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   auto f = _frame.lock();
   if (!f)
-  {
-    std::stringstream ss;
-    ss << "Trying to get pose of a deleted frame";
-    throw FrameException(ss.str());
-  }
-  p = f->dataPtr->pose;
+    throw FrameException("Trying to get pose of a deleted frame");
+  p = f->Pose();
   return p;
 }
 
@@ -138,7 +122,7 @@ FrameWeakPtr FrameGraph::Frame(const std::string &_path) const
 
 /////////////////////////////////////////////////
 FrameWeakPtr FrameGraph::Frame(FrameWeakPtr _frame,
-                                     const std::string &_relativepath) const
+                               const std::string &_relativepath) const
 {
   PathPrivate path(_relativepath);
   return this->dataPtr->FrameFromRelativePath(_frame, path);
@@ -150,59 +134,56 @@ void FrameGraph::SetLocalPose(FrameWeakPtr _frame, const Pose3d &_p)
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   auto f = _frame.lock();
   if (f)
-    f->dataPtr->pose = _p;
+    f->SetPose(_p);
 }
 
 /////////////////////////////////////////////////
 void FrameGraph::SetLocalPose(const std::string &_path, const Pose3d &_p)
 {
-  auto frame = this->Frame(_path);
-  this->SetLocalPose(frame, _p);
+  this->SetLocalPose(this->Frame(_path), _p);
 }
 
 /////////////////////////////////////////////////
 RelativePose FrameGraph::CreateRelativePose(const std::string &_dstPath,
-                                       const std::string &_srcPath) const
+                                            const std::string &_srcPath) const
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   const auto &dstFrame = this->dataPtr->FrameFromAbsolutePath(_dstPath);
   const auto &srcFrame = this->dataPtr->FrameFromRelativePath(dstFrame,
                                                               _srcPath);
   // create the relative pose object while we have the mutex lock
-  RelativePose r(dstFrame, srcFrame);
-  return r;
+  return RelativePose(dstFrame, srcFrame);
 }
 
 /////////////////////////////////////////////////
 Pose3d FrameGraph::Pose(const RelativePose &_relativePose) const
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
-  // the list of frames to traverse are kept in 2 vectors
-  const auto &up = _relativePose.dataPtr->up;
-  const auto &down = _relativePose.dataPtr->down;
-  // add all the transform from dst to world
+
+  // add all the transform from dst to root
   Pose3d ups;
-  for (auto &f : up)
+  for (auto const &f : _relativePose.Up())
   {
     auto frame = f.lock();
     if (frame)
-    {
-      Pose3d p = frame->dataPtr->pose;
-      ups += p;
-    }
+      ups += frame->Pose();
   }
-  // add all the transform from src to world (often empty)
+
+  // add all the transform from src to root (often empty)
   Pose3d downs;
-  for (auto &f : down)
+  for (auto &f : _relativePose.Down())
   {
     auto frame = f.lock();
     if (frame)
-    {
-      Pose3d p = frame->dataPtr->pose;
-      downs += p;
-    }
+      downs += frame->Pose();
   }
+
   // apply the opposite of the downs to the ups
-  Pose3d result = ups - downs;
-  return result;
+  return ups - downs;
+}
+
+/////////////////////////////////////////////////
+void FrameGraph::Print(std::ostream &_out) const
+{
+  _out << *this->dataPtr->root;
 }
