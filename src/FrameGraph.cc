@@ -39,6 +39,9 @@ void FrameGraph::AddFrame(const std::string &_path,
                           const Pose3d &_pose)
 {
   // Is it a good name?
+  if (_name == "." || _name == "..")
+     throw FrameException("A frame cannot be named '.' or '..'");
+
   if (!PathPrivate::CheckName(_name))
     throw FrameException("The frame '" + _name + "' is not a valid");
 

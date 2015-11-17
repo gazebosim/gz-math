@@ -35,17 +35,14 @@ PathPrivate::PathPrivate(const std::string &_s)
   {
     if (item.empty())
       continue;
-
     if (item == ".")
       continue;
-
     // avoid path elements with wrong names
     if (!this->CheckName(item))
     {
       throw FrameException("Error: path '"+ _s +
           "' contains an invalid element: '" + item + "'");
     }
-
     this->pathElems.push_back(item);
   }
 }

@@ -62,6 +62,9 @@ TEST(FrameGraphTest, AbsolutePaths)
   // this path as an illegal "!" frame
   EXPECT_THROW(frameGraph.AddFrame("/!", "x", pa), FrameException);
 
+  // this path as an illegal ".." frame
+  EXPECT_THROW(frameGraph.AddFrame("/", "..", pa), FrameException);
+
   // very stupid attempt at getting pose info from inexistent frame
   Pose3d p;
   EXPECT_THROW(p = frameGraph.Pose("/x", "/"), FrameException);
