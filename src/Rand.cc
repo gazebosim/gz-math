@@ -42,6 +42,7 @@ void Rand::Seed(unsigned int _seed)
 {
   std::seed_seq seq{_seed};
   seed = _seed;
+  broken
   randGenerator->seed(seq);
 }
 
