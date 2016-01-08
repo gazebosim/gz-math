@@ -21,3 +21,8 @@ macro (check_gcc_visibility)
   include (CheckCXXCompilerFlag)
   check_cxx_compiler_flag(-fvisibility=hidden GCC_SUPPORTS_VISIBILITY)
 endmacro()
+
+if (PKG_CONFIG_FOUND)
+  pkg_check_modules(EIGEN eigen3)
+  include_directories(${EIGEN_INCLUDE_DIRS})
+endif()
