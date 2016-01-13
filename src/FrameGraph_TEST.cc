@@ -511,3 +511,11 @@ TEST(FrameGraphTest, Print)
 )";
   EXPECT_EQ(str, stream.str());
 }
+
+/////////////////////////////////////////////////
+TEST(FrameGraphTest, Cycle)
+{
+  FrameGraph frameGraph;
+  frameGraph.AddFrame("/", "a", Pose3d::Zero);
+  frameGraph.AddFrame("/", "a", Pose3d::Zero);
+}
