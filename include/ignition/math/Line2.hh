@@ -260,17 +260,17 @@ namespace ignition
 
       /// \brief Get the slope of the line
       /// \return The slope of the line, NAN_D if the line is vertical.
-      # pragma warning(push)
-      # pragma warning(disable : 4723) // division by zero is checked above
       public: double Slope() const
       {
         if (math::equal(this->pts[1].X(), this->pts[0].X()))
           return NAN_D;
 
+#  pragma warning(push)
+#  pragma warning(disable:4723) // division by zero is checked above
         return (this->pts[1].Y() - this->pts[0].Y()) /
                static_cast<double>(this->pts[1].X() - this->pts[0].X());
+#  pragma warning(pop)
       }
-      # pragma warning(pop)
 
       /// \brief Equality operator.
       /// \param[in] _line Line to compare for equality.
