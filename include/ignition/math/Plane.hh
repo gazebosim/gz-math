@@ -167,7 +167,10 @@ namespace ignition
         else
         {
           T nom = _origin.Dot(this->normal) - this->d;
+          # pragma warning(push)
+          # pragma warning(disable : 4723) // division by zero is checked above
           T t = -(nom/denom);
+          # pragma warning(pop)
           return t;
         }
       }
