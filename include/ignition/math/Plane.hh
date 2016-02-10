@@ -154,6 +154,8 @@ namespace ignition
       /// \param[in] _origin the origin
       /// \param[in] _dir a direction
       /// \return the shortest distance
+      # pragma warning(push)
+      # pragma warning(disable : 4723) // division by zero is checked above
       public: T Distance(const Vector3<T> &_origin,
                          const Vector3<T> &_dir) const
       {
@@ -167,13 +169,11 @@ namespace ignition
         else
         {
           T nom = _origin.Dot(this->normal) - this->d;
-          # pragma warning(push)
-          # pragma warning(disable : 4723) // division by zero is checked above
           T t = -(nom/denom);
-          # pragma warning(pop)
           return t;
         }
       }
+      # pragma warning(pop)
 
       /// \brief Get the plane size
       public: inline const Vector2<T> &Size() const
