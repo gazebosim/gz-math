@@ -69,10 +69,7 @@ TEST(HelpersTest, Precision)
   EXPECT_DOUBLE_EQ(0.15, math::precision(0.15, 2));
 
   EXPECT_DOUBLE_EQ(1, math::precision(1.4, 0));
-  # pragma warning(push)
-  # pragma warning(disable : 4244) // conversion from double to int expected
   EXPECT_EQ(0, math::precision(0, 0));
-  # pragma warning(pop)
 }
 
 /////////////////////////////////////////////////

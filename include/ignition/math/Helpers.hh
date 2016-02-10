@@ -265,12 +265,15 @@ namespace ignition
     /// \param[in] _a the number
     /// \param[in] _precision the precision
     /// \return the value for the specified precision
+    # pragma warning(push)
+    # pragma warning(disable : 4244) // conversion from double to int expected
     template<typename T>
     inline T precision(const T &_a, const unsigned int &_precision)
     {
       return std::round(_a * std::pow(10, _precision))
                            / std::pow(10, _precision);
     }
+    # pragma warning(pop)
 
     /// \brief Sort two numbers, such that _a <= _b
     /// \param[out] _a the first number
