@@ -264,12 +264,15 @@ namespace ignition
       {
         if (math::equal(this->pts[1].X(), this->pts[0].X()))
           return NAN_D;
-
-#  pragma warning(push)
-#  pragma warning(disable:4723) // division by zero is checked above
+#ifdef _MSC_VER
+# pragma warning(push)
+# pragma warning(disable:4723) // division by zero is checked above
+#endif
         return (this->pts[1].Y() - this->pts[0].Y()) /
                static_cast<double>(this->pts[1].X() - this->pts[0].X());
-#  pragma warning(pop)
+#ifdef _MSC_VER
+# pragma warning(pop)
+#endif
       }
 
       /// \brief Equality operator.
