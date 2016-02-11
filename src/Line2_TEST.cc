@@ -59,7 +59,7 @@ TEST(Line2Test, Slope)
   {
 #ifdef _MSC_VER
 #pragma warning(push)
-#pragma warning(disable:4244) // conversion from double to int expected
+#pragma warning(disable:4723) // conversion from double to int expected
 #endif
     math::Line2d line(0, 0, 0, 10);
     EXPECT_TRUE(math::isnan(line.Slope()));
