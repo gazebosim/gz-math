@@ -167,7 +167,10 @@ namespace ignition
         else
         {
           T nom = _origin.Dot(this->normal) - this->d;
+#pragma warning( push )                    // Save the current warning state.
+#pragma warning( disable : 4723 )          // C4723: potential divide by 0
           T t = -(nom/denom);
+#pragma warning( pop )                     // Restore warnings to previous state.
           return t;
         }
       }
