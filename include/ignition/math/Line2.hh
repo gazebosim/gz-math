@@ -21,11 +21,6 @@
 #include <ignition/math/Vector2.hh>
 #include <ignition/math/IndexException.hh>
 
-#ifdef _MSC_VER
-#pragma warning( push )
-#pragma warning( disable : 4723 )          // C4723: potential divide by 0
-#endif
-
 namespace ignition
 {
   namespace math
@@ -321,9 +316,5 @@ namespace ignition
     typedef Line2<float> Line2f;
   }
 }
-
-#ifdef _MSC_VER
-#pragma warning( pop )
-#endif
 
 #endif

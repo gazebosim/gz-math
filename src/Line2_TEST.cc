@@ -48,6 +48,8 @@ TEST(Line2Test, Length)
   EXPECT_NEAR(lineA.Length(), sqrt(200), 1e-10);
 }
 
+#pragma warning( push )                    // Save the current warning state.
+#pragma warning( disable : 4723 )          // C4723: potential divide by 0
 /////////////////////////////////////////////////
 TEST(Line2Test, Slope)
 {
@@ -58,10 +60,7 @@ TEST(Line2Test, Slope)
 
   {
     math::Line2d line(0, 0, 0, 10);
-#pragma warning( push )                    // Save the current warning state.
-#pragma warning( disable : 4723 )          // C4723: potential divide by 0
     EXPECT_TRUE(math::isnan(line.Slope()));
-#pragma warning( pop )                     // Restore warnings to previous state.
   }
 
   {
@@ -69,6 +68,7 @@ TEST(Line2Test, Slope)
     EXPECT_EQ(line.Slope(), 0.0);
   }
 }
+#pragma warning( pop )                     // Restore warnings to previous state.
 
 /////////////////////////////////////////////////
 TEST(Line2Test, ParallelLine)

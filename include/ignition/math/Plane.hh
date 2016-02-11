@@ -167,14 +167,7 @@ namespace ignition
         else
         {
           T nom = _origin.Dot(this->normal) - this->d;
-#ifdef _MSC_VER
-#pragma warning( push )
-#pragma warning( disable : 4723 )          // C4723: potential divide by 0
-#endif
           T t = -(nom/denom);
-#ifdef _MSC_VER
-#pragma warning( pop )
-#endif
           return t;
         }
       }
