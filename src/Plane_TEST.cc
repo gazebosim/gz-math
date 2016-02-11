@@ -31,8 +31,6 @@ TEST(PlaneTest, PlaneConstructor)
   EXPECT_NEAR(plane.Offset(), 0.1, 1e-6);
 }
 
-#pragma warning( push )                    // Save the current warning state.
-#pragma warning( disable : 4723 )          // C4723: potential divide by 0
 /////////////////////////////////////////////////
 TEST(PlaneTest, Distance)
 {
@@ -48,7 +46,6 @@ TEST(PlaneTest, Distance)
   EXPECT_NEAR(plane.Distance(Vector3d(0, 0, 0.1),
               Vector3d(1, 0, 0)), 0, 1e-6);
 }
-#pragma warning( pop )                     // Restore warnings to previous state.
 
 /////////////////////////////////////////////////
 TEST(PlaneTest, Plane)
