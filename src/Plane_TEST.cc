@@ -43,12 +43,11 @@ TEST(PlaneTest, Distance)
 
   EXPECT_NEAR(plane.Distance(Vector3d(0, 0, 0.2),
               Vector3d(0, 0, 1)), -0.1, 1e-6);
-
-// MSVC report warning about division by zero
-#ifndef _MSC_VER
+#pragma warning( push )                    // Save the current warning state.
+#pragma warning( disable : 4723 )          // C4723: potential divide by 0
   EXPECT_NEAR(plane.Distance(Vector3d(0, 0, 0.1),
               Vector3d(1, 0, 0)), 0, 1e-6);
-#endif
+#pragma warning( pop )                     // Restore warnings to previous state.
 }
 
 /////////////////////////////////////////////////
