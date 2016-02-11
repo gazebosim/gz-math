@@ -22,6 +22,9 @@
 #include <ignition/math/Vector3.hh>
 #include <ignition/math/Vector2.hh>
 
+#pragma warning( push )                    // Save the current warning state.
+#pragma warning( disable : 4723 )          // C4723: potential divide by 0
+
 namespace ignition
 {
   namespace math
@@ -167,10 +170,7 @@ namespace ignition
         else
         {
           T nom = _origin.Dot(this->normal) - this->d;
-#pragma warning( push )                    // Save the current warning state.
-#pragma warning( disable : 4723 )          // C4723: potential divide by 0
           T t = -(nom/denom);
-#pragma warning( pop )                     // Restore warnings to previous state.
           return t;
         }
       }
@@ -232,5 +232,7 @@ namespace ignition
     typedef Plane<float> Planef;
   }
 }
+
+#pragma warning( pop )                     // Restore warnings to previous state.
 
 #endif
