@@ -57,15 +57,11 @@ TEST(Line2Test, Slope)
   }
 
   {
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable:4723) // conversion from double to int expected
-#endif
     math::Line2d line(0, 0, 0, 10);
+#pragma warning( push )                    // Save the current warning state.
+#pragma warning( disable : 4723 )          // C4723: potential divide by 0
     EXPECT_TRUE(math::isnan(line.Slope()));
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
+#pragma warning( pop )                     // Restore warnings to previous state.
   }
 
   {
