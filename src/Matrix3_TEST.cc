@@ -261,6 +261,17 @@ TEST(Matrix3dTest, NotEqual)
 }
 
 /////////////////////////////////////////////////
+// Test Equal function with specified tolerance
+TEST(Matrix3Test, EqualTolerance)
+{
+  EXPECT_FALSE(math::Matrix3d::Zero.Equal(math::Matrix3d::Identity, 1e-6));
+  EXPECT_FALSE(math::Matrix3d::Zero.Equal(math::Matrix3d::Identity, 1e-3));
+  EXPECT_FALSE(math::Matrix3d::Zero.Equal(math::Matrix3d::Identity, 1e-1));
+  EXPECT_TRUE(math::Matrix3d::Zero.Equal(math::Matrix3d::Identity, 1));
+  EXPECT_TRUE(math::Matrix3d::Zero.Equal(math::Matrix3d::Identity, 1.1));
+}
+
+/////////////////////////////////////////////////
 TEST(Matrix3dTest, Inverse)
 {
   // Inverse of identity matrix is itself
@@ -292,4 +303,99 @@ TEST(Matrix3dTest, Determinant)
   // Determinant of arbitrary matrix
   math::Matrix3d m(-2, 4, 0, 0.1, 9, 55, -7, 1, 26);
   EXPECT_DOUBLE_EQ(-1908.4, m.Determinant());
+}
+
+/////////////////////////////////////////////////
+TEST(Matrix3dTest, Transpose)
+{
+  // Transpose of zero matrix is itself
+  EXPECT_EQ(math::Matrix3d::Zero, math::Matrix3d::Zero.Transposed());
+
+  // Transpose of identity matrix is itself
+  EXPECT_EQ(math::Matrix3d::Identity, math::Matrix3d::Identity.Transposed());
+
+  // Matrix and expected transpose
+  math::Matrix3d m(-2, 4, 0,
+                  0.1, 9, 55,
+                   -7, 1, 26);
+  math::Matrix3d mT(-2, 0.1, -7,
+                     4,   9, 1,
+                     0,  55, 26);
+  EXPECT_NE(m, mT);
+  EXPECT_EQ(m.Transposed(), mT);
+  EXPECT_DOUBLE_EQ(m.Determinant(), m.Transposed().Determinant());
+
+  mT.Transpose();
+  EXPECT_EQ(m, mT);
+}
+
+/////////////////////////////////////////////////
+TEST(Matrix3dTest, From2Axes)
+{
+  math::Vector3d v1(1.0, 0.0, 0.0);
+  math::Vector3d v2(0.0, 1.0, 0.0);
+
+  math::Matrix3d m1;
+  m1.From2Axes(v1, v2);
+
+  math::Matrix3d m2;
+  m2.From2Axes(v2, v1);
+
+  math::Matrix3d m1Correct(0, -1, 0,
+                           1, 0, 0,
+                           0, 0, 1);
+  math::Matrix3d m2Correct(m1Correct);
+  m2Correct.Transpose();
+
+  EXPECT_NE(m1, m2);
+  EXPECT_EQ(m1Correct, m1);
+  EXPECT_EQ(m2Correct, m2);
+  EXPECT_EQ(math::Matrix3d::Identity, m1 * m2);
+  EXPECT_EQ(v2, m1 * v1);
+  EXPECT_EQ(v1, m2 * v2);
+
+  // rotation about 45 degrees
+  v1.Set(1.0, 0.0, 0.0);
+  v2.Set(1.0, 1.0, 0.0);
+  m2.From2Axes(v1, v2);
+  // m1 is 90 degrees rotation
+  EXPECT_EQ(m1, m2*m2);
+
+  // with non-unit vectors
+  v1.Set(0.5, 0.5, 0);
+  v2.Set(-0.5, 0.5, 0);
+
+  m1.From2Axes(v1, v2);
+  m2.From2Axes(v2, v1);
+
+  EXPECT_NE(m1, m2);
+  EXPECT_EQ(m1Correct, m1);
+  EXPECT_EQ(m2Correct, m2);
+  EXPECT_EQ(math::Matrix3d::Identity, m1 * m2);
+  EXPECT_EQ(v2, m1 * v1);
+  EXPECT_EQ(v1, m2 * v2);
+
+  // For zero-length vectors, a unit matrix is returned
+  v1.Set(0, 0, 0);
+  v2.Set(-0.5, 0.5, 0);
+  m1.From2Axes(v1, v2);
+  EXPECT_EQ(math::Matrix3d::Identity, m1);
+
+  // For zero-length vectors, a unit matrix is returned
+  v1.Set(-0.5, 0.5, 0);
+  v2.Set(0, 0, 0);
+  m1.From2Axes(v1, v2);
+  EXPECT_EQ(math::Matrix3d::Identity, m1);
+
+  // Parallel vectors
+  v1.Set(1, 0, 0);
+  v2.Set(2, 0, 0);
+  m1.From2Axes(v1, v2);
+  EXPECT_EQ(math::Matrix3d::Identity, m1);
+
+  // Opposite vectors
+  v1.Set(1, 0, 0);
+  v2.Set(-2, 0, 0);
+  m1.From2Axes(v1, v2);
+  EXPECT_EQ(math::Matrix3d::Zero - math::Matrix3d::Identity, m1);
 }

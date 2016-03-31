@@ -153,6 +153,17 @@ TEST(Vector4dTest, IndexException)
 }
 
 /////////////////////////////////////////////////
+// Test Equal function with specified tolerance
+TEST(Vector2Test, EqualTolerance)
+{
+  EXPECT_FALSE(math::Vector4d::Zero.Equal(math::Vector4d::One, 1e-6));
+  EXPECT_FALSE(math::Vector4d::Zero.Equal(math::Vector4d::One, 1e-3));
+  EXPECT_FALSE(math::Vector4d::Zero.Equal(math::Vector4d::One, 1e-1));
+  EXPECT_TRUE(math::Vector4d::Zero.Equal(math::Vector4d::One, 1));
+  EXPECT_TRUE(math::Vector4d::Zero.Equal(math::Vector4d::One, 1.1));
+}
+
+/////////////////////////////////////////////////
 TEST(Vector4dTest, Add)
 {
   math::Vector4d vec1(0.1, 0.2, 0.4, 0.8);
@@ -278,5 +289,22 @@ TEST(Vector4Test, Multiply)
 
   // Multiply by itself element-wise
   EXPECT_EQ(v*v, math::Vector4d(0.01, 17.64, 123.21, 70.56));
+}
+
+/////////////////////////////////////////////////
+TEST(Vector4dTest, Length)
+{
+  // Zero vector
+  EXPECT_DOUBLE_EQ(math::Vector4d::Zero.Length(), 0.0);
+  EXPECT_DOUBLE_EQ(math::Vector4d::Zero.SquaredLength(), 0.0);
+
+  // One vector
+  EXPECT_DOUBLE_EQ(math::Vector4d::One.Length(), 2.0);
+  EXPECT_DOUBLE_EQ(math::Vector4d::One.SquaredLength(), 4.0);
+
+  // Arbitrary vector
+  math::Vector4d v(0.1, -4.2, 2.5, 1.0);
+  EXPECT_NEAR(v.Length(), 4.98998997995, 1e-10);
+  EXPECT_DOUBLE_EQ(v.SquaredLength(), 24.9);
 }
 

@@ -13,6 +13,7 @@ set (headers
   Kmeans.hh
   Line2.hh
   Line3.hh
+  MassMatrix3.hh
   Matrix3.hh
   Matrix4.hh
   Plane.hh
@@ -38,5 +39,5 @@ endforeach()
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/math.hh.in
                 ${CMAKE_CURRENT_BINARY_DIR}/math.hh)
 
-ign_install_includes("${IGN_PROJECT_NAME}${PROJECT_MAJOR_VERSION}/ignition" ${CMAKE_CURRENT_BINARY_DIR}/math.hh)
-ign_install_includes("${IGN_PROJECT_NAME}${PROJECT_MAJOR_VERSION}/ignition/${IGN_PROJECT_NAME}" ${headers})
+ign_install_includes("${INCLUDE_INSTALL_DIR_POSTFIX}/ignition" ${CMAKE_CURRENT_BINARY_DIR}/math.hh)
+ign_install_includes("${INCLUDE_INSTALL_DIR_POSTFIX}/ignition/${IGN_PROJECT_NAME}" ${headers})

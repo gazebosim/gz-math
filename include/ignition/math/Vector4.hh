@@ -45,7 +45,8 @@ namespace ignition
       /// \param[in] _y value along y axis
       /// \param[in] _z value along z axis
       /// \param[in] _w value along w axis
-      public: Vector4(const T &_x, const T &_y, const T &_z, const T &_w)
+      public: explicit Vector4(
+                  const T &_x, const T &_y, const T &_z, const T &_w)
       {
         this->data[0] = _x;
         this->data[1] = _y;
@@ -78,21 +79,20 @@ namespace ignition
       }
 
       /// \brief Returns the length (magnitude) of the vector
+      /// \return The length
       public: T Length() const
       {
-        return sqrt(
-            this->data[0] * this->data[0] +
-            this->data[1] * this->data[1] +
-            this->data[2] * this->data[2] +
-            this->data[3] * this->data[3]);
+        return sqrt(this->SquaredLength());
       }
 
       /// \brief Return the square of the length (magnitude) of the vector
       /// \return the length
       public: T SquaredLength() const
       {
-        return this->data[0] * this->data[0] + this->data[1] * this->data[1] +
-          this->data[2] * this->data[2] + this->data[3] * this->data[3];
+        return std::pow(this->data[0], 2)
+             + std::pow(this->data[1], 2)
+             + std::pow(this->data[2], 2)
+             + std::pow(this->data[3], 2);
       }
 
       /// \brief Normalize the vector length
@@ -100,10 +100,13 @@ namespace ignition
       {
         T d = this->Length();
 
-        this->data[0] /= d;
-        this->data[1] /= d;
-        this->data[2] /= d;
-        this->data[3] /= d;
+        if (!equal<T>(d, static_cast<T>(0.0)))
+        {
+          this->data[0] /= d;
+          this->data[1] /= d;
+          this->data[2] /= d;
+          this->data[3] /= d;
+        }
       }
 
       /// \brief Set the contents of the vector
@@ -396,14 +399,26 @@ namespace ignition
         return *this;
       }
 
+      /// \brief Equality test with tolerance.
+      /// \param[in] _v the vector to compare to
+      /// \param[in] _tol equality tolerance.
+      /// \return true if the elements of the vectors are equal within
+      /// the tolerence specified by _tol.
+      public: bool Equal(const Vector4 &_v, const T &_tol) const
+      {
+        return equal<T>(this->data[0], _v[0], _tol)
+            && equal<T>(this->data[1], _v[1], _tol)
+            && equal<T>(this->data[2], _v[2], _tol)
+            && equal<T>(this->data[3], _v[3], _tol);
+      }
+
       /// \brief Equal to operator
       /// \param[in] _v the other vector
       /// \return true if each component is equal within a
       /// default tolerence (1e-6), false otherwise
       public: bool operator==(const Vector4<T> &_v) const
       {
-        return equal(this->data[0], _v[0]) && equal(this->data[1], _v[1]) &&
-               equal(this->data[2], _v[2]) && equal(this->data[3], _v[3]);
+        return this->Equal(_v, static_cast<T>(1e-6));
       }
 
       /// \brief Not equal to operator

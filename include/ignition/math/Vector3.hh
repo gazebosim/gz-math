@@ -63,7 +63,7 @@ namespace ignition
       /// \param[in] _x value along x
       /// \param[in] _y value along y
       /// \param[in] _z value along z
-      public: Vector3(const T &_x, const T &_y, const T &_z)
+      public: explicit Vector3(const T &_x, const T &_y, const T &_z)
       {
         this->data[0] = _x;
         this->data[1] = _y;
@@ -110,30 +110,26 @@ namespace ignition
       }
 
       /// \brief Returns the length (magnitude) of the vector
-      /// \ return the length
+      /// \return the length
       public: T Length() const
       {
-        return sqrt(this->data[0] * this->data[0] +
-                    this->data[1] * this->data[1] +
-                    this->data[2] * this->data[2]);
+        return sqrt(this->SquaredLength());
       }
 
       /// \brief Return the square of the length (magnitude) of the vector
       /// \return the squared length
       public: T SquaredLength() const
       {
-        return this->data[0] * this->data[0] +
-               this->data[1] * this->data[1] +
-               this->data[2] * this->data[2];
+        return std::pow(this->data[0], 2)
+             + std::pow(this->data[1], 2)
+             + std::pow(this->data[2], 2);
       }
 
       /// \brief Normalize the vector length
       /// \return unit length vector
       public: Vector3 Normalize()
       {
-        T d = sqrt(this->data[0] * this->data[0] +
-                   this->data[1] * this->data[1] +
-                   this->data[2] * this->data[2]);
+        T d = this->Length();
 
         if (!equal<T>(d, static_cast<T>(0.0)))
         {
@@ -143,6 +139,15 @@ namespace ignition
         }
 
         return *this;
+      }
+
+      /// \brief Return a normalized vector
+      /// \return unit length vector
+      public: Vector3 Normalized() const
+      {
+        Vector3<T> result = *this;
+        result.Normalize();
+        return result;
       }
 
       /// \brief Round to near whole number, return the result.
@@ -543,15 +548,25 @@ namespace ignition
         return *this;
       }
 
+      /// \brief Equality test with tolerance.
+      /// \param[in] _v the vector to compare to
+      /// \param[in] _tol equality tolerance.
+      /// \return true if the elements of the vectors are equal within
+      /// the tolerence specified by _tol.
+      public: bool Equal(const Vector3 &_v, const T &_tol) const
+      {
+        return equal<T>(this->data[0], _v[0], _tol)
+            && equal<T>(this->data[1], _v[1], _tol)
+            && equal<T>(this->data[2], _v[2], _tol);
+      }
+
       /// \brief Equal to operator
       /// \param[in] _v The vector to compare against
       /// \return true if each component is equal within a
       /// default tolerence (1e-3), false otherwise
       public: bool operator==(const Vector3<T> &_v) const
       {
-        return equal<T>(this->data[0], _v[0], static_cast<T>(0.001)) &&
-               equal<T>(this->data[1], _v[1], static_cast<T>(0.001)) &&
-               equal<T>(this->data[2], _v[2], static_cast<T>(0.001));
+        return this->Equal(_v, static_cast<T>(1e-3));
       }
 
       /// \brief Not equal to operator

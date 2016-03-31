@@ -44,7 +44,7 @@ namespace ignition
       /// \brief Constructor
       /// \param[in] _x value along x
       /// \param[in] _y value along y
-      public: Vector2(const T &_x, const T &_y)
+      public: explicit Vector2(const T &_x, const T &_y)
       {
         this->data[0] = _x;
         this->data[1] = _y;
@@ -70,14 +70,31 @@ namespace ignition
                     (this->data[1]-_pt[1])*(this->data[1]-_pt[1]));
       }
 
-      /// \brief  Normalize the vector length
+      /// \brief Returns the length (magnitude) of the vector
+      /// \return The length
+      public: T Length() const
+      {
+        return sqrt(this->SquaredLength());
+      }
+
+      /// \brief Returns the square of the length (magnitude) of the vector
+      /// \return The squared length
+      public: T SquaredLength() const
+      {
+        return std::pow(this->data[0], 2)
+             + std::pow(this->data[1], 2);
+      }
+
+      /// \brief Normalize the vector length
       public: void Normalize()
       {
-        double d = sqrt(this->data[0] * this->data[0] +
-                        this->data[1] * this->data[1]);
+        double d = this->Length();
 
-        this->data[0] /= d;
-        this->data[1] /= d;
+        if (!equal<T>(d, static_cast<T>(0.0)))
+        {
+          this->data[0] /= d;
+          this->data[1] /= d;
+        }
       }
 
       /// \brief Set the contents of the vector
@@ -313,13 +330,24 @@ namespace ignition
         return *this;
       }
 
+      /// \brief Equality test with tolerance.
+      /// \param[in] _v the vector to compare to
+      /// \param[in] _tol equality tolerance.
+      /// \return true if the elements of the vectors are equal within
+      /// the tolerence specified by _tol.
+      public: bool Equal(const Vector2 &_v, const T &_tol) const
+      {
+        return equal<T>(this->data[0], _v[0], _tol)
+            && equal<T>(this->data[1], _v[1], _tol);
+      }
+
       /// \brief Equal to operator
       /// \param[in] _v the vector to compare to
       /// \return true if the elements of the 2 vectors are equal within
       /// a tolerence (1e-6)
       public: bool operator==(const Vector2 &_v) const
       {
-        return equal(this->data[0], _v[0]) && equal(this->data[1], _v[1]);
+        return this->Equal(_v, static_cast<T>(1e-6));
       }
 
       /// \brief Not equal to operator

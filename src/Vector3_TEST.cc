@@ -134,6 +134,31 @@ TEST(Vector3dTest, SquaredLength)
 }
 
 /////////////////////////////////////////////////
+TEST(Vector3dTest, Length)
+{
+  // Zero vector
+  EXPECT_DOUBLE_EQ(math::Vector3d::Zero.Length(), 0.0);
+  EXPECT_DOUBLE_EQ(math::Vector3d::Zero.SquaredLength(), 0.0);
+
+  // UnitXYZ vectors
+  EXPECT_DOUBLE_EQ(math::Vector3d::UnitX.Length(), 1.0);
+  EXPECT_DOUBLE_EQ(math::Vector3d::UnitY.Length(), 1.0);
+  EXPECT_DOUBLE_EQ(math::Vector3d::UnitZ.Length(), 1.0);
+  EXPECT_DOUBLE_EQ(math::Vector3d::UnitX.SquaredLength(), 1.0);
+  EXPECT_DOUBLE_EQ(math::Vector3d::UnitY.SquaredLength(), 1.0);
+  EXPECT_DOUBLE_EQ(math::Vector3d::UnitZ.SquaredLength(), 1.0);
+
+  // One vector
+  EXPECT_NEAR(math::Vector3d::One.Length(), sqrt(3.0), 1e-10);
+  EXPECT_DOUBLE_EQ(math::Vector3d::One.SquaredLength(), 3.0);
+
+  // Arbitrary vector
+  math::Vector3d v(0.1, -4.2, 2.5);
+  EXPECT_NEAR(v.Length(), 4.88876262463, 1e-10);
+  EXPECT_DOUBLE_EQ(v.SquaredLength(), 23.9);
+}
+
+/////////////////////////////////////////////////
 TEST(Vector3dTest, Normalize)
 {
   math::Vector3d vec1(0, 0, 0);
@@ -146,6 +171,10 @@ TEST(Vector3dTest, Normalize)
   vec3 = vec2.Normalize();
   EXPECT_EQ(vec3, vec2);
   EXPECT_EQ(vec2, math::Vector3d(0.267261, 0.534522, 0.801784));
+
+  const math::Vector3d vecConst(1, 2, 3);
+  EXPECT_EQ(vecConst.Normalized(), vec3);
+  EXPECT_EQ(vecConst, math::Vector3d(1, 2, 3));
 }
 
 /////////////////////////////////////////////////
@@ -351,6 +380,17 @@ TEST(Vector3dTest, NotEqual)
 
   EXPECT_TRUE(vec1 != vec2);
   EXPECT_FALSE(vec1 != vec3);
+}
+
+/////////////////////////////////////////////////
+// Test Equal function with specified tolerance
+TEST(Vector2Test, EqualTolerance)
+{
+  EXPECT_FALSE(math::Vector3d::Zero.Equal(math::Vector3d::One, 1e-6));
+  EXPECT_FALSE(math::Vector3d::Zero.Equal(math::Vector3d::One, 1e-3));
+  EXPECT_FALSE(math::Vector3d::Zero.Equal(math::Vector3d::One, 1e-1));
+  EXPECT_TRUE(math::Vector3d::Zero.Equal(math::Vector3d::One, 1));
+  EXPECT_TRUE(math::Vector3d::Zero.Equal(math::Vector3d::One, 1.1));
 }
 
 /////////////////////////////////////////////////

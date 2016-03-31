@@ -15,7 +15,11 @@
  *
 */
 
+#ifndef _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
+#endif
 #include <gtest/gtest.h>
+#include <cmath>
 
 #include "ignition/math/Helpers.hh"
 #include "ignition/math/Vector2.hh"
@@ -130,6 +134,17 @@ TEST(Vector2Test, IndexException)
   EXPECT_NO_THROW(math::equal(v[1], 2.0));
 
   EXPECT_THROW(math::equal(v[2], 1.0), math::IndexException);
+}
+
+/////////////////////////////////////////////////
+// Test Equal function with specified tolerance
+TEST(Vector2Test, EqualTolerance)
+{
+  EXPECT_FALSE(math::Vector2d::Zero.Equal(math::Vector2d::One, 1e-6));
+  EXPECT_FALSE(math::Vector2d::Zero.Equal(math::Vector2d::One, 1e-3));
+  EXPECT_FALSE(math::Vector2d::Zero.Equal(math::Vector2d::One, 1e-1));
+  EXPECT_TRUE(math::Vector2d::Zero.Equal(math::Vector2d::One, 1));
+  EXPECT_TRUE(math::Vector2d::Zero.Equal(math::Vector2d::One, 1.1));
 }
 
 /////////////////////////////////////////////////
@@ -269,5 +284,22 @@ TEST(Vector2Test, Multiply)
 
   // Multiply by itself element-wise
   EXPECT_EQ(v*v, math::Vector2d(0.01, 17.64));
+}
+
+/////////////////////////////////////////////////
+TEST(Vector2dTest, Length)
+{
+  // Zero vector
+  EXPECT_DOUBLE_EQ(math::Vector2d::Zero.Length(), 0.0);
+  EXPECT_DOUBLE_EQ(math::Vector2d::Zero.SquaredLength(), 0.0);
+
+  // One vector
+  EXPECT_NEAR(math::Vector2d::One.Length(), M_SQRT2, 1e-10);
+  EXPECT_DOUBLE_EQ(math::Vector2d::One.SquaredLength(), 2.0);
+
+  // Arbitrary vector
+  math::Vector2d v(0.1, -4.2);
+  EXPECT_NEAR(v.Length(), 4.20119030752, 1e-10);
+  EXPECT_DOUBLE_EQ(v.SquaredLength(), 17.65);
 }
 

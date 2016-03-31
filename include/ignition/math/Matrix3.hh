@@ -18,6 +18,7 @@
 #ifndef _IGNITION_MATRIX3_HH_
 #define _IGNITION_MATRIX3_HH_
 
+#include <algorithm>
 #include <cstring>
 #include <ignition/math/Vector3.hh>
 #include <ignition/math/Quaternion.hh>
@@ -26,6 +27,8 @@ namespace ignition
 {
   namespace math
   {
+    template <typename T> class Quaternion;
+
     /// \class Matrix3 Matrix3.hh ignition/math/Matrix3.hh
     /// \brief A 3x3 matrix class
     template<typename T>
@@ -77,7 +80,7 @@ namespace ignition
 
       /// \brief Construct Matrix3 from a quaternion.
       /// \param[in] _q Quaternion.
-      public: Matrix3(const Quaternion<T> &_q)
+      public: explicit Matrix3(const Quaternion<T> &_q)
       {
         Quaternion<T> qt = _q;
         qt.Normalize();
@@ -153,6 +156,49 @@ namespace ignition
         this->data[2][0] = _axis.Z()*_axis.X()*C - _axis.Y()*s;
         this->data[2][1] = _axis.Z()*_axis.Y()*C + _axis.X()*s;
         this->data[2][2] = _axis.Z()*_axis.Z()*C + c;
+      }
+
+      /// \brief Set the matrix to represent rotation from
+      /// vector _v1 to vector _v2, so that
+      /// _v2.Normalize() == this * _v1.Normalize() holds.
+      ///
+      /// \param[in] _v1 The first vector
+      /// \param[in] _v2 The second vector
+      public: void From2Axes(const Vector3<T> &_v1, const Vector3<T> &_v2)
+      {
+        const T _v1LengthSquared = _v1.SquaredLength();
+        if (_v1LengthSquared <= 0.0)
+        {
+          // zero vector - we can't handle this
+          this->Set(1, 0, 0, 0, 1, 0, 0, 0, 1);
+          return;
+        }
+
+        const T _v2LengthSquared = _v2.SquaredLength();
+        if (_v2LengthSquared <= 0.0)
+        {
+          // zero vector - we can't handle this
+          this->Set(1, 0, 0, 0, 1, 0, 0, 0, 1);
+          return;
+        }
+
+        const T dot = _v1.Dot(_v2) / sqrt(_v1LengthSquared * _v2LengthSquared);
+        if (fabs(dot - 1.0) <= 1e-6)
+        {
+          // the vectors are parallel
+          this->Set(1, 0, 0, 0, 1, 0, 0, 0, 1);
+          return;
+        }
+        else if (fabs(dot + 1.0) <= 1e-6)
+        {
+          // the vectors are opposite
+          this->Set(-1, 0, 0, 0, -1, 0, 0, 0, -1);
+          return;
+        }
+
+        const Vector3<T> cross = _v1.Cross(_v2).Normalize();
+
+        this->Axis(cross, acos(dot));
       }
 
       /// \brief Set a column
@@ -292,22 +338,30 @@ namespace ignition
             _m(0, 2)*_v.X() + _m(1, 2)*_v.Y() + _m(2, 2)*_v.Z());
       }
 
+      /// \brief Equality test with tolerance.
+      /// \param[in] _m the matrix to compare to
+      /// \param[in] _tol equality tolerance.
+      /// \return true if the elements of the matrices are equal within
+      /// the tolerence specified by _tol.
+      public: bool Equal(const Matrix3 &_m, const T &_tol) const
+      {
+        return equal<T>(this->data[0][0], _m(0, 0), _tol)
+            && equal<T>(this->data[0][1], _m(0, 1), _tol)
+            && equal<T>(this->data[0][2], _m(0, 2), _tol)
+            && equal<T>(this->data[1][0], _m(1, 0), _tol)
+            && equal<T>(this->data[1][1], _m(1, 1), _tol)
+            && equal<T>(this->data[1][2], _m(1, 2), _tol)
+            && equal<T>(this->data[2][0], _m(2, 0), _tol)
+            && equal<T>(this->data[2][1], _m(2, 1), _tol)
+            && equal<T>(this->data[2][2], _m(2, 2), _tol);
+      }
+
       /// \brief Equality test operator
       /// \param[in] _m Matrix3<T> to test
       /// \return True if equal (using the default tolerance of 1e-6)
       public: bool operator==(const Matrix3<T> &_m) const
       {
-        return math::equal(this->data[0][0], _m(0, 0)) &&
-               math::equal(this->data[0][1], _m(0, 1)) &&
-               math::equal(this->data[0][2], _m(0, 2)) &&
-
-               math::equal(this->data[1][0], _m(1, 0)) &&
-               math::equal(this->data[1][1], _m(1, 1)) &&
-               math::equal(this->data[1][2], _m(1, 2)) &&
-
-               math::equal(this->data[2][0], _m(2, 0)) &&
-               math::equal(this->data[2][1], _m(2, 1)) &&
-               math::equal(this->data[2][2], _m(2, 2));
+        return this->Equal(_m, static_cast<T>(1e-6));
       }
 
       /// \brief Inequality test operator
@@ -389,6 +443,24 @@ namespace ignition
              this->data[2][0] * this->data[0][1]),
           + (this->data[1][1] * this->data[0][0] -
              this->data[1][0] * this->data[0][1]));
+      }
+
+      /// \brief Transpose this matrix.
+      public: void Transpose()
+      {
+        std::swap(this->data[0][1], this->data[1][0]);
+        std::swap(this->data[0][2], this->data[2][0]);
+        std::swap(this->data[1][2], this->data[2][1]);
+      }
+
+      /// \brief Return the transpose of this matrix
+      /// \return Transpose of this matrix.
+      public: Matrix3<T> Transposed() const
+      {
+        return Matrix3<T>(
+          this->data[0][0], this->data[1][0], this->data[2][0],
+          this->data[0][1], this->data[1][1], this->data[2][1],
+          this->data[0][2], this->data[1][2], this->data[2][2]);
       }
 
       /// \brief Stream insertion operator
