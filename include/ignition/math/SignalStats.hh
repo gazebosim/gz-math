@@ -14,8 +14,8 @@
  * limitations under the License.
  *
 */
-#ifndef _IGNITION_SIGNAL_STATS_HH_
-#define _IGNITION_SIGNAL_STATS_HH_
+#ifndef IGNITION_MATH_SIGNALSTATS_HH_
+#define IGNITION_MATH_SIGNALSTATS_HH_
 
 #include <map>
 #include <memory>
@@ -233,6 +233,11 @@ namespace ignition
 
       /// \brief Forget all previous data.
       public: void Reset();
+
+      /// \brief Assignment operator
+      /// \param[in] _v A SignalStats to copy
+      /// \return this
+      public: SignalStats &operator=(const SignalStats &_s);
 
 #ifdef _WIN32
 // Disable warning C4251 which is triggered by
