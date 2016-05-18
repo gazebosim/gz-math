@@ -14,8 +14,8 @@
  * limitations under the License.
  *
 */
-#ifndef _IGNITION_QUATERNION_HH_
-#define _IGNITION_QUATERNION_HH_
+#ifndef IGNITION_MATH_QUATERNION_HH_
+#define IGNITION_MATH_QUATERNION_HH_
 
 #include <ignition/math/Helpers.hh>
 #include <ignition/math/Angle.hh>
@@ -35,6 +35,9 @@ namespace ignition
     {
       /// \brief math::Quaternion(1, 0, 0, 0)
       public: static const Quaternion Identity;
+
+      /// \brief math::Quaternion(0, 0, 0, 0)
+      public: static const Quaternion Zero;
 
       /// \brief Default Constructor
       public: Quaternion()
@@ -1035,6 +1038,9 @@ namespace ignition
 
     template<typename T> const Quaternion<T>
       Quaternion<T>::Identity(1, 0, 0, 0);
+
+    template<typename T> const Quaternion<T>
+      Quaternion<T>::Zero(0, 0, 0, 0);
 
     typedef Quaternion<double> Quaterniond;
     typedef Quaternion<float> Quaternionf;
