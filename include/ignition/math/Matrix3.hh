@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef _IGNITION_MATRIX3_HH_
-#define _IGNITION_MATRIX3_HH_
+#ifndef IGNITION_MATH_MATRIX3_HH_
+#define IGNITION_MATH_MATRIX3_HH_
 
 #include <algorithm>
 #include <cstring>
@@ -212,6 +212,15 @@ namespace ignition
         this->data[0][_c] = _v.X();
         this->data[1][_c] = _v.Y();
         this->data[2][_c] = _v.Z();
+      }
+
+      /// \brief Equal operator. this = _mat
+      /// \param _mat Incoming matrix
+      /// \return itself
+      public: Matrix3<T> &operator=(const Matrix3<T> &_mat)
+      {
+        memcpy(this->data, _mat.data, sizeof(this->data[0][0])*9);
+        return *this;
       }
 
       /// \brief returns the element wise difference of two matrices

@@ -14,12 +14,8 @@
  * limitations under the License.
  *
 */
-#ifndef _IGNITION_MATH_FUNCTIONS_HH_
-#define _IGNITION_MATH_FUNCTIONS_HH_
-
-#ifndef _USE_MATH_DEFINES
-# define _USE_MATH_DEFINES
-#endif
+#ifndef IGNITION_MATH_FUNCTIONS_HH_
+#define IGNITION_MATH_FUNCTIONS_HH_
 
 #include <cmath>
 #include <algorithm>
@@ -51,6 +47,9 @@
 /// \brief Float lowest value, equivalent to -IGN_FLT_MAX
 #define IGN_FLT_LOW std::numeric_limits<float>::lowest()
 
+/// \brief Float positive infinite value
+#define IGN_FLT_INF std::numeric_limits<float>::infinity()
+
 /// \brief 16bit unsigned integer maximum value
 #define IGN_UINT16_MAX std::numeric_limits<uint16_t>::max()
 
@@ -60,6 +59,9 @@
 /// \brief 16bit unsigned integer lowest value. This is equivalent to
 /// IGN_UINT16_MIN, and is defined here for completeness.
 #define IGN_UINT16_LOW std::numeric_limits<uint16_t>::lowest()
+
+/// \brief 16-bit unsigned integer positive infinite value
+#define IGN_UINT16_INF std::numeric_limits<uint16_t>::infinity()
 
 /// \brief 16bit integer maximum value
 #define IGN_INT16_MAX std::numeric_limits<int16_t>::max()
@@ -71,6 +73,9 @@
 /// and is defined here for completeness.
 #define IGN_INT16_LOW std::numeric_limits<int16_t>::lowest()
 
+/// \brief 16-bit integer positive infinite value
+#define IGN_INT16_INF std::numeric_limits<int16_t>::infinity()
+
 /// \brief 32bit unsigned integer maximum value
 #define IGN_UINT32_MAX std::numeric_limits<uint32_t>::max()
 
@@ -80,6 +85,9 @@
 /// \brief 32bit unsigned integer lowest value. This is equivalent to
 /// IGN_UINT32_MIN, and is defined here for completeness.
 #define IGN_UINT32_LOW std::numeric_limits<uint32_t>::lowest()
+
+/// \brief 32-bit unsigned integer positive infinite value
+#define IGN_UINT32_INF std::numeric_limits<uint32_t>::infinity()
 
 /// \brief 32bit integer maximum value
 #define IGN_INT32_MAX std::numeric_limits<int32_t>::max()
@@ -91,6 +99,9 @@
 /// and is defined here for completeness.
 #define IGN_INT32_LOW std::numeric_limits<int32_t>::lowest()
 
+/// \brief 32-bit integer positive infinite value
+#define IGN_INT32_INF std::numeric_limits<int32_t>::infinity()
+
 /// \brief 64bit unsigned integer maximum value
 #define IGN_UINT64_MAX std::numeric_limits<uint64_t>::max()
 
@@ -100,6 +111,9 @@
 /// \brief 64bit unsigned integer lowest value. This is equivalent to
 /// IGN_UINT64_MIN, and is defined here for completeness.
 #define IGN_UINT64_LOW std::numeric_limits<uint64_t>::lowest()
+
+/// \brief 64-bit unsigned integer positive infinite value
+#define IGN_UINT64_INF std::numeric_limits<uint64_t>::infinity()
 
 /// \brief 64bit integer maximum value
 #define IGN_INT64_MAX std::numeric_limits<int64_t>::max()
@@ -111,16 +125,21 @@
 /// and is defined here for completeness.
 #define IGN_INT64_LOW std::numeric_limits<int64_t>::lowest()
 
+/// \brief 64-bit integer positive infinite value
+#define IGN_INT64_INF std::numeric_limits<int64_t>::infinity()
+
 /// \brief Define IGN_PI, IGN_PI_2, and IGN_PI_4.
 /// This was put here for Windows support.
 #ifdef M_PI
 #define IGN_PI M_PI
 #define IGN_PI_2 M_PI_2
 #define IGN_PI_4 M_PI_4
+#define IGN_SQRT2 M_SQRT2
 #else
 #define IGN_PI   3.14159265358979323846
 #define IGN_PI_2 1.57079632679489661923
 #define IGN_PI_4 0.78539816339744830962
+#define IGN_SQRT2 1.41421356237309504880
 #endif
 
 /// \brief Define IGN_FP_VOLATILE for FP equality comparisons
@@ -421,7 +440,7 @@ namespace ignition
         p++;
       }
 
-      double acc = 0;
+      int acc = 0;
       while (*p >= '0' && *p <= '9')
         acc = acc * 10 + *p++ - '0';
 
@@ -431,7 +450,7 @@ namespace ignition
         return NAN_I;
       }
 
-      return static_cast<int>(s * acc);
+      return s * acc;
     }
 
     /// \brief parse string into float

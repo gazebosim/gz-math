@@ -14,8 +14,8 @@
  * limitations under the License.
  *
 */
-#ifndef _IGNITION_ANGLE_HH_
-#define _IGNITION_ANGLE_HH_
+#ifndef IGNITION_MATH_ANGLE_HH_
+#define IGNITION_MATH_ANGLE_HH_
 
 #include <iostream>
 #include <ignition/math/Helpers.hh>
@@ -87,6 +87,11 @@ namespace ignition
 
       /// \brief Normalize the angle in the range -Pi to Pi
       public: void Normalize();
+
+      /// \brief Assignment operator. Set this angle to the parameter
+      /// \param[in]  _angle Angle to copy
+      /// \return The new angle.
+      public: Angle &operator=(const Angle &_angle);
 
       /// \brief Return the angle's radian value
       /// \return double containing the angle's radian value

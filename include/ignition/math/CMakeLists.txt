@@ -27,6 +27,7 @@ set (headers
   Triangle3.hh
   Vector2.hh
   Vector3.hh
+  Vector3Stats.hh
   Vector4.hh
 )
 
