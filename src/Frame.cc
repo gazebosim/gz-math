@@ -20,15 +20,51 @@
 using namespace ignition;
 using namespace math;
 
+const Frame ignition::math::Frame::Nan("inf", Pose3d::Nan);
+
+namespace ignition
+{
+  namespace math
+  {
+    /// \brief Private data for the Frame class
+    class FramePrivate
+    {
+      /// Constructor
+      public: FramePrivate() {}
+
+      /// Constructor
+      /// \param[in] _name Name of the frame
+      /// \param[in] _pose Pose of the frame
+      public: FramePrivate(const std::string &_name, const Pose3d &_pose)
+              : pose(_pose), name(_name) {}
+
+      /// \brief Frame's pose
+      public: Pose3d pose = ignition::math::Pose3d::Zero;
+
+      /// \brief Frame's name
+      public: std::string name = "";
+    };
+  }
+}
+
 /////////////////////////////////////////////////
 Frame::Frame()
+: dataPtr(new FramePrivate)
 {
 }
 
 /////////////////////////////////////////////////
 Frame::Frame(const std::string &_name, const Pose3d &_pose)
-  :name(_name), pose(_pose)
+: dataPtr(new FramePrivate(_name, _pose))
 {
+}
+
+/////////////////////////////////////////////////
+Frame::Frame(const Frame &_frame)
+: dataPtr(new FramePrivate)
+{
+  this->dataPtr->name = _frame.Name();
+  this->dataPtr->pose = _frame.Pose();
 }
 
 /////////////////////////////////////////////////
@@ -39,23 +75,35 @@ Frame::~Frame()
 /////////////////////////////////////////////////
 std::string Frame::Name() const
 {
-  return this->name;
+  return this->dataPtr->name;
 }
 
 /////////////////////////////////////////////////
 void Frame::SetName(const std::string &_name)
 {
-  this->name = _name;
+  this->dataPtr->name = _name;
 }
 
 /////////////////////////////////////////////////
 Pose3d Frame::Pose() const
 {
-  return this->pose;
+  return this->dataPtr->pose;
 }
 
 /////////////////////////////////////////////////
 void Frame::SetPose(const Pose3d &_pose)
 {
-  this->pose = _pose;
+  this->dataPtr->pose = _pose;
+}
+
+/////////////////////////////////////////////////
+bool Frame::operator==(const Frame &_frame) const
+{
+  return this->Name() == _frame.Name() && this->Pose() == _frame.Pose();
+}
+
+/////////////////////////////////////////////////
+bool Frame::operator!=(const Frame &_frame) const
+{
+  return !(Frame::operator==(_frame));
 }

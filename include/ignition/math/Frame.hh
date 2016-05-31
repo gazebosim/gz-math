@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Open Source Robotics Foundation
+ * Copyright (C) 2016 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  *
 */
-#ifndef _IGNITION_FRAME_HH_
-#define _IGNITION_FRAME_HH_
+#ifndef IGNITION_MATH_FRAME_HH_
+#define IGNITION_MATH_FRAME_HH_
 
 #include <string>
 #include <memory>
@@ -25,18 +25,29 @@ namespace ignition
 {
   namespace math
   {
+    // Forward declare private data class
+    class FramePrivate;
+
     /// \class Frame Frame.hh ignition/math/Frame.hh
     /// \brief A frame has an offset (a Pose3d) and a name
     /// Frames are typically composed inside the FrameGraph class.
     class IGNITION_VISIBLE Frame
     {
+      /// \brief math::Frame("inf", math::Pose3d::Nan)
+      public: static const Frame Nan;
+
       /// \brief Constructor
       public: Frame();
+
+      /// \brief Copy constructor
+      /// \param[in] _frame Frame to copy
+      public: Frame(const Frame &_frame);
 
       /// \brief Constructor
       /// \param[in] _name Name of the frame
       /// \param[in] _pose Pose of the frame
-      public: Frame(const std::string &_name, const Pose3d &_pose);
+      public: Frame(const std::string &_name,
+                    const Pose3d &_pose = Pose3d::Zero);
 
       /// \brief Destructor.
       public: virtual ~Frame();
@@ -57,6 +68,16 @@ namespace ignition
       /// \param[in] _pose Pose of the frame.
       public: void SetPose(const Pose3d &_pose);
 
+      /// \brief Equality operator.
+      /// \param[in] _frame Frame to compare against.
+      /// \return True if this frame and _frame are equal.
+      public: bool operator==(const Frame &_frame) const;
+
+      /// \brief Inequality operator.
+      /// \param[in] _frame Frame to compare against.
+      /// \return False if this frame and _frame are equal.
+      public: bool operator!=(const Frame &_frame) const;
+
       /// \brief Stream insertion operator
       /// \param _out output stream
       /// \param _pt Frame to output
@@ -64,24 +85,14 @@ namespace ignition
       public: friend std::ostream &operator<<(
                   std::ostream &_out, const ignition::math::Frame &_f)
       {
-        _out << _f.name << " = " << _f.pose;
+        _out << _f.Name() << " = " << _f.Pose();
         return _out;
       }
 
-      /// \brief Frame's pose
-      private: Pose3d pose;
-
-      /// \brief Frame's name
-      private: std::string name;
+      /// \internal
+      /// \brief Private data pointer.
+      private: std::unique_ptr<FramePrivate> dataPtr;
     };
-
-    /// \def FramePtr
-    /// \brief Shared pointer to a frame
-    using FramePtr = std::shared_ptr<Frame>;
-
-    /// \def FrameWeakPtr
-    /// \brief Weak pointer to a frame
-    using FrameWeakPtr = std::weak_ptr<Frame>;
   }
 }
 #endif

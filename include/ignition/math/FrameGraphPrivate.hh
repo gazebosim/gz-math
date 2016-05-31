@@ -14,8 +14,8 @@
  * limitations under the License.
  *
 */
-#ifndef _IGNITION_FRAMEGRAPHPRIVATE_HH_
-#define _IGNITION_FRAMEGRAPHPRIVATE_HH_
+#ifndef IGNITION_FRAMEGRAPHPRIVATE_HH_
+#define IGNITION_FRAMEGRAPHPRIVATE_HH_
 
 #include <vector>
 #include <ignition/math/Frame.hh>
@@ -28,7 +28,7 @@ namespace ignition
     class FrameGraphPrivate
     {
       /// \brief The set of frames in the graph
-      public: std::vector<FramePtr> frames;
+      public: std::vector<Frame> frames;
 
       /// \brief The set of edges in the graph
       public: std::vector<std::vector<int>> edges;

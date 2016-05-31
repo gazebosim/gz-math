@@ -32,6 +32,9 @@ namespace ignition
       /// \brief math::Pose3<T>(0, 0, 0, 0, 0, 0)
       public: static const Pose3<T> Zero;
 
+      /// \brief math::Pose3<T>(nan, nan, nan, nan, nan, nan)
+      public: static const Pose3<T> Nan;
+
       /// \brief Default constructors
       public: Pose3() : p(0, 0, 0), q(1, 0, 0, 0)
       {
@@ -402,6 +405,13 @@ namespace ignition
       private: Quaternion<T> q;
     };
     template<typename T> const Pose3<T> Pose3<T>::Zero(0, 0, 0, 0, 0, 0);
+    template<typename T> const Pose3<T> Pose3<T>::Nan(
+        std::numeric_limits<T>::quiet_NaN(),
+        std::numeric_limits<T>::quiet_NaN(),
+        std::numeric_limits<T>::quiet_NaN(),
+        std::numeric_limits<T>::quiet_NaN(),
+        std::numeric_limits<T>::quiet_NaN(),
+        std::numeric_limits<T>::quiet_NaN());
 
     typedef Pose3<int> Pose3i;
     typedef Pose3<double> Pose3d;

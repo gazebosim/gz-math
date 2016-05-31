@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Open Source Robotics Foundation
+ * Copyright (C) 2016 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,13 @@
  * limitations under the License.
  *
 */
-#ifndef _IGNITION_FRAMEGRAPH_HH_
-#define _IGNITION_FRAMEGRAPH_HH_
+#ifndef IGNITION_MATH_FRAMEGRAPH_HH_
+#define IGNITION_MATH_FRAMEGRAPH_HH_
 
-#include <memory>
 #include <list>
+#include <memory>
+#include <string>
+#include <utility>
 #include <ignition/math/Frame.hh>
 #include <ignition/math/Pose3.hh>
 
@@ -70,16 +72,28 @@ namespace ignition
       /// \brief Destructor
       public: virtual ~FrameGraph();
 
+      /// \brief Get the number of nodes.
+      /// \return Number of nodes in the graph.
+      public: size_t NodeCount() const;
+
+      /// \brief Get the number of edges.
+      /// \return Number of edges in the graph.
+      public: size_t EdgeCount() const;
+
       /// \brief Get a node (frame) by name
       /// \param[in] _name Name of the node.
-      /// \return Weak pointer to the node.
-      public: FrameWeakPtr Node(const std::string &_name) const;
+      /// \return Reference to the new node. On error, the reference will be
+      /// to Frame::Inf, which has a name of "inf" and a pose of Pose3d::Inf
+      public: const Frame &Node(const std::string &_name) const;
 
       /// \brief Get the index of a node.
       /// \param[in] _name Name of the node to find.
       /// \return Index of the node. -1 is returned when the node is not
       /// found.
       public: int NodeIndex(const std::string &_name) const;
+
+      /// \brief Clear the edges.
+      public: void ClearEdges();
 
       /// \brief Initialize a graph using a list of frames and edges.
       /// \param[in] _frame List of frames and their values.
@@ -89,18 +103,28 @@ namespace ignition
       /// \brief Add a new node (frame).
       /// \param[in] _name Name of the node.
       /// \param[in] _pose Pose the node.
-      /// \return Pointer to the new node.
-      public: FrameWeakPtr AddNode(const std::string &_name,
+      /// \return Reference to the new node.
+      public: const Frame &AddNode(const std::string &_name,
                                    const Pose3d &_pose);
 
       /// \brief Add a new node.
-      /// \param[in] _node Pointer to the node to add.
-      public: void AddNode(FramePtr _frame);
+      /// \param[in] _node Reference to the node to add.
+      /// \return Reference to the new node.
+      public: const Frame &AddNode(const Frame &_frame);
 
       /// \brief Add a new edge.
-      /// \param[in] _parent Pointer to the parent node
-      /// \param[in] _child Pointer to the child node
-      public: void AddEdge(FramePtr _parent, FramePtr _child);
+      /// \param[in] _parent Reference to the parent node
+      /// \param[in] _child Reference to the child node
+      /// \return True if the edge was successfully added
+      public: bool AddEdge(const Frame &_parent, const Frame &_child);
+
+      /// \brief Add a new edge.
+      /// \param[in] _parent Name of the parent node
+      /// \param[in] _child Name of the child node
+      /// \return True if the edge was successfully added
+      public: bool AddEdge(const std::string &_parent,
+                           const std::string &_child);
+
 
       /// \brief Compute the transform from a start frame to an end frame.
       /// \param[in] _start Name of the start frame.
@@ -113,8 +137,9 @@ namespace ignition
       /// algorithm.
       /// \param[in] _start Name of the start node
       /// \param[in] _end Name of the end node
-      public: void Path(const std::string &_start, const std::string &_end,
-                        std::list<FrameWeakPtr> &_result);
+      /// \return False if a path was not found.
+      public: bool Path(const std::string &_start, const std::string &_end,
+                        std::list<Frame> &_result);
 
       /// \brief Stream insertion operator
       /// \param _out output stream

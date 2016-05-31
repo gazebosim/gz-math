@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Open Source Robotics Foundation
+ * Copyright (C) 2016 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ FrameGraph::FrameGraph()
 
 /////////////////////////////////////////////////
 FrameGraph::FrameGraph(const Frame_L &_frames, const Edge_L &_edges)
-  : dataPtr(new FrameGraphPrivate)
+: dataPtr(new FrameGraphPrivate)
 {
   this->Init(_frames, _edges);
 }
@@ -43,14 +43,25 @@ FrameGraph::~FrameGraph()
 }
 
 /////////////////////////////////////////////////
+void FrameGraph::ClearEdges()
+{
+  this->dataPtr->edges.clear();
+
+  // Resize edges so that there is one element per frame.
+  this->dataPtr->edges.resize(this->dataPtr->frames.size());
+}
+
+/////////////////////////////////////////////////
 void FrameGraph::Init(const Frame_L &_frames, const Edge_L &_edges)
 {
+  // Clear the graph
   this->dataPtr->frames.clear();
   this->dataPtr->edges.clear();
+
+  // Add all the frames
   for (auto const &frame : _frames)
   {
-    this->dataPtr->frames.push_back(
-        FramePtr(new Frame(frame.first, frame.second)));
+    this->dataPtr->frames.push_back(Frame(frame.first, frame.second));
   }
 
   // Resize edges so that there is one element per frame.
@@ -66,14 +77,14 @@ void FrameGraph::Init(const Frame_L &_frames, const Edge_L &_edges)
 }
 
 /////////////////////////////////////////////////
-FrameWeakPtr FrameGraph::Node(const std::string &_name) const
+const Frame &FrameGraph::Node(const std::string &_name) const
 {
   for (auto const &frame : this->dataPtr->frames)
   {
-    if (frame->Name() == _name)
+    if (frame.Name() == _name)
       return frame;
   }
-  return FrameWeakPtr();
+  return Frame::Nan;
 }
 
 /////////////////////////////////////////////////
@@ -84,7 +95,7 @@ int FrameGraph::NodeIndex(const std::string &_name) const
   // Find the frame
   for (int i = 0; i < this->dataPtr->frames.size(); ++i)
   {
-    if (this->dataPtr->frames[i]->Name() == _name)
+    if (this->dataPtr->frames[i].Name() == _name)
     {
       result = i;
       break;
@@ -95,26 +106,55 @@ int FrameGraph::NodeIndex(const std::string &_name) const
 }
 
 /////////////////////////////////////////////////
-FrameWeakPtr FrameGraph::AddNode(const std::string &_name, const Pose3d &_pose)
+const Frame &FrameGraph::AddNode(const std::string &_name, const Pose3d &_pose)
 {
-  this->dataPtr->frames.push_back(
-      FramePtr(new Frame(_name, _pose)));
+  this->dataPtr->frames.push_back(Frame(_name, _pose));
+
+  // Resize edges so that there is one element per frame.
+  this->dataPtr->edges.resize(this->dataPtr->frames.size());
+
+  return this->dataPtr->frames.back();
 }
 
 /////////////////////////////////////////////////
-void FrameGraph::AddNode(FramePtr _frame)
+const Frame &FrameGraph::AddNode(const Frame &_frame)
 {
-  this->dataPtr->frames.push_back(_frame);
+  this->dataPtr->frames.push_back(Frame(_frame));
+
+  // Resize edges so that there is one element per frame.
+  this->dataPtr->edges.resize(this->dataPtr->frames.size());
+
+  return this->dataPtr->frames.back();
 }
 
 /////////////////////////////////////////////////
-void FrameGraph::AddEdge(FramePtr _parent, FramePtr _child)
+bool FrameGraph::AddEdge(const Frame &_parent, const Frame &_child)
 {
-  int parent = this->NodeIndex(_parent->Name());
-  int child = this->NodeIndex(_child->Name());
+  int parent = this->NodeIndex(_parent.Name());
+  int child = this->NodeIndex(_child.Name());
 
   if (parent >= 0 && child >= 0)
+  {
     this->dataPtr->edges[parent].push_back(child);
+    return true;
+  }
+
+  return false;
+}
+
+/////////////////////////////////////////////////
+bool FrameGraph::AddEdge(const std::string &_parent, const std::string &_child)
+{
+  int parent = this->NodeIndex(_parent);
+  int child = this->NodeIndex(_child);
+
+  if (parent >= 0 && child >= 0)
+  {
+    this->dataPtr->edges[parent].push_back(child);
+    return true;
+  }
+
+  return false;
 }
 
 /////////////////////////////////////////////////
@@ -122,19 +162,19 @@ Pose3d FrameGraph::Transform(const std::string &_start, const std::string &_end)
 {
   Pose3d result;
 
-  std::list<FrameWeakPtr> path;
+  std::list<Frame> path;
   this->Path(_start, _end, path);
   for (auto const &frame : path)
   {
-    result += frame.lock()->Pose();
+    result += frame.Pose();
   }
 
   return result;
 }
 
 /////////////////////////////////////////////////
-void FrameGraph::Path(const std::string &_start, const std::string &_end,
-                      std::list<FrameWeakPtr> &_result)
+bool FrameGraph::Path(const std::string &_start, const std::string &_end,
+                      std::list<Frame> &_result)
 {
   _result.clear();
 
@@ -147,13 +187,13 @@ void FrameGraph::Path(const std::string &_start, const std::string &_end,
   if (startIndex < 0)
   {
     std::cerr << "Start frame[" << _start << "] Not found\n" << std::endl;
-    return;
+    return false;
   }
 
   if (endIndex < 0)
   {
     std::cerr << "End frame[" << _end << "] Not found\n" << std::endl;
-    return;
+    return false;
   }
 
   // Set distance from _start to _start to zero
@@ -171,7 +211,7 @@ void FrameGraph::Path(const std::string &_start, const std::string &_end,
     activeFrames.erase(activeFrames.begin());
 
     // Check if the end frame was reached.
-    if (this->dataPtr->frames[where]->Name() == _end)
+    if (this->dataPtr->frames[where].Name() == _end)
     {
       // Populate the result list with the start
       _result.push_back(this->dataPtr->frames[startIndex]);
@@ -210,6 +250,8 @@ void FrameGraph::Path(const std::string &_start, const std::string &_end,
       }
     }
   }
+
+  return true;
 }
 
 /////////////////////////////////////////////////
@@ -218,7 +260,7 @@ void FrameGraph::Print(std::ostream &_out) const
   _out << "Frames:" << std::endl;
   for (auto const &frame : this->dataPtr->frames)
   {
-    _out << *frame << std::endl;
+    _out << frame << std::endl;
   }
 
   _out << std::endl << "Edges:" << std::endl;
@@ -227,9 +269,23 @@ void FrameGraph::Print(std::ostream &_out) const
     for (unsigned int child = 0; child < this->dataPtr->edges[parent].size();
          ++child)
     {
-      std::cout << this->dataPtr->frames[parent]->Name() << " -> " <<
+      std::cout << this->dataPtr->frames[parent].Name() << " -> " <<
                    this->dataPtr->frames[
-                   this->dataPtr->edges[parent][child]]->Name() << std::endl;
+                   this->dataPtr->edges[parent][child]].Name() << std::endl;
     }
   }
 }
+
+/////////////////////////////////////////////////
+size_t FrameGraph::NodeCount() const
+{
+  return this->dataPtr->frames.size();
+}
+
+/////////////////////////////////////////////////
+size_t FrameGraph::EdgeCount() const
+{
+  return this->dataPtr->edges.size();
+}
+
+

@@ -333,7 +333,7 @@ namespace ignition
                       const T &_epsilon = 1e-6)
     {
       IGN_FP_VOLATILE T diff = std::abs(_a - _b);
-      return diff <= _epsilon;
+      return diff <= _epsilon || (std::isnan(_a) && std::isnan(_b));
     }
 
     /// \brief get value at a specified precision
