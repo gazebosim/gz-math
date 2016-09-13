@@ -307,7 +307,7 @@ else (build_errors)
     ${CMAKE_CURRENT_BINARY_DIR}/${cmake_conf_file}
     ${CMAKE_CURRENT_BINARY_DIR}/${cmake_conf_version_file}
     DESTINATION ${CMAKE_CONFIG_INSTALL_DIR} COMPONENT cmake)
-    
+
   # Create *-targets.cmake file for build directory
   # TODO: keep this instruction until we depend on CMake 3
   #       then change the first line from TARGETS ...  

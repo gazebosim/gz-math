@@ -1,5 +1,9 @@
 include (${project_cmake_dir}/Utils.cmake)
 
+set (c_headers
+  vector2.h
+)
+
 set (headers
   AffineException.hh
   Angle.hh
@@ -25,6 +29,7 @@ set (headers
   SignalStats.hh
   SphericalCoordinates.hh
   Spline.hh
+  System.hh
   Temperature.hh
   Triangle.hh
   Triangle3.hh
@@ -34,14 +39,29 @@ set (headers
   Vector4.hh
 )
 
-set (ign_headers "" CACHE INTERNAL "Ignition math headers" FORCE)
+set (ign_headers "" CACHE INTERNAL "Ignition math C++ headers" FORCE)
 foreach (hdr ${headers})
   APPEND_TO_CACHED_STRING(ign_headers
-    "Ignition math headers" "#include <ignition/math/${hdr}>\n")
+    "Ignition math C++ headers" "#include <ignition/math/${hdr}>\n")
+endforeach()
+
+set (ign_c_headers "" CACHE INTERNAL "Ignition math C headers" FORCE)
+foreach (hdr ${c_headers})
+  APPEND_TO_CACHED_STRING(ign_c_headers
+    "Ignition math C headers" "#include <ignition/math/${hdr}>\n")
 endforeach()
 
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/math.hh.in
                 ${CMAKE_CURRENT_BINARY_DIR}/math.hh)
 
-ign_install_includes("${INCLUDE_INSTALL_DIR_POSTFIX}/ignition" ${CMAKE_CURRENT_BINARY_DIR}/math.hh)
-ign_install_includes("${INCLUDE_INSTALL_DIR_POSTFIX}/ignition/${IGN_PROJECT_NAME}" ${headers})
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/math.h.in
+                ${CMAKE_CURRENT_BINARY_DIR}/math.h)
+
+ign_install_includes("${INCLUDE_INSTALL_DIR_POSTFIX}/ignition"
+                     ${CMAKE_CURRENT_BINARY_DIR}/math.hh
+                     ${CMAKE_CURRENT_BINARY_DIR}/math.h)
+
+ign_install_includes(
+  "${INCLUDE_INSTALL_DIR_POSTFIX}/ignition/${IGN_PROJECT_NAME}"
+  ${headers}
+  ${c_headers})

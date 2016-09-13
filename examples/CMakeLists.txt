@@ -6,5 +6,9 @@ find_package(ignition-math2 REQUIRED)
 add_executable(vector2_example vector2_example.cc)
 target_link_libraries(vector2_example ${IGNITION-MATH_LIBRARIES})
 
+message(STATUS "\n\n${IGNITION-MATHC_LIBRARIES}\n\n")
+add_executable(vector2c_example vector2c_example.c)
+target_link_libraries(vector2c_example ${IGNITION-MATHC_LIBRARIES})
+
 add_executable(triangle_example triangle_example.cc)
 target_link_libraries(triangle_example ${IGNITION-MATH_LIBRARIES})

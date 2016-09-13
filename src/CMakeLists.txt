@@ -19,6 +19,10 @@ set (sources
   Vector3Stats.cc
 )
 
+set (c_sources
+  vector2.cc
+)
+
 set (gtest_sources
   Angle_TEST.cc
   Box_TEST.cc
@@ -52,17 +56,24 @@ set (gtest_sources
 )
 
 ign_add_library(${PROJECT_LIBRARY_TARGET_NAME} ${sources})
+ign_add_library(${PROJECT_LIBRARY_TARGET_NAME}c ${c_sources})
 
 # When the minimum CMake required version will be >= 3.1 
 # we could use the target_compile_features() command 
 # to enable C++11 support in a platform-independent way. 
 if(NOT MSVC)
     target_compile_options(${PROJECT_LIBRARY_TARGET_NAME} PUBLIC "-std=c++11")
+    target_compile_options(${PROJECT_LIBRARY_TARGET_NAME}c PUBLIC "-std=c++11")
 endif()
 
 target_include_directories(${PROJECT_LIBRARY_TARGET_NAME}
   PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
          $<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR_FULL}>)
 
+target_include_directories(${PROJECT_LIBRARY_TARGET_NAME}c
+  PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+         $<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR_FULL}>)
+
 ign_build_tests(${gtest_sources})
 ign_install_library(${PROJECT_LIBRARY_TARGET_NAME} ${PROJECT_EXPORT_NAME})
+ign_install_library(${PROJECT_LIBRARY_TARGET_NAME}c ${PROJECT_EXPORT_NAME})
