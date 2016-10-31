@@ -2,6 +2,10 @@
 
 ### Ignition Math 3.x.x
 
+1. Added copy constructor, equality operators and assignment operators to
+    SphericalCoordinates class.
+    * [Pull request 130](https://bitbucket.org/ignitionrobotics/ign-math/pull-request/130)
+
 1. Added `operator=(const Quaternion<T> &_q)` to `Matrix3`.
     * [Pull request 111](https://bitbucket.org/ignitionrobotics/ign-math/pull-request/111)
 
