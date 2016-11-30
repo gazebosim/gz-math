@@ -3,8 +3,6 @@ include (${project_cmake_dir}/Utils.cmake)
 set (sources
   Angle.cc
   Box.cc
-  Frame.cc
-  FrameGraph.cc
   Frustum.cc
   Helpers.cc
   IndexException.cc
@@ -21,8 +19,6 @@ set (gtest_sources
   Angle_TEST.cc
   Box_TEST.cc
   Filter_TEST.cc
-  Frame_TEST.cc
-  FrameGraph_TEST.cc
   Frustum_TEST.cc
   Helpers_TEST.cc
   Kmeans_TEST.cc
@@ -44,6 +40,7 @@ set (gtest_sources
   Vector3_TEST.cc
   Vector3Stats_TEST.cc
   Vector4_TEST.cc
+  Vertex_TEST.cc
 )
 
 ign_add_library(${PROJECT_LIBRARY_TARGET_NAME} ${sources})

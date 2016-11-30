@@ -125,7 +125,6 @@ namespace ignition
       public: bool AddEdge(const std::string &_parent,
                            const std::string &_child);
 
-
       /// \brief Compute the transform from a start frame to an end frame.
       /// \param[in] _start Name of the start frame.
       /// \param[in] _end Name of the end frame.

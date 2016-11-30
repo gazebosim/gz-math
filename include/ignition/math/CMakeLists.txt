@@ -4,10 +4,10 @@ set (headers
   AffineException.hh
   Angle.hh
   Box.hh
+  Edge.hh
   Filter.hh
-  Frame.hh
-  FrameGraph.hh
   Frustum.hh
+  Graph.hh
   Helpers.hh
   IndexException.hh
   Kmeans.hh
@@ -29,6 +29,7 @@ set (headers
   Vector3.hh
   Vector3Stats.hh
   Vector4.hh
+  Vertex.hh
 )
 
 set (ign_headers "" CACHE INTERNAL "Ignition math headers" FORCE)

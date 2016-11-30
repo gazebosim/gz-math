@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Open Source Robotics Foundation
+ * Copyright (C) 2016 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,30 +22,24 @@ using namespace math;
 
 const Frame ignition::math::Frame::Nan("inf", Pose3d::Nan);
 
-namespace ignition
+/// \brief Private data for the Frame class
+class ignition::math::FramePrivate
 {
-  namespace math
-  {
-    /// \brief Private data for the Frame class
-    class FramePrivate
-    {
-      /// Constructor
-      public: FramePrivate() {}
+  /// Constructor
+  public: FramePrivate() {}
 
-      /// Constructor
-      /// \param[in] _name Name of the frame
-      /// \param[in] _pose Pose of the frame
-      public: FramePrivate(const std::string &_name, const Pose3d &_pose)
-              : pose(_pose), name(_name) {}
+  /// Constructor
+  /// \param[in] _name Name of the frame
+  /// \param[in] _pose Pose of the frame
+  public: FramePrivate(const std::string &_name, const Pose3d &_pose)
+          : pose(_pose), name(_name) {}
 
-      /// \brief Frame's pose
-      public: Pose3d pose = ignition::math::Pose3d::Zero;
+  /// \brief Frame's pose
+  public: Pose3d pose = ignition::math::Pose3d::Zero;
 
-      /// \brief Frame's name
-      public: std::string name = "";
-    };
-  }
-}
+  /// \brief Frame's name
+  public: std::string name = "";
+};
 
 /////////////////////////////////////////////////
 Frame::Frame()
