@@ -38,7 +38,7 @@ namespace ignition
       /// \brief Copy constructor
       /// \param[in] _edge Edge to copy
       public: Edge(const Edge<T> &_edge)
-              : dataPtr(new EdgePrivate<T>)
+              : Edge()
       {
         this->dataPtr->name = _node.Name();
         this->dataPtr->parent = _node.Parent();
@@ -113,7 +113,6 @@ namespace ignition
         this->dataPtr->child = _name;
       }
 
-
       /// \brief Private data for the Edge class
       private: template<typename U>
                class EdgePrivate
@@ -122,7 +121,7 @@ namespace ignition
         public: EdgePrivate() {}
 
         /// Constructor
-        /// \param[in] _name Name of the node
+        /// \param[in] _name Name of the edge
         /// \param[in] _data Data held by the node
         public: EdgePrivate(const std::string &_name, const U &_data)
                  : name(_name), data(_data) {}
