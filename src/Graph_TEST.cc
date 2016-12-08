@@ -16,95 +16,354 @@
 */
 
 #include <gtest/gtest.h>
-#include <ignition/math/Graph.hh>
+#include <algorithm>
+#include <iostream>
+
+#include "ignition/math/Graph.hh"
 
 using namespace ignition;
 using namespace math;
 
 /////////////////////////////////////////////////
-TEST(GraphTest, Constructor)
+TEST(GraphTest, VertexById)
 {
   Graph<int, double> graph;
-  if (graph.Empty())
-    std::cout << "Graph is empty\n" << std::endl;
 
   // Create some vertexes.
+  auto v0 = graph.AddVertex(0);
+  ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1);
-  auto v2 = graph.AddVertex(3);
-  auto v3 = graph.AddVertex(5);
+  ASSERT_TRUE(v1 != nullptr);
+  auto v2 = graph.AddVertex(2);
+  ASSERT_TRUE(v2 != nullptr);
 
-  // List of vertexes.
-  std::cout << "--Vertexes--" << std::endl;
+  auto v = graph.VertexById(v0->Id());
+  ASSERT_TRUE(v != nullptr);
+  EXPECT_EQ(v, v0);
+
+  // Id not found.
+  v = graph.VertexById(-1);
+  ASSERT_EQ(v, nullptr);
+}
+
+/////////////////////////////////////////////////
+TEST(GraphTest, Vertexes)
+{
+  Graph<int, double> graph;
+
+  // Create some vertexes.
+  auto v0 = graph.AddVertex(0);
+  ASSERT_TRUE(v0 != nullptr);
+  auto v1 = graph.AddVertex(1);
+  ASSERT_TRUE(v1 != nullptr);
+  auto v2 = graph.AddVertex(2);
+  ASSERT_TRUE(v2 != nullptr);
+
   auto vertexes = graph.Vertexes();
-  for (auto &v: vertexes)
-    std::cout << v->Data() << std::endl;
-  std::cout << std::endl;
+  EXPECT_EQ(vertexes.size(), 3u);
+  // Check that the pointers point to the same vertexes.
+  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v0), vertexes.end());
+  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v1), vertexes.end());
+  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v2), vertexes.end());
+}
 
-  // Create and edge from node #1 to node #2.
-  std::cout << "Edge #1:" << std::endl;
-  auto e1 = graph.AddEdge(v1, v2, 2.0);
-  if (e1)
-  {
-    std::cout << "  From: " << e1->Source()->Data() << std::endl;
-    std::cout << "  To: " << e1->Destination()->Data() << std::endl;
-    std::cout << "  Data: " << e1->Data() << std::endl << std::endl;
-  }
+/////////////////////////////////////////////////
+TEST(GraphTest, Edges)
+{
+  Graph<int, double> graph;
 
-  // Create and edge from node #2 to node #3.
-  std::cout << "Edge #2:" << std::endl;
-  auto e2 = graph.AddEdge(v2, v3, 3.0);
-  if (e2)
-  {
-    std::cout << "  From: " << e2->Source()->Data() << std::endl;
-    std::cout << "  To: " << e2->Destination()->Data() << std::endl;
-    std::cout << "  Data: " << e2->Data() << std::endl << std::endl;
-  }
+  // Create some vertexes.
+  auto v0 = graph.AddVertex(0);
+  ASSERT_TRUE(v0 != nullptr);
+  auto v1 = graph.AddVertex(1);
+  ASSERT_TRUE(v1 != nullptr);
+  auto v2 = graph.AddVertex(2);
+  ASSERT_TRUE(v2 != nullptr);
 
-  // Create and invalid edge.
-  auto eInvalid = graph.AddEdge(v2, nullptr, 4.0);
-  if (!eInvalid)
-    std::cerr << "Invalid edge" << std::endl << std::endl;
+  // Create some edges [(v0-->v1), (v1-->v2). (v2-->v0)]
+  auto e0 = graph.AddEdge(v0, v1, 2.0);
+  ASSERT_TRUE(e0 != nullptr);
+  auto e1 = graph.AddEdge(v1, v2, 3.0);
+  ASSERT_TRUE(e1 != nullptr);
+  auto e2 = graph.AddEdge(v2, v0, 4.0);
+  ASSERT_TRUE(e2 != nullptr);
 
-  // List of edges.
-  std::cout << "--Edges--" << std::endl;
   auto edges = graph.Edges();
-  for (auto &e: edges)
-  {
-    std::cout << "  From: " << e->Source()->Data() << std::endl;
-    std::cout << "  To: " << e->Destination()->Data() << std::endl;
-    std::cout << "  Data: " << e->Data() << std::endl << std::endl;
-  }
+  EXPECT_EQ(edges.size(), 3u);
+  // Check that the pointers point to the same edges.
+  EXPECT_NE(std::find(edges.begin(), edges.end(), e0), edges.end());
+  EXPECT_NE(std::find(edges.begin(), edges.end(), e1), edges.end());
+  EXPECT_NE(std::find(edges.begin(), edges.end(), e2), edges.end());
+}
 
-  if (!graph.Empty())
-    std::cout << "Graph not empty" << std::endl << std::endl;
+/////////////////////////////////////////////////
+TEST(GraphTest, Empty)
+{
+  Graph<int, double> graph;
 
-  std::cout << "-- Adjacents to node #1 --" << std::endl;
-  auto adjacentsV1 = graph.Adjacents(v1);
-  for (auto &v: adjacentsV1)
-    std::cout << v->Data() << std::endl;
-  std::cout << std::endl;
+  EXPECT_TRUE(graph.Empty());
 
-  std::cout << "-- Incidents to node #3 --" << std::endl;
-  auto incidentsV3 = graph.Incidents(v3);
-  for (auto &e: incidentsV3)
-  {
-    std::cout << "  From: " << e->Source()->Data() << std::endl;
-    std::cout << "  To: " << e->Destination()->Data() << std::endl;
-    std::cout << "  Data: " << e->Data() << std::endl << std::endl;
-  }
-  std::cout << std::endl;
+  // Create a vertex.
+  auto v0 = graph.AddVertex(0);
+  ASSERT_TRUE(v0 != nullptr);
 
-  std::cout << graph << std::endl;
+  EXPECT_FALSE(graph.Empty());
+}
 
-  std::cout << "-- Removing edge from node #1 to node #2 --" << std::endl;
-  std::cout << std::endl;
+/////////////////////////////////////////////////
+TEST(GraphTest, Adjacents)
+{
+  Graph<int, double> graph;
+
+  // Create some vertexes.
+  auto v0 = graph.AddVertex(0);
+  ASSERT_TRUE(v0 != nullptr);
+  auto v1 = graph.AddVertex(1);
+  ASSERT_TRUE(v1 != nullptr);
+  auto v2 = graph.AddVertex(2);
+  ASSERT_TRUE(v2 != nullptr);
+
+  // Create some edges [(v0-->v1), (v1-->v2). (v2-->v0)]
+  auto e0 = graph.AddEdge(v0, v1, 2.0);
+  ASSERT_TRUE(e0 != nullptr);
+  auto e1 = graph.AddEdge(v1, v2, 3.0);
+  ASSERT_TRUE(e1 != nullptr);
+  auto e2 = graph.AddEdge(v2, v0, 4.0);
+  ASSERT_TRUE(e2 != nullptr);
+
+  auto adjacents = graph.Adjacents(v0);
+  EXPECT_EQ(adjacents.size(), 1u);
+  EXPECT_NE(std::find(adjacents.begin(), adjacents.end(), v1), adjacents.end());
+}
+
+/////////////////////////////////////////////////
+TEST(GraphTest, Incidents)
+{
+  Graph<int, double> graph;
+
+  // Create some vertexes.
+  auto v0 = graph.AddVertex(0);
+  ASSERT_TRUE(v0 != nullptr);
+  auto v1 = graph.AddVertex(1);
+  ASSERT_TRUE(v1 != nullptr);
+  auto v2 = graph.AddVertex(2);
+  ASSERT_TRUE(v2 != nullptr);
+
+  // Create some edges [(v0-->v1), (v1-->v2). (v2-->v0)]
+  auto e0 = graph.AddEdge(v0, v1, 2.0);
+  ASSERT_TRUE(e0 != nullptr);
+  auto e1 = graph.AddEdge(v1, v2, 3.0);
+  ASSERT_TRUE(e1 != nullptr);
+  auto e2 = graph.AddEdge(v2, v0, 4.0);
+  ASSERT_TRUE(e2 != nullptr);
+
+  auto incidents = graph.Incidents(v0);
+  EXPECT_EQ(incidents.size(), 1u);
+  EXPECT_NE(std::find(incidents.begin(), incidents.end(), e2), incidents.end());
+}
+
+/////////////////////////////////////////////////
+TEST(GraphTest, AddVertex)
+{
+  Graph<int, double> graph;
+
+  // Create some vertexes without Id.
+  auto v0 = graph.AddVertex(0);
+  ASSERT_TRUE(v0 != nullptr);
+  auto v1 = graph.AddVertex(1);
+  ASSERT_TRUE(v1 != nullptr);
+  auto v2 = graph.AddVertex(2);
+  ASSERT_TRUE(v2 != nullptr);
+
+  // Create a vertex with Id.
+  auto v3 = graph.AddVertex(5, 3);
+  ASSERT_TRUE(v3 != nullptr);
+  EXPECT_EQ(v3->Id(), 3);
+  EXPECT_EQ(v3->Data(), 5);
+
+  // Create a vertex with an already used Id.
+  auto v4 = graph.AddVertex(0, 3);
+  ASSERT_TRUE(v4 == nullptr);
+
+  auto vertexes = graph.Vertexes();
+  EXPECT_EQ(vertexes.size(), 4u);
+}
+
+/////////////////////////////////////////////////
+TEST(GraphTest, AddEdge)
+{
+  Graph<int, double> graph;
+
+  // Create some vertexes without Id.
+  auto v0 = graph.AddVertex(0);
+  ASSERT_TRUE(v0 != nullptr);
+  auto v1 = graph.AddVertex(1);
+  ASSERT_TRUE(v1 != nullptr);
+  auto v2 = graph.AddVertex(2);
+  ASSERT_TRUE(v2 != nullptr);
+
+  // Create some edges [(v0-->v1), (v1-->v2). (v2-->v0)]
+  auto e0 = graph.AddEdge(v0, v1, 2.0);
+  ASSERT_TRUE(e0 != nullptr);
+  auto e1 = graph.AddEdge(v1, v2, 3.0);
+  ASSERT_TRUE(e1 != nullptr);
+  auto e2 = graph.AddEdge(v2, v0, 4.0);
+  ASSERT_TRUE(e2 != nullptr);
+
+  // Check the edge content.
+  EXPECT_EQ(e0->Data(), 2.0);
+  EXPECT_EQ(e1->Data(), 3.0);
+  EXPECT_EQ(e2->Data(), 4.0);
+
+  // Check that the edges point to the right vertexes.
+  EXPECT_EQ(e0->Tail(), v0);
+  EXPECT_EQ(e0->Head(), v1);
+
+  auto edges = graph.Edges();
+  EXPECT_EQ(edges.size(), 3u);
+
+  // Try to add an edge with an incorrect tail.
+  auto edge = graph.AddEdge(nullptr, v1, 2.0);
+  EXPECT_EQ(edge, nullptr);
+  EXPECT_EQ(edges.size(), 3u);
+
+  // Try to add an edge with an incorrect head.
+  edge = graph.AddEdge(v0, nullptr, 2.0);
+  EXPECT_EQ(edge, nullptr);
+  EXPECT_EQ(edges.size(), 3u);
+}
+
+/////////////////////////////////////////////////
+TEST(GraphTest, RemoveEdge)
+{
+  Graph<int, double> graph;
+
+  // Create some vertexes without Id.
+  auto v0 = graph.AddVertex(0);
+  ASSERT_TRUE(v0 != nullptr);
+  auto v1 = graph.AddVertex(1);
+  ASSERT_TRUE(v1 != nullptr);
+  auto v2 = graph.AddVertex(2);
+  ASSERT_TRUE(v2 != nullptr);
+
+  // Create some edges [(v0-->v1), (v1-->v2). (v2-->v0)]
+  auto e0 = graph.AddEdge(v0, v1, 2.0);
+  ASSERT_TRUE(e0 != nullptr);
+  auto e1 = graph.AddEdge(v1, v2, 3.0);
+  ASSERT_TRUE(e1 != nullptr);
+  auto e2 = graph.AddEdge(v2, v0, 4.0);
+  ASSERT_TRUE(e2 != nullptr);
+
+  EXPECT_EQ(graph.Edges().size(), 3u);
+
+  // Remove using nullptr shouldn't cause any effect.
+  EdgePtr<int, double> edge;
+  graph.RemoveEdge(edge);
+  EXPECT_EQ(graph.Edges().size(), 3u);
+
+  EXPECT_EQ(graph.Incidents(v1).size(), 1);
+
+  EXPECT_NE(e0->Head(), nullptr);
+  EXPECT_NE(e0->Tail(), nullptr);
+
+  graph.RemoveEdge(e0);
+  EXPECT_EQ(graph.Edges().size(), 2u);
+  // After disconnecting e0, it shoudln't be possible to reach the vertexes.
+  EXPECT_EQ(e0->Head(), nullptr);
+  EXPECT_EQ(e0->Tail(), nullptr);
+
+  EXPECT_EQ(graph.Incidents(v1).size(), 0);
+
   graph.RemoveEdge(e1);
+  EXPECT_EQ(graph.Edges().size(), 1u);
 
-  std::cout << graph << std::endl;
+  // Try to remove an edge that doesn't exist.
+  graph.RemoveEdge(e1);
+  EXPECT_EQ(graph.Edges().size(), 1u);
 
-  std::cout << "-- Removing vertex #3 --" << std::endl;
-  std::cout << std::endl;
-  graph.RemoveVertex(v3);
+  graph.RemoveEdge(e2);
+  EXPECT_EQ(graph.Edges().size(), 0u);
+}
 
-  std::cout << graph << std::endl;
+/////////////////////////////////////////////////
+TEST(GraphTest, RemoveVertex)
+{
+  Graph<int, double> graph;
+
+  // Create some vertexes without Id.
+  auto v0 = graph.AddVertex(0);
+  ASSERT_TRUE(v0 != nullptr);
+  auto v1 = graph.AddVertex(1);
+  ASSERT_TRUE(v1 != nullptr);
+  auto v2 = graph.AddVertex(2);
+  ASSERT_TRUE(v2 != nullptr);
+
+  // Create some edges [(v0-->v1), (v1-->v2). (v2-->v0)]
+  auto e0 = graph.AddEdge(v0, v1, 2.0);
+  ASSERT_TRUE(e0 != nullptr);
+  auto e1 = graph.AddEdge(v1, v2, 3.0);
+  ASSERT_TRUE(e1 != nullptr);
+  auto e2 = graph.AddEdge(v2, v0, 4.0);
+  ASSERT_TRUE(e2 != nullptr);
+
+  EXPECT_EQ(graph.Edges().size(), 3u);
+
+  // Remove using nullptr shouldn't cause any effect.
+  VertexPtr<int> vertex;
+  graph.RemoveVertex(vertex);
+  EXPECT_EQ(graph.Vertexes().size(), 3u);
+
+  EXPECT_EQ(graph.Adjacents(v1).size(), 1);
+
+  graph.RemoveVertex(v2);
+  EXPECT_EQ(graph.Vertexes().size(), 2u);
+  EXPECT_EQ(graph.Edges().size(), 1u);
+
+  EXPECT_EQ(graph.Adjacents(v1).size(), 0);
+
+  graph.RemoveVertex(v1);
+  EXPECT_EQ(graph.Vertexes().size(), 1u);
+  EXPECT_TRUE(graph.Edges().empty());
+
+  graph.RemoveVertex(v0);
+  EXPECT_TRUE(graph.Vertexes().empty());
+
+  EXPECT_TRUE(graph.Empty());
+}
+
+/////////////////////////////////////////////////
+TEST(GraphTest, StreamInsertion)
+{
+  Graph<int, double> graph;
+
+  // Create some vertexes without Id.
+  auto v0 = graph.AddVertex(0);
+  ASSERT_TRUE(v0 != nullptr);
+  auto v1 = graph.AddVertex(1);
+  ASSERT_TRUE(v1 != nullptr);
+  auto v2 = graph.AddVertex(2);
+  ASSERT_TRUE(v2 != nullptr);
+
+  // Create some edges [(v0-->v1), (v1-->v2). (v2-->v0)]
+  auto e0 = graph.AddEdge(v0, v1, 2.0);
+  ASSERT_TRUE(e0 != nullptr);
+  auto e1 = graph.AddEdge(v1, v2, 3.0);
+  ASSERT_TRUE(e1 != nullptr);
+  auto e2 = graph.AddEdge(v2, v0, 4.0);
+  ASSERT_TRUE(e2 != nullptr);
+
+  EXPECT_EQ(graph.Edges().size(), 3u);
+
+  std::ostringstream output;
+  output << graph;
+  std::string expectedOutput =
+    "Vertexes\n"
+    "  [0]\n"
+    "  [1]\n"
+    "  [2]\n"
+    "Edges\n"
+    "  [0-->1]\n"
+    "  [1-->2]\n"
+    "  [2-->0]\n";
+  EXPECT_EQ(output.str(), expectedOutput);
 }

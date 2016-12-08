@@ -18,6 +18,7 @@
 #define IGNITION_MATH_GRAPH_HH_
 
 #include <algorithm>
+#include <cstdint>
 #include <map>
 #include <memory>
 #include <set>
@@ -36,7 +37,8 @@ namespace ignition
       /// \brief Constructor.
       /// \param[in] _data User information.
       /// \param[in] _id Unique id.
-      public: Vertex(const V &_data, const long _id)
+      public: Vertex(const V &_data,
+                     const int64_t _id)
         : data(_data),
           id(_id)
       {
@@ -51,7 +53,7 @@ namespace ignition
 
       /// \brief Get the vertex Id.
       /// \return The vertex Id.
-      public: long Id() const
+      public: int64_t Id() const
       {
         return this->id;
       }
@@ -60,7 +62,7 @@ namespace ignition
       private: V data;
 
       /// \brief Unique vertex Id.
-      private: long id;
+      private: int64_t id;
     };
 
     /// \def VertexPtr
@@ -82,36 +84,36 @@ namespace ignition
     class Edge
     {
       /// \brief Constructor.
-      /// \param[in] _src Shared pointer to the source vertex.
-      /// \param[in] _dst Shared pointer to the destination vertex.
+      /// \param[in] _tail Shared pointer to the tail vertex.
+      /// \param[in] _head Shared pointer to the head vertex.
       /// \param[in] _data User data to be stored in the edge.
-      public: Edge(const VertexPtr<V> _src,
-                   const VertexPtr<V> _dst,
+      public: Edge(const VertexPtr<V> _tail,
+                   const VertexPtr<V> _head,
                    const E &_data)
-        : src(_src),
-          dst(_dst),
+        : tail(_tail),
+          head(_head),
           data(_data)
       {
       }
 
-      /// \brief Get a shared pointer to the source's vertex in this edge.
-      /// \return A shared pointer to the source's vertex in this edge.
-      public: VertexPtr<V> Source() const
+      /// \brief Get a shared pointer to the tail's vertex in this edge.
+      /// \return A shared pointer to the tail's vertex in this edge.
+      public: VertexPtr<V> Tail() const
       {
         if (!this->valid)
           return nullptr;
 
-        return this->src;
+        return this->tail;
       }
 
       /// \brief Get a shared pointer to the destination's vertex in this edge.
       /// \return A shared pointer to the destination's vertex in this edge.
-      public: VertexPtr<V> Destination() const
+      public: VertexPtr<V> Head() const
       {
         if (!this->valid)
           return nullptr;
 
-        return this->dst;
+        return this->head;
       }
 
       /// \brief Get the user data stored in the edge.
@@ -121,11 +123,11 @@ namespace ignition
         return this->data;
       }
 
-      /// \brief Shared pointer to the source's vertex.
-      private: VertexPtr<V> src;
+      /// \brief Shared pointer to the tail's vertex.
+      private: VertexPtr<V> tail;
 
-      /// \brief Shared pointer to the destination's vertex.
-      private: VertexPtr<V> dst;
+      /// \brief Shared pointer to the head's vertex.
+      private: VertexPtr<V> head;
 
       /// \brief User data.
       private: E data;
@@ -170,7 +172,7 @@ namespace ignition
 
       /// \brief Get a pointer to a vertex using its Id.
       /// \return A shared pointer to the vertex with Id = _id .
-      public: VertexPtr<V> VertexById(const long _id)
+      public: VertexPtr<V> VertexById(const int64_t _id)
       {
         if (this->ids.find(_id) == this->ids.end())
           return nullptr;
@@ -224,14 +226,14 @@ namespace ignition
         {
           auto edges = (*itVertex).second;
           for (auto edgePtr : edges)
-            res.push_back(edgePtr->Destination());
+            res.push_back(edgePtr->Head());
         }
 
         return res;
       }
 
-      /// \brief Get the set of outgoing edges from a given node.
-      /// \return The set of outgoing edges from a given node.
+      /// \brief Get the set of incoming edges to a given node.
+      /// \return The set of incoming edges to a given node.
       public: EdgePtr_S<V, E> Incidents(const VertexPtr<V> _vertex)
       {
         EdgePtr_S<V, E> res;
@@ -241,7 +243,7 @@ namespace ignition
           auto edges = pair.second;
           for (auto e : edges)
           {
-            if (e->Destination() == _vertex)
+            if (e->Head() == _vertex)
               res.insert(e);
           }
         }
@@ -257,7 +259,7 @@ namespace ignition
       /// \return Shared pointer to the new vertex created or nullptr if the
       /// Id specified was already used.
       public: VertexPtr<V> AddVertex(const V &_data,
-                                     const long _id = -1)
+                                     const int64_t _id = -1)
       {
         auto id = _id;
         // The user didn't provide an Id, we generate it.
@@ -278,37 +280,37 @@ namespace ignition
       }
 
       /// \brief Add a new edge to the graph.
-      /// \param[in] _src Pointer to the source's vertex.
-      /// \param[in] _dst Pointer to the destination''s vertex.
+      /// \param[in] _tail Pointer to the tail's vertex.
+      /// \param[in] _head Pointer to the head''s vertex.
       /// \param[in] _data User data stored in the edge.
-      public: EdgePtr<V, E> AddEdge(const VertexPtr<V> &_src,
-                                    const VertexPtr<V> &_dst,
+      public: EdgePtr<V, E> AddEdge(const VertexPtr<V> &_tail,
+                                    const VertexPtr<V> &_head,
                                     const E &_data)
       {
         // Find the origin vertex.
-        auto itSrc = std::find_if(this->data.begin(), this->data.end(),
-                       [&_src](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
+        auto itTail = std::find_if(this->data.begin(), this->data.end(),
+                       [&_tail](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
                        {
-                         return _pair.first == _src;
+                         return _pair.first == _tail;
                        });
 
-        if (itSrc == this->data.end())
+        if (itTail == this->data.end())
           return nullptr;
 
         // Make sure that the destination vertex also exists.
-        auto itDst = std::find_if(this->data.begin(), this->data.end(),
-                       [&_dst](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
-                       {
-                         return _pair.first == _dst;
-                       });
-        if (itDst == this->data.end())
+        auto itHead = std::find_if(this->data.begin(), this->data.end(),
+                      [&_head](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
+                      {
+                        return _pair.first == _head;
+                      });
+        if (itHead == this->data.end())
           return nullptr;
 
         // Create the edge.
-        auto edge = std::make_shared<Edge<V, E>>(_src, _dst, _data);
+        auto edge = std::make_shared<Edge<V, E>>(_tail, _head, _data);
 
         // Link the new edge.
-        (*itSrc).second.insert(edge);
+        (*itTail).second.insert(edge);
 
         // Mark the edge as valid.
         edge->valid = true;
@@ -318,11 +320,14 @@ namespace ignition
 
       /// \brief Remove an existing edge from the graph. After the removal, it
       /// won't be possible to reach any of the vertexes from the edge. Any
-      /// call to Source() or Destination() will return nullptr.
+      /// call to Tail() or Head() will return nullptr.
       /// \param[in] _edge Pointer to the edge to be removed.
       public: void RemoveEdge(EdgePtr<V, E> &_edge)
       {
-        auto vertex = _edge->Source();
+        if (!_edge)
+          return;
+
+        auto vertex = _edge->Tail();
         auto itPair = std::find_if(this->data.begin(), this->data.end(),
                [&vertex](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
                {
@@ -343,6 +348,9 @@ namespace ignition
       /// \param[in] _vertex Pointer to the vertex to be removed.
       public: void RemoveVertex(VertexPtr<V> &_vertex)
       {
+        if (!_vertex)
+          return;
+
         // Save the Id.
         auto id = _vertex->Id();
 
@@ -369,22 +377,22 @@ namespace ignition
       public: friend std::ostream &operator<<(std::ostream &_out,
                                               const Graph<V, E> &_g)
       {
-        _out << "Vertices" << std::endl;
+        _out << "Vertexes" << std::endl;
         for (auto const &v : _g.Vertexes())
           _out << "  [" << v->Id() << "]" << std::endl;
 
         _out << "Edges" << std::endl;
         for (auto const &e : _g.Edges())
         {
-          _out << "  [" << e->Source()->Id() << "--"
-               << e->Destination()->Id() << "]" << std::endl;
+          _out << "  [" << e->Tail()->Id() << "-->"
+               << e->Head()->Id() << "]" << std::endl;
         }
         return _out;
       }
 
       /// \brief Get an available Id to be assigned to a new vertex.
       /// \return The next available Id.
-      private: long NextId()
+      private: int64_t NextId()
       {
         while (this->ids.find(this->nextId) != this->ids.end())
           ++this->nextId;
@@ -393,13 +401,13 @@ namespace ignition
       }
 
       /// The graph is represented using an adjacency list.
-      private: std::vector<std::pair<VertexPtr<V>, EdgePtr_S<V, E>>> data;
+      protected: std::vector<std::pair<VertexPtr<V>, EdgePtr_S<V, E>>> data;
 
       /// \brief List of ids curently used.
-      private: std::map<long, VertexPtr<V>> ids;
+      protected: std::map<int64_t, VertexPtr<V>> ids;
 
       /// \brief The next vertex Id to be assigned to a new vertex.
-      private: long nextId = 0;
+      private: int64_t nextId = 0;
     };
   }
 }
