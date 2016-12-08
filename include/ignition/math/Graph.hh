@@ -166,9 +166,7 @@ namespace ignition
     class Graph
     {
       /// \brief Default constructor.
-      public: Graph()
-      {
-      }
+      public: Graph() = default;
 
       /// \brief Get a pointer to a vertex using its Id.
       /// \return A shared pointer to the vertex with Id = _id .
