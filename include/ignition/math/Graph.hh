@@ -106,8 +106,8 @@ namespace ignition
         return this->tail;
       }
 
-      /// \brief Get a shared pointer to the destination's vertex in this edge.
-      /// \return A shared pointer to the destination's vertex in this edge.
+      /// \brief Get a shared pointer to the head's vertex in this edge.
+      /// \return A shared pointer to the head's vertex in this edge.
       public: VertexPtr<V> Head() const
       {
         if (!this->valid)
@@ -285,7 +285,7 @@ namespace ignition
                                     const VertexPtr<V> &_head,
                                     const E &_data)
       {
-        // Find the origin vertex.
+        // Find the tail vertex.
         auto itTail = std::find_if(this->data.begin(), this->data.end(),
                        [&_tail](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
                        {
@@ -295,7 +295,7 @@ namespace ignition
         if (itTail == this->data.end())
           return nullptr;
 
-        // Make sure that the destination vertex also exists.
+        // Make sure that the head vertex also exists.
         auto itHead = std::find_if(this->data.begin(), this->data.end(),
                       [&_head](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
                       {
