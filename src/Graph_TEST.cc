@@ -97,6 +97,40 @@ TEST(GraphTest, Edges)
 }
 
 /////////////////////////////////////////////////
+TEST(GraphTest, EdgesWithIDs)
+{
+  Graph<int, double> graph;
+
+  // Create some vertexes.
+  auto v0 = graph.AddVertex(0);
+  ASSERT_TRUE(v0 != nullptr);
+  auto v1 = graph.AddVertex(1);
+  ASSERT_TRUE(v1 != nullptr);
+  auto v2 = graph.AddVertex(2);
+  ASSERT_TRUE(v2 != nullptr);
+
+  // Create some edges [(v0-->v1), (v1-->v2). (v2-->v0)]
+  auto e0 = graph.AddEdge(0, 1, 2.0);
+  ASSERT_TRUE(e0 != nullptr);
+  auto e1 = graph.AddEdge(1, 2, 3.0);
+  ASSERT_TRUE(e1 != nullptr);
+  auto e2 = graph.AddEdge(2, 0, 4.0);
+  ASSERT_TRUE(e2 != nullptr);
+
+  // Try to add a repeated edge.
+  auto invalid = graph.AddEdge(2, 0, 5.0);
+  ASSERT_TRUE(invalid == nullptr);
+
+  auto edges = graph.Edges();
+  EXPECT_EQ(edges.size(), 3u);
+
+  // Check that the pointers point to the same edges.
+  EXPECT_NE(std::find(edges.begin(), edges.end(), e0), edges.end());
+  EXPECT_NE(std::find(edges.begin(), edges.end(), e1), edges.end());
+  EXPECT_NE(std::find(edges.begin(), edges.end(), e2), edges.end());
+}
+
+/////////////////////////////////////////////////
 TEST(GraphTest, Empty)
 {
   Graph<int, double> graph;

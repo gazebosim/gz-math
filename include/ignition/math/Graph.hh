@@ -21,6 +21,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <ostream>
 #include <set>
 #include <utility>
 #include <vector>
@@ -222,7 +223,7 @@ namespace ignition
                });
         if (itVertex != this->data.end())
         {
-          auto edges = (*itVertex).second;
+          auto edges = itVertex->second;
           for (auto edgePtr : edges)
             res.push_back(edgePtr->Head());
         }
@@ -279,7 +280,7 @@ namespace ignition
 
       /// \brief Add a new edge to the graph.
       /// \param[in] _tail Pointer to the tail's vertex.
-      /// \param[in] _head Pointer to the head''s vertex.
+      /// \param[in] _head Pointer to the head's vertex.
       /// \param[in] _data User data stored in the edge.
       public: EdgePtr<V, E> AddEdge(const VertexPtr<V> &_tail,
                                     const VertexPtr<V> &_head,
@@ -304,16 +305,47 @@ namespace ignition
         if (itHead == this->data.end())
           return nullptr;
 
+        // Check that the edge is not repeated.
+        EdgePtr_S<V, E> &edges = itTail->second;
+        auto edgeFound = std::find_if(edges.begin(), edges.end(),
+                       [&_head](EdgePtr<V, E> _edge)
+                       {
+                         return _edge->Head() == _head;
+                       });
+        if (edgeFound != edges.end())
+          return nullptr;
+
         // Create the edge.
         auto edge = std::make_shared<Edge<V, E>>(_tail, _head, _data);
 
         // Link the new edge.
-        (*itTail).second.insert(edge);
+        itTail->second.insert(edge);
 
         // Mark the edge as valid.
         edge->valid = true;
 
         return edge;
+      }
+
+      /// \brief Add a new edge to the graph.
+      /// \param[in] _tailId ID of the tail's vertex.
+      /// \param[in] _headId ID of the head's vertex.
+      /// \param[in] _data User data stored in the edge.
+      public: EdgePtr<V, E> AddEdge(const int64_t _tailId,
+                                    const int64_t _headId,
+                                    const E &_data)
+      {
+        // Find the tail vertex.
+        auto tailPtr = VertexById(_tailId);
+        if (!tailPtr)
+          return nullptr;
+
+        // Make sure that the head vertex also exists.
+        auto headPtr = VertexById(_headId);
+        if (!headPtr)
+          return nullptr;
+
+        return this->AddEdge(tailPtr, headPtr, _data);
       }
 
       /// \brief Remove an existing edge from the graph. After the removal, it
@@ -334,7 +366,7 @@ namespace ignition
         if (itPair == this->data.end())
           return;
 
-        std::set<EdgePtr<V, E>> &edges = (*itPair).second;
+        EdgePtr_S<V, E> &edges = itPair->second;
         edges.erase(_edge);
 
         // Mark the edge as invalid. This will prevent to reach any vertexes if
