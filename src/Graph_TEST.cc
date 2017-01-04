@@ -168,6 +168,10 @@ TEST(GraphTest, Adjacents)
   auto adjacents = graph.Adjacents(v0);
   EXPECT_EQ(adjacents.size(), 1u);
   EXPECT_NE(std::find(adjacents.begin(), adjacents.end(), v1), adjacents.end());
+
+  adjacents = graph.Adjacents(0);
+  EXPECT_EQ(adjacents.size(), 1u);
+  EXPECT_NE(std::find(adjacents.begin(), adjacents.end(), v1), adjacents.end());
 }
 
 /////////////////////////////////////////////////
@@ -192,6 +196,10 @@ TEST(GraphTest, Incidents)
   ASSERT_TRUE(e2 != nullptr);
 
   auto incidents = graph.Incidents(v0);
+  EXPECT_EQ(incidents.size(), 1u);
+  EXPECT_NE(std::find(incidents.begin(), incidents.end(), e2), incidents.end());
+
+  incidents = graph.Incidents(0);
   EXPECT_EQ(incidents.size(), 1u);
   EXPECT_NE(std::find(incidents.begin(), incidents.end(), e2), incidents.end());
 }
@@ -349,7 +357,7 @@ TEST(GraphTest, RemoveVertex)
 
   EXPECT_EQ(graph.Adjacents(v1).size(), 1);
 
-  graph.RemoveVertex(v2);
+  graph.RemoveVertex(2);
   EXPECT_EQ(graph.Vertexes().size(), 2u);
   EXPECT_EQ(graph.Edges().size(), 1u);
 

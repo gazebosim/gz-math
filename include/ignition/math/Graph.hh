@@ -21,7 +21,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
-#include <ostream>
+#include <iostream>
 #include <set>
 #include <utility>
 #include <vector>
@@ -231,8 +231,19 @@ namespace ignition
         return res;
       }
 
-      /// \brief Get the set of incoming edges to a given node.
-      /// \return The set of incoming edges to a given node.
+      /// \brief Get all neighbors vertexes that are directly connected to
+      /// a given vertex.
+      /// \param[in] _id The vertex ID to check adjacent vertexes.
+      /// \return A vector of vertexes that are adjacents and directly connected
+      /// with an edge.
+      public: VertexPtr_V<V> Adjacents(const int64_t _id)
+      {
+        return this->Adjacents(this->VertexById(_id));
+      }
+
+      /// \brief Get the set of incoming edges to a given vertex.
+      /// \param[in] _vertex Pointer to the vertex.
+      /// \return The set of incoming edges to a given vertex.
       public: EdgePtr_S<V, E> Incidents(const VertexPtr<V> _vertex)
       {
         EdgePtr_S<V, E> res;
@@ -248,6 +259,14 @@ namespace ignition
         }
 
         return res;
+      }
+
+      /// \brief Get the set of incoming edges to a given node.
+      /// \param[in] _id The ID of the vertex
+      /// \return The set of incoming edges to a given node.
+      public: EdgePtr_S<V, E> Incidents(const int64_t _id)
+      {
+        return this->Incidents(this->VertexById(_id));
       }
 
       /// \brief Add a new vertex to the graph.
@@ -399,6 +418,15 @@ namespace ignition
 
         // Remove also the id from the map of Ids.
         this->ids.erase(id);
+      }
+
+      /// \brief Remove an existing vertex from the graph.
+      /// \param[in] _id ID of the vertex to be removed.
+      public: void RemoveVertex(const int64_t _id)
+      {
+        auto vPtr = this->VertexById(_id);
+        if (vPtr)
+          this->RemoveVertex(vPtr);
       }
 
       /// \brief Stream insertion operator.
