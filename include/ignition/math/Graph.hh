@@ -354,17 +354,8 @@ namespace ignition
                                     const int64_t _headId,
                                     const E &_data)
       {
-        // Find the tail vertex.
-        auto tailPtr = VertexById(_tailId);
-        if (!tailPtr)
-          return nullptr;
-
-        // Make sure that the head vertex also exists.
-        auto headPtr = VertexById(_headId);
-        if (!headPtr)
-          return nullptr;
-
-        return this->AddEdge(tailPtr, headPtr, _data);
+        return this->AddEdge(this->VertexById(_tailId),
+          this->VertexById(_headId), _data);
       }
 
       /// \brief Remove an existing edge from the graph. After the removal, it
