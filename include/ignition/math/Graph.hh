@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Open Source Robotics Foundation
+ * Copyright (C) 2017 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -170,7 +170,9 @@ namespace ignition
       public: Graph() = default;
 
       /// \brief Get a pointer to a vertex using its Id.
-      /// \return A shared pointer to the vertex with Id = _id .
+      /// \param[in] _id The ID of the vertex.
+      /// \return A shared pointer to the vertex with Id = _id or nullptr if
+      /// not found.
       public: VertexPtr<V> VertexById(const int64_t _id)
       {
         if (this->ids.find(_id) == this->ids.end())
@@ -262,7 +264,7 @@ namespace ignition
       }
 
       /// \brief Get the set of incoming edges to a given node.
-      /// \param[in] _id The ID of the vertex
+      /// \param[in] _id The ID of the vertex.
       /// \return The set of incoming edges to a given node.
       public: EdgePtr_S<V, E> Incidents(const int64_t _id)
       {
@@ -350,6 +352,7 @@ namespace ignition
       /// \param[in] _tailId ID of the tail's vertex.
       /// \param[in] _headId ID of the head's vertex.
       /// \param[in] _data User data stored in the edge.
+      /// \return Shared pointer to the new edge.
       public: EdgePtr<V, E> AddEdge(const int64_t _tailId,
                                     const int64_t _headId,
                                     const E &_data)
