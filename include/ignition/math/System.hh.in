@@ -17,6 +17,10 @@
 #ifndef IGNITION_MATH_SYSTEM_HH_
 #define IGNITION_MATH_SYSTEM_HH_
 
+#define IGNMATH_INLINE_NAMESPACE_BEGIN inline namespace @IGNMATH_INLINE_NAMESPACE@ {
+#define IGNMATH_INLINE_NAMESPACE_END }
+#define USING_IGNMATH_INLINE_NAMESPACE using namespace @IGNMATH_INLINE_NAMESPACE@;
+
 #if defined(__GNUC__)
 #define IGN_DEPRECATED(version) __attribute__((deprecated))
 #define IGN_FORCEINLINE __attribute__((always_inline))

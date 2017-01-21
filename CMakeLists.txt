@@ -7,6 +7,9 @@ string (SUBSTRING ${PROJECT_NAME} 9 4 IGN_PROJECT_NAME)
 string (SUBSTRING ${PROJECT_NAME} 13 -1 PROJECT_MAJOR_VERSION)
 set (PROJECT_MINOR_VERSION 0)
 set (PROJECT_PATCH_VERSION 0)
+set (PROJECT_ABI_VERSION ${PROJECT_MAJOR_VERSION})
+
+set(IGNMATH_INLINE_NAMESPACE "v${PROJECT_ABI_VERSION}")
 
 set(PROJECT_NAME_NO_VERSION "ignition-${IGN_PROJECT_NAME}")
 string (TOLOWER ${PROJECT_NAME_NO_VERSION} PROJECT_NAME_NO_VERSION_LOWER)
@@ -253,6 +256,9 @@ else (build_errors)
   message (STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
   message (STATUS "Install path: ${CMAKE_INSTALL_PREFIX}")
 
+  # System.hh is used in src/ directory so we need to generate it first here
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/ignition/math/System.hh.in
+                 ${CMAKE_CURRENT_SOURCE_DIR}/include/ignition/math/System.hh)
 
   if (BUILD_IGNITION)
     set(TEST_TYPE "UNIT")

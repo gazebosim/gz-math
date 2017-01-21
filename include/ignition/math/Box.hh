@@ -30,6 +30,7 @@ namespace ignition
     // Forward declaration of private data
     class BoxPrivate;
 
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class Box Box.hh ignition/math/Box.hh
     /// \brief Mathematical representation of a box and related functions.
     class IGNITION_VISIBLE Box
@@ -226,6 +227,8 @@ namespace ignition
       /// \brief Private data pointer
       private: BoxPrivate *dataPtr;
     };
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

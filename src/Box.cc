@@ -21,6 +21,7 @@
 
 using namespace ignition;
 using namespace math;
+USING_IGNMATH_INLINE_NAMESPACE
 
 //////////////////////////////////////////////////
 Box::Box()
