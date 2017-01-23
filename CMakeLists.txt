@@ -239,12 +239,17 @@ if (build_errors)
 else (build_errors)
 
   ########################################
-  # Write the config.h file
+  # Write the config.h and System.h file
   configure_file ("${project_cmake_dir}/config.hh.in"
     "${PROJECT_BINARY_DIR}/include/ignition/${IGN_PROJECT_NAME}/config.hh")
+  # System.hh is used in src/ directory so we need to generate it first here
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/ignition/math/System.hh.in
+    "${PROJECT_BINARY_DIR}/include/ignition/${IGN_PROJECT_NAME}/System.hh")
+
   ign_install_includes(
     "${INCLUDE_INSTALL_DIR_POSTFIX}/ignition/${IGN_PROJECT_NAME}"
-    "${PROJECT_BINARY_DIR}/include/ignition/${IGN_PROJECT_NAME}/config.hh")
+    "${PROJECT_BINARY_DIR}/include/ignition/${IGN_PROJECT_NAME}/config.hh"
+    "${PROJECT_BINARY_DIR}/include/ignition/${IGN_PROJECT_NAME}/System.hh")
 
   link_directories(${PROJECT_BINARY_DIR}/src)
 
@@ -255,10 +260,6 @@ else (build_errors)
   endif()
   message (STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
   message (STATUS "Install path: ${CMAKE_INSTALL_PREFIX}")
-
-  # System.hh is used in src/ directory so we need to generate it first here
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/ignition/math/System.hh.in
-                 ${CMAKE_CURRENT_SOURCE_DIR}/include/ignition/math/System.hh)
 
   if (BUILD_IGNITION)
     set(TEST_TYPE "UNIT")
