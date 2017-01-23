@@ -39,6 +39,7 @@ namespace ignition
 {
   namespace math
   {
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class Angle Angle.hh ignition/math/Angle.hh
     /// \brief An angle and related functions.
     class IGNITION_VISIBLE Angle
@@ -198,6 +199,7 @@ namespace ignition
       private: double value;
     };
   }
+  IGNMATH_INLINE_NAMESPACE_END
 }
 
 #endif

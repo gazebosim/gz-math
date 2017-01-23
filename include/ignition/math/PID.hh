@@ -24,6 +24,7 @@ namespace ignition
 {
   namespace math
   {
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class PID PID.hh ignition/math/PID.hh
     /// \brief Generic PID controller class.
     /// Generic proportional-integral-derivative controller class that
@@ -223,6 +224,8 @@ namespace ignition
       /// \brief Command offset.
       private: double cmdOffset = 0.0;
     };
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

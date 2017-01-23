@@ -27,6 +27,7 @@ namespace ignition
 {
   namespace math
   {
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \def GeneratorType
     /// \brief std::mt19937
     typedef std::mt19937 GeneratorType;
@@ -89,6 +90,8 @@ namespace ignition
       /// \brief Random number seed.
       private: static uint32_t seed;
     };
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

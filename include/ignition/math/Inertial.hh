@@ -24,6 +24,7 @@ namespace ignition
 {
   namespace math
   {
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class Inertial Inertial.hh ignition/math/Inertial.hh
     /// \brief A class for inertial information about a rigid body
     /// consisting of the scalar mass, a 3x3 symmetric moment
@@ -239,6 +240,8 @@ namespace ignition
 
     typedef Inertial<double> Inertiald;
     typedef Inertial<float> Inertialf;
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

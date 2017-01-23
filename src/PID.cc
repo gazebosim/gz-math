@@ -22,6 +22,7 @@
 
 using namespace ignition;
 using namespace math;
+using namespace IGNMATH_INLINE_NAMESPACE;
 
 /////////////////////////////////////////////////
 PID::PID(const double _p, const double _i, const double _d,

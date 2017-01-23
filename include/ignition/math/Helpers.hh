@@ -209,6 +209,7 @@ namespace ignition
   /// \brief Math classes and function useful in robot applications.
   namespace math
   {
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \brief size_t type with a value of 0
     static const size_t IGN_ZERO_SIZE_T  = 0u;
 
@@ -739,6 +740,8 @@ namespace ignition
     /// \sa Pair
     std::tuple<PairInput, PairInput> IGNITION_VISIBLE Unpair(
         const PairOutput _key);
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 

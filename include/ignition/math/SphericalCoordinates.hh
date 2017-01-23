@@ -28,6 +28,7 @@ namespace ignition
 {
   namespace math
   {
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     class SphericalCoordinatesPrivate;
 
     /// \class SphericalCoordinates SphericalCoordinates.hh commmon/common.hh
@@ -227,6 +228,8 @@ namespace ignition
 #endif
     };
     /// \}
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

@@ -25,6 +25,7 @@ namespace ignition
 {
   namespace math
   {
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class Filter Filter.hh ignition/math/Filter.hh
     /// \brief Filter base class
     template <class T>
@@ -241,6 +242,8 @@ namespace ignition
         this->Set(math::Vector3d(0, 0, 0));
       }
     };
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 

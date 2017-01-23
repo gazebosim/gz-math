@@ -29,6 +29,7 @@ namespace ignition
     // Forward declare private data class
     class SemanticVersionPrivate;
 
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class SemanticVersion SemanticVersion.hh
     ///        ignition/math/SemanticVersion.hh
     /// \brief Version comparison class based on Semantic Versioning 2.0.0
@@ -155,6 +156,8 @@ namespace ignition
 #pragma warning(pop)
 #endif
     };
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

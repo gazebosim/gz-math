@@ -24,6 +24,7 @@ namespace ignition
 {
   namespace math
   {
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class Pose3 Pose3.hh ignition/math/Pose3.hh
     /// \brief Encapsulates a position and rotation in three space
     template<typename T>
@@ -406,6 +407,8 @@ namespace ignition
     typedef Pose3<int> Pose3i;
     typedef Pose3<double> Pose3d;
     typedef Pose3<float> Pose3f;
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

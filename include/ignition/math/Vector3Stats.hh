@@ -29,6 +29,7 @@ namespace ignition
     /// \brief Forward declare private data class.
     class Vector3StatsPrivate;
 
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class Vector3Stats Vector3Stats.hh ignition/math/Vector3Stats.hh
     /// \brief Collection of statistics for a Vector3 signal.
     class IGNITION_VISIBLE Vector3Stats
@@ -101,6 +102,8 @@ namespace ignition
       /// \brief Pointer to private data.
       protected: Vector3StatsPrivate *dataPtr;
     };
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

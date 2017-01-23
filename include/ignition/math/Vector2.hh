@@ -23,6 +23,7 @@ namespace ignition
 {
   namespace math
   {
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class Vector2 Vector2.hh ignition/math/Vector2.hh
     /// \brief Two dimensional (x, y) vector.
     template<typename T>
@@ -465,6 +466,8 @@ namespace ignition
     typedef Vector2<int> Vector2i;
     typedef Vector2<double> Vector2d;
     typedef Vector2<float> Vector2f;
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

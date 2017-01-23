@@ -21,6 +21,7 @@
 
 using namespace ignition;
 using namespace math;
+using namespace IGNMATH_INLINE_NAMESPACE;
 
 //////////////////////////////////////////////////
 SignalStatistic::SignalStatistic()

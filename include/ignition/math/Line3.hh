@@ -24,6 +24,7 @@ namespace ignition
 {
   namespace math
   {
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class Line3 Line3.hh ignition/math/Line3.hh
     /// \brief A three dimensional line segment. The line is defined by a
     /// start and end point.
@@ -383,6 +384,8 @@ namespace ignition
     typedef Line3<int> Line3i;
     typedef Line3<double> Line3d;
     typedef Line3<float> Line3f;
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

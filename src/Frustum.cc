@@ -16,12 +16,13 @@
 */
 #include <cmath>
 
-#include "ignition/math/Matrix4.hh"
 #include "ignition/math/FrustumPrivate.hh"
 #include "ignition/math/Frustum.hh"
+#include "ignition/math/Matrix4.hh"
 
 using namespace ignition;
 using namespace math;
+using namespace IGNMATH_INLINE_NAMESPACE;
 
 /////////////////////////////////////////////////
 Frustum::Frustum()

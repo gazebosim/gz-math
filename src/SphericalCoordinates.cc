@@ -21,6 +21,7 @@
 
 using namespace ignition;
 using namespace math;
+using namespace IGNMATH_INLINE_NAMESPACE;
 
 // Parameters for EARTH_WGS84 model
 // wikipedia: World_Geodetic_System#A_new_World_Geodetic_System:_WGS_84

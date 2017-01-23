@@ -31,6 +31,7 @@ namespace ignition
 {
   namespace math
   {
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class MassMatrix3 MassMatrix3.hh ignition/math/MassMatrix3.hh
     /// \brief A class for inertial information about a rigid body
     /// consisting of the scalar mass and a 3x3 symmetric moment
@@ -899,6 +900,8 @@ namespace ignition
 
     typedef MassMatrix3<double> MassMatrix3d;
     typedef MassMatrix3<float> MassMatrix3f;
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

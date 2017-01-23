@@ -24,6 +24,7 @@ namespace ignition
 {
   namespace math
   {
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class Vector4 Vector4.hh ignition/math/Vector4.hh
     /// \brief T Generic x, y, z, w vector
     template<typename T>
@@ -546,6 +547,8 @@ namespace ignition
     typedef Vector4<int> Vector4i;
     typedef Vector4<double> Vector4d;
     typedef Vector4<float> Vector4f;
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

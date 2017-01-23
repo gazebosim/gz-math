@@ -26,6 +26,7 @@ namespace ignition
     // Forward declare private data
     class RotationSplinePrivate;
 
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class RotationSpline RotationSpline.hh ignition/math/RotationSpline.hh
     /// \brief Spline for rotations
     class IGNITION_VISIBLE  RotationSpline
@@ -115,6 +116,8 @@ namespace ignition
       /// \brief Private data pointer
       private: RotationSplinePrivate *dataPtr;
     };
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 

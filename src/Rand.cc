@@ -29,6 +29,7 @@
 
 using namespace ignition;
 using namespace math;
+using namespace IGNMATH_INLINE_NAMESPACE;
 
 // We don't seed with time for the cases when two processes are started the
 // same time (this mostly happens with launch scripts that start a server

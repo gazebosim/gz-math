@@ -29,6 +29,7 @@ namespace ignition
     /// \brief Forward declare private data class.
     class SignalStatisticPrivate;
 
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class SignalStatistic SignalStats.hh ignition/math/SignalStats.hh
     /// \brief Statistical properties of a discrete time scalar signal.
     class IGNITION_VISIBLE SignalStatistic
@@ -252,6 +253,8 @@ namespace ignition
 #endif
     };
     /// \}
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

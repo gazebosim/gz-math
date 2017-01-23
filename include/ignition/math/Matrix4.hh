@@ -27,6 +27,7 @@ namespace ignition
 {
   namespace math
   {
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class Matrix4 Matrix4.hh ignition/math/Matrix4.hh
     /// \brief A 4x4 matrix class
     template<typename T>
@@ -885,6 +886,8 @@ namespace ignition
     typedef Matrix4<int> Matrix4i;
     typedef Matrix4<double> Matrix4d;
     typedef Matrix4<float> Matrix4f;
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

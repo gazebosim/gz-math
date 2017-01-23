@@ -26,6 +26,7 @@ namespace ignition
 {
   namespace math
   {
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     template <typename T> class Matrix3;
 
     /// \class Quaternion Quaternion.hh ignition/math/Quaternion.hh
@@ -1068,6 +1069,8 @@ namespace ignition
     typedef Quaternion<double> Quaterniond;
     typedef Quaternion<float> Quaternionf;
     typedef Quaternion<int> Quaternioni;
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

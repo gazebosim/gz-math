@@ -28,6 +28,7 @@ namespace ignition
     // Forward declare private data
     class KmeansPrivate;
 
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class Kmeans Kmeans.hh math/gzmath.hh
     /// \brief K-Means clustering algorithm. Given a set of observations,
     /// k-means partitions the observations into k sets so as to minimize the
@@ -79,6 +80,8 @@ namespace ignition
       /// \brief Private data pointer
       private: KmeansPrivate *dataPtr;
     };
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 

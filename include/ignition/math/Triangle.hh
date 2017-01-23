@@ -26,6 +26,7 @@ namespace ignition
 {
   namespace math
   {
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class Triangle Triangle.hh ignition/math/Triangle.hh
     /// \brief Triangle class and related functions.
     template<typename T>
@@ -237,6 +238,8 @@ namespace ignition
 
     /// Float specialization of the Triangle class.
     typedef Triangle<float> Trianglef;
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

@@ -28,6 +28,7 @@ namespace ignition
     // Forward declaration of private data
     class FrustumPrivate;
 
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \brief Mathematical representation of a frustum and related functions.
     /// This is also known as a view frustum.
     class IGNITION_VISIBLE Frustum
@@ -171,6 +172,8 @@ namespace ignition
       /// \brief Private data pointer
       private: FrustumPrivate *dataPtr;
     };
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

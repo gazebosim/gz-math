@@ -22,6 +22,7 @@
 
 using namespace ignition;
 using namespace math;
+using namespace IGNMATH_INLINE_NAMESPACE;
 
 //////////////////////////////////////////////////
 Kmeans::Kmeans(const std::vector<Vector3d> &_obs)

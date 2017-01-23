@@ -19,6 +19,7 @@
 
 using namespace ignition;
 using namespace math;
+using namespace IGNMATH_INLINE_NAMESPACE;
 
 const Angle Angle::Zero = math::Angle(0);
 const Angle Angle::Pi = math::Angle(IGN_PI);

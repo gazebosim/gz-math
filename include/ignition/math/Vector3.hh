@@ -28,6 +28,7 @@ namespace ignition
 {
   namespace math
   {
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class Vector3 Vector3.hh ignition/math/Vector3.hh
     /// \brief The Vector3 class represents the generic vector containing 3
     /// elements.  Since it's commonly used to keep coordinate system
@@ -743,6 +744,8 @@ namespace ignition
     typedef Vector3<int> Vector3i;
     typedef Vector3<double> Vector3d;
     typedef Vector3<float> Vector3f;
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

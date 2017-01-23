@@ -19,6 +19,7 @@
 
 using namespace ignition;
 using namespace math;
+using namespace IGNMATH_INLINE_NAMESPACE;
 
 //////////////////////////////////////////////////
 Vector3Stats::Vector3Stats()

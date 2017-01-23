@@ -29,6 +29,7 @@ namespace ignition
     // Forward declare private data class
     class SplinePrivate;
 
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class Spline Spline.hh ignition/math/Spline.hh
     /// \brief Splines
     class IGNITION_VISIBLE Spline
@@ -125,6 +126,8 @@ namespace ignition
       /// \brief Private data pointer
       private: SplinePrivate *dataPtr;
     };
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

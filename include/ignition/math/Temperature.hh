@@ -29,6 +29,7 @@ namespace ignition
     // Forward declare private data class.
     class TemperaturePrivate;
 
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \brief A class that stores temperature information, and allows
     /// conversion between different units.
     ///
@@ -370,6 +371,8 @@ namespace ignition
 #pragma warning(pop)
 #endif
     };
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 #endif

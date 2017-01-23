@@ -25,6 +25,7 @@ namespace ignition
 {
   namespace math
   {
+    IGNMATH_INLINE_NAMESPACE_BEGIN
     /// \class Plane Plane.hh ignition/math/Plane.hh
     /// \brief A plane and related functions.
     template<typename T>
@@ -225,6 +226,8 @@ namespace ignition
     typedef Plane<int> Planei;
     typedef Plane<double> Planed;
     typedef Plane<float> Planef;
+
+  IGNMATH_INLINE_NAMESPACE_END
   }
 }
 
