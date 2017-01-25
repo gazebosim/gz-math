@@ -18,11 +18,13 @@
 #define IGNITION_MATH_GRAPH_HH_
 
 #include <algorithm>
+#include <cassert>
 #include <cstdint>
 #include <map>
 #include <memory>
 #include <iostream>
 #include <set>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -37,10 +39,13 @@ namespace ignition
     {
       /// \brief Constructor.
       /// \param[in] _data User information.
+      /// \param[in] _name Non-unique vertex name.
       /// \param[in] _id Unique id.
       public: Vertex(const V &_data,
+                     const std::string &_name,
                      const int64_t _id)
         : data(_data),
+          name(_name),
           id(_id)
       {
       }
@@ -59,11 +64,21 @@ namespace ignition
         return this->id;
       }
 
+      /// \brief Get the vertex name.
+      /// \return The vertex name.
+      public: std::string Name() const
+      {
+        return this->name;
+      }
+
       /// \brief User information.
       private: V data;
 
       /// \brief Unique vertex Id.
       private: int64_t id;
+
+      /// \brief Non-unique vertex name.
+      private: std::string name = "";
     };
 
     /// \def VertexPtr
@@ -118,7 +133,7 @@ namespace ignition
       }
 
       /// \brief Get the user data stored in the edge.
-      /// \param The user data stored in the edge.
+      /// \return The user data stored in the edge.
       public: E &Data()
       {
         return this->data;
@@ -162,7 +177,8 @@ namespace ignition
     /// \brief A generic graph class.
     /// Both vertexes and edges can store user information. A vertex could be
     /// created passing a custom Id if needed, otherwise it will be choosen
-    /// internally.
+    /// internally. The vertexes also have a name that could be reused among
+    /// other vertexes if needed.
     template<typename V, typename E>
     class Graph
     {
@@ -188,6 +204,17 @@ namespace ignition
         VertexPtr_V<V> res;
         for (auto const &pair : this->data)
           res.push_back(pair.first);
+        return res;
+      }
+
+      /// \brief Get all vertexes of the graph with a given name.
+      /// \param[in] _name A name.
+      /// \return A vector of shared pointers to all vertexes with name == _name
+      public: VertexPtr_V<V> Vertexes(const std::string &_name) const
+      {
+        VertexPtr_V<V> res;
+        if (this->names.find(_name) != this->names.end())
+          res = this->names.at(_name);
         return res;
       }
 
@@ -273,12 +300,14 @@ namespace ignition
 
       /// \brief Add a new vertex to the graph.
       /// \param[in] _data User data to be stored in the vertex.
+      /// \param[in] _name The name of the vertex.
       /// \param[in] _id Optional Id of the vertex. If not set, the Id will be
       /// internally chosen. If the Id is set but has been already used, the
       /// vertex won't be added.
       /// \return Shared pointer to the new vertex created or nullptr if the
       /// Id specified was already used.
       public: VertexPtr<V> AddVertex(const V &_data,
+                                     const std::string &_name,
                                      const int64_t _id = -1)
       {
         auto id = _id;
@@ -290,11 +319,13 @@ namespace ignition
           return nullptr;
 
         // Create the vertex.
-        auto v = std::make_shared<Vertex<V>>(_data, id);
+        auto v = std::make_shared<Vertex<V>>(_data, _name, id);
         // Link the vertex with an empty list of edges.
         this->data.push_back(std::make_pair(v, EdgePtr_S<V, E>()));
         // Update the map of Ids.
         this->ids[id] = v;
+        // Update the map of names.
+        this->names[_name].push_back(v);
 
         return v;
       }
@@ -303,6 +334,8 @@ namespace ignition
       /// \param[in] _tail Pointer to the tail's vertex.
       /// \param[in] _head Pointer to the head's vertex.
       /// \param[in] _data User data stored in the edge.
+      /// \return Shared pointer to the new edge created or nullptr if the
+      /// edge was not created (e.g. incorrect vertexes).
       public: EdgePtr<V, E> AddEdge(const VertexPtr<V> &_tail,
                                     const VertexPtr<V> &_head,
                                     const E &_data)
@@ -408,10 +441,22 @@ namespace ignition
                {
                   return _pair.first == _vertex;
                });
+        if (itPair == this->data.end())
+          return;
+
         this->data.erase(itPair);
 
         // Remove also the id from the map of Ids.
         this->ids.erase(id);
+
+        // Remove also the vertex from the map of names.
+        std::string name = _vertex->Name();
+        assert(this->names.find(name) != this->names.end());
+
+        auto &v = this->names.at(name);
+        v.erase(std::remove(v.begin(), v.end(), _vertex), v.end());
+        if (v.empty())
+          this->names.erase(name);
       }
 
       /// \brief Remove an existing vertex from the graph.
@@ -423,6 +468,18 @@ namespace ignition
           this->RemoveVertex(vPtr);
       }
 
+      /// \brief Remove all vertexes with name == _name.
+      /// \param[in] _name Name of the vertexes to be removed.
+      public: void RemoveVertexes(const std::string &_name)
+      {
+        if (this->names.find(_name) == this->names.end())
+          return;
+
+        auto &v = this->names.at(_name);
+        while (!v.empty())
+          this->RemoveVertex(v.front());
+      }
+
       /// \brief Stream insertion operator.
       /// \param[out] _out The output stream.
       /// \param[in] _g Graph to write to the stream.
@@ -431,7 +488,7 @@ namespace ignition
       {
         _out << "Vertexes" << std::endl;
         for (auto const &v : _g.Vertexes())
-          _out << "  [" << v->Id() << "]" << std::endl;
+          _out << "  [" << v->Id() << "][" << v->Name() << "]" << std::endl;
 
         _out << "Edges" << std::endl;
         for (auto const &e : _g.Edges())
@@ -457,6 +514,9 @@ namespace ignition
 
       /// \brief List of ids curently used.
       protected: std::map<int64_t, VertexPtr<V>> ids;
+
+      /// \brief Associatation between names and vertexes curently used.
+      protected: std::map<std::string, VertexPtr_V<V>> names;
 
       /// \brief The next vertex Id to be assigned to a new vertex.
       private: int64_t nextId = 0;
