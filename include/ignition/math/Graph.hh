@@ -52,7 +52,7 @@ namespace ignition
 
       /// \brief Retrieve the user information.
       /// \return A mutable reference to the user information.
-      public: V &Data()
+      public: V &Data() const
       {
         return this->data;
       }
