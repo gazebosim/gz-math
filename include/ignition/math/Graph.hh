@@ -52,7 +52,7 @@ namespace ignition
 
       /// \brief Retrieve the user information.
       /// \return A mutable reference to the user information.
-      public: V &Data() const
+      public: V &Data()
       {
         return this->data;
       }
@@ -191,10 +191,11 @@ namespace ignition
       /// not found.
       public: VertexPtr<V> VertexById(const int64_t _id)
       {
-        if (this->ids.find(_id) == this->ids.end())
+        auto iter = this->ids.find(_id);
+        if (iter == this->ids.end())
           return nullptr;
 
-        return this->ids.at(_id);
+        return iter->second;
       }
 
       /// \brief Get all vertexes of the graph.
@@ -213,8 +214,9 @@ namespace ignition
       public: VertexPtr_V<V> Vertexes(const std::string &_name) const
       {
         VertexPtr_V<V> res;
-        if (this->names.find(_name) != this->names.end())
-          res = this->names.at(_name);
+        auto iter = this->names.find(_name);
+        if (iter != this->names.end())
+          res = iter->second;
         return res;
       }
 
@@ -472,10 +474,11 @@ namespace ignition
       /// \param[in] _name Name of the vertexes to be removed.
       public: void RemoveVertexes(const std::string &_name)
       {
-        if (this->names.find(_name) == this->names.end())
+        auto iter = this->names.find(_name);
+        if (iter == this->names.end())
           return;
 
-        auto &v = this->names.at(_name);
+        auto &v = iter->second;
         while (!v.empty())
           this->RemoveVertex(v.front());
       }
