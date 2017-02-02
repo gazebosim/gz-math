@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
+#include <functional>
 #include <map>
 #include <memory>
 #include <iostream>
@@ -37,6 +38,9 @@ namespace ignition
     template<typename V>
     class Vertex
     {
+      // \brief Default constructor.
+      public: Vertex() = default;
+
       /// \brief Constructor.
       /// \param[in] _data User information.
       /// \param[in] _name Non-unique vertex name.
@@ -103,8 +107,8 @@ namespace ignition
       /// \param[in] _tail Shared pointer to the tail vertex.
       /// \param[in] _head Shared pointer to the head vertex.
       /// \param[in] _data User data to be stored in the edge.
-      public: Edge(const VertexPtr<V> _tail,
-                   const VertexPtr<V> _head,
+      public: Edge(const Vertex<V> &_tail,
+                   const Vertex<V> &_head,
                    const E &_data)
         : tail(_tail),
           head(_head),
@@ -114,7 +118,7 @@ namespace ignition
 
       /// \brief Get a shared pointer to the tail's vertex in this edge.
       /// \return A shared pointer to the tail's vertex in this edge.
-      public: VertexPtr<V> Tail() const
+      public: Vertex<V> &Tail() const
       {
         if (!this->valid)
           return nullptr;
@@ -124,7 +128,7 @@ namespace ignition
 
       /// \brief Get a shared pointer to the head's vertex in this edge.
       /// \return A shared pointer to the head's vertex in this edge.
-      public: VertexPtr<V> Head() const
+      public: Vertex<V> &Head() const
       {
         if (!this->valid)
           return nullptr;
@@ -140,10 +144,10 @@ namespace ignition
       }
 
       /// \brief Shared pointer to the tail's vertex.
-      private: VertexPtr<V> tail;
+      private: Vertex<V> &tail;
 
       /// \brief Shared pointer to the head's vertex.
-      private: VertexPtr<V> head;
+      private: Vertex<V> &head;
 
       /// \brief User data.
       private: E data;
@@ -174,6 +178,9 @@ namespace ignition
     template<typename V, typename E>
     using EdgePtr_S = std::set<EdgePtr<V, E>>;
 
+    template<typename V>
+    using Vertex_P = std::pair<bool, std::reference_wrapper<Vertex<V>>>;
+
     /// \brief A generic graph class.
     /// Both vertexes and edges can store user information. A vertex could be
     /// created passing a custom Id if needed, otherwise it will be choosen
@@ -189,116 +196,116 @@ namespace ignition
       /// \param[in] _id The ID of the vertex.
       /// \return A shared pointer to the vertex with Id = _id or nullptr if
       /// not found.
-      public: VertexPtr<V> VertexById(const int64_t _id)
+      public: Vertex_P<V> VertexById(const int64_t _id)
       {
         auto iter = this->ids.find(_id);
         if (iter == this->ids.end())
-          return nullptr;
+          return std::make_pair(false, std::ref(Vertex<V>()));
 
-        return iter->second;
+        return std::make_pair(true, std::ref(iter->second));
       }
 
-      /// \brief Get all vertexes of the graph.
-      /// \return A vector of shared pointers to all vertexes in the graph.
-      public: VertexPtr_V<V> Vertexes() const
-      {
-        VertexPtr_V<V> res;
-        for (auto const &pair : this->data)
-          res.push_back(pair.first);
-        return res;
-      }
-
-      /// \brief Get all vertexes of the graph with a given name.
-      /// \param[in] _name A name.
-      /// \return A vector of shared pointers to all vertexes with name == _name
-      public: VertexPtr_V<V> Vertexes(const std::string &_name) const
-      {
-        VertexPtr_V<V> res;
-        auto iter = this->names.find(_name);
-        if (iter != this->names.end())
-          res = iter->second;
-        return res;
-      }
-
-      /// \brief Get all edges of the graph.
-      /// \return A set of shared pointers to all edges in the graph.
-      public: EdgePtr_S<V, E> Edges() const
-      {
-        EdgePtr_S<V, E> res;
-        for (auto const &pair : this->data)
-          for (auto const &e : pair.second)
-            res.insert(e);
-        return res;
-      }
-
-      /// \brief Whether the graph is empty.
-      /// \return True when there are no vertexes in the graph or
-      /// false otherwise.
-      public: bool Empty() const
-      {
-        return this->data.empty();
-      }
-
-      /// \brief Get all neighbors vertexes that are directly connected to
-      /// a given vertex.
-      /// \param[in] _vertex The vertex to check adjacent vertexes.
-      /// \return A vector of vertexes that are adjacents and directly connected
-      /// with an edge.
-      public: VertexPtr_V<V> Adjacents(const VertexPtr<V> _vertex)
-      {
-        VertexPtr_V<V> res;
-        auto itVertex = std::find_if(this->data.begin(), this->data.end(),
-               [&_vertex](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
-               {
-                  return _pair.first == _vertex;
-               });
-        if (itVertex != this->data.end())
-        {
-          auto edges = itVertex->second;
-          for (auto edgePtr : edges)
-            res.push_back(edgePtr->Head());
-        }
-
-        return res;
-      }
-
-      /// \brief Get all neighbors vertexes that are directly connected to
-      /// a given vertex.
-      /// \param[in] _id The vertex ID to check adjacent vertexes.
-      /// \return A vector of vertexes that are adjacents and directly connected
-      /// with an edge.
-      public: VertexPtr_V<V> Adjacents(const int64_t _id)
-      {
-        return this->Adjacents(this->VertexById(_id));
-      }
-
-      /// \brief Get the set of incoming edges to a given vertex.
-      /// \param[in] _vertex Pointer to the vertex.
-      /// \return The set of incoming edges to a given vertex.
-      public: EdgePtr_S<V, E> Incidents(const VertexPtr<V> _vertex)
-      {
-        EdgePtr_S<V, E> res;
-
-        for (auto pair : this->data)
-        {
-          auto edges = pair.second;
-          for (auto e : edges)
-          {
-            if (e->Head() == _vertex)
-              res.insert(e);
-          }
-        }
-
-        return res;
-      }
-
-      /// \brief Get the set of incoming edges to a given node.
-      /// \param[in] _id The ID of the vertex.
-      /// \return The set of incoming edges to a given node.
-      public: EdgePtr_S<V, E> Incidents(const int64_t _id)
-      {
-        return this->Incidents(this->VertexById(_id));
-      }
+      ///// \brief Get all vertexes of the graph.
+      ///// \return A vector of shared pointers to all vertexes in the graph.
+      //public: VertexPtr_V<V> Vertexes() const
+      //{
+      //  VertexPtr_V<V> res;
+      //  for (auto const &pair : this->data)
+      //    res.push_back(pair.first);
+      //  return res;
+      //}
+//
+      ///// \brief Get all vertexes of the graph with a given name.
+      ///// \param[in] _name A name.
+      ///// \return A vector of shared pointers to all vertexes with name == _name
+      //public: VertexPtr_V<V> Vertexes(const std::string &_name) const
+      //{
+      //  VertexPtr_V<V> res;
+      //  auto iter = this->names.find(_name);
+      //  if (iter != this->names.end())
+      //    res = iter->second;
+      //  return res;
+      //}
+//
+      ///// \brief Get all edges of the graph.
+      ///// \return A set of shared pointers to all edges in the graph.
+      //public: EdgePtr_S<V, E> Edges() const
+      //{
+      //  EdgePtr_S<V, E> res;
+      //  for (auto const &pair : this->data)
+      //    for (auto const &e : pair.second)
+      //      res.insert(e);
+      //  return res;
+      //}
+//
+      ///// \brief Whether the graph is empty.
+      ///// \return True when there are no vertexes in the graph or
+      ///// false otherwise.
+      //public: bool Empty() const
+      //{
+      //  return this->data.empty();
+      //}
+//
+      ///// \brief Get all neighbors vertexes that are directly connected to
+      ///// a given vertex.
+      ///// \param[in] _vertex The vertex to check adjacent vertexes.
+      ///// \return A vector of vertexes that are adjacents and directly connected
+      ///// with an edge.
+      //public: VertexPtr_V<V> Adjacents(const VertexPtr<V> _vertex)
+      //{
+      //  VertexPtr_V<V> res;
+      //  auto itVertex = std::find_if(this->data.begin(), this->data.end(),
+      //         [&_vertex](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
+      //         {
+      //            return _pair.first == _vertex;
+      //         });
+      //  if (itVertex != this->data.end())
+      //  {
+      //    auto edges = itVertex->second;
+      //    for (auto edgePtr : edges)
+      //      res.push_back(edgePtr->Head());
+      //  }
+//
+      //  return res;
+      //}
+//
+      ///// \brief Get all neighbors vertexes that are directly connected to
+      ///// a given vertex.
+      ///// \param[in] _id The vertex ID to check adjacent vertexes.
+      ///// \return A vector of vertexes that are adjacents and directly connected
+      ///// with an edge.
+      //public: VertexPtr_V<V> Adjacents(const int64_t _id)
+      //{
+      //  return this->Adjacents(this->VertexById(_id));
+      //}
+//
+      ///// \brief Get the set of incoming edges to a given vertex.
+      ///// \param[in] _vertex Pointer to the vertex.
+      ///// \return The set of incoming edges to a given vertex.
+      //public: EdgePtr_S<V, E> Incidents(const VertexPtr<V> _vertex)
+      //{
+      //  EdgePtr_S<V, E> res;
+//
+      //  for (auto pair : this->data)
+      //  {
+      //    auto edges = pair.second;
+      //    for (auto e : edges)
+      //    {
+      //      if (e->Head() == _vertex)
+      //        res.insert(e);
+      //    }
+      //  }
+//
+      //  return res;
+      //}
+//
+      ///// \brief Get the set of incoming edges to a given node.
+      ///// \param[in] _id The ID of the vertex.
+      ///// \return The set of incoming edges to a given node.
+      //public: EdgePtr_S<V, E> Incidents(const int64_t _id)
+      //{
+      //  return this->Incidents(this->VertexById(_id));
+      //}
 
       /// \brief Add a new vertex to the graph.
       /// \param[in] _data User data to be stored in the vertex.
@@ -308,17 +315,21 @@ namespace ignition
       /// vertex won't be added.
       /// \return Shared pointer to the new vertex created or nullptr if the
       /// Id specified was already used.
-      public: VertexPtr<V> AddVertex(const V &_data,
-                                     const std::string &_name,
-                                     const int64_t _id = -1)
+      public: Vertex_P<V> AddVertex(const V &_data,
+                                                     const std::string &_name,
+                                                     const int64_t _id = -1)
       {
         auto id = _id;
         // The user didn't provide an Id, we generate it.
         if (id == -1)
           id = this->NextId();
         // The user provided an Id but already exists.
-        else if (this->ids.find(id) != this->ids.end())
-          return nullptr;
+        else
+        {
+          auto iter = this->ids.find(id);
+          if (iter != this->ids.end())
+            return std::make_pair(false, std::ref(*(iter->second)));
+        }
 
         // Create the vertex.
         auto v = std::make_shared<Vertex<V>>(_data, _name, id);
@@ -329,7 +340,7 @@ namespace ignition
         // Update the map of names.
         this->names[_name].push_back(v);
 
-        return v;
+        return std::make_pair(true, std::ref(*v));
       }
 
       /// \brief Add a new edge to the graph.
@@ -338,169 +349,169 @@ namespace ignition
       /// \param[in] _data User data stored in the edge.
       /// \return Shared pointer to the new edge created or nullptr if the
       /// edge was not created (e.g. incorrect vertexes).
-      public: EdgePtr<V, E> AddEdge(const VertexPtr<V> &_tail,
-                                    const VertexPtr<V> &_head,
-                                    const E &_data)
-      {
-        // Find the tail vertex.
-        auto itTail = std::find_if(this->data.begin(), this->data.end(),
-                       [&_tail](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
-                       {
-                         return _pair.first == _tail;
-                       });
-
-        if (itTail == this->data.end())
-          return nullptr;
-
-        // Make sure that the head vertex also exists.
-        auto itHead = std::find_if(this->data.begin(), this->data.end(),
-                      [&_head](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
-                      {
-                        return _pair.first == _head;
-                      });
-        if (itHead == this->data.end())
-          return nullptr;
-
-        // Check that the edge is not repeated.
-        EdgePtr_S<V, E> &edges = itTail->second;
-        auto edgeFound = std::find_if(edges.begin(), edges.end(),
-                       [&_head](EdgePtr<V, E> _edge)
-                       {
-                         return _edge->Head() == _head;
-                       });
-        if (edgeFound != edges.end())
-          return nullptr;
-
-        // Create the edge.
-        auto edge = std::make_shared<Edge<V, E>>(_tail, _head, _data);
-
-        // Link the new edge.
-        itTail->second.insert(edge);
-
-        // Mark the edge as valid.
-        edge->valid = true;
-
-        return edge;
-      }
-
-      /// \brief Add a new edge to the graph.
-      /// \param[in] _tailId ID of the tail's vertex.
-      /// \param[in] _headId ID of the head's vertex.
-      /// \param[in] _data User data stored in the edge.
-      /// \return Shared pointer to the new edge.
-      public: EdgePtr<V, E> AddEdge(const int64_t _tailId,
-                                    const int64_t _headId,
-                                    const E &_data)
-      {
-        return this->AddEdge(this->VertexById(_tailId),
-          this->VertexById(_headId), _data);
-      }
-
-      /// \brief Remove an existing edge from the graph. After the removal, it
-      /// won't be possible to reach any of the vertexes from the edge. Any
-      /// call to Tail() or Head() will return nullptr.
-      /// \param[in] _edge Pointer to the edge to be removed.
-      public: void RemoveEdge(EdgePtr<V, E> &_edge)
-      {
-        if (!_edge)
-          return;
-
-        auto vertex = _edge->Tail();
-        auto itPair = std::find_if(this->data.begin(), this->data.end(),
-               [&vertex](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
-               {
-                  return _pair.first == vertex;
-               });
-        if (itPair == this->data.end())
-          return;
-
-        EdgePtr_S<V, E> &edges = itPair->second;
-        edges.erase(_edge);
-
-        // Mark the edge as invalid. This will prevent to reach any vertexes if
-        // there are any shared pointers keeping the edge alive.
-        _edge->valid = false;
-      }
-
-      /// \brief Remove an existing vertex from the graph.
-      /// \param[in] _vertex Pointer to the vertex to be removed.
-      public: void RemoveVertex(VertexPtr<V> &_vertex)
-      {
-        if (!_vertex)
-          return;
-
-        // Save the Id.
-        auto id = _vertex->Id();
-
-        // Remove incident edges.
-        auto incidents = this->Incidents(_vertex);
-        for (auto e : incidents)
-          this->RemoveEdge(e);
-
-        // Remove the vertex and all outcoming edges.
-        auto itPair = std::find_if(this->data.begin(), this->data.end(),
-               [&_vertex](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
-               {
-                  return _pair.first == _vertex;
-               });
-        if (itPair == this->data.end())
-          return;
-
-        this->data.erase(itPair);
-
-        // Remove also the id from the map of Ids.
-        this->ids.erase(id);
-
-        // Remove also the vertex from the map of names.
-        std::string name = _vertex->Name();
-        assert(this->names.find(name) != this->names.end());
-
-        auto &v = this->names.at(name);
-        v.erase(std::remove(v.begin(), v.end(), _vertex), v.end());
-        if (v.empty())
-          this->names.erase(name);
-      }
-
-      /// \brief Remove an existing vertex from the graph.
-      /// \param[in] _id ID of the vertex to be removed.
-      public: void RemoveVertex(const int64_t _id)
-      {
-        auto vPtr = this->VertexById(_id);
-        if (vPtr)
-          this->RemoveVertex(vPtr);
-      }
-
-      /// \brief Remove all vertexes with name == _name.
-      /// \param[in] _name Name of the vertexes to be removed.
-      public: void RemoveVertexes(const std::string &_name)
-      {
-        auto iter = this->names.find(_name);
-        if (iter == this->names.end())
-          return;
-
-        auto &v = iter->second;
-        while (!v.empty())
-          this->RemoveVertex(v.front());
-      }
-
-      /// \brief Stream insertion operator.
-      /// \param[out] _out The output stream.
-      /// \param[in] _g Graph to write to the stream.
-      public: friend std::ostream &operator<<(std::ostream &_out,
-                                              const Graph<V, E> &_g)
-      {
-        _out << "Vertexes" << std::endl;
-        for (auto const &v : _g.Vertexes())
-          _out << "  [" << v->Id() << "][" << v->Name() << "]" << std::endl;
-
-        _out << "Edges" << std::endl;
-        for (auto const &e : _g.Edges())
-        {
-          _out << "  [" << e->Tail()->Id() << "-->"
-               << e->Head()->Id() << "]" << std::endl;
-        }
-        return _out;
-      }
+      //public: EdgePtr<V, E> AddEdge(const VertexPtr<V> &_tail,
+      //                              const VertexPtr<V> &_head,
+      //                              const E &_data)
+      //{
+      //  // Find the tail vertex.
+      //  auto itTail = std::find_if(this->data.begin(), this->data.end(),
+      //                 [&_tail](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
+      //                 {
+      //                   return _pair.first == _tail;
+      //                 });
+//
+      //  if (itTail == this->data.end())
+      //    return nullptr;
+//
+      //  // Make sure that the head vertex also exists.
+      //  auto itHead = std::find_if(this->data.begin(), this->data.end(),
+      //                [&_head](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
+      //                {
+      //                  return _pair.first == _head;
+      //                });
+      //  if (itHead == this->data.end())
+      //    return nullptr;
+//
+      //  // Check that the edge is not repeated.
+      //  EdgePtr_S<V, E> &edges = itTail->second;
+      //  auto edgeFound = std::find_if(edges.begin(), edges.end(),
+      //                 [&_head](EdgePtr<V, E> _edge)
+      //                 {
+      //                   return _edge->Head() == _head;
+      //                 });
+      //  if (edgeFound != edges.end())
+      //    return nullptr;
+//
+      //  // Create the edge.
+      //  auto edge = std::make_shared<Edge<V, E>>(_tail, _head, _data);
+//
+      //  // Link the new edge.
+      //  itTail->second.insert(edge);
+//
+      //  // Mark the edge as valid.
+      //  edge->valid = true;
+//
+      //  return edge;
+      //}
+//
+      ///// \brief Add a new edge to the graph.
+      ///// \param[in] _tailId ID of the tail's vertex.
+      ///// \param[in] _headId ID of the head's vertex.
+      ///// \param[in] _data User data stored in the edge.
+      ///// \return Shared pointer to the new edge.
+      //public: EdgePtr<V, E> AddEdge(const int64_t _tailId,
+      //                              const int64_t _headId,
+      //                              const E &_data)
+      //{
+      //  return this->AddEdge(this->VertexById(_tailId),
+      //    this->VertexById(_headId), _data);
+      //}
+//
+      ///// \brief Remove an existing edge from the graph. After the removal, it
+      ///// won't be possible to reach any of the vertexes from the edge. Any
+      ///// call to Tail() or Head() will return nullptr.
+      ///// \param[in] _edge Pointer to the edge to be removed.
+      //public: void RemoveEdge(EdgePtr<V, E> &_edge)
+      //{
+      //  if (!_edge)
+      //    return;
+//
+      //  auto vertex = _edge->Tail();
+      //  auto itPair = std::find_if(this->data.begin(), this->data.end(),
+      //         [&vertex](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
+      //         {
+      //            return _pair.first == vertex;
+      //         });
+      //  if (itPair == this->data.end())
+      //    return;
+//
+      //  EdgePtr_S<V, E> &edges = itPair->second;
+      //  edges.erase(_edge);
+//
+      //  // Mark the edge as invalid. This will prevent to reach any vertexes if
+      //  // there are any shared pointers keeping the edge alive.
+      //  _edge->valid = false;
+      //}
+//
+      ///// \brief Remove an existing vertex from the graph.
+      ///// \param[in] _vertex Pointer to the vertex to be removed.
+      //public: void RemoveVertex(VertexPtr<V> &_vertex)
+      //{
+      //  if (!_vertex)
+      //    return;
+//
+      //  // Save the Id.
+      //  auto id = _vertex->Id();
+//
+      //  // Remove incident edges.
+      //  auto incidents = this->Incidents(_vertex);
+      //  for (auto e : incidents)
+      //    this->RemoveEdge(e);
+//
+      //  // Remove the vertex and all outcoming edges.
+      //  auto itPair = std::find_if(this->data.begin(), this->data.end(),
+      //         [&_vertex](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
+      //         {
+      //            return _pair.first == _vertex;
+      //         });
+      //  if (itPair == this->data.end())
+      //    return;
+//
+      //  this->data.erase(itPair);
+//
+      //  // Remove also the id from the map of Ids.
+      //  this->ids.erase(id);
+//
+      //  // Remove also the vertex from the map of names.
+      //  std::string name = _vertex->Name();
+      //  assert(this->names.find(name) != this->names.end());
+//
+      //  auto &v = this->names.at(name);
+      //  v.erase(std::remove(v.begin(), v.end(), _vertex), v.end());
+      //  if (v.empty())
+      //    this->names.erase(name);
+      //}
+//
+      ///// \brief Remove an existing vertex from the graph.
+      ///// \param[in] _id ID of the vertex to be removed.
+      //public: void RemoveVertex(const int64_t _id)
+      //{
+      //  auto vPtr = this->VertexById(_id);
+      //  if (vPtr)
+      //    this->RemoveVertex(vPtr);
+      //}
+//
+      ///// \brief Remove all vertexes with name == _name.
+      ///// \param[in] _name Name of the vertexes to be removed.
+      //public: void RemoveVertexes(const std::string &_name)
+      //{
+      //  auto iter = this->names.find(_name);
+      //  if (iter == this->names.end())
+      //    return;
+//
+      //  auto &v = iter->second;
+      //  while (!v.empty())
+      //    this->RemoveVertex(v.front());
+      //}
+//
+      ///// \brief Stream insertion operator.
+      ///// \param[out] _out The output stream.
+      ///// \param[in] _g Graph to write to the stream.
+      //public: friend std::ostream &operator<<(std::ostream &_out,
+      //                                        const Graph<V, E> &_g)
+      //{
+      //  _out << "Vertexes" << std::endl;
+      //  for (auto const &v : _g.Vertexes())
+      //    _out << "  [" << v->Id() << "][" << v->Name() << "]" << std::endl;
+//
+      //  _out << "Edges" << std::endl;
+      //  for (auto const &e : _g.Edges())
+      //  {
+      //    _out << "  [" << e->Tail()->Id() << "-->"
+      //         << e->Head()->Id() << "]" << std::endl;
+      //  }
+      //  return _out;
+      //}
 
       /// \brief Get an available Id to be assigned to a new vertex.
       /// \return The next available Id.
@@ -514,12 +525,14 @@ namespace ignition
 
       /// The graph is represented using an adjacency list.
       protected: std::vector<std::pair<VertexPtr<V>, EdgePtr_S<V, E>>> data;
+      //protected: std::vector<std::pair<Vertex<V>, Edge_S<V, E>>> data;
 
       /// \brief List of ids curently used.
       protected: std::map<int64_t, VertexPtr<V>> ids;
 
-      /// \brief Associatation between names and vertexes curently used.
+      /// \brief Association between names and vertexes curently used.
       protected: std::map<std::string, VertexPtr_V<V>> names;
+      //protected: std::map<std::string, Vertex<V>*> names;
 
       /// \brief The next vertex Id to be assigned to a new vertex.
       private: int64_t nextId = 0;
