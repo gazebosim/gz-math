@@ -28,7 +28,7 @@ using namespace math;
 /////////////////////////////////////////////////
 TEST(GraphTest, VertexById)
 {
-  Graph<int, double> graph;
+  DirectedGraph<int, double> graph;
 
   // Create some vertexes.
   auto v0 = graph.AddVertex(0, "0");
@@ -51,7 +51,7 @@ TEST(GraphTest, VertexById)
 /////////////////////////////////////////////////
 TEST(GraphTest, Vertexes)
 {
-  Graph<int, double> graph;
+  DirectedGraph<int, double> graph;
 
   // Create some vertexes.
   auto v0 = graph.AddVertex(0, "0");
@@ -72,7 +72,7 @@ TEST(GraphTest, Vertexes)
 /////////////////////////////////////////////////
 TEST(GraphTest, VertexesNames)
 {
-  Graph<int, double> graph;
+  DirectedGraph<int, double> graph;
 
   // Create some vertexes.
   auto v0 = graph.AddVertex(0, "vertex_0");
@@ -94,7 +94,7 @@ TEST(GraphTest, VertexesNames)
 /////////////////////////////////////////////////
 TEST(GraphTest, Edges)
 {
-  Graph<int, double> graph;
+  DirectedGraph<int, double> graph;
 
   // Create some vertexes.
   auto v0 = graph.AddVertex(0, "0");
@@ -123,7 +123,7 @@ TEST(GraphTest, Edges)
 /////////////////////////////////////////////////
 TEST(GraphTest, EdgesWithIDs)
 {
-  Graph<int, double> graph;
+  DirectedGraph<int, double> graph;
 
   // Create some vertexes.
   auto v0 = graph.AddVertex(0, "0");
@@ -157,7 +157,7 @@ TEST(GraphTest, EdgesWithIDs)
 /////////////////////////////////////////////////
 TEST(GraphTest, Empty)
 {
-  Graph<int, double> graph;
+  DirectedGraph<int, double> graph;
 
   EXPECT_TRUE(graph.Empty());
 
@@ -171,7 +171,7 @@ TEST(GraphTest, Empty)
 /////////////////////////////////////////////////
 TEST(GraphTest, Adjacents)
 {
-  Graph<int, double> graph;
+  DirectedGraph<int, double> graph;
 
   // Create some vertexes.
   auto v0 = graph.AddVertex(0, "0");
@@ -201,7 +201,7 @@ TEST(GraphTest, Adjacents)
 /////////////////////////////////////////////////
 TEST(GraphTest, Incidents)
 {
-  Graph<int, double> graph;
+  DirectedGraph<int, double> graph;
 
   // Create some vertexes.
   auto v0 = graph.AddVertex(0, "0");
@@ -231,7 +231,7 @@ TEST(GraphTest, Incidents)
 /////////////////////////////////////////////////
 TEST(GraphTest, AddVertex)
 {
-  Graph<int, double> graph;
+  DirectedGraph<int, double> graph;
 
   // Create some vertexes without Id.
   auto v0 = graph.AddVertex(0, "0");
@@ -258,7 +258,7 @@ TEST(GraphTest, AddVertex)
 /////////////////////////////////////////////////
 TEST(GraphTest, AddEdge)
 {
-  Graph<int, double> graph;
+  DirectedGraph<int, double> graph;
 
   // Create some vertexes without Id.
   auto v0 = graph.AddVertex(0, "0");
@@ -302,7 +302,7 @@ TEST(GraphTest, AddEdge)
 /////////////////////////////////////////////////
 TEST(GraphTest, RemoveEdge)
 {
-  Graph<int, double> graph;
+  DirectedGraph<int, double> graph;
 
   // Create some vertexes without Id.
   auto v0 = graph.AddVertex(0, "0");
@@ -354,7 +354,7 @@ TEST(GraphTest, RemoveEdge)
 /////////////////////////////////////////////////
 TEST(GraphTest, RemoveVertex)
 {
-  Graph<int, double> graph;
+  DirectedGraph<int, double> graph;
 
   // Create some vertexes without Id.
   auto v0 = graph.AddVertex(0, "0");
@@ -405,7 +405,7 @@ TEST(GraphTest, RemoveVertex)
 /////////////////////////////////////////////////
 TEST(GraphTest, RemoveVertexesWithName)
 {
-  Graph<int, double> graph;
+  DirectedGraph<int, double> graph;
 
   // Create some vertexes without Id.
   auto v0 = graph.AddVertex(0, "vertex_0");
@@ -453,7 +453,7 @@ TEST(GraphTest, RemoveVertexesWithName)
 /////////////////////////////////////////////////
 TEST(GraphTest, StreamInsertion)
 {
-  Graph<int, double> graph;
+  DirectedGraph<int, double> graph;
 
   // Create some vertexes without Id.
   auto v0 = graph.AddVertex(0, "vertex_0");

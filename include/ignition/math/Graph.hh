@@ -93,7 +93,7 @@ namespace ignition
 
     // Forward declarations.
     template <typename V, typename E>
-    class Graph;
+    class DirectedGraph;
 
     /// \brief An edge represents a connection between two vertexes.
     template<typename V, typename E>
@@ -161,7 +161,7 @@ namespace ignition
       private: bool valid = false;
 
       /// The Graph class needs to modify 'valid' during edge removal.
-      friend class Graph<V, E>;
+      friend class DirectedGraph<V, E>;
     };
 
     /// \def EdgePtr
@@ -174,16 +174,16 @@ namespace ignition
     template<typename V, typename E>
     using EdgePtr_S = std::set<EdgePtr<V, E>>;
 
-    /// \brief A generic graph class.
+    /// \brief A generic directed graph class.
     /// Both vertexes and edges can store user information. A vertex could be
     /// created passing a custom Id if needed, otherwise it will be choosen
     /// internally. The vertexes also have a name that could be reused among
     /// other vertexes if needed.
     template<typename V, typename E>
-    class Graph
+    class DirectedGraph
     {
       /// \brief Default constructor.
-      public: Graph() = default;
+      public: DirectedGraph() = default;
 
       /// \brief Get a pointer to a vertex using its Id.
       /// \param[in] _id The ID of the vertex.
@@ -487,7 +487,7 @@ namespace ignition
       /// \param[out] _out The output stream.
       /// \param[in] _g Graph to write to the stream.
       public: friend std::ostream &operator<<(std::ostream &_out,
-                                              const Graph<V, E> &_g)
+                                              const DirectedGraph<V, E> &_g)
       {
         _out << "Vertexes" << std::endl;
         for (auto const &v : _g.Vertexes())
@@ -512,7 +512,7 @@ namespace ignition
         return this->nextId;
       }
 
-      /// The graph is represented using an adjacency list.
+      /// The directed graph is represented using an adjacency list.
       protected: std::vector<std::pair<VertexPtr<V>, EdgePtr_S<V, E>>> data;
 
       /// \brief List of ids curently used.
