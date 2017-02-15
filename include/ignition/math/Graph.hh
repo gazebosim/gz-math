@@ -52,7 +52,7 @@ namespace ignition
 
       /// \brief Retrieve the user information.
       /// \return A mutable reference to the user information.
-      public: V &Data()
+      public: const V &Data() const
       {
         return this->data;
       }
@@ -79,6 +79,20 @@ namespace ignition
 
       /// \brief Non-unique vertex name.
       private: std::string name = "";
+    };
+
+    /// \brief Used in the Graph constructor as a uniform initialization.
+    template<typename E>
+    struct EdgeInitializer
+    {
+      /// \brief ID of the tail's vertex.
+      public: int64_t tailId;
+
+      /// \brief ID of the head's vertex.
+      public: int64_t headId;
+
+      /// \brief User data.
+      public: E data;
     };
 
     /// \def VertexPtr
@@ -184,6 +198,33 @@ namespace ignition
     {
       /// \brief Default constructor.
       public: DirectedGraph() = default;
+
+      /// \brief Constructor.
+      /// \param[in] _vertexes Collection of vertexes.
+      /// \param[in] _edges Collection of edges.
+      public: DirectedGraph(const std::vector<Vertex<V>> &_vertexes,
+                            const std::vector<EdgeInitializer<E>> &_edges)
+      {
+        // Add all vertexes.
+        for (auto &v : _vertexes)
+        {
+          if (!this->AddVertex(v.Data(), v.Name(), v.Id()))
+          {
+            std::cerr << "Invalid vertex with Id [" << v.Id() << "]"
+                      << std::endl;
+          }
+        }
+
+        // Add all edges.
+        for (auto &e : _edges)
+        {
+          if (!this->AddEdge(e.tailId, e.headId, e.data))
+          {
+            std::cerr << "Invalid edge [" << e.tailId << "," << e.headId << ","
+                      << e.data << "]" << std::endl;
+          }
+        }
+      }
 
       /// \brief Get a pointer to a vertex using its Id.
       /// \param[in] _id The ID of the vertex.
