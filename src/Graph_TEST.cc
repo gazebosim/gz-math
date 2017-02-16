@@ -513,3 +513,19 @@ TEST(GraphTest, StreamInsertion)
     "  [2-->0]\n";
   EXPECT_EQ(output.str(), expectedOutput);
 }
+
+/////////////////////////////////////////////////
+TEST(GraphTest, Performance)
+{
+  DirectedGraph<int, double> graph;
+  const int kNumVertexes = 100000;
+  VertexPtr<int> v;
+
+  for (int i = 0; i < kNumVertexes; ++i)
+    v = graph.AddVertex(i, std::to_string(i));
+
+  for (int i = 0; i < kNumVertexes - 1; ++i)
+    graph.AddEdge(i, i + 1, 0.0);
+
+  EXPECT_EQ(graph.Incidents(v).size(), 1);
+}
