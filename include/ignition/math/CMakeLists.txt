@@ -7,6 +7,7 @@ set (headers
   Color.hh
   Filter.hh
   Frustum.hh
+  Graph.hh
   Helpers.hh
   IndexException.hh
   Inertial.hh
