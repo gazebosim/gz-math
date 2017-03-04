@@ -74,11 +74,11 @@ namespace ignition
       /// \brief User information.
       private: V data;
 
-      /// \brief Unique vertex Id.
-      private: int64_t id;
-
       /// \brief Non-unique vertex name.
       private: std::string name = "";
+
+      /// \brief Unique vertex Id.
+      private: int64_t id;
     };
 
     /// \brief Used in the Graph constructor as a uniform initialization.
