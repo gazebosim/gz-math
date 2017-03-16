@@ -169,8 +169,8 @@ Vector3f Color::YUV() const
 {
   Vector3f yuv;
 
-  yuv.X() =   0.299f * this->r + 0.587f  * this->g + 0.114    * this->b;
-  yuv.Y() = -0.1679f * this->r - 0.332f  * this->g + 0.5      * this->b + 0.5f;
+  yuv.X() =   0.299f * this->r + 0.587f  * this->g + 0.114f   * this->b;
+  yuv.Y() = -0.1679f * this->r - 0.332f  * this->g + 0.5f     * this->b + 0.5f;
   yuv.Z() =     0.5f * this->r - 0.4189f * this->g - 0.08105f * this->b + 0.5f;
 
   yuv.X() = yuv.X() < 0 ? 0: yuv.X();
