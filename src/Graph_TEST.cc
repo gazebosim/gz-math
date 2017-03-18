@@ -34,12 +34,15 @@ TEST(GraphTest, Iterators)
     {{0, 1, 0.0}, {1, 2, 0.0}, {1, 0, 0.0}}
   });
 
-  auto g_vIt = graph.Find(1);
+  // Get a vertex iterator from the vertex Id.
+  AdjList<int, double>::iterator g_vIt = graph.Find(1);
+
+  // Create and adjacency iterator from a vertex iterator.
   AdjIt<int, double> g_adjIt(g_vIt);
+
+  // Iterate through the list of vertexes connected with
   for (; g_adjIt.Valid(); ++g_adjIt)
-  {
     std::cout << (*g_adjIt.CurAdj())->Head()->Name() << std::endl;
-  }
 }
 
 /////////////////////////////////////////////////
