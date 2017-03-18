@@ -26,11 +26,25 @@ using namespace ignition;
 using namespace math;
 
 /////////////////////////////////////////////////
+TEST(GraphTest, Iterators)
+{
+  DirectedGraph<int, double> graph(
+  {
+    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
+    {{0, 1, 0.0}, {1, 2, 0.0}, {1, 0, 0.0}}
+  });
+
+  auto g_vIt = graph.Find(1);
+  AdjIt<int, double> g_adjIt(g_vIt);
+  for (; g_adjIt.Valid(); ++g_adjIt)
+  {
+    std::cout << (*g_adjIt.CurAdj())->Head()->Name() << std::endl;
+  }
+}
+
+/////////////////////////////////////////////////
 TEST(GraphTest, UniformInitialization)
 {
-  // Testing caguero.
-  DirectedGraph<int, double> graph;
-
   //DirectedGraph<int, double> graph(
   //{
   //  {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
