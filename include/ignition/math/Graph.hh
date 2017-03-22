@@ -164,12 +164,12 @@ namespace ignition
 
       /// \brief True when the edge is connected in a graph or false otherwise.
       /// This member variable exists to prevent the following situation:
-      ///   Imagine that you have a shared pointer pointing to a valid edge
-      ///   connected in a graph. Now, you use the Graph API and remove the
-      ///   edge. This operation will disconnect the edge from the graph but the
-      ///   edge won't be deallocated because you will keep a shared pointer.
-      ///   Having a shared pointer to the edge will allow you to traverse the
-      ///   edge and go to any of the vertexes of the graph and modify it.
+      /// Imagine that you have a shared pointer pointing to a valid edge
+      /// connected in a graph. Now, you use the Graph API and remove the
+      /// edge. This operation will disconnect the edge from the graph but the
+      /// edge won't be deallocated because you will keep a shared pointer.
+      /// Having a shared pointer to the edge will allow you to traverse the
+      /// edge and go to any of the vertexes of the graph and modify it.
       /// Once an edge is removed, this flag is set to false and this will
       /// prevent you from traversing the edge and reach the vertexes.
       private: bool valid = false;
@@ -189,18 +189,22 @@ namespace ignition
     using EdgePtr_S = std::set<EdgePtr<V, E>>;
 
     template<typename V, typename E>
-    using AdjList = std::vector<std::pair<VertexPtr<V>, EdgePtr_S<V, E>>>;
+    using AdjList = std::map<VertexPtr<V>, EdgePtr_S<V, E>>;
+
+    /// ToDo.
+    template<typename V, typename E>
+    using NodeIt = typename AdjList<V, E>::const_iterator;
+
+    /// ToDo.
+    template<typename V, typename E>
+    using EdgeIt = typename EdgePtr_S<V, E>::const_iterator;
 
     // Adjacency iterator.
     template<typename V, typename E>
     class AdjIt
     {
-      using NodeIt = typename AdjList<V, E>::const_iterator;
-      using EdgeIt = typename EdgePtr_S<V, E>::const_iterator;
-
-      public: AdjIt(NodeIt n):
-        //begin(b),
-        //end(e),
+      /// \brief ToDo.
+      public: AdjIt(NodeIt<V, E> n):
         edgeBegin(n->second.begin()),
         edgeEnd(n->second.end()),
         node(n),
@@ -208,39 +212,106 @@ namespace ignition
       {
       }
 
+      /// \brief ToDo.
       public: bool Valid() const
       {
         return this->adj != this->edgeEnd;
       }
 
+      /// \brief ToDo.
       public: V Value() const
       {
         return this->node->first->Data();
       }
 
-      public: EdgeIt CurAdj() const
+      /// \brief ToDo.
+      public: EdgeIt<V, E> CurAdj() const
       {
         return this->adj;
       }
 
+      /// \brief ToDo.
       public: AdjIt &operator++()
       {
-        ++this->adj;
+        if (this->adj != this->edgeEnd)
+          ++this->adj;
         return *this;
       }
 
-      private: void FindAdjacent()
+      /// ToDo.
+      private: EdgeIt<V, E> const edgeBegin;
+      /// ToDo.
+      private: EdgeIt<V, E> const edgeEnd;
+      /// ToDo.
+      private: NodeIt<V, E> node;
+      /// ToDo.
+      private: EdgeIt<V, E> adj;
+    };
+
+    // Graph edge iterator.
+    template<typename V, typename E>
+    class GraphEdgeIt
+    {
+      /// \brief ToDo.
+      public: GraphEdgeIt(const NodeIt<V, E> _b,
+                          const NodeIt<V, E> _e):
+        end(_e),
+        curVertex(_b),
+        curEdge(_b->second.begin()),
+        edgeEnd(_b->second.end())
       {
-        while (this->adj != this->edgeEnd)
-          ++this->adj;
+        if (this->curEdge == this->edgeEnd)
+          this->FindNextEdge();
       }
 
-      //private: NodeIt const begin;
-      //private: NodeIt const end;
-      private: EdgeIt const edgeBegin;
-      private: EdgeIt const edgeEnd;
-      private: NodeIt node;
-      private: EdgeIt adj;
+      /// \brief ToDo.
+      public: bool Valid() const
+      {
+        return this->curVertex != this->end;
+      }
+
+      /// \brief ToDo.
+      public: NodeIt<V, E> CurVertex() const
+      {
+        return this->curVertex;
+      }
+
+      /// \brief ToDo.
+      public: EdgeIt<V, E> CurEdge() const
+      {
+        return this->curEdge;
+      }
+
+      /// \brief ToDo.
+      public: GraphEdgeIt &operator++()
+      {
+        this->FindNextEdge();
+        return *this;
+      }
+
+      /// \brief ToDo.
+      private: void FindNextEdge()
+      {
+        if (this->curEdge != this->edgeEnd)
+          ++this->curEdge;
+
+        while ((this->curEdge   == this->edgeEnd) &&
+               (this->curVertex != this->end))
+        {
+          ++this->curVertex;
+          this->curEdge = this->curVertex->second.begin();
+          this->edgeEnd = this->curVertex->second.end();
+        }
+      }
+
+      /// ToDo.
+      private: NodeIt<V, E> const end;
+      /// ToDo.
+      private: NodeIt<V, E> curVertex;
+      /// ToDo.
+      private: EdgeIt<V, E> curEdge;
+      /// ToDo.
+      private: EdgeIt<V, E> edgeEnd;
     };
 
     /// \brief A generic directed graph class.
@@ -294,15 +365,18 @@ namespace ignition
         return iter->second;
       }
 
-      /// \brief Get all vertexes of the graph.
-      /// \return A vector of shared pointers to all vertexes in the graph.
-      //public: VertexPtr_V<V> Vertexes() const
-      //{
-      //  VertexPtr_V<V> res;
-      //  for (auto const &pair : this->data)
-      //    res.push_back(pair.first);
-      //  return res;
-      //}
+      /// \brief Get an iterator pointing to the first vertex in the graph.
+      public: NodeIt<V, E> begin() const
+      {
+        return this->data.begin();
+      }
+
+      /// \brief Get an iterator pointing to the past-the-end vertex in the
+      /// graph.
+      public: NodeIt<V, E> end() const
+      {
+        return this->data.end();
+      }
 
       /// \brief Get all vertexes of the graph with a given name.
       /// \param[in] _name A name.
@@ -327,13 +401,24 @@ namespace ignition
       //  return res;
       //}
 
+      public: EdgePtr_S<V, E> Edges() const
+      {
+        GraphEdgeIt<V, E> graphEdgeIt(this->begin(), this->end());
+
+        EdgePtr_S<V, E> res;
+        for (; graphEdgeIt.Valid(); ++graphEdgeIt)
+          res.insert(*graphEdgeIt.CurEdge());
+
+        return res;
+      }
+
       /// \brief Whether the graph is empty.
       /// \return True when there are no vertexes in the graph or
       /// false otherwise.
-      //public: bool Empty() const
-      //{
-      //  return this->data.empty();
-      //}
+      public: bool Empty() const
+      {
+        return this->data.empty();
+      }
 
       /// \brief Get all neighbors vertexes that are directly connected to
       /// a given vertex.
@@ -358,15 +443,23 @@ namespace ignition
       //  return res;
       //}
 
+      public: AdjIt<V, E> Adjacents(const VertexPtr<V> _vertex)
+      {
+        // Get a vertex iterator from the vertex Id.
+        AdjList<int, double>::iterator vIt = this->Find(_vertex);
+
+        return AdjIt<V, E>(vIt);
+      }
+
       /// \brief Get all neighbors vertexes that are directly connected to
       /// a given vertex.
       /// \param[in] _id The vertex ID to check adjacent vertexes.
       /// \return A vector of vertexes that are adjacents and directly connected
       /// with an edge.
-      //public: VertexPtr_V<V> Adjacents(const int64_t _id)
-      //{
-      //  return this->Adjacents(this->VertexById(_id));
-      //}
+      public: AdjIt<V, E> Adjacents(const int64_t _id)
+      {
+        return this->Adjacents(this->VertexById(_id));
+      }
 
       /// \brief Get the set of incoming edges to a given vertex.
       /// \param[in] _vertex Pointer to the vertex.
@@ -419,7 +512,8 @@ namespace ignition
         // Create the vertex.
         auto v = std::make_shared<Vertex<V>>(_data, _name, id);
         // Link the vertex with an empty list of edges.
-        this->data.push_back(std::make_pair(v, EdgePtr_S<V, E>()));
+        this->data[v] = EdgePtr_S<V, E>();
+
         // Update the map of Ids.
         this->ids[id] = v;
         // Update the map of names.
@@ -439,21 +533,12 @@ namespace ignition
                                     const E &_data)
       {
         // Find the tail vertex.
-        auto itTail = std::find_if(this->data.begin(), this->data.end(),
-                       [&_tail](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
-                       {
-                         return _pair.first == _tail;
-                       });
-
+        auto itTail = this->data.find(_tail);
         if (itTail == this->data.end())
           return nullptr;
 
         // Make sure that the head vertex also exists.
-        auto itHead = std::find_if(this->data.begin(), this->data.end(),
-                      [&_head](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
-                      {
-                        return _pair.first == _head;
-                      });
+        auto itHead = this->data.find(_head);
         if (itHead == this->data.end())
           return nullptr;
 
@@ -495,11 +580,7 @@ namespace ignition
       /// \brief ToDo.
       typename AdjList<V, E>::iterator Find(const VertexPtr<V> &_vertex)
       {
-        return std::find_if(this->data.begin(), this->data.end(),
-               [&_vertex](std::pair<VertexPtr<V>, EdgePtr_S<V, E>> _pair)
-               {
-                 return _pair.first == _vertex;
-               });
+        return this->data.find(_vertex);
       }
 
       /// \brief ToDo.
@@ -598,21 +679,21 @@ namespace ignition
       /// \brief Stream insertion operator.
       /// \param[out] _out The output stream.
       /// \param[in] _g Graph to write to the stream.
-      //public: friend std::ostream &operator<<(std::ostream &_out,
-      //                                        const DirectedGraph<V, E> &_g)
-      //{
-      //  _out << "Vertexes" << std::endl;
-      //  for (auto const &v : _g.Vertexes())
-      //    _out << "  [" << v->Id() << "][" << v->Name() << "]" << std::endl;
-      //
-      //  _out << "Edges" << std::endl;
-      //  for (auto const &e : _g.Edges())
-      //  {
-      //    _out << "  [" << e->Tail()->Id() << "-->"
-      //         << e->Head()->Id() << "]" << std::endl;
-      //  }
-      //  return _out;
-      //}
+      public: friend std::ostream &operator<<(std::ostream &_out,
+                                              const DirectedGraph<V, E> &_g)
+      {
+        _out << "Vertexes" << std::endl;
+        for (auto const &v : _g.Vertexes())
+          _out << "  [" << v->Id() << "][" << v->Name() << "]" << std::endl;
+
+        _out << "Edges" << std::endl;
+        for (auto const &e : _g.Edges())
+        {
+          _out << "  [" << e->Tail()->Id() << "-->"
+               << e->Head()->Id() << "]" << std::endl;
+        }
+        return _out;
+      }
 
       /// \brief Get an available Id to be assigned to a new vertex.
       /// \return The next available Id.
@@ -625,7 +706,7 @@ namespace ignition
       }
 
       /// The directed graph is represented using an adjacency list.
-      protected: std::vector<std::pair<VertexPtr<V>, EdgePtr_S<V, E>>> data;
+      protected: AdjList<V, E> data;
 
       /// \brief List of ids curently used.
       protected: std::map<int64_t, VertexPtr<V>> ids;
