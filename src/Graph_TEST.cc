@@ -607,3 +607,64 @@ TEST(GraphTest, Unidirected_initializer)
 
   std::cout << graph << std::endl;
 }
+
+/////////////////////////////////////////////////
+TEST(GraphTest, UndirectedEdges)
+{
+  UndirectedGraph<int, double> graph;
+
+  // Create some vertexes.
+  auto v0 = graph.AddVertex(0, "0");
+  ASSERT_TRUE(v0 != nullptr);
+  auto v1 = graph.AddVertex(1, "1");
+  ASSERT_TRUE(v1 != nullptr);
+  auto v2 = graph.AddVertex(2, "2");
+  ASSERT_TRUE(v2 != nullptr);
+
+  // Create some edges [(v0-->v1), (v1-->v2), (v2-->v0)]
+  VertexPtr_S<int> vertexes1 = {v0, v1};
+  VertexPtr_S<int> vertexes2 = {v1, v2};
+  VertexPtr_S<int> vertexes3 = {v1, v0};
+  auto e0 = graph.AddEdge(vertexes1, 2.0);
+  ASSERT_TRUE(e0 != nullptr);
+  auto e1 = graph.AddEdge(vertexes2, 3.0);
+  ASSERT_TRUE(e1 != nullptr);
+  auto e2 = graph.AddEdge(vertexes3, 4.0);
+  ASSERT_TRUE(e2 == nullptr);
+
+  auto edges = graph.Edges();
+  EXPECT_EQ(edges.size(), 2u);
+
+  // Check that the pointers point to the same edges.
+  EXPECT_NE(std::find(edges.begin(), edges.end(), e0), edges.end());
+  EXPECT_NE(std::find(edges.begin(), edges.end(), e1), edges.end());
+}
+
+/////////////////////////////////////////////////
+TEST(GraphTest, GenericGraph)
+{
+  GenericEdgePtr<DirectedEdge<int, double>> edgePtr;
+  GenericEdgePtr_S<DirectedEdge<int, double>> edgePtr_s;
+  GenericAdjList<int, UndirectedEdge<int, double>> geneAdjList;
+  GenericNodeIt<int, UndirectedEdge<int, double>> nodeIt;
+  GenericEdgeIt<DirectedEdge<int, double>> edgeIt;
+
+  Graph<int, double, DirectedEdge<int, double>> genericGraph;
+  // Create some vertexes without Id.
+  auto v0 = genericGraph.AddVertex(0, "vertex_0");
+  ASSERT_TRUE(v0 != nullptr);
+
+  // Get a vertex iterator from the vertex Id.
+  GenericAdjList<int, DirectedEdge<int, double>>::iterator g_vIt =
+    genericGraph.Find(0);
+
+  // Create and adjacency iterator from a vertex iterator.
+  GenericAdjIt<int, DirectedEdge<int, double>> g_adjIt(g_vIt);
+
+  // Iterate through the list of vertexes connected with vertex "1".
+  for (; g_adjIt.Valid(); ++g_adjIt)
+    std::cout << (*g_adjIt.CurAdj())->Head()->Name() << std::endl;
+
+  auto edges = genericGraph.Edges();
+  EXPECT_EQ(edges.size(), 0u);
+}

@@ -127,9 +127,17 @@ namespace ignition
     template <typename V, typename E>
     class UndirectedGraph;
 
+    /// \brief Generic edge class.
+    template<typename V>
+    class Edge
+    {
+      /// \brief ToDo.
+      public: virtual VertexPtr<V> To(const VertexPtr<V> _from) const = 0;
+    };
+
     /// \brief A directed edge represents a connection between two vertexes.
     template<typename V, typename E>
-    class DirectedEdge
+    class DirectedEdge : public Edge<V>
     {
       /// \brief Constructor.
       /// \param[in] _tail Shared pointer to the tail vertex.
@@ -207,7 +215,7 @@ namespace ignition
 
     /// \brief An undirected edge represents a connection between two vertexes.
     template<typename V, typename E>
-    class UndirectedEdge
+    class UndirectedEdge : public Edge<V>
     {
       /// \brief Constructor.
       /// \param[in] _tail Shared pointer to the tail vertex.
@@ -287,10 +295,20 @@ namespace ignition
     template<typename V, typename E>
     using UndirectedEdgePtr = std::shared_ptr<UndirectedEdge<V, E>>;
 
+     /// \def
+    /// \brief Shared pointer to an edge.
+    template<typename EdgeType>
+    using GenericEdgePtr = std::shared_ptr<EdgeType>;
+
     /// \def EdgePtr_S
     /// \brief Set of shared pointers to edges.
     template<typename V, typename E>
     using EdgePtr_S = std::set<EdgePtr<V, E>>;
+
+    /// \def EdgePtr_S
+    /// \brief Set of shared pointers to edges.
+    template<typename EdgeType>
+    using GenericEdgePtr_S = std::set<GenericEdgePtr<EdgeType>>;
 
     /// \def
     /// \brief Set of shared pointers to edges.
@@ -303,6 +321,9 @@ namespace ignition
     template<typename V, typename E>
     using UndirectedAdjList = std::map<VertexPtr<V>, UndirectedEdgePtr_S<V, E>>;
 
+    template<typename V, typename EdgeType>
+    using GenericAdjList = std::map<VertexPtr<V>, GenericEdgePtr_S<EdgeType>>;
+
     /// ToDo.
     template<typename V, typename E>
     using NodeIt = typename AdjList<V, E>::const_iterator;
@@ -311,6 +332,9 @@ namespace ignition
     template<typename V, typename E>
     using UndirectedNodeIt = typename UndirectedAdjList<V, E>::const_iterator;
 
+    template<typename V, typename EdgeType>
+    using GenericNodeIt = typename GenericAdjList<V, EdgeType>::const_iterator;
+
     /// ToDo.
     template<typename V, typename E>
     using EdgeIt = typename EdgePtr_S<V, E>::const_iterator;
@@ -318,6 +342,10 @@ namespace ignition
     /// ToDo.
     template<typename V, typename E>
     using UndirectedEdgeIt = typename UndirectedEdgePtr_S<V, E>::const_iterator;
+
+    /// ToDo.
+    template<typename EdgeType>
+    using GenericEdgeIt = typename GenericEdgePtr_S<EdgeType>::const_iterator;
 
     // Adjacency iterator.
     template<typename V, typename E>
@@ -415,6 +443,55 @@ namespace ignition
       private: UndirectedNodeIt<V, E> node;
       /// ToDo.
       private: UndirectedEdgeIt<V, E> adj;
+    };
+
+    // Adjacency iterator.
+    template<typename V, typename EdgeType>
+    class GenericAdjIt
+    {
+      /// \brief ToDo.
+      public: GenericAdjIt(GenericNodeIt<V, EdgeType> n):
+        edgeBegin(n->second.begin()),
+        edgeEnd(n->second.end()),
+        node(n),
+        adj(n->second.begin())
+      {
+      }
+
+      /// \brief ToDo.
+      public: bool Valid() const
+      {
+        return this->adj != this->edgeEnd;
+      }
+
+      /// \brief ToDo.
+      public: V Value() const
+      {
+        return this->node->first->Data();
+      }
+
+      /// \brief ToDo.
+      public: GenericEdgeIt<EdgeType> CurAdj() const
+      {
+        return this->adj;
+      }
+
+      /// \brief ToDo.
+      public: GenericAdjIt &operator++()
+      {
+        if (this->adj != this->edgeEnd)
+          ++this->adj;
+        return *this;
+      }
+
+      /// ToDo.
+      private: GenericEdgeIt<EdgeType> const edgeBegin;
+      /// ToDo.
+      private: GenericEdgeIt<EdgeType> const edgeEnd;
+      /// ToDo.
+      private: GenericNodeIt<V, EdgeType> node;
+      /// ToDo.
+      private: GenericEdgeIt<EdgeType> adj;
     };
 
     // Graph edge iterator.
@@ -549,7 +626,73 @@ namespace ignition
       private: UndirectedEdgeIt<V, E> edgeEnd;
     };
 
+    // Graph edge iterator.
+    template<typename V, typename EdgeType>
+    class GenericGraphEdgeIt
+    {
+      /// \brief ToDo.
+      public: GenericGraphEdgeIt(const GenericNodeIt<V, EdgeType> _b,
+                                 const GenericNodeIt<V, EdgeType> _e):
+        end(_e),
+        curVertex(_b),
+        curEdge(_b->second.begin()),
+        edgeEnd(_b->second.end())
+      {
+        if (this->curEdge == this->edgeEnd)
+          this->FindNextEdge();
+      }
 
+      /// \brief ToDo.
+      public: bool Valid() const
+      {
+        return this->curVertex != this->end;
+      }
+
+      /// \brief ToDo.
+      public: GenericNodeIt<V, EdgeType> CurVertex() const
+      {
+        return this->curVertex;
+      }
+
+      /// \brief ToDo.
+      public: GenericEdgeIt<EdgeType> CurEdge() const
+      {
+        return this->curEdge;
+      }
+
+      /// \brief ToDo.
+      public: GenericGraphEdgeIt &operator++()
+      {
+        this->FindNextEdge();
+        return *this;
+      }
+
+      /// \brief ToDo.
+      private: void FindNextEdge()
+      {
+        if (this->curEdge != this->edgeEnd)
+          ++this->curEdge;
+
+        while ((this->curEdge   == this->edgeEnd) &&
+               (this->curVertex != this->end))
+        {
+          ++this->curVertex;
+          this->curEdge = this->curVertex->second.begin();
+          this->edgeEnd = this->curVertex->second.end();
+        }
+      }
+
+      /// ToDo.
+      private: GenericNodeIt<V, EdgeType> const end;
+      /// ToDo.
+      private: GenericNodeIt<V, EdgeType> curVertex;
+      /// ToDo.
+      private: GenericEdgeIt<EdgeType> curEdge;
+      /// ToDo.
+      private: GenericEdgeIt<EdgeType> edgeEnd;
+    };
+
+    /// \brief ToDo.
     template<typename V, typename E>
     class UndirectedGraph
     {
@@ -668,7 +811,7 @@ namespace ignition
         return this->AddEdge(vertexes, _data);
       }
 
-       /// \brief Get a pointer to a vertex using its Id.
+      /// \brief Get a pointer to a vertex using its Id.
       /// \param[in] _id The ID of the vertex.
       /// \return A shared pointer to the vertex with Id = _id or nullptr if
       /// not found.
@@ -1153,6 +1296,127 @@ namespace ignition
 
       /// The directed graph is represented using an adjacency list.
       protected: AdjList<V, E> data;
+
+      /// \brief List of ids curently used.
+      protected: std::map<int64_t, VertexPtr<V>> ids;
+
+      /// \brief Associatation between names and vertexes curently used.
+      protected: std::map<std::string, VertexPtr_V<V>> names;
+
+      /// \brief The next vertex Id to be assigned to a new vertex.
+      private: int64_t nextId = 0;
+    };
+
+    /// \brief A generic directed graph class.
+    /// Both vertexes and edges can store user information. A vertex could be
+    /// created passing a custom Id if needed, otherwise it will be choosen
+    /// internally. The vertexes also have a name that could be reused among
+    /// other vertexes if needed.
+    template<typename V, typename E, typename EdgeType>
+    class Graph
+    {
+      /// \brief Default constructor.
+      public: Graph() = default;
+
+      /// \brief ToDo.
+      public: VertexPtr<V> AddVertex(const V &_data,
+                                     const std::string &_name,
+                                     const int64_t _id = -1)
+      {
+        auto id = _id;
+        // The user didn't provide an Id, we generate it.
+        if (id == -1)
+          id = this->NextId();
+        // The user provided an Id but already exists.
+        else if (this->ids.find(id) != this->ids.end())
+          return nullptr;
+
+        // Create the vertex.
+        auto v = std::make_shared<Vertex<V>>(_data, _name, id);
+
+        // Link the vertex with an empty list of edges.
+        this->data[v] = GenericEdgePtr_S<EdgeType>();
+
+        // Update the map of Ids.
+        this->ids[id] = v;
+        // Update the map of names.
+        this->names[_name].push_back(v);
+
+        return v;
+      }
+
+      /// \brief ToDo.
+      public: GenericEdgePtr_S<EdgeType> Edges() const
+      {
+        GenericGraphEdgeIt<V, EdgeType> graphEdgeIt(this->begin(), this->end());
+
+        GenericEdgePtr_S<EdgeType> res;
+        for (; graphEdgeIt.Valid(); ++graphEdgeIt)
+          res.insert(*graphEdgeIt.CurEdge());
+
+        return res;
+      }
+
+      /// \brief Whether the graph is empty.
+      /// \return True when there are no vertexes in the graph or
+      /// false otherwise.
+      public: bool Empty() const
+      {
+        return this->data.empty();
+      }
+
+      /// \brief Get a pointer to a vertex using its Id.
+      /// \param[in] _id The ID of the vertex.
+      /// \return A shared pointer to the vertex with Id = _id or nullptr if
+      /// not found.
+      public: VertexPtr<V> VertexById(const int64_t _id)
+      {
+        auto iter = this->ids.find(_id);
+        if (iter == this->ids.end())
+          return nullptr;
+
+        return iter->second;
+      }
+
+      /// \brief Get an iterator pointing to the first vertex in the graph.
+      public: GenericNodeIt<V, EdgeType> begin() const
+      {
+        return this->data.begin();
+      }
+
+      /// \brief Get an iterator pointing to the past-the-end vertex in the
+      /// graph.
+      public: GenericNodeIt<V, EdgeType> end() const
+      {
+        return this->data.end();
+      }
+
+      /// \brief ToDo.
+      public: typename GenericAdjList<V, EdgeType>::iterator Find(
+                                                    const VertexPtr<V> &_vertex)
+      {
+        return this->data.find(_vertex);
+      }
+
+      /// \brief ToDo.
+      public: typename GenericAdjList<V, EdgeType>::iterator Find(
+                                                        const int64_t _vertexId)
+      {
+        return this->Find(this->VertexById(_vertexId));
+      }
+
+      /// \brief Get an available Id to be assigned to a new vertex.
+      /// \return The next available Id.
+      private: int64_t NextId()
+      {
+        while (this->ids.find(this->nextId) != this->ids.end())
+          ++this->nextId;
+
+        return this->nextId;
+      }
+
+      /// The directed graph is represented using an adjacency list.
+      protected: GenericAdjList<V, EdgeType> data;
 
       /// \brief List of ids curently used.
       protected: std::map<int64_t, VertexPtr<V>> ids;
