@@ -7,6 +7,8 @@ set (headers
   Filter.hh
   Frustum.hh
   Graph.hh
+  GraphDirected.hh
+  GraphUndirected.hh
   Helpers.hh
   Inertial.hh
   Kmeans.hh
