@@ -83,13 +83,23 @@ namespace ignition
 
     /// \brief Used in the Graph constructor as a uniform initialization.
     template<typename E>
-    struct EdgeInitializer
+    struct DirectEdgeInitializer
     {
       /// \brief ID of the tail's vertex.
       public: int64_t tailId;
 
       /// \brief ID of the head's vertex.
       public: int64_t headId;
+
+      /// \brief User data.
+      public: E data;
+    };
+
+    template<typename E>
+    struct UndirectEdgeInitializer
+    {
+      /// \brief IDs of the vertexes.
+      public: std::set<int64_t> vertexes;
 
       /// \brief User data.
       public: E data;
@@ -105,19 +115,27 @@ namespace ignition
     template<typename V>
     using VertexPtr_V = std::vector<VertexPtr<V>>;
 
+    /// \def VertexPtr_S
+    /// \brief Set of shared pointers to a vertex.
+    template<typename V>
+    using VertexPtr_S = std::set<VertexPtr<V>>;
+
     // Forward declarations.
     template <typename V, typename E>
     class DirectedGraph;
 
-    /// \brief An edge represents a connection between two vertexes.
+    template <typename V, typename E>
+    class UndirectedGraph;
+
+    /// \brief A directed edge represents a connection between two vertexes.
     template<typename V, typename E>
-    class Edge
+    class DirectedEdge
     {
       /// \brief Constructor.
       /// \param[in] _tail Shared pointer to the tail vertex.
       /// \param[in] _head Shared pointer to the head vertex.
       /// \param[in] _data User data to be stored in the edge.
-      public: Edge(const VertexPtr<V> _tail,
+      public: DirectedEdge(const VertexPtr<V> _tail,
                    const VertexPtr<V> _head,
                    const E &_data)
         : tail(_tail),
@@ -153,6 +171,15 @@ namespace ignition
         return this->data;
       }
 
+      /// \brief ToDo.
+      public: VertexPtr<V> To(const VertexPtr<V> _from) const
+      {
+        if (_from != this->Tail())
+          return nullptr;
+
+        return this->Head();
+      }
+
       /// \brief Shared pointer to the tail's vertex.
       private: VertexPtr<V> tail;
 
@@ -178,18 +205,103 @@ namespace ignition
       friend class DirectedGraph<V, E>;
     };
 
+    /// \brief An undirected edge represents a connection between two vertexes.
+    template<typename V, typename E>
+    class UndirectedEdge
+    {
+      /// \brief Constructor.
+      /// \param[in] _tail Shared pointer to the tail vertex.
+      /// \param[in] _head Shared pointer to the head vertex.
+      /// \param[in] _data User data to be stored in the edge.
+      public: UndirectedEdge(const VertexPtr_S<V> _vertexes,
+                             const E &_data)
+        : vertexes(_vertexes),
+          data(_data)
+      {
+      }
+
+      /// \brief Get a shared pointer to the tail's vertex in this edge.
+      /// \return A shared pointer to the tail's vertex in this edge.
+      public: VertexPtr_S<V> Vertexes() const
+      {
+        return this->vertexes;
+      }
+
+      /// \brief Get the user data stored in the edge.
+      /// \return The user data stored in the edge.
+      public: E &Data()
+      {
+        return this->data;
+      }
+
+      /// \brief ToDo.
+      public: VertexPtr<V> To(const VertexPtr<V> _from) const
+      {
+        assert(this->vertexes.size() == 2u);
+        auto search = this->vertexes.find(_from);
+        if (search == this->vertexes.end())
+          return nullptr;
+
+        VertexPtr_S<V> diff;
+        VertexPtr_S<V> s2 = {_from};
+        std::set_difference(this->vertexes.begin(), this->vertexes.end(),
+                            s2.begin(), s2.end(),
+                            std::inserter(diff, diff.begin()));
+
+        assert(diff.size() > 0u);
+        if (diff.size() >= 2u)
+          return nullptr;
+
+        return *diff.begin();
+      }
+
+      /// \brief ToDo.
+      private: VertexPtr_S<V> vertexes;
+
+      /// \brief User data.
+      private: E data;
+
+      /// \brief True when the edge is connected in a graph or false otherwise.
+      /// This member variable exists to prevent the following situation:
+      /// Imagine that you have a shared pointer pointing to a valid edge
+      /// connected in a graph. Now, you use the Graph API and remove the
+      /// edge. This operation will disconnect the edge from the graph but the
+      /// edge won't be deallocated because you will keep a shared pointer.
+      /// Having a shared pointer to the edge will allow you to traverse the
+      /// edge and go to any of the vertexes of the graph and modify it.
+      /// Once an edge is removed, this flag is set to false and this will
+      /// prevent you from traversing the edge and reach the vertexes.
+      private: bool valid = false;
+
+      /// The Graph class needs to modify 'valid' during edge removal.
+      friend class UndirectedGraph<V, E>;
+    };
+
     /// \def EdgePtr
     /// \brief Shared pointer to an edge.
     template<typename V, typename E>
-    using EdgePtr = std::shared_ptr<Edge<V, E>>;
+    using EdgePtr = std::shared_ptr<DirectedEdge<V, E>>;
+
+    /// \def
+    /// \brief Shared pointer to an edge.
+    template<typename V, typename E>
+    using UndirectedEdgePtr = std::shared_ptr<UndirectedEdge<V, E>>;
 
     /// \def EdgePtr_S
     /// \brief Set of shared pointers to edges.
     template<typename V, typename E>
     using EdgePtr_S = std::set<EdgePtr<V, E>>;
 
+    /// \def
+    /// \brief Set of shared pointers to edges.
+    template<typename V, typename E>
+    using UndirectedEdgePtr_S = std::set<UndirectedEdgePtr<V, E>>;
+
     template<typename V, typename E>
     using AdjList = std::map<VertexPtr<V>, EdgePtr_S<V, E>>;
+
+    template<typename V, typename E>
+    using UndirectedAdjList = std::map<VertexPtr<V>, UndirectedEdgePtr_S<V, E>>;
 
     /// ToDo.
     template<typename V, typename E>
@@ -197,7 +309,15 @@ namespace ignition
 
     /// ToDo.
     template<typename V, typename E>
+    using UndirectedNodeIt = typename UndirectedAdjList<V, E>::const_iterator;
+
+    /// ToDo.
+    template<typename V, typename E>
     using EdgeIt = typename EdgePtr_S<V, E>::const_iterator;
+
+    /// ToDo.
+    template<typename V, typename E>
+    using UndirectedEdgeIt = typename UndirectedEdgePtr_S<V, E>::const_iterator;
 
     // Adjacency iterator.
     template<typename V, typename E>
@@ -246,6 +366,55 @@ namespace ignition
       private: NodeIt<V, E> node;
       /// ToDo.
       private: EdgeIt<V, E> adj;
+    };
+
+    // Adjacency iterator.
+    template<typename V, typename E>
+    class UndirectedAdjIt
+    {
+      /// \brief ToDo.
+      public: UndirectedAdjIt(UndirectedNodeIt<V, E> n):
+        edgeBegin(n->second.begin()),
+        edgeEnd(n->second.end()),
+        node(n),
+        adj(n->second.begin())
+      {
+      }
+
+      /// \brief ToDo.
+      public: bool Valid() const
+      {
+        return this->adj != this->edgeEnd;
+      }
+
+      /// \brief ToDo.
+      public: V Value() const
+      {
+        return this->node->first->Data();
+      }
+
+      /// \brief ToDo.
+      public: UndirectedEdgeIt<V, E> CurAdj() const
+      {
+        return this->adj;
+      }
+
+      /// \brief ToDo.
+      public: UndirectedAdjIt &operator++()
+      {
+        if (this->adj != this->edgeEnd)
+          ++this->adj;
+        return *this;
+      }
+
+      /// ToDo.
+      private: UndirectedEdgeIt<V, E> const edgeBegin;
+      /// ToDo.
+      private: UndirectedEdgeIt<V, E> const edgeEnd;
+      /// ToDo.
+      private: UndirectedNodeIt<V, E> node;
+      /// ToDo.
+      private: UndirectedEdgeIt<V, E> adj;
     };
 
     // Graph edge iterator.
@@ -314,6 +483,282 @@ namespace ignition
       private: EdgeIt<V, E> edgeEnd;
     };
 
+    // Graph edge iterator.
+    template<typename V, typename E>
+    class UndirectedGraphEdgeIt
+    {
+      /// \brief ToDo.
+      public: UndirectedGraphEdgeIt(const UndirectedNodeIt<V, E> _b,
+                                    const UndirectedNodeIt<V, E> _e):
+        end(_e),
+        curVertex(_b),
+        curEdge(_b->second.begin()),
+        edgeEnd(_b->second.end())
+      {
+        if (this->curEdge == this->edgeEnd)
+          this->FindNextEdge();
+      }
+
+      /// \brief ToDo.
+      public: bool Valid() const
+      {
+        return this->curVertex != this->end;
+      }
+
+      /// \brief ToDo.
+      public: UndirectedNodeIt<V, E> CurVertex() const
+      {
+        return this->curVertex;
+      }
+
+      /// \brief ToDo.
+      public: UndirectedEdgeIt<V, E> CurEdge() const
+      {
+        return this->curEdge;
+      }
+
+      /// \brief ToDo.
+      public: UndirectedGraphEdgeIt &operator++()
+      {
+        this->FindNextEdge();
+        return *this;
+      }
+
+      /// \brief ToDo.
+      private: void FindNextEdge()
+      {
+        if (this->curEdge != this->edgeEnd)
+          ++this->curEdge;
+
+        while ((this->curEdge   == this->edgeEnd) &&
+               (this->curVertex != this->end))
+        {
+          ++this->curVertex;
+          this->curEdge = this->curVertex->second.begin();
+          this->edgeEnd = this->curVertex->second.end();
+        }
+      }
+
+      /// ToDo.
+      private: UndirectedNodeIt<V, E> const end;
+      /// ToDo.
+      private: UndirectedNodeIt<V, E> curVertex;
+      /// ToDo.
+      private: UndirectedEdgeIt<V, E> curEdge;
+      /// ToDo.
+      private: UndirectedEdgeIt<V, E> edgeEnd;
+    };
+
+
+    template<typename V, typename E>
+    class UndirectedGraph
+    {
+      /// \brief Default constructor.
+      public: UndirectedGraph() = default;
+
+      /// \brief Constructor.
+      /// \param[in] _vertexes Collection of vertexes.
+      /// \param[in] _edges Collection of edges.
+      public: UndirectedGraph(const std::vector<Vertex<V>> &_vertexes,
+                          const std::vector<UndirectEdgeInitializer<E>> &_edges)
+      {
+        // Add all vertexes.
+        for (auto &v : _vertexes)
+        {
+          if (!this->AddVertex(v.Data(), v.Name(), v.Id()))
+          {
+            std::cerr << "Invalid vertex with Id [" << v.Id() << "]"
+                      << std::endl;
+          }
+        }
+
+        // Add all edges.
+        for (auto &e : _edges)
+        {
+          if (!this->AddEdge(e.vertexes, e.data))
+          {
+            //std::cerr << "Invalid edge [" << e.tailId << "," << e.headId << ","
+            //          << e.data << "]" << std::endl;
+          }
+        }
+      }
+
+      /// \brief ToDo.
+      public: VertexPtr<V> AddVertex(const V &_data,
+                                     const std::string &_name,
+                                     const int64_t _id = -1)
+      {
+        auto id = _id;
+        // The user didn't provide an Id, we generate it.
+        if (id == -1)
+          id = this->NextId();
+        // The user provided an Id but already exists.
+        else if (this->ids.find(id) != this->ids.end())
+          return nullptr;
+
+        // Create the vertex.
+        auto v = std::make_shared<Vertex<V>>(_data, _name, id);
+        // Link the vertex with an empty list of edges.
+        this->data[v] = UndirectedEdgePtr_S<V, E>();
+
+        // Update the map of Ids.
+        this->ids[id] = v;
+        // Update the map of names.
+        this->names[_name].push_back(v);
+
+        return v;
+      }
+
+      /// \brief Add a new edge to the graph.
+      /// \param[in] _tail Pointer to the tail's vertex.
+      /// \param[in] _head Pointer to the head's vertex.
+      /// \param[in] _data User data stored in the edge.
+      /// \return Shared pointer to the new edge created or nullptr if the
+      /// edge was not created (e.g. incorrect vertexes).
+      public: UndirectedEdgePtr<V, E> AddEdge(
+                                             const VertexPtr_S<V> &_vertexes,
+                                             const E &_data)
+      {
+        assert(_vertexes.size() == 2u);
+
+        for (auto it = _vertexes.begin(); it != _vertexes.end(); ++it)
+        {
+          // Find the vertex.
+          auto itVertex = this->data.find(*it);
+          if (itVertex == this->data.end())
+            return nullptr;
+        }
+
+        // Check that the edge is not repeated.
+        UndirectedEdgePtr_S<V, E> &edges = this->data[(*_vertexes.begin())];
+        auto edgeFound = std::find_if(edges.begin(), edges.end(),
+                       [&_vertexes](UndirectedEdgePtr<V, E> _edge)
+                       {
+                         return _edge->Vertexes() == _vertexes;
+                       });
+        if (edgeFound != edges.end())
+          return nullptr;
+
+        // Create the edge.
+        auto edge = std::make_shared<UndirectedEdge<V, E>>(_vertexes, _data);
+
+        // Link the new edge.
+        for (auto it = _vertexes.begin(); it != _vertexes.end(); ++it)
+          this->data[*it].insert(edge);
+
+        // Mark the edge as valid.
+        edge->valid = true;
+
+        return edge;
+      }
+
+      /// \brief Add a new edge to the graph.
+      /// \param[in] _tailId ID of the tail's vertex.
+      /// \param[in] _headId ID of the head's vertex.
+      /// \param[in] _data User data stored in the edge.
+      /// \return Shared pointer to the new edge.
+      public: UndirectedEdgePtr<V, E> AddEdge(const std::set<int64_t> _vertexes,
+                                              const E &_data)
+      {
+        VertexPtr_S<V> vertexes;
+
+        for (auto id : _vertexes)
+          vertexes.insert(this->VertexById(id));
+
+        return this->AddEdge(vertexes, _data);
+      }
+
+       /// \brief Get a pointer to a vertex using its Id.
+      /// \param[in] _id The ID of the vertex.
+      /// \return A shared pointer to the vertex with Id = _id or nullptr if
+      /// not found.
+      public: VertexPtr<V> VertexById(const int64_t _id)
+      {
+        auto iter = this->ids.find(_id);
+        if (iter == this->ids.end())
+          return nullptr;
+
+        return iter->second;
+      }
+
+      /// \brief Get an iterator pointing to the first vertex in the graph.
+      public: UndirectedNodeIt<V, E> begin() const
+      {
+        return this->data.begin();
+      }
+
+      /// \brief Get an iterator pointing to the past-the-end vertex in the
+      /// graph.
+      public: UndirectedNodeIt<V, E> end() const
+      {
+        return this->data.end();
+      }
+
+      /// \brief ToDo.
+      public: UndirectedEdgePtr_S<V, E> Edges() const
+      {
+        UndirectedGraphEdgeIt<V, E> graphEdgeIt(this->begin(), this->end());
+
+        UndirectedEdgePtr_S<V, E> res;
+        for (; graphEdgeIt.Valid(); ++graphEdgeIt)
+          res.insert(*graphEdgeIt.CurEdge());
+
+        return res;
+      }
+
+      /// \brief Whether the graph is empty.
+      /// \return True when there are no vertexes in the graph or
+      /// false otherwise.
+      public: bool Empty() const
+      {
+        return this->data.empty();
+      }
+
+      /// \brief Stream insertion operator.
+      /// \param[out] _out The output stream.
+      /// \param[in] _g Graph to write to the stream.
+      public: friend std::ostream &operator<<(std::ostream &_out,
+                                              const UndirectedGraph<V, E> &_g)
+      {
+        //_out << "Vertexes" << std::endl;
+        //for (auto const &v : _g.Vertexes())
+        //  _out << "  [" << v->Id() << "][" << v->Name() << "]" << std::endl;
+
+        _out << "Edges" << std::endl;
+        for (auto const &e : _g.Edges())
+        {
+          auto vertexes = e->Vertexes();
+          auto it = vertexes.begin();
+          _out << "[" << (*it)->Id() << "]-->";
+          ++it;
+          _out << "[" << (*it)->Id() << "]" << std::endl;
+        }
+        return _out;
+      }
+
+      /// \brief Get an available Id to be assigned to a new vertex.
+      /// \return The next available Id.
+      private: int64_t NextId()
+      {
+        while (this->ids.find(this->nextId) != this->ids.end())
+          ++this->nextId;
+
+        return this->nextId;
+      }
+
+      /// The directed graph is represented using an adjacency list.
+      protected: UndirectedAdjList<V, E> data;
+
+      /// \brief List of ids curently used.
+      protected: std::map<int64_t, VertexPtr<V>> ids;
+
+      /// \brief Associatation between names and vertexes curently used.
+      protected: std::map<std::string, VertexPtr_V<V>> names;
+
+      /// \brief The next vertex Id to be assigned to a new vertex.
+      private: int64_t nextId = 0;
+    };
+
     /// \brief A generic directed graph class.
     /// Both vertexes and edges can store user information. A vertex could be
     /// created passing a custom Id if needed, otherwise it will be choosen
@@ -329,7 +774,7 @@ namespace ignition
       /// \param[in] _vertexes Collection of vertexes.
       /// \param[in] _edges Collection of edges.
       public: DirectedGraph(const std::vector<Vertex<V>> &_vertexes,
-                            const std::vector<EdgeInitializer<E>> &_edges)
+                            const std::vector<DirectEdgeInitializer<E>> &_edges)
       {
         // Add all vertexes.
         for (auto &v : _vertexes)
@@ -401,6 +846,7 @@ namespace ignition
       //  return res;
       //}
 
+      /// \brief ToDo.
       public: EdgePtr_S<V, E> Edges() const
       {
         GraphEdgeIt<V, E> graphEdgeIt(this->begin(), this->end());
@@ -553,7 +999,7 @@ namespace ignition
           return nullptr;
 
         // Create the edge.
-        auto edge = std::make_shared<Edge<V, E>>(_tail, _head, _data);
+        auto edge = std::make_shared<DirectedEdge<V, E>>(_tail, _head, _data);
 
         // Link the new edge.
         itTail->second.insert(edge);

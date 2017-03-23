@@ -40,7 +40,7 @@ TEST(GraphTest, Iterators)
   // Create and adjacency iterator from a vertex iterator.
   AdjIt<int, double> g_adjIt(g_vIt);
 
-  // Iterate through the list of vertexes connected with
+  // Iterate through the list of vertexes connected with vertex "1".
   for (; g_adjIt.Valid(); ++g_adjIt)
     std::cout << (*g_adjIt.CurAdj())->Head()->Name() << std::endl;
 }
@@ -73,7 +73,6 @@ TEST(GraphTest, UniformInitialization)
   EXPECT_EQ(edges.size(), 2u);
 }
 
-
 /////////////////////////////////////////////////
 TEST(GraphTest, VertexById)
 {
@@ -96,7 +95,6 @@ TEST(GraphTest, VertexById)
   v = graph.VertexById(-1);
   ASSERT_EQ(v, nullptr);
 }
-
 
 /////////////////////////////////////////////////
 TEST(GraphTest, Vertexes)
@@ -128,7 +126,6 @@ TEST(GraphTest, Vertexes)
   //EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v2), vertexes.end());
 }
 
-
 /////////////////////////////////////////////////
 //TEST(GraphTest, VertexesNames)
 //{
@@ -150,7 +147,6 @@ TEST(GraphTest, Vertexes)
 //  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v2), vertexes.end());
 //  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v3), vertexes.end());
 //}
-
 
 /////////////////////////////////////////////////
 TEST(GraphTest, Edges)
@@ -570,3 +566,44 @@ TEST(GraphTest, StreamInsertion)
   EXPECT_EQ(output.str(), expectedOutput);
 }
 */
+
+/////////////////////////////////////////////////
+TEST(GraphTest, Unidirected_test_caguero)
+{
+  DirectedGraph<int, double> graph;
+
+  // Create some vertexes without Id.
+  auto v0 = graph.AddVertex(0, "vertex_0");
+  ASSERT_TRUE(v0 != nullptr);
+  auto v1 = graph.AddVertex(1, "vertex_1");
+  ASSERT_TRUE(v1 != nullptr);
+  auto v2 = graph.AddVertex(2, "vertex_2");
+  ASSERT_TRUE(v2 != nullptr);
+
+  //double data = 0.1;
+  //{
+  //  UndirectedEdgePtr_S<int> vertexes = {v0, v1};
+  //  auto edge = std::make_shared<UndirectedEdge<int, double>>(vertexes, data);
+  //  EXPECT_EQ(edge->To(v0), v1);
+  //  EXPECT_EQ(edge->To(v1), v0);
+  //  EXPECT_EQ(edge->To(v2), nullptr);
+  //}
+  //{
+  //  auto edge = std::make_shared<DirectedEdge<int, double>>(v0, v1, data);
+  //  EXPECT_EQ(edge->To(v0), v1);
+  //  EXPECT_EQ(edge->To(v1), nullptr);
+  //  EXPECT_EQ(edge->To(v2), nullptr);
+  //}
+}
+
+/////////////////////////////////////////////////
+TEST(GraphTest, Unidirected_initializer)
+{
+  UndirectedGraph<int, double> graph(
+  {
+    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
+    {{{0, 1}, 0.0}, {{1, 2}, 0.0}}
+  });
+
+  std::cout << graph << std::endl;
+}
