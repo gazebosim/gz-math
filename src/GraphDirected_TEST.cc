@@ -20,30 +20,10 @@
 #include <iostream>
 #include <memory>
 
-#include "ignition/math/Graph.hh"
+#include "ignition/math/GraphDirected.hh"
 
 using namespace ignition;
 using namespace math;
-
-/////////////////////////////////////////////////
-TEST(GraphTest, Iterators)
-{
-  DirectedGraph<int, double> graph(
-  {
-    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{0, 1, 0.0}, {1, 2, 0.0}, {1, 0, 0.0}}
-  });
-
-  // Get a vertex iterator from the vertex Id.
-  AdjList<int, double>::iterator g_vIt = graph.Find(1);
-
-  // Create and adjacency iterator from a vertex iterator.
-  AdjIt<int, double> g_adjIt(g_vIt);
-
-  // Iterate through the list of vertexes connected with vertex "1".
-  for (; g_adjIt.Valid(); ++g_adjIt)
-    std::cout << (*g_adjIt.CurAdj())->Head()->Name() << std::endl;
-}
 
 /////////////////////////////////////////////////
 TEST(GraphTest, UniformInitialization)
@@ -55,9 +35,8 @@ TEST(GraphTest, UniformInitialization)
   });
 
   // Verify the vertexes.
-  auto first = graph.begin();
-  auto last = graph.end();
-  EXPECT_EQ(std::distance(first, last), 3u);
+  auto vertexes = graph.Vertexes();
+  EXPECT_EQ(vertexes.size(), 3u);
 
   for (auto i = 0; i < 3; ++i)
   {
@@ -109,44 +88,36 @@ TEST(GraphTest, Vertexes)
   auto v2 = graph.AddVertex(2, "2");
   ASSERT_TRUE(v2 != nullptr);
 
-  auto first = graph.begin();
-  auto last = graph.end();
-  EXPECT_EQ(std::distance(first, last), 3u);
-
-  //auto vertexes = graph.Vertexes();
-  //EXPECT_EQ(vertexes.size(), 3u);
-
-  EXPECT_NE(graph.Find(v0), graph.end());
-  EXPECT_NE(graph.Find(v1), graph.end());
-  EXPECT_NE(graph.Find(v2), graph.end());
+  auto vertexes = graph.Vertexes();
+  EXPECT_EQ(vertexes.size(), 3u);
 
   // Check that the pointers point to the same vertexes.
-  //EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v0), vertexes.end());
-  //EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v1), vertexes.end());
-  //EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v2), vertexes.end());
+  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v0), vertexes.end());
+  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v1), vertexes.end());
+  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v2), vertexes.end());
 }
 
 /////////////////////////////////////////////////
-//TEST(GraphTest, VertexesNames)
-//{
-//  DirectedGraph<int, double> graph;
-//
-//  // Create some vertexes.
-//  auto v0 = graph.AddVertex(0, "vertex_0");
-//  ASSERT_TRUE(v0 != nullptr);
-//  auto v1 = graph.AddVertex(1, "vertex_1");
-//  ASSERT_TRUE(v1 != nullptr);
-//  auto v2 = graph.AddVertex(2, "vertex_2");
-//  ASSERT_TRUE(v2 != nullptr);
-//  auto v3 = graph.AddVertex(3, "vertex_2");
-//  ASSERT_TRUE(v3 != nullptr);
-//
-//  auto vertexes = graph.Vertexes("vertex_2");
-//  EXPECT_EQ(vertexes.size(), 2);
-//  // Check that the pointers point to the same vertexes.
-//  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v2), vertexes.end());
-//  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v3), vertexes.end());
-//}
+TEST(GraphTest, VertexesNames)
+{
+  DirectedGraph<int, double> graph;
+
+  // Create some vertexes.
+  auto v0 = graph.AddVertex(0, "vertex_0");
+  ASSERT_TRUE(v0 != nullptr);
+  auto v1 = graph.AddVertex(1, "vertex_1");
+  ASSERT_TRUE(v1 != nullptr);
+  auto v2 = graph.AddVertex(2, "vertex_2");
+  ASSERT_TRUE(v2 != nullptr);
+  auto v3 = graph.AddVertex(3, "vertex_2");
+  ASSERT_TRUE(v3 != nullptr);
+
+  auto vertexes = graph.Vertexes("vertex_2");
+  EXPECT_EQ(vertexes.size(), 2);
+  // Check that the pointers point to the same vertexes.
+  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v2), vertexes.end());
+  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v3), vertexes.end());
+}
 
 /////////////////////////////////////////////////
 TEST(GraphTest, Edges)
@@ -177,40 +148,6 @@ TEST(GraphTest, Edges)
   EXPECT_NE(std::find(edges.begin(), edges.end(), e1), edges.end());
   EXPECT_NE(std::find(edges.begin(), edges.end(), e2), edges.end());
 }
-
-/////////////////////////////////////////////////
-//TEST(GraphTest, EdgesWithIDs)
-//{
-//  DirectedGraph<int, double> graph;
-//
-//  // Create some vertexes.
-//  auto v0 = graph.AddVertex(0, "0");
-//  ASSERT_TRUE(v0 != nullptr);
-//  auto v1 = graph.AddVertex(1, "1");
-//  ASSERT_TRUE(v1 != nullptr);
-//  auto v2 = graph.AddVertex(2, "2");
-//  ASSERT_TRUE(v2 != nullptr);
-//
-//  // Create some edges [(v0-->v1), (v1-->v2), (v2-->v0)]
-//  auto e0 = graph.AddEdge(0, 1, 2.0);
-//  ASSERT_TRUE(e0 != nullptr);
-//  auto e1 = graph.AddEdge(1, 2, 3.0);
-//  ASSERT_TRUE(e1 != nullptr);
-//  auto e2 = graph.AddEdge(2, 0, 4.0);
-//  ASSERT_TRUE(e2 != nullptr);
-//
-//  // Try to add a repeated edge.
-//  auto invalid = graph.AddEdge(2, 0, 5.0);
-//  ASSERT_TRUE(invalid == nullptr);
-//
-//  auto edges = graph.Edges();
-//  EXPECT_EQ(edges.size(), 3u);
-//
-//  // Check that the pointers point to the same edges.
-//  EXPECT_NE(std::find(edges.begin(), edges.end(), e0), edges.end());
-//  EXPECT_NE(std::find(edges.begin(), edges.end(), e1), edges.end());
-//  EXPECT_NE(std::find(edges.begin(), edges.end(), e2), edges.end());
-//}
 
 /////////////////////////////////////////////////
 TEST(GraphTest, Empty)
@@ -247,65 +184,48 @@ TEST(GraphTest, Adjacents)
   auto e2 = graph.AddEdge(v2, v0, 4.0);
   ASSERT_TRUE(e2 != nullptr);
 
-  //auto adjacents = graph.Adjacents(v0);
-  //EXPECT_EQ(adjacents.size(), 1u);
-  //EXPECT_NE(std::find(adjacents.begin(), adjacents.end(), v1), adjacents.end());
+  // Try to get the adjacents of an inexistent vertex.
+  auto adjacents = graph.Adjacents(-1);
+  EXPECT_TRUE(adjacents.empty());
 
-  //adjacents = graph.Adjacents(0);
-  //EXPECT_EQ(adjacents.size(), 1u);
-  //EXPECT_NE(std::find(adjacents.begin(), adjacents.end(), v1), adjacents.end());
+  adjacents = graph.Adjacents(v0);
+  EXPECT_EQ(adjacents.size(), 1u);
+  EXPECT_NE(std::find(adjacents.begin(), adjacents.end(), v1), adjacents.end());
 
-  {
-    auto adjIt = graph.Adjacents(v0);
-    auto counter = 0u;
-    for (; adjIt.Valid(); ++adjIt)
-      ++counter;
-
-    ASSERT_EQ(counter, 1u);
-  }
-
-  {
-    auto adjIt = graph.Adjacents(v0);
-    EXPECT_EQ((*adjIt.CurAdj())->Head(), v1);
-  }
-
-  {
-    auto adjIt = graph.Adjacents(0);
-    EXPECT_EQ((*adjIt.CurAdj())->Head(), v1);
-  }
+  adjacents = graph.Adjacents(0);
+  EXPECT_EQ(adjacents.size(), 1u);
+  EXPECT_NE(std::find(adjacents.begin(), adjacents.end(), v1), adjacents.end());
 }
 
 /////////////////////////////////////////////////
-// TEST(GraphTest, Incidents)
-// {
-//   DirectedGraph<int, double> graph;
-//
-//   // Create some vertexes.
-//   auto v0 = graph.AddVertex(0, "0");
-//   ASSERT_TRUE(v0 != nullptr);
-//   auto v1 = graph.AddVertex(1, "1");
-//   ASSERT_TRUE(v1 != nullptr);
-//   auto v2 = graph.AddVertex(2, "2");
-//   ASSERT_TRUE(v2 != nullptr);
-//
-//   // Create some edges [(v0-->v1), (v1-->v2), (v2-->v0)]
-//   auto e0 = graph.AddEdge(v0, v1, 2.0);
-//   ASSERT_TRUE(e0 != nullptr);
-//   auto e1 = graph.AddEdge(v1, v2, 3.0);
-//   ASSERT_TRUE(e1 != nullptr);
-//   auto e2 = graph.AddEdge(v2, v0, 4.0);
-//   ASSERT_TRUE(e2 != nullptr);
-//
-//   auto incidents = graph.Incidents(v0);
-//   EXPECT_EQ(incidents.size(), 1u);
-//   EXPECT_NE(std::find(incidents.begin(), incidents.end(), e2), incidents.end());
-//
-//   incidents = graph.Incidents(0);
-//   EXPECT_EQ(incidents.size(), 1u);
-//   EXPECT_NE(std::find(incidents.begin(), incidents.end(), e2), incidents.end());
-// }
+TEST(GraphTest, Incidents)
+{
+  DirectedGraph<int, double> graph;
 
-/*
+  // Create some vertexes.
+  auto v0 = graph.AddVertex(0, "0");
+  ASSERT_TRUE(v0 != nullptr);
+  auto v1 = graph.AddVertex(1, "1");
+  ASSERT_TRUE(v1 != nullptr);
+  auto v2 = graph.AddVertex(2, "2");
+  ASSERT_TRUE(v2 != nullptr);
+
+  // Create some edges [(v0-->v1), (v1-->v2), (v2-->v0)]
+  auto e0 = graph.AddEdge(v0, v1, 2.0);
+  ASSERT_TRUE(e0 != nullptr);
+  auto e1 = graph.AddEdge(v1, v2, 3.0);
+  ASSERT_TRUE(e1 != nullptr);
+  auto e2 = graph.AddEdge(v2, v0, 4.0);
+  ASSERT_TRUE(e2 != nullptr);
+
+  auto incidents = graph.Incidents(v0);
+  EXPECT_EQ(incidents.size(), 1u);
+  EXPECT_NE(std::find(incidents.begin(), incidents.end(), e2), incidents.end());
+
+  incidents = graph.Incidents(0);
+  EXPECT_EQ(incidents.size(), 1u);
+  EXPECT_NE(std::find(incidents.begin(), incidents.end(), e2), incidents.end());
+}
 
 /////////////////////////////////////////////////
 TEST(GraphTest, AddVertex)
@@ -402,7 +322,7 @@ TEST(GraphTest, RemoveEdge)
   EXPECT_EQ(graph.Edges().size(), 3u);
 
   // Remove using nullptr shouldn't cause any effect.
-  EdgePtr<int, double> edge;
+  DirectedEdgePtr<int, double> edge;
   graph.RemoveEdge(edge);
   EXPECT_EQ(graph.Edges().size(), 3u);
 
@@ -560,111 +480,8 @@ TEST(GraphTest, StreamInsertion)
     "  [1][vertex_1]\n"
     "  [2][vertex_2]\n"
     "Edges\n"
-    "  [0-->1]\n"
-    "  [1-->2]\n"
-    "  [2-->0]\n";
+    "  [0]-->[1]\n"
+    "  [1]-->[2]\n"
+    "  [2]-->[0]\n";
   EXPECT_EQ(output.str(), expectedOutput);
-}
-*/
-
-/////////////////////////////////////////////////
-TEST(GraphTest, Unidirected_test_caguero)
-{
-  DirectedGraph<int, double> graph;
-
-  // Create some vertexes without Id.
-  auto v0 = graph.AddVertex(0, "vertex_0");
-  ASSERT_TRUE(v0 != nullptr);
-  auto v1 = graph.AddVertex(1, "vertex_1");
-  ASSERT_TRUE(v1 != nullptr);
-  auto v2 = graph.AddVertex(2, "vertex_2");
-  ASSERT_TRUE(v2 != nullptr);
-
-  //double data = 0.1;
-  //{
-  //  UndirectedEdgePtr_S<int> vertexes = {v0, v1};
-  //  auto edge = std::make_shared<UndirectedEdge<int, double>>(vertexes, data);
-  //  EXPECT_EQ(edge->To(v0), v1);
-  //  EXPECT_EQ(edge->To(v1), v0);
-  //  EXPECT_EQ(edge->To(v2), nullptr);
-  //}
-  //{
-  //  auto edge = std::make_shared<DirectedEdge<int, double>>(v0, v1, data);
-  //  EXPECT_EQ(edge->To(v0), v1);
-  //  EXPECT_EQ(edge->To(v1), nullptr);
-  //  EXPECT_EQ(edge->To(v2), nullptr);
-  //}
-}
-
-/////////////////////////////////////////////////
-TEST(GraphTest, Unidirected_initializer)
-{
-  UndirectedGraph<int, double> graph(
-  {
-    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{{0, 1}, 0.0}, {{1, 2}, 0.0}}
-  });
-
-  std::cout << graph << std::endl;
-}
-
-/////////////////////////////////////////////////
-TEST(GraphTest, UndirectedEdges)
-{
-  UndirectedGraph<int, double> graph;
-
-  // Create some vertexes.
-  auto v0 = graph.AddVertex(0, "0");
-  ASSERT_TRUE(v0 != nullptr);
-  auto v1 = graph.AddVertex(1, "1");
-  ASSERT_TRUE(v1 != nullptr);
-  auto v2 = graph.AddVertex(2, "2");
-  ASSERT_TRUE(v2 != nullptr);
-
-  // Create some edges [(v0-->v1), (v1-->v2), (v2-->v0)]
-  VertexPtr_S<int> vertexes1 = {v0, v1};
-  VertexPtr_S<int> vertexes2 = {v1, v2};
-  VertexPtr_S<int> vertexes3 = {v1, v0};
-  auto e0 = graph.AddEdge(vertexes1, 2.0);
-  ASSERT_TRUE(e0 != nullptr);
-  auto e1 = graph.AddEdge(vertexes2, 3.0);
-  ASSERT_TRUE(e1 != nullptr);
-  auto e2 = graph.AddEdge(vertexes3, 4.0);
-  ASSERT_TRUE(e2 == nullptr);
-
-  auto edges = graph.Edges();
-  EXPECT_EQ(edges.size(), 2u);
-
-  // Check that the pointers point to the same edges.
-  EXPECT_NE(std::find(edges.begin(), edges.end(), e0), edges.end());
-  EXPECT_NE(std::find(edges.begin(), edges.end(), e1), edges.end());
-}
-
-/////////////////////////////////////////////////
-TEST(GraphTest, GenericGraph)
-{
-  GenericEdgePtr<DirectedEdge<int, double>> edgePtr;
-  GenericEdgePtr_S<DirectedEdge<int, double>> edgePtr_s;
-  GenericAdjList<int, UndirectedEdge<int, double>> geneAdjList;
-  GenericNodeIt<int, UndirectedEdge<int, double>> nodeIt;
-  GenericEdgeIt<DirectedEdge<int, double>> edgeIt;
-
-  Graph<int, double, DirectedEdge<int, double>> genericGraph;
-  // Create some vertexes without Id.
-  auto v0 = genericGraph.AddVertex(0, "vertex_0");
-  ASSERT_TRUE(v0 != nullptr);
-
-  // Get a vertex iterator from the vertex Id.
-  GenericAdjList<int, DirectedEdge<int, double>>::iterator g_vIt =
-    genericGraph.Find(0);
-
-  // Create and adjacency iterator from a vertex iterator.
-  GenericAdjIt<int, DirectedEdge<int, double>> g_adjIt(g_vIt);
-
-  // Iterate through the list of vertexes connected with vertex "1".
-  for (; g_adjIt.Valid(); ++g_adjIt)
-    std::cout << (*g_adjIt.CurAdj())->Head()->Name() << std::endl;
-
-  auto edges = genericGraph.Edges();
-  EXPECT_EQ(edges.size(), 0u);
 }
