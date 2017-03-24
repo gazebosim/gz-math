@@ -148,128 +148,6 @@ namespace ignition
     template<typename V, typename EdgeType>
     using GenericAdjList = std::map<VertexPtr<V>, GenericEdgePtr_S<EdgeType>>;
 
-    template<typename V, typename EdgeType>
-    using GenericNodeIt = typename GenericAdjList<V, EdgeType>::const_iterator;
-
-    /// ToDo.
-    template<typename EdgeType>
-    using GenericEdgeIt = typename GenericEdgePtr_S<EdgeType>::const_iterator;
-
-    // Adjacency iterator.
-    template<typename V, typename EdgeType>
-    class GenericAdjIt
-    {
-      /// \brief ToDo.
-      public: GenericAdjIt(GenericNodeIt<V, EdgeType> n):
-        edgeBegin(n->second.begin()),
-        edgeEnd(n->second.end()),
-        node(n),
-        adj(n->second.begin())
-      {
-      }
-
-      /// \brief ToDo.
-      public: bool Valid() const
-      {
-        return this->adj != this->edgeEnd;
-      }
-
-      /// \brief ToDo.
-      public: V Value() const
-      {
-        return this->node->first->Data();
-      }
-
-      /// \brief ToDo.
-      public: GenericEdgeIt<EdgeType> CurAdj() const
-      {
-        return this->adj;
-      }
-
-      /// \brief ToDo.
-      public: GenericAdjIt &operator++()
-      {
-        if (this->adj != this->edgeEnd)
-          ++this->adj;
-        return *this;
-      }
-
-      /// ToDo.
-      private: GenericEdgeIt<EdgeType> const edgeBegin;
-      /// ToDo.
-      private: GenericEdgeIt<EdgeType> const edgeEnd;
-      /// ToDo.
-      private: GenericNodeIt<V, EdgeType> node;
-      /// ToDo.
-      private: GenericEdgeIt<EdgeType> adj;
-    };
-
-    // Graph edge iterator.
-    template<typename V, typename EdgeType>
-    class GenericGraphEdgeIt
-    {
-      /// \brief ToDo.
-      public: GenericGraphEdgeIt(const GenericNodeIt<V, EdgeType> _b,
-                                 const GenericNodeIt<V, EdgeType> _e):
-        end(_e),
-        curVertex(_b),
-        curEdge(_b->second.begin()),
-        edgeEnd(_b->second.end())
-      {
-        if (this->curEdge == this->edgeEnd)
-          this->FindNextEdge();
-      }
-
-      /// \brief ToDo.
-      public: bool Valid() const
-      {
-        return this->curVertex != this->end;
-      }
-
-      /// \brief ToDo.
-      public: GenericNodeIt<V, EdgeType> CurVertex() const
-      {
-        return this->curVertex;
-      }
-
-      /// \brief ToDo.
-      public: GenericEdgeIt<EdgeType> CurEdge() const
-      {
-        return this->curEdge;
-      }
-
-      /// \brief ToDo.
-      public: GenericGraphEdgeIt &operator++()
-      {
-        this->FindNextEdge();
-        return *this;
-      }
-
-      /// \brief ToDo.
-      private: void FindNextEdge()
-      {
-        if (this->curEdge != this->edgeEnd)
-          ++this->curEdge;
-
-        while ((this->curEdge   == this->edgeEnd) &&
-               (this->curVertex != this->end))
-        {
-          ++this->curVertex;
-          this->curEdge = this->curVertex->second.begin();
-          this->edgeEnd = this->curVertex->second.end();
-        }
-      }
-
-      /// ToDo.
-      private: GenericNodeIt<V, EdgeType> const end;
-      /// ToDo.
-      private: GenericNodeIt<V, EdgeType> curVertex;
-      /// ToDo.
-      private: GenericEdgeIt<EdgeType> curEdge;
-      /// ToDo.
-      private: GenericEdgeIt<EdgeType> edgeEnd;
-    };
-
     /// \brief A generic directed graph class.
     /// Both vertexes and edges can store user information. A vertex could be
     /// created passing a custom Id if needed, otherwise it will be choosen
@@ -376,11 +254,9 @@ namespace ignition
       /// \brief ToDo.
       public: GenericEdgePtr_S<EdgeType> Edges() const
       {
-        GenericGraphEdgeIt<V, EdgeType> graphEdgeIt(this->begin(), this->end());
-
         GenericEdgePtr_S<EdgeType> res;
-        for (; graphEdgeIt.Valid(); ++graphEdgeIt)
-          res.insert(*graphEdgeIt.CurEdge());
+        for (auto const &vertex : this->data)
+          res.insert(vertex.second.begin(), vertex.second.end());
 
         return res;
       }
@@ -388,14 +264,13 @@ namespace ignition
       /// \brief ToDo.
       public: VertexPtr_S<V> Adjacents(const VertexPtr<V> _vertex)
       {
-        // Get a vertex iterator from the vertex Id.
-        typename GenericAdjList<V, EdgeType>::iterator vIt =
-          this->Find(_vertex);
-        GenericAdjIt<V, EdgeType> adjIt(vIt);
+        auto vertexIt = this->data.find(_vertex);
+        if (vertexIt == this->data.end())
+          return {};
 
         VertexPtr_S<V> res;
-        for (; adjIt.Valid(); ++adjIt)
-          res.insert((*adjIt.CurAdj())->To(_vertex));
+        for (auto const &edge : vertexIt->second)
+          res.insert(edge->To(_vertex));
 
         return res;
       }
@@ -416,11 +291,14 @@ namespace ignition
       public: GenericEdgePtr_S<EdgeType> Incidents(const VertexPtr<V> _vertex)
       {
         GenericEdgePtr_S<EdgeType> res;
+        auto vertexIt = this->data.find(_vertex);
+        if (vertexIt == this->data.end())
+          return {};
 
         for (auto nodeAdjList : this->data)
         {
           auto edges = nodeAdjList.second;
-          for (auto e : edges)
+          for (auto const &e : edges)
           {
             if (e->To(nodeAdjList.first) == _vertex)
               res.insert(e);
@@ -555,33 +433,6 @@ namespace ignition
           return nullptr;
 
         return iter->second;
-      }
-
-      /// \brief Get an iterator pointing to the first vertex in the graph.
-      public: GenericNodeIt<V, EdgeType> begin() const
-      {
-        return this->data.begin();
-      }
-
-      /// \brief Get an iterator pointing to the past-the-end vertex in the
-      /// graph.
-      public: GenericNodeIt<V, EdgeType> end() const
-      {
-        return this->data.end();
-      }
-
-      /// \brief ToDo.
-      public: typename GenericAdjList<V, EdgeType>::iterator Find(
-                                                    const VertexPtr<V> &_vertex)
-      {
-        return this->data.find(_vertex);
-      }
-
-      /// \brief ToDo.
-      public: typename GenericAdjList<V, EdgeType>::iterator Find(
-                                                        const int64_t _vertexId)
-      {
-        return this->Find(this->VertexById(_vertexId));
       }
 
       /// \brief Get an available Id to be assigned to a new vertex.
