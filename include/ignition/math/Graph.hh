@@ -96,12 +96,43 @@ namespace ignition
     template<typename V>
     using VertexPtr_S = std::set<VertexPtr<V>>;
 
+    // Forward declaration.
+    template<typename V, typename E, typename EdgeType>
+    class Graph;
+
     /// \brief Generic edge class.
     template<typename V>
     class Edge
     {
+      /// \brief
+      public: virtual VertexPtr_S<V> Vertexes() const = 0;
+
       /// \brief ToDo.
       public: virtual VertexPtr<V> To(const VertexPtr<V> _from) const = 0;
+
+      /// \brief ToDo.
+      public: bool Valid() const
+      {
+        return this->valid;
+      }
+
+      /// \brief ToDo.
+      public: void SetValid(const bool _newValue)
+      {
+        this->valid = _newValue;
+      }
+
+      /// \brief True when the edge is connected in a graph or false otherwise.
+      /// This member variable exists to prevent the following situation:
+      /// Imagine that you have a shared pointer pointing to a valid edge
+      /// connected in a graph. Now, you use the Graph API and remove the
+      /// edge. This operation will disconnect the edge from the graph but the
+      /// edge won't be deallocated because you will keep a shared pointer.
+      /// Having a shared pointer to the edge will allow you to traverse the
+      /// edge and go to any of the vertexes of the graph and modify it.
+      /// Once an edge is removed, this flag is set to false and this will
+      /// prevent you from traversing the edge and reach the vertexes.
+      private: bool valid = false;
     };
 
      /// \def
@@ -303,6 +334,38 @@ namespace ignition
         }
 
         return res;
+      }
+
+      /// \brief ToDo.
+      public: bool AddEdge(GenericEdgePtr<EdgeType> _edge)
+      {
+        auto vertexes = _edge->Vertexes();
+        if (vertexes.size() != 2u)
+          return false;
+
+        // Sanity check: Both vertexes should exist.
+        for (auto const &v : vertexes)
+        {
+          auto itV = this->data.find(v);
+          if (itV == this->data.end())
+            return false;
+        }
+
+        // Link the new edge.
+        for (auto const &v : vertexes)
+        {
+          if (_edge->To(v) != nullptr)
+          {
+            auto vertex = this->data.find(v);
+            assert(vertex != this->data.end());
+            vertex->second.insert(_edge);
+          }
+        }
+
+        // Mark the edge as valid.
+        _edge->SetValid(true);
+
+        return true;
       }
 
       /// \brief ToDo.
