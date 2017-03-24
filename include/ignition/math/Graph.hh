@@ -282,9 +282,6 @@ namespace ignition
       public: Graph() = default;
 
       /// \brief ToDo.
-      public: virtual void RemoveEdge(GenericEdgePtr<EdgeType> &_edge) = 0;
-
-      /// \brief ToDo.
       public: VertexPtr<V> AddVertex(const V &_data,
                                      const std::string &_name,
                                      const int64_t _id = -1)
@@ -337,18 +334,26 @@ namespace ignition
       }
 
       /// \brief ToDo.
-      public: bool AddEdge(GenericEdgePtr<EdgeType> _edge)
+      public: bool LinkEdge(GenericEdgePtr<EdgeType> _edge)
       {
+        _edge->SetValid(true);
+
         auto vertexes = _edge->Vertexes();
         if (vertexes.size() != 2u)
+        {
+          _edge->SetValid(false);
           return false;
+        }
 
         // Sanity check: Both vertexes should exist.
         for (auto const &v : vertexes)
         {
           auto itV = this->data.find(v);
           if (itV == this->data.end())
+          {
+            _edge->SetValid(false);
             return false;
+          }
         }
 
         // Link the new edge.
@@ -500,6 +505,43 @@ namespace ignition
         auto &v = iter->second;
         while (!v.empty())
           this->RemoveVertex(v.front());
+      }
+
+      /// \brief Remove an existing edge from the graph. After the removal, it
+      /// won't be possible to reach any of the vertexes from the edge. Any
+      /// call to Tail() or Head() will return nullptr.
+      /// \param[in] _edge Pointer to the edge to be removed.
+      public: void RemoveEdge(GenericEdgePtr<EdgeType> &_edge)
+      {
+        if (!_edge)
+          return;
+
+        auto vertexes = _edge->Vertexes();
+        if (vertexes.size() != 2u)
+          return;
+
+        // Sanity check: Both vertexes should exist.
+        for (auto const &v : vertexes)
+        {
+          auto itV = this->data.find(v);
+          if (itV == this->data.end())
+            return;
+        }
+
+        // Unlink the edge.
+        for (auto const &v : vertexes)
+        {
+          if (_edge->To(v) != nullptr)
+          {
+            auto vertex = this->data.find(v);
+            assert(vertex != this->data.end());
+            vertex->second.erase(_edge);
+          }
+        }
+
+        // Mark the edge as invalid. This will prevent to reach any vertexes if
+        // there are any shared pointers keeping the edge alive.
+        _edge->SetValid(false);
       }
 
       /// \brief Get a pointer to a vertex using its Id.
