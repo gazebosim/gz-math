@@ -1,5 +1,6 @@
 # Ignition Math
 
+You shouldn't merge this branch.
 
 **Math classes and functions for robot applications.**
 
@@ -13,7 +14,7 @@ classes and functions used in other Ignition libraries and programs.
 
 This project uses [appveyor](https://ci.appveyor.com/project/scpeters/ign-math/history)
 for testing on Windows.
-It has the following build status: 
+It has the following build status:
 ![appveyor badge](https://ci.appveyor.com/api/projects/status/bitbucket/ignitionrobotics/ign-math?svg=true)
 
 This project also uses [bitbucket pipelines](https://bitbucket.org/ignitionrobotics/ign-math/addon/pipelines/home#!/)
