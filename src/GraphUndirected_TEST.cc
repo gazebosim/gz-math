@@ -507,11 +507,23 @@ TEST(UndirectedGraphTest, StreamInsertion)
                         "  [0][vertex_0]\n",
                         "  [1][vertex_1]\n",
                         "  [2][vertex_2]\n",
-                        "Edges\n",
-                        "  [0]--[1]\n",
-                        "  [1]--[2]\n",
-                        "  [0]--[2]\n"})
+                        "Edges\n"})
   {
     EXPECT_NE(output.str().find(s), std::string::npos);
+  }
+
+  // We don't really know the order in which the edges will be printed.
+  // We also don't know the order in which the vertexes on each edge will be
+  // printed.
+  std::vector<std::pair<std::string, std::string>> expectedEdges =
+    {
+      {"  [0]--[1]\n", "  [1]--[0]\n"},
+      {"  [1]--[2]\n", "  [2]--[1]\n"},
+      {"  [0]--[2]\n", "  [0]--[2]\n"}
+    };
+  for (auto const &edge : expectedEdges)
+  {
+    EXPECT_TRUE((output.str().find(std::get<0>(edge)) != std::string::npos) ||
+                (output.str().find(std::get<1>(edge)) != std::string::npos));
   }
 }
