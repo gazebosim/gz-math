@@ -273,9 +273,6 @@ namespace ignition
           }
         }
 
-        // Mark the edge as valid.
-        _edge->SetValid(true);
-
         return true;
       }
 

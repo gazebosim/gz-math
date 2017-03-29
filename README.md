@@ -1,4 +1,4 @@
-# Ignition Math 
+# Ignition Math
 
 
 **Math classes and functions for robot applications.**
@@ -18,7 +18,7 @@ job](https://drone.io/bitbucket.org/ignitionrobotics/ign-math).
 
 ## Installation
 
-Standard installation can be performed in UNIX systems using the following 
+Standard installation can be performed in UNIX systems using the following
 steps:
 
  - mkdir build/
@@ -26,7 +26,7 @@ steps:
  - cmake ..
  - sudo make install
 
-## Uninstallation 
+## Uninstallation
 
 To uninstall the software installed with the previous steps:
 
