@@ -474,14 +474,16 @@ TEST(GraphTest, StreamInsertion)
 
   std::ostringstream output;
   output << graph;
-  std::string expectedOutput =
-    "Vertexes\n"
-    "  [0][vertex_0]\n"
-    "  [1][vertex_1]\n"
-    "  [2][vertex_2]\n"
-    "Edges\n"
-    "  [0]-->[1]\n"
-    "  [1]-->[2]\n"
-    "  [2]-->[0]\n";
-  EXPECT_EQ(output.str(), expectedOutput);
+
+  for (auto const &s : {"Vertexes\n",
+                        "  [0][vertex_0]\n",
+                        "  [1][vertex_1]\n",
+                        "  [2][vertex_2]\n",
+                        "Edges\n",
+                        "  [0]-->[1]\n",
+                        "  [1]-->[2]\n",
+                        "  [2]-->[0]\n"})
+  {
+    EXPECT_NE(output.str().find(s), std::string::npos);
+  }
 }

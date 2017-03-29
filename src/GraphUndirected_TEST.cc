@@ -306,8 +306,8 @@ TEST(UndirectedGraphTest, AddEdge)
   EXPECT_EQ(edges.size(), 3u);
 
   // Try to add an edge with an incorrect vertex.
-  vertexes = {nullptr, v1};
-  auto edge = graph.AddEdge(vertexes, 2.0);
+  VertexPtr_S<int> wrongVertexes = {nullptr, v1};
+  auto edge = graph.AddEdge(wrongVertexes, 2.0);
   EXPECT_EQ(edge, nullptr);
   EXPECT_EQ(edges.size(), 3u);
 }
@@ -500,18 +500,18 @@ TEST(UndirectedGraphTest, StreamInsertion)
 
   EXPECT_EQ(graph.Edges().size(), 3u);
 
-  std::cout << graph << std::endl;
-
   std::ostringstream output;
   output << graph;
-  std::string expectedOutput =
-    "Vertexes\n"
-    "  [0][vertex_0]\n"
-    "  [1][vertex_1]\n"
-    "  [2][vertex_2]\n"
-    "Edges\n"
-    "  [0]--[1]\n"
-    "  [1]--[2]\n"
-    "  [0]--[2]\n";
-  EXPECT_EQ(output.str(), expectedOutput);
+
+  for (auto const &s : {"Vertexes\n",
+                        "  [0][vertex_0]\n",
+                        "  [1][vertex_1]\n",
+                        "  [2][vertex_2]\n",
+                        "Edges\n",
+                        "  [0]--[1]\n",
+                        "  [1]--[2]\n",
+                        "  [0]--[2]\n"})
+  {
+    EXPECT_NE(output.str().find(s), std::string::npos);
+  }
 }
