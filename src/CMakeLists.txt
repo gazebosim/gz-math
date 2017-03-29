@@ -26,7 +26,7 @@ set (gtest_sources
   Filter_TEST.cc
   Frustum_TEST.cc
   GraphDirected_TEST.cc
-  GraphUndirected_TEST.cc
+  #  GraphUndirected_TEST.cc
   Helpers_TEST.cc
   Inertial_TEST.cc
   Kmeans_TEST.cc
