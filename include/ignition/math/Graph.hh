@@ -97,7 +97,7 @@ namespace ignition
     using VertexPtr_S = std::set<VertexPtr<V>>;
 
     /// \brief Generic edge class. An edge has two ends and some constraint
-    /// between them. For example, a directed edge only allow traversing the
+    /// between them. For example, a directed edge only allows traversing the
     /// edge in one direction.
     template<typename V>
     class Edge
