@@ -356,10 +356,11 @@ namespace ignition
 
       /// \brief Remove an existing vertex from the graph.
       /// \param[in] _vertex Pointer to the vertex to be removed.
-      public: void RemoveVertex(VertexPtr<V> &_vertex)
+      /// \return True when the vertex was removed or false otherwise.
+      public: bool RemoveVertex(VertexPtr<V> &_vertex)
       {
         if (!_vertex)
-          return;
+          return false;
 
         // Save the Id.
         auto id = _vertex->Id();
@@ -376,7 +377,7 @@ namespace ignition
              return _pair.first == _vertex;
           });
         if (itPair == this->data.end())
-          return;
+          return false;
 
         this->data.erase(itPair);
 
@@ -391,48 +392,54 @@ namespace ignition
         v.erase(std::remove(v.begin(), v.end(), _vertex), v.end());
         if (v.empty())
           this->names.erase(name);
+
+        return true;
       }
 
       /// \brief Remove an existing vertex from the graph.
       /// \param[in] _id ID of the vertex to be removed.
-      public: void RemoveVertex(const int64_t _id)
+      /// \return True when the vertex was removed or false otherwise.
+      public: bool RemoveVertex(const int64_t _id)
       {
         auto vPtr = this->VertexById(_id);
-        if (vPtr)
-          this->RemoveVertex(vPtr);
+        return this->RemoveVertex(vPtr);
       }
 
       /// \brief Remove all vertexes with name == _name.
       /// \param[in] _name Name of the vertexes to be removed.
-      public: void RemoveVertexes(const std::string &_name)
+      /// \return True when at least one vertex was removed.
+      public: bool RemoveVertexes(const std::string &_name)
       {
         auto iter = this->names.find(_name);
         if (iter == this->names.end())
-          return;
+          return false;
 
         auto &v = iter->second;
         while (!v.empty())
           this->RemoveVertex(v.front());
+
+        return true;
       }
 
       /// \brief Remove an existing edge from the graph. After the removal, it
       /// won't be possible to reach any of the vertexes from the edge.
       /// \param[in] _edge Pointer to the edge to be removed.
-      public: void RemoveEdge(EdgePtr<EdgeType> &_edge)
+      /// \return True when the edge was removed.
+      public: bool RemoveEdge(EdgePtr<EdgeType> &_edge)
       {
         if (!_edge)
-          return;
+          return false;
 
         auto vertexes = _edge->Vertexes();
         if (vertexes.size() != 2u)
-          return;
+          return false;
 
         // Sanity check: Both vertexes should exist.
         for (auto const &v : vertexes)
         {
           auto itV = this->data.find(v);
           if (itV == this->data.end())
-            return;
+            return false;
         }
 
         // Unlink the edge.
@@ -449,6 +456,8 @@ namespace ignition
         // Mark the edge as invalid. This will prevent to reach any vertexes if
         // there are any shared pointers keeping the edge alive.
         _edge->SetValid(false);
+
+        return true;
       }
 
       /// \brief Get a pointer to a vertex using its Id.

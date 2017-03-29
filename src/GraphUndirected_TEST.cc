@@ -341,7 +341,7 @@ TEST(UndirectedGraphTest, RemoveEdge)
 
   // Remove using nullptr shouldn't cause any effect.
   UndirectedEdgePtr<int, double> edge;
-  graph.RemoveEdge(edge);
+  EXPECT_FALSE(graph.RemoveEdge(edge));
   EXPECT_EQ(graph.Edges().size(), 3u);
 
   EXPECT_EQ(graph.Incidents(v1).size(), 2u);
@@ -349,7 +349,7 @@ TEST(UndirectedGraphTest, RemoveEdge)
   vertexes = e0->Vertexes();
   EXPECT_EQ(vertexes.find(nullptr), vertexes.end());
 
-  graph.RemoveEdge(e0);
+  EXPECT_TRUE(graph.RemoveEdge(e0));
   EXPECT_EQ(graph.Edges().size(), 2u);
 
   // After disconnecting e0, it shoudln't be possible to reach the vertexes.
@@ -358,14 +358,14 @@ TEST(UndirectedGraphTest, RemoveEdge)
 
   EXPECT_EQ(graph.Incidents(v1).size(), 1u);
 
-  graph.RemoveEdge(e1);
+  EXPECT_TRUE(graph.RemoveEdge(e1));
   EXPECT_EQ(graph.Edges().size(), 1u);
 
   // Try to remove an edge that doesn't exist.
-  graph.RemoveEdge(e1);
+  EXPECT_FALSE(graph.RemoveEdge(e1));
   EXPECT_EQ(graph.Edges().size(), 1u);
 
-  graph.RemoveEdge(e2);
+  EXPECT_TRUE(graph.RemoveEdge(e2));
   EXPECT_EQ(graph.Edges().size(), 0u);
 }
 
@@ -396,27 +396,27 @@ TEST(UndirectedGraphTest, RemoveVertex)
 
   // Remove using nullptr shouldn't cause any effect.
   VertexPtr<int> vertex;
-  graph.RemoveVertex(vertex);
+  EXPECT_FALSE(graph.RemoveVertex(vertex));
   EXPECT_EQ(graph.Vertexes().size(), 3u);
 
   // Try to remove a vertex that doesn't belong to the graph.
   auto v = std::make_shared<Vertex<int>>(10, "new_vertex", 99);
-  graph.RemoveVertex(v);
+  EXPECT_FALSE(graph.RemoveVertex(v));
   EXPECT_EQ(graph.Vertexes().size(), 3u);
 
   EXPECT_EQ(graph.Adjacents(v1).size(), 2u);
 
-  graph.RemoveVertex(2);
+  EXPECT_TRUE(graph.RemoveVertex(2));
   EXPECT_EQ(graph.Vertexes().size(), 2u);
   EXPECT_EQ(graph.Edges().size(), 1u);
 
   EXPECT_EQ(graph.Adjacents(v1).size(), 1u);
 
-  graph.RemoveVertex(v1);
+  EXPECT_TRUE(graph.RemoveVertex(v1));
   EXPECT_EQ(graph.Vertexes().size(), 1u);
   EXPECT_TRUE(graph.Edges().empty());
 
-  graph.RemoveVertex(v0);
+  EXPECT_TRUE(graph.RemoveVertex(v0));
   EXPECT_TRUE(graph.Vertexes().empty());
 
   EXPECT_TRUE(graph.Empty());
@@ -454,21 +454,21 @@ TEST(UndirectedGraphTest, RemoveVertexesWithName)
   EXPECT_EQ(graph.Edges().size(), 4u);
 
   // Try to remove a node with a name that doesn't exist.
-  graph.RemoveVertexes("wrong_name");
+  EXPECT_FALSE(graph.RemoveVertexes("wrong_name"));
   EXPECT_EQ(graph.Vertexes().size(), 4u);
   EXPECT_EQ(graph.Adjacents(v1).size(), 2u);
 
-  graph.RemoveVertexes("vertex_2");
+  EXPECT_TRUE(graph.RemoveVertexes("vertex_2"));
   EXPECT_EQ(graph.Vertexes().size(), 2u);
   EXPECT_EQ(graph.Edges().size(), 1u);
 
   EXPECT_EQ(graph.Adjacents(v1).size(), 1u);
 
-  graph.RemoveVertexes("vertex_1");
+  EXPECT_TRUE(graph.RemoveVertexes("vertex_1"));
   EXPECT_EQ(graph.Vertexes().size(), 1u);
   EXPECT_TRUE(graph.Edges().empty());
 
-  graph.RemoveVertexes("vertex_0");
+  EXPECT_TRUE(graph.RemoveVertexes("vertex_0"));
   EXPECT_TRUE(graph.Vertexes().empty());
 
   EXPECT_TRUE(graph.Empty());
