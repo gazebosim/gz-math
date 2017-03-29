@@ -19,6 +19,9 @@
 #include <algorithm>
 #include <iostream>
 #include <memory>
+#include <pair>
+#include <string>
+#include <vector>
 
 #include "ignition/math/GraphUndirected.hh"
 
