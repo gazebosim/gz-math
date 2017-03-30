@@ -262,8 +262,8 @@ namespace ignition
               Edge<E>(_tail, _head, _data)));
         // this->edges[id].SetValid(true);
 
-        this->connections[_tail].insert(_head);
-        this->connections[_head].insert(_tail);
+        this->vertexEdges[_tail].insert(_head);
+        this->vertexEdges[_head].insert(_tail);
 
         return id;
       }
@@ -273,7 +273,7 @@ namespace ignition
       /// \param[in] _name Name of the vertex. It doesn't have to be unique.
       /// \param[in] _id Optional Id to be used for this vertex.
       public: VertexId AddVertex(const std::string &_name,
-                                 const VertexId _id = -1, const V &_data = V())
+                                 const V &_data = V(), const VertexId _id = -1)
       {
         auto id = _id;
         // The user didn't provide an Id, we generate it.
@@ -294,24 +294,28 @@ namespace ignition
 
       /// \brief The collection of all vertexes in the graph.
       /// \return A set of shared pointers to all vertexes.
-      public: const std::map<int64_t, Vertex<V>> &Vertexes() const
+      public: const std::map<VertexId, Vertex<V>> &Vertexes() const
       {
         return this->vertexes;
       }
 
       /// \brief The collection of all vertexes in the graph with name == _name.
       /// \return A vector of shared pointers to all vertexes with name == _name
-      /*public: VertexPtr_S<V> Vertexes(const std::string &_name) const
+      public: std::map<VertexId, std::reference_wrapper<Vertex<V>>> Vertexes(
+                  const std::string &_name)
       {
-        VertexPtr_S<V> res;
-        for (auto const &nodeAdjList : this->edges)
+        std::map<VertexId, std::reference_wrapper<Vertex<V>>> res;
+        for (auto &vertex : this->vertexes)
         {
-          if (nodeAdjList.first->Name() == _name)
-            res.insert(nodeAdjList.first);
+          if (vertex.second.Name() == _name)
+          {
+            res.insert(
+                std::make_pair(vertex.first, std::ref(vertex.second)));
+          }
         }
 
-        return res;
-      }*/
+        return std::move(res);
+      }
 
 
       /// \brief The collection of all edges in the graph.
@@ -326,17 +330,17 @@ namespace ignition
       /// \param[in] _vertex The pointer to the vertex to check adjacents.
       /// \return A set of vertexes that are adjacents and directly connected
       /// with an edge.
-      public: std::set<VertexId> Adjacents(const int64_t &_vertex) const
+      public: std::set<VertexId> Adjacents(const VertexId &_vertex) const
       {
-        auto vertexIt = this->connections.find(_vertex);
-        if (vertexIt == this->connections.end())
+        auto vertexIt = this->vertexEdges.find(_vertex);
+        if (vertexIt == this->vertexEdges.end())
           return {};
 
         std::set<VertexId> res;
         for (auto const &edge : vertexIt->second)
-          res.insert(this->connections[edge].To(_vertex));
+          res.insert(this->edges.at(edge).To(_vertex));
 
-        return res;
+        return std::move(res);
       }
 
       /// \brief Get the set of incoming edges to a given vertex.
@@ -345,11 +349,11 @@ namespace ignition
       public: std::set<EdgeId> Incidents(const int64_t &_vertex) const
       {
         std::set<EdgeId> res;
-        auto vertexIt = this->connections.find(_vertex);
-        if (vertexIt == this->connections.end())
+        auto vertexIt = this->vertexEdges.find(_vertex);
+        if (vertexIt == this->vertexEdges.end())
           return {};
 
-        for (auto const &nodeAdjList : this->connections)
+        for (auto const &nodeAdjList : this->vertexEdges)
         {
           auto edgs = nodeAdjList.second;
           for (auto const &e : edgs)
@@ -362,7 +366,7 @@ namespace ignition
           }
         }
 
-        return res;
+        return std::move(res);
       }
 
       /// \brief Whether the graph is empty.
@@ -370,7 +374,7 @@ namespace ignition
       /// false otherwise.
       public: bool Empty() const
       {
-        return this->vertexs.empty() && this->edges.empty();
+        return this->vertexes.empty() && this->edges.empty();
       }
 
       /// \brief Remove an existing vertex from the graph.
@@ -494,12 +498,14 @@ namespace ignition
         return this->nextEdgeId;
       }
 
-      /// The directed graph is represented using an adjacency list.
+      /// The set of vertexes
       protected: std::map<VertexId, Vertex<V>> vertexes;
+
+      /// The set of edges
       protected: std::map<EdgeId, Edge<E>> edges;
 
-      //protected: std::map<VertexId, EdgePtr_S<EdgeType>> edges;
-      protected: std::map<VertexId, std::set<EdgeId>> connections;
+      /// \brief Vertex -> Edge map
+      protected: std::map<VertexId, std::set<EdgeId>> vertexEdges;
 
       /// \brief Associatation between names and vertexes curently used.
       protected: std::map<std::string, VertexId> names;
