@@ -208,22 +208,30 @@ namespace ignition
         return this->AddEdge(tailPtr, headPtr, _data);
       }
 
-      /// \brief Stream insertion operator.
+      /// \brief Stream insertion operator. The output uses DOT graph
+      /// description language.
       /// \param[out] _out The output stream.
       /// \param[in] _g Graph to write to the stream.
+      /// \ref https://en.wikipedia.org/wiki/DOT_(graph_description_language).
       public: friend std::ostream &operator<<(std::ostream &_out,
                                               const DirectedGraph<V, E> &_g)
       {
-        _out << "Vertices" << std::endl;
-        for (auto const &v : _g.Vertices())
-          _out << "  [" << v->Id() << "][" << v->Name() << "]" << std::endl;
+        _out << "digraph {" << std::endl;
 
-        _out << "Edges" << std::endl;
-        for (auto const &e : _g.Edges())
+        // All vertices with the name and Id as a "label" attribute.
+        for (auto const &v : _g.Vertices())
         {
-          _out << "  [" << e->Tail()->Id() << "]-->"
-               << "["   << e->Head()->Id() << "]" << std::endl;
+            _out << "  " << v->Id() << " [label=\"" << v->Name() << " ("
+                 << v->Id() << ")\"];\n";
         }
+
+        // All edges.
+        VertexPtr_S<V> verticesUsed;
+        for (auto const &e : _g.Edges())
+          _out << "  " << e->Tail()->Id() << " -> " << e->Head()->Id() << ";\n";
+
+        _out << "}" << std::endl;
+
         return _out;
       }
     };

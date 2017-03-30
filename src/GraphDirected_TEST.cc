@@ -461,6 +461,8 @@ TEST(GraphTest, StreamInsertion)
   ASSERT_TRUE(v1 != nullptr);
   auto v2 = graph.AddVertex(2, "vertex_2");
   ASSERT_TRUE(v2 != nullptr);
+  auto v3 = graph.AddVertex(3, "vertex_3");
+  ASSERT_TRUE(v2 != nullptr);
 
   // Create some edges [(v0-->v1), (v1-->v2), (v2-->v0)]
   auto e0 = graph.AddEdge(v0, v1, 2.0);
@@ -475,14 +477,17 @@ TEST(GraphTest, StreamInsertion)
   std::ostringstream output;
   output << graph;
 
-  for (auto const &s : {"Vertices\n",
-                        "  [0][vertex_0]\n",
-                        "  [1][vertex_1]\n",
-                        "  [2][vertex_2]\n",
-                        "Edges\n",
-                        "  [0]-->[1]\n",
-                        "  [1]-->[2]\n",
-                        "  [2]-->[0]\n"})
+  std::cout << "# Use this snippet with your favorite DOT tool." << std::endl;
+  std::cout << graph << std::endl;
+
+  for (auto const &s : {"digraph {\n",
+                        "  0 [label=\"vertex_0 (0)\"];\n",
+                        "  1 [label=\"vertex_1 (1)\"];\n",
+                        "  2 [label=\"vertex_2 (2)\"];\n",
+                        "  3 [label=\"vertex_3 (3)\"];\n",
+                        "  0 -> 1;\n",
+                        "  1 -> 2;\n",
+                        "  2 -> 0;\n"})
   {
     EXPECT_NE(output.str().find(s), std::string::npos);
   }

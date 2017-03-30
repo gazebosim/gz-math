@@ -489,6 +489,8 @@ TEST(UndirectedGraphTest, StreamInsertion)
   ASSERT_TRUE(v1 != nullptr);
   auto v2 = graph.AddVertex(2, "vertex_2");
   ASSERT_TRUE(v2 != nullptr);
+  auto v3 = graph.AddVertex(3, "vertex_3");
+  ASSERT_TRUE(v2 != nullptr);
 
   // Create some edges [(v0-->v1), (v1-->v2), (v2-->v0)]
   VertexPtr_S<int> vertices = {v0, v1};
@@ -506,11 +508,14 @@ TEST(UndirectedGraphTest, StreamInsertion)
   std::ostringstream output;
   output << graph;
 
-  for (auto const &s : {"Vertices\n",
-                        "  [0][vertex_0]\n",
-                        "  [1][vertex_1]\n",
-                        "  [2][vertex_2]\n",
-                        "Edges\n"})
+  std::cout << "# Use this snippet with your favorite DOT tool." << std::endl;
+  std::cout << graph << std::endl;
+
+  for (auto const &s : {"graph {\n",
+                        "  0 [label=\"vertex_0 (0)\"];\n",
+                        "  1 [label=\"vertex_1 (1)\"];\n",
+                        "  2 [label=\"vertex_2 (2)\"];\n",
+                        "  3 [label=\"vertex_3 (3)\"];\n"})
   {
     EXPECT_NE(output.str().find(s), std::string::npos);
   }
@@ -520,9 +525,9 @@ TEST(UndirectedGraphTest, StreamInsertion)
   // printed.
   std::vector<std::pair<std::string, std::string>> expectedEdges =
     {
-      {"  [0]--[1]\n", "  [1]--[0]\n"},
-      {"  [1]--[2]\n", "  [2]--[1]\n"},
-      {"  [0]--[2]\n", "  [2]--[0]\n"}
+      {"  0 -- 1;\n", "  1 -- 0;\n"},
+      {"  1 -- 2;\n", "  2 -- 1;\n"},
+      {"  0 -- 2;\n", "  2 -- 0;\n"}
     };
   for (auto const &edge : expectedEdges)
   {
