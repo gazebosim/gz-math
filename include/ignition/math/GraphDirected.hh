@@ -58,7 +58,7 @@ namespace ignition
     template<typename V, typename E>
     using DirectedEdgePtr_S = std::set<DirectedEdgePtr<V, E>>;
 
-    /// \brief A directed edge represents a connection between two vertexes.
+    /// \brief A directed edge represents a connection between two vertices.
     template<typename V, typename E>
     class DirectedEdge : public Edge<V>
     {
@@ -116,7 +116,7 @@ namespace ignition
       }
 
       // Documentation inherited.
-      public: VertexPtr_S<V> Vertexes() const
+      public: VertexPtr_S<V> Vertices() const
       {
         if (!this->Valid())
           return {nullptr, nullptr};
@@ -151,13 +151,13 @@ namespace ignition
       public: DirectedGraph() = default;
 
       /// \brief Constructor.
-      /// \param[in] _vertexes Collection of vertexes.
+      /// \param[in] _vertices Collection of vertices.
       /// \param[in] _edges Collection of edges.
-      public: DirectedGraph(const std::vector<Vertex<V>> &_vertexes,
+      public: DirectedGraph(const std::vector<Vertex<V>> &_vertices,
                             const std::vector<DirectEdgeInitializer<E>> &_edges)
       {
-        // Add all vertexes.
-        for (auto const &v : _vertexes)
+        // Add all vertices.
+        for (auto const &v : _vertices)
         {
           if (!this->AddVertex(v.Data(), v.Name(), v.Id()))
           {
@@ -182,7 +182,7 @@ namespace ignition
       /// \param[in] _head Pointer to the head's vertex.
       /// \param[in] _data User data stored in the edge.
       /// \return Shared pointer to the new edge created or nullptr if the
-      /// edge was not created (e.g. incorrect vertexes).
+      /// edge was not created (e.g. incorrect vertices).
       public: DirectedEdgePtr<V, E> AddEdge(const VertexPtr<V> &_tail,
                                             const VertexPtr<V> &_head,
                                             const E &_data)
@@ -214,8 +214,8 @@ namespace ignition
       public: friend std::ostream &operator<<(std::ostream &_out,
                                               const DirectedGraph<V, E> &_g)
       {
-        _out << "Vertexes" << std::endl;
-        for (auto const &v : _g.Vertexes())
+        _out << "Vertices" << std::endl;
+        for (auto const &v : _g.Vertices())
           _out << "  [" << v->Id() << "][" << v->Name() << "]" << std::endl;
 
         _out << "Edges" << std::endl;

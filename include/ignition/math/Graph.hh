@@ -104,7 +104,7 @@ namespace ignition
     {
       /// \brief Get the set of ends of the edge.
       /// \return The set of ends of the edge.
-      public: virtual VertexPtr_S<V> Vertexes() const = 0;
+      public: virtual VertexPtr_S<V> Vertices() const = 0;
 
       /// \brief Get the destination end that is reachable from a source end of
       /// an edge.
@@ -123,7 +123,7 @@ namespace ignition
       public: virtual VertexPtr<V> To(const VertexPtr<V> &_from) const = 0;
 
       /// \brief Get if the edge is valid. An edge is valid if its linked in a
-      /// graph and its vertexes are reachable.
+      /// graph and its vertices are reachable.
       /// \return True when the edge is valid.
       /// \sa SetValid
       public: bool Valid() const
@@ -146,9 +146,9 @@ namespace ignition
       /// edge. This operation will disconnect the edge from the graph but the
       /// edge won't be deallocated because you will keep a shared pointer.
       /// Having a shared pointer to the edge will allow you to traverse the
-      /// edge and go to any of the vertexes of the graph and modify it.
+      /// edge and go to any of the vertices of the graph and modify it.
       /// Once an edge is removed, this flag is set to false and this will
-      /// prevent you from traversing the edge and reach the vertexes.
+      /// prevent you from traversing the edge and reach the vertices.
       private: bool valid = false;
     };
 
@@ -163,7 +163,7 @@ namespace ignition
     using EdgePtr_S = std::set<EdgePtr<EdgeType>>;
 
     /// \def AdjList
-    /// \brief A map where the keys are pointers to all vertexes. For each
+    /// \brief A map where the keys are pointers to all vertices. For each
     /// vertex (v), the map value contains a set of pointers to edges. Each of
     /// these edges (e) represents that there is a path from (v) to another
     /// vertex via (e).
@@ -171,10 +171,10 @@ namespace ignition
     using AdjList = std::map<VertexPtr<V>, EdgePtr_S<EdgeType>>;
 
     /// \brief A generic graph class.
-    /// Both vertexes and edges can store user information. A vertex could be
+    /// Both vertices and edges can store user information. A vertex could be
     /// created passing a custom Id if needed, otherwise it will be choosen
-    /// internally. The vertexes also have a name that could be reused among
-    /// other vertexes if needed. This class supports the use of different edge
+    /// internally. The vertices also have a name that could be reused among
+    /// other vertices if needed. This class supports the use of different edge
     /// types (e.g. directed or undirected edges).
     template<typename V, typename E, typename EdgeType>
     class Graph
@@ -212,9 +212,9 @@ namespace ignition
         return v;
       }
 
-      /// \brief The collection of all vertexes in the graph.
-      /// \return A set of shared pointers to all vertexes.
-      public: VertexPtr_S<V> Vertexes() const
+      /// \brief The collection of all vertices in the graph.
+      /// \return A set of shared pointers to all vertices.
+      public: VertexPtr_S<V> Vertices() const
       {
         VertexPtr_S<V> res;
         for (auto const &nodeAdjList : this->data)
@@ -223,9 +223,9 @@ namespace ignition
         return res;
       }
 
-      /// \brief The collection of all vertexes in the graph with name == _name.
-      /// \return A vector of shared pointers to all vertexes with name == _name
-      public: VertexPtr_S<V> Vertexes(const std::string &_name) const
+      /// \brief The collection of all vertices in the graph with name == _name.
+      /// \return A vector of shared pointers to all vertices with name == _name
+      public: VertexPtr_S<V> Vertices(const std::string &_name) const
       {
         VertexPtr_S<V> res;
         for (auto const &nodeAdjList : this->data)
@@ -244,15 +244,15 @@ namespace ignition
       {
         _edge->SetValid(true);
 
-        auto vertexes = _edge->Vertexes();
-        if (vertexes.size() != 2u)
+        auto vertices = _edge->Vertices();
+        if (vertices.size() != 2u)
         {
           _edge->SetValid(false);
           return false;
         }
 
-        // Sanity check: Both vertexes should exist.
-        for (auto const &v : vertexes)
+        // Sanity check: Both vertices should exist.
+        for (auto const &v : vertices)
         {
           auto itV = this->data.find(v);
           if (itV == this->data.end())
@@ -263,7 +263,7 @@ namespace ignition
         }
 
         // Link the new edge.
-        for (auto const &v : vertexes)
+        for (auto const &v : vertices)
         {
           if (_edge->To(v) != nullptr)
           {
@@ -287,10 +287,10 @@ namespace ignition
         return res;
       }
 
-      /// \brief Get all neighbors vertexes that are directly connected to
+      /// \brief Get all neighbors vertices that are directly connected to
       /// a given vertex.
       /// \param[in] _vertex The pointer to the vertex to check adjacents.
-      /// \return A set of vertexes that are adjacents and directly connected
+      /// \return A set of vertices that are adjacents and directly connected
       /// with an edge.
       public: VertexPtr_S<V> Adjacents(const VertexPtr<V> &_vertex) const
       {
@@ -305,10 +305,10 @@ namespace ignition
         return res;
       }
 
-      /// \brief Get all neighbors vertexes that are directly connected to
+      /// \brief Get all neighbors vertices that are directly connected to
       /// a given vertex.
-      /// \param[in] _id The vertex ID to check adjacent vertexes.
-      /// \return A set of vertexes that are adjacents and directly connected
+      /// \param[in] _id The vertex ID to check adjacent vertices.
+      /// \return A set of vertices that are adjacents and directly connected
       /// with an edge.
       public: VertexPtr_S<V> Adjacents(const int64_t _id) const
       {
@@ -347,7 +347,7 @@ namespace ignition
       }
 
       /// \brief Whether the graph is empty.
-      /// \return True when there are no vertexes in the graph or
+      /// \return True when there are no vertices in the graph or
       /// false otherwise.
       public: bool Empty() const
       {
@@ -405,10 +405,10 @@ namespace ignition
         return this->RemoveVertex(vPtr);
       }
 
-      /// \brief Remove all vertexes with name == _name.
-      /// \param[in] _name Name of the vertexes to be removed.
+      /// \brief Remove all vertices with name == _name.
+      /// \param[in] _name Name of the vertices to be removed.
       /// \return True when at least one vertex was removed.
-      public: bool RemoveVertexes(const std::string &_name)
+      public: bool RemoveVertices(const std::string &_name)
       {
         auto iter = this->names.find(_name);
         if (iter == this->names.end())
@@ -422,7 +422,7 @@ namespace ignition
       }
 
       /// \brief Remove an existing edge from the graph. After the removal, it
-      /// won't be possible to reach any of the vertexes from the edge.
+      /// won't be possible to reach any of the vertices from the edge.
       /// \param[in] _edge Pointer to the edge to be removed.
       /// \return True when the edge was removed.
       public: bool RemoveEdge(EdgePtr<EdgeType> &_edge)
@@ -430,12 +430,12 @@ namespace ignition
         if (!_edge)
           return false;
 
-        auto vertexes = _edge->Vertexes();
-        if (vertexes.size() != 2u)
+        auto vertices = _edge->Vertices();
+        if (vertices.size() != 2u)
           return false;
 
-        // Sanity check: Both vertexes should exist.
-        for (auto const &v : vertexes)
+        // Sanity check: Both vertices should exist.
+        for (auto const &v : vertices)
         {
           auto itV = this->data.find(v);
           if (itV == this->data.end())
@@ -443,7 +443,7 @@ namespace ignition
         }
 
         // Unlink the edge.
-        for (auto const &v : vertexes)
+        for (auto const &v : vertices)
         {
           if (_edge->To(v) != nullptr)
           {
@@ -453,7 +453,7 @@ namespace ignition
           }
         }
 
-        // Mark the edge as invalid. This will prevent to reach any vertexes if
+        // Mark the edge as invalid. This will prevent to reach any vertices if
         // there are any shared pointers keeping the edge alive.
         _edge->SetValid(false);
 
@@ -489,7 +489,7 @@ namespace ignition
       /// \brief List of ids curently used.
       protected: std::map<int64_t, VertexPtr<V>> ids;
 
-      /// \brief Associatation between names and vertexes curently used.
+      /// \brief Associatation between names and vertices curently used.
       protected: std::map<std::string, VertexPtr_V<V>> names;
 
       /// \brief The next vertex Id to be assigned to a new vertex.

@@ -34,9 +34,9 @@ TEST(GraphTest, UniformInitialization)
     {{0, 1, 0.0}, {1, 2, 0.0}}
   });
 
-  // Verify the vertexes.
-  auto vertexes = graph.Vertexes();
-  EXPECT_EQ(vertexes.size(), 3u);
+  // Verify the vertices.
+  auto vertices = graph.Vertices();
+  EXPECT_EQ(vertices.size(), 3u);
 
   for (auto i = 0; i < 3; ++i)
   {
@@ -57,7 +57,7 @@ TEST(GraphTest, VertexById)
 {
   DirectedGraph<int, double> graph;
 
-  // Create some vertexes.
+  // Create some vertices.
   auto v0 = graph.AddVertex(0, "0");
   EXPECT_EQ(v0->Name(), "0");
   ASSERT_TRUE(v0 != nullptr);
@@ -76,11 +76,11 @@ TEST(GraphTest, VertexById)
 }
 
 /////////////////////////////////////////////////
-TEST(GraphTest, Vertexes)
+TEST(GraphTest, vertices)
 {
   DirectedGraph<int, double> graph;
 
-  // Create some vertexes.
+  // Create some vertices.
   auto v0 = graph.AddVertex(0, "0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "1");
@@ -88,21 +88,21 @@ TEST(GraphTest, Vertexes)
   auto v2 = graph.AddVertex(2, "2");
   ASSERT_TRUE(v2 != nullptr);
 
-  auto vertexes = graph.Vertexes();
-  EXPECT_EQ(vertexes.size(), 3u);
+  auto vertices = graph.Vertices();
+  EXPECT_EQ(vertices.size(), 3u);
 
-  // Check that the pointers point to the same vertexes.
-  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v0), vertexes.end());
-  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v1), vertexes.end());
-  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v2), vertexes.end());
+  // Check that the pointers point to the same vertices.
+  EXPECT_NE(std::find(vertices.begin(), vertices.end(), v0), vertices.end());
+  EXPECT_NE(std::find(vertices.begin(), vertices.end(), v1), vertices.end());
+  EXPECT_NE(std::find(vertices.begin(), vertices.end(), v2), vertices.end());
 }
 
 /////////////////////////////////////////////////
-TEST(GraphTest, VertexesNames)
+TEST(GraphTest, VerticesNames)
 {
   DirectedGraph<int, double> graph;
 
-  // Create some vertexes.
+  // Create some vertices.
   auto v0 = graph.AddVertex(0, "vertex_0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "vertex_1");
@@ -112,11 +112,11 @@ TEST(GraphTest, VertexesNames)
   auto v3 = graph.AddVertex(3, "vertex_2");
   ASSERT_TRUE(v3 != nullptr);
 
-  auto vertexes = graph.Vertexes("vertex_2");
-  EXPECT_EQ(vertexes.size(), 2);
-  // Check that the pointers point to the same vertexes.
-  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v2), vertexes.end());
-  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v3), vertexes.end());
+  auto vertices = graph.Vertices("vertex_2");
+  EXPECT_EQ(vertices.size(), 2);
+  // Check that the pointers point to the same vertices.
+  EXPECT_NE(std::find(vertices.begin(), vertices.end(), v2), vertices.end());
+  EXPECT_NE(std::find(vertices.begin(), vertices.end(), v3), vertices.end());
 }
 
 /////////////////////////////////////////////////
@@ -124,7 +124,7 @@ TEST(GraphTest, Edges)
 {
   DirectedGraph<int, double> graph;
 
-  // Create some vertexes.
+  // Create some vertices.
   auto v0 = graph.AddVertex(0, "0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "1");
@@ -168,7 +168,7 @@ TEST(GraphTest, Adjacents)
 {
   DirectedGraph<int, double> graph;
 
-  // Create some vertexes.
+  // Create some vertices.
   auto v0 = graph.AddVertex(0, "0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "1");
@@ -202,7 +202,7 @@ TEST(GraphTest, Incidents)
 {
   DirectedGraph<int, double> graph;
 
-  // Create some vertexes.
+  // Create some vertices.
   auto v0 = graph.AddVertex(0, "0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "1");
@@ -232,7 +232,7 @@ TEST(GraphTest, AddVertex)
 {
   DirectedGraph<int, double> graph;
 
-  // Create some vertexes without Id.
+  // Create some vertices without Id.
   auto v0 = graph.AddVertex(0, "0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "1");
@@ -250,8 +250,8 @@ TEST(GraphTest, AddVertex)
   auto v4 = graph.AddVertex(0, "3", 3);
   ASSERT_TRUE(v4 == nullptr);
 
-  auto vertexes = graph.Vertexes();
-  EXPECT_EQ(vertexes.size(), 4u);
+  auto vertices = graph.Vertices();
+  EXPECT_EQ(vertices.size(), 4u);
 }
 
 /////////////////////////////////////////////////
@@ -259,7 +259,7 @@ TEST(GraphTest, AddEdge)
 {
   DirectedGraph<int, double> graph;
 
-  // Create some vertexes without Id.
+  // Create some vertices without Id.
   auto v0 = graph.AddVertex(0, "0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "1");
@@ -280,7 +280,7 @@ TEST(GraphTest, AddEdge)
   EXPECT_EQ(e1->Data(), 3.0);
   EXPECT_EQ(e2->Data(), 4.0);
 
-  // Check that the edges point to the right vertexes.
+  // Check that the edges point to the right vertices.
   EXPECT_EQ(e0->Tail(), v0);
   EXPECT_EQ(e0->Head(), v1);
 
@@ -303,7 +303,7 @@ TEST(GraphTest, RemoveEdge)
 {
   DirectedGraph<int, double> graph;
 
-  // Create some vertexes without Id.
+  // Create some vertices without Id.
   auto v0 = graph.AddVertex(0, "0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "1");
@@ -333,7 +333,7 @@ TEST(GraphTest, RemoveEdge)
 
   EXPECT_TRUE(graph.RemoveEdge(e0));
   EXPECT_EQ(graph.Edges().size(), 2u);
-  // After disconnecting e0, it shoudln't be possible to reach the vertexes.
+  // After disconnecting e0, it shoudln't be possible to reach the vertices.
   EXPECT_EQ(e0->Head(), nullptr);
   EXPECT_EQ(e0->Tail(), nullptr);
 
@@ -355,7 +355,7 @@ TEST(GraphTest, RemoveVertex)
 {
   DirectedGraph<int, double> graph;
 
-  // Create some vertexes without Id.
+  // Create some vertices without Id.
   auto v0 = graph.AddVertex(0, "0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "1");
@@ -376,37 +376,37 @@ TEST(GraphTest, RemoveVertex)
   // Remove using nullptr shouldn't cause any effect.
   VertexPtr<int> vertex;
   EXPECT_FALSE(graph.RemoveVertex(vertex));
-  EXPECT_EQ(graph.Vertexes().size(), 3u);
+  EXPECT_EQ(graph.Vertices().size(), 3u);
 
   // Try to remove a vertex that doesn't belong to the graph.
   auto v = std::make_shared<Vertex<int>>(10, "new_vertex", 99);
   EXPECT_FALSE(graph.RemoveVertex(v));
-  EXPECT_EQ(graph.Vertexes().size(), 3u);
+  EXPECT_EQ(graph.Vertices().size(), 3u);
 
   EXPECT_EQ(graph.Adjacents(v1).size(), 1);
 
   EXPECT_TRUE(graph.RemoveVertex(2));
-  EXPECT_EQ(graph.Vertexes().size(), 2u);
+  EXPECT_EQ(graph.Vertices().size(), 2u);
   EXPECT_EQ(graph.Edges().size(), 1u);
 
   EXPECT_EQ(graph.Adjacents(v1).size(), 0);
 
   EXPECT_TRUE(graph.RemoveVertex(v1));
-  EXPECT_EQ(graph.Vertexes().size(), 1u);
+  EXPECT_EQ(graph.Vertices().size(), 1u);
   EXPECT_TRUE(graph.Edges().empty());
 
   EXPECT_TRUE(graph.RemoveVertex(v0));
-  EXPECT_TRUE(graph.Vertexes().empty());
+  EXPECT_TRUE(graph.Vertices().empty());
 
   EXPECT_TRUE(graph.Empty());
 }
 
 /////////////////////////////////////////////////
-TEST(GraphTest, RemoveVertexesWithName)
+TEST(GraphTest, RemoveVerticesWithName)
 {
   DirectedGraph<int, double> graph;
 
-  // Create some vertexes without Id.
+  // Create some vertices without Id.
   auto v0 = graph.AddVertex(0, "vertex_0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "vertex_1");
@@ -429,22 +429,22 @@ TEST(GraphTest, RemoveVertexesWithName)
   EXPECT_EQ(graph.Edges().size(), 4u);
 
   // Try to remove a node with a name that doesn't exist.
-  EXPECT_FALSE(graph.RemoveVertexes("wrong_name"));
-  EXPECT_EQ(graph.Vertexes().size(), 4u);
+  EXPECT_FALSE(graph.RemoveVertices("wrong_name"));
+  EXPECT_EQ(graph.Vertices().size(), 4u);
   EXPECT_EQ(graph.Adjacents(v1).size(), 1);
 
-  EXPECT_TRUE(graph.RemoveVertexes("vertex_2"));
-  EXPECT_EQ(graph.Vertexes().size(), 2u);
+  EXPECT_TRUE(graph.RemoveVertices("vertex_2"));
+  EXPECT_EQ(graph.Vertices().size(), 2u);
   EXPECT_EQ(graph.Edges().size(), 1u);
 
   EXPECT_EQ(graph.Adjacents(v1).size(), 0);
 
-  EXPECT_TRUE(graph.RemoveVertexes("vertex_1"));
-  EXPECT_EQ(graph.Vertexes().size(), 1u);
+  EXPECT_TRUE(graph.RemoveVertices("vertex_1"));
+  EXPECT_EQ(graph.Vertices().size(), 1u);
   EXPECT_TRUE(graph.Edges().empty());
 
-  EXPECT_TRUE(graph.RemoveVertexes("vertex_0"));
-  EXPECT_TRUE(graph.Vertexes().empty());
+  EXPECT_TRUE(graph.RemoveVertices("vertex_0"));
+  EXPECT_TRUE(graph.Vertices().empty());
 
   EXPECT_TRUE(graph.Empty());
 }
@@ -454,7 +454,7 @@ TEST(GraphTest, StreamInsertion)
 {
   DirectedGraph<int, double> graph;
 
-  // Create some vertexes without Id.
+  // Create some vertices without Id.
   auto v0 = graph.AddVertex(0, "vertex_0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "vertex_1");
@@ -475,7 +475,7 @@ TEST(GraphTest, StreamInsertion)
   std::ostringstream output;
   output << graph;
 
-  for (auto const &s : {"Vertexes\n",
+  for (auto const &s : {"Vertices\n",
                         "  [0][vertex_0]\n",
                         "  [1][vertex_1]\n",
                         "  [2][vertex_2]\n",

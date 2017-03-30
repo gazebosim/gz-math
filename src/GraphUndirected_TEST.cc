@@ -38,9 +38,9 @@ TEST(UndirectedGraphTest, UniformInitialization)
     {{{0, 1}, 0.0}, {{1, 2}, 0.0}}
   });
 
-  // Verify the vertexes.
-  auto vertexes = graph.Vertexes();
-  EXPECT_EQ(vertexes.size(), 3u);
+  // Verify the vertices.
+  auto vertices = graph.Vertices();
+  EXPECT_EQ(vertices.size(), 3u);
 
   for (auto i = 0; i < 3; ++i)
   {
@@ -61,7 +61,7 @@ TEST(UndirectedGraphTest, VertexById)
 {
   UndirectedGraph<int, double> graph;
 
-  // Create some vertexes.
+  // Create some vertices.
   auto v0 = graph.AddVertex(0, "0");
   EXPECT_EQ(v0->Name(), "0");
   ASSERT_TRUE(v0 != nullptr);
@@ -80,11 +80,11 @@ TEST(UndirectedGraphTest, VertexById)
 }
 
 /////////////////////////////////////////////////
-TEST(UndirectedGraphTest, Vertexes)
+TEST(UndirectedGraphTest, Vertices)
 {
   UndirectedGraph<int, double> graph;
 
-  // Create some vertexes.
+  // Create some vertices.
   auto v0 = graph.AddVertex(0, "0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "1");
@@ -92,21 +92,21 @@ TEST(UndirectedGraphTest, Vertexes)
   auto v2 = graph.AddVertex(2, "2");
   ASSERT_TRUE(v2 != nullptr);
 
-  auto vertexes = graph.Vertexes();
-  EXPECT_EQ(vertexes.size(), 3u);
+  auto vertices = graph.Vertices();
+  EXPECT_EQ(vertices.size(), 3u);
 
-  // Check that the pointers point to the same vertexes.
-  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v0), vertexes.end());
-  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v1), vertexes.end());
-  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v2), vertexes.end());
+  // Check that the pointers point to the same vertices.
+  EXPECT_NE(std::find(vertices.begin(), vertices.end(), v0), vertices.end());
+  EXPECT_NE(std::find(vertices.begin(), vertices.end(), v1), vertices.end());
+  EXPECT_NE(std::find(vertices.begin(), vertices.end(), v2), vertices.end());
 }
 
 /////////////////////////////////////////////////
-TEST(UndirectedGraphTest, VertexesNames)
+TEST(UndirectedGraphTest, VerticesNames)
 {
   UndirectedGraph<int, double> graph;
 
-  // Create some vertexes.
+  // Create some vertices.
   auto v0 = graph.AddVertex(0, "vertex_0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "vertex_1");
@@ -116,11 +116,11 @@ TEST(UndirectedGraphTest, VertexesNames)
   auto v3 = graph.AddVertex(3, "vertex_2");
   ASSERT_TRUE(v3 != nullptr);
 
-  auto vertexes = graph.Vertexes("vertex_2");
-  EXPECT_EQ(vertexes.size(), 2);
-  // Check that the pointers point to the same vertexes.
-  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v2), vertexes.end());
-  EXPECT_NE(std::find(vertexes.begin(), vertexes.end(), v3), vertexes.end());
+  auto vertices = graph.Vertices("vertex_2");
+  EXPECT_EQ(vertices.size(), 2);
+  // Check that the pointers point to the same vertices.
+  EXPECT_NE(std::find(vertices.begin(), vertices.end(), v2), vertices.end());
+  EXPECT_NE(std::find(vertices.begin(), vertices.end(), v3), vertices.end());
 }
 
 /////////////////////////////////////////////////
@@ -128,7 +128,7 @@ TEST(UndirectedGraphTest, Edges)
 {
   UndirectedGraph<int, double> graph;
 
-  // Create some vertexes.
+  // Create some vertices.
   auto v0 = graph.AddVertex(0, "0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "1");
@@ -137,14 +137,14 @@ TEST(UndirectedGraphTest, Edges)
   ASSERT_TRUE(v2 != nullptr);
 
   // Create some edges [(v0-->v1), (v1-->v2), (v2-->v0)]
-  VertexPtr_S<int> vertexes = {v0, v1};
-  auto e0 = graph.AddEdge(vertexes, 2.0);
+  VertexPtr_S<int> vertices = {v0, v1};
+  auto e0 = graph.AddEdge(vertices, 2.0);
   ASSERT_TRUE(e0 != nullptr);
-  vertexes = {v1, v2};
-  auto e1 = graph.AddEdge(vertexes, 3.0);
+  vertices = {v1, v2};
+  auto e1 = graph.AddEdge(vertices, 3.0);
   ASSERT_TRUE(e1 != nullptr);
-  vertexes = {v2, v0};
-  auto e2 = graph.AddEdge(vertexes, 4.0);
+  vertices = {v2, v0};
+  auto e2 = graph.AddEdge(vertices, 4.0);
   ASSERT_TRUE(e2 != nullptr);
 
   auto edges = graph.Edges();
@@ -175,7 +175,7 @@ TEST(UndirectedGraphTest, Adjacents)
 {
   UndirectedGraph<int, double> graph;
 
-  // Create some vertexes.
+  // Create some vertices.
   auto v0 = graph.AddVertex(0, "0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "1");
@@ -184,14 +184,14 @@ TEST(UndirectedGraphTest, Adjacents)
   ASSERT_TRUE(v2 != nullptr);
 
   // Create some edges [(v0-->v1), (v1-->v2), (v2-->v0)]
-  VertexPtr_S<int> vertexes = {v0, v1};
-  auto e0 = graph.AddEdge(vertexes, 2.0);
+  VertexPtr_S<int> vertices = {v0, v1};
+  auto e0 = graph.AddEdge(vertices, 2.0);
   ASSERT_TRUE(e0 != nullptr);
-  vertexes = {v1, v2};
-  auto e1 = graph.AddEdge(vertexes, 3.0);
+  vertices = {v1, v2};
+  auto e1 = graph.AddEdge(vertices, 3.0);
   ASSERT_TRUE(e1 != nullptr);
-  vertexes = {v2, v0};
-  auto e2 = graph.AddEdge(vertexes, 4.0);
+  vertices = {v2, v0};
+  auto e2 = graph.AddEdge(vertices, 4.0);
   ASSERT_TRUE(e2 != nullptr);
 
   auto adjacents = graph.Adjacents(v0);
@@ -210,7 +210,7 @@ TEST(UndirectedGraphTest, Incidents)
 {
   UndirectedGraph<int, double> graph;
 
-  // Create some vertexes.
+  // Create some vertices.
   auto v0 = graph.AddVertex(0, "0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "1");
@@ -219,14 +219,14 @@ TEST(UndirectedGraphTest, Incidents)
   ASSERT_TRUE(v2 != nullptr);
 
   // Create some edges [(v0-->v1), (v1-->v2), (v2-->v0)]
-  VertexPtr_S<int> vertexes = {v0, v1};
-  auto e0 = graph.AddEdge(vertexes, 2.0);
+  VertexPtr_S<int> vertices = {v0, v1};
+  auto e0 = graph.AddEdge(vertices, 2.0);
   ASSERT_TRUE(e0 != nullptr);
-  vertexes = {v1, v2};
-  auto e1 = graph.AddEdge(vertexes, 3.0);
+  vertices = {v1, v2};
+  auto e1 = graph.AddEdge(vertices, 3.0);
   ASSERT_TRUE(e1 != nullptr);
-  vertexes = {v2, v0};
-  auto e2 = graph.AddEdge(vertexes, 4.0);
+  vertices = {v2, v0};
+  auto e2 = graph.AddEdge(vertices, 4.0);
   ASSERT_TRUE(e2 != nullptr);
 
   auto incidents = graph.Incidents(v0);
@@ -245,7 +245,7 @@ TEST(UndirectedGraphTest, AddVertex)
 {
   UndirectedGraph<int, double> graph;
 
-  // Create some vertexes without Id.
+  // Create some vertices without Id.
   auto v0 = graph.AddVertex(0, "0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "1");
@@ -263,8 +263,8 @@ TEST(UndirectedGraphTest, AddVertex)
   auto v4 = graph.AddVertex(0, "3", 3);
   ASSERT_TRUE(v4 == nullptr);
 
-  auto vertexes = graph.Vertexes();
-  EXPECT_EQ(vertexes.size(), 4u);
+  auto vertices = graph.Vertices();
+  EXPECT_EQ(vertices.size(), 4u);
 }
 
 /////////////////////////////////////////////////
@@ -272,7 +272,7 @@ TEST(UndirectedGraphTest, AddEdge)
 {
   UndirectedGraph<int, double> graph;
 
-  // Create some vertexes without Id.
+  // Create some vertices without Id.
   auto v0 = graph.AddVertex(0, "0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "1");
@@ -281,19 +281,19 @@ TEST(UndirectedGraphTest, AddEdge)
   ASSERT_TRUE(v2 != nullptr);
 
   // Create some edges [(v0-->v1), (v1-->v2), (v2-->v0)]
-  VertexPtr_S<int> vertexes = {v0, v1};
-  auto e0 = graph.AddEdge(vertexes, 2.0);
+  VertexPtr_S<int> vertices = {v0, v1};
+  auto e0 = graph.AddEdge(vertices, 2.0);
   ASSERT_TRUE(e0 != nullptr);
-  vertexes = {v1, v2};
-  auto e1 = graph.AddEdge(vertexes, 3.0);
+  vertices = {v1, v2};
+  auto e1 = graph.AddEdge(vertices, 3.0);
   ASSERT_TRUE(e1 != nullptr);
-  vertexes = {v2, v0};
-  auto e2 = graph.AddEdge(vertexes, 4.0);
+  vertices = {v2, v0};
+  auto e2 = graph.AddEdge(vertices, 4.0);
   ASSERT_TRUE(e2 != nullptr);
 
   // Try to add an edge with just one vertex.
-  vertexes = {v0};
-  auto e3 = graph.AddEdge(vertexes, 4.0);
+  vertices = {v0};
+  auto e3 = graph.AddEdge(vertices, 4.0);
   ASSERT_TRUE(e2 != nullptr);
 
   // Check the edge content.
@@ -301,16 +301,16 @@ TEST(UndirectedGraphTest, AddEdge)
   EXPECT_EQ(e1->Data(), 3.0);
   EXPECT_EQ(e2->Data(), 4.0);
 
-  // Check that the edges point to the right vertexes.
-  EXPECT_NE(e0->Vertexes().find(v0), e0->Vertexes().end());
-  EXPECT_NE(e0->Vertexes().find(v1), e0->Vertexes().end());
+  // Check that the edges point to the right vertices.
+  EXPECT_NE(e0->Vertices().find(v0), e0->Vertices().end());
+  EXPECT_NE(e0->Vertices().find(v1), e0->Vertices().end());
 
   auto edges = graph.Edges();
   EXPECT_EQ(edges.size(), 3u);
 
   // Try to add an edge with an incorrect vertex.
-  VertexPtr_S<int> wrongVertexes = {nullptr, v1};
-  auto edge = graph.AddEdge(wrongVertexes, 2.0);
+  VertexPtr_S<int> wrongVertices = {nullptr, v1};
+  auto edge = graph.AddEdge(wrongVertices, 2.0);
   EXPECT_EQ(edge, nullptr);
   EXPECT_EQ(edges.size(), 3u);
 }
@@ -320,7 +320,7 @@ TEST(UndirectedGraphTest, RemoveEdge)
 {
   UndirectedGraph<int, double> graph;
 
-  // Create some vertexes without Id.
+  // Create some vertices without Id.
   auto v0 = graph.AddVertex(0, "0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "1");
@@ -329,18 +329,18 @@ TEST(UndirectedGraphTest, RemoveEdge)
   ASSERT_TRUE(v2 != nullptr);
 
   // Create some edges [(v0-->v1), (v1-->v2), (v2-->v0)]
-  VertexPtr_S<int> vertexes = {v0, v1};
-  auto e0 = graph.AddEdge(vertexes, 2.0);
+  VertexPtr_S<int> vertices = {v0, v1};
+  auto e0 = graph.AddEdge(vertices, 2.0);
   ASSERT_TRUE(e0 != nullptr);
-  vertexes = {v1, v2};
-  auto e1 = graph.AddEdge(vertexes, 3.0);
+  vertices = {v1, v2};
+  auto e1 = graph.AddEdge(vertices, 3.0);
   ASSERT_TRUE(e1 != nullptr);
-  vertexes = {v2, v0};
-  auto e2 = graph.AddEdge(vertexes, 4.0);
+  vertices = {v2, v0};
+  auto e2 = graph.AddEdge(vertices, 4.0);
   ASSERT_TRUE(e2 != nullptr);
   EXPECT_EQ(graph.Edges().size(), 3u);
 
-  // Remove an edge with vertexes that don't exist.
+  // Remove an edge with vertices that don't exist.
 
   // Remove using nullptr shouldn't cause any effect.
   UndirectedEdgePtr<int, double> edge;
@@ -349,15 +349,15 @@ TEST(UndirectedGraphTest, RemoveEdge)
 
   EXPECT_EQ(graph.Incidents(v1).size(), 2u);
 
-  vertexes = e0->Vertexes();
-  EXPECT_EQ(vertexes.find(nullptr), vertexes.end());
+  vertices = e0->Vertices();
+  EXPECT_EQ(vertices.find(nullptr), vertices.end());
 
   EXPECT_TRUE(graph.RemoveEdge(e0));
   EXPECT_EQ(graph.Edges().size(), 2u);
 
-  // After disconnecting e0, it shoudln't be possible to reach the vertexes.
-  vertexes = e0->Vertexes();
-  EXPECT_NE(vertexes.find(nullptr), vertexes.end());
+  // After disconnecting e0, it shoudln't be possible to reach the vertices.
+  vertices = e0->Vertices();
+  EXPECT_NE(vertices.find(nullptr), vertices.end());
 
   EXPECT_EQ(graph.Incidents(v1).size(), 1u);
 
@@ -377,7 +377,7 @@ TEST(UndirectedGraphTest, RemoveVertex)
 {
   UndirectedGraph<int, double> graph;
 
-  // Create some vertexes without Id.
+  // Create some vertices without Id.
   auto v0 = graph.AddVertex(0, "0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "1");
@@ -386,51 +386,51 @@ TEST(UndirectedGraphTest, RemoveVertex)
   ASSERT_TRUE(v2 != nullptr);
 
   // Create some edges [(v0-->v1), (v1-->v2), (v2-->v0)]
-  VertexPtr_S<int> vertexes = {v0, v1};
-  auto e0 = graph.AddEdge(vertexes, 2.0);
+  VertexPtr_S<int> vertices = {v0, v1};
+  auto e0 = graph.AddEdge(vertices, 2.0);
   ASSERT_TRUE(e0 != nullptr);
-  vertexes = {v1, v2};
-  auto e1 = graph.AddEdge(vertexes, 3.0);
+  vertices = {v1, v2};
+  auto e1 = graph.AddEdge(vertices, 3.0);
   ASSERT_TRUE(e1 != nullptr);
-  vertexes = {v2, v0};
-  auto e2 = graph.AddEdge(vertexes, 4.0);
+  vertices = {v2, v0};
+  auto e2 = graph.AddEdge(vertices, 4.0);
   ASSERT_TRUE(e2 != nullptr);
   EXPECT_EQ(graph.Edges().size(), 3u);
 
   // Remove using nullptr shouldn't cause any effect.
   VertexPtr<int> vertex;
   EXPECT_FALSE(graph.RemoveVertex(vertex));
-  EXPECT_EQ(graph.Vertexes().size(), 3u);
+  EXPECT_EQ(graph.Vertices().size(), 3u);
 
   // Try to remove a vertex that doesn't belong to the graph.
   auto v = std::make_shared<Vertex<int>>(10, "new_vertex", 99);
   EXPECT_FALSE(graph.RemoveVertex(v));
-  EXPECT_EQ(graph.Vertexes().size(), 3u);
+  EXPECT_EQ(graph.Vertices().size(), 3u);
 
   EXPECT_EQ(graph.Adjacents(v1).size(), 2u);
 
   EXPECT_TRUE(graph.RemoveVertex(2));
-  EXPECT_EQ(graph.Vertexes().size(), 2u);
+  EXPECT_EQ(graph.Vertices().size(), 2u);
   EXPECT_EQ(graph.Edges().size(), 1u);
 
   EXPECT_EQ(graph.Adjacents(v1).size(), 1u);
 
   EXPECT_TRUE(graph.RemoveVertex(v1));
-  EXPECT_EQ(graph.Vertexes().size(), 1u);
+  EXPECT_EQ(graph.Vertices().size(), 1u);
   EXPECT_TRUE(graph.Edges().empty());
 
   EXPECT_TRUE(graph.RemoveVertex(v0));
-  EXPECT_TRUE(graph.Vertexes().empty());
+  EXPECT_TRUE(graph.Vertices().empty());
 
   EXPECT_TRUE(graph.Empty());
 }
 
 /////////////////////////////////////////////////
-TEST(UndirectedGraphTest, RemoveVertexesWithName)
+TEST(UndirectedGraphTest, RemoveVerticesWithName)
 {
   UndirectedGraph<int, double> graph;
 
-  // Create some vertexes without Id.
+  // Create some vertices without Id.
   auto v0 = graph.AddVertex(0, "vertex_0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "vertex_1");
@@ -441,38 +441,38 @@ TEST(UndirectedGraphTest, RemoveVertexesWithName)
   ASSERT_TRUE(v2 != nullptr);
 
   // Create some edges [(v0-->v1), (v1-->v2), (v2-->v3), (v3-->v0)]
-  VertexPtr_S<int> vertexes = {v0, v1};
-  auto e0 = graph.AddEdge(vertexes, 2.0);
+  VertexPtr_S<int> vertices = {v0, v1};
+  auto e0 = graph.AddEdge(vertices, 2.0);
   ASSERT_TRUE(e0 != nullptr);
-  vertexes = {v1, v2};
-  auto e1 = graph.AddEdge(vertexes, 3.0);
+  vertices = {v1, v2};
+  auto e1 = graph.AddEdge(vertices, 3.0);
   ASSERT_TRUE(e1 != nullptr);
-  vertexes = {v2, v3};
-  auto e2 = graph.AddEdge(vertexes, 4.0);
+  vertices = {v2, v3};
+  auto e2 = graph.AddEdge(vertices, 4.0);
   ASSERT_TRUE(e2 != nullptr);
-  vertexes = {v3, v0};
-  auto e3 = graph.AddEdge(vertexes, 5.0);
+  vertices = {v3, v0};
+  auto e3 = graph.AddEdge(vertices, 5.0);
   ASSERT_TRUE(e3 != nullptr);
 
   EXPECT_EQ(graph.Edges().size(), 4u);
 
   // Try to remove a node with a name that doesn't exist.
-  EXPECT_FALSE(graph.RemoveVertexes("wrong_name"));
-  EXPECT_EQ(graph.Vertexes().size(), 4u);
+  EXPECT_FALSE(graph.RemoveVertices("wrong_name"));
+  EXPECT_EQ(graph.Vertices().size(), 4u);
   EXPECT_EQ(graph.Adjacents(v1).size(), 2u);
 
-  EXPECT_TRUE(graph.RemoveVertexes("vertex_2"));
-  EXPECT_EQ(graph.Vertexes().size(), 2u);
+  EXPECT_TRUE(graph.RemoveVertices("vertex_2"));
+  EXPECT_EQ(graph.Vertices().size(), 2u);
   EXPECT_EQ(graph.Edges().size(), 1u);
 
   EXPECT_EQ(graph.Adjacents(v1).size(), 1u);
 
-  EXPECT_TRUE(graph.RemoveVertexes("vertex_1"));
-  EXPECT_EQ(graph.Vertexes().size(), 1u);
+  EXPECT_TRUE(graph.RemoveVertices("vertex_1"));
+  EXPECT_EQ(graph.Vertices().size(), 1u);
   EXPECT_TRUE(graph.Edges().empty());
 
-  EXPECT_TRUE(graph.RemoveVertexes("vertex_0"));
-  EXPECT_TRUE(graph.Vertexes().empty());
+  EXPECT_TRUE(graph.RemoveVertices("vertex_0"));
+  EXPECT_TRUE(graph.Vertices().empty());
 
   EXPECT_TRUE(graph.Empty());
 }
@@ -482,7 +482,7 @@ TEST(UndirectedGraphTest, StreamInsertion)
 {
   UndirectedGraph<int, double> graph;
 
-  // Create some vertexes without Id.
+  // Create some vertices without Id.
   auto v0 = graph.AddVertex(0, "vertex_0");
   ASSERT_TRUE(v0 != nullptr);
   auto v1 = graph.AddVertex(1, "vertex_1");
@@ -491,14 +491,14 @@ TEST(UndirectedGraphTest, StreamInsertion)
   ASSERT_TRUE(v2 != nullptr);
 
   // Create some edges [(v0-->v1), (v1-->v2), (v2-->v0)]
-  VertexPtr_S<int> vertexes = {v0, v1};
-  auto e0 = graph.AddEdge(vertexes, 2.0);
+  VertexPtr_S<int> vertices = {v0, v1};
+  auto e0 = graph.AddEdge(vertices, 2.0);
   ASSERT_TRUE(e0 != nullptr);
-  vertexes = {v1, v2};
-  auto e1 = graph.AddEdge(vertexes, 3.0);
+  vertices = {v1, v2};
+  auto e1 = graph.AddEdge(vertices, 3.0);
   ASSERT_TRUE(e1 != nullptr);
-  vertexes = {v2, v0};
-  auto e2 = graph.AddEdge(vertexes, 4.0);
+  vertices = {v2, v0};
+  auto e2 = graph.AddEdge(vertices, 4.0);
   ASSERT_TRUE(e2 != nullptr);
 
   EXPECT_EQ(graph.Edges().size(), 3u);
@@ -506,7 +506,7 @@ TEST(UndirectedGraphTest, StreamInsertion)
   std::ostringstream output;
   output << graph;
 
-  for (auto const &s : {"Vertexes\n",
+  for (auto const &s : {"Vertices\n",
                         "  [0][vertex_0]\n",
                         "  [1][vertex_1]\n",
                         "  [2][vertex_2]\n",
@@ -516,7 +516,7 @@ TEST(UndirectedGraphTest, StreamInsertion)
   }
 
   // We don't really know the order in which the edges will be printed.
-  // We also don't know the order in which the vertexes on each edge will be
+  // We also don't know the order in which the vertices on each edge will be
   // printed.
   std::vector<std::pair<std::string, std::string>> expectedEdges =
     {

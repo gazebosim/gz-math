@@ -37,8 +37,8 @@ namespace ignition
     template<typename E>
     struct UndirectEdgeInitializer
     {
-      /// \brief IDs of the vertexes.
-      public: std::set<int64_t> vertexes;
+      /// \brief IDs of the vertices.
+      public: std::set<int64_t> vertices;
 
       /// \brief User data.
       public: E data;
@@ -58,28 +58,28 @@ namespace ignition
     template<typename V, typename E>
     using UndirectedEdgePtr_S = std::set<UndirectedEdgePtr<V, E>>;
 
-    /// \brief An undirected edge represents a connection between two vertexes.
+    /// \brief An undirected edge represents a connection between two vertices.
     template<typename V, typename E>
     class UndirectedEdge : public Edge<V>
     {
       /// \brief Constructor.
-      /// \param[in] _vertexes The set of pointers to two vertexes.
+      /// \param[in] _vertices The set of pointers to two vertices.
       /// \param[in] _data User data to be stored in the edge.
-      public: UndirectedEdge(const VertexPtr_S<V> &_vertexes,
+      public: UndirectedEdge(const VertexPtr_S<V> &_vertices,
                              const E &_data)
-        : vertexes(_vertexes),
+        : vertices(_vertices),
           data(_data)
       {
       }
 
       /// \brief Helper function for creating an isolated undirected edge.
-      /// \param[in] _vertexes The set of pointers to two vertexes.
+      /// \param[in] _vertices The set of pointers to two vertices.
       /// \param[in] _data User data to be stored in the edge.
       public: static
-        UndirectedEdgePtr<V, E> createEdge(const VertexPtr_S<V> &_vertexes,
+        UndirectedEdgePtr<V, E> createEdge(const VertexPtr_S<V> &_vertices,
                                            const E &_data)
       {
-        return std::make_shared<UndirectedEdge<V, E>>(_vertexes, _data);
+        return std::make_shared<UndirectedEdge<V, E>>(_vertices, _data);
       }
 
       /// \brief Get the user data stored in the edge.
@@ -90,12 +90,12 @@ namespace ignition
       }
 
       // Documentation inherited.
-      public: VertexPtr_S<V> Vertexes() const
+      public: VertexPtr_S<V> Vertices() const
       {
         if (!this->Valid())
           return {nullptr, nullptr};
 
-        return this->vertexes;
+        return this->vertices;
       }
 
       // Documentation inherited.
@@ -104,14 +104,14 @@ namespace ignition
         if (!this->Valid())
           return nullptr;
 
-        assert(this->vertexes.size() == 2u);
-        auto search = this->vertexes.find(_from);
-        if (search == this->vertexes.end())
+        assert(this->vertices.size() == 2u);
+        auto search = this->vertices.find(_from);
+        if (search == this->vertices.end())
           return nullptr;
 
         VertexPtr_S<V> diff;
         VertexPtr_S<V> s2 = {_from};
-        std::set_difference(this->vertexes.begin(), this->vertexes.end(),
+        std::set_difference(this->vertices.begin(), this->vertices.end(),
                             s2.begin(), s2.end(),
                             std::inserter(diff, diff.begin()));
 
@@ -122,8 +122,8 @@ namespace ignition
         return *diff.begin();
       }
 
-      /// \brief The set of pointers to two vertexes.
-      private: VertexPtr_S<V> vertexes;
+      /// \brief The set of pointers to two vertices.
+      private: VertexPtr_S<V> vertices;
 
       /// \brief User data.
       private: E data;
@@ -137,13 +137,13 @@ namespace ignition
       public: UndirectedGraph() = default;
 
       /// \brief Constructor.
-      /// \param[in] _vertexes Collection of vertexes.
+      /// \param[in] _vertices Collection of vertices.
       /// \param[in] _edges Collection of edges.
-      public: UndirectedGraph(const std::vector<Vertex<V>> &_vertexes,
+      public: UndirectedGraph(const std::vector<Vertex<V>> &_vertices,
                           const std::vector<UndirectEdgeInitializer<E>> &_edges)
       {
-        // Add all vertexes.
-        for (auto const &v : _vertexes)
+        // Add all vertices.
+        for (auto const &v : _vertices)
         {
           if (!this->AddVertex(v.Data(), v.Name(), v.Id()))
           {
@@ -155,20 +155,20 @@ namespace ignition
         // Add all edges.
         for (auto const &e : _edges)
         {
-          if (!this->AddEdge(e.vertexes, e.data))
+          if (!this->AddEdge(e.vertices, e.data))
             std::cerr << "Ignoring edge" << std::endl;
         }
       }
 
       /// \brief Add a new edge to the graph.
-      /// \param[in] _vertexes The set of pointers to two vertexes.
+      /// \param[in] _vertices The set of pointers to two vertices.
       /// \param[in] _data User data.
       /// \return Shared pointer to the new edge created or nullptr if the
-      /// edge was not created (e.g. incorrect vertexes).
-      public: UndirectedEdgePtr<V, E> AddEdge(const VertexPtr_S<V> &_vertexes,
+      /// edge was not created (e.g. incorrect vertices).
+      public: UndirectedEdgePtr<V, E> AddEdge(const VertexPtr_S<V> &_vertices,
                                               const E &_data)
       {
-        auto newEdgePtr = UndirectedEdge<V, E>::createEdge(_vertexes, _data);
+        auto newEdgePtr = UndirectedEdge<V, E>::createEdge(_vertices, _data);
 
         if (this->LinkEdge(newEdgePtr))
           return newEdgePtr;
@@ -177,18 +177,18 @@ namespace ignition
       }
 
       /// \brief Add a new edge to the graph.
-      /// \param[in] _vertexes The set of Ids to two vertexes.
+      /// \param[in] _vertices The set of Ids to two vertices.
       /// \param[in] _data User data.
       /// \return Shared pointer to the new edge.
       public:
-        UndirectedEdgePtr<V, E> AddEdge(const std::set<int64_t> &_vertexes,
+        UndirectedEdgePtr<V, E> AddEdge(const std::set<int64_t> &_vertices,
                                         const E &_data)
       {
-        VertexPtr_S<V> vertexes;
-        for (auto const &id : _vertexes)
-          vertexes.insert(this->VertexById(id));
+        VertexPtr_S<V> vertices;
+        for (auto const &id : _vertices)
+          vertices.insert(this->VertexById(id));
 
-        return this->AddEdge(vertexes, _data);
+        return this->AddEdge(vertices, _data);
       }
 
       /// \brief Stream insertion operator.
@@ -197,15 +197,15 @@ namespace ignition
       public: friend std::ostream &operator<<(std::ostream &_out,
                                               const UndirectedGraph<V, E> &_g)
       {
-        _out << "Vertexes" << std::endl;
-        for (auto const &v : _g.Vertexes())
+        _out << "Vertices" << std::endl;
+        for (auto const &v : _g.Vertices())
           _out << "  [" << v->Id() << "][" << v->Name() << "]" << std::endl;
 
         _out << "Edges" << std::endl;
         for (auto const &e : _g.Edges())
         {
-          auto vertexes = e->Vertexes();
-          auto it = vertexes.begin();
+          auto vertices = e->Vertices();
+          auto it = vertices.begin();
           _out << "  [" << (*it)->Id() << "]--";
           ++it;
           _out << "[" << (*it)->Id() << "]" << std::endl;
