@@ -125,7 +125,7 @@ namespace ignition
       }
 
       // Documentation inherited.
-      public: VertexPtr<V> To(const VertexPtr<V> &_from) const
+      public: VertexPtr<V> From(const VertexPtr<V> &_from) const
       {
         if (_from != this->Tail())
           return nullptr;

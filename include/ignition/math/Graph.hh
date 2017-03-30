@@ -110,17 +110,17 @@ namespace ignition
       /// an edge.
       ///
       /// E.g.: Let's assume that we have an undirected edge (e1) with ends
-      /// (v1) and (v2). The operation e1.To(v1) returns (v2).
-      /// The operation e1.To(v2) returns (v1).
+      /// (v1) and (v2). The operation e1.From(v1) returns (v2).
+      /// The operation e1.From(v2) returns (v1).
       ///
       /// E.g.: Let's assume that we have a directed edge (e2) with the tail end
-      /// (v1) and the head end (v2). The operation e2.To(v1) returns (v2).
-      /// The operation e2.To(v2) returns nullptr.
+      /// (v1) and the head end (v2). The operation e2.From(v1) returns (v2).
+      /// The operation e2.From(v2) returns nullptr.
       ///
       /// \param[in] _from Source vertex.
       /// \return The other vertex of the edge reachable from the "_from"
       /// vertex or nullptr otherwise.
-      public: virtual VertexPtr<V> To(const VertexPtr<V> &_from) const = 0;
+      public: virtual VertexPtr<V> From(const VertexPtr<V> &_from) const = 0;
 
       /// \brief Get if the edge is valid. An edge is valid if its linked in a
       /// graph and its vertices are reachable.
@@ -265,7 +265,7 @@ namespace ignition
         // Link the new edge.
         for (auto const &v : vertices)
         {
-          if (_edge->To(v) != nullptr)
+          if (_edge->From(v) != nullptr)
           {
             auto vertex = this->data.find(v);
             assert(vertex != this->data.end());
@@ -300,7 +300,7 @@ namespace ignition
 
         VertexPtr_S<V> res;
         for (auto const &edge : vertexIt->second)
-          res.insert(edge->To(_vertex));
+          res.insert(edge->From(_vertex));
 
         return res;
       }
@@ -330,7 +330,7 @@ namespace ignition
           auto edges = nodeAdjList.second;
           for (auto const &e : edges)
           {
-            if (e->To(nodeAdjList.first) == _vertex)
+            if (e->From(nodeAdjList.first) == _vertex)
               res.insert(e);
           }
         }
@@ -445,7 +445,7 @@ namespace ignition
         // Unlink the edge.
         for (auto const &v : vertices)
         {
-          if (_edge->To(v) != nullptr)
+          if (_edge->From(v) != nullptr)
           {
             auto vertex = this->data.find(v);
             assert(vertex != this->data.end());
