@@ -32,18 +32,21 @@ namespace ignition
 {
   namespace math
   {
+    /// \brief ToDo.
+    using VertexId = int64_t;
+
     /// \brief A vertex of a graph. It stores user information and keeps
     /// an internal unique Id.
     template<typename V>
     class Vertex
     {
       /// \brief Constructor.
-      /// \param[in] _data User information.
       /// \param[in] _name Non-unique vertex name.
       /// \param[in] _id Unique id.
-      public: Vertex(const V &_data,
-                     const std::string &_name,
-                     const int64_t _id)
+      /// \param[in] _data User information.
+      public: Vertex(const std::string &_name,
+                     const VertexId _id,
+                     const V &_data = V())
         : data(_data),
           name(_name),
           id(_id)
@@ -59,7 +62,7 @@ namespace ignition
 
       /// \brief Get the vertex Id.
       /// \return The vertex Id.
-      public: int64_t Id() const
+      public: VertexId Id() const
       {
         return this->id;
       }
@@ -75,7 +78,7 @@ namespace ignition
       private: V data;
 
       /// \brief Unique vertex Id.
-      private: int64_t id;
+      private: VertexId id;
 
       /// \brief Non-unique vertex name.
       private: std::string name = "";
@@ -95,6 +98,9 @@ namespace ignition
     /// \brief Set of shared pointers to a vertex.
     template<typename V>
     using VertexPtr_S = std::set<VertexPtr<V>>;
+
+    /// \brief ToDo.
+    using EdgeId = int64_t;
 
     /// \brief Generic edge class. An edge has two ends and some constraint
     /// between them. For example, a directed edge only allows traversing the
@@ -188,7 +194,7 @@ namespace ignition
       /// \param[in] _id Optional Id to be used for this vertex.
       public: VertexPtr<V> AddVertex(const V &_data,
                                      const std::string &_name,
-                                     const int64_t _id = -1)
+                                     const VertexId _id = -1)
       {
         auto id = _id;
         // The user didn't provide an Id, we generate it.
@@ -199,7 +205,7 @@ namespace ignition
           return nullptr;
 
         // Create the vertex.
-        auto v = std::make_shared<Vertex<V>>(_data, _name, id);
+        auto v = std::make_shared<Vertex<V>>(_name, id, _data);
 
         // Link the vertex with an empty list of edges.
         this->data[v] = EdgePtr_S<EdgeType>();
@@ -310,7 +316,7 @@ namespace ignition
       /// \param[in] _id The vertex ID to check adjacent vertices.
       /// \return A set of vertices that are adjacents and directly connected
       /// with an edge.
-      public: VertexPtr_S<V> Adjacents(const int64_t _id) const
+      public: VertexPtr_S<V> Adjacents(const VertexId _id) const
       {
         return this->Adjacents(this->VertexById(_id));
       }
@@ -341,7 +347,7 @@ namespace ignition
       /// \brief Get the set of incoming edges to a given node.
       /// \param[in] _id The ID of the vertex.
       /// \return The set of incoming edges to a given node.
-      public: EdgePtr_S<EdgeType> Incidents(const int64_t _id) const
+      public: EdgePtr_S<EdgeType> Incidents(const VertexId _id) const
       {
         return this->Incidents(this->VertexById(_id));
       }
@@ -399,7 +405,7 @@ namespace ignition
       /// \brief Remove an existing vertex from the graph.
       /// \param[in] _id ID of the vertex to be removed.
       /// \return True when the vertex was removed or false otherwise.
-      public: bool RemoveVertex(const int64_t _id)
+      public: bool RemoveVertex(const VertexId _id)
       {
         auto vPtr = this->VertexById(_id);
         return this->RemoveVertex(vPtr);
@@ -464,7 +470,7 @@ namespace ignition
       /// \param[in] _id The ID of the vertex.
       /// \return A shared pointer to the vertex with Id = _id or nullptr if
       /// not found.
-      public: VertexPtr<V> VertexById(const int64_t _id) const
+      public: VertexPtr<V> VertexById(const VertexId _id) const
       {
         auto iter = this->ids.find(_id);
         if (iter == this->ids.end())
@@ -475,7 +481,7 @@ namespace ignition
 
       /// \brief Get an available Id to be assigned to a new vertex.
       /// \return The next available Id.
-      private: int64_t NextId()
+      private: VertexId NextId()
       {
         while (this->ids.find(this->nextId) != this->ids.end())
           ++this->nextId;
@@ -487,13 +493,13 @@ namespace ignition
       protected: AdjList<V, EdgeType> data;
 
       /// \brief List of ids curently used.
-      protected: std::map<int64_t, VertexPtr<V>> ids;
+      protected: std::map<VertexId, VertexPtr<V>> ids;
 
       /// \brief Associatation between names and vertices curently used.
       protected: std::map<std::string, VertexPtr_V<V>> names;
 
       /// \brief The next vertex Id to be assigned to a new vertex.
-      private: int64_t nextId = 0;
+      private: VertexId nextId = 0;
     };
   }
 }

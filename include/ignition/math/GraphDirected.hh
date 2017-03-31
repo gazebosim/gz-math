@@ -17,8 +17,6 @@
 #ifndef IGNITION_MATH_GRAPHDIRECTED_HH_
 #define IGNITION_MATH_GRAPHDIRECTED_HH_
 
-// int64_t
-#include <cstdint>
 #include <memory>
 #include <iostream>
 #include <set>
@@ -35,10 +33,10 @@ namespace ignition
     struct DirectEdgeInitializer
     {
       /// \brief ID of the tail's vertex.
-      public: int64_t tailId;
+      public: VertexId tailId;
 
       /// \brief ID of the head's vertex.
-      public: int64_t headId;
+      public: VertexId headId;
 
       /// \brief User data.
       public: E data;
@@ -199,8 +197,8 @@ namespace ignition
       ///// \param[in] _headId ID of the head's vertex.
       ///// \param[in] _data User data stored in the edge.
       ///// \return Shared pointer to the new edge.
-      public: DirectedEdgePtr<V, E> AddEdge(const int64_t _tailId,
-                                            const int64_t _headId,
+      public: DirectedEdgePtr<V, E> AddEdge(const VertexId _tailId,
+                                            const VertexId _headId,
                                             const E &_data)
       {
         auto tailPtr = this->VertexById(_tailId);

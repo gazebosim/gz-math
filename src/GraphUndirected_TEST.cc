@@ -34,7 +34,7 @@ TEST(UndirectedGraphTest, UniformInitialization)
 {
   UndirectedGraph<int, double> graph(
   {
-    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
+    {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
     {{{0, 1}, 0.0}, {{1, 2}, 0.0}}
   });
 
@@ -403,7 +403,7 @@ TEST(UndirectedGraphTest, RemoveVertex)
   EXPECT_EQ(graph.Vertices().size(), 3u);
 
   // Try to remove a vertex that doesn't belong to the graph.
-  auto v = std::make_shared<Vertex<int>>(10, "new_vertex", 99);
+  auto v = std::make_shared<Vertex<int>>("new_vertex", 99, 10);
   EXPECT_FALSE(graph.RemoveVertex(v));
   EXPECT_EQ(graph.Vertices().size(), 3u);
 

@@ -19,8 +19,6 @@
 
 #include <algorithm>
 #include <cassert>
-// int64_t
-#include <cstdint>
 #include <memory>
 #include <iostream>
 #include <set>
@@ -38,7 +36,7 @@ namespace ignition
     struct UndirectEdgeInitializer
     {
       /// \brief IDs of the vertices.
-      public: std::set<int64_t> vertices;
+      public: std::set<VertexId> vertices;
 
       /// \brief User data.
       public: E data;
@@ -181,7 +179,7 @@ namespace ignition
       /// \param[in] _data User data.
       /// \return Shared pointer to the new edge.
       public:
-        UndirectedEdgePtr<V, E> AddEdge(const std::set<int64_t> &_vertices,
+        UndirectedEdgePtr<V, E> AddEdge(const std::set<EdgeId> &_vertices,
                                         const E &_data)
       {
         VertexPtr_S<V> vertices;
