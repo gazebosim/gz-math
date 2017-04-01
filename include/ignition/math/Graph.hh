@@ -338,6 +338,16 @@ namespace ignition
         return res;
       }
 
+      /// \brief Get all neighbors vertices that are directly connected to
+      /// a given vertex.
+      /// \param[in] _vertex The vertex to check adjacents.
+      /// \return A map of vertices, where keys are Ids and values are
+      /// references to the vertices.
+      public: VertexRef_M<V> Adjacents(const Vertex<V> &_vertex) const
+      {
+        return this->Adjacents(_vertex.Id());
+      }
+
       /// \brief Get the set of incoming edges to a given vertex.
       /// \param[in] _vertex Id of the vertex.
       /// \return A map of edges, where keys are Ids and values are
@@ -364,6 +374,15 @@ namespace ignition
         return std::move(res);
       }
 
+      /// \brief Get the set of incoming edges to a given vertex.
+      /// \param[in] _vertex The vertex.
+      /// \return A map of edges, where keys are Ids and values are
+      /// references to the edges.
+      public: EdgeRef_M<EdgeType> Incidents(const Vertex<V> &_vertex) const
+      {
+        return this->Incidents(_vertex.Id());
+      }
+
       /// \brief Whether the graph is empty.
       /// \return True when there are no vertices in the graph or
       /// false otherwise.
@@ -375,7 +394,7 @@ namespace ignition
       /// \brief Remove an existing vertex from the graph.
       /// \param[in] _vertex Id of the vertex to be removed.
       /// \return True when the vertex was removed or false otherwise.
-      public: bool RemoveVertex(VertexId _vertex)
+      public: bool RemoveVertex(const VertexId &_vertex)
       {
         auto vIt = this->vertices.find(_vertex);
         if (vIt == this->vertices.end())
@@ -415,6 +434,14 @@ namespace ignition
         return true;
       }
 
+      /// \brief Remove an existing vertex from the graph.
+      /// \param[in] _vertex The vertex to be removed.
+      /// \return True when the vertex was removed or false otherwise.
+      public: bool RemoveVertex(Vertex<V> &_vertex)
+      {
+        return this->RemoveVertex(_vertex.Id());
+      }
+
       /// \brief Remove all vertices with name == _name.
       /// \param[in] _name Name of the vertices to be removed.
       /// \return The number of vertices removed.
@@ -433,7 +460,7 @@ namespace ignition
       /// \brief Remove an existing edge from the graph. After the removal, it
       /// won't be possible to reach any of the vertices from the edge.
       /// \param[in] _edge Id of the edge to be removed.
-      /// \return True when the edge was removed.
+      /// \return True when the edge was removed or false otherwise.
       public: bool RemoveEdge(const EdgeId &_edge)
       {
         auto edgeIt = this->edges.find(_edge);
@@ -460,6 +487,15 @@ namespace ignition
         // _edge->SetValid(false);
 
         return true;
+      }
+
+      /// \brief Remove an existing edge from the graph. After the removal, it
+      /// won't be possible to reach any of the vertices from the edge.
+      /// \param[in] _edge The edge to be removed.
+      /// \return True when the edge was removed or false otherwise.
+      public: bool RemoveEdge(EdgeType &_edge)
+      {
+        return this->RemoveEdge(_edge.Id());
       }
 
       /// \brief Get a reference to a vertex using its Id.
@@ -490,7 +526,7 @@ namespace ignition
 
       /// \brief Get an available Id to be assigned to a new vertex.
       /// \return The next available Id.
-      private: VertexId NextVertexId()
+      private: VertexId &NextVertexId()
       {
         while (this->vertices.find(this->nextVertexId) != this->vertices.end())
           ++this->nextVertexId;
@@ -500,7 +536,7 @@ namespace ignition
 
       /// \brief Get an available Id to be assigned to a new edge.
       /// \return The next available Id.
-      protected: VertexId NextEdgeId()
+      protected: VertexId &NextEdgeId()
       {
         while (this->edges.find(this->nextEdgeId) != this->edges.end())
           ++this->nextEdgeId;

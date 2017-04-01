@@ -156,6 +156,12 @@ TEST(UndirectedGraphTest, Adjacents)
   EXPECT_EQ(adjacents.size(), 2u);
   EXPECT_NE(adjacents.find(1), adjacents.end());
   EXPECT_NE(adjacents.find(2), adjacents.end());
+
+  auto vertex = graph.VertexById(0);
+  adjacents = graph.Adjacents(vertex);
+  EXPECT_EQ(adjacents.size(), 2u);
+  EXPECT_NE(adjacents.find(1), adjacents.end());
+  EXPECT_NE(adjacents.find(2), adjacents.end());
 }
 
 /////////////////////////////////////////////////
@@ -169,6 +175,12 @@ TEST(UndirectedGraphTest, Incidents)
   });
 
   auto incidents = graph.Incidents(0);
+  EXPECT_EQ(incidents.size(), 2u);
+  EXPECT_NE(incidents.find(2), incidents.end());
+  EXPECT_NE(incidents.find(0), incidents.end());
+
+  auto vertex = graph.VertexById(0);
+  incidents = graph.Incidents(vertex);
   EXPECT_EQ(incidents.size(), 2u);
   EXPECT_NE(incidents.find(2), incidents.end());
   EXPECT_NE(incidents.find(0), incidents.end());
@@ -259,7 +271,8 @@ TEST(UndirectedGraphTest, RemoveEdge)
   EXPECT_EQ(graph.Incidents(1).size(), 1);
 
   // Remove the edge (v1-->v2)
-  EXPECT_TRUE(graph.RemoveEdge(1));
+  auto edge = graph.EdgeById(1);
+  EXPECT_TRUE(graph.RemoveEdge(edge));
   EXPECT_EQ(graph.Edges().size(), 1u);
 
   // Try to remove an edge that doesn't exist anymore.
@@ -293,7 +306,8 @@ TEST(UndirectedGraphTest, RemoveVertex)
   EXPECT_EQ(graph.Adjacents(1).size(), 1u);
 
   // Remove vertex #1.
-  EXPECT_TRUE(graph.RemoveVertex(1));
+  auto vertex = graph.VertexById(1);
+  EXPECT_TRUE(graph.RemoveVertex(vertex));
   EXPECT_EQ(graph.Vertices().size(), 1u);
   EXPECT_TRUE(graph.Edges().empty());
 
