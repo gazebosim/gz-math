@@ -63,9 +63,11 @@ namespace ignition
       /// \brief Constructor.
       /// \param[in] _vertices The set of pointers to two vertices.
       /// \param[in] _data User data to be stored in the edge.
-      public: UndirectedEdge(const VertexPtr_S<V> &_vertices,
+      public: UndirectedEdge(const EdgeId _id,
+                             const VertexPtr_S<V> &_vertices,
                              const E &_data)
-        : vertices(_vertices),
+        : Edge<V>(_id),
+          vertices(_vertices),
           data(_data)
       {
       }
@@ -73,12 +75,13 @@ namespace ignition
       /// \brief Helper function for creating an isolated undirected edge.
       /// \param[in] _vertices The set of pointers to two vertices.
       /// \param[in] _data User data to be stored in the edge.
-      public: static
-        UndirectedEdgePtr<V, E> createEdge(const VertexPtr_S<V> &_vertices,
-                                           const E &_data)
-      {
-        return std::make_shared<UndirectedEdge<V, E>>(_vertices, _data);
-      }
+      //public: static
+      //  UndirectedEdgePtr<V, E> createEdge(const VertexPtr_S<V> &_vertices,
+      //                                     const E &_data)
+      //{
+      //  auto id = this->_NextEdgeId();
+      //  return std::make_shared<UndirectedEdge<V, E>>(_vertices, _data);
+      //}
 
       /// \brief Get the user data stored in the edge.
       /// \return The user data stored in the edge.
@@ -92,6 +95,19 @@ namespace ignition
       {
         if (!this->Valid())
           return {nullptr, nullptr};
+
+        return this->vertices;
+      }
+
+      // Documentation inherited.
+      public: VertexId_S _Vertices() const
+      {
+        if (!this->Valid())
+          return {Vertex<V>::NullVertex, Vertex<V>::NullVertex};
+
+        VertexId_S res;
+        for (auto const &v : this->vertices)
+          res.insert(v->Id());
 
         return this->vertices;
       }
@@ -166,7 +182,10 @@ namespace ignition
       public: UndirectedEdgePtr<V, E> AddEdge(const VertexPtr_S<V> &_vertices,
                                               const E &_data)
       {
-        auto newEdgePtr = UndirectedEdge<V, E>::createEdge(_vertices, _data);
+        auto id = this->_NextEdgeId();
+        auto newEdgePtr =
+          std::make_shared<UndirectedEdge<V, E>>(id, _vertices, _data);
+        //auto newEdgePtr = UndirectedEdge<V, E>::createEdge(_vertices, _data);
 
         if (this->LinkEdge(newEdgePtr))
           return newEdgePtr;
