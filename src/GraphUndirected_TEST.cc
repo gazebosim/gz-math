@@ -53,7 +53,7 @@ TEST(UndirectedGraphTest, UniformInitialization)
 }
 
 /////////////////////////////////////////////////
-TEST(UndirectedGraphTest, VertexById)
+TEST(UndirectedGraphTest, VertexFromId)
 {
   UndirectedGraph<int, double> graph;
 
@@ -63,11 +63,11 @@ TEST(UndirectedGraphTest, VertexById)
   auto v1 = graph.AddVertex(1, "1");
   auto v2 = graph.AddVertex(2, "2");
 
-  auto v = graph.VertexById(v0.Id());
+  auto v = graph.VertexFromId(v0.Id());
   EXPECT_EQ(v.Id(), v0.Id());
 
   // Id not found.
-  v = graph.VertexById(-500);
+  v = graph.VertexFromId(-500);
   EXPECT_EQ(v.Id(), kNullId);
 }
 
@@ -157,7 +157,7 @@ TEST(UndirectedGraphTest, Adjacents)
   EXPECT_NE(adjacents.find(1), adjacents.end());
   EXPECT_NE(adjacents.find(2), adjacents.end());
 
-  auto vertex = graph.VertexById(0);
+  auto vertex = graph.VertexFromId(0);
   adjacents = graph.Adjacents(vertex);
   EXPECT_EQ(adjacents.size(), 2u);
   EXPECT_NE(adjacents.find(1), adjacents.end());
@@ -179,7 +179,7 @@ TEST(UndirectedGraphTest, Incidents)
   EXPECT_NE(incidents.find(2), incidents.end());
   EXPECT_NE(incidents.find(0), incidents.end());
 
-  auto vertex = graph.VertexById(0);
+  auto vertex = graph.VertexFromId(0);
   incidents = graph.Incidents(vertex);
   EXPECT_EQ(incidents.size(), 2u);
   EXPECT_NE(incidents.find(2), incidents.end());
@@ -271,7 +271,7 @@ TEST(UndirectedGraphTest, RemoveEdge)
   EXPECT_EQ(graph.Incidents(1).size(), 1);
 
   // Remove the edge (v1-->v2)
-  auto edge = graph.EdgeById(1);
+  auto edge = graph.EdgeFromId(1);
   EXPECT_TRUE(graph.RemoveEdge(edge));
   EXPECT_EQ(graph.Edges().size(), 1u);
 
@@ -306,7 +306,7 @@ TEST(UndirectedGraphTest, RemoveVertex)
   EXPECT_EQ(graph.Adjacents(1).size(), 1u);
 
   // Remove vertex #1.
-  auto vertex = graph.VertexById(1);
+  auto vertex = graph.VertexFromId(1);
   EXPECT_TRUE(graph.RemoveVertex(vertex));
   EXPECT_EQ(graph.Vertices().size(), 1u);
   EXPECT_TRUE(graph.Edges().empty());

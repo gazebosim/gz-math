@@ -328,9 +328,9 @@ namespace ignition
 
         for (auto const &edgeId : vertexIt->second)
         {
-          auto edge = this->EdgeById(edgeId);
+          auto edge = this->EdgeFromId(edgeId);
           auto neighborVertexId = edge.From(_vertex);
-          auto neighbotVertex = this->VertexById(neighborVertexId);
+          auto neighbotVertex = this->VertexFromId(neighborVertexId);
           res.emplace(
             std::make_pair(neighborVertexId, std::cref(neighbotVertex)));
         }
@@ -365,7 +365,7 @@ namespace ignition
           auto edgeIds = nodeAdjList.second;
           for (auto const &edgeId : edgeIds)
           {
-            auto edge = this->EdgeById(edgeId);
+            auto edge = this->EdgeFromId(edgeId);
             if (edge.From(nodeAdjList.first) == _vertex)
               res.emplace(std::make_pair(edge.Id(), std::cref(edge)));
           }
@@ -502,7 +502,7 @@ namespace ignition
       /// \param[in] _id The Id of the vertex.
       /// \return A reference to the vertex with Id = _id or NullVertex if
       /// not found.
-      public: const Vertex<V> &VertexById(const VertexId _id) const
+      public: const Vertex<V> &VertexFromId(const VertexId _id) const
       {
         auto iter = this->vertices.find(_id);
         if (iter == this->vertices.end())
@@ -515,7 +515,7 @@ namespace ignition
       /// \param[in] _id The Id of the edge.
       /// \return A reference to the edge with Id = _id or NullEdge if
       /// not found.
-      public: const EdgeType &EdgeById(const EdgeId &_id) const
+      public: const EdgeType &EdgeFromId(const EdgeId &_id) const
       {
         auto iter = this->edges.find(_id);
         if (iter == this->edges.end())

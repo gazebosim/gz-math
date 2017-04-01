@@ -189,8 +189,8 @@ namespace ignition
         for (auto const &edgeMap : _g.Edges())
         {
           auto edge = edgeMap.second.get();
-          auto tail = _g.VertexById(edge.Tail());
-          auto head = _g.VertexById(edge.Head());
+          auto tail = _g.VertexFromId(edge.Tail());
+          auto head = _g.VertexFromId(edge.Head());
           _out << "  " << tail.Id() << " -> " << head.Id() << ";\n";
         }
 
