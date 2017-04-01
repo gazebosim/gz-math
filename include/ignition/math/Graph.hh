@@ -21,6 +21,7 @@
 #include <cassert>
 // int64_t
 #include <cstdint>
+#include <limits>
 #include <map>
 #include <memory>
 #include <set>
@@ -34,6 +35,9 @@ namespace ignition
   {
     /// \brief The unique Id of each vertex.
     using VertexId = int64_t;
+
+    /// \brief ToDo.
+    static const VertexId kNullId = std::numeric_limits<VertexId>::min();
 
     /// \brief A vertex of a graph. It stores user information and keeps
     /// an internal unique Id.
@@ -49,7 +53,7 @@ namespace ignition
       /// \param[in] _data User information.
       public: Vertex(const V &_data,
                      const std::string &_name,
-                     const VertexId _id = -1)
+                     const VertexId _id = kNullId)
         : data(_data),
           name(_name),
           id(_id)
@@ -90,7 +94,7 @@ namespace ignition
     /// \def ToDo.
     /// \brief ToDo.
     template<typename V>
-    Vertex<V> Vertex<V>::NullVertex(V(), "__null__", -1);
+    Vertex<V> Vertex<V>::NullVertex(V(), "__null__", kNullId);
 
     /// \def VertexPtr
     /// \brief Shared pointer to a vertex.
@@ -233,11 +237,11 @@ namespace ignition
       /// \param[in] _id Optional Id to be used for this vertex.
       public: VertexPtr<V> AddVertex(const V &_data,
                                      const std::string &_name,
-                                     const VertexId _id = -1)
+                                     const VertexId _id = kNullId)
       {
         auto id = _id;
         // The user didn't provide an Id, we generate it.
-        if (id == -1)
+        if (id == kNullId)
           id = this->NextId();
         // The user provided an Id but already exists.
         else if (this->ids.find(id) != this->ids.end())
@@ -263,11 +267,11 @@ namespace ignition
       /// \param[in] _id Optional Id to be used for this vertex.
       public: Vertex<V> &_AddVertex(const V &_data,
                                     const std::string &_name,
-                                    const VertexId _id = -1)
+                                    const VertexId _id = kNullId)
       {
         auto id = _id;
         // The user didn't provide an Id, we generate it.
-        if (id == -1)
+        if (id == kNullId)
           id = this->_NextId();
         // The user provided an Id but already exists.
         else if (this->_vertices.find(id) != this->_vertices.end())
@@ -402,7 +406,7 @@ namespace ignition
         // Link the new edge.
         for (auto const &v : vertices)
         {
-          if (_edge.From(v) != -1)
+          if (_edge.From(v) != kNullId)
           {
             auto vertexIt = this->_adjList.find(v);
             assert(vertexIt != this->_adjList.end());
@@ -732,7 +736,7 @@ namespace ignition
         // Unlink the edge.
         for (auto const &v : vertices)
         {
-          if (edgeIt->second.From(v) != -1)
+          if (edgeIt->second.From(v) != kNullId)
           {
             auto vertex = this->_adjList.find(v);
             assert(vertex != this->_adjList.end());

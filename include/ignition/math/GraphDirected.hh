@@ -171,7 +171,7 @@ namespace ignition
       public: VertexId From(const VertexId &_from) const
       {
         if (_from != this->Tail())
-          return -1;
+          return kNullId;
 
         return this->Head();
       }
@@ -189,7 +189,7 @@ namespace ignition
     /// \def ToDo.
     /// \brief ToDo.
     template<typename E>
-    DirectedEdge<E> DirectedEdge<E>::NullEdge(-1, -1, -1, E());
+    DirectedEdge<E> DirectedEdge<E>::NullEdge(kNullId, kNullId, kNullId, E());
 
     /// \brief A generic graph class using directed edges.
     template<typename V, typename E>
@@ -243,7 +243,7 @@ namespace ignition
         // Add all vertices.
         for (auto const &v : _vertices)
         {
-          if ((this->_AddVertex(v.Data(), v.Name(), v.Id())).Id() == -1)
+          if ((this->_AddVertex(v.Data(), v.Name(), v.Id())).Id() == kNullId)
           {
             std::cerr << "Invalid vertex with Id [" << v.Id() << "]. Ignoring"
                       << std::endl;
@@ -253,7 +253,7 @@ namespace ignition
         // Add all edges.
         for (auto const &e : _edges)
         {
-          if ((this->AddEdge(e.tailId, e.headId, e.data)).Id() == -1)
+          if ((this->AddEdge(e.tailId, e.headId, e.data)).Id() == kNullId)
           {
             std::cerr << "Invalid edge [" << e.tailId << "," << e.headId << ","
                       << e.data << "]. Ignoring." << std::endl;

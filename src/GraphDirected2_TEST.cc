@@ -66,8 +66,8 @@ TEST(GraphTest, VertexById)
   EXPECT_EQ(v.Id(), v0.Id());
 
   // Id not found.
-  v = graph._VertexById(-1);
-  EXPECT_EQ(v.Id(), -1);
+  v = graph._VertexById(-500);
+  EXPECT_EQ(v.Id(), kNullId);
 }
 
 /////////////////////////////////////////////////
@@ -149,7 +149,7 @@ TEST(GraphTest, Adjacents)
   });
 
   // Try to get the adjacents of an inexistent vertex.
-  auto adjacents = graph._Adjacents(-1);
+  auto adjacents = graph._Adjacents(kNullId);
   EXPECT_TRUE(adjacents.empty());
 
   adjacents = graph._Adjacents(0);
@@ -179,11 +179,11 @@ TEST(GraphTest, AddVertex)
 
   // Create some vertices without Id.
   auto v0 = graph._AddVertex(0, "0");
-  EXPECT_TRUE(v0.Id() != -1);
+  EXPECT_TRUE(v0.Id() != kNullId);
   auto v1 = graph._AddVertex(1, "1");
-  EXPECT_TRUE(v1.Id() != -1);
+  EXPECT_TRUE(v1.Id() != kNullId);
   auto v2 = graph._AddVertex(2, "2");
-  EXPECT_TRUE(v2.Id() != -1);
+  EXPECT_TRUE(v2.Id() != kNullId);
 
   // Create a vertex with Id.
   auto v3 = graph._AddVertex(5, "3", 3);
@@ -193,7 +193,7 @@ TEST(GraphTest, AddVertex)
 
   // Create a vertex with an already used Id.
   auto v4 = graph._AddVertex(0, "3", 3);
-  ASSERT_TRUE(v4.Id() == -1);
+  ASSERT_TRUE(v4.Id() == kNullId);
 
   auto vertices = graph._Vertices();
   EXPECT_EQ(vertices.size(), 4u);
@@ -227,13 +227,13 @@ TEST(GraphTest, AddEdge)
   EXPECT_EQ(edges.size(), 3u);
 
   // Try to add an edge with an incorrect tail.
-  auto edge = graph.AddEdge(-1, 1, 2.0);
-  EXPECT_EQ(edge.Id(), -1);
+  auto edge = graph.AddEdge(kNullId, 1, 2.0);
+  EXPECT_EQ(edge.Id(), kNullId);
   EXPECT_EQ(graph._Edges().size(), 3u);
 
   // Try to add an edge with an incorrect head.
-  edge = graph.AddEdge(0, -1, 2.0);
-  EXPECT_EQ(edge.Id(), -1);
+  edge = graph.AddEdge(0, kNullId, 2.0);
+  EXPECT_EQ(edge.Id(), kNullId);
   EXPECT_EQ(graph._Edges().size(), 3u);
 }
 
@@ -248,7 +248,7 @@ TEST(GraphTest, RemoveEdge)
   });
 
   // Remove a nonexistent edge shouldn't cause any effect.
-  EXPECT_FALSE(graph._RemoveEdge(-1));
+  EXPECT_FALSE(graph._RemoveEdge(kNullId));
   EXPECT_EQ(graph._Edges().size(), 3u);
   EXPECT_EQ(graph._Incidents(1).size(), 1);
 
@@ -281,7 +281,7 @@ TEST(GraphTest, RemoveVertex)
   });
 
   // Remove a nonexistent vertex shouldn't cause any effect.
-  EXPECT_FALSE(graph._RemoveVertex(-1));
+  EXPECT_FALSE(graph._RemoveVertex(kNullId));
   EXPECT_EQ(graph._Vertices().size(), 3u);
   EXPECT_EQ(graph._Adjacents(1).size(), 1u);
 
