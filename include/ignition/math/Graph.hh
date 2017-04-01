@@ -209,7 +209,7 @@ namespace ignition
       /// \param[in] _id Optional Id to be used for this vertex.
       public: Vertex<V> &AddVertex(const V &_data,
                                    const std::string &_name,
-                                   const VertexId _id = kNullId)
+                                   const VertexId &_id = kNullId)
       {
         auto id = _id;
         // The user didn't provide an Id, we generate it.
@@ -352,7 +352,7 @@ namespace ignition
       /// \param[in] _vertex Id of the vertex.
       /// \return A map of edges, where keys are Ids and values are
       /// references to the edges.
-      public: EdgeRef_M<EdgeType> Incidents(const VertexId _vertex) const
+      public: EdgeRef_M<EdgeType> Incidents(const VertexId &_vertex) const
       {
         EdgeRef_M<EdgeType> res;
 
@@ -502,7 +502,7 @@ namespace ignition
       /// \param[in] _id The Id of the vertex.
       /// \return A reference to the vertex with Id = _id or NullVertex if
       /// not found.
-      public: const Vertex<V> &VertexFromId(const VertexId _id) const
+      public: const Vertex<V> &VertexFromId(const VertexId &_id) const
       {
         auto iter = this->vertices.find(_id);
         if (iter == this->vertices.end())

@@ -52,9 +52,9 @@ namespace ignition
       /// \param[in] _tail Id of the tail vertex.
       /// \param[in] _head Id of the head vertex.
       /// \param[in] _data User data to be stored in the edge.
-      public: DirectedEdge(const EdgeId _id,
-                           const VertexId _tail,
-                           const VertexId _head,
+      public: DirectedEdge(const EdgeId &_id,
+                           const VertexId &_tail,
+                           const VertexId &_head,
                            const E &_data)
         : Edge(_id),
           tail(_tail),

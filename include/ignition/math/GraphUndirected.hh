@@ -51,7 +51,7 @@ namespace ignition
       /// \param[in] _id Id of the edge.
       /// \param[in] _vertices The set of Ids of the vertices.
       /// \param[in] _data User data to be stored in the edge.
-      public: UndirectedEdge(const EdgeId _id,
+      public: UndirectedEdge(const EdgeId &_id,
                              const VertexId_S &_vertices,
                              const E &_data)
         : Edge(_id),
