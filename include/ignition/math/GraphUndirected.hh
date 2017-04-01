@@ -78,19 +78,6 @@ namespace ignition
       }
 
       // Documentation inherited.
-      //public: VertexId_S _Vertices() const
-      //{
-      //  if (!this->Valid())
-      //    return {Vertex<V>::NullVertex, Vertex<V>::NullVertex};
-//
-      //  VertexId_S res;
-      //  for (auto const &v : this->vertices)
-      //    res.insert(v->Id());
-//
-      //  return this->vertices;
-      //}
-
-      // Documentation inherited.
       public: VertexId From(const VertexId &_from) const
       {
         if (!this->Valid())
@@ -124,7 +111,8 @@ namespace ignition
     /// \def ToDo.
     /// \brief ToDo.
     template<typename E>
-    UndirectedEdge<E> UndirectedEdge<E>::NullEdge(kNullId, {kNullId, kNullId}, E());
+    UndirectedEdge<E> UndirectedEdge<E>::NullEdge(
+      kNullId, {kNullId, kNullId}, E());
 
     /// \brief A generic graph class using undirected edges.
     template<typename V, typename E>

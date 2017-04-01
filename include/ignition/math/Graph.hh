@@ -454,7 +454,7 @@ namespace ignition
 
         // Mark the edge as invalid. This will prevent to reach any vertices if
         // there are any shared pointers keeping the edge alive.
-        //_edge->SetValid(false);
+        // _edge->SetValid(false);
 
         return true;
       }

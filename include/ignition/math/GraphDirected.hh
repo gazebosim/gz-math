@@ -88,7 +88,7 @@ namespace ignition
       // Documentation inherited.
       public: VertexId_S Vertices() const
       {
-        //if (!this->Valid())
+        // if (!this->Valid())
         //  return {Vertex<V>::NullVertex, Vertex<V>::NullVertex};
 
         return {this->tail, this->head};
