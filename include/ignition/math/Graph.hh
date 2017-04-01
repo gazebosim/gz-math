@@ -31,10 +31,11 @@ namespace ignition
 {
   namespace math
   {
+    /// \def VertexId.
     /// \brief The unique Id of each vertex.
     using VertexId = int64_t;
 
-    /// \brief ToDo.
+    /// \brief Represents an invalid Id.
     static const VertexId kNullId = std::numeric_limits<VertexId>::min();
 
     /// \brief A vertex of a graph. It stores user information and keeps
@@ -42,15 +43,13 @@ namespace ignition
     template<typename V>
     class Vertex
     {
-      /// \brief ToDo.
+      /// \brief An invalid vertex.
       public: static Vertex<V> NullVertex;
 
-      public: Vertex() = default;
-
       /// \brief Constructor.
-      /// \param[in] _name Non-unique vertex name.
-      /// \param[in] _id Unique id.
       /// \param[in] _data User information.
+      /// \param[in] _name Non-unique vertex name.
+      /// \param[in] _id Optional unique id.
       public: Vertex(const V &_data,
                      const std::string &_name,
                      const VertexId _id = kNullId)
@@ -61,7 +60,7 @@ namespace ignition
       }
 
       /// \brief Retrieve the user information.
-      /// \return A mutable reference to the user information.
+      /// \return Reference to the user information.
       public: const V &Data() const
       {
         return this->data;
@@ -81,7 +80,8 @@ namespace ignition
         return this->name;
       }
 
-      /// \brief ToDo.
+      /// \brief Whether the vertex is considered valid or not.
+      /// \return True when the vertex is valid or false otherwise (invalid Id).
       public: bool Valid() const
       {
         return this->id != kNullId;
@@ -97,8 +97,7 @@ namespace ignition
       private: VertexId id = kNullId;
     };
 
-    /// \def ToDo.
-    /// \brief ToDo.
+    /// \brief An invalid vertex.
     template<typename V>
     Vertex<V> Vertex<V>::NullVertex(V(), "__null__", kNullId);
 
@@ -107,12 +106,14 @@ namespace ignition
     using VertexId_S = std::set<VertexId>;
 
     /// \def VertexRef_M
-    /// \brief ToDo.
+    /// \brief Map of vertices. The key is the vertex Id. The value is a
+    /// reference to the vertex.
     template<typename V>
     using VertexRef_M =
       std::map<VertexId, std::reference_wrapper<const Vertex<V>>>;
 
-    /// \brief The unique Id for each edge.
+    /// \def EdgeId.
+    /// \brief The unique Id for an edge.
     using EdgeId = int64_t;
 
     /// \brief Generic edge class. An edge has two ends and some constraint
@@ -147,7 +148,7 @@ namespace ignition
       ///
       /// \param[in] _from Source vertex.
       /// \return The other vertex of the edge reachable from the "_from"
-      /// vertex or nullptr otherwise.
+      /// vertex or NullVertex otherwise.
       public: virtual VertexId From(const VertexId &_from) const = 0;
 
       /// \brief Get if the edge is valid. An edge is valid if its linked in a
@@ -183,14 +184,15 @@ namespace ignition
       private: bool valid = false;
     };
 
-    /// \brief ToDo.
+    /// \def EdgeId_S
+    /// \brief A set of edge Ids.
     using EdgeId_S = std::set<EdgeId>;
 
-    // \def EdgeRef_M
-    /// \brief ToDo.
+    /// \def EdgeRef_M
+    /// \brief A map of edges. The key is the edge Id. The value is a reference
+    /// to the edge.
     template<typename EdgeType>
-    using EdgeRef_M =
-      std::map<EdgeId, std::reference_wrapper<const EdgeType>>;
+    using EdgeRef_M = std::map<EdgeId, std::reference_wrapper<const EdgeType>>;
 
     /// \brief A generic graph class.
     /// Both vertices and edges can store user information. A vertex could be
@@ -201,9 +203,6 @@ namespace ignition
     template<typename V, typename E, typename EdgeType>
     class Graph
     {
-      /// \brief Default constructor.
-      public: Graph() = default;
-
       /// \brief Add a new vertex to the graph.
       /// \param[in] _data Data to be stored in the vertex.
       /// \param[in] _name Name of the vertex. It doesn't have to be unique.
@@ -215,7 +214,7 @@ namespace ignition
         auto id = _id;
         // The user didn't provide an Id, we generate it.
         if (id == kNullId)
-          id = this->NextId();
+          id = this->NextVertexId();
         // The user provided an Id but already exists.
         else if (this->vertices.find(id) != this->vertices.end())
           return Vertex<V>::NullVertex;
@@ -233,7 +232,8 @@ namespace ignition
       }
 
       /// \brief The collection of all vertices in the graph.
-      /// \return A set of shared pointers to all vertices.
+      /// \return A map of vertices, where keys are Ids and values are
+      /// references to the vertices.
       public: VertexRef_M<V> Vertices() const
       {
         VertexRef_M<V> res;
@@ -244,7 +244,8 @@ namespace ignition
       }
 
       /// \brief The collection of all vertices in the graph with name == _name.
-      /// \return A vector of shared pointers to all vertices with name == _name
+      /// \return A map of vertices, where keys are Ids and values are
+      /// references to the vertices.
       public: VertexRef_M<V> Vertices(const std::string &_name) const
       {
         VertexRef_M<V> res;
@@ -259,7 +260,7 @@ namespace ignition
 
       /// \brief Links an edge to the graph.
       /// \param[in] _edge A new edge.
-      /// \return True when the operation succeed or false otherwise.
+      /// \return A reference to the new link created.
       public: EdgeType &LinkEdge(EdgeType &&_edge)
       {
         _edge.SetValid(true);
@@ -299,7 +300,8 @@ namespace ignition
       }
 
       /// \brief The collection of all edges in the graph.
-      /// \return The set of all edges in the graph.
+      /// \return A map of edges, where keys are Ids and values are references
+      /// to the edges.
       public: EdgeRef_M<EdgeType> Edges() const
       {
         EdgeRef_M<EdgeType> res;
@@ -313,9 +315,9 @@ namespace ignition
 
       /// \brief Get all neighbors vertices that are directly connected to
       /// a given vertex.
-      /// \param[in] _vertex The pointer to the vertex to check adjacents.
-      /// \return A set of vertices that are adjacents and directly connected
-      /// with an edge.
+      /// \param[in] _vertex The Id of the vertex to check adjacents.
+      /// \return A map of vertices, where keys are Ids and values are
+      /// references to the vertices.
       public: VertexRef_M<V> Adjacents(const VertexId &_vertex) const
       {
         VertexRef_M<V> res;
@@ -337,8 +339,9 @@ namespace ignition
       }
 
       /// \brief Get the set of incoming edges to a given vertex.
-      /// \param[in] _vertex Pointer to the vertex.
-      /// \return The set of incoming edges to a given vertex.
+      /// \param[in] _vertex Id of the vertex.
+      /// \return A map of edges, where keys are Ids and values are
+      /// references to the edges.
       public: EdgeRef_M<EdgeType> Incidents(const VertexId _vertex) const
       {
         EdgeRef_M<EdgeType> res;
@@ -370,7 +373,7 @@ namespace ignition
       }
 
       /// \brief Remove an existing vertex from the graph.
-      /// \param[in] _vertex Pointer to the vertex to be removed.
+      /// \param[in] _vertex Id of the vertex to be removed.
       /// \return True when the vertex was removed or false otherwise.
       public: bool RemoveVertex(VertexId _vertex)
       {
@@ -414,7 +417,7 @@ namespace ignition
 
       /// \brief Remove all vertices with name == _name.
       /// \param[in] _name Name of the vertices to be removed.
-      /// \return True when at least one vertex was removed.
+      /// \return The number of vertices removed.
       public: size_t RemoveVertices(const std::string &_name)
       {
         size_t n = this->names.count(_name);
@@ -429,7 +432,7 @@ namespace ignition
 
       /// \brief Remove an existing edge from the graph. After the removal, it
       /// won't be possible to reach any of the vertices from the edge.
-      /// \param[in] _edge Pointer to the edge to be removed.
+      /// \param[in] _edge Id of the edge to be removed.
       /// \return True when the edge was removed.
       public: bool RemoveEdge(const EdgeId &_edge)
       {
@@ -459,9 +462,9 @@ namespace ignition
         return true;
       }
 
-      /// \brief Get a pointer to a vertex using its Id.
-      /// \param[in] _id The ID of the vertex.
-      /// \return A shared pointer to the vertex with Id = _id or nullptr if
+      /// \brief Get a reference to a vertex using its Id.
+      /// \param[in] _id The Id of the vertex.
+      /// \return A reference to the vertex with Id = _id or NullVertex if
       /// not found.
       public: const Vertex<V> &VertexById(const VertexId _id) const
       {
@@ -472,9 +475,9 @@ namespace ignition
         return iter->second;
       }
 
-      /// \brief Get a pointer to a vertex using its Id.
-      /// \param[in] _id The ID of the vertex.
-      /// \return A shared pointer to the vertex with Id = _id or nullptr if
+      /// \brief Get a reference to an edge using its Id.
+      /// \param[in] _id The Id of the edge.
+      /// \return A reference to the edge with Id = _id or NullEdge if
       /// not found.
       public: const EdgeType &EdgeById(const EdgeId &_id) const
       {
@@ -487,12 +490,12 @@ namespace ignition
 
       /// \brief Get an available Id to be assigned to a new vertex.
       /// \return The next available Id.
-      private: VertexId NextId()
+      private: VertexId NextVertexId()
       {
-        while (this->vertices.find(this->nextId) != this->vertices.end())
-          ++this->nextId;
+        while (this->vertices.find(this->nextVertexId) != this->vertices.end())
+          ++this->nextVertexId;
 
-        return this->nextId;
+        return this->nextVertexId;
       }
 
       /// \brief Get an available Id to be assigned to a new edge.
@@ -522,7 +525,7 @@ namespace ignition
       protected: std::multimap<std::string, VertexId> names;
 
       /// \brief The next vertex Id to be assigned to a new vertex.
-      private: VertexId nextId = 0;
+      private: VertexId nextVertexId = 0;
 
       /// \brief The next edge Id to be assigned to a new edge.
       private: VertexId nextEdgeId = 0;

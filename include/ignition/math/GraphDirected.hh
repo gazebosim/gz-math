@@ -30,10 +30,10 @@ namespace ignition
     template<typename E>
     struct DirectEdgeInitializer
     {
-      /// \brief ID of the tail's vertex.
+      /// \brief ID of the tail vertex.
       public: VertexId tailId;
 
-      /// \brief ID of the head's vertex.
+      /// \brief ID of the head vertex.
       public: VertexId headId;
 
       /// \brief User data.
@@ -44,12 +44,13 @@ namespace ignition
     template<typename E>
     class DirectedEdge : public Edge
     {
-      /// \brief ToDo.
+      /// \brief An invalid directed edge.
       public: static DirectedEdge<E> NullEdge;
 
       /// \brief Constructor.
-      /// \param[in] _tail Shared pointer to the tail vertex.
-      /// \param[in] _head Shared pointer to the head vertex.
+      /// \param[in] _id Id of the edge.
+      /// \param[in] _tail Id of the tail vertex.
+      /// \param[in] _head Id of the head vertex.
       /// \param[in] _data User data to be stored in the edge.
       public: DirectedEdge(const EdgeId _id,
                            const VertexId _tail,
@@ -62,16 +63,16 @@ namespace ignition
       {
       }
 
-      /// \brief Get a shared pointer to the tail's vertex in this edge.
-      /// \return A shared pointer to the tail's vertex in this edge.
+      /// \brief Get the Id of the tail vertex in this edge.
+      /// \return An id of the tail vertex in this edge.
       /// \sa Head()
       public: VertexId Tail() const
       {
         return this->tail;
       }
 
-      /// \brief Get a shared pointer to the head's vertex in this edge.
-      /// \return A shared pointer to the head's vertex in this edge.
+      /// \brief Get the Id of the head vertex in this edge.
+      /// \return An id of the head vertex in this edge.
       /// \sa Tail()
       public: VertexId Head() const
       {
@@ -103,18 +104,17 @@ namespace ignition
         return this->Head();
       }
 
-      /// \brief ToDo.
+      /// \brief The id of the tail vertex.
       private: VertexId tail;
 
-      /// \brief ToDo.
+      /// \brief the id of the head vertex.
       private: VertexId head;
 
       /// \brief User data.
       private: E data;
     };
 
-    /// \def ToDo.
-    /// \brief ToDo.
+    /// \brief An invalid directed edge.
     template<typename E>
     DirectedEdge<E> DirectedEdge<E>::NullEdge(kNullId, kNullId, kNullId, E());
 
@@ -153,10 +153,10 @@ namespace ignition
       }
 
       /// \brief Add a new edge to the graph.
-      /// \param[in] _tail Pointer to the tail's vertex.
-      /// \param[in] _head Pointer to the head's vertex.
+      /// \param[in] _tail Id of the tail vertex.
+      /// \param[in] _head Id of the head vertex.
       /// \param[in] _data User data stored in the edge.
-      /// \return Shared pointer to the new edge created or nullptr if the
+      /// \return Reference to the new edge created or NullEdge if the
       /// edge was not created (e.g. incorrect vertices).
       public: DirectedEdge<E> &AddEdge(const VertexId &_tail,
                                        const VertexId &_head,

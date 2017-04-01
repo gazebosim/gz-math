@@ -44,13 +44,12 @@ namespace ignition
     template<typename E>
     class UndirectedEdge : public Edge
     {
-      /// \brief ToDo.
+      /// \brief An invalid undirected edge.
       public: static UndirectedEdge<E> NullEdge;
 
-      public: UndirectedEdge() = default;
-
       /// \brief Constructor.
-      /// \param[in] _vertices The set of pointers to two vertices.
+      /// \param[in] _id Id of the edge.
+      /// \param[in] _vertices The set of Ids of the vertices.
       /// \param[in] _data User data to be stored in the edge.
       public: UndirectedEdge(const EdgeId _id,
                              const VertexId_S &_vertices,
@@ -101,15 +100,14 @@ namespace ignition
         return *diff.begin();
       }
 
-      /// \brief The set of pointers to two vertices.
+      /// \brief The set of Ids of the two vertices.
       private: VertexId_S vertices;
 
       /// \brief User data.
       private: E data;
     };
 
-    /// \def ToDo.
-    /// \brief ToDo.
+    /// \brief An invalid undirected edge.
     template<typename E>
     UndirectedEdge<E> UndirectedEdge<E>::NullEdge(
       kNullId, {kNullId, kNullId}, E());
@@ -146,9 +144,9 @@ namespace ignition
       }
 
       /// \brief Add a new edge to the graph.
-      /// \param[in] _vertices The set of pointers to two vertices.
+      /// \param[in] _vertices The set of Ids of the two vertices.
       /// \param[in] _data User data.
-      /// \return Shared pointer to the new edge created or nullptr if the
+      /// \return Reference to the new edge created or NullEdge if the
       /// edge was not created (e.g. incorrect vertices).
       public: UndirectedEdge<E> &AddEdge(const VertexId_S &_vertices,
                                          const E &_data)
