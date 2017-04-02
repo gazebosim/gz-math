@@ -72,7 +72,7 @@ TEST(GraphTest, VertexFromId)
 }
 
 /////////////////////////////////////////////////
-TEST(GraphTest, vertices)
+TEST(GraphTest, Vertices)
 {
   DirectedGraph<int, double> graph(
   {
@@ -316,7 +316,7 @@ TEST(GraphTest, RemoveVertex)
 }
 
 /////////////////////////////////////////////////
-TEST(GraphTest, RemoveVerticesWithName)
+TEST(GraphTest, RemoveVertices)
 {
   // Create a graph with edges [(v0-->v1), (v1-->v2), (v2-->v3), (v3-->v0)]
   DirectedGraph<int, double> graph(

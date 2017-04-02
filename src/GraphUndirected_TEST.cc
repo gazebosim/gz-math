@@ -72,7 +72,7 @@ TEST(UndirectedGraphTest, VertexFromId)
 }
 
 /////////////////////////////////////////////////
-TEST(UndirectedGraphTest, vertices)
+TEST(UndirectedGraphTest, Vertices)
 {
   UndirectedGraph<int, double> graph(
   {
@@ -318,7 +318,7 @@ TEST(UndirectedGraphTest, RemoveVertex)
 }
 
 /////////////////////////////////////////////////
-TEST(UndirectedGraphTest, RemoveVerticesWithName)
+TEST(UndirectedGraphTest, RemoveVertices)
 {
   // Create a graph with edges [(v0-->v1), (v1-->v2), (v2-->v3), (v3-->v0)]
   UndirectedGraph<int, double> graph(
