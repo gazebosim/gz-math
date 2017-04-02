@@ -228,7 +228,7 @@ namespace ignition
       public: VertexRef_M<V> Vertices(const std::string &_name) const
       {
         VertexRef_M<V> res;
-        for (auto &vertex : this->vertices)
+        for (auto const &vertex : this->vertices)
         {
           if (vertex.second.Name() == _name)
             res.emplace(std::make_pair(vertex.first, std::cref(vertex.second)));
@@ -276,7 +276,7 @@ namespace ignition
       public: EdgeRef_M<EdgeType> Edges() const
       {
         EdgeRef_M<EdgeType> res;
-        for (auto &edge : this->edges)
+        for (auto const &edge : this->edges)
         {
           res.emplace(std::make_pair(edge.first, std::cref(edge.second)));
         }
@@ -418,14 +418,14 @@ namespace ignition
       /// \return The number of vertices removed.
       public: size_t RemoveVertices(const std::string &_name)
       {
-        size_t n = this->names.count(_name);
-        for (auto i = 0; i < n; ++i)
+        size_t numVertices = this->names.count(_name);
+        for (auto i = 0; i < numVertices; ++i)
         {
           auto iter = this->names.find(_name);
           this->RemoveVertex(iter->second);
         }
 
-        return n;
+        return numVertices;
       }
 
       /// \brief Remove an existing edge from the graph. After the removal, it
