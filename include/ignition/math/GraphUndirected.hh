@@ -18,8 +18,6 @@
 #define IGNITION_MATH_GRAPHUNDIRECTED_HH_
 
 #include <algorithm>
-#include <cassert>
-#include <memory>
 #include <iostream>
 #include <set>
 #include <vector>
@@ -42,42 +40,24 @@ namespace ignition
       public: E data;
     };
 
-    // Forward declarations.
-    template<typename V, typename E>
-    class UndirectedEdge;
-
-    /// \def UndirectedEdgePtr
-    /// \brief Shared pointer to an edge.
-    template<typename V, typename E>
-    using UndirectedEdgePtr = std::shared_ptr<UndirectedEdge<V, E>>;
-
-    /// \def UndirectedEdgePtr_S
-    /// \brief Set of shared pointers to edges.
-    template<typename V, typename E>
-    using UndirectedEdgePtr_S = std::set<UndirectedEdgePtr<V, E>>;
-
     /// \brief An undirected edge represents a connection between two vertices.
-    template<typename V, typename E>
-    class UndirectedEdge : public Edge<V>
+    template<typename E>
+    class UndirectedEdge : public Edge
     {
+      /// \brief An invalid undirected edge.
+      public: static UndirectedEdge<E> NullEdge;
+
       /// \brief Constructor.
-      /// \param[in] _vertices The set of pointers to two vertices.
+      /// \param[in] _id Id of the edge.
+      /// \param[in] _vertices The set of Ids of the vertices.
       /// \param[in] _data User data to be stored in the edge.
-      public: UndirectedEdge(const VertexPtr_S<V> &_vertices,
+      public: UndirectedEdge(const EdgeId &_id,
+                             const VertexId_S &_vertices,
                              const E &_data)
-        : vertices(_vertices),
+        : Edge(_id),
+          vertices(_vertices),
           data(_data)
       {
-      }
-
-      /// \brief Helper function for creating an isolated undirected edge.
-      /// \param[in] _vertices The set of pointers to two vertices.
-      /// \param[in] _data User data to be stored in the edge.
-      public: static
-        UndirectedEdgePtr<V, E> createEdge(const VertexPtr_S<V> &_vertices,
-                                           const E &_data)
-      {
-        return std::make_shared<UndirectedEdge<V, E>>(_vertices, _data);
       }
 
       /// \brief Get the user data stored in the edge.
@@ -88,48 +68,74 @@ namespace ignition
       }
 
       // Documentation inherited.
-      public: VertexPtr_S<V> Vertices() const
+      public: VertexId_S Vertices() const
       {
         if (!this->Valid())
-          return {nullptr, nullptr};
+          return {kNullId, kNullId};
 
         return this->vertices;
       }
 
       // Documentation inherited.
-      public: VertexPtr<V> From(const VertexPtr<V> &_from) const
+      public: VertexId From(const VertexId &_from) const
       {
         if (!this->Valid())
-          return nullptr;
+          return kNullId;
 
         assert(this->vertices.size() == 2u);
         auto search = this->vertices.find(_from);
         if (search == this->vertices.end())
-          return nullptr;
+          return kNullId;
 
-        VertexPtr_S<V> diff;
-        VertexPtr_S<V> s2 = {_from};
+        VertexId_S diff;
+        VertexId_S s2 = {_from};
         std::set_difference(this->vertices.begin(), this->vertices.end(),
                             s2.begin(), s2.end(),
                             std::inserter(diff, diff.begin()));
 
         assert(diff.size() > 0u);
         if (diff.size() >= 2u)
-          return nullptr;
+          return kNullId;
 
         return *diff.begin();
       }
 
-      /// \brief The set of pointers to two vertices.
-      private: VertexPtr_S<V> vertices;
+      // Documentation inherited.
+      public: VertexId To(const VertexId &_to) const
+      {
+        return this->From(_to);
+      }
+
+      /// \brief Stream insertion operator. The output uses DOT graph
+      /// description language.
+      /// \param[out] _out The output stream.
+      /// \param[in] _e Edge to write to the stream.
+      /// \ref https://en.wikipedia.org/wiki/DOT_(graph_description_language).
+      public: friend std::ostream &operator<<(std::ostream &_out,
+                                              const UndirectedEdge<E> &_e)
+      {
+        auto vertices = _e.Vertices();
+        auto it = vertices.begin();
+        _out << "  " << *it << " -- ";
+        ++it;
+        _out << *it << ";" << std::endl;
+      }
+
+      /// \brief The set of Ids of the two vertices.
+      private: VertexId_S vertices;
 
       /// \brief User data.
       private: E data;
     };
 
+    /// \brief An invalid undirected edge.
+    template<typename E>
+    UndirectedEdge<E> UndirectedEdge<E>::NullEdge(
+      kNullId, {kNullId, kNullId}, E());
+
     /// \brief A generic graph class using undirected edges.
     template<typename V, typename E>
-    class UndirectedGraph : public Graph<V, E, UndirectedEdge<V, E>>
+    class UndirectedGraph : public Graph<V, E, UndirectedEdge<E>>
     {
       /// \brief Default constructor.
       public: UndirectedGraph() = default;
@@ -143,7 +149,7 @@ namespace ignition
         // Add all vertices.
         for (auto const &v : _vertices)
         {
-          if (!this->AddVertex(v.Data(), v.Name(), v.Id()))
+          if (!this->AddVertex(v.Data(), v.Name(), v.Id()).Valid())
           {
             std::cerr << "Invalid vertex with Id [" << v.Id() << "]. Ignoring."
                       << std::endl;
@@ -153,40 +159,22 @@ namespace ignition
         // Add all edges.
         for (auto const &e : _edges)
         {
-          if (!this->AddEdge(e.vertices, e.data))
+          if (!this->AddEdge(e.vertices, e.data).Valid())
             std::cerr << "Ignoring edge" << std::endl;
         }
       }
 
       /// \brief Add a new edge to the graph.
-      /// \param[in] _vertices The set of pointers to two vertices.
+      /// \param[in] _vertices The set of Ids of the two vertices.
       /// \param[in] _data User data.
-      /// \return Shared pointer to the new edge created or nullptr if the
+      /// \return Reference to the new edge created or NullEdge if the
       /// edge was not created (e.g. incorrect vertices).
-      public: UndirectedEdgePtr<V, E> AddEdge(const VertexPtr_S<V> &_vertices,
-                                              const E &_data)
+      public: UndirectedEdge<E> &AddEdge(const VertexId_S &_vertices,
+                                         const E &_data)
       {
-        auto newEdgePtr = UndirectedEdge<V, E>::createEdge(_vertices, _data);
-
-        if (this->LinkEdge(newEdgePtr))
-          return newEdgePtr;
-        else
-          return nullptr;
-      }
-
-      /// \brief Add a new edge to the graph.
-      /// \param[in] _vertices The set of Ids to two vertices.
-      /// \param[in] _data User data.
-      /// \return Shared pointer to the new edge.
-      public:
-        UndirectedEdgePtr<V, E> AddEdge(const std::set<EdgeId> &_vertices,
-                                        const E &_data)
-      {
-        VertexPtr_S<V> vertices;
-        for (auto const &id : _vertices)
-          vertices.insert(this->VertexById(id));
-
-        return this->AddEdge(vertices, _data);
+        auto id = this->NextEdgeId();
+        UndirectedEdge<E> newEdge(id, _vertices, _data);
+        return this->LinkEdge(std::move(newEdge));
       }
 
       /// \brief Stream insertion operator. The output uses DOT graph
@@ -200,21 +188,17 @@ namespace ignition
         _out << "graph {" << std::endl;
 
         // All vertices with the name and Id as a "label" attribute.
-        for (auto const &v : _g.Vertices())
+        for (auto const &vertexMap : _g.Vertices())
         {
-            _out << "  " << v->Id() << " [label=\"" << v->Name() << " ("
-                 << v->Id() << ")\"];\n";
+          auto vertex = vertexMap.second.get();
+          _out << vertex;
         }
 
         // All edges.
-        VertexPtr_S<V> verticesUsed;
-        for (auto const &e : _g.Edges())
+        for (auto const &edgeMap : _g.Edges())
         {
-          auto vertices = e->Vertices();
-          auto it = vertices.begin();
-          _out << "  " << (*it)->Id() << " -- ";
-          ++it;
-          _out << (*it)->Id() << ";\n";
+          auto edge = edgeMap.second.get();
+          _out << edge;
         }
 
         _out << "}" << std::endl;
