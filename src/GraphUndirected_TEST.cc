@@ -16,9 +16,10 @@
 */
 
 #include <gtest/gtest.h>
-#include <algorithm>
 #include <iostream>
-#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "ignition/math/GraphUndirected.hh"
 

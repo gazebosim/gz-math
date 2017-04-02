@@ -16,9 +16,8 @@
 */
 
 #include <gtest/gtest.h>
-#include <algorithm>
 #include <iostream>
-#include <memory>
+#include <string>
 
 #include "ignition/math/GraphDirected.hh"
 
