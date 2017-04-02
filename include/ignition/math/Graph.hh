@@ -123,7 +123,7 @@ namespace ignition
     {
       /// \brief Constructor.
       /// \param[in] _id Unique id.
-      public: Edge(const EdgeId _id)
+      public: Edge(const EdgeId &_id)
         : id(_id)
       {
       }
@@ -153,35 +153,14 @@ namespace ignition
 
       /// \brief Get if the edge is valid. An edge is valid if its linked in a
       /// graph and its vertices are reachable.
-      /// \return True when the edge is valid.
-      /// \sa SetValid
+      /// \return True when the edge is valid or false otherwise (invalid Id).
       public: bool Valid() const
       {
-        return this->valid && this->id != kNullId;
-      }
-
-      /// \brief Set an edge valid or invalid.
-      /// \param[in] _newValue Validity.
-      /// \sa Valid
-      public: void SetValid(const bool _newValue)
-      {
-        this->valid = _newValue;
+        return this->id != kNullId;
       }
 
       /// \brief Unique edge Id.
       private: EdgeId id = kNullId;
-
-      /// \brief True when the edge is connected in a graph or false otherwise.
-      /// This member variable exists to prevent the following situation:
-      /// Imagine that you have a shared pointer pointing to a valid edge
-      /// connected in a graph. Now, you use the Graph API and remove the
-      /// edge. This operation will disconnect the edge from the graph but the
-      /// edge won't be deallocated because you will keep a shared pointer.
-      /// Having a shared pointer to the edge will allow you to traverse the
-      /// edge and go to any of the vertices of the graph and modify it.
-      /// Once an edge is removed, this flag is set to false and this will
-      /// prevent you from traversing the edge and reach the vertices.
-      private: bool valid = false;
     };
 
     /// \def EdgeId_S
@@ -263,24 +242,16 @@ namespace ignition
       /// \return A reference to the new link created.
       public: EdgeType &LinkEdge(EdgeType &&_edge)
       {
-        _edge.SetValid(true);
-
         auto vertices = _edge.Vertices();
         if (vertices.size() != 2u)
-        {
-          _edge.SetValid(false);
           return EdgeType::NullEdge;
-        }
 
         // Sanity check: Both vertices should exist.
         for (auto const &v : vertices)
         {
           auto itV = this->vertices.find(v);
           if (itV == this->vertices.end())
-          {
-            _edge.SetValid(false);
             return EdgeType::NullEdge;
-          }
         }
 
         // Link the new edge.
@@ -481,10 +452,6 @@ namespace ignition
         }
 
         this->edges.erase(_edge);
-
-        // Mark the edge as invalid. This will prevent to reach any vertices if
-        // there are any shared pointers keeping the edge alive.
-        // _edge->SetValid(false);
 
         return true;
       }
