@@ -138,7 +138,7 @@ TEST(GraphTest, Empty)
 }
 
 /////////////////////////////////////////////////
-TEST(GraphTest, Adjacents)
+TEST(GraphTest, AdjacentsFrom)
 {
   // Create a graph with edges [(v0-->v1), (v1-->v2), (v2-->v0)]
   DirectedGraph<int, double> graph(
@@ -147,22 +147,74 @@ TEST(GraphTest, Adjacents)
     {{0, 1, 2.0}, {1, 2, 3.0}, {2, 0, 4.0}}
   });
 
-  // Try to get the adjacents of an inexistent vertex.
-  auto adjacents = graph.Adjacents(kNullId);
+  // Try to get the adjacents from an inexistent vertex.
+  auto adjacents = graph.AdjacentsFrom(kNullId);
   EXPECT_TRUE(adjacents.empty());
 
-  adjacents = graph.Adjacents(0);
+  adjacents = graph.AdjacentsFrom(0);
   EXPECT_EQ(adjacents.size(), 1u);
   EXPECT_NE(adjacents.find(1), adjacents.end());
 
   auto vertex = graph.VertexFromId(0);
-  adjacents = graph.Adjacents(vertex);
+  adjacents = graph.AdjacentsFrom(vertex);
   EXPECT_EQ(adjacents.size(), 1u);
   EXPECT_NE(adjacents.find(1), adjacents.end());
 }
 
 /////////////////////////////////////////////////
-TEST(GraphTest, Incidents)
+TEST(GraphTest, AdjacentsTo)
+{
+  // Create a graph with edges [(v0-->v1), (v1-->v2), (v2-->v1)]
+  DirectedGraph<int, double> graph(
+  {
+    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
+    {{0, 1, 2.0}, {1, 2, 3.0}, {2, 1, 4.0}}
+  });
+
+  // Try to get the adjacents to an inexistent vertex.
+  auto adjacents = graph.AdjacentsTo(kNullId);
+  EXPECT_TRUE(adjacents.empty());
+
+  adjacents = graph.AdjacentsTo(0);
+  EXPECT_EQ(adjacents.size(), 0u);
+
+  adjacents = graph.AdjacentsTo(1);
+  EXPECT_EQ(adjacents.size(), 2u);
+  EXPECT_NE(adjacents.find(0), adjacents.end());
+  EXPECT_NE(adjacents.find(2), adjacents.end());
+
+  auto vertex = graph.VertexFromId(2);
+  adjacents = graph.AdjacentsTo(vertex);
+  EXPECT_EQ(adjacents.size(), 1u);
+  EXPECT_NE(adjacents.find(1), adjacents.end());
+}
+
+/////////////////////////////////////////////////
+TEST(GraphTest, IncidentsFrom)
+{
+  // Create a graph with edges [(v0-->v1), (v1-->v0), (v1-->v2)]
+  DirectedGraph<int, double> graph(
+  {
+    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
+    {{0, 1, 2.0}, {1, 0, 3.0}, {1, 2, 4.0}}
+  });
+
+  auto incidents = graph.IncidentsFrom(0);
+  EXPECT_EQ(incidents.size(), 1u);
+  EXPECT_NE(incidents.find(0), incidents.end());
+
+  auto vertex = graph.VertexFromId(1);
+  incidents = graph.IncidentsFrom(vertex);
+  EXPECT_EQ(incidents.size(), 2u);
+  EXPECT_NE(incidents.find(1), incidents.end());
+  EXPECT_NE(incidents.find(2), incidents.end());
+
+  incidents = graph.IncidentsFrom(2);
+  EXPECT_TRUE(incidents.empty());
+}
+
+/////////////////////////////////////////////////
+TEST(GraphTest, IncidentsTo)
 {
   // Create a graph with edges [(v0-->v1), (v1-->v2), (v2-->v0)]
   DirectedGraph<int, double> graph(
@@ -171,14 +223,48 @@ TEST(GraphTest, Incidents)
     {{0, 1, 2.0}, {1, 2, 3.0}, {2, 0, 4.0}}
   });
 
-  auto incidents = graph.Incidents(0);
+  auto incidents = graph.IncidentsTo(0);
   EXPECT_EQ(incidents.size(), 1u);
   EXPECT_NE(incidents.find(2), incidents.end());
 
   auto vertex = graph.VertexFromId(0);
-  incidents = graph.Incidents(vertex);
+  incidents = graph.IncidentsTo(vertex);
   EXPECT_EQ(incidents.size(), 1u);
   EXPECT_NE(incidents.find(2), incidents.end());
+}
+
+/////////////////////////////////////////////////
+TEST(GraphTest, InDegree)
+{
+  // Create a graph with edges [(v0-->v1), (v1-->v2), (v2-->v1)]
+  DirectedGraph<int, double> graph(
+  {
+    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
+    {{0, 1, 2.0}, {1, 2, 3.0}, {2, 1, 4.0}}
+  });
+
+  EXPECT_EQ(graph.InDegree(0), 0u);
+  EXPECT_EQ(graph.InDegree(graph.VertexFromId(0)), 0u);
+  EXPECT_EQ(graph.InDegree(1), 2u);
+  EXPECT_EQ(graph.InDegree(graph.VertexFromId(1)), 2u);
+}
+
+/////////////////////////////////////////////////
+TEST(GraphTest, OutDegree)
+{
+  // Create a graph with edges [(v0-->v1), (v1-->v0), (v1-->v2)]
+  DirectedGraph<int, double> graph(
+  {
+    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
+    {{0, 1, 2.0}, {1, 0, 3.0}, {1, 2, 4.0}}
+  });
+
+  EXPECT_EQ(graph.OutDegree(0), 1u);
+  EXPECT_EQ(graph.OutDegree(graph.VertexFromId(0)), 1u);
+  EXPECT_EQ(graph.OutDegree(1), 2u);
+  EXPECT_EQ(graph.OutDegree(graph.VertexFromId(1)), 2u);
+  EXPECT_EQ(graph.OutDegree(2), 0u);
+  EXPECT_EQ(graph.OutDegree(graph.VertexFromId(2)), 0u);
 }
 
 /////////////////////////////////////////////////
@@ -259,12 +345,12 @@ TEST(GraphTest, RemoveEdge)
   // Remove a nonexistent edge shouldn't cause any effect.
   EXPECT_FALSE(graph.RemoveEdge(kNullId));
   EXPECT_EQ(graph.Edges().size(), 3u);
-  EXPECT_EQ(graph.Incidents(1).size(), 1);
+  EXPECT_EQ(graph.IncidentsTo(1).size(), 1);
 
   // Remove the edge (v0-->v1)
   EXPECT_TRUE(graph.RemoveEdge(0));
   EXPECT_EQ(graph.Edges().size(), 2u);
-  EXPECT_EQ(graph.Incidents(1).size(), 0);
+  EXPECT_EQ(graph.IncidentsTo(1).size(), 0);
 
   // Remove the edge (v1-->v2)
   auto edge = graph.EdgeFromId(1);
@@ -293,13 +379,13 @@ TEST(GraphTest, RemoveVertex)
   // Remove a nonexistent vertex shouldn't cause any effect.
   EXPECT_FALSE(graph.RemoveVertex(kNullId));
   EXPECT_EQ(graph.Vertices().size(), 3u);
-  EXPECT_EQ(graph.Adjacents(1).size(), 1u);
+  EXPECT_EQ(graph.AdjacentsFrom(1).size(), 1u);
 
   // Remove vertex #2.
   EXPECT_TRUE(graph.RemoveVertex(2));
   EXPECT_EQ(graph.Vertices().size(), 2u);
   EXPECT_EQ(graph.Edges().size(), 1u);
-  EXPECT_EQ(graph.Adjacents(1).size(), 0u);
+  EXPECT_EQ(graph.AdjacentsFrom(1).size(), 0u);
 
   // Remove vertex #1.
   auto vertex = graph.VertexFromId(1);
@@ -327,14 +413,14 @@ TEST(GraphTest, RemoveVertices)
   // Try to remove a node with a name that doesn't exist.
   EXPECT_EQ(graph.RemoveVertices("wrong_name"), 0);
   EXPECT_EQ(graph.Vertices().size(), 4u);
-  EXPECT_EQ(graph.Adjacents(1).size(), 1);
+  EXPECT_EQ(graph.AdjacentsFrom(1).size(), 1);
 
   // Remove two vertices at the same time.
   EXPECT_EQ(graph.RemoveVertices("common"), 2u);
   EXPECT_EQ(graph.Vertices().size(), 2u);
   EXPECT_EQ(graph.Edges().size(), 1u);
 
-  EXPECT_EQ(graph.Adjacents(1).size(), 0);
+  EXPECT_EQ(graph.AdjacentsFrom(1).size(), 0);
 
   EXPECT_EQ(graph.RemoveVertices("v1"), 1u);
   EXPECT_EQ(graph.Vertices().size(), 1u);

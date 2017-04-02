@@ -100,6 +100,27 @@ namespace ignition
         return *diff.begin();
       }
 
+      // Documentation inherited.
+      public: VertexId To(const VertexId &_to) const
+      {
+        return this->From(_to);
+      }
+
+      /// \brief Stream insertion operator. The output uses DOT graph
+      /// description language.
+      /// \param[out] _out The output stream.
+      /// \param[in] _e Edge to write to the stream.
+      /// \ref https://en.wikipedia.org/wiki/DOT_(graph_description_language).
+      public: friend std::ostream &operator<<(std::ostream &_out,
+                                              const UndirectedEdge<E> &_e)
+      {
+        auto vertices = _e.Vertices();
+        auto it = vertices.begin();
+        _out << "  " << *it << " -- ";
+        ++it;
+        _out << *it << ";" << std::endl;
+      }
+
       /// \brief The set of Ids of the two vertices.
       private: VertexId_S vertices;
 
@@ -166,24 +187,18 @@ namespace ignition
       {
         _out << "graph {" << std::endl;
 
-         // All vertices with the name and Id as a "label" attribute.
+        // All vertices with the name and Id as a "label" attribute.
         for (auto const &vertexMap : _g.Vertices())
         {
           auto vertex = vertexMap.second.get();
-          _out << "  " << vertex.Id() << " [label=\"" << vertex.Name()
-               << " (" << vertex.Id() << ")\"];\n";
+          _out << vertex;
         }
 
         // All edges.
         for (auto const &edgeMap : _g.Edges())
         {
           auto edge = edgeMap.second.get();
-
-          auto vertices = edge.Vertices();
-          auto it = vertices.begin();
-          _out << "  " << *it << " -- ";
-          ++it;
-          _out << *it << ";\n";
+          _out << edge;
         }
 
         _out << "}" << std::endl;

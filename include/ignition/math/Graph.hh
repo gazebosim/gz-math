@@ -21,6 +21,7 @@
 // int64_t
 #include <cstdint>
 #include <functional>
+#include <iostream>
 #include <limits>
 #include <map>
 #include <set>
@@ -87,6 +88,18 @@ namespace ignition
         return this->id != kNullId;
       }
 
+      /// \brief Stream insertion operator. The output uses DOT graph
+      /// description language.
+      /// \param[out] _out The output stream.
+      /// \param[in] _v Vertex to write to the stream.
+      /// \ref https://en.wikipedia.org/wiki/DOT_(graph_description_language).
+      public: friend std::ostream &operator<<(std::ostream &_out,
+                                              const Vertex<V> &_v)
+      {
+        _out << "  " << _v.Id() << " [label=\"" << _v.Name()
+             << " (" << _v.Id() << ")\"];" << std::endl;
+      }
+
       /// \brief User information.
       private: V data;
 
@@ -139,17 +152,33 @@ namespace ignition
       /// an edge.
       ///
       /// E.g.: Let's assume that we have an undirected edge (e1) with ends
-      /// (v1) and (v2). The operation e1.From(v1) returns (v2).
+      /// (v1) and (v2): (v1)--(v2). The operation e1.From(v1) returns (v2).
       /// The operation e1.From(v2) returns (v1).
       ///
       /// E.g.: Let's assume that we have a directed edge (e2) with the tail end
-      /// (v1) and the head end (v2). The operation e2.From(v1) returns (v2).
-      /// The operation e2.From(v2) returns nullptr.
+      /// (v1) and the head end (v2): (v1)->(v2). The operation e2.From(v1)
+      /// returns (v2). The operation e2.From(v2) returns kNullId.
       ///
       /// \param[in] _from Source vertex.
       /// \return The other vertex of the edge reachable from the "_from"
-      /// vertex or NullVertex otherwise.
+      /// vertex or kNullId otherwise.
       public: virtual VertexId From(const VertexId &_from) const = 0;
+
+      /// \brief Get the source end that can reach the destination end of
+      /// an edge.
+      ///
+      /// E.g.: Let's assume that we have an undirected edge (e1) with ends
+      /// (v1) and (v2): (v1)--(v2). The operation e1.To(v1) returns (v2).
+      /// The operation e1.To(v2) returns (v1).
+      ///
+      /// E.g.: Let's assume that we have a directed edge (e2) with the tail end
+      /// (v1) and the head end (v2): (v1)->(v2). The operation e2.To(v1)
+      /// returns kNullId. The operation e2.To(v2) returns v1.
+      ///
+      /// \param[in] _from Destination vertex.
+      /// \return The other vertex of the edge that can reach "_to"
+      /// vertex or kNullId otherwise.
+      public: virtual VertexId To(const VertexId &_to) const = 0;
 
       /// \brief Get if the edge is valid. An edge is valid if its linked in a
       /// graph and its vertices are reachable.
@@ -284,12 +313,13 @@ namespace ignition
         return std::move(res);
       }
 
-      /// \brief Get all neighbors vertices that are directly connected to
-      /// a given vertex.
-      /// \param[in] _vertex The Id of the vertex to check adjacents.
+      /// \brief Get all vertices that are directly connected with one edge
+      /// from a given vertex. E.g. j is adjacent from i if there is an
+      /// edge (i->j).
+      /// \param[in] _vertex The Id of the vertex to check adjacentsFrom.
       /// \return A map of vertices, where keys are Ids and values are
       /// references to the vertices.
-      public: VertexRef_M<V> Adjacents(const VertexId &_vertex) const
+      public: VertexRef_M<V> AdjacentsFrom(const VertexId &_vertex) const
       {
         VertexRef_M<V> res;
 
@@ -301,9 +331,12 @@ namespace ignition
         {
           auto edge = this->EdgeFromId(edgeId);
           auto neighborVertexId = edge.From(_vertex);
-          auto neighbotVertex = this->VertexFromId(neighborVertexId);
-          res.emplace(
-            std::make_pair(neighborVertexId, std::cref(neighbotVertex)));
+          if (neighborVertexId != kNullId)
+          {
+            auto neighborVertex = this->VertexFromId(neighborVertexId);
+            res.emplace(
+              std::make_pair(neighborVertexId, std::cref(neighborVertex)));
+          }
         }
 
         return res;
@@ -314,16 +347,115 @@ namespace ignition
       /// \param[in] _vertex The vertex to check adjacents.
       /// \return A map of vertices, where keys are Ids and values are
       /// references to the vertices.
-      public: VertexRef_M<V> Adjacents(const Vertex<V> &_vertex) const
+      public: VertexRef_M<V> AdjacentsFrom(const Vertex<V> &_vertex) const
       {
-        return this->Adjacents(_vertex.Id());
+        return this->AdjacentsFrom(_vertex.Id());
+      }
+
+      /// \brief Get all vertices that are directly connected with one edge
+      /// to a given vertex. E.g. i is adjacent to j if there is an
+      /// edge (i->j).
+      /// \param[in] _vertex The Id of the vertex to check adjacentsTo.
+      /// \return A map of vertices, where keys are Ids and values are
+      /// references to the vertices.
+      public: VertexRef_M<V> AdjacentsTo(const VertexId &_vertex) const
+      {
+        auto incidentEdges = this->IncidentsTo(_vertex);
+
+        VertexRef_M<V> res;
+        for (auto incidentEdgeRef : incidentEdges)
+        {
+          auto incidentEdgeId = incidentEdgeRef.first;
+          auto incidentEdge = this->EdgeFromId(incidentEdgeId);
+          auto neighborVertexId = incidentEdge.To(_vertex);
+          auto neighborVertex = this->VertexFromId(neighborVertexId);
+          res.emplace(
+              std::make_pair(neighborVertexId, std::cref(neighborVertex)));
+        }
+
+        return res;
+      }
+
+      /// \brief Get all vertices that are directly connected with one edge
+      /// to a given vertex. E.g. i is adjacent to j if there is an
+      /// edge (i->j).
+      /// \param[in] _vertex The the vertex to check adjacentsTo.
+      /// \return A map of vertices, where keys are Ids and values are
+      /// references to the vertices.
+      public: VertexRef_M<V> AdjacentsTo(const Vertex<V> &_vertex) const
+      {
+        return this->AdjacentsTo(_vertex.Id());
+      }
+
+      /// \brief Get the number of edges incidents to a vertex.
+      /// \param[in] _vertex The vertex Id.
+      /// \return The number of edges incidents to a vertex.
+      public: size_t InDegree(const VertexId &_vertex) const
+      {
+        return this->IncidentsTo(_vertex).size();
+      }
+
+      /// \brief Get the number of edges incidents to a vertex.
+      /// \param[in] _vertex The vertex.
+      /// \return The number of edges incidents to a vertex.
+      public: size_t InDegree(const Vertex<V> &_vertex) const
+      {
+        return this->IncidentsTo(this->VertexFromId(_vertex.Id())).size();
+      }
+
+      /// \brief Get the number of edges incidents from a vertex.
+      /// \param[in] _vertex The vertex Id.
+      /// \return The number of edges incidents from a vertex.
+      public: size_t OutDegree(const VertexId &_vertex) const
+      {
+        return this->AdjacentsFrom(_vertex).size();
+      }
+
+      /// \brief Get the number of edges incidents from a vertex.
+      /// \param[in] _vertex The vertex.
+      /// \return The number of edges incidents from a vertex.
+      public: size_t OutDegree(const Vertex<V> &_vertex) const
+      {
+        return this->AdjacentsFrom(this->VertexFromId(_vertex.Id())).size();
+      }
+
+      /// \brief Get the set of outgoing edges from a given vertex.
+      /// \param[in] _vertex Id of the vertex.
+      /// \return A map of edges, where keys are Ids and values are
+      /// references to the edges.
+      public: EdgeRef_M<EdgeType> IncidentsFrom(const VertexId &_vertex) const
+      {
+        EdgeRef_M<EdgeType> res;
+
+        auto adjIt = this->adjList.find(_vertex);
+        if (adjIt == this->adjList.end())
+          return res;
+
+        auto edgeIds = adjIt->second;
+        for (auto const &edgeId : edgeIds)
+        {
+          auto edge = this->EdgeFromId(edgeId);
+          if (edge.From(_vertex) != kNullId)
+            res.emplace(std::make_pair(edge.Id(), std::cref(edge)));
+        }
+
+        return std::move(res);
+      }
+
+      /// \brief Get the set of outgoing edges from a given vertex.
+      /// \param[in] _vertex The vertex.
+      /// \return A map of edges, where keys are Ids and values are
+      /// references to the edges.
+      public: EdgeRef_M<EdgeType> IncidentsFrom(const Vertex<V> &_vertex) const
+      {
+        return this->IncidentsFrom(_vertex.Id());
       }
 
       /// \brief Get the set of incoming edges to a given vertex.
       /// \param[in] _vertex Id of the vertex.
       /// \return A map of edges, where keys are Ids and values are
       /// references to the edges.
-      public: EdgeRef_M<EdgeType> Incidents(const VertexId &_vertex) const
+      public: EdgeRef_M<EdgeType> IncidentsTo(const VertexId &_vertex) const
       {
         EdgeRef_M<EdgeType> res;
 
@@ -349,9 +481,9 @@ namespace ignition
       /// \param[in] _vertex The vertex.
       /// \return A map of edges, where keys are Ids and values are
       /// references to the edges.
-      public: EdgeRef_M<EdgeType> Incidents(const Vertex<V> &_vertex) const
+      public: EdgeRef_M<EdgeType> IncidentsTo(const Vertex<V> &_vertex) const
       {
-        return this->Incidents(_vertex.Id());
+        return this->IncidentsTo(_vertex.Id());
       }
 
       /// \brief Whether the graph is empty.
@@ -374,7 +506,7 @@ namespace ignition
         std::string name = vIt->second.Name();
 
         // Remove incident edges.
-        auto incidents = this->Incidents(_vertex);
+        auto incidents = this->IncidentsTo(_vertex);
         for (auto edgePair : incidents)
           this->RemoveEdge(edgePair.first);
 
