@@ -122,6 +122,7 @@ namespace ignition
                                               const DirectedEdge<E> &_e)
       {
         _out << "  " << _e.Tail() << " -> " << _e.Head() << ";" << std::endl;
+        return _out;
       }
 
       /// \brief The id of the tail vertex.

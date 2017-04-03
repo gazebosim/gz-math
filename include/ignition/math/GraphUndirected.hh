@@ -119,6 +119,7 @@ namespace ignition
         _out << "  " << *it << " -- ";
         ++it;
         _out << *it << ";" << std::endl;
+        return _out;
       }
 
       /// \brief The set of Ids of the two vertices.

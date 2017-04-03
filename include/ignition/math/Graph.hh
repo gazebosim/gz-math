@@ -98,6 +98,7 @@ namespace ignition
       {
         _out << "  " << _v.Id() << " [label=\"" << _v.Name()
              << " (" << _v.Id() << ")\"];" << std::endl;
+        return _out;
       }
 
       /// \brief User information.
