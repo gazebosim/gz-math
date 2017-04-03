@@ -137,7 +137,7 @@ namespace ignition
     {
       /// \brief Constructor.
       /// \param[in] _id Unique id.
-      public: Edge(const EdgeId &_id)
+      public: explicit Edge(const EdgeId &_id)
         : id(_id)
       {
       }
@@ -270,7 +270,7 @@ namespace ignition
       /// \brief Links an edge to the graph.
       /// \param[in] _edge A new edge.
       /// \return A reference to the new link created.
-      public: EdgeType &LinkEdge(EdgeType &&_edge)
+      public: EdgeType &LinkEdge(const EdgeType &_edge)
       {
         auto vertices = _edge.Vertices();
         if (vertices.size() != 2u)
