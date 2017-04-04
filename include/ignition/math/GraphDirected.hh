@@ -26,23 +26,9 @@ namespace ignition
 {
   namespace math
   {
-    /// \brief Used in the DirectedGraph constructor for uniform initialization.
-    template<typename E>
-    struct DirectEdgeInitializer
-    {
-      /// \brief ID of the tail vertex.
-      public: VertexId tailId;
-
-      /// \brief ID of the head vertex.
-      public: VertexId headId;
-
-      /// \brief User data.
-      public: E data;
-    };
-
     /// \brief A directed edge represents a connection between two vertices.
     template<typename E>
-    class DirectedEdge : public Edge
+    class DirectedEdge : public Edge<E>
     {
       /// \brief An invalid directed edge.
       public: static DirectedEdge<E> NullEdge;
@@ -56,43 +42,9 @@ namespace ignition
                            const VertexId &_tail,
                            const VertexId &_head,
                            const E &_data)
-        : Edge(_id),
-          tail(_tail),
-          head(_head),
-          data(_data)
+        : Edge<E>(_id, _tail, _head, _data)
       {
-      }
-
-      /// \brief Get the Id of the tail vertex in this edge.
-      /// \return An id of the tail vertex in this edge.
-      /// \sa Head()
-      public: VertexId Tail() const
-      {
-        return this->tail;
-      }
-
-      /// \brief Get the Id of the head vertex in this edge.
-      /// \return An id of the head vertex in this edge.
-      /// \sa Tail()
-      public: VertexId Head() const
-      {
-        return this->head;
-      }
-
-      /// \brief Get the user data stored in the edge.
-      /// \return The user data stored in the edge.
-      public: E &Data()
-      {
-        return this->data;
-      }
-
-      // Documentation inherited.
-      public: VertexId_S Vertices() const
-      {
-        // if (!this->Valid())
-        //  return {Vertex<V>::NullVertex, Vertex<V>::NullVertex};
-
-        return {this->tail, this->head};
+        this->ostreamSymbol = "->";
       }
 
       // Documentation inherited.
@@ -112,29 +64,9 @@ namespace ignition
 
         return this->Tail();
       }
-
-      /// \brief Stream insertion operator. The output uses DOT graph
-      /// description language.
-      /// \param[out] _out The output stream.
-      /// \param[in] _e Edge to write to the stream.
-      /// \ref https://en.wikipedia.org/wiki/DOT_(graph_description_language).
-      public: friend std::ostream &operator<<(std::ostream &_out,
-                                              const DirectedEdge<E> &_e)
-      {
-        _out << "  " << _e.Tail() << " -> " << _e.Head() << ";" << std::endl;
-      }
-
-      /// \brief The id of the tail vertex.
-      private: VertexId tail;
-
-      /// \brief the id of the head vertex.
-      private: VertexId head;
-
-      /// \brief User data.
-      private: E data;
     };
 
-    /// \brief An invalid directed edge.
+    /// \brief An invalid undirected edge.
     template<typename E>
     DirectedEdge<E> DirectedEdge<E>::NullEdge(kNullId, kNullId, kNullId, E());
 
@@ -144,76 +76,11 @@ namespace ignition
     {
       /// \brief Default constructor.
       public: DirectedGraph() = default;
-
-      /// \brief Constructor.
-      /// \param[in] _vertices Collection of vertices.
-      /// \param[in] _edges Collection of edges.
       public: DirectedGraph(const std::vector<Vertex<V>> &_vertices,
-                            const std::vector<DirectEdgeInitializer<E>> &_edges)
+                            const std::vector<EdgeInitializer<E>> &_edges)
+              : Graph<V, E, DirectedEdge<E>>(_vertices, _edges)
       {
-        // Add all vertices.
-        for (auto const &v : _vertices)
-        {
-          if (!this->AddVertex(v.Data(), v.Name(), v.Id()).Valid())
-          {
-            std::cerr << "Invalid vertex with Id [" << v.Id() << "]. Ignoring"
-                      << std::endl;
-          }
-        }
-
-        // Add all edges.
-        for (auto const &e : _edges)
-        {
-          if (!this->AddEdge(e.tailId, e.headId, e.data).Valid())
-          {
-            std::cerr << "Invalid edge [" << e.tailId << "," << e.headId << ","
-                      << e.data << "]. Ignoring." << std::endl;
-          }
-        }
-      }
-
-      /// \brief Add a new edge to the graph.
-      /// \param[in] _tail Id of the tail vertex.
-      /// \param[in] _head Id of the head vertex.
-      /// \param[in] _data User data stored in the edge.
-      /// \return Reference to the new edge created or NullEdge if the
-      /// edge was not created (e.g. incorrect vertices).
-      public: DirectedEdge<E> &AddEdge(const VertexId &_tail,
-                                       const VertexId &_head,
-                                       const E &_data)
-      {
-        auto id = this->NextEdgeId();
-        DirectedEdge<E> newEdge(id, _tail, _head, _data);
-        return this->LinkEdge(std::move(newEdge));
-      }
-
-      /// \brief Stream insertion operator. The output uses DOT graph
-      /// description language.
-      /// \param[out] _out The output stream.
-      /// \param[in] _g Graph to write to the stream.
-      /// \ref https://en.wikipedia.org/wiki/DOT_(graph_description_language).
-      public: friend std::ostream &operator<<(std::ostream &_out,
-                                              const DirectedGraph<V, E> &_g)
-      {
-        _out << "digraph {" << std::endl;
-
-        // All vertices with the name and Id as a "label" attribute.
-        for (auto const &vertexMap : _g.Vertices())
-        {
-          auto vertex = vertexMap.second.get();
-          _out << vertex;
-        }
-
-        // All edges.
-        for (auto const &edgeMap : _g.Edges())
-        {
-          auto edge = edgeMap.second.get();
-          _out << edge;
-        }
-
-        _out << "}" << std::endl;
-
-        return _out;
+        this->ostreamName = "digraph";
       }
     };
   }

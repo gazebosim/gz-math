@@ -32,7 +32,7 @@ TEST(UndirectedGraphTest, UniformInitialization)
   UndirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{{0, 1}, 0.0}, {{1, 2}, 0.0}}
+    {{0, 1, 0.0}, {1, 2, 0.0}}
   });
 
   // Verify the vertices.
@@ -114,7 +114,7 @@ TEST(UndirectedGraphTest, Edges)
   UndirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
+    {{0, 1, 2.0}, {1, 2, 3.0}, {2, 0, 4.0}}
   });
 
   auto edges = graph.Edges();
@@ -146,7 +146,7 @@ TEST(UndirectedGraphTest, AdjacentsFrom)
   UndirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
+    {{0, 1, 2.0}, {1, 2, 3.0}, {2, 0, 4.0}}
   });
 
   // Try to get the adjacents from an inexistent vertex.
@@ -172,7 +172,7 @@ TEST(UndirectedGraphTest, AdjacentsTo)
   UndirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}}
+    {{0, 1, 2.0}, {1, 2, 3.0}}
   });
 
   // Try to get the adjacents from an inexistent vertex.
@@ -197,7 +197,7 @@ TEST(UndirectedGraphTest, IncidentsFrom)
   UndirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}}
+    {{0, 1, 2.0}, {1, 2, 3.0}}
   });
 
   auto incidents = graph.IncidentsFrom(0);
@@ -218,7 +218,7 @@ TEST(UndirectedGraphTest, IncidentsTo)
   UndirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
+    {{0, 1, 2.0}, {1, 2, 3.0}, {2, 0, 4.0}}
   });
 
   auto incidents = graph.IncidentsTo(0);
@@ -240,7 +240,7 @@ TEST(UndirectedGraphTest, InDegree)
   UndirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}}
+    {{0, 1, 2.0}, {1, 2, 3.0}}
   });
 
   EXPECT_EQ(graph.InDegree(0), 1u);
@@ -256,7 +256,7 @@ TEST(UndirectedGraphTest, OutDegree)
   UndirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}}
+    {{0, 1, 2.0}, {1, 2, 3.0}}
   });
 
   EXPECT_EQ(graph.OutDegree(0), 1u);
@@ -305,9 +305,9 @@ TEST(UndirectedGraphTest, AddEdge)
   });
 
   // Create some edges [(v0--v1), (v1--v2), (v2--v0)]
-  auto e0 = graph.AddEdge({0, 1}, 2.0);
-  auto e1 = graph.AddEdge({1, 2}, 3.0);
-  auto e2 = graph.AddEdge({2, 0}, 4.0);
+  auto e0 = graph.AddEdge(0, 1, 2.0);
+  auto e1 = graph.AddEdge(1, 2, 3.0);
+  auto e2 = graph.AddEdge(2, 0, 4.0);
 
   // Check the edge content.
   EXPECT_EQ(e0.Data(), 2.0);
@@ -321,12 +321,12 @@ TEST(UndirectedGraphTest, AddEdge)
   EXPECT_EQ(edges.size(), 3u);
 
   // Try to add an edge with an incorrect tail.
-  auto edge = graph.AddEdge({kNullId, 1}, 2.0);
+  auto edge = graph.AddEdge(kNullId, 1, 2.0);
   EXPECT_EQ(edge.Id(), kNullId);
   EXPECT_EQ(graph.Edges().size(), 3u);
 
   // Try to add an edge with an incorrect head.
-  edge = graph.AddEdge({0, kNullId}, 2.0);
+  edge = graph.AddEdge(0, kNullId, 2.0);
   EXPECT_EQ(edge.Id(), kNullId);
   EXPECT_EQ(graph.Edges().size(), 3u);
 }
@@ -338,7 +338,7 @@ TEST(UndirectedGraphTest, RemoveEdge)
   UndirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
+    {{0, 1, 2.0}, {1, 2, 3.0}, {2, 0, 4.0}}
   });
 
   // Remove a nonexistent edge shouldn't cause any effect.
@@ -372,7 +372,7 @@ TEST(UndirectedGraphTest, RemoveVertex)
   UndirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
+    {{0, 1, 2.0}, {1, 2, 3.0}, {2, 0, 4.0}}
   });
 
   // Remove a nonexistent vertex shouldn't cause any effect.
@@ -405,7 +405,7 @@ TEST(UndirectedGraphTest, RemoveVertices)
   UndirectedGraph<int, double> graph(
   {
     {{0, "v0", 0}, {1, "v1", 1}, {2, "common", 2}, {3, "common", 3}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 3}, 4.0}, {{3, 0}, 5.0}}
+    {{0, 1, 2.0}, {1, 2, 3.0}, {2, 3, 4.0}, {3, 0, 5.0}}
   });
 
   // Try to remove a node with a name that doesn't exist.
@@ -437,7 +437,7 @@ TEST(UndirectedGraphTest, StreamInsertion)
   UndirectedGraph<int, double> graph(
   {
     {{0, "v0", 0}, {1, "v1", 1}, {2, "v2", 2}, {3, "v3", 3}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
+    {{0, 1, 2.0}, {1, 2, 3.0}, {2, 0, 4.0}}
   });
 
   std::ostringstream output;
@@ -458,15 +458,14 @@ TEST(UndirectedGraphTest, StreamInsertion)
   // We don't really know the order in which the edges will be printed.
   // We also don't know the order in which the vertices on each edge will be
   // printed.
-  std::vector<std::pair<std::string, std::string>> expectedEdges =
+  std::vector<std::string> expectedEdges =
     {
-      {"  0 -- 1;\n", "  1 -- 0;\n"},
-      {"  1 -- 2;\n", "  2 -- 1;\n"},
-      {"  0 -- 2;\n", "  2 -- 0;\n"}
+      "  0 -- 1;\n",
+      "  1 -- 2;\n",
+      "  2 -- 0;\n"
     };
   for (auto const &edge : expectedEdges)
   {
-    EXPECT_TRUE((output.str().find(std::get<0>(edge)) != std::string::npos) ||
-                (output.str().find(std::get<1>(edge)) != std::string::npos));
+    EXPECT_TRUE(output.str().find(edge) != std::string::npos);
   }
 }

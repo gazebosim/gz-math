@@ -129,15 +129,34 @@ namespace ignition
     /// \brief The unique Id for an edge.
     using EdgeId = int64_t;
 
+    /// \brief Used in the DirectedGraph constructor for uniform initialization.
+    template<typename E>
+    struct EdgeInitializer
+    {
+      /// \brief ID of the tail vertex.
+      public: VertexId tailId;
+
+      /// \brief ID of the head vertex.
+      public: VertexId headId;
+
+      /// \brief User data.
+      public: E data;
+    };
+
     /// \brief Generic edge class. An edge has two ends and some constraint
     /// between them. For example, a directed edge only allows traversing the
     /// edge in one direction.
+    template<typename E>
     class Edge
     {
       /// \brief Constructor.
       /// \param[in] _id Unique id.
-      public: Edge(const EdgeId &_id)
-        : id(_id)
+      public: Edge(const EdgeId &_id, const VertexId &_tail,
+                   const VertexId &_head, const E &_data)
+        : id(_id),
+          tail(_tail),
+          head(_head),
+          data(_data)
       {
       }
 
@@ -162,7 +181,13 @@ namespace ignition
       /// \param[in] _from Source vertex.
       /// \return The other vertex of the edge reachable from the "_from"
       /// vertex or kNullId otherwise.
-      public: virtual VertexId From(const VertexId &_from) const = 0;
+      public: virtual VertexId From(const VertexId &_from) const
+      {
+        if (_from == this->Head())
+          return this->Tail();
+        else
+          return this->Head();
+      }
 
       /// \brief Get the source end that can reach the destination end of
       /// an edge.
@@ -178,7 +203,16 @@ namespace ignition
       /// \param[in] _from Destination vertex.
       /// \return The other vertex of the edge that can reach "_to"
       /// vertex or kNullId otherwise.
-      public: virtual VertexId To(const VertexId &_to) const = 0;
+      public: virtual VertexId To(const VertexId &_to) const
+      {
+        return this->From(_to);
+      }
+
+      // Documentation inherited.
+      public: VertexId_S Vertices() const
+      {
+        return {this->tail, this->head};
+      }
 
       /// \brief Get if the edge is valid. An edge is valid if its linked in a
       /// graph and its vertices are reachable.
@@ -188,8 +222,54 @@ namespace ignition
         return this->id != kNullId;
       }
 
+      /// \brief Get the Id of the tail vertex in this edge.
+      /// \return An id of the tail vertex in this edge.
+      /// \sa Head()
+      public: VertexId Tail() const
+      {
+        return this->tail;
+      }
+
+      /// \brief Get the Id of the head vertex in this edge.
+      /// \return An id of the head vertex in this edge.
+      /// \sa Tail()
+      public: VertexId Head() const
+      {
+        return this->head;
+      }
+
+      /// \brief Get the user data stored in the edge.
+      /// \return The user data stored in the edge.
+      public: E &Data()
+      {
+        return this->data;
+      }
+
+      /// \brief Stream insertion operator. The output uses DOT graph
+      /// description language.
+      /// \param[out] _out The output stream.
+      /// \param[in] _e Edge to write to the stream.
+      /// \ref https://en.wikipedia.org/wiki/DOT_(graph_description_language).
+      public: friend std::ostream &operator<<(std::ostream &_out,
+                                              const Edge<E> &_e)
+      {
+        _out << "  " << _e.Tail() << " " << _e.ostreamSymbol
+          << " " << _e.Head() << ";" << std::endl;
+      }
+
+      /// \brief The id of the tail vertex.
+      protected: VertexId tail;
+
+      /// \brief the id of the head vertex.
+      protected: VertexId head;
+
+      /// \brief User data.
+      protected: E data;
+
       /// \brief Unique edge Id.
       private: EdgeId id = kNullId;
+
+      protected: std::string ostreamSymbol = "--";
     };
 
     /// \def EdgeId_S
@@ -211,6 +291,35 @@ namespace ignition
     template<typename V, typename E, typename EdgeType>
     class Graph
     {
+      public: Graph() = default;
+
+      /// \brief Constructor.
+      /// \param[in] _vertices Collection of vertices.
+      /// \param[in] _edges Collection of edges.
+      public: Graph(const std::vector<Vertex<V>> &_vertices,
+                    const std::vector<EdgeInitializer<E>> &_edges)
+      {
+        // Add all vertices.
+        for (auto const &v : _vertices)
+        {
+          if (!this->AddVertex(v.Data(), v.Name(), v.Id()).Valid())
+          {
+            std::cerr << "Invalid vertex with Id [" << v.Id() << "]. Ignoring"
+                      << std::endl;
+          }
+        }
+
+        // Add all edges.
+        for (auto const &e : _edges)
+        {
+          if (!this->AddEdge(e.tailId, e.headId, e.data).Valid())
+          {
+            std::cerr << "Invalid edge [" << e.tailId << "," << e.headId << ","
+                      << e.data << "]. Ignoring." << std::endl;
+          }
+        }
+      }
+
       /// \brief Add a new vertex to the graph.
       /// \param[in] _data Data to be stored in the vertex.
       /// \param[in] _name Name of the vertex. It doesn't have to be unique.
@@ -237,6 +346,20 @@ namespace ignition
         this->names.insert(std::make_pair(_name, id));
 
         return this->vertices.at(id);
+      }
+
+      /// \brief Add a new edge to the graph.
+      /// \param[in] _vertices The set of Ids of the two vertices.
+      /// \param[in] _data User data.
+      /// \return Reference to the new edge created or NullEdge if the
+      /// edge was not created (e.g. incorrect vertices).
+      public: EdgeType &AddEdge(const VertexId &_tail,
+                                const VertexId &_head,
+                                const E &_data)
+      {
+        auto id = this->NextEdgeId();
+        EdgeType newEdge(id, _tail, _head, _data);
+        return this->LinkEdge(std::move(newEdge));
       }
 
       /// \brief The collection of all vertices in the graph.
@@ -623,6 +746,34 @@ namespace ignition
         return iter->second;
       }
 
+      /// \brief Stream insertion operator. The output uses DOT graph
+      /// description language.
+      /// \param[out] _out The output stream.
+      /// \param[in] _g Graph to write to the stream.
+      /// \ref https://en.wikipedia.org/wiki/DOT_(graph_description_language).
+      private: friend std::ostream &operator<<(std::ostream &_out,
+                                               const Graph<V, E, EdgeType> &_g)
+      {
+        _out << " " << _g.ostreamName << " {" << std::endl;
+        // All vertices with the name and Id as a "label" attribute.
+        for (auto const &vertexMap : _g.Vertices())
+        {
+          auto vertex = vertexMap.second.get();
+          _out << vertex;
+        }
+
+        // All edges.
+        for (auto const &edgeMap : _g.Edges())
+        {
+          auto edge = edgeMap.second.get();
+          _out << edge;
+        }
+
+        _out << "}" << std::endl;
+
+        return _out;
+      }
+
       /// \brief Get an available Id to be assigned to a new vertex.
       /// \return The next available Id.
       private: VertexId &NextVertexId()
@@ -658,6 +809,8 @@ namespace ignition
 
       /// \brief Association between names and vertices curently used.
       protected: std::multimap<std::string, VertexId> names;
+
+      protected: std::string ostreamName = "graph";
 
       /// \brief The next vertex Id to be assigned to a new vertex.
       private: VertexId nextVertexId = 0;
