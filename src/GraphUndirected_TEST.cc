@@ -21,6 +21,7 @@
 #include <utility>
 #include <vector>
 
+#include "ignition/math/GraphAlgorithms.hh"
 #include "ignition/math/GraphUndirected.hh"
 
 using namespace ignition;
@@ -469,4 +470,62 @@ TEST(UndirectedGraphTest, StreamInsertion)
     EXPECT_TRUE((output.str().find(std::get<0>(edge)) != std::string::npos) ||
                 (output.str().find(std::get<1>(edge)) != std::string::npos));
   }
+}
+
+/////////////////////////////////////////////////
+TEST(UndirectedGraphTest, DFS)
+{
+  UndirectedGraph<int, double> graph(
+  {
+    // Vertices.
+    {{0, "A", 0}, {1, "B", 1}, {2, "C", 2}, {3, "D", 3},
+     {4, "E", 4}, {5, "F", 5}, {6, "G", 6}},
+
+     // Edges.
+     {{{0, 1}, 2.0}, {{0, 2}, 3.0}, {{0, 4}, 4.0},
+      {{1, 3}, 2.0}, {{1, 5}, 3.0}, {{2, 6}, 4.0},
+      {{5, 4}, 2.0}}
+  });
+
+  auto res = DFS(graph, 0);
+  std::vector<VertexId> expected = {0, 4, 5, 1, 3, 2, 6};
+  EXPECT_EQ(res, expected);
+}
+
+/////////////////////////////////////////////////
+TEST(UndirectedGraphTest, BFS)
+{
+  UndirectedGraph<int, double> graph(
+  {
+    // Vertices.
+    {{0, "A", 0}, {1, "B", 1}, {2, "C", 2}, {3, "D", 3},
+     {4, "E", 4}, {5, "F", 5}, {6, "G", 6}},
+
+     // Edges.
+     {{{0, 1}, 2.0}, {{0, 2}, 3.0}, {{0, 4}, 4.0}, {{1, 3}, 2.0},
+      {{1, 5}, 3.0}, {{2, 6}, 4.0}, {{5, 4}, 2.0}}
+  });
+
+  auto res = BFS(graph, 0);
+  std::vector<VertexId> expected = {0, 1, 2, 4, 3, 5, 6};
+  EXPECT_EQ(res, expected);
+}
+
+/////////////////////////////////////////////////
+TEST(UndirectedGraphTest, Dijkstra)
+{
+  UndirectedGraph<int, double> graph(
+  {
+    // Vertices.
+    {{0, "A", 0}, {1, "B", 1}, {2, "C", 2}, {3, "D", 3},
+     {4, "E", 4}, {5, "F", 5}, {6, "G", 6}},
+
+     // Edges.
+     {{{0, 1}, 2.0}, {{0, 2}, 3.0}, {{0, 4}, 4.0}, {{1, 3}, 2.0},
+      {{1, 5}, 3.0}, {{2, 6}, 4.0}, {{5, 4}, 2.0}}
+  });
+
+  auto res = dijkstra(graph, 0, 5);
+  std::vector<VertexId> expected = {0, 1, 5};
+  EXPECT_EQ(res, expected);
 }

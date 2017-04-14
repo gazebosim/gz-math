@@ -7,6 +7,7 @@ set (headers
   Filter.hh
   Frustum.hh
   Graph.hh
+  GraphAlgorithms.hh
   GraphDirected.hh
   GraphUndirected.hh
   Helpers.hh
