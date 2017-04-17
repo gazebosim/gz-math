@@ -60,8 +60,15 @@ namespace ignition
       {
       }
 
-      /// \brief Get the user data stored in the edge.
-      /// \return The user data stored in the edge.
+      /// \brief Get a non-mutable reference to the user data stored in the edge
+      /// \return The non-mutable reference to the user data stored in the edge.
+      public: const E &Data() const
+      {
+        return this->data;
+      }
+
+      /// \brief Get a mutable reference to the user data stored in the edge.
+      /// \return The mutable reference to the user data stored in the edge.
       public: E &Data()
       {
         return this->data;

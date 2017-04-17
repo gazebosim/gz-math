@@ -78,7 +78,7 @@ TEST(UndirectedGraphTest, Vertices)
 {
   UndirectedGraph<int, double> graph(
   {
-    {{0, "0"}, {1, "1"}, {2, "2"}},
+    {{10, "0", 0}, {20, "1", 1}, {30, "2", 2}},
     {}
   });
 
@@ -89,6 +89,35 @@ TEST(UndirectedGraphTest, Vertices)
   EXPECT_NE(vertices.find(0), vertices.end());
   EXPECT_NE(vertices.find(1), vertices.end());
   EXPECT_NE(vertices.find(2), vertices.end());
+
+  // Check the references.
+  for (auto const &vertexPair : vertices)
+  {
+    auto &vertex = vertexPair.second.get();
+    switch (vertex.Id())
+    {
+      case 0:
+      {
+        EXPECT_EQ(vertex.Name(), "0");
+        EXPECT_EQ(vertex.Data(), 10);
+        break;
+      }
+      case 1:
+      {
+        EXPECT_EQ(vertex.Name(), "1");
+        EXPECT_EQ(vertex.Data(), 20);
+        break;
+      }
+      case 2:
+      {
+        EXPECT_EQ(vertex.Name(), "2");
+        EXPECT_EQ(vertex.Data(), 30);
+        break;
+      }
+      default:
+        FAIL();
+    };
+  }
 }
 
 /////////////////////////////////////////////////
@@ -102,10 +131,34 @@ TEST(UndirectedGraphTest, VerticesNames)
   });
 
   auto vertices = graph.Vertices("common");
-  EXPECT_EQ(vertices.size(), 2);
+  EXPECT_EQ(vertices.size(), 2u);
+
   // Check the Ids.
   EXPECT_NE(vertices.find(2), vertices.end());
   EXPECT_NE(vertices.find(3), vertices.end());
+
+  // Check the references.
+  for (auto const &vertexPair : vertices)
+  {
+    auto &vertex = vertexPair.second.get();
+    switch (vertex.Id())
+    {
+      case 2:
+      {
+        EXPECT_EQ(vertex.Name(), "common");
+        EXPECT_EQ(vertex.Data(), 2);
+        break;
+      }
+      case 3:
+      {
+        EXPECT_EQ(vertex.Name(), "common");
+        EXPECT_EQ(vertex.Data(), 3);
+        break;
+      }
+      default:
+        FAIL();
+    };
+  }
 }
 
 /////////////////////////////////////////////////
@@ -125,6 +178,41 @@ TEST(UndirectedGraphTest, Edges)
   EXPECT_NE(edges.find(0), edges.end());
   EXPECT_NE(edges.find(1), edges.end());
   EXPECT_NE(edges.find(2), edges.end());
+
+  // Check the references.
+  for (auto const &edgePair : edges)
+  {
+    auto &edge = edgePair.second.get();
+    switch (edge.Id())
+    {
+      case 0:
+      {
+        auto vertices = edge.Vertices();
+        EXPECT_NE(vertices.find(0), vertices.end());
+        EXPECT_NE(vertices.find(1), vertices.end());
+        EXPECT_EQ(edge.Data(), 2.0);
+        break;
+      }
+      case 1:
+      {
+        auto vertices = edge.Vertices();
+        EXPECT_NE(vertices.find(1), vertices.end());
+        EXPECT_NE(vertices.find(2), vertices.end());
+        EXPECT_EQ(edge.Data(), 3.0);
+        break;
+      }
+      case 2:
+      {
+        auto vertices = edge.Vertices();
+        EXPECT_NE(vertices.find(2), vertices.end());
+        EXPECT_NE(vertices.find(0), vertices.end());
+        EXPECT_EQ(edge.Data(), 4.0);
+        break;
+      }
+      default:
+        FAIL();
+    };
+  }
 }
 
 /////////////////////////////////////////////////
@@ -350,7 +438,7 @@ TEST(UndirectedGraphTest, RemoveEdge)
   // Remove the edge (v0--v1)
   EXPECT_TRUE(graph.RemoveEdge(0));
   EXPECT_EQ(graph.Edges().size(), 2u);
-  EXPECT_EQ(graph.IncidentsTo(1).size(), 1);
+  EXPECT_EQ(graph.IncidentsTo(1).size(), 1u);
 
   // Remove the edge (v1--v2)
   auto edge = graph.EdgeFromId(1);
