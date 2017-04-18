@@ -252,6 +252,29 @@ TEST(UndirectedGraphTest, AdjacentsFrom)
   EXPECT_EQ(adjacents.size(), 2u);
   EXPECT_NE(adjacents.find(1), adjacents.end());
   EXPECT_NE(adjacents.find(2), adjacents.end());
+
+  // Check the references.
+  for (auto const &vertexPair : adjacents)
+  {
+    auto &vertex = vertexPair.second.get();
+    switch (vertex.Id())
+    {
+      case 1:
+      {
+        EXPECT_EQ(vertex.Name(), "1");
+        EXPECT_EQ(vertex.Data(), 1);
+        break;
+      }
+      case 2:
+      {
+        EXPECT_EQ(vertex.Name(), "2");
+        EXPECT_EQ(vertex.Data(), 2);
+        break;
+      }
+      default:
+        FAIL();
+    };
+  }
 }
 
 /////////////////////////////////////////////////
@@ -277,6 +300,29 @@ TEST(UndirectedGraphTest, AdjacentsTo)
   EXPECT_EQ(adjacents.size(), 2u);
   EXPECT_NE(adjacents.find(0), adjacents.end());
   EXPECT_NE(adjacents.find(2), adjacents.end());
+
+  // Check the references.
+  for (auto const &vertexPair : adjacents)
+  {
+    auto &vertex = vertexPair.second.get();
+    switch (vertex.Id())
+    {
+      case 0:
+      {
+        EXPECT_EQ(vertex.Name(), "0");
+        EXPECT_EQ(vertex.Data(), 0);
+        break;
+      }
+      case 2:
+      {
+        EXPECT_EQ(vertex.Name(), "2");
+        EXPECT_EQ(vertex.Data(), 2);
+        break;
+      }
+      default:
+        FAIL();
+    };
+  }
 }
 
 /////////////////////////////////////////////////
@@ -299,6 +345,33 @@ TEST(UndirectedGraphTest, IncidentsFrom)
   EXPECT_EQ(incidents.size(), 2u);
   EXPECT_NE(incidents.find(0), incidents.end());
   EXPECT_NE(incidents.find(1), incidents.end());
+
+  // Check the references.
+  for (auto const &edgePair : incidents)
+  {
+    auto &edge = edgePair.second.get();
+    switch (edge.Id())
+    {
+      case 0:
+      {
+        auto vertices = edge.Vertices();
+        EXPECT_NE(vertices.find(0), vertices.end());
+        EXPECT_NE(vertices.find(1), vertices.end());
+        EXPECT_EQ(edge.Data(), 2.0);
+        break;
+      }
+      case 1:
+      {
+        auto vertices = edge.Vertices();
+        EXPECT_NE(vertices.find(1), vertices.end());
+        EXPECT_NE(vertices.find(2), vertices.end());
+        EXPECT_EQ(edge.Data(), 3.0);
+        break;
+      }
+      default:
+        FAIL();
+    };
+  }
 }
 
 /////////////////////////////////////////////////
@@ -321,6 +394,33 @@ TEST(UndirectedGraphTest, IncidentsTo)
   EXPECT_EQ(incidents.size(), 2u);
   EXPECT_NE(incidents.find(2), incidents.end());
   EXPECT_NE(incidents.find(0), incidents.end());
+
+  // Check the references.
+  for (auto const &edgePair : incidents)
+  {
+    auto &edge = edgePair.second.get();
+    switch (edge.Id())
+    {
+      case 0:
+      {
+        auto vertices = edge.Vertices();
+        EXPECT_NE(vertices.find(0), vertices.end());
+        EXPECT_NE(vertices.find(1), vertices.end());
+        EXPECT_EQ(edge.Data(), 2.0);
+        break;
+      }
+      case 2:
+      {
+        auto vertices = edge.Vertices();
+        EXPECT_NE(vertices.find(2), vertices.end());
+        EXPECT_NE(vertices.find(0), vertices.end());
+        EXPECT_EQ(edge.Data(), 4.0);
+        break;
+      }
+      default:
+        FAIL();
+    };
+  }
 }
 
 /////////////////////////////////////////////////

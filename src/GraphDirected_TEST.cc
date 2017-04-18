@@ -246,6 +246,23 @@ TEST(GraphTest, AdjacentsFrom)
   adjacents = graph.AdjacentsFrom(vertex);
   EXPECT_EQ(adjacents.size(), 1u);
   EXPECT_NE(adjacents.find(1), adjacents.end());
+
+  // Check the references.
+  for (auto const &vertexPair : adjacents)
+  {
+    auto &vertex = vertexPair.second.get();
+    switch (vertex.Id())
+    {
+      case 1:
+      {
+        EXPECT_EQ(vertex.Name(), "1");
+        EXPECT_EQ(vertex.Data(), 1);
+        break;
+      }
+      default:
+        FAIL();
+    };
+  }
 }
 
 /////////////////////////////////////////////////
@@ -274,6 +291,23 @@ TEST(GraphTest, AdjacentsTo)
   adjacents = graph.AdjacentsTo(vertex);
   EXPECT_EQ(adjacents.size(), 1u);
   EXPECT_NE(adjacents.find(1), adjacents.end());
+
+  // Check the references.
+  for (auto const &vertexPair : adjacents)
+  {
+    auto &vertex = vertexPair.second.get();
+    switch (vertex.Id())
+    {
+      case 1:
+      {
+        EXPECT_EQ(vertex.Name(), "1");
+        EXPECT_EQ(vertex.Data(), 1);
+        break;
+      }
+      default:
+        FAIL();
+    };
+  }
 }
 
 /////////////////////////////////////////////////
@@ -295,6 +329,33 @@ TEST(GraphTest, IncidentsFrom)
   EXPECT_EQ(incidents.size(), 2u);
   EXPECT_NE(incidents.find(1), incidents.end());
   EXPECT_NE(incidents.find(2), incidents.end());
+
+  // Check the references.
+  for (auto const &edgePair : incidents)
+  {
+    auto &edge = edgePair.second.get();
+    switch (edge.Id())
+    {
+      case 1:
+      {
+        auto vertices = edge.Vertices();
+        EXPECT_NE(vertices.find(1), vertices.end());
+        EXPECT_NE(vertices.find(0), vertices.end());
+        EXPECT_EQ(edge.Data(), 3.0);
+        break;
+      }
+      case 2:
+      {
+        auto vertices = edge.Vertices();
+        EXPECT_NE(vertices.find(1), vertices.end());
+        EXPECT_NE(vertices.find(2), vertices.end());
+        EXPECT_EQ(edge.Data(), 4.0);
+        break;
+      }
+      default:
+        FAIL();
+    };
+  }
 
   incidents = graph.IncidentsFrom(2);
   EXPECT_TRUE(incidents.empty());
@@ -318,6 +379,25 @@ TEST(GraphTest, IncidentsTo)
   incidents = graph.IncidentsTo(vertex);
   EXPECT_EQ(incidents.size(), 1u);
   EXPECT_NE(incidents.find(2), incidents.end());
+
+  // Check the references.
+  for (auto const &edgePair : incidents)
+  {
+    auto &edge = edgePair.second.get();
+    switch (edge.Id())
+    {
+      case 2:
+      {
+        auto vertices = edge.Vertices();
+        EXPECT_NE(vertices.find(2), vertices.end());
+        EXPECT_NE(vertices.find(0), vertices.end());
+        EXPECT_EQ(edge.Data(), 4.0);
+        break;
+      }
+      default:
+        FAIL();
+    };
+  }
 }
 
 /////////////////////////////////////////////////
