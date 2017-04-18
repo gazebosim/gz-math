@@ -289,9 +289,10 @@ TEST(UndirectedGraphTest, IncidentsFrom)
     {{{0, 1}, 2.0}, {{1, 2}, 3.0}}
   });
 
-  auto incidents = graph.IncidentsFrom(0);
-  EXPECT_EQ(incidents.size(), 1u);
+  auto incidents = graph.IncidentsFrom(1);
+  EXPECT_EQ(incidents.size(), 2u);
   EXPECT_NE(incidents.find(0), incidents.end());
+  EXPECT_NE(incidents.find(1), incidents.end());
 
   auto vertex = graph.VertexFromId(1);
   incidents = graph.IncidentsFrom(vertex);

@@ -424,7 +424,8 @@ namespace ignition
       /// \param[in] _vertex Id of the vertex.
       /// \return A map of edges, where keys are Ids and values are
       /// references to the edges.
-      public: EdgeRef_M<EdgeType> IncidentsFrom(const VertexId &_vertex) const
+      public: const EdgeRef_M<EdgeType> IncidentsFrom(const VertexId &_vertex)
+        const
       {
         EdgeRef_M<EdgeType> res;
 
@@ -447,7 +448,8 @@ namespace ignition
       /// \param[in] _vertex The vertex.
       /// \return A map of edges, where keys are Ids and values are
       /// references to the edges.
-      public: EdgeRef_M<EdgeType> IncidentsFrom(const Vertex<V> &_vertex) const
+      public: const EdgeRef_M<EdgeType> IncidentsFrom(const Vertex<V> &_vertex)
+        const
       {
         return this->IncidentsFrom(_vertex.Id());
       }
@@ -456,7 +458,8 @@ namespace ignition
       /// \param[in] _vertex Id of the vertex.
       /// \return A map of edges, where keys are Ids and values are
       /// references to the edges.
-      public: EdgeRef_M<EdgeType> IncidentsTo(const VertexId &_vertex) const
+      public: const EdgeRef_M<EdgeType> IncidentsTo(const VertexId &_vertex)
+        const
       {
         EdgeRef_M<EdgeType> res;
 
@@ -482,7 +485,8 @@ namespace ignition
       /// \param[in] _vertex The vertex.
       /// \return A map of edges, where keys are Ids and values are
       /// references to the edges.
-      public: EdgeRef_M<EdgeType> IncidentsTo(const Vertex<V> &_vertex) const
+      public: const EdgeRef_M<EdgeType> IncidentsTo(const Vertex<V> &_vertex)
+        const
       {
         return this->IncidentsTo(_vertex.Id());
       }
