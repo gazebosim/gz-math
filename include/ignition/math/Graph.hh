@@ -243,7 +243,7 @@ namespace ignition
       /// \brief The collection of all vertices in the graph.
       /// \return A map of vertices, where keys are Ids and values are
       /// references to the vertices.
-      public: VertexRef_M<V> Vertices() const
+      public: const VertexRef_M<V> Vertices() const
       {
         VertexRef_M<V> res;
         for (auto const &v : this->vertices)
@@ -255,7 +255,7 @@ namespace ignition
       /// \brief The collection of all vertices in the graph with name == _name.
       /// \return A map of vertices, where keys are Ids and values are
       /// references to the vertices.
-      public: VertexRef_M<V> Vertices(const std::string &_name) const
+      public: const VertexRef_M<V> Vertices(const std::string &_name) const
       {
         VertexRef_M<V> res;
         for (auto const &vertex : this->vertices)
@@ -303,7 +303,7 @@ namespace ignition
       /// \brief The collection of all edges in the graph.
       /// \return A map of edges, where keys are Ids and values are references
       /// to the edges.
-      public: EdgeRef_M<EdgeType> Edges() const
+      public: const EdgeRef_M<EdgeType> Edges() const
       {
         EdgeRef_M<EdgeType> res;
         for (auto const &edge : this->edges)
