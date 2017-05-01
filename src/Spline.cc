@@ -265,12 +265,12 @@ bool Spline::MapToSegment(const double _t,
   double tArc = _t * this->dataPtr->arcLength;
 
   // Get segment index where t would lie
-  auto it = std::lower_bound(this->dataPtr->cumulativeArcLengths.begin(),
-                             this->dataPtr->cumulativeArcLengths.end(),
+//  auto it = std::lower_bound(this->dataPtr->cumulativeArcLengths.begin(),
+  //                           this->dataPtr->cumulativeArcLengths.end(),
                              tArc);
 
-  if (it != this->dataPtr->cumulativeArcLengths.begin())
-    _index = it - this->dataPtr->cumulativeArcLengths.begin() - 1;
+  //if (it != this->dataPtr->cumulativeArcLengths.begin())
+    //_index = it - this->dataPtr->cumulativeArcLengths.begin() - 1;
 
   // Get fraction of t, but renormalized to the segment
   _fraction = (tArc - this->dataPtr->cumulativeArcLengths[_index])
