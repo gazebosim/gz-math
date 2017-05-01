@@ -267,7 +267,7 @@ bool Spline::MapToSegment(const double _t,
   // Get segment index where t would lie
 //  auto it = std::lower_bound(this->dataPtr->cumulativeArcLengths.begin(),
   //                           this->dataPtr->cumulativeArcLengths.end(),
-                             tArc);
+                             //tArc);
 
   //if (it != this->dataPtr->cumulativeArcLengths.begin())
     //_index = it - this->dataPtr->cumulativeArcLengths.begin() - 1;
