@@ -216,6 +216,7 @@ namespace ignition
       /// \param[in] _data Data to be stored in the vertex.
       /// \param[in] _name Name of the vertex. It doesn't have to be unique.
       /// \param[in] _id Optional Id to be used for this vertex.
+      /// \return A reference to the new vertex.
       public: Vertex<V> &AddVertex(const V &_data,
                                    const std::string &_name,
                                    const VertexId &_id = kNullId)
