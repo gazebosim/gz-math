@@ -11,10 +11,13 @@ classes and functions used in other Ignition libraries and programs.
 
 ## Continuous integration
 
-Please refer to the [drone.io
-job](https://drone.io/bitbucket.org/ignitionrobotics/ign-math).
+This project uses [appveyor](https://ci.appveyor.com/project/scpeters/ign-math/history)
+for testing on Windows.
+It has the following build status: 
+![appveyor badge](https://ci.appveyor.com/api/projects/status/bitbucket/ignitionrobotics/ign-math?svg=true)
 
-[![Build Status](https://drone.io/bitbucket.org/ignitionrobotics/ign-math/status.png)](https://drone.io/bitbucket.org/ignitionrobotics/ign-math/latest)
+This project also uses [bitbucket pipelines](https://bitbucket.org/ignitionrobotics/ign-math/addon/pipelines/home#!/)
+for testing with Linux.
 
 ## Installation
 

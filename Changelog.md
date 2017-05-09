@@ -1,6 +1,16 @@
+## Ignition Math 4.x
+
+### Ignition Math 4.x.x
+
 ## Ignition Math 3.x
 
 ### Ignition Math 3.x.x
+
+1. Added signum functions to Helpers.hh.
+    * Contribution from Martin Pecka
+    * [Pull request 153](https://bitbucket.org/ignitionrobotics/ign-math/pull-request/153)
+
+### Ignition Math 3.0.0 (2017-01-05)
 
 1. Deprecate many IGN_* macros in favor of static const variables in Helpers.hh
     * [Pull request 138](https://bitbucket.org/ignitionrobotics/ign-math/pull-request/138)
