@@ -30,32 +30,39 @@
 using namespace ignition;
 using namespace math;
 
+// We don't seed with time for the cases when two processes are started the
+// same time (this mostly happens with launch scripts that start a server
+// and gui simultaneously).
+uint32_t Rand::seed = std::random_device {}();
+
+std::unique_ptr<GeneratorType> Rand::randGenerator(new GeneratorType(seed));
+
 //////////////////////////////////////////////////
 void Rand::Seed(unsigned int _seed)
 {
   std::seed_seq seq{_seed};
-  SeedMutable() = _seed;
-  RandGenerator().seed(seq);
+  seed = _seed;
+  randGenerator->seed(seq);
 }
 
 //////////////////////////////////////////////////
 unsigned int Rand::Seed()
 {
-  return SeedMutable();
+  return seed;
 }
 
 //////////////////////////////////////////////////
 double Rand::DblUniform(double _min, double _max)
 {
   UniformRealDist d(_min, _max);
-  return d(RandGenerator());
+  return d(*randGenerator);
 }
 
 //////////////////////////////////////////////////
 double Rand::DblNormal(double _mean, double _sigma)
 {
   NormalRealDist d(_mean, _sigma);
-  return d(RandGenerator());
+  return d(*randGenerator);
 }
 
 //////////////////////////////////////////////////
@@ -63,7 +70,7 @@ int32_t Rand::IntUniform(int _min, int _max)
 {
   UniformIntDist d(_min, _max);
 
-  return d(RandGenerator());
+  return d(*randGenerator);
 }
 
 //////////////////////////////////////////////////
@@ -71,22 +78,5 @@ int32_t Rand::IntNormal(int _mean, int _sigma)
 {
   NormalRealDist d(_mean, _sigma);
 
-  return static_cast<int32_t>(d(RandGenerator()));
-}
-
-//////////////////////////////////////////////////
-uint32_t &Rand::SeedMutable()
-{
-  // We don't seed with time for the cases when two processes are started the
-  // same time (this mostly happens with launch scripts that start a server
-  // and gui simultaneously).
-  static uint32_t seed = std::random_device {}();;
-  return seed;
-}
-
-//////////////////////////////////////////////////
-GeneratorType &Rand::RandGenerator()
-{
-  static GeneratorType randGenerator(Seed());
-  return randGenerator;
+  return static_cast<int32_t>(d(*randGenerator));
 }
