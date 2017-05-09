@@ -164,16 +164,22 @@ namespace ignition
         unvisited.erase(
           std::remove(unvisited.begin(), unvisited.end(), id), unvisited.end());
 
-        for (auto const &neighborPair : _graph.AdjacentsFrom(id))
+        for (auto const &edgePair : _graph.IncidentsFrom(id))
         {
-          auto neighborId = neighborPair.first;
+          const auto &edgeId = edgePair.first;
+          const auto &edge = _graph.EdgeFromId(edgeId);
+          const auto &neighborId = edge.From(id);
+          if (neighborId == kNullId)
+            continue;
+
+          double weight = edge.Weight(id);
           if (std::find(unvisited.begin(), unvisited.end(), neighborId) !=
                 unvisited.end())
           {
             if ((dist.at(neighborId) == MAX_D) ||
-                (dist.at(id) + 1 < dist.at(neighborId)))
+                (dist.at(id) + weight < dist.at(neighborId)))
             {
-              dist.at(neighborId) = dist.at(id) + 1;
+              dist.at(neighborId) = dist.at(id) + weight;
               prev[neighborId] = id;
             }
           }

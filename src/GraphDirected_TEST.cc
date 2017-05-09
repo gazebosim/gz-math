@@ -606,7 +606,7 @@ TEST(GraphTest, StreamInsertion)
   DirectedGraph<int, double> graph(
   {
     {{0, "v0", 0}, {1, "v1", 1}, {2, "v2", 2}, {3, "v3", 3}},
-    {{0, 1, 2.0}, {1, 2, 3.0}, {2, 0, 4.0}}
+    {{0, 1, 2.0, 4.0}, {1, 2, 3.0}, {2, 0, 4.0}}
   });
 
   std::ostringstream output;
@@ -620,9 +620,9 @@ TEST(GraphTest, StreamInsertion)
                         "  1 [label=\"v1 (1)\"];\n",
                         "  2 [label=\"v2 (2)\"];\n",
                         "  3 [label=\"v3 (3)\"];\n",
-                        "  0 -> 1;\n",
-                        "  1 -> 2;\n",
-                        "  2 -> 0;\n"})
+                        "  0 -> 1 [label=4];\n",
+                        "  1 -> 2 [label=1];\n",
+                        "  2 -> 0 [label=1];\n"})
   {
     EXPECT_NE(output.str().find(s), std::string::npos);
   }
@@ -681,6 +681,30 @@ TEST(GraphTest, Dijkstra)
   });
 
   auto res = dijkstra(graph, 0, 5);
+  std::vector<VertexId> expected = {0, 1, 5};
+  EXPECT_EQ(res, expected);
+}
+
+/////////////////////////////////////////////////
+TEST(GraphTest, DijkstraWeights)
+{
+  DirectedGraph<int, double> graph;
+  int kNumVertices = 10;
+  for (int i = 0; i < kNumVertices; ++i)
+    graph.AddVertex(i, std::to_string(i));
+
+  for (int i = 0; i < kNumVertices; ++i)
+    for (int j = i; j < kNumVertices; ++j)
+    {
+      if (i == 0 && j == 5)
+        graph.AddEdge(i, j, 2.0, 10.0);
+      else
+        graph.AddEdge(i, j, 2.0);
+    }
+
+  VertexId from = 0;
+  VertexId to = 5;
+  auto res = dijkstra(graph, from, to);
   std::vector<VertexId> expected = {0, 1, 5};
   EXPECT_EQ(res, expected);
 }
