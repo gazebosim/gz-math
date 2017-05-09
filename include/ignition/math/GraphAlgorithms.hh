@@ -105,7 +105,7 @@ namespace ignition
     /// \param[in] _graph A graph.
     /// \param[in] _from The starting vertex.
     /// \param[in] _to The destination vertex.
-    /// \return The vector of vertice Ids contained in the path or an empty
+    /// \return The vector of vertex Ids contained in the path or an empty
     /// vector if there's no path.
     /// \ToDo: This assumes that the cost of all edges is 1. I should
     /// implement a Cost() function in all edges and use it here.

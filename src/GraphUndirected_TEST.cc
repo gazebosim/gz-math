@@ -582,6 +582,11 @@ TEST(UndirectedGraphTest, RemoveVertex)
   EXPECT_EQ(graph.Vertices().size(), 1u);
   EXPECT_TRUE(graph.Edges().empty());
 
+  // Try to remove a vertex (#1) that doesn't exist anymore.
+  EXPECT_FALSE(graph.RemoveVertex(1));
+  EXPECT_EQ(graph.Vertices().size(), 1u);
+  EXPECT_TRUE(graph.Edges().empty());
+
   // Remove vertex #0.
   EXPECT_TRUE(graph.RemoveVertex(0));
   EXPECT_TRUE(graph.Vertices().empty());

@@ -84,7 +84,7 @@ TEST(GraphTest, Vertices)
   auto vertices = graph.Vertices();
   EXPECT_EQ(vertices.size(), 3u);
 
-  // Check that the vertices Ids start from 0.
+  // Check that the vertex Ids start from 0.
   EXPECT_NE(vertices.find(0), vertices.end());
   EXPECT_NE(vertices.find(1), vertices.end());
   EXPECT_NE(vertices.find(2), vertices.end());
@@ -557,6 +557,11 @@ TEST(GraphTest, RemoveVertex)
   // Remove vertex #1.
   auto vertex = graph.VertexFromId(1);
   EXPECT_TRUE(graph.RemoveVertex(vertex));
+  EXPECT_EQ(graph.Vertices().size(), 1u);
+  EXPECT_TRUE(graph.Edges().empty());
+
+  // Try to remove a vertex (#1) that doesn't exist anymore.
+  EXPECT_FALSE(graph.RemoveVertex(1));
   EXPECT_EQ(graph.Vertices().size(), 1u);
   EXPECT_TRUE(graph.Edges().empty());
 
