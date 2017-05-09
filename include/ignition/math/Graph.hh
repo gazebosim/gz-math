@@ -137,8 +137,11 @@ namespace ignition
     {
       /// \brief Constructor.
       /// \param[in] _id Unique id.
-      public: explicit Edge(const EdgeId &_id)
-        : id(_id)
+      /// \param[in] _weight The weight (cost) of the edge.
+      public: explicit Edge(const EdgeId &_id,
+                            const double _weight)
+        : id(_id),
+          weight(_weight)
       {
       }
 
@@ -181,6 +184,15 @@ namespace ignition
       /// vertex or kNullId otherwise.
       public: virtual VertexId To(const VertexId &_to) const = 0;
 
+      /// \brief The cost of traversing the _from end to the other end of the
+      /// edge.
+      /// \param[in] _from Source vertex.
+      /// \return The cost.
+      public: double Weight(const VertexId &_from) const
+      {
+        return this->weight;
+      }
+
       /// \brief Get if the edge is valid. An edge is valid if its linked in a
       /// graph and its vertices are reachable.
       /// \return True when the edge is valid or false otherwise (invalid Id).
@@ -191,6 +203,9 @@ namespace ignition
 
       /// \brief Unique edge Id.
       private: EdgeId id = kNullId;
+
+      /// \brief The weight (cost) of the edge.
+      private: double weight = 1.0;
     };
 
     /// \def EdgeId_S

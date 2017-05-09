@@ -30,6 +30,17 @@ namespace ignition
     template<typename E>
     struct DirectEdgeInitializer
     {
+      DirectEdgeInitializer(const VertexId &_tailId,
+                            const VertexId &_headId,
+                            const E &_data,
+                            const double _weight = 1)
+        : tailId(_tailId),
+          headId(_headId),
+          data(_data),
+          weight(_weight)
+      {
+      }
+
       /// \brief ID of the tail vertex.
       public: VertexId tailId;
 
@@ -38,6 +49,9 @@ namespace ignition
 
       /// \brief User data.
       public: E data;
+
+      /// \brief The weight (cost) of the edge.
+      public: double weight = 1;
     };
 
     /// \brief A directed edge represents a connection between two vertices.
@@ -53,10 +67,11 @@ namespace ignition
       /// \param[in] _head Id of the head vertex.
       /// \param[in] _data User data to be stored in the edge.
       public: DirectedEdge(const EdgeId &_id,
+                           const double _weight,
                            const VertexId &_tail,
                            const VertexId &_head,
                            const E &_data)
-        : Edge(_id),
+        : Edge(_id, _weight),
           tail(_tail),
           head(_head),
           data(_data)
@@ -103,7 +118,7 @@ namespace ignition
       }
 
       // Documentation inherited.
-      public: VertexId From(const VertexId &_from) const
+      public: VertexId From(const VertexId &_from) const override
       {
         if (_from != this->Tail())
           return kNullId;
@@ -112,7 +127,7 @@ namespace ignition
       }
 
       // Documentation inherited.
-      public: VertexId To(const VertexId &_to) const
+      public: VertexId To(const VertexId &_to) const override
       {
         if (_to != this->Head())
           return kNullId;
@@ -128,7 +143,8 @@ namespace ignition
       public: friend std::ostream &operator<<(std::ostream &_out,
                                               const DirectedEdge<E> &_e)
       {
-        _out << "  " << _e.Tail() << " -> " << _e.Head() << ";" << std::endl;
+        _out << "  " << _e.Tail() << " -> " << _e.Head()
+             << " [label=" << _e.Weight(_e.Tail()) << "];" << std::endl;
         return _out;
       }
 
@@ -144,7 +160,8 @@ namespace ignition
 
     /// \brief An invalid directed edge.
     template<typename E>
-    DirectedEdge<E> DirectedEdge<E>::NullEdge(kNullId, kNullId, kNullId, E());
+    DirectedEdge<E> DirectedEdge<E>::NullEdge(
+      kNullId, 1.0, kNullId, kNullId, E());
 
     /// \brief A generic graph class using directed edges.
     template<typename V, typename E>
@@ -172,7 +189,7 @@ namespace ignition
         // Add all edges.
         for (auto const &e : _edges)
         {
-          if (!this->AddEdge(e.tailId, e.headId, e.data).Valid())
+          if (!this->AddEdge(e.tailId, e.headId, e.data, e.weight).Valid())
           {
             std::cerr << "Invalid edge [" << e.tailId << "," << e.headId << ","
                       << e.data << "]. Ignoring." << std::endl;
@@ -188,10 +205,11 @@ namespace ignition
       /// edge was not created (e.g. incorrect vertices).
       public: DirectedEdge<E> &AddEdge(const VertexId &_tail,
                                        const VertexId &_head,
-                                       const E &_data)
+                                       const E &_data,
+                                       const double _weight = 1.0)
       {
         auto id = this->NextEdgeId();
-        DirectedEdge<E> newEdge(id, _tail, _head, _data);
+        DirectedEdge<E> newEdge(id, _weight, _tail, _head, _data);
         return this->LinkEdge(std::move(newEdge));
       }
 

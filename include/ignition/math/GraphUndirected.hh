@@ -33,11 +33,23 @@ namespace ignition
     template<typename E>
     struct UndirectEdgeInitializer
     {
+      UndirectEdgeInitializer(const std::set<VertexId> &_vertices,
+                              const E &_data,
+                              const double _weight = 1)
+        : vertices(_vertices),
+          data(_data),
+          weight(_weight)
+      {
+      };
+
       /// \brief IDs of the vertices.
       public: std::set<VertexId> vertices;
 
       /// \brief User data.
       public: E data;
+
+      /// \brief The weight (cost) of the edge.
+      public: double weight = 1;
     };
 
     /// \brief An undirected edge represents a connection between two vertices.
@@ -52,9 +64,10 @@ namespace ignition
       /// \param[in] _vertices The set of Ids of the vertices.
       /// \param[in] _data User data to be stored in the edge.
       public: UndirectedEdge(const EdgeId &_id,
+                             const double _weight,
                              const VertexId_S &_vertices,
                              const E &_data)
-        : Edge(_id),
+        : Edge(_id, _weight),
           vertices(_vertices),
           data(_data)
       {
@@ -84,7 +97,7 @@ namespace ignition
       }
 
       // Documentation inherited.
-      public: VertexId From(const VertexId &_from) const
+      public: VertexId From(const VertexId &_from) const override
       {
         if (!this->Valid())
           return kNullId;
@@ -108,7 +121,7 @@ namespace ignition
       }
 
       // Documentation inherited.
-      public: VertexId To(const VertexId &_to) const
+      public: VertexId To(const VertexId &_to) const override
       {
         return this->From(_to);
       }
@@ -125,7 +138,7 @@ namespace ignition
         auto it = vertices.begin();
         _out << "  " << *it << " -- ";
         ++it;
-        _out << *it << ";" << std::endl;
+        _out << *it << " [label=" << _e.Weight(*it) << "];" << std::endl;
         return _out;
       }
 
@@ -139,7 +152,7 @@ namespace ignition
     /// \brief An invalid undirected edge.
     template<typename E>
     UndirectedEdge<E> UndirectedEdge<E>::NullEdge(
-      kNullId, {kNullId, kNullId}, E());
+      kNullId, 1.0, {kNullId, kNullId}, E());
 
     /// \brief A generic graph class using undirected edges.
     template<typename V, typename E>
@@ -167,7 +180,7 @@ namespace ignition
         // Add all edges.
         for (auto const &e : _edges)
         {
-          if (!this->AddEdge(e.vertices, e.data).Valid())
+          if (!this->AddEdge(e.vertices, e.data, e.weight).Valid())
             std::cerr << "Ignoring edge" << std::endl;
         }
       }
@@ -178,10 +191,11 @@ namespace ignition
       /// \return Reference to the new edge created or NullEdge if the
       /// edge was not created (e.g. incorrect vertices).
       public: UndirectedEdge<E> &AddEdge(const VertexId_S &_vertices,
-                                         const E &_data)
+                                         const E &_data,
+                                         const double _weight = 1.0)
       {
         auto id = this->NextEdgeId();
-        UndirectedEdge<E> newEdge(id, _vertices, _data);
+        UndirectedEdge<E> newEdge(id, _weight, _vertices, _data);
         return this->LinkEdge(std::move(newEdge));
       }
 
