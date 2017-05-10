@@ -46,14 +46,14 @@ namespace ignition
       public: static Vertex<V> NullVertex;
 
       /// \brief Constructor.
-      /// \param[in] _data User information.
       /// \param[in] _name Non-unique vertex name.
+      /// \param[in] _data User information.
       /// \param[in] _id Optional unique id.
-      public: Vertex(const V &_data,
-                     const std::string &_name,
+      public: Vertex(const std::string &_name,
+                     const V &_data,
                      const VertexId _id = kNullId)
-        : data(_data),
-          name(_name),
+        : name(_name),
+          data(_data),
           id(_id)
       {
       }
@@ -99,11 +99,11 @@ namespace ignition
         return _out;
       }
 
-      /// \brief User information.
-      private: V data;
-
       /// \brief Non-unique vertex name.
       private: std::string name = "";
+
+      /// \brief User information.
+      private: V data;
 
       /// \brief Unique vertex Id.
       private: VertexId id = kNullId;
@@ -111,7 +111,7 @@ namespace ignition
 
     /// \brief An invalid vertex.
     template<typename V>
-    Vertex<V> Vertex<V>::NullVertex(V(), "__null__", kNullId);
+    Vertex<V> Vertex<V>::NullVertex("__null__", V(), kNullId);
 
     /// \def VertexId_A
     /// \brief An array of two vertex Ids.

@@ -51,7 +51,7 @@ namespace ignition
         // Add all vertices.
         for (auto const &v : _vertices)
         {
-          if (!this->AddVertex(v.Data(), v.Name(), v.Id()).Valid())
+          if (!this->AddVertex(v.Name(), v.Data(), v.Id()).Valid())
           {
             std::cerr << "Invalid vertex with Id [" << v.Id() << "]. Ignoring."
                       << std::endl;
@@ -67,12 +67,12 @@ namespace ignition
       }
 
       /// \brief Add a new vertex to the graph.
-      /// \param[in] _data Data to be stored in the vertex.
       /// \param[in] _name Name of the vertex. It doesn't have to be unique.
+      /// \param[in] _data Data to be stored in the vertex.
       /// \param[in] _id Optional Id to be used for this vertex.
       /// \return A reference to the new vertex.
-      public: Vertex<V> &AddVertex(const V &_data,
-                                   const std::string &_name,
+      public: Vertex<V> &AddVertex(const std::string &_name,
+                                   const V &_data,
                                    const VertexId &_id = kNullId)
       {
         auto id = _id;
@@ -84,7 +84,7 @@ namespace ignition
           return Vertex<V>::NullVertex;
 
         // Create the vertex.
-        this->vertices.insert(std::make_pair(id, Vertex<V>(_data, _name, id)));
+        this->vertices.insert(std::make_pair(id, Vertex<V>(_name, _data, id)));
 
         // Link the vertex with an empty list of edges.
         this->adjList[id] = EdgeId_S();

@@ -30,7 +30,7 @@ TEST(GraphTest, UniformInitialization)
 {
   DirectedGraph<int, double> graph(
   {
-    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
+    {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
     {{{0, 1}, 0.0}, {{1, 2}, 0.0}}
   });
 
@@ -58,10 +58,10 @@ TEST(GraphTest, VertexFromId)
   DirectedGraph<int, double> graph;
 
   // Create some vertices.
-  auto v0 = graph.AddVertex(0, "0");
+  auto v0 = graph.AddVertex("0", 0);
   EXPECT_EQ(v0.Name(), "0");
-  auto v1 = graph.AddVertex(1, "1");
-  auto v2 = graph.AddVertex(2, "2");
+  auto v1 = graph.AddVertex("1", 1);
+  auto v2 = graph.AddVertex("2", 2);
 
   auto v = graph.VertexFromId(v0.Id());
   EXPECT_EQ(v.Id(), v0.Id());
@@ -76,7 +76,7 @@ TEST(GraphTest, Vertices)
 {
   DirectedGraph<int, double> graph(
   {
-    {{10, "0", 0}, {20, "1", 1}, {30, "2", 2}},
+    {{"0", 10, 0}, {"1", 20, 1}, {"2", 30, 2}},
     {{{0, 1}, 0.0}, {{1, 2}, 0.0}}
   });
 
@@ -124,7 +124,7 @@ TEST(GraphTest, VerticesNames)
   // Create a few vertices with two of them sharing the same name.
   DirectedGraph<int, double> graph(
   {
-    {{0, "vertex_0"}, {1, "vertex_1"}, {2, "common"}, {3, "common"}},
+    {{"vertex_0", 0}, {"vertex_1", 1}, {"common", 2}, {"common", 3}},
     {}
   });
 
@@ -165,7 +165,7 @@ TEST(GraphTest, Edges)
   // Create a graph with edges [(v0-->v1), (v1-->v2), (v2-->v0)]
   DirectedGraph<int, double> graph(
   {
-    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
+    {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
     {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
@@ -218,7 +218,7 @@ TEST(GraphTest, Empty)
   EXPECT_TRUE(graph.Empty());
 
   // Create a vertex.
-  auto v0 = graph.AddVertex(0, "0");
+  auto v0 = graph.AddVertex("0", 0);
   ASSERT_TRUE(v0.Valid());
   EXPECT_FALSE(graph.Empty());
 }
@@ -229,7 +229,7 @@ TEST(GraphTest, AdjacentsFrom)
   // Create a graph with edges [(v0-->v1), (v1-->v2), (v2-->v0)]
   DirectedGraph<int, double> graph(
   {
-    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
+    {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
     {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
@@ -270,7 +270,7 @@ TEST(GraphTest, AdjacentsTo)
   // Create a graph with edges [(v0-->v1), (v1-->v2), (v2-->v1)]
   DirectedGraph<int, double> graph(
   {
-    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
+    {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
     {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 1}, 4.0}}
   });
 
@@ -315,7 +315,7 @@ TEST(GraphTest, IncidentsFrom)
   // Create a graph with edges [(v0-->v1), (v1-->v0), (v1-->v2)]
   DirectedGraph<int, double> graph(
   {
-    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
+    {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
     {{{0, 1}, 2.0}, {{1, 0}, 3.0}, {{1, 2}, 4.0}}
   });
 
@@ -370,7 +370,7 @@ TEST(GraphTest, IncidentsTo)
   // Create a graph with edges [(v0-->v1), (v1-->v2), (v2-->v0)]
   DirectedGraph<int, double> graph(
   {
-    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
+    {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
     {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
@@ -411,7 +411,7 @@ TEST(GraphTest, InDegree)
   // Create a graph with edges [(v0-->v1), (v1-->v2), (v2-->v1)]
   DirectedGraph<int, double> graph(
   {
-    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
+    {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
     {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 1}, 4.0}}
   });
 
@@ -427,7 +427,7 @@ TEST(GraphTest, OutDegree)
   // Create a graph with edges [(v0-->v1), (v1-->v0), (v1-->v2)]
   DirectedGraph<int, double> graph(
   {
-    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
+    {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
     {{{0, 1}, 2.0}, {{1, 0}, 3.0}, {{1, 2}, 4.0}}
   });
 
@@ -445,21 +445,21 @@ TEST(GraphTest, AddVertex)
   DirectedGraph<int, double> graph;
 
   // Create some vertices without Id.
-  auto v0 = graph.AddVertex(0, "0");
+  auto v0 = graph.AddVertex("0", 0);
   EXPECT_TRUE(v0.Id() != kNullId);
-  auto v1 = graph.AddVertex(1, "1");
+  auto v1 = graph.AddVertex("1", 1);
   EXPECT_TRUE(v1.Id() != kNullId);
-  auto v2 = graph.AddVertex(2, "2");
+  auto v2 = graph.AddVertex("2", 2);
   EXPECT_TRUE(v2.Id() != kNullId);
 
   // Create a vertex with Id.
-  auto v3 = graph.AddVertex(5, "3", 3);
+  auto v3 = graph.AddVertex("3", 5, 3);
   EXPECT_EQ(v3.Id(), 3);
   EXPECT_EQ(v3.Data(), 5);
   EXPECT_EQ(v3.Name(), "3");
 
   // Create a vertex with an already used Id.
-  auto v4 = graph.AddVertex(0, "3", 3);
+  auto v4 = graph.AddVertex("3", 0, 3);
   ASSERT_TRUE(v4.Id() == kNullId);
 
   auto vertices = graph.Vertices();
@@ -472,7 +472,7 @@ TEST(GraphTest, AddEdge)
   // Create a graph with three vertices.
   DirectedGraph<int, double> graph(
   {
-    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
+    {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
     {}
   });
 
@@ -510,7 +510,7 @@ TEST(GraphTest, RemoveEdge)
   // Create a graph with edges [(v0-->v1), (v1-->v2), (v2-->v0)]
   DirectedGraph<int, double> graph(
   {
-    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
+    {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
     {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
@@ -544,7 +544,7 @@ TEST(GraphTest, RemoveVertex)
   // Create a graph with edges [(v0-->v1), (v1-->v2), (v2-->v0)]
   DirectedGraph<int, double> graph(
   {
-    {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
+    {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
     {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
@@ -583,7 +583,7 @@ TEST(GraphTest, RemoveVertices)
   // Create a graph with edges [(v0-->v1), (v1-->v2), (v2-->v3), (v3-->v0)]
   DirectedGraph<int, double> graph(
   {
-    {{0, "v0", 0}, {1, "v1", 1}, {2, "common", 2}, {3, "common", 3}},
+    {{"v0", 0, 0}, {"v1", 1, 1}, {"common", 2, 2}, {"common", 3, 3}},
     {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 3}, 4.0}, {{3, 0}, 5.0}}
   });
 
@@ -615,7 +615,7 @@ TEST(GraphTest, StreamInsertion)
   // Create a graph with 4 vertices and edges [(v0-->v1), (v1-->v2), (v2-->v3)]
   DirectedGraph<int, double> graph(
   {
-    {{0, "v0", 0}, {1, "v1", 1}, {2, "v2", 2}, {3, "v3", 3}},
+    {{"v0", 0, 0}, {"v1", 1, 1}, {"v2", 2, 2}, {"v3", 3, 3}},
     {{{0, 1}, 2.0, 4.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
@@ -644,8 +644,8 @@ TEST(GraphTest, DFS)
   DirectedGraph<int, double> graph(
   {
     // Vertices.
-    {{0, "A", 0}, {1, "B", 1}, {2, "C", 2}, {3, "D", 3}, {4, "E", 4},
-     {5, "F", 5}, {6, "G", 6}},
+    {{"A", 0, 0}, {"B", 1, 1}, {"C", 2, 2}, {"D", 3, 3}, {"E", 4, 4},
+     {"F", 5, 5}, {"G", 6, 6}},
     // Edges.
     {{{0, 1}, 2.0}, {{0, 2}, 3.0}, {{0, 4}, 4.0},
      {{1, 3}, 2.0}, {{1, 5}, 3.0}, {{2, 6}, 4.0},
@@ -663,8 +663,8 @@ TEST(GraphTest, BFS)
   DirectedGraph<int, double> graph(
   {
     // Vertices.
-    {{0, "A", 0}, {1, "B", 1}, {2, "C", 2}, {3, "D", 3}, {4, "E", 4},
-     {5, "F", 5}, {6, "G", 6}},
+    {{"A", 0, 0}, {"B", 1, 1}, {"C", 2, 2}, {"D", 3, 3}, {"E", 4, 4},
+     {"F", 5, 5}, {"G", 6, 6}},
     // Edges.
     {{{0, 1}, 2.0}, {{0, 2}, 3.0}, {{0, 4}, 4.0},
      {{1, 3}, 2.0}, {{1, 5}, 3.0}, {{2, 6}, 4.0},
@@ -682,8 +682,8 @@ TEST(GraphTest, Dijkstra)
   DirectedGraph<int, double> graph(
   {
     // Vertices.
-    {{0, "A", 0}, {1, "B", 1}, {2, "C", 2}, {3, "D", 3}, {4, "E", 4},
-     {5, "F", 5}, {6, "G", 6}},
+    {{"A", 0, 0}, {"B", 1, 1}, {"C", 2, 2}, {"D", 3, 3}, {"E", 4, 4},
+     {"F", 5, 5}, {"G", 6, 6}},
     // Edges.
     {{{0, 1}, 2.0}, {{0, 2}, 3.0}, {{0, 4}, 4.0},
      {{1, 3}, 2.0}, {{1, 5}, 3.0}, {{2, 6}, 4.0},
@@ -701,7 +701,7 @@ TEST(GraphTest, DijkstraWeights)
   DirectedGraph<int, double> graph;
   int kNumVertices = 10;
   for (int i = 0; i < kNumVertices; ++i)
-    graph.AddVertex(i, std::to_string(i));
+    graph.AddVertex(std::to_string(i), i);
 
   for (int i = 0; i < kNumVertices; ++i)
     for (int j = i; j < kNumVertices; ++j)
@@ -726,7 +726,7 @@ TEST(GraphTest, Loop)
   // edges [(v0-->v0), (v0-->v1), (v1-->v2), (v2-->v3)]
   DirectedGraph<int, double> graph(
   {
-    {{0, "v0", 0}, {1, "v1", 1}, {2, "v2", 2}, {3, "v3", 3}},
+    {{"v0", 0, 0}, {"v1", 1, 1}, {"v2", 2, 2}, {"v3", 3, 3}},
     {{{0, 1}, 2.0, 4.0}, {{0, 0}, 2.0, 6.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
