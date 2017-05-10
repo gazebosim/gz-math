@@ -17,6 +17,7 @@
 #ifndef IGNITION_MATH_GRAPH_HH_
 #define IGNITION_MATH_GRAPH_HH_
 
+#include <array>
 #include <cassert>
 // int64_t
 #include <cstdint>
@@ -27,11 +28,16 @@
 #include <set>
 #include <string>
 #include <utility>
+#include <vector>
 
 namespace ignition
 {
   namespace math
   {
+    //////////
+    /// Vertex
+    //////////
+
     /// \def VertexId.
     /// \brief The unique Id of each vertex.
     using VertexId = int64_t;
@@ -115,9 +121,9 @@ namespace ignition
     template<typename V>
     Vertex<V> Vertex<V>::NullVertex(V(), "__null__", kNullId);
 
-    /// \def VertexId_S
-    /// \brief Set of vertex Ids.
-    using VertexId_S = std::set<VertexId>;
+    /// \def VertexId_A
+    /// \brief An array of two vertex Ids.
+    using VertexId_A = std::array<VertexId, 2>;
 
     /// \def VertexRef_M
     /// \brief Map of vertices. The key is the vertex Id. The value is a
@@ -126,22 +132,60 @@ namespace ignition
     using VertexRef_M =
       std::map<VertexId, std::reference_wrapper<const Vertex<V>>>;
 
+    ////////
+    /// Edge
+    ////////
+
     /// \def EdgeId.
     /// \brief The unique Id for an edge.
     using EdgeId = int64_t;
 
+    /// \brief Used in the Graph constructors for uniform initialization.
+    template<typename E>
+    struct EdgeInitializer
+    {
+      /// \brief Constructor.
+      /// \param[in] _vertices The vertices of the edge.
+      /// \param[in] _data The data stored in the edge.
+      /// \param[in] _weight The weight (cost) of the edge.
+      EdgeInitializer(const VertexId_A &_vertices,
+                      const E &_data,
+                      const double _weight = 1)
+        : vertices(_vertices),
+          data(_data),
+          weight(_weight)
+      {
+      };
+
+      /// \brief IDs of the vertices.
+      public: VertexId_A vertices;
+
+      /// \brief User data.
+      public: E data;
+
+      /// \brief The weight (cost) of the edge.
+      public: double weight = 1;
+    };
+
     /// \brief Generic edge class. An edge has two ends and some constraint
     /// between them. For example, a directed edge only allows traversing the
     /// edge in one direction.
+    template<typename E>
     class Edge
     {
       /// \brief Constructor.
       /// \param[in] _id Unique id.
       /// \param[in] _weight The weight (cost) of the edge.
+      /// \param[in] _vertices The vertices of the edge.
+      /// \param[in] _data The data stored in the edge.
       public: explicit Edge(const EdgeId &_id,
-                            const double _weight)
+                            const double _weight,
+                            const VertexId_A &_vertices,
+                            const E &_data)
         : id(_id),
-          weight(_weight)
+          weight(_weight),
+          vertices(_vertices),
+          data(_data)
       {
       }
 
@@ -193,6 +237,29 @@ namespace ignition
         return this->weight;
       }
 
+      // Documentation inherited.
+      public: VertexId_A Vertices() const
+      {
+        if (!this->Valid())
+          return {kNullId, kNullId};
+
+        return this->vertices;
+      }
+
+      /// \brief Get a non-mutable reference to the user data stored in the edge
+      /// \return The non-mutable reference to the user data stored in the edge.
+      public: const E &Data() const
+      {
+        return this->data;
+      }
+
+      /// \brief Get a mutable reference to the user data stored in the edge.
+      /// \return The mutable reference to the user data stored in the edge.
+      public: E &Data()
+      {
+        return this->data;
+      }
+
       /// \brief Get if the edge is valid. An edge is valid if its linked in a
       /// graph and its vertices are reachable.
       /// \return True when the edge is valid or false otherwise (invalid Id).
@@ -206,6 +273,12 @@ namespace ignition
 
       /// \brief The weight (cost) of the edge.
       private: double weight = 1.0;
+
+      /// \brief The set of Ids of the two vertices.
+      protected: VertexId_A vertices;
+
+      /// \brief User data.
+      private: E data;
     };
 
     /// \def EdgeId_S
@@ -218,6 +291,10 @@ namespace ignition
     template<typename EdgeType>
     using EdgeRef_M = std::map<EdgeId, std::reference_wrapper<const EdgeType>>;
 
+    /////////
+    /// Graph
+    /////////
+
     /// \brief A generic graph class.
     /// Both vertices and edges can store user information. A vertex could be
     /// created passing a custom Id if needed, otherwise it will be choosen
@@ -227,6 +304,33 @@ namespace ignition
     template<typename V, typename E, typename EdgeType>
     class Graph
     {
+      /// \brief Default constructor.
+      public: Graph() = default;
+
+      /// \brief Constructor.
+      /// \param[in] _vertices Collection of vertices.
+      /// \param[in] _edges Collection of edges.
+      public: Graph(const std::vector<Vertex<V>> &_vertices,
+                    const std::vector<EdgeInitializer<E>> &_edges)
+      {
+        // Add all vertices.
+        for (auto const &v : _vertices)
+        {
+          if (!this->AddVertex(v.Data(), v.Name(), v.Id()).Valid())
+          {
+            std::cerr << "Invalid vertex with Id [" << v.Id() << "]. Ignoring."
+                      << std::endl;
+          }
+        }
+
+        // Add all edges.
+        for (auto const &e : _edges)
+        {
+          if (!this->AddEdge(e.vertices, e.data, e.weight).Valid())
+            std::cerr << "Ignoring edge" << std::endl;
+        }
+      }
+
       /// \brief Add a new vertex to the graph.
       /// \param[in] _data Data to be stored in the vertex.
       /// \param[in] _name Name of the vertex. It doesn't have to be unique.
@@ -281,6 +385,20 @@ namespace ignition
         }
 
         return std::move(res);
+      }
+
+      ///// \brief Add a new edge to the graph.
+      ///// \param[in] _vertices The set of Ids of the two vertices.
+      ///// \param[in] _data User data.
+      ///// \return Reference to the new edge created or NullEdge if the
+      ///// edge was not created (e.g. incorrect vertices).
+      public: EdgeType &AddEdge(const VertexId_A &_vertices,
+                                const E &_data,
+                                const double _weight = 1.0)
+      {
+        auto id = this->NextEdgeId();
+        EdgeType newEdge(id, _weight, _vertices, _data);
+        return this->LinkEdge(std::move(newEdge));
       }
 
       /// \brief Links an edge to the graph.

@@ -107,8 +107,6 @@ namespace ignition
     /// \param[in] _to The destination vertex.
     /// \return The vector of vertex Ids contained in the path or an empty
     /// vector if there's no path.
-    /// \ToDo: This assumes that the cost of all edges is 1. I should
-    /// implement a Cost() function in all edges and use it here.
     template<typename V, typename E, typename EdgeType>
     std::vector<VertexId> dijkstra(const Graph<V, E, EdgeType> &_graph,
                                    const VertexId &_from,

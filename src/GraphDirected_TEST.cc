@@ -32,7 +32,7 @@ TEST(GraphTest, UniformInitialization)
   DirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{0, 1, 0.0}, {1, 2, 0.0}}
+    {{{0, 1}, 0.0}, {{1, 2}, 0.0}}
   });
 
   // Verify the vertices.
@@ -78,7 +78,7 @@ TEST(GraphTest, Vertices)
   DirectedGraph<int, double> graph(
   {
     {{10, "0", 0}, {20, "1", 1}, {30, "2", 2}},
-    {{0, 1, 0.0}, {1, 2, 0.0}}
+    {{{0, 1}, 0.0}, {{1, 2}, 0.0}}
   });
 
   auto vertices = graph.Vertices();
@@ -167,7 +167,7 @@ TEST(GraphTest, Edges)
   DirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{0, 1, 2.0}, {1, 2, 3.0}, {2, 0, 4.0}}
+    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
   auto edges = graph.Edges();
@@ -231,7 +231,7 @@ TEST(GraphTest, AdjacentsFrom)
   DirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{0, 1, 2.0}, {1, 2, 3.0}, {2, 0, 4.0}}
+    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
   // Try to get the adjacents from an inexistent vertex.
@@ -272,7 +272,7 @@ TEST(GraphTest, AdjacentsTo)
   DirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{0, 1, 2.0}, {1, 2, 3.0}, {2, 1, 4.0}}
+    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 1}, 4.0}}
   });
 
   // Try to get the adjacents to an inexistent vertex.
@@ -317,7 +317,7 @@ TEST(GraphTest, IncidentsFrom)
   DirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{0, 1, 2.0}, {1, 0, 3.0}, {1, 2, 4.0}}
+    {{{0, 1}, 2.0}, {{1, 0}, 3.0}, {{1, 2}, 4.0}}
   });
 
   auto incidents = graph.IncidentsFrom(0);
@@ -339,16 +339,20 @@ TEST(GraphTest, IncidentsFrom)
       case 1:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(vertices.find(1), vertices.end());
-        EXPECT_NE(vertices.find(0), vertices.end());
+         EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
+          vertices.end());
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
+          vertices.end());
         EXPECT_EQ(edge.Data(), 3.0);
         break;
       }
       case 2:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(vertices.find(1), vertices.end());
-        EXPECT_NE(vertices.find(2), vertices.end());
+         EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
+          vertices.end());
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 2),
+          vertices.end());
         EXPECT_EQ(edge.Data(), 4.0);
         break;
       }
@@ -368,7 +372,7 @@ TEST(GraphTest, IncidentsTo)
   DirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{0, 1, 2.0}, {1, 2, 3.0}, {2, 0, 4.0}}
+    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
   auto incidents = graph.IncidentsTo(0);
@@ -389,8 +393,10 @@ TEST(GraphTest, IncidentsTo)
       case 2:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(vertices.find(2), vertices.end());
-        EXPECT_NE(vertices.find(0), vertices.end());
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 2),
+          vertices.end());
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
+          vertices.end());
         EXPECT_EQ(edge.Data(), 4.0);
         break;
       }
@@ -407,7 +413,7 @@ TEST(GraphTest, InDegree)
   DirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{0, 1, 2.0}, {1, 2, 3.0}, {2, 1, 4.0}}
+    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 1}, 4.0}}
   });
 
   EXPECT_EQ(graph.InDegree(0), 0u);
@@ -423,7 +429,7 @@ TEST(GraphTest, OutDegree)
   DirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{0, 1, 2.0}, {1, 0, 3.0}, {1, 2, 4.0}}
+    {{{0, 1}, 2.0}, {{1, 0}, 3.0}, {{1, 2}, 4.0}}
   });
 
   EXPECT_EQ(graph.OutDegree(0), 1u);
@@ -472,9 +478,9 @@ TEST(GraphTest, AddEdge)
   });
 
   // Create some edges [(v0-->v1), (v1-->v2), (v2-->v0)]
-  auto e0 = graph.AddEdge(0, 1, 2.0);
-  auto e1 = graph.AddEdge(1, 2, 3.0);
-  auto e2 = graph.AddEdge(2, 0, 4.0);
+  auto e0 = graph.AddEdge({0, 1}, 2.0);
+  auto e1 = graph.AddEdge({1, 2}, 3.0);
+  auto e2 = graph.AddEdge({2, 0}, 4.0);
 
   // Check the edge content.
   EXPECT_EQ(e0.Data(), 2.0);
@@ -489,12 +495,12 @@ TEST(GraphTest, AddEdge)
   EXPECT_EQ(edges.size(), 3u);
 
   // Try to add an edge with an incorrect tail.
-  auto edge = graph.AddEdge(kNullId, 1, 2.0);
+  auto edge = graph.AddEdge({kNullId, 1}, 2.0);
   EXPECT_EQ(edge.Id(), kNullId);
   EXPECT_EQ(graph.Edges().size(), 3u);
 
   // Try to add an edge with an incorrect head.
-  edge = graph.AddEdge(0, kNullId, 2.0);
+  edge = graph.AddEdge({0, kNullId}, 2.0);
   EXPECT_EQ(edge.Id(), kNullId);
   EXPECT_EQ(graph.Edges().size(), 3u);
 }
@@ -506,7 +512,7 @@ TEST(GraphTest, RemoveEdge)
   DirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{0, 1, 2.0}, {1, 2, 3.0}, {2, 0, 4.0}}
+    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
   // Remove a nonexistent edge shouldn't cause any effect.
@@ -540,7 +546,7 @@ TEST(GraphTest, RemoveVertex)
   DirectedGraph<int, double> graph(
   {
     {{0, "0", 0}, {1, "1", 1}, {2, "2", 2}},
-    {{0, 1, 2.0}, {1, 2, 3.0}, {2, 0, 4.0}}
+    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
   // Remove a nonexistent vertex shouldn't cause any effect.
@@ -579,7 +585,7 @@ TEST(GraphTest, RemoveVertices)
   DirectedGraph<int, double> graph(
   {
     {{0, "v0", 0}, {1, "v1", 1}, {2, "common", 2}, {3, "common", 3}},
-    {{0, 1, 2.0}, {1, 2, 3.0}, {2, 3, 4.0}, {3, 0, 5.0}}
+    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 3}, 4.0}, {{3, 0}, 5.0}}
   });
 
   // Try to remove a node with a name that doesn't exist.
@@ -611,7 +617,7 @@ TEST(GraphTest, StreamInsertion)
   DirectedGraph<int, double> graph(
   {
     {{0, "v0", 0}, {1, "v1", 1}, {2, "v2", 2}, {3, "v3", 3}},
-    {{0, 1, 2.0, 4.0}, {1, 2, 3.0}, {2, 0, 4.0}}
+    {{{0, 1}, 2.0, 4.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
   std::ostringstream output;
@@ -642,9 +648,9 @@ TEST(GraphTest, DFS)
     {{0, "A", 0}, {1, "B", 1}, {2, "C", 2}, {3, "D", 3}, {4, "E", 4},
      {5, "F", 5}, {6, "G", 6}},
     // Edges.
-    {{0, 1, 2.0}, {0, 2, 3.0}, {0, 4, 4.0},
-     {1, 3, 2.0}, {1, 5, 3.0}, {2, 6, 4.0},
-     {5, 4, 2.0}}
+    {{{0, 1}, 2.0}, {{0, 2}, 3.0}, {{0, 4}, 4.0},
+     {{1, 3}, 2.0}, {{1, 5}, 3.0}, {{2, 6}, 4.0},
+     {{5, 4}, 2.0}}
   });
 
   auto res = DFS(graph, 0);
@@ -661,9 +667,9 @@ TEST(GraphTest, BFS)
     {{0, "A", 0}, {1, "B", 1}, {2, "C", 2}, {3, "D", 3}, {4, "E", 4},
      {5, "F", 5}, {6, "G", 6}},
     // Edges.
-    {{0, 1, 2.0}, {0, 2, 3.0}, {0, 4, 4.0},
-     {1, 3, 2.0}, {1, 5, 3.0}, {2, 6, 4.0},
-     {5, 4, 2.0}}
+    {{{0, 1}, 2.0}, {{0, 2}, 3.0}, {{0, 4}, 4.0},
+     {{1, 3}, 2.0}, {{1, 5}, 3.0}, {{2, 6}, 4.0},
+     {{5, 4}, 2.0}}
   });
 
   auto res = BFS(graph, 0);
@@ -680,9 +686,9 @@ TEST(GraphTest, Dijkstra)
     {{0, "A", 0}, {1, "B", 1}, {2, "C", 2}, {3, "D", 3}, {4, "E", 4},
      {5, "F", 5}, {6, "G", 6}},
     // Edges.
-    {{0, 1, 2.0}, {0, 2, 3.0}, {0, 4, 4.0},
-     {1, 3, 2.0}, {1, 5, 3.0}, {2, 6, 4.0},
-     {5, 4, 2.0}}
+    {{{0, 1}, 2.0}, {{0, 2}, 3.0}, {{0, 4}, 4.0},
+     {{1, 3}, 2.0}, {{1, 5}, 3.0}, {{2, 6}, 4.0},
+     {{5, 4}, 2.0}}
   });
 
   auto res = dijkstra(graph, 0, 5);
@@ -702,9 +708,9 @@ TEST(GraphTest, DijkstraWeights)
     for (int j = i; j < kNumVertices; ++j)
     {
       if (i == 0 && j == 5)
-        graph.AddEdge(i, j, 2.0, 10.0);
+        graph.AddEdge({i, j}, 2.0, 10.0);
       else
-        graph.AddEdge(i, j, 2.0);
+        graph.AddEdge({i, j}, 2.0);
     }
 
   VertexId from = 0;
@@ -712,4 +718,34 @@ TEST(GraphTest, DijkstraWeights)
   auto res = dijkstra(graph, from, to);
   std::vector<VertexId> expected = {0, 1, 5};
   EXPECT_EQ(res, expected);
+}
+
+/////////////////////////////////////////////////
+TEST(GraphTest, Loop)
+{
+  // Create a graph with 4 vertices and
+  // edges [(v0-->v0), (v0-->v1), (v1-->v2), (v2-->v3)]
+  DirectedGraph<int, double> graph(
+  {
+    {{0, "v0", 0}, {1, "v1", 1}, {2, "v2", 2}, {3, "v3", 3}},
+    {{{0, 1}, 2.0, 4.0}, {{0, 0}, 2.0, 6.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
+  });
+
+  std::ostringstream output;
+  output << graph;
+
+  std::cout << "# Use this snippet with your favorite DOT tool." << std::endl;
+  std::cout << graph << std::endl;
+
+  for (auto const &s : {"digraph {\n",
+                        "  0 [label=\"v0 (0)\"];\n",
+                        "  1 [label=\"v1 (1)\"];\n",
+                        "  2 [label=\"v2 (2)\"];\n",
+                        "  3 [label=\"v3 (3)\"];\n",
+                        "  0 -> 1 [label=4];\n",
+                        "  1 -> 2 [label=1];\n",
+                        "  2 -> 0 [label=1];\n"})
+  {
+    EXPECT_NE(output.str().find(s), std::string::npos);
+  }
 }

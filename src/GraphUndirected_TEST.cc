@@ -188,24 +188,30 @@ TEST(UndirectedGraphTest, Edges)
       case 0:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(vertices.find(0), vertices.end());
-        EXPECT_NE(vertices.find(1), vertices.end());
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
+          vertices.end());
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
+          vertices.end());
         EXPECT_EQ(edge.Data(), 2.0);
         break;
       }
       case 1:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(vertices.find(1), vertices.end());
-        EXPECT_NE(vertices.find(2), vertices.end());
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
+          vertices.end());
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 2),
+          vertices.end());
         EXPECT_EQ(edge.Data(), 3.0);
         break;
       }
       case 2:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(vertices.find(2), vertices.end());
-        EXPECT_NE(vertices.find(0), vertices.end());
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 2),
+          vertices.end());
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
+          vertices.end());
         EXPECT_EQ(edge.Data(), 4.0);
         break;
       }
@@ -355,16 +361,20 @@ TEST(UndirectedGraphTest, IncidentsFrom)
       case 0:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(vertices.find(0), vertices.end());
-        EXPECT_NE(vertices.find(1), vertices.end());
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
+          vertices.end());
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
+          vertices.end());
         EXPECT_EQ(edge.Data(), 2.0);
         break;
       }
       case 1:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(vertices.find(1), vertices.end());
-        EXPECT_NE(vertices.find(2), vertices.end());
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
+          vertices.end());
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 2),
+          vertices.end());
         EXPECT_EQ(edge.Data(), 3.0);
         break;
       }
@@ -404,16 +414,20 @@ TEST(UndirectedGraphTest, IncidentsTo)
       case 0:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(vertices.find(0), vertices.end());
-        EXPECT_NE(vertices.find(1), vertices.end());
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
+          vertices.end());
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
+          vertices.end());
         EXPECT_EQ(edge.Data(), 2.0);
         break;
       }
       case 2:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(vertices.find(2), vertices.end());
-        EXPECT_NE(vertices.find(0), vertices.end());
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 2),
+          vertices.end());
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
+          vertices.end());
         EXPECT_EQ(edge.Data(), 4.0);
         break;
       }
@@ -505,7 +519,8 @@ TEST(UndirectedGraphTest, AddEdge)
   EXPECT_EQ(e2.Data(), 4.0);
 
   // Check that the edges point to the right vertices.
-  EXPECT_NE(e0.Vertices().find(0), e0.Vertices().end());
+  EXPECT_NE(std::find(e0.Vertices().begin(), e0.Vertices().end(), 0),
+          e0.Vertices().end());
 
   auto edges = graph.Edges();
   EXPECT_EQ(edges.size(), 3u);
@@ -700,6 +715,8 @@ TEST(UndirectedGraphTest, BFS)
       {{1, 5}, 3.0}, {{2, 6}, 4.0}, {{5, 4}, 2.0}}
   });
 
+  std::cout << graph << std::endl;
+
   auto res = BFS(graph, 0);
   std::vector<VertexId> expected = {0, 1, 2, 4, 3, 5, 6};
   EXPECT_EQ(res, expected);
@@ -725,7 +742,7 @@ TEST(UndirectedGraphTest, Dijkstra)
 }
 
 /////////////////////////////////////////////////
-TEST(GraphTest, DijkstraWeights)
+TEST(UndirectedGraphTest, DijkstraWeights)
 {
   UndirectedGraph<int, double> graph;
   int kNumVertices = 10;
@@ -746,4 +763,47 @@ TEST(GraphTest, DijkstraWeights)
   auto res = dijkstra(graph, from, to);
   std::vector<VertexId> expected = {0, 1, 5};
   EXPECT_EQ(res, expected);
+}
+
+/////////////////////////////////////////////////
+TEST(UndirectedGraphTest, Loop)
+{
+  // Create a graph with 4 vertices and
+  // edges [(v0-->v0), (v0-->v1), (v1-->v2), (v2-->v3)]
+  UndirectedGraph<int, double> graph(
+  {
+    {{0, "v0", 0}, {1, "v1", 1}, {2, "v2", 2}, {3, "v3", 3}},
+    {{{0, 1}, 2.0, 4.0}, {{0, 0}, 2.0, 6.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
+  });
+
+  std::ostringstream output;
+  output << graph;
+
+  std::cout << "# Use this snippet with your favorite DOT tool." << std::endl;
+  std::cout << graph << std::endl;
+
+  for (auto const &s : {"graph {\n",
+                        "  0 [label=\"v0 (0)\"];\n",
+                        "  1 [label=\"v1 (1)\"];\n",
+                        "  2 [label=\"v2 (2)\"];\n",
+                        "  3 [label=\"v3 (3)\"];\n"})
+  {
+    EXPECT_NE(output.str().find(s), std::string::npos);
+  }
+
+  // We don't really know the order in which the edges will be printed.
+  // We also don't know the order in which the vertices on each edge will be
+  // printed.
+  std::vector<std::pair<std::string, std::string>> expectedEdges =
+    {
+      {"  0 -- 0 [label=6];\n", "  0 -- 0 [label=6];\n"},
+      {"  0 -- 1 [label=4];\n", "  1 -- 0 [label=4];\n"},
+      {"  1 -- 2 [label=1];\n", "  2 -- 1 [label=1];\n"},
+      {"  0 -- 2 [label=1];\n", "  2 -- 0 [label=1];\n"}
+    };
+  for (auto const &edge : expectedEdges)
+  {
+    EXPECT_TRUE((output.str().find(std::get<0>(edge)) != std::string::npos) ||
+                (output.str().find(std::get<1>(edge)) != std::string::npos));
+  }
 }

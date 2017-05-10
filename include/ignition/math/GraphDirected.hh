@@ -18,7 +18,6 @@
 #define IGNITION_MATH_GRAPHDIRECTED_HH_
 
 #include <iostream>
-#include <vector>
 
 #include "ignition/math/Graph.hh"
 
@@ -26,64 +25,22 @@ namespace ignition
 {
   namespace math
   {
-    /// \brief Used in the DirectedGraph constructor for uniform initialization.
-    template<typename E>
-    struct DirectEdgeInitializer
-    {
-      DirectEdgeInitializer(const VertexId &_tailId,
-                            const VertexId &_headId,
-                            const E &_data,
-                            const double _weight = 1)
-        : tailId(_tailId),
-          headId(_headId),
-          data(_data),
-          weight(_weight)
-      {
-      }
-
-      /// \brief ID of the tail vertex.
-      public: VertexId tailId;
-
-      /// \brief ID of the head vertex.
-      public: VertexId headId;
-
-      /// \brief User data.
-      public: E data;
-
-      /// \brief The weight (cost) of the edge.
-      public: double weight = 1;
-    };
-
     /// \brief A directed edge represents a connection between two vertices.
     template<typename E>
-    class DirectedEdge : public Edge
+    class DirectedEdge : public Edge<E>
     {
       /// \brief An invalid directed edge.
       public: static DirectedEdge<E> NullEdge;
 
-      /// \brief Constructor.
-      /// \param[in] _id Id of the edge.
-      /// \param[in] _tail Id of the tail vertex.
-      /// \param[in] _head Id of the head vertex.
-      /// \param[in] _data User data to be stored in the edge.
-      public: DirectedEdge(const EdgeId &_id,
-                           const double _weight,
-                           const VertexId &_tail,
-                           const VertexId &_head,
-                           const E &_data)
-        : Edge(_id, _weight),
-          tail(_tail),
-          head(_head),
-          data(_data)
-      {
-      }
+      // Documentation inherited.
+      using Edge<E>::Edge;
 
       /// \brief Get the Id of the tail vertex in this edge.
       /// \return An id of the tail vertex in this edge.
       /// \sa Head()
       public: VertexId Tail() const
       {
-        return this->tail;
+        return this->vertices.front();
       }
 
       /// \brief Get the Id of the head vertex in this edge.
@@ -91,30 +48,7 @@ namespace ignition
       /// \sa Tail()
       public: VertexId Head() const
       {
-        return this->head;
-      }
-
-      /// \brief Get a non-mutable reference to the user data stored in the edge
-      /// \return The non-mutable reference to the user data stored in the edge.
-      public: const E &Data() const
-      {
-        return this->data;
-      }
-
-      /// \brief Get a mutable reference to the user data stored in the edge.
-      /// \return The mutable reference to the user data stored in the edge.
-      public: E &Data()
-      {
-        return this->data;
-      }
-
-      // Documentation inherited.
-      public: VertexId_S Vertices() const
-      {
-        // if (!this->Valid())
-        //  return {Vertex<V>::NullVertex, Vertex<V>::NullVertex};
-
-        return {this->tail, this->head};
+        return this->vertices.back();
       }
 
       // Documentation inherited.
@@ -147,71 +81,19 @@ namespace ignition
              << " [label=" << _e.Weight(_e.Tail()) << "];" << std::endl;
         return _out;
       }
-
-      /// \brief The id of the tail vertex.
-      private: VertexId tail;
-
-      /// \brief the id of the head vertex.
-      private: VertexId head;
-
-      /// \brief User data.
-      private: E data;
     };
 
     /// \brief An invalid directed edge.
     template<typename E>
     DirectedEdge<E> DirectedEdge<E>::NullEdge(
-      kNullId, 1.0, kNullId, kNullId, E());
+      kNullId, 1.0, {kNullId, kNullId}, E());
 
     /// \brief A generic graph class using directed edges.
     template<typename V, typename E>
     class DirectedGraph : public Graph<V, E, DirectedEdge<E>>
     {
-      /// \brief Default constructor.
-      public: DirectedGraph() = default;
-
-      /// \brief Constructor.
-      /// \param[in] _vertices Collection of vertices.
-      /// \param[in] _edges Collection of edges.
-      public: DirectedGraph(const std::vector<Vertex<V>> &_vertices,
-                            const std::vector<DirectEdgeInitializer<E>> &_edges)
-      {
-        // Add all vertices.
-        for (auto const &v : _vertices)
-        {
-          if (!this->AddVertex(v.Data(), v.Name(), v.Id()).Valid())
-          {
-            std::cerr << "Invalid vertex with Id [" << v.Id() << "]. Ignoring"
-                      << std::endl;
-          }
-        }
-
-        // Add all edges.
-        for (auto const &e : _edges)
-        {
-          if (!this->AddEdge(e.tailId, e.headId, e.data, e.weight).Valid())
-          {
-            std::cerr << "Invalid edge [" << e.tailId << "," << e.headId << ","
-                      << e.data << "]. Ignoring." << std::endl;
-          }
-        }
-      }
-
-      /// \brief Add a new edge to the graph.
-      /// \param[in] _tail Id of the tail vertex.
-      /// \param[in] _head Id of the head vertex.
-      /// \param[in] _data User data stored in the edge.
-      /// \return Reference to the new edge created or NullEdge if the
-      /// edge was not created (e.g. incorrect vertices).
-      public: DirectedEdge<E> &AddEdge(const VertexId &_tail,
-                                       const VertexId &_head,
-                                       const E &_data,
-                                       const double _weight = 1.0)
-      {
-        auto id = this->NextEdgeId();
-        DirectedEdge<E> newEdge(id, _weight, _tail, _head, _data);
-        return this->LinkEdge(std::move(newEdge));
-      }
+      // Documentation inherited.
+      using Graph<V, E, DirectedEdge<E>>::Graph;
 
       /// \brief Stream insertion operator. The output uses DOT graph
       /// description language.
