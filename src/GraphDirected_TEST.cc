@@ -19,8 +19,7 @@
 #include <iostream>
 #include <string>
 
-#include "ignition/math/GraphDirected.hh"
-
+#include "ignition/math/Graph.hh"
 #include "ignition/math/GraphAlgorithms.hh"
 
 using namespace ignition;
@@ -743,6 +742,7 @@ TEST(GraphTest, Loop)
                         "  2 [label=\"v2 (2)\"];\n",
                         "  3 [label=\"v3 (3)\"];\n",
                         "  0 -> 1 [label=4];\n",
+                        "  0 -> 0 [label=6];\n",
                         "  1 -> 2 [label=1];\n",
                         "  2 -> 0 [label=1];\n"})
   {

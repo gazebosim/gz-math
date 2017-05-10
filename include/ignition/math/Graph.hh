@@ -17,285 +17,19 @@
 #ifndef IGNITION_MATH_GRAPH_HH_
 #define IGNITION_MATH_GRAPH_HH_
 
-#include <array>
 #include <cassert>
-// int64_t
-#include <cstdint>
-#include <functional>
 #include <iostream>
-#include <limits>
 #include <map>
-#include <set>
 #include <string>
-#include <utility>
 #include <vector>
+
+#include "ignition/math/Edge.hh"
+#include "ignition/math/Vertex.hh"
 
 namespace ignition
 {
   namespace math
   {
-    //////////
-    /// Vertex
-    //////////
-
-    /// \def VertexId.
-    /// \brief The unique Id of each vertex.
-    using VertexId = int64_t;
-
-    /// \brief Represents an invalid Id.
-    static const VertexId kNullId = std::numeric_limits<VertexId>::min();
-
-    /// \brief A vertex of a graph. It stores user information and keeps
-    /// an internal unique Id.
-    template<typename V>
-    class Vertex
-    {
-      /// \brief An invalid vertex.
-      public: static Vertex<V> NullVertex;
-
-      /// \brief Constructor.
-      /// \param[in] _data User information.
-      /// \param[in] _name Non-unique vertex name.
-      /// \param[in] _id Optional unique id.
-      public: Vertex(const V &_data,
-                     const std::string &_name,
-                     const VertexId _id = kNullId)
-        : data(_data),
-          name(_name),
-          id(_id)
-      {
-      }
-
-      /// \brief Retrieve the user information.
-      /// \return Reference to the user information.
-      public: const V &Data() const
-      {
-        return this->data;
-      }
-
-      /// \brief Get the vertex Id.
-      /// \return The vertex Id.
-      public: VertexId Id() const
-      {
-        return this->id;
-      }
-
-      /// \brief Get the vertex name.
-      /// \return The vertex name.
-      public: std::string Name() const
-      {
-        return this->name;
-      }
-
-      /// \brief Whether the vertex is considered valid or not.
-      /// \return True when the vertex is valid or false otherwise (invalid Id).
-      public: bool Valid() const
-      {
-        return this->id != kNullId;
-      }
-
-      /// \brief Stream insertion operator. The output uses DOT graph
-      /// description language.
-      /// \param[out] _out The output stream.
-      /// \param[in] _v Vertex to write to the stream.
-      /// \ref https://en.wikipedia.org/wiki/DOT_(graph_description_language).
-      public: friend std::ostream &operator<<(std::ostream &_out,
-                                              const Vertex<V> &_v)
-      {
-        _out << "  " << _v.Id() << " [label=\"" << _v.Name()
-             << " (" << _v.Id() << ")\"];" << std::endl;
-        return _out;
-      }
-
-      /// \brief User information.
-      private: V data;
-
-      /// \brief Non-unique vertex name.
-      private: std::string name = "";
-
-      /// \brief Unique vertex Id.
-      private: VertexId id = kNullId;
-    };
-
-    /// \brief An invalid vertex.
-    template<typename V>
-    Vertex<V> Vertex<V>::NullVertex(V(), "__null__", kNullId);
-
-    /// \def VertexId_A
-    /// \brief An array of two vertex Ids.
-    using VertexId_A = std::array<VertexId, 2>;
-
-    /// \def VertexRef_M
-    /// \brief Map of vertices. The key is the vertex Id. The value is a
-    /// reference to the vertex.
-    template<typename V>
-    using VertexRef_M =
-      std::map<VertexId, std::reference_wrapper<const Vertex<V>>>;
-
-    ////////
-    /// Edge
-    ////////
-
-    /// \def EdgeId.
-    /// \brief The unique Id for an edge.
-    using EdgeId = int64_t;
-
-    /// \brief Used in the Graph constructors for uniform initialization.
-    template<typename E>
-    struct EdgeInitializer
-    {
-      /// \brief Constructor.
-      /// \param[in] _vertices The vertices of the edge.
-      /// \param[in] _data The data stored in the edge.
-      /// \param[in] _weight The weight (cost) of the edge.
-      EdgeInitializer(const VertexId_A &_vertices,
-                      const E &_data,
-                      const double _weight = 1)
-        : vertices(_vertices),
-          data(_data),
-          weight(_weight)
-      {
-      };
-
-      /// \brief IDs of the vertices.
-      public: VertexId_A vertices;
-
-      /// \brief User data.
-      public: E data;
-
-      /// \brief The weight (cost) of the edge.
-      public: double weight = 1;
-    };
-
-    /// \brief Generic edge class. An edge has two ends and some constraint
-    /// between them. For example, a directed edge only allows traversing the
-    /// edge in one direction.
-    template<typename E>
-    class Edge
-    {
-      /// \brief Constructor.
-      /// \param[in] _id Unique id.
-      /// \param[in] _weight The weight (cost) of the edge.
-      /// \param[in] _vertices The vertices of the edge.
-      /// \param[in] _data The data stored in the edge.
-      public: explicit Edge(const EdgeId &_id,
-                            const double _weight,
-                            const VertexId_A &_vertices,
-                            const E &_data)
-        : id(_id),
-          weight(_weight),
-          vertices(_vertices),
-          data(_data)
-      {
-      }
-
-      /// \brief Get the edge Id.
-      /// \return The edge Id.
-      public: EdgeId Id() const
-      {
-        return this->id;
-      }
-
-      /// \brief Get the destination end that is reachable from a source end of
-      /// an edge.
-      ///
-      /// E.g.: Let's assume that we have an undirected edge (e1) with ends
-      /// (v1) and (v2): (v1)--(v2). The operation e1.From(v1) returns (v2).
-      /// The operation e1.From(v2) returns (v1).
-      ///
-      /// E.g.: Let's assume that we have a directed edge (e2) with the tail end
-      /// (v1) and the head end (v2): (v1)->(v2). The operation e2.From(v1)
-      /// returns (v2). The operation e2.From(v2) returns kNullId.
-      ///
-      /// \param[in] _from Source vertex.
-      /// \return The other vertex of the edge reachable from the "_from"
-      /// vertex or kNullId otherwise.
-      public: virtual VertexId From(const VertexId &_from) const = 0;
-
-      /// \brief Get the source end that can reach the destination end of
-      /// an edge.
-      ///
-      /// E.g.: Let's assume that we have an undirected edge (e1) with ends
-      /// (v1) and (v2): (v1)--(v2). The operation e1.To(v1) returns (v2).
-      /// The operation e1.To(v2) returns (v1).
-      ///
-      /// E.g.: Let's assume that we have a directed edge (e2) with the tail end
-      /// (v1) and the head end (v2): (v1)->(v2). The operation e2.To(v1)
-      /// returns kNullId. The operation e2.To(v2) returns v1.
-      ///
-      /// \param[in] _from Destination vertex.
-      /// \return The other vertex of the edge that can reach "_to"
-      /// vertex or kNullId otherwise.
-      public: virtual VertexId To(const VertexId &_to) const = 0;
-
-      /// \brief The cost of traversing the _from end to the other end of the
-      /// edge.
-      /// \param[in] _from Source vertex.
-      /// \return The cost.
-      public: double Weight(const VertexId &_from) const
-      {
-        return this->weight;
-      }
-
-      /// \brief Get the two vertices contained in the edge.
-      /// \return The two vertices contained in the edge.
-      public: VertexId_A Vertices() const
-      {
-        if (!this->Valid())
-          return {kNullId, kNullId};
-
-        return this->vertices;
-      }
-
-      /// \brief Get a non-mutable reference to the user data stored in the edge
-      /// \return The non-mutable reference to the user data stored in the edge.
-      public: const E &Data() const
-      {
-        return this->data;
-      }
-
-      /// \brief Get a mutable reference to the user data stored in the edge.
-      /// \return The mutable reference to the user data stored in the edge.
-      public: E &Data()
-      {
-        return this->data;
-      }
-
-      /// \brief Get if the edge is valid. An edge is valid if its linked in a
-      /// graph and its vertices are reachable.
-      /// \return True when the edge is valid or false otherwise (invalid Id).
-      public: bool Valid() const
-      {
-        return this->id != kNullId;
-      }
-
-      /// \brief Unique edge Id.
-      private: EdgeId id = kNullId;
-
-      /// \brief The weight (cost) of the edge.
-      private: double weight = 1.0;
-
-      /// \brief The set of Ids of the two vertices.
-      private: VertexId_A vertices;
-
-      /// \brief User data.
-      private: E data;
-    };
-
-    /// \def EdgeId_S
-    /// \brief A set of edge Ids.
-    using EdgeId_S = std::set<EdgeId>;
-
-    /// \def EdgeRef_M
-    /// \brief A map of edges. The key is the edge Id. The value is a reference
-    /// to the edge.
-    template<typename EdgeType>
-    using EdgeRef_M = std::map<EdgeId, std::reference_wrapper<const EdgeType>>;
-
-    /////////
-    /// Graph
-    /////////
-
     /// \brief A generic graph class.
     /// Both vertices and edges can store user information. A vertex could be
     /// created passing a custom Id if needed, otherwise it will be choosen
@@ -763,6 +497,15 @@ namespace ignition
         return iter->second;
       }
 
+      /// \brief Stream insertion operator. The output uses DOT graph
+      /// description language.
+      /// \param[out] _out The output stream.
+      /// \param[in] _g Graph to write to the stream.
+      /// \ref https://en.wikipedia.org/wiki/DOT_(graph_description_language).
+      public: template<typename VV, typename EE, typename EEdgeType>
+      friend std::ostream &operator<<(std::ostream &_out,
+                                      const Graph<VV, EE, EEdgeType> &_g);
+
       /// \brief Get an available Id to be assigned to a new vertex.
       /// \return The next available Id.
       private: VertexId &NextVertexId()
@@ -775,7 +518,7 @@ namespace ignition
 
       /// \brief Get an available Id to be assigned to a new edge.
       /// \return The next available Id.
-      protected: VertexId &NextEdgeId()
+      private: VertexId &NextEdgeId()
       {
         while (this->edges.find(this->nextEdgeId) != this->edges.end())
           ++this->nextEdgeId;
@@ -784,20 +527,20 @@ namespace ignition
       }
 
       /// \brief The set of vertices.
-      protected: std::map<VertexId, Vertex<V>> vertices;
+      private: std::map<VertexId, Vertex<V>> vertices;
 
       /// \brief The set of edges.
-      protected: std::map<EdgeId, EdgeType> edges;
+      private: std::map<EdgeId, EdgeType> edges;
 
       /// \brief The adjacency list.
       /// A map where the keys are vertex Ids. For each vertex (v)
       /// with id (vId), the map value contains a set of edge Ids. Each of
       /// the edges (e) with Id (eId) represents a connected path from (v) to
       /// another vertex via (e).
-      protected: std::map<VertexId, EdgeId_S> adjList;
+      private: std::map<VertexId, EdgeId_S> adjList;
 
       /// \brief Association between names and vertices curently used.
-      protected: std::multimap<std::string, VertexId> names;
+      private: std::multimap<std::string, VertexId> names;
 
       /// \brief The next vertex Id to be assigned to a new vertex.
       private: VertexId nextVertexId = 0;
@@ -805,6 +548,70 @@ namespace ignition
       /// \brief The next edge Id to be assigned to a new edge.
       private: VertexId nextEdgeId = 0;
     };
+
+    /////////////////////////////////////////////////
+    /// Partial template specification for undirected edges.
+    template<typename VV, typename EE>
+    std::ostream &operator<<(std::ostream &_out,
+                             const Graph<VV, EE, UndirectedEdge<EE>> &_g)
+    {
+      _out << "graph {" << std::endl;
+
+      // All vertices with the name and Id as a "label" attribute.
+      for (auto const &vertexMap : _g.Vertices())
+      {
+        auto vertex = vertexMap.second.get();
+        _out << vertex;
+      }
+
+      // All edges.
+      for (auto const &edgeMap : _g.Edges())
+      {
+        auto edge = edgeMap.second.get();
+        _out << edge;
+      }
+
+      _out << "}" << std::endl;
+
+      return _out;
+    }
+
+    /////////////////////////////////////////////////
+    /// Partial template specification for directed edges.
+    template<typename VV, typename EE>
+    std::ostream &operator<<(std::ostream &_out,
+                             const Graph<VV, EE, DirectedEdge<EE>> &_g)
+    {
+      _out << "digraph {" << std::endl;
+
+      // All vertices with the name and Id as a "label" attribute.
+      for (auto const &vertexMap : _g.Vertices())
+      {
+        auto vertex = vertexMap.second.get();
+        _out << vertex;
+      }
+
+      // All edges.
+      for (auto const &edgeMap : _g.Edges())
+      {
+        auto edge = edgeMap.second.get();
+        _out << edge;
+      }
+
+      _out << "}" << std::endl;
+
+      return _out;
+    }
+
+    /// \def UndirectedGraph
+    /// \brief An undirected graph.
+    template<typename V, typename E>
+    using UndirectedGraph = Graph<V, E, UndirectedEdge<E>>;
+
+    /// \def DirectedGraph
+    /// \brief A directed graph.
+    template<typename V, typename E>
+    using DirectedGraph = Graph<V, E, DirectedEdge<E>>;
   }
 }
 #endif

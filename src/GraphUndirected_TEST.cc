@@ -21,8 +21,8 @@
 #include <utility>
 #include <vector>
 
+#include "ignition/math/Graph.hh"
 #include "ignition/math/GraphAlgorithms.hh"
-#include "ignition/math/GraphUndirected.hh"
 
 using namespace ignition;
 using namespace math;
