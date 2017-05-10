@@ -237,7 +237,8 @@ namespace ignition
         return this->weight;
       }
 
-      // Documentation inherited.
+      /// \brief Get the two vertices contained in the edge.
+      /// \return The two vertices contained in the edge.
       public: VertexId_A Vertices() const
       {
         if (!this->Valid())
