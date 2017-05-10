@@ -276,7 +276,7 @@ namespace ignition
       private: double weight = 1.0;
 
       /// \brief The set of Ids of the two vertices.
-      protected: VertexId_A vertices;
+      private: VertexId_A vertices;
 
       /// \brief User data.
       private: E data;

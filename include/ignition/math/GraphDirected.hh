@@ -40,7 +40,7 @@ namespace ignition
       /// \sa Head()
       public: VertexId Tail() const
       {
-        return this->vertices.front();
+        return this->Vertices().front();
       }
 
       /// \brief Get the Id of the head vertex in this edge.
@@ -48,7 +48,7 @@ namespace ignition
       /// \sa Tail()
       public: VertexId Head() const
       {
-        return this->vertices.back();
+        return this->Vertices().back();
       }
 
       // Documentation inherited.

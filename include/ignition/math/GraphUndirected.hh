@@ -42,17 +42,17 @@ namespace ignition
         if (!this->Valid())
           return kNullId;
 
-        assert(this->vertices.size() == 2u);
-        if (std::find(this->vertices.begin(), this->vertices.end(), _from) ==
-              this->vertices.end())
+        assert(this->Vertices().size() == 2u);
+        if (std::find(this->Vertices().begin(), this->Vertices().end(),
+              _from) == this->Vertices().end())
         {
           return kNullId;
         }
 
-        if (this->vertices.front() == _from)
-          return this->vertices.back();
+        if (this->Vertices().front() == _from)
+          return this->Vertices().back();
 
-        return this->vertices.front();
+        return this->Vertices().front();
       }
 
       // Documentation inherited.
