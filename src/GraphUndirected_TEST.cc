@@ -164,20 +164,19 @@ TEST(UndirectedGraphTest, VerticesNames)
 /////////////////////////////////////////////////
 TEST(UndirectedGraphTest, Edges)
 {
-  // Create a graph with edges [(v0--v1), (v1--v2), (v2--v0)]
+  // Create a graph with edges [(v0--v0), (v0--v1), (v1--v2), (v2--v0)]
   UndirectedGraph<int, double> graph(
   {
     {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
+    {{{0, 0}, 1.0}, {{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
   auto edges = graph.Edges();
-  EXPECT_EQ(edges.size(), 3u);
+  EXPECT_EQ(edges.size(), 4u);
 
   // Check the Ids.
-  EXPECT_NE(edges.find(0), edges.end());
-  EXPECT_NE(edges.find(1), edges.end());
-  EXPECT_NE(edges.find(2), edges.end());
+  for (auto i = 0; i < 4; ++i)
+    EXPECT_NE(edges.find(i), edges.end());
 
   // Check the references.
   for (auto const &edgePair : edges)
@@ -190,12 +189,22 @@ TEST(UndirectedGraphTest, Edges)
         auto vertices = edge.Vertices();
         EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
           vertices.end());
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
+          vertices.end());
+        EXPECT_EQ(edge.Data(), 1.0);
+        break;
+      }
+      case 1:
+      {
+        auto vertices = edge.Vertices();
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
+          vertices.end());
         EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
           vertices.end());
         EXPECT_EQ(edge.Data(), 2.0);
         break;
       }
-      case 1:
+      case 2:
       {
         auto vertices = edge.Vertices();
         EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
@@ -205,7 +214,7 @@ TEST(UndirectedGraphTest, Edges)
         EXPECT_EQ(edge.Data(), 3.0);
         break;
       }
-      case 2:
+      case 3:
       {
         auto vertices = edge.Vertices();
         EXPECT_NE(std::find(vertices.begin(), vertices.end(), 2),
@@ -237,11 +246,11 @@ TEST(UndirectedGraphTest, Empty)
 /////////////////////////////////////////////////
 TEST(UndirectedGraphTest, AdjacentsFrom)
 {
-  // Create a graph with edges [(v0--v1), (v1--v2), (v2--v0)]
+  // Create a graph with edges [(v0--v0), (v0--v1), (v1--v2), (v2--v0)]
   UndirectedGraph<int, double> graph(
   {
     {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
+    {{{0, 0}, 1.0}, {{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
   // Try to get the adjacents from an inexistent vertex.
@@ -249,13 +258,15 @@ TEST(UndirectedGraphTest, AdjacentsFrom)
   EXPECT_TRUE(adjacents.empty());
 
   adjacents = graph.AdjacentsFrom(0);
-  EXPECT_EQ(adjacents.size(), 2u);
+  EXPECT_EQ(adjacents.size(), 3u);
+  EXPECT_NE(adjacents.find(0), adjacents.end());
   EXPECT_NE(adjacents.find(1), adjacents.end());
   EXPECT_NE(adjacents.find(2), adjacents.end());
 
   auto vertex = graph.VertexFromId(0);
   adjacents = graph.AdjacentsFrom(vertex);
-  EXPECT_EQ(adjacents.size(), 2u);
+  EXPECT_EQ(adjacents.size(), 3u);
+  EXPECT_NE(adjacents.find(0), adjacents.end());
   EXPECT_NE(adjacents.find(1), adjacents.end());
   EXPECT_NE(adjacents.find(2), adjacents.end());
 
@@ -265,6 +276,12 @@ TEST(UndirectedGraphTest, AdjacentsFrom)
     auto &vertex = vertexPair.second.get();
     switch (vertex.Id())
     {
+      case 0:
+      {
+        EXPECT_EQ(vertex.Name(), "0");
+        EXPECT_EQ(vertex.Data(), 0);
+        break;
+      }
       case 1:
       {
         EXPECT_EQ(vertex.Name(), "1");
@@ -286,11 +303,11 @@ TEST(UndirectedGraphTest, AdjacentsFrom)
 /////////////////////////////////////////////////
 TEST(UndirectedGraphTest, AdjacentsTo)
 {
-  // Create a graph with edges [(v0--v1), (v1--v2)]
+  // Create a graph with edges [(v0--v0), (v0--v1), (v1--v2)]
   UndirectedGraph<int, double> graph(
   {
     {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}}
+    {{{0, 0}, 1.0}, {{0, 1}, 2.0}, {{1, 2}, 3.0}}
   });
 
   // Try to get the adjacents from an inexistent vertex.
@@ -298,7 +315,8 @@ TEST(UndirectedGraphTest, AdjacentsTo)
   EXPECT_TRUE(adjacents.empty());
 
   adjacents = graph.AdjacentsTo(0);
-  EXPECT_EQ(adjacents.size(), 1u);
+  EXPECT_EQ(adjacents.size(), 2u);
+  EXPECT_NE(adjacents.find(0), adjacents.end());
   EXPECT_NE(adjacents.find(1), adjacents.end());
 
   auto vertex = graph.VertexFromId(1);
@@ -334,14 +352,14 @@ TEST(UndirectedGraphTest, AdjacentsTo)
 /////////////////////////////////////////////////
 TEST(UndirectedGraphTest, IncidentsFrom)
 {
-  // Create a graph with edges [(v0--v1), (v1--v2)]
+  // Create a graph with edges [(v0--v0), (v0--v1), (v1--v2)]
   UndirectedGraph<int, double> graph(
   {
     {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}}
+    {{{0, 0}, 1.0}, {{0, 1}, 2.0}, {{1, 2}, 3.0}}
   });
 
-  auto incidents = graph.IncidentsFrom(1);
+  auto incidents = graph.IncidentsFrom(0);
   EXPECT_EQ(incidents.size(), 2u);
   EXPECT_NE(incidents.find(0), incidents.end());
   EXPECT_NE(incidents.find(1), incidents.end());
@@ -349,8 +367,8 @@ TEST(UndirectedGraphTest, IncidentsFrom)
   auto vertex = graph.VertexFromId(1);
   incidents = graph.IncidentsFrom(vertex);
   EXPECT_EQ(incidents.size(), 2u);
-  EXPECT_NE(incidents.find(0), incidents.end());
   EXPECT_NE(incidents.find(1), incidents.end());
+  EXPECT_NE(incidents.find(2), incidents.end());
 
   // Check the references.
   for (auto const &edgePair : incidents)
@@ -358,7 +376,7 @@ TEST(UndirectedGraphTest, IncidentsFrom)
     auto &edge = edgePair.second.get();
     switch (edge.Id())
     {
-      case 0:
+      case 1:
       {
         auto vertices = edge.Vertices();
         EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
@@ -368,7 +386,7 @@ TEST(UndirectedGraphTest, IncidentsFrom)
         EXPECT_EQ(edge.Data(), 2.0);
         break;
       }
-      case 1:
+      case 2:
       {
         auto vertices = edge.Vertices();
         EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
@@ -387,23 +405,25 @@ TEST(UndirectedGraphTest, IncidentsFrom)
 /////////////////////////////////////////////////
 TEST(UndirectedGraphTest, IncidentsTo)
 {
-  // Create a graph with edges [(v0--v1), (v1--v2), (v2--v0)]
+  // Create a graph with edges [(v0--v0), (v0--v1), (v1--v2), (v2--v0)]
   UndirectedGraph<int, double> graph(
   {
     {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
+    {{{0, 0}, 1.0}, {{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
   auto incidents = graph.IncidentsTo(0);
-  EXPECT_EQ(incidents.size(), 2u);
-  EXPECT_NE(incidents.find(2), incidents.end());
+  EXPECT_EQ(incidents.size(), 3u);
   EXPECT_NE(incidents.find(0), incidents.end());
+  EXPECT_NE(incidents.find(1), incidents.end());
+  EXPECT_NE(incidents.find(3), incidents.end());
 
   auto vertex = graph.VertexFromId(0);
   incidents = graph.IncidentsTo(vertex);
-  EXPECT_EQ(incidents.size(), 2u);
-  EXPECT_NE(incidents.find(2), incidents.end());
+  EXPECT_EQ(incidents.size(), 3u);
   EXPECT_NE(incidents.find(0), incidents.end());
+  EXPECT_NE(incidents.find(1), incidents.end());
+  EXPECT_NE(incidents.find(3), incidents.end());
 
   // Check the references.
   for (auto const &edgePair : incidents)
@@ -416,12 +436,20 @@ TEST(UndirectedGraphTest, IncidentsTo)
         auto vertices = edge.Vertices();
         EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
           vertices.end());
+        EXPECT_EQ(edge.Data(), 1.0);
+        break;
+      }
+      case 1:
+      {
+        auto vertices = edge.Vertices();
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
+          vertices.end());
         EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
           vertices.end());
         EXPECT_EQ(edge.Data(), 2.0);
         break;
       }
-      case 2:
+      case 3:
       {
         auto vertices = edge.Vertices();
         EXPECT_NE(std::find(vertices.begin(), vertices.end(), 2),
@@ -440,15 +468,15 @@ TEST(UndirectedGraphTest, IncidentsTo)
 /////////////////////////////////////////////////
 TEST(UndirectedGraphTest, InDegree)
 {
-  // Create a graph with edges [(v0--v1), (v1--v2)]
+  // Create a graph with edges [(v0--v0), (v0--v1), (v1--v2)]
   UndirectedGraph<int, double> graph(
   {
     {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}}
+    {{{0, 0}, 1.0}, {{0, 1}, 2.0}, {{1, 2}, 3.0}}
   });
 
-  EXPECT_EQ(graph.InDegree(0), 1u);
-  EXPECT_EQ(graph.InDegree(graph.VertexFromId(0)), 1u);
+  EXPECT_EQ(graph.InDegree(0), 2u);
+  EXPECT_EQ(graph.InDegree(graph.VertexFromId(0)), 2u);
   EXPECT_EQ(graph.InDegree(1), 2u);
   EXPECT_EQ(graph.InDegree(graph.VertexFromId(1)), 2u);
 }
@@ -456,15 +484,15 @@ TEST(UndirectedGraphTest, InDegree)
 /////////////////////////////////////////////////
 TEST(UndirectedGraphTest, OutDegree)
 {
-  // Create a graph with edges [(v0--v1), (v1--v2)]
+  // Create a graph with edges [(v0--v0), (v0--v1), (v1--v2)]
   UndirectedGraph<int, double> graph(
   {
     {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}}
+    {{{0, 0}, 1.0}, {{0, 1}, 2.0}, {{1, 2}, 3.0}}
   });
 
-  EXPECT_EQ(graph.OutDegree(0), 1u);
-  EXPECT_EQ(graph.OutDegree(graph.VertexFromId(0)), 1u);
+  EXPECT_EQ(graph.OutDegree(0), 2u);
+  EXPECT_EQ(graph.OutDegree(graph.VertexFromId(0)), 2u);
   EXPECT_EQ(graph.OutDegree(1), 2u);
   EXPECT_EQ(graph.OutDegree(graph.VertexFromId(1)), 2u);
   EXPECT_EQ(graph.OutDegree(2), 1u);
@@ -643,11 +671,12 @@ TEST(UndirectedGraphTest, RemoveVertices)
 /////////////////////////////////////////////////
 TEST(UndirectedGraphTest, StreamInsertion)
 {
-  // Create a graph with 4 vertices and edges [(v0--v1), (v1--v2), (v2--v3)]
+  // Create a graph with 4 vertices and
+  // edges [(v0-->v0), (v0-->v1), (v1-->v2), (v2-->v3)]
   UndirectedGraph<int, double> graph(
   {
     {{"v0", 0, 0}, {"v1", 1, 1}, {"v2", 2, 2}, {"v3", 3, 3}},
-    {{{0, 1}, 2.0, 4.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
+    {{{0, 1}, 2.0, 4.0}, {{0, 0}, 2.0, 6.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
   std::ostringstream output;
@@ -670,6 +699,7 @@ TEST(UndirectedGraphTest, StreamInsertion)
   // printed.
   std::vector<std::pair<std::string, std::string>> expectedEdges =
     {
+      {"  0 -- 0 [label=6];\n", "  0 -- 0 [label=6];\n"},
       {"  0 -- 1 [label=4];\n", "  1 -- 0 [label=4];\n"},
       {"  1 -- 2 [label=1];\n", "  2 -- 1 [label=1];\n"},
       {"  0 -- 2 [label=1];\n", "  2 -- 0 [label=1];\n"}
@@ -763,47 +793,4 @@ TEST(UndirectedGraphTest, DijkstraWeights)
   auto res = dijkstra(graph, from, to);
   std::vector<VertexId> expected = {0, 1, 5};
   EXPECT_EQ(res, expected);
-}
-
-/////////////////////////////////////////////////
-TEST(UndirectedGraphTest, Loop)
-{
-  // Create a graph with 4 vertices and
-  // edges [(v0-->v0), (v0-->v1), (v1-->v2), (v2-->v3)]
-  UndirectedGraph<int, double> graph(
-  {
-    {{"v0", 0, 0}, {"v1", 1, 1}, {"v2", 2, 2}, {"v3", 3, 3}},
-    {{{0, 1}, 2.0, 4.0}, {{0, 0}, 2.0, 6.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
-  });
-
-  std::ostringstream output;
-  output << graph;
-
-  std::cout << "# Use this snippet with your favorite DOT tool." << std::endl;
-  std::cout << graph << std::endl;
-
-  for (auto const &s : {"graph {\n",
-                        "  0 [label=\"v0 (0)\"];\n",
-                        "  1 [label=\"v1 (1)\"];\n",
-                        "  2 [label=\"v2 (2)\"];\n",
-                        "  3 [label=\"v3 (3)\"];\n"})
-  {
-    EXPECT_NE(output.str().find(s), std::string::npos);
-  }
-
-  // We don't really know the order in which the edges will be printed.
-  // We also don't know the order in which the vertices on each edge will be
-  // printed.
-  std::vector<std::pair<std::string, std::string>> expectedEdges =
-    {
-      {"  0 -- 0 [label=6];\n", "  0 -- 0 [label=6];\n"},
-      {"  0 -- 1 [label=4];\n", "  1 -- 0 [label=4];\n"},
-      {"  1 -- 2 [label=1];\n", "  2 -- 1 [label=1];\n"},
-      {"  0 -- 2 [label=1];\n", "  2 -- 0 [label=1];\n"}
-    };
-  for (auto const &edge : expectedEdges)
-  {
-    EXPECT_TRUE((output.str().find(std::get<0>(edge)) != std::string::npos) ||
-                (output.str().find(std::get<1>(edge)) != std::string::npos));
-  }
 }

@@ -166,16 +166,15 @@ TEST(GraphTest, Edges)
   DirectedGraph<int, double> graph(
   {
     {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
+    {{{0, 0}, 1.0}, {{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
   auto edges = graph.Edges();
-  EXPECT_EQ(edges.size(), 3u);
+  EXPECT_EQ(edges.size(), 4u);
 
   // Check the Ids.
-  EXPECT_NE(edges.find(0), edges.end());
-  EXPECT_NE(edges.find(1), edges.end());
-  EXPECT_NE(edges.find(2), edges.end());
+  for (auto i = 0; i < 4; ++i)
+    EXPECT_NE(edges.find(i), edges.end());
 
   // Check the references.
   for (auto const &edgePair : edges)
@@ -186,18 +185,25 @@ TEST(GraphTest, Edges)
       case 0:
       {
         EXPECT_EQ(edge.Tail(), 0);
+        EXPECT_EQ(edge.Head(), 0);
+        EXPECT_EQ(edge.Data(), 1.0);
+        break;
+      }
+      case 1:
+      {
+        EXPECT_EQ(edge.Tail(), 0);
         EXPECT_EQ(edge.Head(), 1);
         EXPECT_EQ(edge.Data(), 2.0);
         break;
       }
-      case 1:
+      case 2:
       {
         EXPECT_EQ(edge.Tail(), 1);
         EXPECT_EQ(edge.Head(), 2);
         EXPECT_EQ(edge.Data(), 3.0);
         break;
       }
-      case 2:
+      case 3:
       {
         EXPECT_EQ(edge.Tail(), 2);
         EXPECT_EQ(edge.Head(), 0);
@@ -226,11 +232,11 @@ TEST(GraphTest, Empty)
 /////////////////////////////////////////////////
 TEST(GraphTest, AdjacentsFrom)
 {
-  // Create a graph with edges [(v0-->v1), (v1-->v2), (v2-->v0)]
+  // Create a graph with edges [(v0--v0), (v0-->v1), (v1-->v2), (v2-->v0)]
   DirectedGraph<int, double> graph(
   {
     {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
+    {{{0, 0}, 1.0}, {{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
   // Try to get the adjacents from an inexistent vertex.
@@ -238,12 +244,14 @@ TEST(GraphTest, AdjacentsFrom)
   EXPECT_TRUE(adjacents.empty());
 
   adjacents = graph.AdjacentsFrom(0);
-  EXPECT_EQ(adjacents.size(), 1u);
+  EXPECT_EQ(adjacents.size(), 2u);
+  EXPECT_NE(adjacents.find(0), adjacents.end());
   EXPECT_NE(adjacents.find(1), adjacents.end());
 
   auto vertex = graph.VertexFromId(0);
   adjacents = graph.AdjacentsFrom(vertex);
-  EXPECT_EQ(adjacents.size(), 1u);
+  EXPECT_EQ(adjacents.size(), 2u);
+  EXPECT_NE(adjacents.find(0), adjacents.end());
   EXPECT_NE(adjacents.find(1), adjacents.end());
 
   // Check the references.
@@ -252,6 +260,12 @@ TEST(GraphTest, AdjacentsFrom)
     auto &vertex = vertexPair.second.get();
     switch (vertex.Id())
     {
+      case 0:
+      {
+        EXPECT_EQ(vertex.Name(), "0");
+        EXPECT_EQ(vertex.Data(), 0);
+        break;
+      }
       case 1:
       {
         EXPECT_EQ(vertex.Name(), "1");
@@ -267,11 +281,11 @@ TEST(GraphTest, AdjacentsFrom)
 /////////////////////////////////////////////////
 TEST(GraphTest, AdjacentsTo)
 {
-  // Create a graph with edges [(v0-->v1), (v1-->v2), (v2-->v1)]
+  // Create a graph with edges [(v0-->v0), (v0-->v1), (v1-->v2), (v2-->v1)]
   DirectedGraph<int, double> graph(
   {
     {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 1}, 4.0}}
+    {{{0, 0}, 1.0}, {{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 1}, 4.0}}
   });
 
   // Try to get the adjacents to an inexistent vertex.
@@ -279,7 +293,8 @@ TEST(GraphTest, AdjacentsTo)
   EXPECT_TRUE(adjacents.empty());
 
   adjacents = graph.AdjacentsTo(0);
-  EXPECT_EQ(adjacents.size(), 0u);
+  EXPECT_EQ(adjacents.size(), 1u);
+  EXPECT_NE(adjacents.find(0), adjacents.end());
 
   adjacents = graph.AdjacentsTo(1);
   EXPECT_EQ(adjacents.size(), 2u);
@@ -312,22 +327,23 @@ TEST(GraphTest, AdjacentsTo)
 /////////////////////////////////////////////////
 TEST(GraphTest, IncidentsFrom)
 {
-  // Create a graph with edges [(v0-->v1), (v1-->v0), (v1-->v2)]
+  // Create a graph with edges [(v0--v0), (v0-->v1), (v1-->v0), (v1-->v2)]
   DirectedGraph<int, double> graph(
   {
     {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
-    {{{0, 1}, 2.0}, {{1, 0}, 3.0}, {{1, 2}, 4.0}}
+    {{{0, 0}, 1.0}, {{0, 1}, 2.0}, {{1, 0}, 3.0}, {{1, 2}, 4.0}}
   });
 
   auto incidents = graph.IncidentsFrom(0);
-  EXPECT_EQ(incidents.size(), 1u);
+  EXPECT_EQ(incidents.size(), 2u);
   EXPECT_NE(incidents.find(0), incidents.end());
+  EXPECT_NE(incidents.find(1), incidents.end());
 
   auto vertex = graph.VertexFromId(1);
   incidents = graph.IncidentsFrom(vertex);
   EXPECT_EQ(incidents.size(), 2u);
-  EXPECT_NE(incidents.find(1), incidents.end());
   EXPECT_NE(incidents.find(2), incidents.end());
+  EXPECT_NE(incidents.find(3), incidents.end());
 
   // Check the references.
   for (auto const &edgePair : incidents)
@@ -335,7 +351,7 @@ TEST(GraphTest, IncidentsFrom)
     auto &edge = edgePair.second.get();
     switch (edge.Id())
     {
-      case 1:
+      case 2:
       {
         auto vertices = edge.Vertices();
          EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
@@ -345,7 +361,7 @@ TEST(GraphTest, IncidentsFrom)
         EXPECT_EQ(edge.Data(), 3.0);
         break;
       }
-      case 2:
+      case 3:
       {
         auto vertices = edge.Vertices();
          EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
@@ -367,21 +383,23 @@ TEST(GraphTest, IncidentsFrom)
 /////////////////////////////////////////////////
 TEST(GraphTest, IncidentsTo)
 {
-  // Create a graph with edges [(v0-->v1), (v1-->v2), (v2-->v0)]
+  // Create a graph with edges [(v0--v0), (v0-->v1), (v1-->v2), (v2-->v0)]
   DirectedGraph<int, double> graph(
   {
     {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
+    {{{0, 0}, 1.0}, {{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
   auto incidents = graph.IncidentsTo(0);
-  EXPECT_EQ(incidents.size(), 1u);
-  EXPECT_NE(incidents.find(2), incidents.end());
+  EXPECT_EQ(incidents.size(), 2u);
+  EXPECT_NE(incidents.find(0), incidents.end());
+  EXPECT_NE(incidents.find(3), incidents.end());
 
   auto vertex = graph.VertexFromId(0);
   incidents = graph.IncidentsTo(vertex);
-  EXPECT_EQ(incidents.size(), 1u);
-  EXPECT_NE(incidents.find(2), incidents.end());
+  EXPECT_EQ(incidents.size(), 2u);
+  EXPECT_NE(incidents.find(0), incidents.end());
+  EXPECT_NE(incidents.find(3), incidents.end());
 
   // Check the references.
   for (auto const &edgePair : incidents)
@@ -389,7 +407,15 @@ TEST(GraphTest, IncidentsTo)
     auto &edge = edgePair.second.get();
     switch (edge.Id())
     {
-      case 2:
+      case 0:
+      {
+        auto vertices = edge.Vertices();
+        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
+          vertices.end());
+        EXPECT_EQ(edge.Data(), 1.0);
+        break;
+      }
+      case 3:
       {
         auto vertices = edge.Vertices();
         EXPECT_NE(std::find(vertices.begin(), vertices.end(), 2),
@@ -408,15 +434,15 @@ TEST(GraphTest, IncidentsTo)
 /////////////////////////////////////////////////
 TEST(GraphTest, InDegree)
 {
-  // Create a graph with edges [(v0-->v1), (v1-->v2), (v2-->v1)]
+  // Create a graph with edges [(v0--v0), (v0-->v1), (v1-->v2), (v2-->v1)]
   DirectedGraph<int, double> graph(
   {
     {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
-    {{{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 1}, 4.0}}
+    {{{0, 0}, 1.0}, {{0, 1}, 2.0}, {{1, 2}, 3.0}, {{2, 1}, 4.0}}
   });
 
-  EXPECT_EQ(graph.InDegree(0), 0u);
-  EXPECT_EQ(graph.InDegree(graph.VertexFromId(0)), 0u);
+  EXPECT_EQ(graph.InDegree(0), 1u);
+  EXPECT_EQ(graph.InDegree(graph.VertexFromId(0)), 1u);
   EXPECT_EQ(graph.InDegree(1), 2u);
   EXPECT_EQ(graph.InDegree(graph.VertexFromId(1)), 2u);
 }
@@ -424,15 +450,15 @@ TEST(GraphTest, InDegree)
 /////////////////////////////////////////////////
 TEST(GraphTest, OutDegree)
 {
-  // Create a graph with edges [(v0-->v1), (v1-->v0), (v1-->v2)]
+  // Create a graph with edges [(v0--v0), (v0-->v1), (v1-->v0), (v1-->v2)]
   DirectedGraph<int, double> graph(
   {
     {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
-    {{{0, 1}, 2.0}, {{1, 0}, 3.0}, {{1, 2}, 4.0}}
+    {{{0, 0}, 1.0}, {{0, 1}, 2.0}, {{1, 0}, 3.0}, {{1, 2}, 4.0}}
   });
 
-  EXPECT_EQ(graph.OutDegree(0), 1u);
-  EXPECT_EQ(graph.OutDegree(graph.VertexFromId(0)), 1u);
+  EXPECT_EQ(graph.OutDegree(0), 2u);
+  EXPECT_EQ(graph.OutDegree(graph.VertexFromId(0)), 2u);
   EXPECT_EQ(graph.OutDegree(1), 2u);
   EXPECT_EQ(graph.OutDegree(graph.VertexFromId(1)), 2u);
   EXPECT_EQ(graph.OutDegree(2), 0u);
@@ -612,11 +638,12 @@ TEST(GraphTest, RemoveVertices)
 /////////////////////////////////////////////////
 TEST(GraphTest, StreamInsertion)
 {
-  // Create a graph with 4 vertices and edges [(v0-->v1), (v1-->v2), (v2-->v3)]
+  // Create a graph with 4 vertices and
+  // edges [(v0-->v0), (v0-->v1), (v1-->v2), (v2-->v3)]
   DirectedGraph<int, double> graph(
   {
     {{"v0", 0, 0}, {"v1", 1, 1}, {"v2", 2, 2}, {"v3", 3, 3}},
-    {{{0, 1}, 2.0, 4.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
+    {{{0, 1}, 2.0, 4.0}, {{0, 0}, 2.0, 6.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
   });
 
   std::ostringstream output;
@@ -631,6 +658,7 @@ TEST(GraphTest, StreamInsertion)
                         "  2 [label=\"v2 (2)\"];\n",
                         "  3 [label=\"v3 (3)\"];\n",
                         "  0 -> 1 [label=4];\n",
+                        "  0 -> 0 [label=6];\n",
                         "  1 -> 2 [label=1];\n",
                         "  2 -> 0 [label=1];\n"})
   {
@@ -717,35 +745,4 @@ TEST(GraphTest, DijkstraWeights)
   auto res = dijkstra(graph, from, to);
   std::vector<VertexId> expected = {0, 1, 5};
   EXPECT_EQ(res, expected);
-}
-
-/////////////////////////////////////////////////
-TEST(GraphTest, Loop)
-{
-  // Create a graph with 4 vertices and
-  // edges [(v0-->v0), (v0-->v1), (v1-->v2), (v2-->v3)]
-  DirectedGraph<int, double> graph(
-  {
-    {{"v0", 0, 0}, {"v1", 1, 1}, {"v2", 2, 2}, {"v3", 3, 3}},
-    {{{0, 1}, 2.0, 4.0}, {{0, 0}, 2.0, 6.0}, {{1, 2}, 3.0}, {{2, 0}, 4.0}}
-  });
-
-  std::ostringstream output;
-  output << graph;
-
-  std::cout << "# Use this snippet with your favorite DOT tool." << std::endl;
-  std::cout << graph << std::endl;
-
-  for (auto const &s : {"digraph {\n",
-                        "  0 [label=\"v0 (0)\"];\n",
-                        "  1 [label=\"v1 (1)\"];\n",
-                        "  2 [label=\"v2 (2)\"];\n",
-                        "  3 [label=\"v3 (3)\"];\n",
-                        "  0 -> 1 [label=4];\n",
-                        "  0 -> 0 [label=6];\n",
-                        "  1 -> 2 [label=1];\n",
-                        "  2 -> 0 [label=1];\n"})
-  {
-    EXPECT_NE(output.str().find(s), std::string::npos);
-  }
 }
