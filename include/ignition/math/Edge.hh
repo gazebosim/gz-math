@@ -204,7 +204,7 @@ namespace ignition
                                       const double _weight,
                                       const VertexId_A &_vertices,
                                       const E &_data)
-        : Edge(_id, _weight, _vertices, _data)
+        : Edge<E>(_id, _weight, _vertices, _data)
       {
       }
 
@@ -271,7 +271,7 @@ namespace ignition
                                     const double _weight,
                                     const VertexId_A &_vertices,
                                     const E &_data)
-        : Edge(_id, _weight, _vertices, _data)
+        : Edge<E>(_id, _weight, _vertices, _data)
       {
       }
 

@@ -65,6 +65,13 @@ namespace ignition
         return this->data;
       }
 
+      /// \brief Get a mutable reference to the user information.
+      /// \return Mutable reference to the user information.
+      public: V &Data()
+      {
+        return this->data;
+      }
+
       /// \brief Get the vertex Id.
       /// \return The vertex Id.
       public: VertexId Id() const

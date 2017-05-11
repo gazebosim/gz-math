@@ -484,6 +484,19 @@ namespace ignition
         return iter->second;
       }
 
+      /// \brief Get a mutable reference to a vertex using its Id.
+      /// \param[in] _id The Id of the vertex.
+      /// \return A mutable reference to the vertex with Id = _id or NullVertex
+      /// if not found.
+      public: Vertex<V> &VertexFromId(const VertexId &_id)
+      {
+        auto iter = this->vertices.find(_id);
+        if (iter == this->vertices.end())
+          return Vertex<V>::NullVertex;
+
+        return iter->second;
+      }
+
       /// \brief Get a reference to an edge using its Id.
       /// \param[in] _id The Id of the edge.
       /// \return A reference to the edge with Id = _id or NullEdge if
