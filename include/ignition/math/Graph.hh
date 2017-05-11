@@ -425,7 +425,7 @@ namespace ignition
       public: size_t RemoveVertices(const std::string &_name)
       {
         size_t numVertices = this->names.count(_name);
-        for (auto i = 0; i < numVertices; ++i)
+        for (size_t i = 0; i < numVertices; ++i)
         {
           auto iter = this->names.find(_name);
           this->RemoveVertex(iter->second);
