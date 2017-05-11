@@ -42,7 +42,7 @@ TYPED_TEST(EdgeTestFixture, Accessors)
   {
     EdgeId id = 1;
     double weight = 2.0;
-    VertexId_A vertices = {0, 1};
+    VertexId_P vertices = {0, 1};
     int data = 3;
     TypeParam edge(id, weight, vertices, data);
 
@@ -59,13 +59,13 @@ TYPED_TEST(EdgeTestFixture, Accessors)
   {
     EdgeId id = kNullId;
     double weight = 2.0;
-    VertexId_A vertices = {0, 1};
+    VertexId_P vertices = {0, 1};
     int data = 3;
     TypeParam edge(id, weight, vertices, data);
 
     EXPECT_EQ(edge.Id(), id);
     EXPECT_DOUBLE_EQ(edge.Weight(), weight);
-    VertexId_A expectedVertices = {kNullId, kNullId};
+    VertexId_P expectedVertices = {kNullId, kNullId};
     EXPECT_EQ(edge.Vertices(), expectedVertices);
     EXPECT_EQ(edge.Data(), data);
     // Modify the data.
@@ -76,11 +76,87 @@ TYPED_TEST(EdgeTestFixture, Accessors)
 }
 
 /////////////////////////////////////////////////
+TEST(EdgeTest, FromToDirected)
+{
+  {
+    EdgeId id = 1;
+    double weight = 2.0;
+    VertexId_P vertices = {0, 1};
+    int data = 3;
+    DirectedEdge<int> edge(id, weight, vertices, data);
+
+    EXPECT_EQ(edge.From(0), 1);
+    EXPECT_EQ(edge.To(1), 0);
+
+    // It's a directed edge, you cannot go in this direction.
+    EXPECT_EQ(edge.From(1), kNullId);
+    EXPECT_EQ(edge.To(0), kNullId);
+
+    // The Id doesn't exit.
+    EXPECT_EQ(edge.From(99), kNullId);
+    EXPECT_EQ(edge.To(99), kNullId);
+  }
+
+  {
+    EdgeId id = kNullId;
+    double weight = 2.0;
+    // Only one vertex.
+    VertexId_P vertices = {0, 1};
+    int data = 3;
+    DirectedEdge<int> edge(id, weight, vertices, data);
+    // The edge is not valid because the Id == kNullId.
+    EXPECT_FALSE(edge.Valid());
+
+    EXPECT_EQ(edge.From(0), kNullId);
+    EXPECT_EQ(edge.To(1), kNullId);
+    EXPECT_EQ(edge.From(1), kNullId);
+    EXPECT_EQ(edge.To(0), kNullId);
+  }
+}
+
+/////////////////////////////////////////////////
+TEST(EdgeTest, FromToUndirected)
+{
+  {
+    EdgeId id = 1;
+    double weight = 2.0;
+    VertexId_P vertices = {0, 1};
+    int data = 3;
+    UndirectedEdge<int> edge(id, weight, vertices, data);
+
+    EXPECT_EQ(edge.From(0), 1);
+    EXPECT_EQ(edge.To(1), 0);
+    EXPECT_EQ(edge.From(1), 0);
+    EXPECT_EQ(edge.To(0), 1);
+
+    // The Id doesn't exit.
+    EXPECT_EQ(edge.From(99), kNullId);
+    EXPECT_EQ(edge.To(99), kNullId);
+  }
+
+  {
+    EdgeId id = kNullId;
+    double weight = 2.0;
+    // Only one vertex.
+    VertexId_P vertices = {0, 1};
+    int data = 3;
+    UndirectedEdge<int> edge(id, weight, vertices, data);
+    // The edge is not valid because the Id == kNullId.
+    EXPECT_FALSE(edge.Valid());
+
+    EXPECT_EQ(edge.From(0), kNullId);
+    EXPECT_EQ(edge.To(1), kNullId);
+    EXPECT_EQ(edge.From(1), kNullId);
+    EXPECT_EQ(edge.To(0), kNullId);
+  }
+}
+
+/////////////////////////////////////////////////
 TEST(EdgeTest, StreamInsertionDirected)
 {
   EdgeId id = 1;
   double weight = 2.0;
-  VertexId_A vertices = {0, 1};
+  VertexId_P vertices = {0, 1};
   int data = 3;
   DirectedEdge<int> edge(id, weight, vertices, data);
 
@@ -96,7 +172,7 @@ TEST(EdgeTest, StreamInsertionUndirected)
 {
   EdgeId id = 1;
   double weight = 2.0;
-  VertexId_A vertices = {0, 1};
+  VertexId_P vertices = {0, 1};
   int data = 3;
   UndirectedEdge<int> edge(id, weight, vertices, data);
 

@@ -53,40 +53,32 @@ TEST(UndirectedGraphTest, Edges)
       case 0:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
-          vertices.end());
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
-          vertices.end());
+        EXPECT_EQ(vertices.first, 0);
+        EXPECT_EQ(vertices.second, 0);
         EXPECT_EQ(edge.Data(), 1.0);
         break;
       }
       case 1:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
-          vertices.end());
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
-          vertices.end());
+        EXPECT_EQ(vertices.first, 0);
+        EXPECT_EQ(vertices.second, 1);
         EXPECT_EQ(edge.Data(), 2.0);
         break;
       }
       case 2:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
-          vertices.end());
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 2),
-          vertices.end());
+        EXPECT_EQ(vertices.first, 1);
+        EXPECT_EQ(vertices.second, 2);
         EXPECT_EQ(edge.Data(), 3.0);
         break;
       }
       case 3:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 2),
-          vertices.end());
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
-          vertices.end());
+        EXPECT_EQ(vertices.first, 2);
+        EXPECT_EQ(vertices.second, 0);
         EXPECT_EQ(edge.Data(), 4.0);
         break;
       }
@@ -232,20 +224,16 @@ TEST(UndirectedGraphTest, IncidentsFrom)
       case 1:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
-          vertices.end());
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
-          vertices.end());
+        EXPECT_EQ(vertices.first, 0);
+        EXPECT_EQ(vertices.second, 1);
         EXPECT_EQ(edge.Data(), 2.0);
         break;
       }
       case 2:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
-          vertices.end());
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 2),
-          vertices.end());
+        EXPECT_EQ(vertices.first, 1);
+        EXPECT_EQ(vertices.second, 2);
         EXPECT_EQ(edge.Data(), 3.0);
         break;
       }
@@ -287,28 +275,24 @@ TEST(UndirectedGraphTest, IncidentsTo)
       case 0:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
-          vertices.end());
+        EXPECT_EQ(vertices.first, 0);
+        EXPECT_EQ(vertices.second, 0);
         EXPECT_EQ(edge.Data(), 1.0);
         break;
       }
       case 1:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
-          vertices.end());
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
-          vertices.end());
+        EXPECT_EQ(vertices.first, 0);
+        EXPECT_EQ(vertices.second, 1);
         EXPECT_EQ(edge.Data(), 2.0);
         break;
       }
       case 3:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 2),
-          vertices.end());
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
-          vertices.end());
+        EXPECT_EQ(vertices.first, 2);
+        EXPECT_EQ(vertices.second, 0);
         EXPECT_EQ(edge.Data(), 4.0);
         break;
       }
@@ -373,8 +357,7 @@ TEST(UndirectedGraphTest, AddEdge)
   EXPECT_EQ(e2.Data(), 4.0);
 
   // Check that the edges point to the right vertices.
-  EXPECT_NE(std::find(e0.Vertices().begin(), e0.Vertices().end(), 0),
-          e0.Vertices().end());
+  EXPECT_EQ(e0.Vertices().first, 0);
 
   auto edges = graph.Edges();
   EXPECT_EQ(edges.size(), 3u);

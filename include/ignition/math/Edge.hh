@@ -44,7 +44,7 @@ namespace ignition
       /// \param[in] _vertices The vertices of the edge.
       /// \param[in] _data The data stored in the edge.
       /// \param[in] _weight The weight (cost) of the edge.
-      EdgeInitializer(const VertexId_A &_vertices,
+      EdgeInitializer(const VertexId_P &_vertices,
                       const E &_data,
                       const double _weight = 1)
         : vertices(_vertices),
@@ -54,7 +54,7 @@ namespace ignition
       };
 
       /// \brief IDs of the vertices.
-      public: VertexId_A vertices;
+      public: VertexId_P vertices;
 
       /// \brief User data.
       public: E data;
@@ -76,7 +76,7 @@ namespace ignition
       /// \param[in] _data The data stored in the edge.
       public: explicit Edge(const EdgeId &_id,
                             const double _weight,
-                            const VertexId_A &_vertices,
+                            const VertexId_P &_vertices,
                             const E &_data)
         : id(_id),
           weight(_weight),
@@ -134,7 +134,7 @@ namespace ignition
 
       /// \brief Get the two vertices contained in the edge.
       /// \return The two vertices contained in the edge.
-      public: VertexId_A Vertices() const
+      public: VertexId_P Vertices() const
       {
         if (!this->Valid())
           return {kNullId, kNullId};
@@ -171,7 +171,7 @@ namespace ignition
       private: double weight = 1.0;
 
       /// \brief The set of Ids of the two vertices.
-      private: VertexId_A vertices;
+      private: VertexId_P vertices;
 
       /// \brief User data.
       private: E data;
@@ -201,7 +201,7 @@ namespace ignition
       /// \param[in] _data The data stored in the edge.
       public: explicit UndirectedEdge(const EdgeId &_id,
                                       const double _weight,
-                                      const VertexId_A &_vertices,
+                                      const VertexId_P &_vertices,
                                       const E &_data)
         : Edge<E>(_id, _weight, _vertices, _data)
       {
@@ -213,17 +213,13 @@ namespace ignition
         if (!this->Valid())
           return kNullId;
 
-        assert(this->Vertices().size() == 2u);
-        if (std::find(this->Vertices().begin(), this->Vertices().end(),
-              _from) == this->Vertices().end())
-        {
+        if (this->Vertices().first != _from && this->Vertices().second != _from)
           return kNullId;
-        }
 
-        if (this->Vertices().front() == _from)
-          return this->Vertices().back();
+        if (this->Vertices().first == _from)
+          return this->Vertices().second;
 
-        return this->Vertices().front();
+        return this->Vertices().first;
       }
 
       // Documentation inherited.
@@ -241,10 +237,8 @@ namespace ignition
                                               const UndirectedEdge<E> &_e)
       {
         auto vertices = _e.Vertices();
-        auto it = vertices.begin();
-        _out << "  " << *it << " -- ";
-        ++it;
-        _out << *it << " [label=" << _e.Weight() << "];" << std::endl;
+        _out << "  " << vertices.first << " -- " << vertices.second
+             << " [label=" << _e.Weight() << "];" << std::endl;
         return _out;
       }
     };
@@ -268,7 +262,7 @@ namespace ignition
       /// \param[in] _data The data stored in the edge.
       public: explicit DirectedEdge(const EdgeId &_id,
                                     const double _weight,
-                                    const VertexId_A &_vertices,
+                                    const VertexId_P &_vertices,
                                     const E &_data)
         : Edge<E>(_id, _weight, _vertices, _data)
       {
@@ -279,7 +273,7 @@ namespace ignition
       /// \sa Head()
       public: VertexId Tail() const
       {
-        return this->Vertices().front();
+        return this->Vertices().first;
       }
 
       /// \brief Get the Id of the head vertex in this edge.
@@ -287,7 +281,7 @@ namespace ignition
       /// \sa Tail()
       public: VertexId Head() const
       {
-        return this->Vertices().back();
+        return this->Vertices().second;
       }
 
       // Documentation inherited.

@@ -127,7 +127,7 @@ namespace ignition
       ///// \param[in] _data User data.
       ///// \return Reference to the new edge created or NullEdge if the
       ///// edge was not created (e.g. incorrect vertices).
-      public: EdgeType &AddEdge(const VertexId_A &_vertices,
+      public: EdgeType &AddEdge(const VertexId_P &_vertices,
                                 const E &_data,
                                 const double _weight = 1.0)
       {
@@ -142,11 +142,9 @@ namespace ignition
       public: EdgeType &LinkEdge(const EdgeType &_edge)
       {
         auto vertices = _edge.Vertices();
-        if (vertices.size() != 2u)
-          return EdgeType::NullEdge;
 
         // Sanity check: Both vertices should exist.
-        for (auto const &v : vertices)
+        for (auto const &v : {vertices.first, vertices.second})
         {
           auto itV = this->vertices.find(v);
           if (itV == this->vertices.end())
@@ -154,7 +152,7 @@ namespace ignition
         }
 
         // Link the new edge.
-        for (auto const &v : vertices)
+        for (auto const &v : {vertices.first, vertices.second})
         {
           if (_edge.From(v) != kNullId)
           {
@@ -447,7 +445,7 @@ namespace ignition
         auto vertices = edgeIt->second.Vertices();
 
         // Unlink the edge.
-        for (auto const &v : vertices)
+        for (auto const &v : {vertices.first, vertices.second})
         {
           if (edgeIt->second.From(v) != kNullId)
           {

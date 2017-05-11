@@ -17,7 +17,6 @@
 #ifndef IGNITION_MATH_VERTEX_HH_
 #define IGNITION_MATH_VERTEX_HH_
 
-#include <array>
 // int64_t
 #include <cstdint>
 #include <functional>
@@ -25,6 +24,7 @@
 #include <limits>
 #include <map>
 #include <string>
+#include <utility>
 
 namespace ignition
 {
@@ -120,9 +120,9 @@ namespace ignition
     template<typename V>
     Vertex<V> Vertex<V>::NullVertex("__null__", V(), kNullId);
 
-    /// \def VertexId_A
-    /// \brief An array of two vertex Ids.
-    using VertexId_A = std::array<VertexId, 2>;
+    /// \def VertexId_P
+    /// \brief A pair of two vertex Ids.
+    using VertexId_P = std::pair<VertexId, VertexId>;
 
     /// \def VertexRef_M
     /// \brief Map of vertices. The key is the vertex Id. The value is a

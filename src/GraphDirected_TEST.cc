@@ -207,20 +207,16 @@ TEST(GraphTest, IncidentsFrom)
       case 2:
       {
         auto vertices = edge.Vertices();
-         EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
-          vertices.end());
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
-          vertices.end());
+        EXPECT_EQ(vertices.first, 1);
+        EXPECT_EQ(vertices.second, 0);
         EXPECT_EQ(edge.Data(), 3.0);
         break;
       }
       case 3:
       {
         auto vertices = edge.Vertices();
-         EXPECT_NE(std::find(vertices.begin(), vertices.end(), 1),
-          vertices.end());
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 2),
-          vertices.end());
+        EXPECT_EQ(vertices.first, 1);
+        EXPECT_EQ(vertices.second, 2);
         EXPECT_EQ(edge.Data(), 4.0);
         break;
       }
@@ -263,18 +259,16 @@ TEST(GraphTest, IncidentsTo)
       case 0:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
-          vertices.end());
+        EXPECT_EQ(vertices.first, 0);
+        EXPECT_EQ(vertices.second, 0);
         EXPECT_EQ(edge.Data(), 1.0);
         break;
       }
       case 3:
       {
         auto vertices = edge.Vertices();
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 2),
-          vertices.end());
-        EXPECT_NE(std::find(vertices.begin(), vertices.end(), 0),
-          vertices.end());
+        EXPECT_EQ(vertices.first, 2);
+        EXPECT_EQ(vertices.second, 0);
         EXPECT_EQ(edge.Data(), 4.0);
         break;
       }
