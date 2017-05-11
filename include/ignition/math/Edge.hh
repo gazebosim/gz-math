@@ -128,7 +128,7 @@ namespace ignition
       /// edge.
       /// \param[in] _from Source vertex.
       /// \return The cost.
-      public: double Weight(const VertexId &_from) const
+      public: double Weight(const VertexId &/*_from*/) const
       {
         return this->weight;
       }
@@ -195,8 +195,18 @@ namespace ignition
       /// \brief An invalid undirected edge.
       public: static UndirectedEdge<E> NullEdge;
 
-      // Documentation inherited.
-      using Edge<E>::Edge;
+      /// \brief Constructor.
+      /// \param[in] _id Unique id.
+      /// \param[in] _weight The weight (cost) of the edge.
+      /// \param[in] _vertices The vertices of the edge.
+      /// \param[in] _data The data stored in the edge.
+      public: explicit UndirectedEdge(const EdgeId &_id,
+                                      const double _weight,
+                                      const VertexId_A &_vertices,
+                                      const E &_data)
+        : Edge(_id, _weight, _vertices, _data)
+      {
+      }
 
       // Documentation inherited.
       public: VertexId From(const VertexId &_from) const override
@@ -252,8 +262,18 @@ namespace ignition
       /// \brief An invalid directed edge.
       public: static DirectedEdge<E> NullEdge;
 
-      // Documentation inherited.
-      using Edge<E>::Edge;
+      /// \brief Constructor.
+      /// \param[in] _id Unique id.
+      /// \param[in] _weight The weight (cost) of the edge.
+      /// \param[in] _vertices The vertices of the edge.
+      /// \param[in] _data The data stored in the edge.
+      public: explicit DirectedEdge(const EdgeId &_id,
+                                    const double _weight,
+                                    const VertexId_A &_vertices,
+                                    const E &_data)
+        : Edge(_id, _weight, _vertices, _data)
+      {
+      }
 
       /// \brief Get the Id of the tail vertex in this edge.
       /// \return An id of the tail vertex in this edge.
