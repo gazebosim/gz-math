@@ -170,7 +170,7 @@ namespace ignition
           if (neighborId == kNullId)
             continue;
 
-          double weight = edge.Weight(id);
+          double weight = edge.Weight();
           if (std::find(unvisited.begin(), unvisited.end(), neighborId) !=
                 unvisited.end())
           {

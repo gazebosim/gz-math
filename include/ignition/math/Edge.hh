@@ -126,9 +126,8 @@ namespace ignition
 
       /// \brief The cost of traversing the _from end to the other end of the
       /// edge.
-      /// \param[in] _from Source vertex.
       /// \return The cost.
-      public: double Weight(const VertexId &/*_from*/) const
+      public: double Weight() const
       {
         return this->weight;
       }
@@ -245,7 +244,7 @@ namespace ignition
         auto it = vertices.begin();
         _out << "  " << *it << " -- ";
         ++it;
-        _out << *it << " [label=" << _e.Weight(*it) << "];" << std::endl;
+        _out << *it << " [label=" << _e.Weight() << "];" << std::endl;
         return _out;
       }
     };
@@ -318,7 +317,7 @@ namespace ignition
                                               const DirectedEdge<E> &_e)
       {
         _out << "  " << _e.Tail() << " -> " << _e.Head()
-             << " [label=" << _e.Weight(_e.Tail()) << "];" << std::endl;
+             << " [label=" << _e.Weight() << "];" << std::endl;
         return _out;
       }
     };
