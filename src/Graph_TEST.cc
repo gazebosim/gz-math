@@ -39,28 +39,58 @@ TYPED_TEST_CASE(GraphTestFixture, GraphTypes);
 /////////////////////////////////////////////////
 TYPED_TEST(GraphTestFixture, UniformInitialization)
 {
-  TypeParam graph(
   {
-    {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
-    {{{0, 1}, 0.0}, {{1, 2}, 0.0}}
-  });
+    TypeParam graph(
+    {
+      // Create vertices with custom Ids.
+      {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}},
+      // Create edges.
+      {{{0, 1}, 0.0}, {{1, 2}, 0.0}}
+    });
 
-  // Verify the vertices.
-  auto vertices = graph.Vertices();
-  EXPECT_EQ(vertices.size(), 3u);
+    // Verify the vertices.
+    auto vertices = graph.Vertices();
+    EXPECT_EQ(vertices.size(), 3u);
 
-  for (int i = 0; i < 3; ++i)
-  {
-    ASSERT_NE(vertices.find(i), vertices.end());
-    auto v = vertices.at(i).get();
-    EXPECT_EQ(v.Name(), std::to_string(i));
-    EXPECT_EQ(v.Id(), i);
-    EXPECT_EQ(v.Data(), i);
+    for (int i = 0; i < 3; ++i)
+    {
+      ASSERT_NE(vertices.find(i), vertices.end());
+      auto v = vertices.at(i).get();
+      EXPECT_EQ(v.Name(), std::to_string(i));
+      EXPECT_EQ(v.Id(), i);
+      EXPECT_EQ(v.Data(), i);
+    }
+
+    // Verify the edges.
+    auto edges = graph.Edges();
+    EXPECT_EQ(edges.size(), 2u);
   }
+  {
+    TypeParam graph(
+    {
+      // Create vertices with automatic Id selection.
+      {{"0", 0}, {"1", 1}, {"2", 2}},
+      // Create edges.
+      {{{0, 1}, 0.0}, {{1, 2}, 0.0}}
+    });
 
-  // Verify the edges.
-  auto edges = graph.Edges();
-  EXPECT_EQ(edges.size(), 2u);
+    // Verify the vertices.
+    auto vertices = graph.Vertices();
+    EXPECT_EQ(vertices.size(), 3u);
+
+    for (int i = 0; i < 3; ++i)
+    {
+      ASSERT_NE(vertices.find(i), vertices.end());
+      auto v = vertices.at(i).get();
+      EXPECT_EQ(v.Name(), std::to_string(i));
+      EXPECT_EQ(v.Id(), i);
+      EXPECT_EQ(v.Data(), i);
+    }
+
+    // Verify the edges.
+    auto edges = graph.Edges();
+    EXPECT_EQ(edges.size(), 2u);
+  }
 }
 
 /////////////////////////////////////////////////

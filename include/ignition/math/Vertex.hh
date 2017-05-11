@@ -17,7 +17,7 @@
 #ifndef IGNITION_MATH_VERTEX_HH_
 #define IGNITION_MATH_VERTEX_HH_
 
-// int64_t
+// uint64_t
 #include <cstdint>
 #include <functional>
 #include <iostream>
@@ -32,10 +32,10 @@ namespace ignition
   {
     /// \def VertexId.
     /// \brief The unique Id of each vertex.
-    using VertexId = int64_t;
+    using VertexId = uint64_t;
 
     /// \brief Represents an invalid Id.
-    static const VertexId kNullId = std::numeric_limits<VertexId>::min();
+    static const VertexId kNullId = std::numeric_limits<VertexId>::max();
 
     /// \brief A vertex of a graph. It stores user information and keeps
     /// an internal unique Id.

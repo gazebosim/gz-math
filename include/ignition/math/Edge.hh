@@ -18,9 +18,6 @@
 #define IGNITION_MATH_EDGE_HH_
 
 #include <algorithm>
-#include <cassert>
-// int64_t
-#include <cstdint>
 #include <functional>
 #include <iostream>
 #include <map>

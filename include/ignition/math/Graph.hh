@@ -19,6 +19,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <limits>
 #include <map>
 #include <string>
 #include <vector>
@@ -76,9 +77,20 @@ namespace ignition
                                    const VertexId &_id = kNullId)
       {
         auto id = _id;
+
         // The user didn't provide an Id, we generate it.
         if (id == kNullId)
+        {
           id = this->NextVertexId();
+
+          // No space for new Ids.
+          if (id == kNullId)
+          {
+            std::cerr << "[Graph::AddVertex()] The limit of vertices has been "
+                      << "reached" << std::endl;
+            return Vertex<V>::NullVertex;
+          }
+        }
         // The user provided an Id but already exists.
         else if (this->vertices.find(id) != this->vertices.end())
           return Vertex<V>::NullVertex;
@@ -132,6 +144,15 @@ namespace ignition
                                 const double _weight = 1.0)
       {
         auto id = this->NextEdgeId();
+
+        // No space for new Ids.
+        if (id == kNullId)
+        {
+          std::cerr << "[Graph::AddEdge()] The limit of edges has been reached"
+                    << std::endl;
+          return EdgeType::NullEdge;
+        }
+
         EdgeType newEdge(id, _weight, _vertices, _data);
         return this->LinkEdge(std::move(newEdge));
       }
@@ -531,8 +552,11 @@ namespace ignition
       /// \return The next available Id.
       private: VertexId &NextEdgeId()
       {
-        while (this->edges.find(this->nextEdgeId) != this->edges.end())
+        while (this->edges.find(this->nextEdgeId) != this->edges.end() &&
+               this->nextEdgeId < std::numeric_limits<VertexId>::max())
+        {
           ++this->nextEdgeId;
+        }
 
         return this->nextEdgeId;
       }
@@ -554,10 +578,10 @@ namespace ignition
       private: std::multimap<std::string, VertexId> names;
 
       /// \brief The next vertex Id to be assigned to a new vertex.
-      private: VertexId nextVertexId = 0;
+      private: VertexId nextVertexId = 0u;
 
       /// \brief The next edge Id to be assigned to a new edge.
-      private: VertexId nextEdgeId = 0;
+      private: VertexId nextEdgeId = 0u;
     };
 
     /////////////////////////////////////////////////
