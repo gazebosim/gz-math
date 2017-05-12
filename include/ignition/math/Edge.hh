@@ -17,7 +17,8 @@
 #ifndef IGNITION_MATH_EDGE_HH_
 #define IGNITION_MATH_EDGE_HH_
 
-#include <algorithm>
+// uint64_t
+#include <cstdint>
 #include <functional>
 #include <iostream>
 #include <map>
@@ -31,7 +32,7 @@ namespace ignition
   {
     /// \def EdgeId.
     /// \brief The unique Id for an edge.
-    using EdgeId = int64_t;
+    using EdgeId = uint64_t;
 
     /// \brief Used in the Graph constructors for uniform initialization.
     template<typename E>

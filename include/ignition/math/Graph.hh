@@ -19,7 +19,6 @@
 
 #include <cassert>
 #include <iostream>
-#include <limits>
 #include <map>
 #include <string>
 #include <vector>
@@ -134,11 +133,11 @@ namespace ignition
         return std::move(res);
       }
 
-      ///// \brief Add a new edge to the graph.
-      ///// \param[in] _vertices The set of Ids of the two vertices.
-      ///// \param[in] _data User data.
-      ///// \return Reference to the new edge created or NullEdge if the
-      ///// edge was not created (e.g. incorrect vertices).
+      /// \brief Add a new edge to the graph.
+      /// \param[in] _vertices The set of Ids of the two vertices.
+      /// \param[in] _data User data.
+      /// \return Reference to the new edge created or NullEdge if the
+      /// edge was not created (e.g. incorrect vertices).
       public: EdgeType &AddEdge(const VertexId_P &_vertices,
                                 const E &_data,
                                 const double _weight = 1.0)
@@ -542,8 +541,11 @@ namespace ignition
       /// \return The next available Id.
       private: VertexId &NextVertexId()
       {
-        while (this->vertices.find(this->nextVertexId) != this->vertices.end())
+        while (this->vertices.find(this->nextVertexId) != this->vertices.end()
+            && this->nextVertexId < MAX_UI64)
+        {
           ++this->nextVertexId;
+        }
 
         return this->nextVertexId;
       }
@@ -553,7 +555,7 @@ namespace ignition
       private: VertexId &NextEdgeId()
       {
         while (this->edges.find(this->nextEdgeId) != this->edges.end() &&
-               this->nextEdgeId < std::numeric_limits<VertexId>::max())
+               this->nextEdgeId < MAX_UI64)
         {
           ++this->nextEdgeId;
         }

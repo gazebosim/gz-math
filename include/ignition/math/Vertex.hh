@@ -21,10 +21,11 @@
 #include <cstdint>
 #include <functional>
 #include <iostream>
-#include <limits>
 #include <map>
 #include <string>
 #include <utility>
+
+#include <ignition/math/Helpers.hh>
 
 namespace ignition
 {
@@ -35,7 +36,7 @@ namespace ignition
     using VertexId = uint64_t;
 
     /// \brief Represents an invalid Id.
-    static const VertexId kNullId = std::numeric_limits<VertexId>::max();
+    static const VertexId kNullId = MAX_UI64;
 
     /// \brief A vertex of a graph. It stores user information and keeps
     /// an internal unique Id.
