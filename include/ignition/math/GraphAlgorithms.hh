@@ -142,11 +142,11 @@ namespace ignition
 
       while (!unvisited.empty() &&
              std::find(unvisited.begin(), unvisited.end(), _to) !=
-               unvisited.end() )
+               unvisited.end())
       {
         // Get the next vertex from the unvisited list.
         double minDist = MAX_D;
-        VertexId id = -1;
+        VertexId id = kNullId;
         for (auto const &unvisitedId : unvisited)
         {
           if (dist.at(unvisitedId) < minDist)
@@ -155,7 +155,7 @@ namespace ignition
             id = unvisitedId;
           }
         }
-        if (id == -1)
+        if (id == kNullId)
          return {};
 
         // Update unvisited.
@@ -184,7 +184,7 @@ namespace ignition
         }
       }
 
-      if (prev.at(_to) == -1)
+      if (prev.at(_to) == kNullId)
         return {};
 
       // Populate the result.
