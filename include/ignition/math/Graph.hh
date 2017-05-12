@@ -161,10 +161,10 @@ namespace ignition
       /// \return A reference to the new link created.
       public: EdgeType &LinkEdge(const EdgeType &_edge)
       {
-        auto vertices = _edge.Vertices();
+        auto edgeVertices = _edge.Vertices();
 
         // Sanity check: Both vertices should exist.
-        for (auto const &v : {vertices.first, vertices.second})
+        for (auto const &v : {edgeVertices.first, edgeVertices.second})
         {
           auto itV = this->vertices.find(v);
           if (itV == this->vertices.end())
@@ -172,7 +172,7 @@ namespace ignition
         }
 
         // Link the new edge.
-        for (auto const &v : {vertices.first, vertices.second})
+        for (auto const &v : {edgeVertices.first, edgeVertices.second})
         {
           if (_edge.From(v) != kNullId)
           {
@@ -460,10 +460,10 @@ namespace ignition
         if (edgeIt == this->edges.end())
           return false;
 
-        auto vertices = edgeIt->second.Vertices();
+        auto edgeVertices = edgeIt->second.Vertices();
 
         // Unlink the edge.
-        for (auto const &v : {vertices.first, vertices.second})
+        for (auto const &v : {edgeVertices.first, edgeVertices.second})
         {
           if (edgeIt->second.From(v) != kNullId)
           {

@@ -110,19 +110,19 @@ TEST(GraphTest, AdjacentsFrom)
   // Check the references.
   for (auto const &vertexPair : adjacents)
   {
-    auto &vertex = vertexPair.second.get();
-    switch (vertex.Id())
+    auto &neighborVertex = vertexPair.second.get();
+    switch (neighborVertex.Id())
     {
       case 0:
       {
-        EXPECT_EQ(vertex.Name(), "0");
-        EXPECT_EQ(vertex.Data(), 0);
+        EXPECT_EQ(neighborVertex.Name(), "0");
+        EXPECT_EQ(neighborVertex.Data(), 0);
         break;
       }
       case 1:
       {
-        EXPECT_EQ(vertex.Name(), "1");
-        EXPECT_EQ(vertex.Data(), 1);
+        EXPECT_EQ(neighborVertex.Name(), "1");
+        EXPECT_EQ(neighborVertex.Data(), 1);
         break;
       }
       default:
@@ -162,13 +162,13 @@ TEST(GraphTest, AdjacentsTo)
   // Check the references.
   for (auto const &vertexPair : adjacents)
   {
-    auto &vertex = vertexPair.second.get();
-    switch (vertex.Id())
+    auto &neighborVertex = vertexPair.second.get();
+    switch (neighborVertex.Id())
     {
       case 1:
       {
-        EXPECT_EQ(vertex.Name(), "1");
-        EXPECT_EQ(vertex.Data(), 1);
+        EXPECT_EQ(neighborVertex.Name(), "1");
+        EXPECT_EQ(neighborVertex.Data(), 1);
         break;
       }
       default:
