@@ -108,7 +108,7 @@ TYPED_TEST(GraphTestFixture, VertexFromId)
   EXPECT_EQ(v.Id(), v0.Id());
 
   // Id not found.
-  v = graph.VertexFromId(-500);
+  v = graph.VertexFromId(500);
   EXPECT_EQ(v.Id(), kNullId);
 }
 
