@@ -403,13 +403,11 @@ namespace ignition
           this->RemoveEdge(edgePair.first);
 
         // Remove all outgoing edges.
-        auto adjIt = this->adjList.find(_vertex);
-        if (adjIt != this->adjList.end())
-        {
-          auto &edgeIds = adjIt->second;
-          for (auto &edge : edgeIds)
-            this->RemoveEdge(edge);
-        }
+        incidents = this->IncidentsFrom(_vertex);
+        for (auto edgePair : incidents)
+          this->RemoveEdge(edgePair.first);
+
+        // Remove the vertex (key) from the adjacency list.
         this->adjList.erase(_vertex);
 
         // Remove the vertex.

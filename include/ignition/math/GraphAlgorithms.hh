@@ -76,7 +76,7 @@ namespace ignition
                               const VertexId &_from)
     {
       std::vector<VertexId> visited;
-      std::list<VertexId> pending({_from});
+      std::list<VertexId> pending = {_from};
 
       while (!pending.empty())
       {
