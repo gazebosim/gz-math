@@ -87,8 +87,8 @@ namespace ignition
         return this->name;
       }
 
-      /// \brief Whether the vertex is considered valid or not.
-      /// \return True when the vertex is valid or false otherwise (invalid Id).
+      /// \brief Whether the vertex is considered valid or not (id==kNullId).
+      /// \return True when the vertex is valid or false otherwise (id==kNullId)
       public: bool Valid() const
       {
         return this->id != kNullId;

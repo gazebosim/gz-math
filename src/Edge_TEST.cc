@@ -100,7 +100,6 @@ TEST(EdgeTest, FromToDirected)
   {
     EdgeId id = kNullId;
     double weight = 2.0;
-    // Only one vertex.
     VertexId_P vertices = {0, 1};
     int data = 3;
     DirectedEdge<int> edge(id, weight, vertices, data);
