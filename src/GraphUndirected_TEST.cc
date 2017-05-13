@@ -28,6 +28,20 @@ using namespace ignition;
 using namespace math;
 
 /////////////////////////////////////////////////
+TEST(UndirectedGraphTest, caguero)
+{
+  UndirectedEdge<void, Unweighted, EdgeNoData> edge1(1, {2, 3});
+
+  UndirectedEdge<std::string, Unweighted, EdgeWithData> edge2(1, {2, 3}, "");
+  std::cout << edge2.Data() << std::endl;
+
+  UndirectedEdge<void, Weighted, EdgeNoData> edge3(1, {2, 3}, 4.0);
+
+  UndirectedEdge<std::string, Weighted, EdgeWithData> edge4(1, {2, 3}, 4.0, "");
+  std::cout << edge4.Data() << std::endl;
+}
+
+/////////////////////////////////////////////////
 TEST(UndirectedGraphTest, Edges)
 {
   // Create a graph with edges [(v0--v0), (v0--v1), (v1--v2), (v2--v0)]

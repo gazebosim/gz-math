@@ -152,7 +152,7 @@ namespace ignition
           return EdgeType::NullEdge;
         }
 
-        EdgeType newEdge(id, _weight, _vertices, _data);
+        EdgeType newEdge(id, _vertices, _weight, _data);
         return this->LinkEdge(std::move(newEdge));
       }
 

@@ -43,7 +43,7 @@ namespace ignition
       /// \param[in] _data The data stored in the edge.
       /// \param[in] _weight The weight (cost) of the edge.
       EdgeInitializer(const VertexId_P &_vertices,
-                      const E &_data,
+                      const E &_data = E(),
                       const double _weight = 1)
         : vertices(_vertices),
           data(_data),
@@ -61,25 +61,22 @@ namespace ignition
       public: double weight = 1;
     };
 
-    /// \brief Generic edge class. An edge has two ends and some constraint
-    /// between them. For example, a directed edge only allows traversing the
-    /// edge in one direction.
-    template<typename E>
-    class Edge
+    struct Weighted {};
+    struct Unweighted {};
+    struct EdgeWithData {};
+    struct EdgeNoData {};
+
+    class EdgeCommon
     {
+      public: EdgeCommon() = default;
+
       /// \brief Constructor.
       /// \param[in] _id Unique id.
-      /// \param[in] _weight The weight (cost) of the edge.
       /// \param[in] _vertices The vertices of the edge.
-      /// \param[in] _data The data stored in the edge.
-      public: explicit Edge(const EdgeId &_id,
-                            const double _weight,
-                            const VertexId_P &_vertices,
-                            const E &_data)
+      public: explicit EdgeCommon(const EdgeId &_id,
+                                  const VertexId_P &_vertices)
         : id(_id),
-          weight(_weight),
-          vertices(_vertices),
-          data(_data)
+          vertices(_vertices)
       {
       }
 
@@ -90,46 +87,6 @@ namespace ignition
         return this->id;
       }
 
-      /// \brief Get the destination end that is reachable from a source end of
-      /// an edge.
-      ///
-      /// E.g.: Let's assume that we have an undirected edge (e1) with ends
-      /// (v1) and (v2): (v1)--(v2). The operation e1.From(v1) returns (v2).
-      /// The operation e1.From(v2) returns (v1).
-      ///
-      /// E.g.: Let's assume that we have a directed edge (e2) with the tail end
-      /// (v1) and the head end (v2): (v1)->(v2). The operation e2.From(v1)
-      /// returns (v2). The operation e2.From(v2) returns kNullId.
-      ///
-      /// \param[in] _from Source vertex.
-      /// \return The other vertex of the edge reachable from the "_from"
-      /// vertex or kNullId otherwise.
-      public: virtual VertexId From(const VertexId &_from) const = 0;
-
-      /// \brief Get the source end that can reach the destination end of
-      /// an edge.
-      ///
-      /// E.g.: Let's assume that we have an undirected edge (e1) with ends
-      /// (v1) and (v2): (v1)--(v2). The operation e1.To(v1) returns (v2).
-      /// The operation e1.To(v2) returns (v1).
-      ///
-      /// E.g.: Let's assume that we have a directed edge (e2) with the tail end
-      /// (v1) and the head end (v2): (v1)->(v2). The operation e2.To(v1)
-      /// returns kNullId. The operation e2.To(v2) returns v1.
-      ///
-      /// \param[in] _from Destination vertex.
-      /// \return The other vertex of the edge that can reach "_to"
-      /// vertex or kNullId otherwise.
-      public: virtual VertexId To(const VertexId &_to) const = 0;
-
-      /// \brief The cost of traversing the _from end to the other end of the
-      /// edge.
-      /// \return The cost.
-      public: double Weight() const
-      {
-        return this->weight;
-      }
-
       /// \brief Get the two vertices contained in the edge.
       /// \return The two vertices contained in the edge.
       public: VertexId_P Vertices() const
@@ -138,6 +95,50 @@ namespace ignition
           return {kNullId, kNullId};
 
         return this->vertices;
+      }
+
+      /// \brief Get if the edge is valid. An edge is valid if its linked in a
+      /// graph and its vertices are reachable.
+      /// \return True when the edge is valid or false otherwise (invalid Id).
+      public: bool Valid() const
+      {
+        return this->id != kNullId;
+      }
+
+      /// \brief Unique edge Id.
+      protected: EdgeId id = kNullId;
+
+      /// \brief The set of Ids of the two vertices.
+      protected: VertexId_P vertices;
+    };
+
+    /// \brief Generic edge class. An edge has two ends and some constraint
+    /// between them. For example, a directed edge only allows traversing the
+    /// edge in one direction.
+    template<class E, class WeightP = Weighted, class DataP = EdgeWithData>
+    class Edge : public EdgeCommon
+    {
+      /// \brief Constructor.
+      /// \param[in] _id Unique id.
+      /// \param[in] _vertices The vertices of the edge.
+      /// \param[in] _weight The weight (cost) of the edge.
+      /// \param[in] _data The data stored in the edge.
+      public: explicit Edge(const EdgeId &_id,
+                            const VertexId_P &_vertices,
+                            const double _weight,
+                            const E &_data)
+        : EdgeCommon(_id, _vertices),
+          weight(_weight),
+          data(_data)
+      {
+      }
+
+      /// \brief The cost of traversing the _from end to the other end of the
+      /// edge.
+      /// \return The cost.
+      public: double Weight() const
+      {
+        return this->weight;
       }
 
       /// \brief Get a non-mutable reference to the user data stored in the edge
@@ -154,25 +155,86 @@ namespace ignition
         return this->data;
       }
 
-      /// \brief Get if the edge is valid. An edge is valid if its linked in a
-      /// graph and its vertices are reachable.
-      /// \return True when the edge is valid or false otherwise (invalid Id).
-      public: bool Valid() const
-      {
-        return this->id != kNullId;
-      }
-
-      /// \brief Unique edge Id.
-      private: EdgeId id = kNullId;
-
       /// \brief The weight (cost) of the edge.
       private: double weight = 1.0;
 
-      /// \brief The set of Ids of the two vertices.
-      private: VertexId_P vertices;
+      /// \brief User data.
+      private: E data;
+    };
+
+    /// \brief Generic edge class. An edge has two ends and some constraint
+    /// between them. For example, a directed edge only allows traversing the
+    /// edge in one direction.
+    template<>
+    class Edge<void, Weighted, EdgeNoData> : public EdgeCommon
+    {
+      /// \brief Constructor.
+      /// \param[in] _id Unique id.
+      /// \param[in] _vertices The vertices of the edge.
+      /// \param[in] _weight The weight (cost) of the edge.
+      public: explicit Edge(const EdgeId &_id,
+                            const VertexId_P &_vertices,
+                            const double _weight)
+        : EdgeCommon(_id, vertices),
+          weight(_weight)
+      {
+      }
+
+      /// \brief The cost of traversing the _from end to the other end of the
+      /// edge.
+      /// \return The cost.
+      public: double Weight() const
+      {
+        return 5.0;
+      }
+
+      /// \brief The weight (cost) of the edge.
+      private: double weight = 1.0;
+    };
+
+    /// \brief Generic edge class. An edge has two ends and some constraint
+    /// between them. For example, a directed edge only allows traversing the
+    /// edge in one direction.
+    template<typename E>
+    class Edge<E, Unweighted, EdgeWithData> : public EdgeCommon
+    {
+      /// \brief Constructor.
+      /// \param[in] _id Unique id.
+      /// \param[in] _vertices The vertices of the edge.
+      /// \param[in] _weight The weight (cost) of the edge.
+      public: explicit Edge(const EdgeId &_id,
+                            const VertexId_P &_vertices,
+                            const E &_data)
+        : EdgeCommon(_id, vertices),
+          data(_data)
+      {
+      }
+
+      /// \brief Get a non-mutable reference to the user data stored in the edge
+      /// \return The non-mutable reference to the user data stored in the edge.
+      public: const E &Data() const
+      {
+        return this->data;
+      }
+
+      /// \brief Get a mutable reference to the user data stored in the edge.
+      /// \return The mutable reference to the user data stored in the edge.
+      public: E &Data()
+      {
+        return this->data;
+      }
 
       /// \brief User data.
       private: E data;
+    };
+
+    /// \brief Generic edge class. An edge has two ends and some constraint
+    /// between them. For example, a directed edge only allows traversing the
+    /// edge in one direction.
+    template<>
+    class Edge<void, Unweighted, EdgeNoData> : public EdgeCommon
+    {
+      using EdgeCommon::EdgeCommon;
     };
 
     /// \def EdgeId_S
@@ -186,27 +248,16 @@ namespace ignition
     using EdgeRef_M = std::map<EdgeId, std::reference_wrapper<const EdgeType>>;
 
     /// \brief An undirected edge represents a connection between two vertices.
-    template<typename E>
-    class UndirectedEdge : public Edge<E>
+    template<class E, class WeightP = Weighted, class DataP = EdgeWithData>
+    class UndirectedEdge : public Edge<E, WeightP, DataP>
     {
       /// \brief An invalid undirected edge.
-      public: static UndirectedEdge<E> NullEdge;
+      public: static UndirectedEdge<E, WeightP, DataP> NullEdge;
 
-      /// \brief Constructor.
-      /// \param[in] _id Unique id.
-      /// \param[in] _weight The weight (cost) of the edge.
-      /// \param[in] _vertices The vertices of the edge.
-      /// \param[in] _data The data stored in the edge.
-      public: explicit UndirectedEdge(const EdgeId &_id,
-                                      const double _weight,
-                                      const VertexId_P &_vertices,
-                                      const E &_data)
-        : Edge<E>(_id, _weight, _vertices, _data)
-      {
-      }
+      using Edge<E, WeightP, DataP>::Edge;
 
       // Documentation inherited.
-      public: VertexId From(const VertexId &_from) const override
+      public: VertexId From(const VertexId &_from) const// override
       {
         if (!this->Valid())
           return kNullId;
@@ -221,7 +272,7 @@ namespace ignition
       }
 
       // Documentation inherited.
-      public: VertexId To(const VertexId &_to) const override
+      public: VertexId To(const VertexId &_to) const// override
       {
         return this->From(_to);
       }
@@ -232,7 +283,7 @@ namespace ignition
       /// \param[in] _e Edge to write to the stream.
       /// \ref https://en.wikipedia.org/wiki/DOT_(graph_description_language).
       public: friend std::ostream &operator<<(std::ostream &_out,
-                                              const UndirectedEdge<E> &_e)
+                                    const UndirectedEdge<E, WeightP, DataP> &_e)
       {
         auto vertices = _e.Vertices();
         _out << "  " << vertices.first << " -- " << vertices.second
@@ -242,29 +293,18 @@ namespace ignition
     };
 
     /// \brief An invalid undirected edge.
-    template<typename E>
-    UndirectedEdge<E> UndirectedEdge<E>::NullEdge(
-      kNullId, 1.0, {kNullId, kNullId}, E());
+    template<typename E, typename WeightP, typename DataP>
+    UndirectedEdge<E, WeightP, DataP> UndirectedEdge<E, WeightP, DataP>::NullEdge(
+      kNullId, {kNullId, kNullId}, 1.0, E());
 
     /// \brief A directed edge represents a connection between two vertices.
-    template<typename E>
-    class DirectedEdge : public Edge<E>
+    template<class E, class WeightP = Weighted, class DataP = EdgeWithData>
+    class DirectedEdge : public Edge<E, WeightP, DataP>
     {
       /// \brief An invalid directed edge.
-      public: static DirectedEdge<E> NullEdge;
+      public: static DirectedEdge<E, WeightP, DataP> NullEdge;
 
-      /// \brief Constructor.
-      /// \param[in] _id Unique id.
-      /// \param[in] _weight The weight (cost) of the edge.
-      /// \param[in] _vertices The vertices of the edge.
-      /// \param[in] _data The data stored in the edge.
-      public: explicit DirectedEdge(const EdgeId &_id,
-                                    const double _weight,
-                                    const VertexId_P &_vertices,
-                                    const E &_data)
-        : Edge<E>(_id, _weight, _vertices, _data)
-      {
-      }
+      using Edge<E, WeightP, DataP>::Edge;
 
       /// \brief Get the Id of the tail vertex in this edge.
       /// \return An id of the tail vertex in this edge.
@@ -283,7 +323,7 @@ namespace ignition
       }
 
       // Documentation inherited.
-      public: VertexId From(const VertexId &_from) const override
+      public: VertexId From(const VertexId &_from) const// override
       {
         if (_from != this->Tail())
           return kNullId;
@@ -292,7 +332,7 @@ namespace ignition
       }
 
       // Documentation inherited.
-      public: VertexId To(const VertexId &_to) const override
+      public: VertexId To(const VertexId &_to) const// override
       {
         if (_to != this->Head())
           return kNullId;
@@ -306,7 +346,7 @@ namespace ignition
       /// \param[in] _e Edge to write to the stream.
       /// \ref https://en.wikipedia.org/wiki/DOT_(graph_description_language).
       public: friend std::ostream &operator<<(std::ostream &_out,
-                                              const DirectedEdge<E> &_e)
+                                      const DirectedEdge<E, WeightP, DataP> &_e)
       {
         _out << "  " << _e.Tail() << " -> " << _e.Head()
              << " [label=" << _e.Weight() << "];" << std::endl;
@@ -315,9 +355,9 @@ namespace ignition
     };
 
     /// \brief An invalid directed edge.
-    template<typename E>
-    DirectedEdge<E> DirectedEdge<E>::NullEdge(
-      kNullId, 1.0, {kNullId, kNullId}, E());
+    template<typename E, typename WeightP, typename DataP>
+    DirectedEdge<E, WeightP, DataP> DirectedEdge<E, WeightP, DataP>::NullEdge(
+      kNullId, {kNullId, kNullId}, 1.0, E());
   }
 }
 #endif
