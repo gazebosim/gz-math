@@ -44,7 +44,7 @@ TYPED_TEST(EdgeTestFixture, Accessors)
     double weight = 2.0;
     VertexId_P vertices = {0, 1};
     int data = 3;
-    TypeParam edge(id, weight, vertices, data);
+    TypeParam edge(id, vertices, data, weight);
 
     EXPECT_EQ(edge.Id(), id);
     EXPECT_DOUBLE_EQ(edge.Weight(), weight);
@@ -61,7 +61,7 @@ TYPED_TEST(EdgeTestFixture, Accessors)
     double weight = 2.0;
     VertexId_P vertices = {0, 1};
     int data = 3;
-    TypeParam edge(id, weight, vertices, data);
+    TypeParam edge(id, vertices, data, weight);
 
     EXPECT_EQ(edge.Id(), id);
     EXPECT_DOUBLE_EQ(edge.Weight(), weight);
@@ -83,7 +83,7 @@ TEST(EdgeTest, FromToDirected)
     double weight = 2.0;
     VertexId_P vertices = {0, 1};
     int data = 3;
-    DirectedEdge<int> edge(id, weight, vertices, data);
+    DirectedEdge<int> edge(id, vertices, data, weight);
 
     EXPECT_EQ(edge.From(0), 1);
     EXPECT_EQ(edge.To(1), 0);
@@ -102,7 +102,7 @@ TEST(EdgeTest, FromToDirected)
     double weight = 2.0;
     VertexId_P vertices = {0, 1};
     int data = 3;
-    DirectedEdge<int> edge(id, weight, vertices, data);
+    DirectedEdge<int> edge(id, vertices, data, weight);
     // The edge is not valid because the Id == kNullId.
     EXPECT_FALSE(edge.Valid());
 
@@ -121,7 +121,7 @@ TEST(EdgeTest, FromToUndirected)
     double weight = 2.0;
     VertexId_P vertices = {0, 1};
     int data = 3;
-    UndirectedEdge<int> edge(id, weight, vertices, data);
+    UndirectedEdge<int> edge(id, vertices, data, weight);
 
     EXPECT_EQ(edge.From(0), 1);
     EXPECT_EQ(edge.To(1), 0);
@@ -139,7 +139,7 @@ TEST(EdgeTest, FromToUndirected)
     // Only one vertex.
     VertexId_P vertices = {0, 1};
     int data = 3;
-    UndirectedEdge<int> edge(id, weight, vertices, data);
+    UndirectedEdge<int> edge(id, vertices, data, weight);
     // The edge is not valid because the Id == kNullId.
     EXPECT_FALSE(edge.Valid());
 
@@ -157,7 +157,7 @@ TEST(EdgeTest, StreamInsertionDirected)
   double weight = 2.0;
   VertexId_P vertices = {0, 1};
   int data = 3;
-  DirectedEdge<int> edge(id, weight, vertices, data);
+  DirectedEdge<int> edge(id, vertices, data, weight);
 
   std::ostringstream output;
   output << edge;
@@ -173,7 +173,7 @@ TEST(EdgeTest, StreamInsertionUndirected)
   double weight = 2.0;
   VertexId_P vertices = {0, 1};
   int data = 3;
-  UndirectedEdge<int> edge(id, weight, vertices, data);
+  UndirectedEdge<int> edge(id, vertices, data, weight);
 
   std::ostringstream output;
   output << edge;

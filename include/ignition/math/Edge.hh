@@ -69,17 +69,17 @@ namespace ignition
     {
       /// \brief Constructor.
       /// \param[in] _id Unique id.
-      /// \param[in] _weight The weight (cost) of the edge.
       /// \param[in] _vertices The vertices of the edge.
       /// \param[in] _data The data stored in the edge.
+      /// \param[in] _weight The weight (cost) of the edge.
       public: explicit Edge(const EdgeId &_id,
-                            const double _weight,
                             const VertexId_P &_vertices,
-                            const E &_data)
+                            const E &_data,
+                            const double _weight)
         : id(_id),
-          weight(_weight),
           vertices(_vertices),
-          data(_data)
+          data(_data),
+          weight(_weight)
       {
       }
 
@@ -88,6 +88,38 @@ namespace ignition
       public: EdgeId Id() const
       {
         return this->id;
+      }
+
+      /// \brief Get the two vertices contained in the edge.
+      /// \return The two vertices contained in the edge.
+      public: VertexId_P Vertices() const
+      {
+        if (!this->Valid())
+          return {kNullId, kNullId};
+
+        return this->vertices;
+      }
+
+      /// \brief Get a non-mutable reference to the user data stored in the edge
+      /// \return The non-mutable reference to the user data stored in the edge.
+      public: const E &Data() const
+      {
+        return this->data;
+      }
+
+      /// \brief Get a mutable reference to the user data stored in the edge.
+      /// \return The mutable reference to the user data stored in the edge.
+      public: E &Data()
+      {
+        return this->data;
+      }
+
+      /// \brief The cost of traversing the _from end to the other end of the
+      /// edge.
+      /// \return The cost.
+      public: double Weight() const
+      {
+        return this->weight;
       }
 
       /// \brief Get the destination end that is reachable from a source end of
@@ -122,38 +154,6 @@ namespace ignition
       /// vertex or kNullId otherwise.
       public: virtual VertexId To(const VertexId &_to) const = 0;
 
-      /// \brief The cost of traversing the _from end to the other end of the
-      /// edge.
-      /// \return The cost.
-      public: double Weight() const
-      {
-        return this->weight;
-      }
-
-      /// \brief Get the two vertices contained in the edge.
-      /// \return The two vertices contained in the edge.
-      public: VertexId_P Vertices() const
-      {
-        if (!this->Valid())
-          return {kNullId, kNullId};
-
-        return this->vertices;
-      }
-
-      /// \brief Get a non-mutable reference to the user data stored in the edge
-      /// \return The non-mutable reference to the user data stored in the edge.
-      public: const E &Data() const
-      {
-        return this->data;
-      }
-
-      /// \brief Get a mutable reference to the user data stored in the edge.
-      /// \return The mutable reference to the user data stored in the edge.
-      public: E &Data()
-      {
-        return this->data;
-      }
-
       /// \brief Get if the edge is valid. An edge is valid if its linked in a
       /// graph and its vertices are reachable.
       /// \return True when the edge is valid or false otherwise (invalid Id).
@@ -165,14 +165,14 @@ namespace ignition
       /// \brief Unique edge Id.
       private: EdgeId id = kNullId;
 
-      /// \brief The weight (cost) of the edge.
-      private: double weight = 1.0;
-
       /// \brief The set of Ids of the two vertices.
       private: VertexId_P vertices;
 
       /// \brief User data.
       private: E data;
+
+      /// \brief The weight (cost) of the edge.
+      private: double weight = 1.0;
     };
 
     /// \def EdgeId_S
@@ -194,14 +194,14 @@ namespace ignition
 
       /// \brief Constructor.
       /// \param[in] _id Unique id.
-      /// \param[in] _weight The weight (cost) of the edge.
       /// \param[in] _vertices The vertices of the edge.
       /// \param[in] _data The data stored in the edge.
+      /// \param[in] _weight The weight (cost) of the edge.
       public: explicit UndirectedEdge(const EdgeId &_id,
-                                      const double _weight,
                                       const VertexId_P &_vertices,
-                                      const E &_data)
-        : Edge<E>(_id, _weight, _vertices, _data)
+                                      const E &_data,
+                                      const double _weight)
+        : Edge<E>(_id, _vertices, _data, _weight)
       {
       }
 
@@ -244,7 +244,7 @@ namespace ignition
     /// \brief An invalid undirected edge.
     template<typename E>
     UndirectedEdge<E> UndirectedEdge<E>::NullEdge(
-      kNullId, 1.0, {kNullId, kNullId}, E());
+      kNullId, {kNullId, kNullId}, E(), 1.0);
 
     /// \brief A directed edge represents a connection between two vertices.
     template<typename E>
@@ -259,10 +259,10 @@ namespace ignition
       /// \param[in] _vertices The vertices of the edge.
       /// \param[in] _data The data stored in the edge.
       public: explicit DirectedEdge(const EdgeId &_id,
-                                    const double _weight,
                                     const VertexId_P &_vertices,
-                                    const E &_data)
-        : Edge<E>(_id, _weight, _vertices, _data)
+                                    const E &_data,
+                                    const double _weight)
+        : Edge<E>(_id, _vertices, _data, _weight)
       {
       }
 
@@ -317,7 +317,7 @@ namespace ignition
     /// \brief An invalid directed edge.
     template<typename E>
     DirectedEdge<E> DirectedEdge<E>::NullEdge(
-      kNullId, 1.0, {kNullId, kNullId}, E());
+      kNullId, {kNullId, kNullId}, E(), 1.0);
   }
 }
 #endif
