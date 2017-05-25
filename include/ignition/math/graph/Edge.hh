@@ -257,7 +257,7 @@ namespace graph
     using Edge<E, WeightP, DataP>::Edge;
 
     // Documentation inherited.
-    public: VertexId From(const VertexId &_from) const// override
+    public: VertexId From(const VertexId &_from) const  // override
     {
       if (!this->Valid())
         return kNullId;
@@ -272,7 +272,7 @@ namespace graph
     }
 
     // Documentation inherited.
-    public: VertexId To(const VertexId &_to) const// override
+    public: VertexId To(const VertexId &_to) const  // override
     {
       return this->From(_to);
     }
@@ -323,7 +323,7 @@ namespace graph
     }
 
     // Documentation inherited.
-    public: VertexId From(const VertexId &_from) const// override
+    public: VertexId From(const VertexId &_from) const  // override
     {
       if (_from != this->Tail())
         return kNullId;
@@ -332,7 +332,7 @@ namespace graph
     }
 
     // Documentation inherited.
-    public: VertexId To(const VertexId &_to) const// override
+    public: VertexId To(const VertexId &_to) const  // override
     {
       if (_to != this->Head())
         return kNullId;
