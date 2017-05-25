@@ -51,11 +51,11 @@ set (gtest_sources
   Temperature_TEST.cc
   Triangle_TEST.cc
   Triangle3_TEST.cc
-  Vertex_TEST.cc
   Vector2_TEST.cc
   Vector3_TEST.cc
   Vector3Stats_TEST.cc
   Vector4_TEST.cc
+  Vertex_TEST.cc
 )
 
 ign_add_library(${PROJECT_LIBRARY_TARGET_NAME} ${sources})

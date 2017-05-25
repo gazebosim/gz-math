@@ -21,11 +21,12 @@
 #include <utility>
 #include <vector>
 
-#include "ignition/math/Graph.hh"
-#include "ignition/math/GraphAlgorithms.hh"
+#include "ignition/math/graph/Graph.hh"
+#include "ignition/math/graph/GraphAlgorithms.hh"
 
 using namespace ignition;
 using namespace math;
+using namespace graph;
 
 /////////////////////////////////////////////////
 TEST(UndirectedGraphTest, caguero)

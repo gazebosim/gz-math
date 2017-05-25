@@ -4,11 +4,12 @@ set (headers
   Angle.hh
   Box.hh
   Color.hh
-  Edge.hh
   Filter.hh
   Frustum.hh
-  Graph.hh
-  GraphAlgorithms.hh
+  graph/Edge.hh
+  graph/Graph.hh
+  graph/GraphAlgorithms.hh
+  graph/Vertex.hh
   Helpers.hh
   Inertial.hh
   Kmeans.hh
@@ -32,7 +33,6 @@ set (headers
   Temperature.hh
   Triangle.hh
   Triangle3.hh
-  Vertex.hh
   Vector2.hh
   Vector3.hh
   Vector3Stats.hh

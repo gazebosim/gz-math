@@ -19,11 +19,12 @@
 #include <iostream>
 #include <string>
 
-#include "ignition/math/Edge.hh"
-#include "ignition/math/Vertex.hh"
+#include "ignition/math/graph/Edge.hh"
+#include "ignition/math/graph/Vertex.hh"
 
 using namespace ignition;
 using namespace math;
+using namespace graph;
 
 // Define a test fixture class template.
 template <class T>

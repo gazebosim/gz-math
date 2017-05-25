@@ -19,10 +19,11 @@
 #include <iostream>
 #include <string>
 
-#include "ignition/math/Vertex.hh"
+#include "ignition/math/graph/Vertex.hh"
 
 using namespace ignition;
 using namespace math;
+using namespace graph;
 
 /////////////////////////////////////////////////
 TEST(VertexTest, Accessors)
