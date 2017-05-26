@@ -23,8 +23,12 @@ set (gtest_sources
   Angle_TEST.cc
   Box_TEST.cc
   Color_TEST.cc
+  Edge_TEST.cc
   Filter_TEST.cc
   Frustum_TEST.cc
+  Graph_TEST.cc
+  GraphDirected_TEST.cc
+  GraphUndirected_TEST.cc
   Helpers_TEST.cc
   Inertial_TEST.cc
   Kmeans_TEST.cc
@@ -47,6 +51,7 @@ set (gtest_sources
   Temperature_TEST.cc
   Triangle_TEST.cc
   Triangle3_TEST.cc
+  Vertex_TEST.cc
   Vector2_TEST.cc
   Vector3_TEST.cc
   Vector3Stats_TEST.cc
@@ -55,9 +60,9 @@ set (gtest_sources
 
 ign_add_library(${PROJECT_LIBRARY_TARGET_NAME} ${sources})
 
-# When the minimum CMake required version will be >= 3.1 
-# we could use the target_compile_features() command 
-# to enable C++11 support in a platform-independent way. 
+# When the minimum CMake required version will be >= 3.1
+# we could use the target_compile_features() command
+# to enable C++11 support in a platform-independent way.
 if(NOT MSVC)
     target_compile_options(${PROJECT_LIBRARY_TARGET_NAME} PUBLIC "-std=c++11")
 endif()
