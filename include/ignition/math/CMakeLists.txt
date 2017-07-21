@@ -1,6 +1,5 @@
 include (${project_cmake_dir}/Utils.cmake)
 
-set (ign_headers "" CACHE INTERNAL "Ignition math headers" FORCE)
 set (headers
   Angle.hh
   Box.hh
@@ -37,10 +36,13 @@ set (headers
 )
 add_subdirectory(graph)
 
+set (ign_headers "" CACHE INTERNAL "Ignition math headers" FORCE)
 foreach (hdr ${headers})
   APPEND_TO_CACHED_STRING(ign_headers
     "Ignition math headers" "#include <ignition/math/${hdr}>\n")
 endforeach()
+APPEND_TO_CACHED_STRING(ign_headers
+    "Ignition math headers" "#include <ignition/math/graph.hh>\n")
 
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/math.hh.in
                 ${CMAKE_CURRENT_BINARY_DIR}/math.hh)
