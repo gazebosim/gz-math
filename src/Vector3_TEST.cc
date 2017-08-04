@@ -95,6 +95,18 @@ TEST(Vector3Test, Vector3d)
 }
 
 /////////////////////////////////////////////////
+TEST(Vector3dTest, Movable)
+{
+  std::unique_ptr<math::Vector3d> ptr1, ptr2;
+  ptr1.reset(new math::Vector3d);
+  EXPECT_NE(ptr1, nullptr);
+  EXPECT_EQ(ptr2, nullptr);
+  ptr2 = ptr1;
+  EXPECT_EQ(ptr1, nullptr);
+  EXPECT_NE(ptr2, nullptr);
+}
+
+/////////////////////////////////////////////////
 TEST(Vector3dTest, Distance)
 {
   math::Vector3d vec1(0, 0, 0);

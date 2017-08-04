@@ -100,6 +100,18 @@ TEST(QuaternionTest, ConstructAxisAngle)
 }
 
 /////////////////////////////////////////////////
+TEST(QuaterniondTest, Movable)
+{
+  std::unique_ptr<math::Quaterniond> ptr1, ptr2;
+  ptr1.reset(new math::Quaterniond);
+  EXPECT_NE(ptr1, nullptr);
+  EXPECT_EQ(ptr2, nullptr);
+  ptr2 = ptr1;
+  EXPECT_EQ(ptr1, nullptr);
+  EXPECT_NE(ptr2, nullptr);
+}
+
+/////////////////////////////////////////////////
 TEST(QuaternionTest, Identity)
 {
   math::Quaterniond q = math::Quaterniond::Identity;
