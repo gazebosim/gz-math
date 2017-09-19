@@ -115,6 +115,7 @@ TEST(PlaneTest, SidePoint)
 /////////////////////////////////////////////////
 TEST(PlaneTest, SideBox)
 {
+  // Construct a horizontal plane
   Planed plane(Vector3d(0, 0, 1), 1);
 
   // On the negative side of the plane (below the plane)
@@ -139,5 +140,92 @@ TEST(PlaneTest, SideBox)
   {
     Box box(Vector3d(0, 0, 0), Vector3d(3, 3, 3));
     EXPECT_EQ(plane.Side(box), Planed::BOTH_SIDE);
+  }
+}
+
+
+/////////////////////////////////////////////////
+TEST(PlaneTest, SideBoxVerticalPlane)
+{
+  // Construct a vertical plane
+  Planed plane(Vector3d(1, 0, 0), 1);
+
+  // 1m^3 box 1cm away front side of plane
+  {
+    Box box(Vector3d(2.01, -.5, -.5), Vector3d(1.01, .5, .5));
+    EXPECT_EQ(Planed::POSITIVE_SIDE, plane.Side(box));
+  }
+
+  // very big box 8m away from positive side of plane
+  {
+    Box box(Vector3d(10, -10, -10), Vector3d(9, 9, 9));
+    EXPECT_EQ(Planed::POSITIVE_SIDE, plane.Side(box));
+  }
+
+  // 1m^3 box 1cm away from back side of plane
+  {
+    Box box(Vector3d(0.99, -0.5, -0.5), Vector3d(-0.01, 0.5, 0.5));
+    EXPECT_EQ(Planed::NEGATIVE_SIDE, plane.Side(box));
+  }
+
+  // On both sides the plane equally
+  {
+    Box box(Vector3d(1.5, -.5, -.5), Vector3d(0.5, .5, .5));
+    EXPECT_EQ(Planed::BOTH_SIDE, plane.Side(box));
+  }
+
+  // On both sides of the plane by 1cm
+  {
+    Box box(Vector3d(1.99, -.5, -.5), Vector3d(0.99, .5, .5));
+    EXPECT_EQ(Planed::BOTH_SIDE, plane.Side(box));
+  }
+
+  // On both sides of the plane by 1cm other direction
+  {
+    Box box(Vector3d(1.01, -.5, -.5), Vector3d(0.01, .5, .5));
+    EXPECT_EQ(Planed::BOTH_SIDE, plane.Side(box));
+  }
+}
+
+/////////////////////////////////////////////////
+TEST(PlaneTest, SideBoxAngledVerticalPlane)
+{
+  // Construct an angled vertical plane
+  Planed plane(Vector3d(1, 1, 0), 1);
+
+  // 1m^3 box with one corner 1cm away from front side of plane
+  {
+    Box box(Vector3d(0.51, 0.51, -.5), Vector3d(1.51, 1.51, .5));
+    EXPECT_EQ(Planed::POSITIVE_SIDE, plane.Side(box));
+  }
+
+  // very big box 8m away from positive side of plane
+  {
+    Box box(Vector3d(9.5, 9.5, -10), Vector3d(8.5, 8.5, 10));
+    EXPECT_EQ(Planed::POSITIVE_SIDE, plane.Side(box));
+  }
+
+  // 1m^3 box 1cm away from back side of plane
+  {
+    Box box(Vector3d(0.49, 0.49, -0.5), Vector3d(-0.51, -0.51, 0.5));
+    EXPECT_EQ(Planed::NEGATIVE_SIDE, plane.Side(box));
+  }
+
+  // On both sides the plane equally
+  {
+    Box box(Vector3d(1, 1, -.5), Vector3d(0, 0, .5));
+    EXPECT_EQ(Planed::BOTH_SIDE, plane.Side(box));
+  }
+
+  // Overlaps plane by 1cm
+  {
+    Box box(Vector3d(1.49, 1.49, -.5), Vector3d(0.49, 0.49, .5));
+    EXPECT_EQ(Planed::BOTH_SIDE, plane.Side(box));
+  }
+
+  // Overlaps plane by 1cm other direction
+  {
+    Box box(Vector3d(.51, 0.51, -.5), Vector3d(-0.49, -0.49, .5));
+    EXPECT_EQ(Planed::BOTH_SIDE, plane.Side(box));
   }
 }
