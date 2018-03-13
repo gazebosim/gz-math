@@ -9,7 +9,13 @@ project(ignition-math5 VERSION 5.0.0)
 # Find ignition-cmake
 #============================================================================
 # If you get an error at this line, you need to install ignition-cmake
-find_package(ignition-cmake0 0.3.0 REQUIRED)
+find_package(ignition-cmake1 1.0.0 QUIET)
+if (NOT ignition-cmake0_FOUND)
+  message(STATUS "ignition-cmake1 not found")
+  find_package(ignition-cmake0 0.3.0 REQUIRED)
+else()
+  message(STATUS "ignition-cmake1 found")
+endif()
 
 #============================================================================
 # Configure the project
