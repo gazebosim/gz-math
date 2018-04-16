@@ -1,2 +1,10 @@
 codecov:
   branch: default
+
+parsers:
+  gcov:
+    branch_detection:
+      conditional: no
+      loop: no
+      method: no
+      macro: no
