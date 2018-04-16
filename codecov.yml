@@ -8,3 +8,9 @@ parsers:
       loop: no
       method: no
       macro: no
+  lcov:
+    branch_detection:
+      conditional: no
+      loop: no
+      method: no
+      macro: no
