@@ -19,13 +19,14 @@
 
 #include <algorithm>
 #include <unordered_map>
-#include <ignition/math/MovingWindow.hh>
+#include <ignition/math/movingwindow/MovingWindow.hh>
 
 namespace ignition
 {
 namespace math
 {
-inline namespace IGNITION_MATH_VERSION_NAMESPACE
+inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+namespace movingwindow
 {
 
 template <class WindowShape, class EntityShape>
@@ -36,10 +37,10 @@ class MovingWindowPrivate
                               const Pose3d &_pose);
 
   /// \brief Holds shape and pose of the window
-  public: detail::WindowInfo<WindowShape> winInfo;
+  public: WindowInfo<WindowShape> winInfo;
 
   public: std::unordered_map<std::size_t, 
-            detail::ShapeInfo<EntityShape>> entities;
+            ShapeInfo<EntityShape>> entities;
 };
 
 template <class WindowShape, class EntityShape>
@@ -111,27 +112,7 @@ std::vector<EntityState> MovingWindow<WindowPolicy, EntityShape>::Check()
                                           this->dataPtr->entities);
 }
 
-//////////////////////////////////////////////////
-template <class EntityShape>
-std::vector<EntityState> AxisAlignedBoxWindow<EntityShape>::Check(
-    const detail::WindowInfo<WindowShape> &_winInfo,
-    const std::unordered_map<std::size_t, detail::ShapeInfo<EntityShape>>
-        &_entities)
-{
-  std::vector<EntityState> output;
-
-  for (const auto &[id, shapeInfo] : _entities)
-  {
-    // We consider intersection to be inside the window
-    bool inside =
-        _winInfo.shape.Intersects(shapeInfo.shape + shapeInfo.pose.Pos());
-    EntityState::State state =
-        inside ? EntityState::INSIDE : EntityState::OUTSIDE;
-    output.push_back(EntityState{id, state});
-  }
-  return output;
 }
-
 }
 }
 }

@@ -16,16 +16,18 @@
  */
 
 #include <gtest/gtest.h>
-#include "ignition/math/MovingWindow.hh"
+#include "ignition/math/movingwindow/AxisAlignedBoxWindow.hh"
+#include "ignition/math/movingwindow/MovingWindow.hh"
 
 using namespace ignition;
 using namespace math;
+using namespace movingwindow;
 
 /////////////////////////////////////////////////
 TEST(MovingWindowTest, ConstructorDefault)
 {
-  using WindowType = MovingWindow<AxisAlignedBoxWindow, AxisAlignedBox>;
-  WindowType window(AxisAlignedBox{});
+  using WindowType = AxisAlignedBoxMovingWindow<AxisAlignedBox>;
+  WindowType window{{}};
   auto res = window.Check();
   EXPECT_EQ(0ul, res.size());
 }
@@ -33,16 +35,16 @@ TEST(MovingWindowTest, ConstructorDefault)
 /////////////////////////////////////////////////
 TEST(MovingWindowTest, RegisterEntities)
 {
-  using WindowType = MovingWindow<AxisAlignedBoxWindow, AxisAlignedBox>;
-  WindowType window(AxisAlignedBox{-10, -10, 0, 10, 10, 10});
+  using WindowType = AxisAlignedBoxMovingWindow<AxisAlignedBox>;
+  WindowType window{{-10, -10, 0, 10, 10, 10}};
   const std::size_t shapeId = 1;
   const bool res =
-      window.RegisterEntity(shapeId, AxisAlignedBox{-1, -1, -1, 1, 1, 1});
+      window.RegisterEntity(shapeId, {-1, -1, -1, 1, 1, 1});
   EXPECT_TRUE(res);
   EXPECT_EQ(1ul, window.EntityCount());
 
   const bool res2 =
-      window.RegisterEntity(shapeId, AxisAlignedBox{-1, -1, -1, 1, 1, 1});
+      window.RegisterEntity(shapeId, {-1, -1, -1, 1, 1, 1});
   EXPECT_FALSE(res2);
 
   const bool unregRes = window.UnregisterEntity(shapeId);
@@ -53,11 +55,11 @@ TEST(MovingWindowTest, RegisterEntities)
 /////////////////////////////////////////////////
 TEST(MovingWindowTest, TestWindowCheck)
 {
-  using WindowType = MovingWindow<AxisAlignedBoxWindow, AxisAlignedBox>;
-  WindowType window(AxisAlignedBox{-10, -10, 0, 10, 10, 10});
+  using WindowType = AxisAlignedBoxMovingWindow<AxisAlignedBox>;
+  WindowType window{{-10, -10, 0, 10, 10, 10}};
   const std::size_t shapeId = 1;
   const bool res =
-      window.RegisterEntity(shapeId, AxisAlignedBox{-1, -1, -1, 1, 1, 1});
+      window.RegisterEntity(shapeId, {-1, -1, -1, 1, 1, 1});
   ASSERT_TRUE(res);
   ASSERT_EQ(1ul, window.EntityCount());
   
@@ -70,11 +72,11 @@ TEST(MovingWindowTest, TestWindowCheck)
 /////////////////////////////////////////////////
 TEST(MovingWindowTest, TestShapePositionChange)
 {
-  using WindowType = MovingWindow<AxisAlignedBoxWindow, AxisAlignedBox>;
-  WindowType window(AxisAlignedBox{-10, -10, 0, 10, 10, 10});
+  using WindowType = AxisAlignedBoxMovingWindow<AxisAlignedBox>;
+  WindowType window{{-10, -10, 0, 10, 10, 10}};
   const std::size_t shapeId = 1;
   const bool res =
-      window.RegisterEntity(shapeId, AxisAlignedBox{-1, -1, -1, 1, 1, 1});
+      window.RegisterEntity(shapeId, {-1, -1, -1, 1, 1, 1});
   ASSERT_TRUE(res);
   
   const auto checkRes = window.Check();
