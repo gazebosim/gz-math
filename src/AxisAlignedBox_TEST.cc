@@ -198,6 +198,17 @@ TEST(AxisAlignedBoxTest, DefaultConstructor)
 }
 
 /////////////////////////////////////////////////
+TEST(AxisAlignedBoxTest, PlusVector)
+{
+  AxisAlignedBox box1(1, 2, 3, 4, 5, 6);
+  Vector3d sub(1, 1, 1);
+
+  AxisAlignedBox box2 = box1 + sub;
+  EXPECT_EQ(box2.Min(), box1.Min() + sub);
+  EXPECT_EQ(box2.Max(), box1.Max() + sub);
+}
+
+/////////////////////////////////////////////////
 TEST(AxisAlignedBoxTest, Minus)
 {
   AxisAlignedBox box1(1, 2, 3, 4, 5, 6);

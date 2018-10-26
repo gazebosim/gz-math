@@ -153,9 +153,15 @@ bool AxisAlignedBox::operator!=(const AxisAlignedBox &_b) const
 }
 
 //////////////////////////////////////////////////
-AxisAlignedBox AxisAlignedBox::operator-(const Vector3d &_v)
+AxisAlignedBox AxisAlignedBox::operator+(const Vector3d &_v) const
 {
-  return AxisAlignedBox(this->dataPtr->min - _v, this->dataPtr->max - _v);
+  return AxisAlignedBox(this->dataPtr->min + _v, this->dataPtr->max + _v);
+}
+
+//////////////////////////////////////////////////
+AxisAlignedBox AxisAlignedBox::operator-(const Vector3d &_v) const
+{
+  return (*this + (-_v));
 }
 
 //////////////////////////////////////////////////

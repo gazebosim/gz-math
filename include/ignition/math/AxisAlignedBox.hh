@@ -122,10 +122,15 @@ namespace ignition
       /// \return True if not equal
       public: bool operator!=(const AxisAlignedBox &_b) const;
 
+      /// \brief Add a vector to the min and max values
+      /// \param _v The vector to use during addition
+      /// \return The new box
+      public: AxisAlignedBox operator+(const Vector3d &_v) const;
+
       /// \brief Subtract a vector from the min and max values
       /// \param _v The vector to use during subtraction
       /// \return The new box
-      public: AxisAlignedBox operator-(const Vector3d &_v);
+      public: AxisAlignedBox operator-(const Vector3d &_v) const;
 
       /// \brief Output operator
       /// \param[in] _out Output stream
