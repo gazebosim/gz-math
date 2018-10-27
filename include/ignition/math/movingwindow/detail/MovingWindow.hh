@@ -65,6 +65,13 @@ MovingWindow<WindowPolicy, EntityShape>::MovingWindow(const WindowShape &_shape,
 
 //////////////////////////////////////////////////
 template <template <class> class WindowPolicy, class EntityShape>
+void MovingWindow<WindowPolicy, EntityShape>::SetWindowPose(const Pose3d &_pose)
+{
+  this->dataPtr->winInfo.pose = _pose;
+}
+
+//////////////////////////////////////////////////
+template <template <class> class WindowPolicy, class EntityShape>
 bool MovingWindow<WindowPolicy, EntityShape>::RegisterEntity(
     std::size_t _id, const EntityShape &_shape, const Pose3d &_pose)
 {

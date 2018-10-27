@@ -54,7 +54,7 @@ namespace movingwindow
     State state = UNINITIALIZED;
   };
 
-  /// \brief A struct that holds the shape used for the entities as well as 
+  /// \brief A struct that holds the shape used for the entities as well as
   /// extra parameters.
   template <class EntityShape>
   struct ShapeInfo
@@ -65,7 +65,7 @@ namespace movingwindow
     Pose3d pose;
   };
 
-  /// \brief A struct that holds the shape used for the window as well as 
+  /// \brief A struct that holds the shape used for the window as well as
   /// extra parameters.
   template <class WindowShape>
   struct WindowInfo
@@ -74,7 +74,7 @@ namespace movingwindow
     WindowShape shape;
     /// \brief The hysteresis is taken to be a buffer around the window.
     double hysteresis;
-    /// \brief The pose of the window. For certain window shapes, only the 
+    /// \brief The pose of the window. For certain window shapes, only the
     /// position will be used.
     Pose3d pose;
   };
@@ -85,7 +85,7 @@ namespace movingwindow
   /// \tparam EntityShape The shape type that represents the entity. The
   /// parameter is also passed to \a WindowPolicy.
   ///
-  /// \detail This class takes \a WindowPolicy class as a template parameter. 
+  /// \detail This class takes \a WindowPolicy class as a template parameter.
   ///
   /// <b> Example usage</b>
   /// \code{cpp}
@@ -94,8 +94,8 @@ namespace movingwindow
   /// \endcode
   ///
   /// <b> For window implementers</b>
-  /// The policy class must be a template that accepts a template parameter for 
-  /// the shape of the entity.  The policy class must have also have  static 
+  /// The policy class must be a template that accepts a template parameter for
+  /// the shape of the entity.  The policy class must have also have  static
   /// function \c WindowPolicy::Check
   /// Example
   /// \code{cpp}
@@ -115,7 +115,7 @@ namespace movingwindow
   template <template <class> class WindowPolicy, class EntityShape>
   class IGNITION_MATH_VISIBLE MovingWindow
   {
-    public: using WindowShape = 
+    public: using WindowShape =
             typename WindowPolicy<EntityShape>::WindowShape;
 
     /// \brief Constructor
@@ -123,38 +123,45 @@ namespace movingwindow
                              double _hysteresis = 0,
                              const Pose3d &_pose = Pose3d::Zero);
 
+    /// \brief Sets the pose of the window. Note that for some windows only the
+    /// position is meaningful.
+    /// \param[in] _pose The pose of the window.
+    public: void SetWindowPose(const Pose3d &_pose);
+
     /// \brief Register the given entity for later checking if in window
-    /// \param[in] _id The id associated with the entity. This id is provided 
-    /// by the caller and will be used in the returned list of entities when 
+    /// \param[in] _id The id associated with the entity. This id is provided
+    /// by the caller and will be used in the returned list of entities when
     /// Check() is called.
     /// \param[in] _shape The shape of the entity.
     /// \param[in] _pose The pose of the entity.
-    /// \return True if the the entity was successfully (the _id is new) 
-    /// registered. 
-    public: bool RegisterEntity(std::size_t _id, const EntityShape &_shape, 
+    /// \return True if the the entity was successfully (the _id is new)
+    /// registered.
+    public: bool RegisterEntity(std::size_t _id, const EntityShape &_shape,
                                 const Pose3d &_pose = Pose3d::Zero);
 
     /// \brief Unregister the given entity from the window.
-    /// \param[in] _id The id associated with the entity. This id would have 
+    /// \param[in] _id The id associated with the entity. This id would have
     /// been provided when calling \see{RegisterEntity}.
-    /// \return True if the the entity was successfully (the _id is found) 
-    /// unregistered. 
+    /// \return True if the the entity was successfully (the _id is found)
+    /// unregistered.
     public: bool UnregisterEntity(std::size_t _id);
 
     /// \brief Gives the number of entities registered in this window.
     /// \return number of entities registered.
     public: std::size_t EntityCount() const;
 
-    /// \brief Sets the pose of the entity. Note that some windows only use the 
+    /// \brief Sets the pose of the entity. Note that some windows only use the
     /// position of the entity and ignore its orientation.
     /// \param[in] _id The id associated with the entity.
     /// \param[in] _pose The pose of the entity.
     public: bool SetEntityPose(std::size_t _id, const Pose3d &_pose);
 
     /// \brief Checks if the registered entities are inside the window.
-    /// \todo(addisu): About changing state. Add another function for getting 
+    /// see the class documentation, \ref MovingWindow, for the requirment on 
+    /// the window policy for the function to work properly.
+    /// \todo(addisu): About changing state. Add another function for getting
     /// objects of certain state.
-    /// \returns A list of entities (identified by their ids supplied to 
+    /// \returns A list of entities (identified by their ids supplied to
     /// RegisterEntity) and their state.
     public: std::vector<EntityState> Check();
 

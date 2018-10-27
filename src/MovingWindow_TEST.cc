@@ -70,6 +70,27 @@ TEST(MovingWindowTest, TestWindowCheck)
 }
 
 /////////////////////////////////////////////////
+TEST(MovingWindowTest, TestWindowPositionChange)
+{
+  using WindowType = AxisAlignedBoxMovingWindow<AxisAlignedBox>;
+  WindowType window{{-10, -10, 0, 10, 10, 10}};
+  const std::size_t shapeId = 1;
+  const bool res =
+      window.RegisterEntity(shapeId, {-1, -1, -1, 1, 1, 1});
+  ASSERT_TRUE(res);
+  
+  const auto checkRes = window.Check();
+  EXPECT_EQ(shapeId, checkRes.begin()->id);
+  EXPECT_EQ(EntityState::INSIDE, checkRes.begin()->state);
+  
+  window.SetWindowPose({100, 0, 0, 0, 0, 0});
+  const auto checkRes2 = window.Check();
+  ASSERT_GT(checkRes2.size(), 0ul);
+  EXPECT_EQ(shapeId, checkRes2.begin()->id);
+  EXPECT_EQ(EntityState::OUTSIDE, checkRes2.begin()->state);
+}
+
+/////////////////////////////////////////////////
 TEST(MovingWindowTest, TestShapePositionChange)
 {
   using WindowType = AxisAlignedBoxMovingWindow<AxisAlignedBox>;

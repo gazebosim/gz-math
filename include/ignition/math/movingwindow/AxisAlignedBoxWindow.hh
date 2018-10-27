@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-
 #ifndef IGNITION_MATH_MOVINGWINDOW_AXIS_ALIGNED_BOX_WINDOW_HH_
 #define IGNITION_MATH_MOVINGWINDOW_AXIS_ALIGNED_BOX_WINDOW_HH_
 
@@ -47,11 +46,12 @@ namespace movingwindow
         {
           std::vector<EntityState> output;
 
+          auto window = _winInfo.shape + _winInfo.pose.Pos();
           for (const auto &[id, shapeInfo] : _entities)
           {
             // We consider intersection to be inside the window
-            bool inside = _winInfo.shape.Intersects(shapeInfo.shape +
-                                                    shapeInfo.pose.Pos());
+            bool inside =
+                window.Intersects(shapeInfo.shape + shapeInfo.pose.Pos());
             EntityState::State state =
                 inside ? EntityState::INSIDE : EntityState::OUTSIDE;
             output.push_back(EntityState{id, state});
