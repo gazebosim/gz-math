@@ -345,6 +345,8 @@ TEST(QuaternionTest, Math)
     math::Vector3d v = math::Vector3d(1, 2, 3);
     math::Vector3d r1 = q.RotateVector(v);
     math::Vector3d r2 = q.RotateVectorReverse(v);
+    EXPECT_EQ(r1, q * v);
+    EXPECT_EQ(r2, q.Inverse() * v);
     std::cout << "[" << q.W() << ", " << q.X() << ", "
       << q.Y() << ", " << q.Z() << "]\n";
     std::cout << " forward turns [" << v << "] to [" << r1 << "]\n";
@@ -365,18 +367,21 @@ TEST(QuaternionTest, Math)
     q = math::Quaterniond(IGN_PI/2.0, IGN_PI/2.0, 0);
     math::Vector3d v1(1, 0, 0);
     math::Vector3d r1 = q.RotateVector(v1);
+    EXPECT_EQ(r1, q * v1);
     // 90 degrees about X does nothing,
     // 90 degrees about Y sends point down to -Z
     EXPECT_EQ(r1, math::Vector3d(0, 0, -1));
 
     math::Vector3d v2(0, 1, 0);
     math::Vector3d r2 = q.RotateVector(v2);
+    EXPECT_EQ(r2, q * v2);
     // 90 degrees about X sends point to +Z
     // 90 degrees about Y sends point to +X
     EXPECT_EQ(r2, math::Vector3d(1, 0, 0));
 
     math::Vector3d v3(0, 0, 1);
     math::Vector3d r3 = q.RotateVector(v3);
+    EXPECT_EQ(r3, q * v3);
     // 90 degrees about X sends point to -Y
     // 90 degrees about Y does nothing
     EXPECT_EQ(r3, math::Vector3d(0, -1, 0));
