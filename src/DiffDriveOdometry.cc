@@ -137,7 +137,7 @@ bool DiffDriveOdometry::Update(const Angle &_leftPos, const Angle &_rightPos,
 
   this->dataPtr->IntegrateExact(linear, angular);
 
-  // Check if interval is too small to integrate
+  // We cannot estimate the speed with very small time intervals.
   if (dt.count() < 0.0001)
     return false;
 
