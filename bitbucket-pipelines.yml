@@ -19,7 +19,7 @@ pipelines:
           - cd ..
           # Ignition cmake
           - git clone --depth 1 https://github.com/osrf/gzdev -b repository
-          - ./gzdev/gzdev.py repository enable --project=ign-math7
+          - ./gzdev/gzdev.py repository enable --project=ignition-math7
           - apt-get -y install
             libignition-cmake2-dev
           # Ignition math
