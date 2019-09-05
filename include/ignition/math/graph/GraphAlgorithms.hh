@@ -332,47 +332,55 @@ namespace graph
   /// if a vertex with multiple incoming edges is found.
   /// Otherwise, this function returns the first Vertex that is found with
   /// only outgoing and no incoming edges.
+  /// It also returns the sequence of edges leading to the outgoing vertex.
   /// \param[in] _graph A directed graph.
   /// \param[in] _id VertexId of the starting vertex.
-  /// \return A vertex with only outgoing and no incoming edges or a
-  /// NullVertex if a cycle or vertex with multiple incoming edges are detected.
+  /// \return A vertex with only outgoing and no incoming edges paired with a
+  /// vector of the edges leading to that vertex, or a NullVertex paired
+  /// with an empty vector if a cycle or vertex with multiple incoming edges
+  /// are detected.
   template<typename V, typename E>
-  const Vertex<V> &FindOutgoingVertex(
-      const DirectedGraph<V, E> &_graph, const VertexId _id)
+  std::pair<const Vertex<V> &, std::vector<DirectedEdge<E>>>
+  FindOutgoingVertex(const DirectedGraph<V, E> &_graph, const VertexId _id)
   {
+    using EdgesType = std::vector<DirectedEdge<E>>;
+    using PairType = std::pair<const Vertex<V> &, EdgesType>;
+    EdgesType edges;
     std::reference_wrapper<const Vertex<V>> vertex(_graph.VertexFromId(_id));
     if (!vertex.get().Valid())
     {
       std::cerr << "Input vertex [" << _id << "] is not valid" << std::endl;
-      return Vertex<V>::NullVertex;
+      return PairType(Vertex<V>::NullVertex, EdgesType());
     }
 
     std::set<VertexId> visited;
     visited.insert(vertex.get().Id());
 
-    auto adjacentsTo = _graph.AdjacentsTo(vertex);
-    while (!adjacentsTo.empty())
+    auto incidentsTo = _graph.IncidentsTo(vertex);
+    while (!incidentsTo.empty())
     {
-      if (adjacentsTo.size() != 1)
+      if (incidentsTo.size() != 1)
       {
-        std::cerr << "Multiple vertices adjacent to current vertex ["
+        std::cerr << "Multiple vertices incident to current vertex ["
                   << vertex.get().Id() << "]"
                   << std::endl;
-        return Vertex<V>::NullVertex;
+        return PairType(Vertex<V>::NullVertex, EdgesType());
       }
-      vertex = adjacentsTo.begin()->second;
+      auto const &edge = incidentsTo.begin()->second;
+      vertex = _graph.VertexFromId(edge.get().Vertices().first);
+      edges.push_back(edge);
       if (visited.count(vertex.get().Id()))
       {
         std::cerr << "Graph cycle detected, already visited vertex ["
                   << vertex.get().Id() << "]"
                   << std::endl;
-        return Vertex<V>::NullVertex;
+        return PairType(Vertex<V>::NullVertex, EdgesType());
       }
       visited.insert(vertex.get().Id());
-      adjacentsTo = _graph.AdjacentsTo(vertex);
+      incidentsTo = _graph.IncidentsTo(vertex);
     }
 
-    return vertex;
+    return PairType(vertex, edges);
   }
 
   /// \brief Copy a DirectedGraph to an UndirectedGraph with the same vertices

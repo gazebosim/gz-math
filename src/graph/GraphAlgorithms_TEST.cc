@@ -335,17 +335,34 @@ TEST(GraphTestFixture, FindOutgoingVertex)
      {{3, 4}, 2.0, 1.0}}
   });
 
-  // invalid input vertex
-  EXPECT_FALSE(FindOutgoingVertex(graph, 99).Valid());
+  // invalid input vertex and no edges
+  EXPECT_FALSE(FindOutgoingVertex(graph, 99).first.Valid());
+  EXPECT_TRUE(FindOutgoingVertex(graph, 99).second.empty());
 
   // starting from 0, 1, 2 will lead to vertex 0
-  EXPECT_EQ(0u, FindOutgoingVertex(graph, 0).Id());
-  EXPECT_EQ(0u, FindOutgoingVertex(graph, 1).Id());
-  EXPECT_EQ(0u, FindOutgoingVertex(graph, 2).Id());
+  auto pair0 = FindOutgoingVertex(graph, 0);
+  EXPECT_EQ(0u, pair0.first.Id());
+  EXPECT_EQ(0u, pair0.second.size());
+
+  auto pair1 = FindOutgoingVertex(graph, 1);
+  EXPECT_EQ(0u, pair1.first.Id());
+  EXPECT_EQ(1u, pair1.second.size());
+  EXPECT_TRUE(pair1.second[0].Valid());
+  EXPECT_DOUBLE_EQ(6.0, pair1.second[0].Weight());
+
+  auto pair2 = FindOutgoingVertex(graph, 2);
+  EXPECT_EQ(0u, pair2.first.Id());
+  EXPECT_EQ(2u, pair2.second.size());
+  EXPECT_TRUE(pair2.second[0].Valid());
+  EXPECT_DOUBLE_EQ(5.0, pair2.second[0].Weight());
+  EXPECT_TRUE(pair2.second[1].Valid());
+  EXPECT_DOUBLE_EQ(6.0, pair2.second[1].Weight());
 
   // vertices 3 and 4 both have multiple incoming edges, so are invalid
-  EXPECT_FALSE(FindOutgoingVertex(graph, 3).Valid());
-  EXPECT_FALSE(FindOutgoingVertex(graph, 4).Valid());
+  EXPECT_FALSE(FindOutgoingVertex(graph, 3).first.Valid());
+  EXPECT_FALSE(FindOutgoingVertex(graph, 4).first.Valid());
+  EXPECT_TRUE(FindOutgoingVertex(graph, 3).second.empty());
+  EXPECT_TRUE(FindOutgoingVertex(graph, 4).second.empty());
 
   // test a graph with a cycle
   DirectedGraph<int, double> cycle(
@@ -357,11 +374,16 @@ TEST(GraphTestFixture, FindOutgoingVertex)
      {{2, 3}, 4.0, 5.0}, {{3, 4}, 4.0, 2.0},
      {{4, 0}, 4.0, 2.0}}
   });
-  EXPECT_FALSE(FindOutgoingVertex(cycle, 0).Valid());
-  EXPECT_FALSE(FindOutgoingVertex(cycle, 1).Valid());
-  EXPECT_FALSE(FindOutgoingVertex(cycle, 2).Valid());
-  EXPECT_FALSE(FindOutgoingVertex(cycle, 3).Valid());
-  EXPECT_FALSE(FindOutgoingVertex(cycle, 4).Valid());
+  EXPECT_FALSE(FindOutgoingVertex(cycle, 0).first.Valid());
+  EXPECT_FALSE(FindOutgoingVertex(cycle, 1).first.Valid());
+  EXPECT_FALSE(FindOutgoingVertex(cycle, 2).first.Valid());
+  EXPECT_FALSE(FindOutgoingVertex(cycle, 3).first.Valid());
+  EXPECT_FALSE(FindOutgoingVertex(cycle, 4).first.Valid());
+  EXPECT_TRUE(FindOutgoingVertex(cycle, 0).second.empty());
+  EXPECT_TRUE(FindOutgoingVertex(cycle, 1).second.empty());
+  EXPECT_TRUE(FindOutgoingVertex(cycle, 2).second.empty());
+  EXPECT_TRUE(FindOutgoingVertex(cycle, 3).second.empty());
+  EXPECT_TRUE(FindOutgoingVertex(cycle, 4).second.empty());
 }
 
 /////////////////////////////////////////////////
