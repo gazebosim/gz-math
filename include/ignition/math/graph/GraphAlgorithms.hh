@@ -326,6 +326,55 @@ namespace graph
     return res;
   }
 
+  /// \brief Starting from a given vertex in a directed graph, traverse edges
+  /// in reverse direction to find a vertex that has only outgoing edges.
+  /// This function returns a NullVertex if a graph cycle is detected or
+  /// if a vertex with multiple incoming edges is found.
+  /// Otherwise, this function returns the first Vertex that is found with
+  /// only outgoing and no incoming edges.
+  /// \param[in] _graph A directed graph.
+  /// \param[in] _id VertexId of the starting vertex.
+  /// \return A vertex with only outgoing and no incoming edges or a
+  /// NullVertex if a cycle or vertex with multiple incoming edges are detected.
+  template<typename V, typename E>
+  const Vertex<V> &FindOutgoingVertex(
+      const DirectedGraph<V, E> &_graph, const VertexId _id)
+  {
+    std::reference_wrapper<const Vertex<V>> vertex(_graph.VertexFromId(_id));
+    if (!vertex.get().Valid())
+    {
+      std::cerr << "Input vertex [" << _id << "] is not valid" << std::endl;
+      return Vertex<V>::NullVertex;
+    }
+
+    std::set<VertexId> visited;
+    visited.insert(vertex.get().Id());
+
+    auto adjacentsTo = _graph.AdjacentsTo(vertex);
+    while (!adjacentsTo.empty())
+    {
+      if (adjacentsTo.size() != 1)
+      {
+        std::cerr << "Multiple vertices adjacent to current vertex ["
+                  << vertex.get().Id() << "]"
+                  << std::endl;
+        return Vertex<V>::NullVertex;
+      }
+      vertex = adjacentsTo.begin()->second;
+      if (visited.count(vertex.get().Id()))
+      {
+        std::cerr << "Graph cycle detected, already visited vertex ["
+                  << vertex.get().Id() << "]"
+                  << std::endl;
+        return Vertex<V>::NullVertex;
+      }
+      visited.insert(vertex.get().Id());
+      adjacentsTo = _graph.AdjacentsTo(vertex);
+    }
+
+    return vertex;
+  }
+
   /// \brief Copy a DirectedGraph to an UndirectedGraph with the same vertices
   /// and edges.
   /// \param[in] _graph A directed graph.

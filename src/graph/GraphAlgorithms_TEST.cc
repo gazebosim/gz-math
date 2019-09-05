@@ -311,6 +311,60 @@ TEST(GraphTestFixture, ConnectedComponents)
 }
 
 /////////////////////////////////////////////////
+TEST(GraphTestFixture, FindOutgoingVertex)
+{
+  ///              (6)                  |
+  ///           0------>1               |
+  ///           |      /|\              |
+  ///           |     / | \(5)          |
+  ///           | (2)/  |  ┘            |
+  ///           |   /   |   2           |
+  ///        (1)|  / (2)|  /            |
+  ///           | /     | /(5)          |
+  ///           VL      VL              |
+  ///           3------>4               |
+  ///              (1)                  |
+  DirectedGraph<int, double> graph(
+  {
+    // Vertices.
+    {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}, {"3", 3, 3}, {"4", 4, 4}},
+    // Edges.
+    {{{0, 1}, 2.0, 6.0}, {{0, 3}, 3.0, 1.0},
+     {{1, 2}, 4.0, 5.0}, {{1, 3}, 4.0, 2.0}, {{1, 4}, 4.0, 2.0},
+     {{2, 4}, 2.0, 5.0},
+     {{3, 4}, 2.0, 1.0}}
+  });
+
+  // invalid input vertex
+  EXPECT_FALSE(FindOutgoingVertex(graph, 99).Valid());
+
+  // starting from 0, 1, 2 will lead to vertex 0
+  EXPECT_EQ(0u, FindOutgoingVertex(graph, 0).Id());
+  EXPECT_EQ(0u, FindOutgoingVertex(graph, 1).Id());
+  EXPECT_EQ(0u, FindOutgoingVertex(graph, 2).Id());
+
+  // vertices 3 and 4 both have multiple incoming edges, so are invalid
+  EXPECT_FALSE(FindOutgoingVertex(graph, 3).Valid());
+  EXPECT_FALSE(FindOutgoingVertex(graph, 4).Valid());
+
+  // test a graph with a cycle
+  DirectedGraph<int, double> cycle(
+  {
+    // Vertices.
+    {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}, {"3", 3, 3}, {"4", 4, 4}},
+    // Edges.
+    {{{0, 1}, 2.0, 6.0}, {{1, 2}, 3.0, 1.0},
+     {{2, 3}, 4.0, 5.0}, {{3, 4}, 4.0, 2.0},
+     {{4, 0}, 4.0, 2.0}}
+  });
+  EXPECT_FALSE(FindOutgoingVertex(cycle, 0).Valid());
+  EXPECT_FALSE(FindOutgoingVertex(cycle, 1).Valid());
+  EXPECT_FALSE(FindOutgoingVertex(cycle, 2).Valid());
+  EXPECT_FALSE(FindOutgoingVertex(cycle, 3).Valid());
+  EXPECT_FALSE(FindOutgoingVertex(cycle, 4).Valid());
+}
+
+/////////////////////////////////////////////////
 TEST(GraphTestFixture, ToUndirectedGraph)
 {
   ///              (6)                  |
