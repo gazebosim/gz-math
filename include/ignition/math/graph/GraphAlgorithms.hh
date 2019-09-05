@@ -328,21 +328,19 @@ namespace graph
   }
 
   /// \brief Starting from a given vertex in a directed graph, traverse edges
-  /// in reverse direction to find a vertex that has only outgoing edges.
+  /// in reverse direction to find a source vertex (has only outgoing edges).
   /// This function returns a NullVertex if a graph cycle is detected or
   /// if a vertex with multiple incoming edges is found.
-  /// Otherwise, this function returns the first Vertex that is found with
-  /// only outgoing and no incoming edges.
-  /// It also returns the sequence of edges leading to the outgoing vertex.
+  /// Otherwise, this function returns the first source Vertex that is found.
+  /// It also returns the sequence of edges leading to the source vertex.
   /// \param[in] _graph A directed graph.
   /// \param[in] _id VertexId of the starting vertex.
-  /// \return A vertex with only outgoing and no incoming edges paired with a
-  /// vector of the edges leading to that vertex, or a NullVertex paired
-  /// with an empty vector if a cycle or vertex with multiple incoming edges
-  /// are detected.
+  /// \return A source vertex paired with a vector of the edges leading the
+  /// source to the starting vertex, or a NullVertex paired with an empty
+  /// vector if a cycle or vertex with multiple incoming edges are detected.
   template<typename V, typename E>
   std::pair<const Vertex<V> &, std::vector<DirectedEdge<E>>>
-  FindOutgoingVertex(const DirectedGraph<V, E> &_graph, const VertexId _id)
+  FindSourceVertex(const DirectedGraph<V, E> &_graph, const VertexId _id)
   {
     using EdgesType = std::vector<DirectedEdge<E>>;
     using PairType = std::pair<const Vertex<V> &, EdgesType>;
