@@ -387,6 +387,80 @@ TEST(GraphTestFixture, FindSourceVertex)
 }
 
 /////////////////////////////////////////////////
+TEST(GraphTestFixture, FindSinkVertex)
+{
+  ///              (6)                  |
+  ///           0------>1               |
+  ///           |      /|\              |
+  ///           |     / | \(5)          |
+  ///           | (2)/  |  ┘            |
+  ///           |   /   |   2           |
+  ///        (1)|  / (2)|  /            |
+  ///           | /     | /(5)          |
+  ///           VL      VL              |
+  ///           3------>4               |
+  ///              (1)                  |
+  DirectedGraph<int, double> graph(
+  {
+    // Vertices.
+    {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}, {"3", 3, 3}, {"4", 4, 4}},
+    // Edges.
+    {{{0, 1}, 2.0, 6.0}, {{0, 3}, 3.0, 1.0},
+     {{1, 2}, 4.0, 5.0}, {{1, 3}, 4.0, 2.0}, {{1, 4}, 4.0, 2.0},
+     {{2, 4}, 2.0, 5.0},
+     {{3, 4}, 2.0, 1.0}}
+  });
+
+  // invalid input vertex and no edges
+  EXPECT_FALSE(FindSinkVertex(graph, 99).first.Valid());
+  EXPECT_TRUE(FindSinkVertex(graph, 99).second.empty());
+
+  // vertices 0 and 1 both have multiple incoming edges, so are invalid
+  EXPECT_FALSE(FindSinkVertex(graph, 0).first.Valid());
+  EXPECT_FALSE(FindSinkVertex(graph, 1).first.Valid());
+  EXPECT_TRUE(FindSinkVertex(graph, 0).second.empty());
+  EXPECT_TRUE(FindSinkVertex(graph, 1).second.empty());
+
+  // starting from 2, 3, 4 will lead to vertex 4
+  auto pair2 = FindSinkVertex(graph, 2);
+  EXPECT_EQ(4u, pair2.first.Id());
+  EXPECT_EQ(1u, pair2.second.size());
+  EXPECT_TRUE(pair2.second[0].Valid());
+  EXPECT_DOUBLE_EQ(5.0, pair2.second[0].Weight());
+
+  auto pair3 = FindSinkVertex(graph, 3);
+  EXPECT_EQ(4u, pair3.first.Id());
+  EXPECT_EQ(1u, pair3.second.size());
+  EXPECT_TRUE(pair3.second[0].Valid());
+  EXPECT_DOUBLE_EQ(1.0, pair3.second[0].Weight());
+
+  auto pair4 = FindSinkVertex(graph, 4);
+  EXPECT_EQ(4u, pair4.first.Id());
+  EXPECT_EQ(0u, pair4.second.size());
+
+  // test a graph with a cycle
+  DirectedGraph<int, double> cycle(
+  {
+    // Vertices.
+    {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}, {"3", 3, 3}, {"4", 4, 4}},
+    // Edges.
+    {{{0, 1}, 2.0, 6.0}, {{1, 2}, 3.0, 1.0},
+     {{2, 3}, 4.0, 5.0}, {{3, 4}, 4.0, 2.0},
+     {{4, 0}, 4.0, 2.0}}
+  });
+  EXPECT_FALSE(FindSinkVertex(cycle, 0).first.Valid());
+  EXPECT_FALSE(FindSinkVertex(cycle, 1).first.Valid());
+  EXPECT_FALSE(FindSinkVertex(cycle, 2).first.Valid());
+  EXPECT_FALSE(FindSinkVertex(cycle, 3).first.Valid());
+  EXPECT_FALSE(FindSinkVertex(cycle, 4).first.Valid());
+  EXPECT_TRUE(FindSinkVertex(cycle, 0).second.empty());
+  EXPECT_TRUE(FindSinkVertex(cycle, 1).second.empty());
+  EXPECT_TRUE(FindSinkVertex(cycle, 2).second.empty());
+  EXPECT_TRUE(FindSinkVertex(cycle, 3).second.empty());
+  EXPECT_TRUE(FindSinkVertex(cycle, 4).second.empty());
+}
+
+////////////////////////////////////////////////
 TEST(GraphTestFixture, ToUndirectedGraph)
 {
   ///              (6)                  |
