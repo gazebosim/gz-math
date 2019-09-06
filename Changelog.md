@@ -2,6 +2,9 @@
 
 ### Ignition Math 5.x.x
 
+1. GraphAlgorithms: add functions for finding source and sink vertices in a DirectedGraph.
+    * [Pull request 333](https://bitbucket.org/ignitionrobotics/ign-math/pull-requests/333)
+
 1. GraphAlgorithms: add ToUndirected(DirectedGraph) that copies to an UndirectedGraph.
     * [Pull request 332](https://bitbucket.org/ignitionrobotics/ign-math/pull-requests/332)
 
