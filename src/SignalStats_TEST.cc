@@ -29,13 +29,11 @@ TEST(SignalStatsTest, SignalMaximumConstructor)
   math::SignalMaximum max;
   EXPECT_DOUBLE_EQ(max.Value(), 0.0);
   EXPECT_EQ(max.Count(), 0u);
-  EXPECT_EQ(max.ShortName(), std::string("max"));
 
   math::SignalMaximum maxCopy(max);
 
   EXPECT_DOUBLE_EQ(max.Value(), maxCopy.Value());
   EXPECT_EQ(max.Count(), maxCopy.Count());
-  EXPECT_EQ(max.ShortName(), maxCopy.ShortName());
 
   // Reset
   max.Reset();
@@ -108,7 +106,6 @@ TEST(SignalStatsTest, SignalMean)
     math::SignalMean mean;
     EXPECT_DOUBLE_EQ(mean.Value(), 0.0);
     EXPECT_EQ(mean.Count(), 0u);
-    EXPECT_EQ(mean.ShortName(), std::string("mean"));
 
     // Reset
     mean.Reset();
@@ -176,7 +173,6 @@ TEST(SignalStatsTest, SignalMinimumConstructor)
   math::SignalMinimum min;
   EXPECT_DOUBLE_EQ(min.Value(), 0.0);
   EXPECT_EQ(min.Count(), 0u);
-  EXPECT_EQ(min.ShortName(), std::string("min"));
 
   // Reset
   min.Reset();
@@ -248,7 +244,6 @@ TEST(SignalStatsTest, SignalRootMeanSquare)
     math::SignalRootMeanSquare rms;
     EXPECT_DOUBLE_EQ(rms.Value(), 0.0);
     EXPECT_EQ(rms.Count(), 0u);
-    EXPECT_EQ(rms.ShortName(), std::string("rms"));
 
     // Reset
     rms.Reset();
@@ -320,7 +315,6 @@ TEST(SignalStatsTest, SignalMaxAbsoluteValue)
     math::SignalMaxAbsoluteValue max;
     EXPECT_DOUBLE_EQ(max.Value(), 0.0);
     EXPECT_EQ(max.Count(), 0u);
-    EXPECT_EQ(max.ShortName(), std::string("maxAbs"));
 
     // Reset
     max.Reset();
@@ -391,7 +385,6 @@ TEST(SignalStatsTest, SignalVarianceConstructor)
   math::SignalVariance var;
   EXPECT_DOUBLE_EQ(var.Value(), 0.0);
   EXPECT_EQ(var.Count(), 0u);
-  EXPECT_EQ(var.ShortName(), std::string("var"));
 
   // Reset
   var.Reset();

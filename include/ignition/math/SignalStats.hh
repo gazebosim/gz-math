@@ -51,10 +51,6 @@ namespace ignition
       /// \return Current value of the statistical measure.
       public: virtual double Value() const = 0;
 
-      /// \brief Get a short version of the name of this statistical measure.
-      /// \return Short name of the statistical measure.
-      public: virtual std::string ShortName() const = 0;
-
       /// \brief Get number of data points in measurement.
       /// \return Number of data points in measurement.
       public: virtual size_t Count() const;
@@ -87,10 +83,6 @@ namespace ignition
       // Documentation inherited.
       public: virtual double Value() const;
 
-      /// \brief Get a short version of the name of this statistical measure.
-      /// \return "max"
-      public: virtual std::string ShortName() const;
-
       // Documentation inherited.
       public: virtual void InsertData(const double _data);
     };
@@ -102,10 +94,6 @@ namespace ignition
     {
       // Documentation inherited.
       public: virtual double Value() const;
-
-      /// \brief Get a short version of the name of this statistical measure.
-      /// \return "mean"
-      public: virtual std::string ShortName() const;
 
       // Documentation inherited.
       public: virtual void InsertData(const double _data);
@@ -119,10 +107,6 @@ namespace ignition
       // Documentation inherited.
       public: virtual double Value() const;
 
-      /// \brief Get a short version of the name of this statistical measure.
-      /// \return "min"
-      public: virtual std::string ShortName() const;
-
       // Documentation inherited.
       public: virtual void InsertData(const double _data);
     };
@@ -135,10 +119,6 @@ namespace ignition
     {
       // Documentation inherited.
       public: virtual double Value() const;
-
-      /// \brief Get a short version of the name of this statistical measure.
-      /// \return "rms"
-      public: virtual std::string ShortName() const;
 
       // Documentation inherited.
       public: virtual void InsertData(const double _data);
@@ -155,10 +135,6 @@ namespace ignition
       // Documentation inherited.
       public: virtual double Value() const;
 
-      /// \brief Get a short version of the name of this statistical measure.
-      /// \return "maxAbs"
-      public: virtual std::string ShortName() const;
-
       // Documentation inherited.
       public: virtual void InsertData(const double _data);
     };
@@ -171,10 +147,6 @@ namespace ignition
     {
       // Documentation inherited.
       public: virtual double Value() const;
-
-      /// \brief Get a short version of the name of this statistical measure.
-      /// \return "var"
-      public: virtual std::string ShortName() const;
 
       // Documentation inherited.
       public: virtual void InsertData(const double _data);

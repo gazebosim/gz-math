@@ -62,12 +62,6 @@ double SignalMaximum::Value() const
 }
 
 //////////////////////////////////////////////////
-std::string SignalMaximum::ShortName() const
-{
-  return "max";
-}
-
-//////////////////////////////////////////////////
 void SignalMaximum::InsertData(const double _data)
 {
   if (this->dataPtr->count == 0 || _data > this->dataPtr->data)
@@ -88,12 +82,6 @@ double SignalMean::Value() const
 }
 
 //////////////////////////////////////////////////
-std::string SignalMean::ShortName() const
-{
-  return "mean";
-}
-
-//////////////////////////////////////////////////
 void SignalMean::InsertData(const double _data)
 {
   this->dataPtr->data += _data;
@@ -104,12 +92,6 @@ void SignalMean::InsertData(const double _data)
 double SignalMinimum::Value() const
 {
   return this->dataPtr->data;
-}
-
-//////////////////////////////////////////////////
-std::string SignalMinimum::ShortName() const
-{
-  return "min";
 }
 
 //////////////////////////////////////////////////
@@ -133,12 +115,6 @@ double SignalRootMeanSquare::Value() const
 }
 
 //////////////////////////////////////////////////
-std::string SignalRootMeanSquare::ShortName() const
-{
-  return "rms";
-}
-
-//////////////////////////////////////////////////
 void SignalRootMeanSquare::InsertData(const double _data)
 {
   this->dataPtr->data += _data * _data;
@@ -149,12 +125,6 @@ void SignalRootMeanSquare::InsertData(const double _data)
 double SignalMaxAbsoluteValue::Value() const
 {
   return this->dataPtr->data;
-}
-
-//////////////////////////////////////////////////
-std::string SignalMaxAbsoluteValue::ShortName() const
-{
-  return "maxAbs";
 }
 
 //////////////////////////////////////////////////
@@ -178,12 +148,6 @@ double SignalVariance::Value() const
 
   // variance = M2 / (n - 1)
   return this->dataPtr->data / (this->dataPtr->count - 1);
-}
-
-//////////////////////////////////////////////////
-std::string SignalVariance::ShortName() const
-{
-  return "var";
 }
 
 //////////////////////////////////////////////////
@@ -234,10 +198,6 @@ size_t SignalStats::Count() const
 std::map<std::string, double> SignalStats::Map() const
 {
   std::map<std::string, double> map;
-  for (auto const &statistic : this->dataPtr->stats)
-  {
-    map[statistic->ShortName()] = statistic->Value();
-  }
   return map;
 }
 
