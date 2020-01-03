@@ -40,6 +40,22 @@ Sphere<T>::Sphere(const T _radius, const ignition::math::Material &_mat)
 
 //////////////////////////////////////////////////
 template<typename T>
+Sphere<T>::Sphere(const Sphere &_sphere)
+  : radius(_sphere.radius),
+    material(_sphere.material)
+{
+}
+
+//////////////////////////////////////////////////
+template<typename T>
+Sphere<T>::Sphere(const Sphere &&_sphere)
+  : radius(std::move(_sphere.radius)),
+    material(std::move(_sphere.material))
+{
+}
+
+//////////////////////////////////////////////////
+template<typename T>
 T Sphere<T>::Radius() const
 {
   return this->radius;
@@ -79,6 +95,24 @@ template<typename T>
 bool Sphere<T>::operator!=(const Sphere &_sphere) const
 {
   return !(*this == _sphere);
+}
+
+//////////////////////////////////////////////////
+template<typename T>
+Sphere<T> &Sphere<T>::operator=(const Sphere &_sphere)
+{
+  this->radius = _sphere.radius;
+  this->material = _sphere.material;
+  return *this;
+}
+
+//////////////////////////////////////////////////
+template<typename T>
+Sphere<T> &Sphere<T>::operator=(Sphere &&_sphere)
+{
+  this->radius = std::move(_sphere.radius);
+  this->material = std::move(_sphere.material);
+  return *this;
 }
 
 //////////////////////////////////////////////////

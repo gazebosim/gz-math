@@ -26,7 +26,7 @@ using namespace math;
 /////////////////////////////////////////////////
 TEST(SphereTest, Constructor)
 {
-  // Default constructor
+  // Default, copy, and move constructors
   {
     math::Sphered sphere;
     EXPECT_DOUBLE_EQ(0.0, sphere.Radius());
@@ -34,6 +34,13 @@ TEST(SphereTest, Constructor)
 
     math::Sphered sphere2;
     EXPECT_EQ(sphere, sphere2);
+    sphere2.SetRadius(2.0);
+
+    math::Sphered sphere3(sphere2);
+    EXPECT_EQ(sphere2, sphere3);
+
+    math::Sphered sphere4(std::move(sphere3));
+    EXPECT_EQ(sphere2, sphere4);
   }
 
   // Radius constructor
@@ -55,6 +62,22 @@ TEST(SphereTest, Constructor)
     math::Sphered sphere2(1.0, math::Material(math::MaterialType::WOOD));
     EXPECT_EQ(sphere, sphere2);
   }
+}
+
+/////////////////////////////////////////////////
+TEST(SphereTest, Operators)
+{
+  math::Sphered sphere(1.2, math::Material(math::MaterialType::PINE));
+  EXPECT_DOUBLE_EQ(1.2, sphere.Radius());
+  EXPECT_EQ(math::MaterialType::PINE, sphere.Material().Type());
+
+  math::Sphered sphere2;
+  sphere2 = sphere;
+  EXPECT_EQ(sphere, sphere2);
+
+  math::Sphered sphere3;
+  sphere3 = std::move(sphere2);
+  EXPECT_EQ(sphere, sphere3);
 }
 
 //////////////////////////////////////////////////

@@ -35,13 +35,21 @@ namespace ignition
     /// \brief A representation of a sphere.
     ///
     /// The sphere class supports defining a sphere with a radius and
-    /// material properties. Radius is in meters.
+    /// material properties. Units for the radius is meters.
     /// See Material for more on material properties.
     template<typename Precision>
     class Sphere
     {
       /// \brief Default constructor. The default radius is zero.
       public: Sphere() = default;
+
+      /// \brief Copy constructor.
+      /// \param[in] _sphere Sphere to copy.
+      public: Sphere(const Sphere &_sphere);
+
+      /// \brief Move constructor.
+      /// \param[in] _sphere Sphere to move.
+      public: Sphere(const Sphere &&_sphere);
 
       /// \brief Construct a sphere with a radius.
       /// \param[in] _radius Radius of the sphere.
@@ -86,6 +94,16 @@ namespace ignition
       /// \brief Check if this sphere is not equal to the provided sphere.
       /// Radius and material properties will be checked.
       public: bool operator!=(const Sphere &_sphere) const;
+
+      /// \brief Assignment operator.
+      /// \param[in] _sphere Sphere to copy.
+      /// \return Reference to this instance.
+      public: Sphere &operator=(const Sphere &_sphere);
+
+      /// \brief Move operator.
+      /// \param[in] _sphere Sphere to move.
+      /// \return Reference to this instance.
+      public: Sphere &operator=(Sphere &&_sphere);
 
       /// \brief Get the volume of the sphere in m^3.
       /// \return Volume of the sphere in m^3.
