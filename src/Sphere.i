@@ -37,13 +37,14 @@ namespace ignition
       public: Sphere(const Sphere &_sphere);
       public: Sphere(const Sphere &&_sphere);
       public: explicit Sphere(const Precision _radius);
-      public: Sphere(const Precision _radius, const Material &_mat);
+      public: Sphere(const Precision _radius,
+                  const ignition::math::Material &_mat);
       public: ~Sphere() = default;
       public: Precision Radius() const;
       public: void SetRadius(const Precision _radius);
       public: const ignition::math::Material &Material() const;
       public: void SetMaterial(const ignition::math::Material &_mat);
-      public: bool MassMatrix(MassMatrix3d &_massMat) const;
+      public: bool MassMatrix(ignition::math::MassMatrix3d &_massMat) const;
       public: bool operator==(const Sphere &_sphere) const;
       public: bool operator!=(const Sphere &_sphere) const;
       public: Sphere &operator=(const Sphere &_sphere);

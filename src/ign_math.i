@@ -1,4 +1,6 @@
 %include "Angle.i"
+%include "Material.i"
+%include "MaterialType.i"
 %include "Sphere.i"
 %include "Vector2.i"
 %include "Vector3.i"

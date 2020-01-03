@@ -23,6 +23,8 @@ if (SWIG_FOUND)
   set(swig_files
     ruby
     Angle
+    Material
+    MaterialType
     Sphere
     Vector2
     Vector3)
