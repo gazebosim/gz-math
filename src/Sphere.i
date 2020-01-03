@@ -21,7 +21,7 @@
 %}
 #endif
 
-%module angle
+%module sphere
 %{
 #include <ignition/math/Sphere.hh>
 %}
@@ -34,20 +34,16 @@ namespace ignition
     class Sphere
     {
       public: Sphere();
-      public: Sphere(const Sphere &_sphere);
-      public: Sphere(const Sphere &&_sphere);
       public: explicit Sphere(const Precision _radius);
-      public: Sphere(const Precision _radius, const Material &_mat);
+      public: Sphere(const Precision _radius,
+                     const ignition::math::Material &_mat);
       public: ~Sphere() = default;
       public: Precision Radius() const;
       public: void SetRadius(const Precision _radius);
       public: const ignition::math::Material &Material() const;
       public: void SetMaterial(const ignition::math::Material &_mat);
-      public: bool MassMatrix(MassMatrix3d &_massMat) const;
+      public: bool MassMatrix(ignition::math::MassMatrix3d &_massMat) const;
       public: bool operator==(const Sphere &_sphere) const;
-      public: bool operator!=(const Sphere &_sphere) const;
-      public: Sphere &operator=(const Sphere &_sphere);
-      public: Sphere &operator=(Sphere &&_sphere);
       public: Precision Volume() const;
       public: Precision DensityFromMass(const Precision _mass) const;
       public: bool SetDensityFromMass(const Precision _mass);

@@ -37,6 +37,14 @@ namespace ignition
     /// The sphere class supports defining a sphere with a radius and
     /// material properties. Units for the radius is meters.
     /// See Material for more on material properties.
+    ///
+    /// # Examples
+    ///
+    /// * C++
+    ///
+    /// \snippet examples/sphere_example.cc complete
+    ///
+    /// * Ruby
     template<typename Precision>
     class Sphere
     {
