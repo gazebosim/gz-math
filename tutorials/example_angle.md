@@ -1,12 +1,12 @@
 # Angle example
 
-This tutorial explains how to use the angle class from ignition math library.
+This tutorial explains how to use the `Angle` class from Ignition Math library.
 
-## CPP example
+## C++ example
 
 ### Compile the code
 
-To compile the code, go to `ign-math/examples` and use `cmake` to compile the code:
+Go to `ign-math/examples` and use `cmake` to compile the code:
 
 ```{.sh}
 git clone https://github.com/ignitionrobotics/ign-math/ -b master
@@ -17,7 +17,7 @@ cmake ..
 make
 ```
 
-When the code is compiled just run:
+When the code is compiled, run:
 
 ```{.sh}
 ./angle_example
@@ -39,25 +39,25 @@ The code instantiates an angle class. The default constructed angle should be ze
 
 \snippet examples/angle_example.cc Create an angle
 
-There are some predefined angles such as:
+There are some predefined angles, such as:
 
 \snippet examples/angle_example.cc constant pi
 
-By the default all the value are in radians, but you can use the method `Degree` to convert it to degrees.
+By default, all values are in radians, but you can use the method `Degree` to convert to degrees.
 
 \snippet examples/angle_example.cc Output the angle in radians and degrees.
 
-The Angle class overloads the +=, and many other, math operators.
+The `Angle` class overloads the `+=`, and many other, math operators.
 
 \snippet examples/angle_example.cc The Angle class overloads the +=, and many other, math operators.
 
-Use the method `Normalized` to bounded the value between `-PI` and `PI`
+Use the method `Normalized` to bound the value between `-PI` and `PI`.
 
 \snippet examples/angle_example.cc normalized
 
 ## Ruby example
 
-This example will only work if the Ruby interface library was compiled and installed. Modify the `RUBYLIB` environment variable to include the ignition math library install path. For example, if you install to ``/usr`:
+This example will only work if the Ruby interface library was compiled and installed. Modify the `RUBYLIB` environment variable to include the Ignition Math library install path. For example, if you install to `/usr`:
 
 ```{.sh}
 export RUBYLIB=/usr/lib/ruby:$RUBYLIB
@@ -79,7 +79,6 @@ printf("PI in degrees = %f\n", Ignition::Math::Angle.Pi.Degree)
 
 Create new objects:
 
-
 ```{.rb}
 a1 = Ignition::Math::Angle.new(1.5707)
 a2 = Ignition::Math::Angle.new(0.7854)
@@ -92,7 +91,7 @@ printf("a1 = %f radians, %f degrees\n", a1.Radian, a1.Degree)
 printf("a2 = %f radians, %f degrees\n", a2.Radian, a2.Degree)
 ```
 
-The Angle class overloads math operators.
+The `Angle` class overloads math operators.
 
 ```{.rb}
 printf("a1 * a2 = %f radians, %f degrees\n", (a1 * a2).Radian, (a1 * a2).Degree)
