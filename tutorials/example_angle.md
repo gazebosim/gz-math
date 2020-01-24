@@ -9,6 +9,7 @@ This tutorial explains how to use the angle class from ignition math library.
 To compile the code, go to `ign-math/examples` and use `cmake` to compile the code:
 
 ```{.sh}
+hg clone https://bitbucket.org/ignitionrobotics/ign-math
 cd ign-math/examples
 mkdir build
 cd build
