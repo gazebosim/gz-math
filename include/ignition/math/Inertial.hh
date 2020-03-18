@@ -233,23 +233,45 @@ namespace ignition
           ixyxzyz = Vector3<T>(moi(0, 1), moi(0, 2), moi(1, 2));
         }
         // Then account for parallel axis theorem
+        // {
+        //   auto dc = com1 - com;
+        //   ixxyyzz.X() += m1 * (std::pow(dc[1], 2) + std::pow(dc[2], 2));
+        //   ixxyyzz.Y() += m1 * (std::pow(dc[2], 2) + std::pow(dc[0], 2));
+        //   ixxyyzz.Z() += m1 * (std::pow(dc[0], 2) + std::pow(dc[1], 2));
+        //   ixxyyzz.X() -= m1 * dc[0] * dc[1];
+        //   ixxyyzz.Y() -= m1 * dc[0] * dc[2];
+        //   ixxyyzz.Z() -= m1 * dc[1] * dc[2];
+        // }
+        // {
+        //   auto dc = com2 - com;
+        //   ixxyyzz.X() += m2 * (std::pow(dc[1], 2) + std::pow(dc[2], 2));
+        //   ixxyyzz.Y() += m2 * (std::pow(dc[2], 2) + std::pow(dc[0], 2));
+        //   ixxyyzz.Z() += m2 * (std::pow(dc[0], 2) + std::pow(dc[1], 2));
+        //   ixxyyzz.X() -= m2 * dc[0] * dc[1];
+        //   ixxyyzz.Y() -= m2 * dc[0] * dc[2];
+        //   ixxyyzz.Z() -= m2 * dc[1] * dc[2];
+        // }
         {
-          auto dc = com1 - com;
-          ixxyyzz.X() += m1 * (std::pow(dc[1], 2) + std::pow(dc[2], 2));
-          ixxyyzz.Y() += m1 * (std::pow(dc[2], 2) + std::pow(dc[0], 2));
-          ixxyyzz.Z() += m1 * (std::pow(dc[0], 2) + std::pow(dc[1], 2));
-          ixxyyzz.X() -= m1 * dc[0] * dc[1];
-          ixxyyzz.Y() -= m1 * dc[0] * dc[2];
-          ixxyyzz.Z() -= m1 * dc[1] * dc[2];
+          auto dc = com - com1;
+          auto sqLen = dc.SquaredLength();
+          ixxyyzz.X() += m1 * (sqLen - dc[0] * dc[0]);
+          ixxyyzz.Y() += m1 * (sqLen - dc[1] * dc[1]);
+          ixxyyzz.Z() += m1 * (sqLen - dc[2] * dc[2]);
+
+          ixyxzyz.X() -= m1 * dc[0] * dc[1];
+          ixyxzyz.Y() -= m1 * dc[0] * dc[2];
+          ixyxzyz.Z() -= m1 * dc[1] * dc[2];
         }
         {
-          auto dc = com2 - com;
-          ixxyyzz.X() += m2 * (std::pow(dc[1], 2) + std::pow(dc[2], 2));
-          ixxyyzz.Y() += m2 * (std::pow(dc[2], 2) + std::pow(dc[0], 2));
-          ixxyyzz.Z() += m2 * (std::pow(dc[0], 2) + std::pow(dc[1], 2));
-          ixxyyzz.X() -= m2 * dc[0] * dc[1];
-          ixxyyzz.Y() -= m2 * dc[0] * dc[2];
-          ixxyyzz.Z() -= m2 * dc[1] * dc[2];
+          auto dc = com - com2;
+          auto sqLen = dc.SquaredLength();
+          ixxyyzz.X() += m2 * (sqLen - dc[0] * dc[0]);
+          ixxyyzz.Y() += m2 * (sqLen - dc[1] * dc[1]);
+          ixxyyzz.Z() += m2 * (sqLen - dc[2] * dc[2]);
+
+          ixyxzyz.X() -= m2 * dc[0] * dc[1];
+          ixyxzyz.Y() -= m2 * dc[0] * dc[2];
+          ixyxzyz.Z() -= m2 * dc[1] * dc[2];
         }
         this->massMatrix = MassMatrix3<T>(mass, ixxyyzz, ixyxzyz);
         this->pose = Pose3<T>(com, Quaternion<T>::Identity);
