@@ -539,3 +539,27 @@ TEST(Inertiald_Test, AdditionInvalid)
     EXPECT_TRUE((i0 + i).MassMatrix().IsValid());
   }
 }
+
+/////////////////////////////////////////////////
+TEST(Inertiald_Test, AdditionPrecomputed)
+{
+  math::Inertiald in1(math::MassMatrix3d(100, {2, 3, 4}, math::Vector3d::Zero),
+                      math::Pose3d::Zero);
+
+  math::Inertiald in2(math::MassMatrix3d(200, {5, 6, 7}, math::Vector3d::Zero),
+                      math::Pose3d(0.0, 1.0, 2.0, 0, 0, 0));
+
+  EXPECT_TRUE(in1.MassMatrix().IsValid());
+  EXPECT_TRUE(in2.MassMatrix().IsValid());
+  auto in3 = in1 + in2;
+  EXPECT_TRUE(in3.MassMatrix().IsValid());
+
+  EXPECT_DOUBLE_EQ(300.0, in3.MassMatrix().Mass());
+  double tol = 1e-4;
+  EXPECT_NEAR(340.33333, in3.MassMatrix().DiagonalMoments().X(), tol);
+  EXPECT_NEAR(275.66666, in3.MassMatrix().DiagonalMoments().Y(), tol);
+  EXPECT_NEAR(77.66666, in3.MassMatrix().DiagonalMoments().Z(), tol);
+  EXPECT_NEAR(0, in3.MassMatrix().OffDiagonalMoments().X(), tol);
+  EXPECT_NEAR(0, in3.MassMatrix().OffDiagonalMoments().Y(), tol);
+  EXPECT_NEAR(-133.33333, in3.MassMatrix().OffDiagonalMoments().Z(), tol);
+}
