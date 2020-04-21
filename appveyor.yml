@@ -9,8 +9,7 @@ environment:
   CTEST_OUTPUT_ON_FAILURE: 1
 
 install:
-  - hg summary
-  - hg clone https://bitbucket.org/ignitionrobotics/ign-cmake
+  - git clone https://github.com/ignitionrobotics/ign-cmake
   - cd ign-cmake
   - hg up ign-cmake2
   - md build
@@ -26,14 +25,13 @@ build_script:
 
 after_build:
   - cmake --build . --config %CONFIGURATION% --target INSTALL
-  
+
 test_script:
   - cmake --build . --config %CONFIGURATION% --target RUN_TESTS
   # Build the examples to make sure that find_package(ignition-math* REQUIRED) works
   - cd ../examples
-  - md build 
+  - md build
   - cd build
   - cmake ..
-  - cmake --build . --config %CONFIGURATION% 
+  - cmake --build . --config %CONFIGURATION%
   - cd ..
-  
