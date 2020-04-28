@@ -366,7 +366,7 @@ TEST(Color, OperatorStreamInWithoutAlpha)
   }
 
   {
-    math::Color test(0.5, 0.6, 0.7, 0.8);
+    math::Color test(0.5f, 0.6f, 0.7f, 0.8f);
     std::stringstream ss("0.1  0.2 \t0.3   \t");
     ss.exceptions(std::stringstream::failbit);
     EXPECT_NO_THROW(ss >> test);
