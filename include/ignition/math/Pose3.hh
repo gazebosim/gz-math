@@ -438,6 +438,20 @@ namespace ignition
         return this->q.Roll();
       }
 
+      /// \brief Get the Pitch value of the rotation.
+      /// \return Pitch value of the orientation.
+      public: inline const T &Pitch() const
+      {
+        return this->q.Pitch();
+      }
+
+      /// \brief Get the mutable Pitch value of the rotation.
+      /// \return Pitch value of the orientation.
+      public: inline T &Pitch() 
+      {
+        return this->q.Pitch();
+      }
+
       /// \brief Stream insertion operator
       /// \param[in] _out output stream
       /// \param[in] _pose pose to output
