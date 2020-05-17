@@ -396,6 +396,20 @@ namespace ignition
         return this->p.Y();
       }
 
+      /// \brief Get the Z value of the position.
+      /// \return Value Z of the origin of the pose.
+      public: inline const Vector3<T> &Z() const
+      {
+        return this->p.Z();
+      }
+
+      /// \brief Get the mutable Z value of the position.
+      /// \return Value Z of the origin of the pose.
+      public: inline Vector3<T> &Z() 
+      {
+        return this->p.Z();
+      }
+
       /// \brief Get the rotation.
       /// \return Quaternion representation of the rotation.
       public: inline const Quaternion<T> &Rot() const
