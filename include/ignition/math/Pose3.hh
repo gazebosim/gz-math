@@ -372,7 +372,28 @@ namespace ignition
       /// \return Value X of the origin of the pose.
       public: inline const Vector3<T> &X() const
       {
-        return this->p.X;
+        return this->p.X();
+      }
+
+      /// \brief Get the mutable X value of the position.
+      /// \return Value X of the origin of the pose.
+      public: inline Vector3<T> &X() 
+      {
+        return this->p.X();
+      }
+
+      /// \brief Get the Y value of the position.
+      /// \return Value Y of the origin of the pose.
+      public: inline const Vector3<T> &Y() const
+      {
+        return this->p.Y();
+      }
+
+      /// \brief Get the mutable Y value of the position.
+      /// \return Value Y of the origin of the pose.
+      public: inline Vector3<T> &Y() 
+      {
+        return this->p.Y();
       }
 
       /// \brief Get the rotation.
