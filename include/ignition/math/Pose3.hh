@@ -452,6 +452,20 @@ namespace ignition
         return this->q.Pitch();
       }
 
+      /// \brief Get the Yaw value of the rotation.
+      /// \return Yaw value of the orientation.
+      public: inline const T &Yaw() const
+      {
+        return this->q.Yaw();
+      }
+
+      /// \brief Get the mutable Yaw value of the rotation.
+      /// \return Yaw value of the orientation.
+      public: inline T &Yaw() 
+      {
+        return this->q.Yaw();
+      }
+
       /// \brief Stream insertion operator
       /// \param[in] _out output stream
       /// \param[in] _pose pose to output
