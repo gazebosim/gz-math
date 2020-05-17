@@ -370,42 +370,42 @@ namespace ignition
 
       /// \brief Get the X value of the position.
       /// \return Value X of the origin of the pose.
-      public: inline const Vector3<T> &X() const
+      public: inline const T &X() const
       {
         return this->p.X();
       }
 
       /// \brief Get the mutable X value of the position.
       /// \return Value X of the origin of the pose.
-      public: inline Vector3<T> &X() 
+      public: inline T &X() 
       {
         return this->p.X();
       }
 
       /// \brief Get the Y value of the position.
       /// \return Value Y of the origin of the pose.
-      public: inline const Vector3<T> &Y() const
+      public: inline const T &Y() const
       {
         return this->p.Y();
       }
 
       /// \brief Get the mutable Y value of the position.
       /// \return Value Y of the origin of the pose.
-      public: inline Vector3<T> &Y() 
+      public: inline T &Y() 
       {
         return this->p.Y();
       }
 
       /// \brief Get the Z value of the position.
       /// \return Value Z of the origin of the pose.
-      public: inline const Vector3<T> &Z() const
+      public: inline const T &Z() const
       {
         return this->p.Z();
       }
 
       /// \brief Get the mutable Z value of the position.
       /// \return Value Z of the origin of the pose.
-      public: inline Vector3<T> &Z() 
+      public: inline T &Z() 
       {
         return this->p.Z();
       }
@@ -422,6 +422,20 @@ namespace ignition
       public: inline Quaternion<T> &Rot()
       {
         return this->q;
+      }
+
+      /// \brief Get the Roll value of the rotation.
+      /// \return Roll value of the orientation.
+      public: inline const T &Roll() const
+      {
+        return this->q.Roll();
+      }
+
+      /// \brief Get the mutable Roll value of the rotation.
+      /// \return Roll value of the orientation.
+      public: inline T &Roll() 
+      {
+        return this->q.Roll();
       }
 
       /// \brief Stream insertion operator
