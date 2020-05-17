@@ -368,6 +368,13 @@ namespace ignition
         return this->p;
       }
 
+      /// \brief Get the X value of the position.
+      /// \return Value X of the origin of the pose.
+      public: inline const Vector3<T> &X() const
+      {
+        return this->p.X;
+      }
+
       /// \brief Get the rotation.
       /// \return Quaternion representation of the rotation.
       public: inline const Quaternion<T> &Rot() const
