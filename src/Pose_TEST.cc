@@ -155,3 +155,25 @@ TEST(PoseTest, OperatorStreamOut)
   EXPECT_EQ(stream.str(), "0.1 1.2 2.3 0 0.1 1");
 }
 
+/////////////////////////////////////////////////
+TEST(PoseTest, PoseElements)
+{
+  const math::Pose3i pose(0, 1, 2, 0, 0, 0);
+
+  int x = pose.Pos().X();
+  int y = pose.Pos().Y();
+  int z = pose.Pos().Z();
+  int Roll = pose.Rot().Roll();
+  int Pitch = pose.Rot().Pitch();
+  int Yaw = pose.Rot().Yaw();
+
+
+  EXPECT_EQ(pose.X(),x);
+  EXPECT_EQ(pose.Y(),y);
+  EXPECT_EQ(pose.Z(),z);
+  EXPECT_EQ(pose.Roll(),Roll);
+  EXPECT_EQ(pose.Pitch(),Pitch);
+  EXPECT_EQ(pose.Yaw(),Yaw);
+
+
+}
