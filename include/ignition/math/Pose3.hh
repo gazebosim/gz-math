@@ -370,7 +370,8 @@ namespace ignition
 
       /// \brief Get the X value of the position.
       /// \return Value X of the origin of the pose.
-      /// \note The return is made by value since Vector3<T>.X() is already a reference.
+      /// \note The return is made by value since
+      /// Vector3<T>.X() is already a reference.
       public: inline const T X() const
       {
         return this->p.X();
@@ -378,15 +379,17 @@ namespace ignition
 
       /// \brief Get the mutable X value of the position.
       /// \return Value X of the origin of the pose.
-      /// \note The return is made by value since Vector3<T>.X() is already a reference.
-      public: inline T X() 
+      /// \note The return is made by value since
+      /// Vector3<T>.X() is already a reference.
+      public: inline T X()
       {
         return this->p.X();
       }
 
       /// \brief Get the Y value of the position.
       /// \return Value Y of the origin of the pose.
-      /// \note The return is made by value since Vector3<T>.Y() is already a reference.
+      /// \note The return is made by value since
+      /// Vector3<T>.Y() is already a reference.
       public: inline const T Y() const
       {
         return this->p.Y();
@@ -394,15 +397,17 @@ namespace ignition
 
       /// \brief Get the mutable Y value of the position.
       /// \return Value Y of the origin of the pose.
-      /// \note The return is made by value since Vector3<T>.Y() is already a reference.
-      public: inline T Y() 
+      /// \note The return is made by value since
+      /// Vector3<T>.Y() is already a reference.
+      public: inline T Y()
       {
         return this->p.Y();
       }
 
       /// \brief Get the Z value of the position.
       /// \return Value Z of the origin of the pose.
-      /// \note The return is made by value since Vector3<T>.Z() is already a reference.
+      /// \note The return is made by value since
+      /// Vector3<T>.Z() is already a reference.
       public: inline const T Z() const
       {
         return this->p.Z();
@@ -410,8 +415,9 @@ namespace ignition
 
       /// \brief Get the mutable Z value of the position.
       /// \return Value Z of the origin of the pose.
-      /// \note The return is made by value since Vector3<T>.Z() is already a reference.
-      public: inline T Z() 
+      /// \note The return is made by value since
+      /// Vector3<T>.Z() is already a reference.
+      public: inline T Z()
       {
         return this->p.Z();
       }
@@ -432,7 +438,8 @@ namespace ignition
 
       /// \brief Get the Roll value of the rotation.
       /// \return Roll value of the orientation.
-      /// \note The return is made by value since Quaternion<T>.Roll() is already a reference.
+      /// \note The return is made by value since
+      ///  Quaternion<T>.Roll() is already a reference.
       public: inline const T Roll() const
       {
         return this->q.Roll();
@@ -440,15 +447,17 @@ namespace ignition
 
       /// \brief Get the mutable Roll value of the rotation.
       /// \return Roll value of the orientation.
-      /// \note The return is made by value since Quaternion<T>.Roll() is already a reference.
-      public: inline T Roll() 
+      /// \note The return is made by value since
+      ///  Quaternion<T>.Roll() is already a reference.
+      public: inline T Roll()
       {
         return this->q.Roll();
       }
 
       /// \brief Get the Pitch value of the rotation.
       /// \return Pitch value of the orientation.
-      /// \note The return is made by value since Quaternion<T>.Pitch() is already a reference.
+      /// \note The return is made by value since
+      ///  Quaternion<T>.Pitch() is already a reference.
       public: inline const T Pitch() const
       {
         return this->q.Pitch();
@@ -456,15 +465,17 @@ namespace ignition
 
       /// \brief Get the mutable Pitch value of the rotation.
       /// \return Pitch value of the orientation.
-      /// \note The return is made by value since Quaternion<T>.Pitch() is already a reference.
-      public: inline T Pitch() 
+      /// \note The return is made by value since
+      ///  Quaternion<T>.Pitch() is already a reference.
+      public: inline T Pitch()
       {
         return this->q.Pitch();
       }
 
       /// \brief Get the Yaw value of the rotation.
       /// \return Yaw value of the orientation.
-      /// \note The return is made by value since Quaternion<T>.Yaw() is already a reference.
+      /// \note The return is made by value since
+      ///  Quaternion<T>.Yaw() is already a reference.
       public: inline const T Yaw() const
       {
         return this->q.Yaw();
@@ -472,8 +483,9 @@ namespace ignition
 
       /// \brief Get the mutable Yaw value of the rotation.
       /// \return Yaw value of the orientation.
-      /// \note The return is made by value since Quaternion<T>.Yaw() is already a reference.
-      public: inline T Yaw() 
+      /// \note The return is made by value since
+      ///  Quaternion<T>.Yaw() is already a reference.
+      public: inline T Yaw()
       {
         return this->q.Yaw();
       }

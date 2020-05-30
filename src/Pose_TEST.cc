@@ -167,13 +167,10 @@ TEST(PoseTest, PoseElements)
   int Pitch = pose.Rot().Pitch();
   int Yaw = pose.Rot().Yaw();
 
-
-  EXPECT_EQ(pose.X(),x);
-  EXPECT_EQ(pose.Y(),y);
-  EXPECT_EQ(pose.Z(),z);
-  EXPECT_EQ(pose.Roll(),Roll);
-  EXPECT_EQ(pose.Pitch(),Pitch);
-  EXPECT_EQ(pose.Yaw(),Yaw);
-
-
+  EXPECT_EQ(pose.X(), x);
+  EXPECT_EQ(pose.Y(), y);
+  EXPECT_EQ(pose.Z(), z);
+  EXPECT_EQ(pose.Roll(), Roll);
+  EXPECT_EQ(pose.Pitch(), Pitch);
+  EXPECT_EQ(pose.Yaw(), Yaw);
 }
