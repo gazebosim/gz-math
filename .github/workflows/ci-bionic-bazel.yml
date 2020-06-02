@@ -14,4 +14,5 @@ jobs:
         uses: ignition-tooling/ubuntu-bionic-ci-action@bazel
         with:
           apt-dependencies: 'ruby-dev swig libeigen3-dev'
-          target: ign_math
+          build-target: '//ign_math/...'
+          test-target: '//ign_math/...'
