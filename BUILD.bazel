@@ -1,0 +1,191 @@
+load(
+    "//ign_bazel:cmake_configure_file.bzl",
+    "cmake_configure_file",
+)
+load(
+    "//ign_bazel:generate_include_header.bzl",
+    "generate_include_header",
+)
+load(
+    "//ign_bazel:generate_file.bzl",
+    "generate_file",
+)
+
+package(default_visibility = ["//visibility:public"])
+
+PROJECT_NAME = "ignition-math"
+PROJECT_MAJOR = 6
+PROJECT_MINOR = 4
+PROJECT_PATCH = 0
+
+# Generates config.hh based on the version numbers in CMake code.
+cmake_configure_file(
+    name = "config",
+    src = "include/ignition/math/config.hh.in",
+    out = "include/ignition/math/config.hh",
+    cmakelists = ["CMakeLists.txt"],
+    defines = [
+        "PROJECT_VERSION_MAJOR=%d" % (PROJECT_MAJOR),
+        "PROJECT_MAJOR_VERSION=%d" % (PROJECT_MAJOR),
+        "PROJECT_MINOR_VERSION=%d" % (PROJECT_MINOR),
+        "PROJECT_PATCH_VERSION=%d" % (PROJECT_PATCH),
+        "PROJECT_VERSION=%d.%d" % (PROJECT_MAJOR, PROJECT_MINOR),
+        "PROJECT_VERSION_FULL=%d.%d.%d" % (PROJECT_MAJOR, PROJECT_MINOR, PROJECT_PATCH),  # noqa
+        "PROJECT_NAME_NO_VERSION=%s" % (PROJECT_NAME),
+    ],
+    visibility = ["//visibility:private"],
+)
+
+generate_file(
+    name = "include/ignition/math/Export.hh",
+    content = """
+#pragma once
+// IGN_DEPRECATED is defined by all ignition libraries, but the version below
+// is a simplified version.  When mixing the regular ignition libraries and
+// the drake compiled ignition libraries, the compiler throws a warning about
+// the macro being multiply defined.  We undefine it before redefining it here
+// to work around that issue.  Note that the IGNITION_MATH_VISIBLE macro
+// shouldn't be defined multiple times, but we undefine it just in case.
+#ifdef IGNITION_MATH_VISIBLE
+#undef IGNITION_MATH_VISIBLE
+#endif
+#define IGNITION_MATH_VISIBLE __attribute__ ((visibility("default")))
+#ifdef IGN_DEPRECATED
+#undef IGN_DEPRECATED
+#endif
+#define IGN_DEPRECATED(version) __attribute__ ((__deprecated__))
+    """,
+    visibility = ["//visibility:private"],
+)
+
+public_headers_no_gen = [
+    "include/ignition/math/Angle.hh",
+    "include/ignition/math/AxisAlignedBox.hh",
+    "include/ignition/math/Box.hh",
+    "include/ignition/math/Color.hh",
+    "include/ignition/math/Cylinder.hh",
+    "include/ignition/math/DiffDriveOdometry.hh",
+    "include/ignition/math/Filter.hh",
+    "include/ignition/math/Frustum.hh",
+    "include/ignition/math/GaussMarkovProcess.hh",
+    "include/ignition/math/Helpers.hh",
+    "include/ignition/math/Inertial.hh",
+    "include/ignition/math/Kmeans.hh",
+    "include/ignition/math/Line2.hh",
+    "include/ignition/math/Line3.hh",
+    "include/ignition/math/MassMatrix3.hh",
+    "include/ignition/math/Material.hh",
+    "include/ignition/math/MaterialType.hh",
+    "include/ignition/math/Matrix3.hh",
+    "include/ignition/math/Matrix4.hh",
+    "include/ignition/math/MovingWindowFilter.hh",
+    "include/ignition/math/OrientedBox.hh",
+    "include/ignition/math/PID.hh",
+    "include/ignition/math/Plane.hh",
+    "include/ignition/math/Pose3.hh",
+    "include/ignition/math/Quaternion.hh",
+    "include/ignition/math/Rand.hh",
+    "include/ignition/math/RollingMean.hh",
+    "include/ignition/math/RotationSpline.hh",
+    "include/ignition/math/SemanticVersion.hh",
+    "include/ignition/math/SignalStats.hh",
+    "include/ignition/math/Sphere.hh",
+    "include/ignition/math/SphericalCoordinates.hh",
+    "include/ignition/math/Spline.hh",
+    "include/ignition/math/Stopwatch.hh",
+    "include/ignition/math/Temperature.hh",
+    "include/ignition/math/Triangle.hh",
+    "include/ignition/math/Triangle3.hh",
+    "include/ignition/math/Vector2.hh",
+    "include/ignition/math/Vector3.hh",
+    "include/ignition/math/Vector3Stats.hh",
+    "include/ignition/math/Vector4.hh",
+    "include/ignition/math/detail/Box.hh",
+    "include/ignition/math/detail/Cylinder.hh",
+    "include/ignition/math/detail/Sphere.hh",
+    "include/ignition/math/graph/Edge.hh",
+    "include/ignition/math/graph/Graph.hh",
+    "include/ignition/math/graph/GraphAlgorithms.hh",
+    "include/ignition/math/graph/Vertex.hh",
+]
+
+private_headers = [
+    "src/FrustumPrivate.hh",
+    "src/KmeansPrivate.hh",
+    "src/MaterialType.hh",
+    "src/RotationSplinePrivate.hh",
+    "src/SignalStatsPrivate.hh",
+    "src/SplinePrivate.hh",
+    "src/Vector3StatsPrivate.hh",
+]
+
+generate_include_header(
+    name = "mathhh_genrule",
+    out = "include/ignition/math.hh",
+    hdrs = public_headers_no_gen + [
+        "include/ignition/math/config.hh",
+        "include/ignition/math/Export.hh",
+    ],
+)
+
+public_headers = public_headers_no_gen + [
+    "include/ignition/math/config.hh",
+    "include/ignition/math/Export.hh",
+    "include/ignition/math.hh",
+]
+
+cc_binary(
+    name = "libignition_math.so",
+    srcs = [
+        "src/Angle.cc",
+        "src/AxisAlignedBox.cc",
+        "src/Color.cc",
+        "src/DiffDriveOdometry.cc",
+        "src/Frustum.cc",
+        "src/GaussMarkovProcess.cc",
+        "src/Helpers.cc",
+        "src/Kmeans.cc",
+        "src/Material.cc",
+        "src/PID.cc",
+        "src/Rand.cc",
+        "src/RollingMean.cc",
+        "src/RotationSpline.cc",
+        "src/RotationSplinePrivate.cc",
+        "src/SemanticVersion.cc",
+        "src/SignalStats.cc",
+        "src/SphericalCoordinates.cc",
+        "src/Spline.cc",
+        "src/SplinePrivate.cc",
+        "src/Stopwatch.cc",
+        "src/Temperature.cc",
+        "src/Vector3Stats.cc",
+    ] + private_headers + public_headers,
+    includes = ["include"],
+    linkopts = ["-Wl,-soname,libignition_math.so"],
+    linkshared = True,
+    visibility = [],
+)
+
+cc_library(
+    name = "ign_math",
+    srcs = ["libignition_math.so"],
+    hdrs = public_headers,
+    includes = ["include"],
+    visibility = ["//visibility:public"],
+)
+
+[cc_test(
+    name = src.replace("/", "_").replace(".cc", "").replace("src_", ""),
+    srcs = [src],
+    deps = [
+        ":ign_math",
+        "@gtest//:gtest",
+        "@gtest//:gtest_main",
+    ],
+) for src in glob(
+    [
+        "src/*_TEST.cc",
+        "src/graph/*_TEST.cc",
+    ],
+)]
+

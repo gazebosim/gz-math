@@ -1,0 +1,30 @@
+public_headers = [
+    "include/ignition/math/eigen3/Conversions.hh",
+]
+
+cc_library(
+    name = "ign_math_eigen3",
+    srcs = public_headers,
+    hdrs = public_headers,
+    deps = [
+        "@org_tuxfamily_eigen//:eigen",
+        "//ign_math",
+    ],
+    includes = ["include"],
+    visibility = ["//visibility:public"]
+)
+
+[cc_test(
+    name = src.replace("/", "_").replace(".cc", "").replace("src_", ""),
+    srcs = [src],
+    deps = [
+        ":ign_math_eigen3",
+        "@gtest//:gtest",
+        "@gtest//:gtest_main",
+    ],
+) for src in glob(
+    [
+        "src/*_TEST.cc",
+    ],
+)]
+
