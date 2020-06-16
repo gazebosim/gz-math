@@ -7,7 +7,7 @@ cc_library(
     srcs = public_headers,
     hdrs = public_headers,
     deps = [
-        "@org_tuxfamily_eigen//:eigen",
+        "@eigen3",
         "//ign_math",
     ],
     includes = ["include"],
