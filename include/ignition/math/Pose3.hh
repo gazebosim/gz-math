@@ -465,7 +465,7 @@ namespace ignition
 
       /// \brief Get the mutable Pitch value of the rotation.
       /// \return Pitch value of the orientation.
-      public: inline T Pitch()
+      public: inline T &Pitch()
       {
         return this->q.Pitch();
       }
@@ -483,7 +483,7 @@ namespace ignition
       /// \return Yaw value of the orientation.
       /// \note The return is made by value since
       ///  Quaternion<T>.Yaw() is already a reference.
-      public: inline T Yaw()
+      public: inline T &Yaw()
       {
         return this->q.Yaw();
       }
