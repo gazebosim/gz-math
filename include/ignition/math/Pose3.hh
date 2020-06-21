@@ -381,7 +381,7 @@ namespace ignition
       /// \return Value X of the origin of the pose.
       /// \note The return is made by value since
       /// Vector3<T>.X() is already a reference.
-      public: inline T X()
+      public: inline T &X()
       {
         return this->p.X();
       }
@@ -399,7 +399,7 @@ namespace ignition
       /// \return Value Y of the origin of the pose.
       /// \note The return is made by value since
       /// Vector3<T>.Y() is already a reference.
-      public: inline T Y()
+      public: inline T &Y()
       {
         return this->p.Y();
       }
@@ -417,7 +417,7 @@ namespace ignition
       /// \return Value Z of the origin of the pose.
       /// \note The return is made by value since
       /// Vector3<T>.Z() is already a reference.
-      public: inline T Z()
+      public: inline T &Z()
       {
         return this->p.Z();
       }
@@ -449,8 +449,8 @@ namespace ignition
       /// \return Roll value of the orientation.
       /// \note The return is made by value since
       ///  Quaternion<T>.Roll() is already a reference.
-      public: inline T Roll()
-      {
+      public: inline T &Roll()
+      { 
         return this->q.Roll();
       }
 
@@ -465,8 +465,6 @@ namespace ignition
 
       /// \brief Get the mutable Pitch value of the rotation.
       /// \return Pitch value of the orientation.
-      /// \note The return is made by value since
-      ///  Quaternion<T>.Pitch() is already a reference.
       public: inline T Pitch()
       {
         return this->q.Pitch();
