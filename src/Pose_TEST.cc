@@ -183,7 +183,7 @@ TEST(PoseTest, ConstPoseElements)
 }
 
 /////////////////////////////////////////////////
-TEST(PoseTest, MutablePoseElements)
+TEST(PoseTest, SetPoseElements)
 {
   math::Pose3d pose(1, 2, 3, 1.57, 1, 2);
   EXPECT_DOUBLE_EQ(pose.X(), 1);

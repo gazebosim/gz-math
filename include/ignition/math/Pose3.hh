@@ -436,15 +436,6 @@ namespace ignition
         return this->q.Roll();
       }
 
-      /// \brief Get the mutable Roll value of the rotation.
-      /// \return Roll value of the orientation.
-      /// \note The return is made by value since
-      ///  Quaternion<T>.Roll() is already a reference.
-      public: inline T &Roll()
-      {
-        return this->q.Roll();
-      }
-
       /// \brief Get the Pitch value of the rotation.
       /// \return Pitch value of the orientation.
       /// \note The return is made by value since
@@ -454,27 +445,11 @@ namespace ignition
         return this->q.Pitch();
       }
 
-      /// \brief Get the mutable Pitch value of the rotation.
-      /// \return Pitch value of the orientation.
-      public: inline T &Pitch()
-      {
-        return this->q.Pitch();
-      }
-
       /// \brief Get the Yaw value of the rotation.
       /// \return Yaw value of the orientation.
       /// \note The return is made by value since
       ///  Quaternion<T>.Yaw() is already a reference.
       public: inline const T Yaw() const
-      {
-        return this->q.Yaw();
-      }
-
-      /// \brief Get the mutable Yaw value of the rotation.
-      /// \return Yaw value of the orientation.
-      /// \note The return is made by value since
-      ///  Quaternion<T>.Yaw() is already a reference.
-      public: inline T &Yaw()
       {
         return this->q.Yaw();
       }
