@@ -377,13 +377,10 @@ namespace ignition
         return this->p.X();
       }
 
-      /// \brief Get the mutable X value of the position.
-      /// \return Value X of the origin of the pose.
-      /// \note The return is made by value since
-      /// Vector3<T>.X() is already a reference.
-      public: inline T &X()
+      /// \brief Set X value of the position.
+      public: inline void SetX(T x)
       {
-        return this->p.X();
+       this->p.X() = x;
       }
 
       /// \brief Get the Y value of the position.
@@ -395,13 +392,10 @@ namespace ignition
         return this->p.Y();
       }
 
-      /// \brief Get the mutable Y value of the position.
-      /// \return Value Y of the origin of the pose.
-      /// \note The return is made by value since
-      /// Vector3<T>.Y() is already a reference.
-      public: inline T &Y()
+      /// \brief Set the Y value of the position.
+      public: inline void SetY(T y)
       {
-        return this->p.Y();
+        this->p.Y() = y;
       }
 
       /// \brief Get the Z value of the position.
@@ -413,13 +407,10 @@ namespace ignition
         return this->p.Z();
       }
 
-      /// \brief Get the mutable Z value of the position.
-      /// \return Value Z of the origin of the pose.
-      /// \note The return is made by value since
-      /// Vector3<T>.Z() is already a reference.
-      public: inline T &Z()
+      /// \brief Set the Z value of the position.
+      public: inline void SetZ(T z)
       {
-        return this->p.Z();
+        this->p.Z() = z;
       }
 
       /// \brief Get the rotation.
@@ -450,7 +441,7 @@ namespace ignition
       /// \note The return is made by value since
       ///  Quaternion<T>.Roll() is already a reference.
       public: inline T &Roll()
-      { 
+      {
         return this->q.Roll();
       }
 
