@@ -65,6 +65,13 @@ namespace ignition
       /// \brief Destructor
       public: virtual ~Vector2() {}
 
+      /// \brief Return the sum of the values
+      /// \return the sum
+      public: T Sum() const
+      {
+        return this->data[0] + this->data[1];
+      }
+
       /// \brief Calc distance to the given point
       /// \param[in] _pt The point to measure to
       /// \return the distance

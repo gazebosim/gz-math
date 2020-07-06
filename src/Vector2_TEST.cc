@@ -123,6 +123,21 @@ TEST(Vector2Test, Vector2)
   EXPECT_DOUBLE_EQ(6, v[0]);
   EXPECT_DOUBLE_EQ(7, v[1]);
 }
+/////////////////////////////////////////////////
+TEST(Vector2dTest, TestSum)
+{
+  math::Vector2 vec1(0, 0);
+  math::Vector2 vec2(1.0, 2.5);
+  math::Vector2 vec3(-2, -4);
+
+  int sum1 = vec1.Sum();
+  float sum2 = vec2.Sum();
+  int sum3 = vec3.Sum();
+
+  EXPECT_EQ(sum1, 0);
+  EXPECT_FLOAT_EQ(sum2, 3.5);
+  EXPECT_EQ(sum3, -6);
+}
 
 /////////////////////////////////////////////////
 TEST(Vector2Test, NoException)
