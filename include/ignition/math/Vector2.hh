@@ -108,6 +108,15 @@ namespace ignition
         }
       }
 
+      ///\brief Returns a normalized vector
+      ///\return unit length vector
+      public: Vector2 Normalized() const
+      {
+        Vector2<T> result = *this;
+        result.Normalize();
+        return result;
+      }
+
       /// \brief Set the contents of the vector
       /// \param[in] _x value along x
       /// \param[in] _y value along y

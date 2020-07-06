@@ -123,8 +123,9 @@ TEST(Vector2Test, Vector2)
   EXPECT_DOUBLE_EQ(6, v[0]);
   EXPECT_DOUBLE_EQ(7, v[1]);
 }
+
 /////////////////////////////////////////////////
-TEST(Vector2dTest, TestSum)
+TEST(Vector2Test, TestSum)
 {
   math::Vector2 vec1(0, 0);
   math::Vector2 vec2(1.0, 2.5);
@@ -137,6 +138,22 @@ TEST(Vector2dTest, TestSum)
   EXPECT_EQ(sum1, 0);
   EXPECT_FLOAT_EQ(sum2, 3.5);
   EXPECT_EQ(sum3, -6);
+}
+
+/////////////////////////////////////////////////
+TEST(Vector2Test, TestNormalized)
+{
+  math::Vector2d vec1(0,0);
+  math::Vector2d vec2(1,2);
+
+  math::Vector2d vec3 = vec1.Normalized();
+
+  // O zero vector should be equal to the normalized vector
+  EXPECT_EQ(vec1,vec3);
+  EXPECT_NE(vec2,vec3);
+
+  vec3 = vec2.Normalized();
+  EXPECT_EQ(vec3, math::Vector2d(0.447213, 0.894427));
 }
 
 /////////////////////////////////////////////////
