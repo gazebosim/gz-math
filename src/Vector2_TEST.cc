@@ -143,14 +143,14 @@ TEST(Vector2Test, TestSum)
 /////////////////////////////////////////////////
 TEST(Vector2Test, TestNormalized)
 {
-  math::Vector2d vec1(0,0);
-  math::Vector2d vec2(1,2);
+  math::Vector2d vec1(0, 0);
+  math::Vector2d vec2(1, 2);
 
   math::Vector2d vec3 = vec1.Normalized();
 
   // O zero vector should be equal to the normalized vector
-  EXPECT_EQ(vec1,vec3);
-  EXPECT_NE(vec2,vec3);
+  EXPECT_EQ(vec1, vec3);
+  EXPECT_NE(vec2, vec3);
 
   vec3 = vec2.Normalized();
   EXPECT_EQ(vec3, math::Vector2d(0.447213, 0.894427));

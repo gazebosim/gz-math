@@ -108,8 +108,8 @@ namespace ignition
         }
       }
 
-      ///\brief Returns a normalized vector
-      ///\return unit length vector
+      /// \brief Returns a normalized vector
+      /// \return unit length vector
       public: Vector2 Normalized() const
       {
         Vector2<T> result = *this;
