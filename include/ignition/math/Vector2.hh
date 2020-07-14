@@ -180,6 +180,17 @@ namespace ignition
           this->data[1] = _v[1];
       }
 
+      /// \brief Set this vector's components to the minimum of itself and the
+      ///        passed in vector
+      /// \return[in] _v the minimum clamping vector
+      public: void Min(const Vector2<T> &_v)
+      {
+        if (_v[0] < this->data[0])
+          this->data[0] = _v[0];
+        if (_v[1] < this->data[1])
+          this->data[1] = _v[1];
+      }
+
       /// \brief Get the maximum value in the vector
       /// \return the maximum element
       public: T Max() const
