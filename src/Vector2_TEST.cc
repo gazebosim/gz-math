@@ -161,6 +161,20 @@ TEST(Vector2Test, TestNormalized)
 }
 
 /////////////////////////////////////////////////
+TEST(Vector2Test, Max)
+{
+  math::Vector2d vec1(0.1, 0.2);
+  math::Vector2d vec2(0.3, 0.5);
+  math::Vector2d vec3(0.4, 0.2);
+
+  vec1.Max(vec2);
+  EXPECT_EQ(vec1, math::Vector2d(0.3, 0.5));
+
+  vec1.Max(vec3);
+  EXPECT_EQ(vec1, math::Vector2d(0.4, 0.5));
+}
+
+/////////////////////////////////////////////////
 TEST(Vector2Test, NoException)
 {
   math::Vector2d v(1, 2);

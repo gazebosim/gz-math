@@ -166,6 +166,17 @@ namespace ignition
         if (!std::isfinite(static_cast<double>(this->data[1])))
           this->data[1] = 0;
       }
+      
+      /// \brief Set this vector's components to the maximum of itself and the
+      ///        passed in vector
+      /// \return[in] _v the maximum clamping vector
+      public: void Max(const Vector2<T> &_v)
+      {
+        if (_v[0] > this->data[0])
+          this->data[0] = _v[0];
+        if (_v[1] > this->data[1])
+          this->data[1] = _v[1];        
+      }
 
       /// \brief Assignment operator
       /// \param[in] _v a value for x and y element
