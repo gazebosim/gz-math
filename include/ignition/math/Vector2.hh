@@ -198,6 +198,13 @@ namespace ignition
         return std::max(this->data[0], this->data[1]);
       }
 
+      /// \brief Get the minimum value in the vector
+      /// \return the minimum element
+      public: T Min() const
+      {
+        return std::min(this->data[0], this->data[1]);
+      }
+
       /// \brief Assignment operator
       /// \param[in] _v a value for x and y element
       /// \return this

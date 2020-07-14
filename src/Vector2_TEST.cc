@@ -183,7 +183,10 @@ TEST(Vector2Test, Min)
   math::Vector2d vec1(0.3, 0.5);
   math::Vector2d vec2(0.1, 0.2);
   math::Vector2d vec3(0.05, 0.1);
- 
+
+  EXPECT_DOUBLE_EQ(vec1.Min(), 0.3);
+  EXPECT_DOUBLE_EQ(vec3.Min(), 0.05);
+
   vec1.Min(vec2);
   EXPECT_EQ(vec1, math::Vector2d(0.1, 0.2));
 
