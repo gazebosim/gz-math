@@ -167,6 +167,9 @@ TEST(Vector2Test, Max)
   math::Vector2d vec2(0.3, 0.5);
   math::Vector2d vec3(0.4, 0.2);
 
+  EXPECT_DOUBLE_EQ(vec1.Max(), 0.2);
+  EXPECT_DOUBLE_EQ(vec3.Max(), 0.4);
+
   vec1.Max(vec2);
   EXPECT_EQ(vec1, math::Vector2d(0.3, 0.5));
 

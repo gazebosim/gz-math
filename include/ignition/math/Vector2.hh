@@ -17,6 +17,8 @@
 #ifndef IGNITION_MATH_VECTOR2_HH_
 #define IGNITION_MATH_VECTOR2_HH_
 
+#include <algorithm>
+
 #include <ignition/math/Helpers.hh>
 #include <ignition/math/config.hh>
 
@@ -175,7 +177,14 @@ namespace ignition
         if (_v[0] > this->data[0])
           this->data[0] = _v[0];
         if (_v[1] > this->data[1])
-          this->data[1] = _v[1];        
+          this->data[1] = _v[1];
+      }
+
+      /// \brief Get the maximum value in the vector
+      /// \return the maximum element
+      public: T Max() const
+      {
+        return std::max(this->data[0], this->data[1]);
       }
 
       /// \brief Assignment operator
