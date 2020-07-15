@@ -18,7 +18,6 @@
 #define IGNITION_MATH_ROLLINGMEAN_HH_
 
 #include <memory>
-#include <limits>
 #include <ignition/math/Export.hh>
 #include <ignition/math/config.hh>
 
