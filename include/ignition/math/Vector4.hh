@@ -133,14 +133,10 @@ namespace ignition
       /// \param[in] _v the maximum clamping vector
       public: void Max(const Vector4<T> &_v)
       {
-        if (_v[0] > this->data[0])
-          this->data[0] = _v[0];
-        if (_v[1] > this->data[1])
-          this->data[1] = _v[1];
-        if (_v[2] > this->data[2])
-          this->data[2] = _v[2];
-        if (_v[3] > this->data[3])
-          this->data[3] = _v[3];
+        this->data[0] = std::max(_v[0], this->data[0]);
+        this->data[1] = std::max(_v[1], this->data[1]);
+        this->data[2] = std::max(_v[2], this->data[2]);
+        this->data[3] = std::max(_v[3], this->data[3]);
       }
 
       /// \brief Set this vector's components to the minimum of itself and the
@@ -148,34 +144,24 @@ namespace ignition
       /// \param[in] _v the minimum clamping vector
       public: void Min(const Vector4<T> &_v)
       {
-        if (_v[0] < this->data[0])
-          this->data[0] = _v[0];
-        if (_v[1] < this->data[1])
-          this->data[1] = _v[1];
-        if (_v[2] < this->data[2])
-          this->data[2] = _v[2];
-        if (_v[3] < this->data[3])
-          this->data[3] = _v[3];
+        this->data[0] = std::min(_v[0], this->data[0]);
+        this->data[1] = std::min(_v[1], this->data[1]);
+        this->data[2] = std::min(_v[2], this->data[2]);
+        this->data[3] = std::min(_v[3], this->data[3]);
       }
 
       /// \brief Get the maximum value in the vector
       /// \return the maximum element
       public: T Max() const
       {
-        return std::max(std::max(std::max(this->data[0],
-                                          this->data[1]),
-                                          this->data[2]),
-                                          this->data[3]);
+        return *std::max_element(this->data, this->data+4);
       }
 
       /// \brief Get the minimum value in the vector
       /// \return the minimum element
       public: T Min() const
       {
-        return std::min(std::min(std::min(this->data[0],
-                                          this->data[1]),
-                                          this->data[2]),
-                                          this->data[3]);
+        return *std::min_element(this->data, this->data+4);
       }
 
       /// \brief Assignment operator
