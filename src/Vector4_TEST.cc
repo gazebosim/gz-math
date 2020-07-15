@@ -20,7 +20,6 @@
 #include "ignition/math/Helpers.hh"
 #include "ignition/math/Matrix4.hh"
 #include "ignition/math/Vector4.hh"
-#include "../include/ignition/math/Vector4.hh"
 
 using namespace ignition;
 
