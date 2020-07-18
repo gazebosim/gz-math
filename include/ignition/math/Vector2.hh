@@ -171,24 +171,20 @@ namespace ignition
       
       /// \brief Set this vector's components to the maximum of itself and the
       ///        passed in vector
-      /// \return[in] _v the maximum clamping vector
+      /// \param[in] _v the maximum clamping vector
       public: void Max(const Vector2<T> &_v)
       {
-        if (_v[0] > this->data[0])
-          this->data[0] = _v[0];
-        if (_v[1] > this->data[1])
-          this->data[1] = _v[1];
+        this->data[0] = std::max(_v[0], this->data[0]);
+        this->data[1] = std::max(_v[1], this->data[1]);
       }
 
       /// \brief Set this vector's components to the minimum of itself and the
       ///        passed in vector
-      /// \return[in] _v the minimum clamping vector
+      /// \param[in] _v the minimum clamping vector
       public: void Min(const Vector2<T> &_v)
       {
-        if (_v[0] < this->data[0])
-          this->data[0] = _v[0];
-        if (_v[1] < this->data[1])
-          this->data[1] = _v[1];
+        this->data[0] = std::min(_v[0], this->data[0]);
+        this->data[1] = std::min(_v[1], this->data[1]);
       }
 
       /// \brief Get the maximum value in the vector
