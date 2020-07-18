@@ -70,6 +70,7 @@ TEST(Vector4dTest, Vector4d)
 
   // ::GetAbs
   EXPECT_TRUE(v1.Abs() == math::Vector4d(1, 2, 3, 4));
+  EXPECT_TRUE(v.Abs() == math::Vector4d(2, 4, 6, 8));
 
   // ::operator= vector4
   v = v1;
