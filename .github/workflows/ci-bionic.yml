@@ -11,8 +11,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Bionic CI
         id: ci
-        uses: ignition-tooling/ubuntu-bionic-ci-action@master
+        uses: ignition-tooling/ubuntu-bionic-ci-action@chapulina/groups
         with:
           apt-dependencies: 'ruby-dev swig libeigen3-dev libignition-cmake2-dev'
           codecov-token: ${{ secrets.CODECOV_TOKEN }}
-          script-after-make: ../.github/ci-bionic/after_make.sh
