@@ -11,6 +11,6 @@ jobs:
         uses: actions/checkout@v2
       - name: Bionic CI
         id: ci
-        uses: ignition-tooling/ubuntu-bionic-ci-action@chapulina/packages.apt
+        uses: ignition-tooling/ubuntu-bionic-ci-action@chapulina/package.apt
         with:
           codecov-token: ${{ secrets.CODECOV_TOKEN }}
