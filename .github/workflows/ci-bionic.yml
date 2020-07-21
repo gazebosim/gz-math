@@ -13,9 +13,4 @@ jobs:
         id: ci
         uses: ignition-tooling/ubuntu-bionic-ci-action@master
         with:
-          apt-dependencies: |
-            libeigen3-dev
-            libignition-cmake2-dev
-            ruby-dev
-            swig
           codecov-token: ${{ secrets.CODECOV_TOKEN }}
