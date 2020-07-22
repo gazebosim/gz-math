@@ -164,6 +164,13 @@ namespace ignition
         return *std::min_element(this->data, this->data+4);
       }
 
+      /// \brief Return the sum of the values
+      /// \return the sum
+      public: T Sum() const
+      {
+        return this->data[0] + this->data[1] + this->data[2] + this->data[3];
+      }
+
       /// \brief Assignment operator
       /// \param[in] _v the vector
       /// \return a reference to this vector

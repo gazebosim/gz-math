@@ -200,6 +200,16 @@ TEST(Vector2Test, EqualTolerance)
 }
 
 /////////////////////////////////////////////////
+TEST(Vector4dTest, Sum)
+{
+  math::Vector4d vec1(1.5, 2.5, 3.5, -4.5);
+
+  EXPECT_TRUE(math::equal(math::Vector4d::Zero.Sum(), 0.0, 1e-6));
+  EXPECT_TRUE(math::equal(math::Vector4d::One.Sum(), 4.0, 1e-6));
+  EXPECT_TRUE(math::equal(vec1.Sum(), 3.0, 1e-6));
+}
+
+/////////////////////////////////////////////////
 TEST(Vector4dTest, Add)
 {
   math::Vector4d vec1(0.1, 0.2, 0.4, 0.8);
