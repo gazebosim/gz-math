@@ -148,7 +148,7 @@ namespace ignition
       ///
       /// result = abs(x1 * x2) + abs(y1 * y2)
       ///
-      /// \param[in] _v the vector
+      /// \param[in] _v The vector
       /// \return The absolute dot product
       public: T AbsDot(const Vector2<T> &_v) const
       {
