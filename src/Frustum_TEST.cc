@@ -193,7 +193,7 @@ TEST(FrustumTest, PyramidYAxis)
       // Field of view
       Angle(IGN_DTOR(45)),
       // Aspect ratio
-      1,
+      1.0,
       // Pose
       Pose3d(0, 0, 0, 0, 0, IGN_PI*0.5));
 
@@ -223,7 +223,7 @@ TEST(FrustumTest, PyramidZAxis)
       // Field of view
       Angle(IGN_DTOR(45)),
       // Aspect ratio
-      1,
+      1.0,
       // Pose
       Pose3d(0, 0, 0, 0, IGN_PI*0.5, 0));
 
@@ -254,7 +254,7 @@ TEST(FrustumTest, NearFar)
       // Field of view
       Angle(IGN_DTOR(45)),
       // Aspect ratio
-      1,
+      1.0,
       // Pose
       Pose3d(0, 0, 0, 0, IGN_PI*0.5, 0));
 
@@ -279,7 +279,7 @@ TEST(FrustumTest, FOV)
       // Field of view
       Angle(IGN_DTOR(45)),
       // Aspect ratio
-      1,
+      1.0,
       // Pose
       Pose3d(0, 0, 0, 0, IGN_PI*0.5, 0));
 
@@ -301,7 +301,7 @@ TEST(FrustumTest, AspectRatio)
       // Field of view
       Angle(IGN_DTOR(45)),
       // Aspect ratio
-      1,
+      1.0,
       // Pose
       Pose3d(0, 0, 0, 0, IGN_PI*0.5, 0));
 
@@ -323,7 +323,7 @@ TEST(FrustumTest, Pose)
       // Field of view
       Angle(IGN_DTOR(45)),
       // Aspect ratio
-      1,
+      1.0,
       // Pose
       Pose3d(0, 0, 0, 0, IGN_PI*0.5, 0));
 
