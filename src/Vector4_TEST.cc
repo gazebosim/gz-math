@@ -59,7 +59,8 @@ TEST(Vector4dTest, Vector4d)
 
   // ::Normalized
   v.Set(1, 2, 3, 4);
-  EXPECT_EQ(v.Normalized(), math::Vector4d(0.182574, 0.365148, 0.547723, 0.730297));
+  EXPECT_EQ(v.Normalized(),
+            math::Vector4d(0.182574, 0.365148, 0.547723, 0.730297));
 
   // ::Set
   v.Set(2, 4, 6, 8);
