@@ -180,7 +180,7 @@ Follow these steps to run tests and static code analysis in your clone of this r
 
 ### Usage
 
-The C++ classes are available in Ruby code by interfaces files (.i) used by swig to build a C++ extension module.
+The C++ classes are available in Ruby code by interface files (`.i`) used by swig to build a C++ extension module.
 
 The interfaces and Ruby test codes are in `src` folder. To use a C++ class in Ruby you need:
 
