@@ -192,7 +192,7 @@ The interfaces and Ruby test codes are in the `src` folder. To use a C++ class i
 
 ### Tests
 
-`make test` already run all tests, including the ones made in Ruby, but you can run an Ruby test individually using
+`make test` already runs all tests, including the ones made in Ruby, but you can run a Ruby test individually using
 
 ```
 ctest -R Ruby_TEST.rb
