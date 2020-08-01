@@ -64,7 +64,7 @@ TEST(Vector4dTest, Vector4d)
   EXPECT_TRUE(v == math::Vector4d(1, 2, 4, 8));
 
   // ::Correct
-  v.Set(1, 1, sqrt(-1), 1);
+  v.Set(1, 1, std::nan("1"), 1);
   v.Correct();
   EXPECT_TRUE(v == math::Vector4d(1, 1, 0, 1));
 
