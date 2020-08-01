@@ -92,7 +92,7 @@ The optional Eigen component of Ignition Math requires:
 
 The optional Ruby tests of Ignition Math require:
 
- * [Ruby](https://www.ruby-lang.org/). Refer to the [Ruby Documentation](https://www.ruby-lang.org/downloads/) for installation instructions. On Ubuntu Systems `apt-get` can be used to install Ubuntu Package `ruby-dev`:
+ * [Ruby](https://www.ruby-lang.org/). Refer to the [Ruby Documentation](https://www.ruby-lang.org/downloads/) for installation instructions. On Ubuntu systems `apt-get` can be used to install Ubuntu Package `ruby-dev`:
 
     ```
     sudo apt-get install ruby-dev
