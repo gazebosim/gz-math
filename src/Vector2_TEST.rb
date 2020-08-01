@@ -108,6 +108,23 @@ class Vector2_TEST < Test::Unit::TestCase
       "Zero should equal 1 with 1.1 tolerance")
   end
 
+  def test_max
+     vec1 = Ignition::Math::Vector2d.new(0.1, 0.2)
+     vec2 = Ignition::Math::Vector2d.new(0.3, 0.5)
+     vec3 = Ignition::Math::Vector2d.new(0.4, 0.2)
+     
+     assert((vec1.Max() - 0.2).abs() < 1e-10,
+           "Vector3 vec1.Max should equal 0.3")
+     
+     vec1.Max(vec2)
+     assert(vec1 == Ignition::Math::Vector2d.new(0.3, 0.5),
+            "Vector2 vec1 should equal [0.3, 0.5]")
+
+     vec1.Max(vec3)
+     assert(vec1 == Ignition::Math::Vector2d.new(0.4, 0.5),
+            "Vector2 vec1 should equal [0.4, 0.5]")
+  end
+
   def test_dot
     v = Ignition::Math::Vector2d.new(1, 2)
 
