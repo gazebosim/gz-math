@@ -98,7 +98,7 @@ The optional Ruby tests of Ignition Math require:
     sudo apt-get install ruby-dev
     ```
 
-  * [Swig](http://www.swig.org/). Refer to the [Swig Documentation](http://www.swig.org/download.html) for installation instructions. On Ubuntu Systems `apt-get` can be used to install Swig:
+  * [Swig](http://www.swig.org/). Refer to the [Swig Documentation](http://www.swig.org/download.html) for installation instructions. On Ubuntu systems `apt-get` can be used to install Swig:
 
     ```
     sudo apt-get install swig
