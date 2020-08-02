@@ -168,7 +168,7 @@ namespace ignition
         if (!std::isfinite(static_cast<double>(this->data[1])))
           this->data[1] = 0;
       }
-      
+
       /// \brief Set this vector's components to the maximum of itself and the
       ///        passed in vector
       /// \param[in] _v the maximum clamping vector
