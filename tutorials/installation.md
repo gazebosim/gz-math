@@ -7,21 +7,21 @@ Next Tutorial: \ref cppgetstarted
 This tutorial describes how to install Ignition Math on Linux, Mac OS X and
 Windows via either a binary distribution or from source.
 
-[Install](#markdown-header-install)
+[Install](#install)
 
-* [Binary Install](#markdown-header-binary-install)
+* [Binary Install](#binary-install)
 
-* [Source Install](#markdown-header-source-install)
+* [Source Install](#source-install)
 
-    * [Prerequisites](#markdown-header-prerequisites)
+    * [Prerequisites](#prerequisites)
 
-    * [Building from Source](#markdown-header-building-from-source)
+    * [Building from Source](#building-from-source)
 
 # Install
 
-We recommend following the [Binary Install](#markdown-header-binary-install) instructions to get up and running as quickly and painlessly as possible.
+We recommend following the [Binary Install](#binary-install) instructions to get up and running as quickly and painlessly as possible.
 
-The [Source Install](#markdown-header-source-install) instructions should be used if you need the very latest software improvements, you need to modify the code, or you plan to make a contribution.
+The [Source Install](#source-install) instructions should be used if you need the very latest software improvements, you need to modify the code, or you plan to make a contribution.
 
 ## Binary Install
 
@@ -83,8 +83,10 @@ The optional Ruby tests of Ignition Math require:
 1. Clone the repository
 
     ```
-    git clone https://github.com/ignitionrobotics/ign-math
+    git clone https://github.com/ignitionrobotics/ign-math -b ign-math<#>
     ```
+    Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
+    which version you need.
 
 2. Configure and build
 

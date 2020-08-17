@@ -52,7 +52,7 @@ Math types.
 
 # Install
 
-Review the [tutorial section](https://ignitionrobotics.org/api/math/6.4/install.html).
+See the [installation tutorial](https://ignitionrobotics.org/api/math/6.4/install.html).
 
 # Usage
 
