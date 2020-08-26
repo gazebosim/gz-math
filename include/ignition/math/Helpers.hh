@@ -737,23 +737,31 @@ namespace ignition
     inline std::pair<int64_t, int64_t> timePointToSecNsec(
         const std::chrono::system_clock::time_point &_time)
     {
-      auto now_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(_time.time_since_epoch());
-      auto now_s = std::chrono::duration_cast<std::chrono::seconds>(_time.time_since_epoch());
-      int64_t seconds = std::chrono::duration_cast<std::chrono::seconds>(_time.time_since_epoch()).count();
-      int64_t nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(now_ns - now_s).count();
+      auto now_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(
+        _time.time_since_epoch());
+      auto now_s = std::chrono::duration_cast<std::chrono::seconds>(
+        _time.time_since_epoch());
+      int64_t seconds = std::chrono::duration_cast<std::chrono::seconds>(
+        _time.time_since_epoch()).count();
+      int64_t nanoseconds = std::chrono::duration_cast
+        <std::chrono::nanoseconds>(now_ns - now_s).count();
       return {seconds, nanoseconds};
     }
 
-    /// \brief Convert to a seconds and nanoseconds to std::chrono::steady_clock::time_point.
+    /// \brief Convert to a seconds and nanoseconds to
+    /// std::chrono::steady_clock::time_point.
     /// \param[in] _sec The seconds to convert.
     /// \param[in] _nanosec The nanoseconds to convert.
-    /// \return A std::chrono::system_clock::time_poin based on the number of seconds and
+    /// \return A std::chrono::system_clock::time_poin based on the number of
+    /// seconds and
     /// the number of nanoseconds.
     inline std::chrono::system_clock::time_point secNsecToTimePoint(
         const uint64_t &_sec, const uint64_t &_nanosec)
     {
-      auto duration = std::chrono::seconds(_sec) + std::chrono::nanoseconds(_nanosec);
-      std::chrono::system_clock::time_point result = std::chrono::system_clock::from_time_t(0);
+      auto duration = std::chrono::seconds(_sec) + std::chrono::nanoseconds(
+        _nanosec);
+      std::chrono::system_clock::time_point result =
+        std::chrono::system_clock::from_time_t(0);
       result = result + duration;
       return result;
     }

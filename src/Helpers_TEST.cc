@@ -534,7 +534,7 @@ TEST(HelpersTest, timePointToSecNsec)
   timeinfo.tm_mon = 0;
   timeinfo.tm_year = 70;
   timeinfo.tm_mday = 2;
-  std::time_t tt = std::mktime (&timeinfo);
+  std::time_t tt = std::mktime(&timeinfo);
 
   parts = math::timePointToSecNsec(
     std::chrono::system_clock::from_time_t(tt));
@@ -557,7 +557,7 @@ TEST(HelpersTest, secNsecToTimePoint)
   timeinfo.tm_mon = 0;
   timeinfo.tm_year = 70;
   timeinfo.tm_mday = 2;
-  std::time_t tt = std::mktime (&timeinfo);
+  std::time_t tt = std::mktime(&timeinfo);
 
   s = math::secNsecToTimePoint(24*60*60, 0);
   EXPECT_EQ(s, std::chrono::system_clock::from_time_t(tt));
