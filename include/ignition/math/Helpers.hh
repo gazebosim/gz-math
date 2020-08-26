@@ -781,7 +781,7 @@ namespace ignition
 
     // TODO(anyone): Replace this with std::chrono::days.
     /// This will exist in C++-20
-    typedef std::chrono::duration<long int, std::ratio<86400>> days;
+    typedef std::chrono::duration<uint64_t, std::ratio<86400>> days;
 
     /// \brief break down durations
     /// \param[in] d Duration to breaw down
