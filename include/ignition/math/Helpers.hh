@@ -740,8 +740,7 @@ namespace ignition
       auto now_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(_time.time_since_epoch());
       auto now_s = std::chrono::duration_cast<std::chrono::seconds>(_time.time_since_epoch());
       int64_t seconds = std::chrono::duration_cast<std::chrono::seconds>(_time.time_since_epoch()).count();
-      int64_t nanoseconds = static_cast<int32_t>(std::chrono::duration_cast<std::chrono::duration<float>>
-        (now_ns - now_s).count()*1e9);
+      int64_t nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(now_ns - now_s).count();
       return {seconds, nanoseconds};
     }
 
@@ -753,10 +752,9 @@ namespace ignition
     inline std::chrono::system_clock::time_point secNsecToTimePoint(
         const uint64_t &_sec, const uint64_t &_nanosec)
     {
-      auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(
-        std::chrono::duration<double>(_sec + _nanosec/1e9));
+      auto duration = std::chrono::seconds(_sec) + std::chrono::nanoseconds(_nanosec);
       std::chrono::system_clock::time_point result = std::chrono::system_clock::from_time_t(0);
-      result += duration;
+      result = result + duration;
       return result;
     }
 
