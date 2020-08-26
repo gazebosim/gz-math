@@ -727,6 +727,37 @@ namespace ignition
       }
     }
 
+    /// \brief Convert a std::chrono::steady_clock::time_point to a seconds and
+    /// nanoseconds pair.
+    /// \param[in] _time The time point to convert.
+    /// \return A pair where the first element is the number of seconds and
+    /// the second is the number of nanoseconds.
+    inline std::pair<int64_t, int64_t> timePointToSecNsec(
+        const std::chrono::system_clock::time_point &_time)
+    {
+      auto now_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(_time.time_since_epoch());
+      auto now_s = std::chrono::duration_cast<std::chrono::seconds>(_time.time_since_epoch());
+      int64_t seconds = std::chrono::duration_cast<std::chrono::seconds>(_time.time_since_epoch()).count();
+      int64_t nanoseconds = static_cast<int32_t>(std::chrono::duration_cast<std::chrono::duration<float>>
+        (now_ns - now_s).count()*1e9);
+      return {seconds, nanoseconds};
+    }
+
+    /// \brief Convert to a seconds and nanoseconds to std::chrono::steady_clock::time_point.
+    /// \param[in] _sec The seconds to convert.
+    /// \param[in] _nanosec The nanoseconds to convert.
+    /// \return A std::chrono::system_clock::time_poin based on the number of seconds and
+    /// the number of nanoseconds.
+    inline std::chrono::system_clock::time_point secNsecToTimePoint(
+        const uint64_t &_sec, const uint64_t &_nanosec)
+    {
+      auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(
+        std::chrono::duration<double>(_sec + _nanosec/1e9));
+      std::chrono::system_clock::time_point result = std::chrono::system_clock::from_time_t(0);
+      result += duration;
+      return result;
+    }
+
     /// \brief Convert a std::chrono::steady_clock::duration to a seconds and
     /// nanoseconds pair.
     /// \param[in] _dur The duration to convert.

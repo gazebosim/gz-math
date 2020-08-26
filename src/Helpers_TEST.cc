@@ -519,6 +519,51 @@ TEST(HelpersTest, Pair)
 }
 
 /////////////////////////////////////////////////
+TEST(HelpersTest, timePointToSecNsec)
+{
+  std::pair<int64_t, int64_t> parts = math::timePointToSecNsec(
+      std::chrono::system_clock::from_time_t(0));
+  EXPECT_EQ(parts.first, 0);
+  EXPECT_EQ(parts.second, 0);
+
+  // Jan 2 01:00:00 1970
+  std::tm timeinfo = std::tm();
+  timeinfo.tm_sec = 0;
+  timeinfo.tm_min = 0;
+  timeinfo.tm_hour = 1;
+  timeinfo.tm_mon = 0;
+  timeinfo.tm_year = 70;
+  timeinfo.tm_mday = 2;
+  std::time_t tt = std::mktime (&timeinfo);
+
+  parts = math::timePointToSecNsec(
+    std::chrono::system_clock::from_time_t(tt));
+
+  EXPECT_EQ(parts.first, 24*60*60);
+  EXPECT_EQ(parts.second, 0);
+}
+
+/////////////////////////////////////////////////
+TEST(HelpersTest, secNsecToTimePoint)
+{
+  std::chrono::system_clock::time_point s = math::secNsecToTimePoint(0, 0);
+  EXPECT_EQ(s, std::chrono::system_clock::from_time_t(0));
+
+  // Jan 2 01:00:00 1970
+  std::tm timeinfo = std::tm();
+  timeinfo.tm_sec = 0;
+  timeinfo.tm_min = 0;
+  timeinfo.tm_hour = 1;
+  timeinfo.tm_mon = 0;
+  timeinfo.tm_year = 70;
+  timeinfo.tm_mday = 2;
+  std::time_t tt = std::mktime (&timeinfo);
+
+  s = math::secNsecToTimePoint(24*60*60, 0);
+  EXPECT_EQ(s, std::chrono::system_clock::from_time_t(tt));
+}
+
+/////////////////////////////////////////////////
 TEST(HelpersTest, durationToSecNsec)
 {
   std::pair<int64_t, int64_t> parts;
