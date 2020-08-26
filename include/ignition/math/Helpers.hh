@@ -23,6 +23,8 @@
 #include <limits>
 #include <string>
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 #include <vector>
 #include <tuple>
 #include <utility>
@@ -769,6 +771,48 @@ namespace ignition
       auto s = std::chrono::duration_cast<std::chrono::seconds>(_dur);
       auto ns = std::chrono::duration_cast<std::chrono::nanoseconds>(_dur-s);
       return {s.count(), ns.count()};
+    }
+
+    // TODO(anyone): Replace this with std::chrono::days. This will exist in C++-20
+    typedef std::chrono::duration<long int, std::ratio<86400>> days;
+
+    /// \brief break down durations
+    /// \param[in] d Duration to breaw down
+    /// \return A tuple based on the durations specified
+    template<class...Durations, class DurationIn>
+    std::tuple<Durations...> break_down_durations( DurationIn d ) {
+      std::tuple<Durations...> retval;
+      using discard=int[];
+      (void)discard{0,(void((
+        (std::get<Durations>(retval) = std::chrono::duration_cast<Durations>(d)),
+        (d -= std::chrono::duration_cast<DurationIn>(std::get<Durations>(retval)))
+      )),0)...};
+      return retval;
+    }
+
+    /// \brief Convert a std::chrono::steady_clock::duration to a string
+    /// \param[in] _point The std::chrono::system_clock::time_point to convert.
+    /// \return A string formatted with the time_point
+    inline std::string timePointToString(
+      const std::chrono::system_clock::time_point &_point)
+    {
+      auto duration = _point - std::chrono::system_clock::from_time_t(0);
+      auto clean_duration = break_down_durations<days,
+                                                 std::chrono::hours,
+                                                 std::chrono::minutes,
+                                                 std::chrono::seconds,
+                                                 std::chrono::milliseconds>(duration);
+      std::ostringstream output_string;
+      output_string << std::get<0>(clean_duration).count() << " "
+                    << std::setw(2) << std::setfill('0')
+                    << std::get<1>(clean_duration).count() << ":"
+                    << std::setw(2) << std::setfill('0')
+                    << std::get<2>(clean_duration).count() << ":"
+                    << std::setw(2) << std::setfill('0')
+                    << std::setprecision(3)
+                    << std::get<3>(clean_duration).count() +
+                       std::get<4>(clean_duration).count()/1000.0;
+      return output_string.str();
     }
 
     // Degrade precision on Windows, which cannot handle 'long double'
