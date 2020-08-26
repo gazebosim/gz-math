@@ -779,20 +779,22 @@ namespace ignition
       return {s.count(), ns.count()};
     }
 
-    // TODO(anyone): Replace this with std::chrono::days. This will exist in C++-20
+    // TODO(anyone): Replace this with std::chrono::days.
+    /// This will exist in C++-20
     typedef std::chrono::duration<long int, std::ratio<86400>> days;
 
     /// \brief break down durations
     /// \param[in] d Duration to breaw down
     /// \return A tuple based on the durations specified
     template<class...Durations, class DurationIn>
-    std::tuple<Durations...> break_down_durations( DurationIn d ) {
+    std::tuple<Durations...> break_down_durations(DurationIn d) {
       std::tuple<Durations...> retval;
-      using discard=int[];
-      (void)discard{0,(void((
-        (std::get<Durations>(retval) = std::chrono::duration_cast<Durations>(d)),
-        (d -= std::chrono::duration_cast<DurationIn>(std::get<Durations>(retval)))
-      )),0)...};
+      using discard = int[];
+      (void)discard{0, (void((
+        (std::get<Durations>(retval) =
+          std::chrono::duration_cast<Durations>(d)),
+        (d -= std::chrono::duration_cast<DurationIn>(
+          std::get<Durations>(retval))))), 0)...};
       return retval;
     }
 
@@ -807,7 +809,8 @@ namespace ignition
                                                  std::chrono::hours,
                                                  std::chrono::minutes,
                                                  std::chrono::seconds,
-                                                 std::chrono::milliseconds>(duration);
+                                                 std::chrono::milliseconds>(
+                                                   duration);
       std::ostringstream output_string;
       output_string << std::get<0>(clean_duration).count() << " "
                     << std::setw(2) << std::setfill('0')
