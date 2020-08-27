@@ -526,21 +526,21 @@ TEST(HelpersTest, timePointToSecNsec)
   EXPECT_EQ(parts.first, 0);
   EXPECT_EQ(parts.second, 0);
 
-  // Jan 2 01:00:00 1970
-  std::tm timeinfo = std::tm();
-  timeinfo.tm_sec = 0;
-  timeinfo.tm_min = 0;
-  timeinfo.tm_hour = 1;
-  timeinfo.tm_mon = 0;
-  timeinfo.tm_year = 70;
-  timeinfo.tm_mday = 2;
-  std::time_t tt = std::mktime(&timeinfo);
+  std::chrono::system_clock::time_point point =
+    std::chrono::system_clock::from_time_t(0);
+  point = point + std::chrono::nanoseconds(1000);
+  parts = math::timePointToSecNsec(point);
 
-  parts = math::timePointToSecNsec(
-    std::chrono::system_clock::from_time_t(tt));
+  EXPECT_EQ(parts.first, 0);
+  EXPECT_EQ(parts.second, 1000);
 
-  EXPECT_EQ(parts.first, 24*60*60);
-  EXPECT_EQ(parts.second, 0);
+  point = std::chrono::system_clock::from_time_t(0);
+  point = point + std::chrono::seconds(60);
+  point = point + std::chrono::nanoseconds(5789);
+  parts = math::timePointToSecNsec(point);
+
+  EXPECT_EQ(parts.first, 60);
+  EXPECT_EQ(parts.second, 5789);
 }
 
 /////////////////////////////////////////////////
@@ -549,18 +549,17 @@ TEST(HelpersTest, secNsecToTimePoint)
   std::chrono::system_clock::time_point s = math::secNsecToTimePoint(0, 0);
   EXPECT_EQ(s, std::chrono::system_clock::from_time_t(0));
 
-  // Jan 2 01:00:00 1970
-  std::tm timeinfo = std::tm();
-  timeinfo.tm_sec = 0;
-  timeinfo.tm_min = 0;
-  timeinfo.tm_hour = 1;
-  timeinfo.tm_mon = 0;
-  timeinfo.tm_year = 70;
-  timeinfo.tm_mday = 2;
-  std::time_t tt = std::mktime(&timeinfo);
+  std::chrono::system_clock::time_point point =
+    std::chrono::system_clock::from_time_t(0);
+  point = point + std::chrono::hours(24);
 
   s = math::secNsecToTimePoint(24*60*60, 0);
-  EXPECT_EQ(s, std::chrono::system_clock::from_time_t(tt));
+  EXPECT_EQ(s, point);
+
+  point = std::chrono::system_clock::from_time_t(0);
+  point = point + std::chrono::nanoseconds(1000);
+  s = math::secNsecToTimePoint(0, 1000);
+  EXPECT_EQ(s, point);
 }
 
 /////////////////////////////////////////////////
