@@ -818,7 +818,7 @@ namespace ignition
                     << std::setw(2) << std::setfill('0')
                     << std::get<2>(clean_duration).count() << ":"
                     << std::setw(2) << std::setfill('0')
-                    << std::setprecision(3)
+                    << std::setprecision(5)
                     << std::get<3>(clean_duration).count() +
                        std::get<4>(clean_duration).count()/1000.0;
       return output_string.str();

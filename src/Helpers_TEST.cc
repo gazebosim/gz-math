@@ -563,6 +563,29 @@ TEST(HelpersTest, secNsecToTimePoint)
 }
 
 /////////////////////////////////////////////////
+TEST(HelpersTest, timePointToString)
+{
+  std::string s = math::timePointToString(
+    std::chrono::system_clock::from_time_t(0));
+
+  EXPECT_STREQ(s.c_str(), std::string("0 00:00:00").c_str());
+
+  std::chrono::system_clock::time_point point =
+    std::chrono::system_clock::from_time_t(0);
+  point = point + std::chrono::hours(24);
+
+  s = math::timePointToString(point);
+  EXPECT_STREQ(s.c_str(), std::string("1 00:00:00").c_str());
+
+  point = std::chrono::system_clock::from_time_t(0);
+  point = point + std::chrono::minutes(1);
+  point = point + std::chrono::seconds(23);
+  point = point + std::chrono::milliseconds(125);
+  s = math::timePointToString(point);
+  EXPECT_STREQ(s.c_str(), std::string("0 00:01:23.125").c_str());
+}
+
+/////////////////////////////////////////////////
 TEST(HelpersTest, durationToSecNsec)
 {
   std::pair<int64_t, int64_t> parts;
