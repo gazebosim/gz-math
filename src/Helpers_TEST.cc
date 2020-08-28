@@ -526,17 +526,20 @@ TEST(HelpersTest, timePointToSecNsec)
   EXPECT_EQ(parts.first, 0);
   EXPECT_EQ(parts.second, 0);
 
+  using std::chrono::duration_cast;
+  using std::chrono::nanoseconds;
+  using std::chrono::system_clock;
   std::chrono::system_clock::time_point point =
     std::chrono::system_clock::from_time_t(0);
-  point = point + std::chrono::nanoseconds(1000);
+  point += duration_cast<system_clock::duration>(nanoseconds(1000));
   parts = math::timePointToSecNsec(point);
 
   EXPECT_EQ(parts.first, 0);
   EXPECT_EQ(parts.second, 1000);
 
   point = std::chrono::system_clock::from_time_t(0);
-  point = point + std::chrono::seconds(60);
-  point = point + std::chrono::nanoseconds(5789);
+  point += std::chrono::seconds(60);
+  point += duration_cast<system_clock::duration>(nanoseconds(5789));
   parts = math::timePointToSecNsec(point);
 
   EXPECT_EQ(parts.first, 60);
@@ -549,15 +552,18 @@ TEST(HelpersTest, secNsecToTimePoint)
   std::chrono::system_clock::time_point s = math::secNsecToTimePoint(0, 0);
   EXPECT_EQ(s, std::chrono::system_clock::from_time_t(0));
 
+  using std::chrono::duration_cast;
+  using std::chrono::nanoseconds;
+  using std::chrono::system_clock;
   std::chrono::system_clock::time_point point =
     std::chrono::system_clock::from_time_t(0);
-  point = point + std::chrono::hours(24);
+  point += std::chrono::hours(24);
 
   s = math::secNsecToTimePoint(24*60*60, 0);
   EXPECT_EQ(s, point);
 
   point = std::chrono::system_clock::from_time_t(0);
-  point = point + std::chrono::nanoseconds(1000);
+  point += duration_cast<system_clock::duration>(nanoseconds(1000));
   s = math::secNsecToTimePoint(0, 1000);
   EXPECT_EQ(s, point);
 }
@@ -572,15 +578,15 @@ TEST(HelpersTest, timePointToString)
 
   std::chrono::system_clock::time_point point =
     std::chrono::system_clock::from_time_t(0);
-  point = point + std::chrono::hours(24);
+  point += std::chrono::hours(24);
 
   s = math::timePointToString(point);
   EXPECT_STREQ(s.c_str(), std::string("1 00:00:00").c_str());
 
   point = std::chrono::system_clock::from_time_t(0);
-  point = point + std::chrono::minutes(1);
-  point = point + std::chrono::seconds(23);
-  point = point + std::chrono::milliseconds(125);
+  point += std::chrono::minutes(1);
+  point += std::chrono::seconds(23);
+  point += std::chrono::milliseconds(125);
   s = math::timePointToString(point);
   EXPECT_STREQ(s.c_str(), std::string("0 00:01:23.125").c_str());
 }
