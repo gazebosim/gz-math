@@ -17,18 +17,19 @@
 #ifndef IGNITION_MATH_FUNCTIONS_HH_
 #define IGNITION_MATH_FUNCTIONS_HH_
 
+#include <algorithm>
 #include <chrono>
 #include <cmath>
-#include <algorithm>
-#include <limits>
-#include <string>
-#include <iostream>
-#include <sstream>
+#include <cstdint>
 #include <iomanip>
-#include <vector>
+#include <iostream>
+#include <limits>
+#include <regex>
+#include <sstream>
+#include <string>
 #include <tuple>
 #include <utility>
-#include <cstdint>
+#include <vector>
 
 #include <ignition/math/config.hh>
 #include "ignition/math/Export.hh"
@@ -838,25 +839,23 @@ namespace ignition
       // The following regex takes a time string in the general format of
       // "dd hh:mm:ss.nnn" where n is milliseconds
       std::regex time_regex(
-          "^([0-9]+ ){0,1}"                       // day (optional):
+          "^([0-9]+ ){0,1}"                       // day:
                                                   // Any positive integer
 
-          "(?:([1-9]:|[0-1][0-9]:|2[0-3]:){0,1}"  // hour (optional):
+          "(?:([1-9]:|[0-1][0-9]:|2[0-3]:){0,1}"  // hour:
                                                   // "1-9":,
                                                   // "01-19":,
                                                   // "20-23":
 
-          "([0-9]:|[0-5][0-9]:)){0,1}"            // minute (required if
-                                                  // hour is set, otherwise
-                                                  // optional):
+          "([0-9]:|[0-5][0-9]:)){0,1}"            // minute:
                                                   // "0-9":,
                                                   // "00-59":
 
-          "([0-9]|[0-5][0-9])"                    // second (required):
+          "(?:([0-9]|[0-5][0-9]){0,1}"            // second:
                                                   // "0-9",
                                                   // "00-59"
 
-          "(\\.[0-9]{1,3}){0,1}$");               // millisecond (optional):
+          "(\\.[0-9]{1,3}){0,1})$");              // millisecond:
                                                   // ".0" - ".9",
                                                   // ".00" - ".99",
                                                   // ".000" - "0.999"
