@@ -761,7 +761,7 @@ namespace ignition
     {
       auto duration = std::chrono::seconds(_sec) + std::chrono::nanoseconds(
         _nanosec);
-      std::chrono::system_clock::time_point result =
+      auto result =
         std::chrono::system_clock::from_time_t(0);
       result += duration;
       return result;
