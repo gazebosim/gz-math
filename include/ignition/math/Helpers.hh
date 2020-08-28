@@ -837,28 +837,29 @@ namespace ignition
         std::chrono::system_clock::from_time_t(-1);
 
       // The following regex takes a time string in the general format of
-      // "dd hh:mm:ss.nnn" where n is milliseconds
+      // "dd hh:mm:ss.nnn" where n is milliseconds, if just one number is
+      // provided, it is assumed to be seconds
       std::regex time_regex(
           "^([0-9]+ ){0,1}"                       // day:
                                                   // Any positive integer
 
           "(?:([1-9]:|[0-1][0-9]:|2[0-3]:){0,1}"  // hour:
-                                                  // "1-9":,
-                                                  // "01-19":,
-                                                  // "20-23":
+                                                  // 1-9:
+                                                  // 01-19:
+                                                  // 20-23:
 
           "([0-9]:|[0-5][0-9]:)){0,1}"            // minute:
-                                                  // "0-9":,
-                                                  // "00-59":
+                                                  // 0-9:
+                                                  // 00-59:
 
           "(?:([0-9]|[0-5][0-9]){0,1}"            // second:
-                                                  // "0-9",
-                                                  // "00-59"
+                                                  // 0-9
+                                                  // 00-59
 
           "(\\.[0-9]{1,3}){0,1})$");              // millisecond:
-                                                  // ".0" - ".9",
-                                                  // ".00" - ".99",
-                                                  // ".000" - "0.999"
+                                                  // .0 - .9
+                                                  // .00 - .99
+                                                  // .000 - 0.999
       std::smatch matches;
 
       // `matches` should always be a size of 6 as there are 6 matching
@@ -890,7 +891,7 @@ namespace ignition
 
       // Days are the only unbounded number, so check first to see if stoi
       // runs successfully
-      if (dayString != "")
+      if (!dayString.empty())
       {
         // Erase the space
         dayString.erase(dayString.length() - 1);
@@ -904,26 +905,26 @@ namespace ignition
         }
       }
 
-      if (hourString != "")
+      if (!hourString.empty())
       {
         // Erase the colon
         hourString.erase(hourString.length() - 1);
         numberHours = std::stoi(hourString);
       }
 
-      if (minuteString != "")
+      if (!minuteString.empty())
       {
         // Erase the colon
         minuteString.erase(minuteString.length() - 1);
         numberMinutes = std::stoi(minuteString);
       }
 
-      if (secondString != "")
+      if (!secondString.empty())
       {
         numberSeconds = std::stoi(secondString);
       }
 
-      if (millisecondString != "")
+      if (!millisecondString.empty())
       {
         // Erase the period
         millisecondString.erase(0, 1);
