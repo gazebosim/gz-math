@@ -763,7 +763,7 @@ namespace ignition
         _nanosec);
       std::chrono::system_clock::time_point result =
         std::chrono::system_clock::from_time_t(0);
-      result = result + duration;
+      result += duration;
       return result;
     }
 
