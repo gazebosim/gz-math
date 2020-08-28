@@ -824,6 +824,126 @@ namespace ignition
       return output_string.str();
     }
 
+    /// \brief Convert a string to a std::chrono::system_clock::time_point
+    /// \param[in] _timeString The string to convert in general format
+    /// "dd hh:mm:ss.nnn" where n is millisecond value
+    /// \return A std::chrono::system_clock::time_point containing the
+    /// string's time value
+    inline std::chrono::system_clock::time_point stringToTimePoint(
+        const std::string &_timeString)
+    {
+      std::chrono::system_clock::time_point timePoint =
+        std::chrono::system_clock::from_time_t(-1);
+
+      // The following regex takes a time string in the general format of
+      // "dd hh:mm:ss.nnn" where n is milliseconds
+      std::regex time_regex(
+          "^([0-9]+ ){0,1}"                       // day (optional):
+                                                  // Any positive integer
+
+          "(?:([1-9]:|[0-1][0-9]:|2[0-3]:){0,1}"  // hour (optional):
+                                                  // "1-9":,
+                                                  // "01-19":,
+                                                  // "20-23":
+
+          "([0-9]:|[0-5][0-9]:)){0,1}"            // minute (required if
+                                                  // hour is set, otherwise
+                                                  // optional):
+                                                  // "0-9":,
+                                                  // "00-59":
+
+          "([0-9]|[0-5][0-9])"                    // second (required):
+                                                  // "0-9",
+                                                  // "00-59"
+
+          "(\\.[0-9]{1,3}){0,1}$");               // millisecond (optional):
+                                                  // ".0" - ".9",
+                                                  // ".00" - ".99",
+                                                  // ".000" - "0.999"
+      std::smatch matches;
+
+      // `matches` should always be a size of 6 as there are 6 matching
+      // groups in the regex.
+      // 1. The whole regex
+      // 2. The days
+      // 3. The hours
+      // 4. The minutes
+      // 5. The seconds
+      // 6. The milliseconds
+      // We can also index them as such below.
+      // Note that the space will remain in the day match, the colon
+      // will remain in the hour and minute matches, and the period will
+      // remain in the millisecond match
+      if (!std::regex_search(_timeString, matches, time_regex) ||
+          matches.size() != 6)
+        return timePoint;
+
+      uint64_t numberDays = 0;
+      uint64_t numberHours = 0;
+      uint64_t numberMinutes = 0;
+      uint64_t numberSeconds = 0;
+      uint64_t numberMilliseconds = 0;
+      std::string dayString = matches[1];
+      std::string hourString = matches[2];
+      std::string minuteString = matches[3];
+      std::string secondString = matches[4];
+      std::string millisecondString = matches[5];
+
+      // Days are the only unbounded number, so check first to see if stoi
+      // runs successfully
+      if (dayString != "")
+      {
+        // Erase the space
+        dayString.erase(dayString.length() - 1);
+        try
+        {
+          numberDays = std::stoi(dayString);
+        }
+        catch (const std::out_of_range &oor)
+        {
+          return timePoint;
+        }
+      }
+
+      if (hourString != "")
+      {
+        // Erase the colon
+        hourString.erase(hourString.length() - 1);
+        numberHours = std::stoi(hourString);
+      }
+
+      if (minuteString != "")
+      {
+        // Erase the colon
+        minuteString.erase(minuteString.length() - 1);
+        numberMinutes = std::stoi(minuteString);
+      }
+
+      if (secondString != "")
+      {
+        numberSeconds = std::stoi(secondString);
+      }
+
+      if (millisecondString != "")
+      {
+        // Erase the period
+        millisecondString.erase(0, 1);
+        // Multiplier because "4" = 400 ms, "04" = 40 ms, and "004" = 4 ms
+        numberMilliseconds = std::stoi(millisecondString) *
+          (1000 / pow(10, millisecondString.length()));
+      }
+
+      timePoint = std::chrono::system_clock::from_time_t(0);
+      auto duration = std::chrono::milliseconds(numberMilliseconds) +
+        std::chrono::seconds(numberSeconds) +
+        std::chrono::minutes(numberMinutes) +
+        std::chrono::hours(numberHours) +
+        std::chrono::hours(24 * numberDays);
+      timePoint += duration;
+
+      return timePoint;
+    }
+
     // Degrade precision on Windows, which cannot handle 'long double'
     // values properly. See the implementation of Unpair.
     // 32 bit ARM processors also define 'long double' to be the same
