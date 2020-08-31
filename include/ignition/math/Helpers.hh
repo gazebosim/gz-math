@@ -731,6 +731,9 @@ namespace ignition
 
     /// \brief Convert a std::chrono::system_clock::time_point to a seconds and
     /// nanoseconds pair.
+    /// NOTE: On gcc, system_clock::time_point has nanosecond precision,
+    // on Windows, it has precision 1/10'000'000 (100ns),
+    // and on macOS, microsecond precision.
     /// \param[in] _time The time point to convert.
     /// \return A pair where the first element is the number of seconds and
     /// the second is the number of nanoseconds.
@@ -750,6 +753,9 @@ namespace ignition
 
     /// \brief Convert seconds and nanoseconds to
     /// std::chrono::system_clock::time_point.
+    /// NOTE: On gcc, system_clock::time_point has nanosecond precision,
+    // on Windows, it has precision 1/10'000'000 (100ns),
+    // and on macOS, microsecond precision.
     /// \param[in] _sec The seconds to convert.
     /// \param[in] _nanosec The nanoseconds to convert.
     /// \return A std::chrono::system_clock::time_point based on the number of
@@ -767,6 +773,9 @@ namespace ignition
 
     /// \brief Convert a std::chrono::steady_clock::duration to a seconds and
     /// nanoseconds pair.
+    /// NOTE: On gcc, system_clock::time_point has nanosecond precision,
+    // on Windows, it has precision 1/10'000'000 (100ns),
+    // and on macOS, microsecond precision.
     /// \param[in] _dur The duration to convert.
     /// \return A pair where the first element is the number of seconds and
     /// the second is the number of nanoseconds.

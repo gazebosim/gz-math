@@ -536,11 +536,11 @@ TEST(HelpersTest, timePointToSecNsec)
 
   point = std::chrono::system_clock::from_time_t(0);
   point = point + std::chrono::seconds(60);
-  point = point + std::chrono::nanoseconds(5789);
+  point = point + std::chrono::nanoseconds(5000);
   parts = math::timePointToSecNsec(point);
 
   EXPECT_EQ(parts.first, 60);
-  EXPECT_EQ(parts.second, 5789);
+  EXPECT_EQ(parts.second, 5000);
 }
 
 /////////////////////////////////////////////////
