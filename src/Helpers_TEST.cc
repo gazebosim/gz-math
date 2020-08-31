@@ -685,7 +685,7 @@ TEST(HelpersTest, stringToTimePoint)
 
   time = "";
   resultTime = math::stringToTimePoint(time);
-  point = std::chrono::system_clock::from_time_t(0);
+  point = std::chrono::system_clock::from_time_t(-1);
 
   EXPECT_EQ(resultTime, point);
 
