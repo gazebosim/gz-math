@@ -730,7 +730,7 @@ namespace ignition
       }
     }
 
-    /// \brief Convert a std::chrono::system_clock::time_point to a seconds and
+    /// \brief Convert a std::chrono::steady_clock::time_point to a seconds and
     /// nanoseconds pair.
     /// NOTE: On gcc, system_clock::time_point has nanosecond precision,
     // on Windows, it has precision 1/10'000'000 (100ns),
@@ -739,7 +739,7 @@ namespace ignition
     /// \return A pair where the first element is the number of seconds and
     /// the second is the number of nanoseconds.
     inline std::pair<int64_t, int64_t> timePointToSecNsec(
-        const std::chrono::system_clock::time_point &_time)
+        const std::chrono::steady_clock::time_point &_time)
     {
       auto now_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(
         _time.time_since_epoch());
@@ -752,23 +752,22 @@ namespace ignition
     }
 
     /// \brief Convert seconds and nanoseconds to
-    /// std::chrono::system_clock::time_point.
+    /// std::chrono::steady_clock::time_point.
     /// NOTE: On gcc, system_clock::time_point has nanosecond precision,
     // on Windows, it has precision 1/10'000'000 (100ns),
     // and on macOS, microsecond precision.
     /// \param[in] _sec The seconds to convert.
     /// \param[in] _nanosec The nanoseconds to convert.
-    /// \return A std::chrono::system_clock::time_point based on the number of
+    /// \return A std::chrono::steady_clock::time_point based on the number of
     /// seconds and the number of nanoseconds.
-    inline std::chrono::system_clock::time_point secNsecToTimePoint(
+    inline std::chrono::steady_clock::time_point secNsecToTimePoint(
         const uint64_t &_sec, const uint64_t &_nanosec)
     {
       auto duration = std::chrono::seconds(_sec) + std::chrono::nanoseconds(
         _nanosec);
-      std::chrono::system_clock::time_point result =
-        std::chrono::system_clock::from_time_t(0);
+      std::chrono::steady_clock::time_point result;
       using std::chrono::duration_cast;
-      result += duration_cast<std::chrono::system_clock::duration>(duration);
+      result += duration_cast<std::chrono::steady_clock::duration>(duration);
       return result;
     }
 
@@ -807,13 +806,13 @@ namespace ignition
       return retval;
     }
 
-    /// \brief Convert a std::chrono::system_clock::time_point to a string
-    /// \param[in] _point The std::chrono::system_clock::time_point to convert.
+    /// \brief Convert a std::chrono::steady_clock::time_point to a string
+    /// \param[in] _point The std::chrono::steady_clock::time_point to convert.
     /// \return A string formatted with the time_point
     inline std::string timePointToString(
-      const std::chrono::system_clock::time_point &_point)
+      const std::chrono::steady_clock::time_point &_point)
     {
-      auto duration = _point - std::chrono::system_clock::from_time_t(0);
+      auto duration = _point - secNsecToTimePoint(0, 0);
       auto clean_duration = break_down_durations<days,
                                                  std::chrono::hours,
                                                  std::chrono::minutes,
@@ -821,13 +820,14 @@ namespace ignition
                                                  std::chrono::milliseconds>(
                                                    duration);
       std::ostringstream output_string;
-      output_string << std::get<0>(clean_duration).count() << " "
+      output_string << std::setw(2) << std::setfill('0')
+                    << std::get<0>(clean_duration).count() << " "
                     << std::setw(2) << std::setfill('0')
                     << std::get<1>(clean_duration).count() << ":"
                     << std::setw(2) << std::setfill('0')
                     << std::get<2>(clean_duration).count() << ":"
-                    << std::setw(2) << std::setfill('0')
-                    << std::setprecision(5)
+                    << std::setfill('0') << std::setw(6)
+                    << std::fixed << std::setprecision(3)
                     << std::get<3>(clean_duration).count() +
                        std::get<4>(clean_duration).count()/1000.0;
       return output_string.str();
