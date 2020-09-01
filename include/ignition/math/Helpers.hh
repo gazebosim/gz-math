@@ -811,7 +811,7 @@ namespace ignition
     inline std::string timePointToString(
       const std::chrono::steady_clock::time_point &_point)
     {
-      auto duration = _point - secNsecToTimePoint(0, 0);//std::chrono::steady_clock();
+      auto duration = _point - secNsecToTimePoint(0, 0);
       auto clean_duration = break_down_durations<days,
                                                  std::chrono::hours,
                                                  std::chrono::minutes,
