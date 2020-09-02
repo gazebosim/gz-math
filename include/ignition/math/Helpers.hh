@@ -833,16 +833,16 @@ namespace ignition
       return output_string.str();
     }
 
-    /// \brief Convert a string to a std::chrono::system_clock::time_point
+    /// \brief Convert a string to a std::chrono::steady_clock::time_point
     /// \param[in] _timeString The string to convert in general format
     /// "dd hh:mm:ss.nnn" where n is millisecond value
-    /// \return A std::chrono::system_clock::time_point containing the
+    /// \return A std::chrono::steady_clock::time_point containing the
     /// string's time value
-    inline std::chrono::system_clock::time_point stringToTimePoint(
+    inline std::chrono::steady_clock::time_point stringToTimePoint(
         const std::string &_timeString)
     {
-      std::chrono::system_clock::time_point timePoint =
-        std::chrono::system_clock::from_time_t(-1);
+      std::chrono::steady_clock::time_point timePoint =
+        math::secNsecToTimePoint(-1, 0);
 
       if (_timeString.empty())
         return timePoint;
@@ -947,7 +947,7 @@ namespace ignition
 
       // TODO(anyone): Replace below day conversion with std::chrono::days.
       /// This will exist in C++-20
-      timePoint = std::chrono::system_clock::from_time_t(0);
+      timePoint = math::secNsecToTimePoint(0, 0);
       auto duration = std::chrono::milliseconds(numberMilliseconds) +
         std::chrono::seconds(numberSeconds) +
         std::chrono::minutes(numberMinutes) +

@@ -592,37 +592,35 @@ TEST(HelpersTest, timePointToString)
 /////////////////////////////////////////////////
 TEST(HelpersTest, stringToTimePoint)
 {
-  std::string time = "bad time";
-  std::chrono::system_clock::time_point resultTime =
+  std::chrono::steady_clock::time_point zeroTime =
+    math::secNsecToTimePoint(0, 0);
+  std::chrono::steady_clock::time_point negTime =
+    math::secNsecToTimePoint(-1, 0);
+
+  std::string time = "0 00:00:00.000";
+  std::chrono::steady_clock::time_point resultTime =
     math::stringToTimePoint(time);
-  std::chrono::system_clock::time_point point =
-    std::chrono::system_clock::from_time_t(-1);
-
-  EXPECT_EQ(resultTime, point);
-
-  time = "0 00:00:00";
-  resultTime = math::stringToTimePoint(time);
-  point = std::chrono::system_clock::from_time_t(0);
+  std::chrono::steady_clock::time_point point = zeroTime;
 
   EXPECT_EQ(resultTime, point);
 
   time = "10 0";
   resultTime = math::stringToTimePoint(time);
-  point = std::chrono::system_clock::from_time_t(0);
+  point = zeroTime;
   point += std::chrono::hours(10 * 24);
 
   EXPECT_EQ(resultTime, point);
 
   time = "7";
   resultTime = math::stringToTimePoint(time);
-  point = std::chrono::system_clock::from_time_t(0);
+  point = zeroTime;
   point += std::chrono::seconds(7);
 
   EXPECT_EQ(resultTime, point);
 
   time = "7:10";
   resultTime = math::stringToTimePoint(time);
-  point = std::chrono::system_clock::from_time_t(0);
+  point = zeroTime;
   point += std::chrono::minutes(7);
   point += std::chrono::seconds(10);
 
@@ -630,7 +628,7 @@ TEST(HelpersTest, stringToTimePoint)
 
   time = "17:10";
   resultTime = math::stringToTimePoint(time);
-  point = std::chrono::system_clock::from_time_t(0);
+  point = zeroTime;
   point += std::chrono::minutes(17);
   point += std::chrono::seconds(10);
 
@@ -638,7 +636,7 @@ TEST(HelpersTest, stringToTimePoint)
 
   time = "7:10.4";
   resultTime = math::stringToTimePoint(time);
-  point = std::chrono::system_clock::from_time_t(0);
+  point = zeroTime;
   point += std::chrono::minutes(7);
   point += std::chrono::seconds(10);
   point += std::chrono::milliseconds(400);
@@ -647,7 +645,7 @@ TEST(HelpersTest, stringToTimePoint)
 
   time = "7:10.45";
   resultTime = math::stringToTimePoint(time);
-  point = std::chrono::system_clock::from_time_t(0);
+  point = zeroTime;
   point += std::chrono::minutes(7);
   point += std::chrono::seconds(10);
   point += std::chrono::milliseconds(450);
@@ -656,7 +654,7 @@ TEST(HelpersTest, stringToTimePoint)
 
   time = "7:10.456";
   resultTime = math::stringToTimePoint(time);
-  point = std::chrono::system_clock::from_time_t(0);
+  point = zeroTime;
   point += std::chrono::minutes(7);
   point += std::chrono::seconds(10);
   point += std::chrono::milliseconds(456);
@@ -665,7 +663,7 @@ TEST(HelpersTest, stringToTimePoint)
 
   time = "2 23:18:25.902";
   resultTime = math::stringToTimePoint(time);
-  point = std::chrono::system_clock::from_time_t(0);
+  point = zeroTime;
   point += std::chrono::hours(2 * 24);
   point += std::chrono::hours(23);
   point += std::chrono::minutes(18);
@@ -676,46 +674,45 @@ TEST(HelpersTest, stringToTimePoint)
 
   time = ".9";
   resultTime = math::stringToTimePoint(time);
-  point = std::chrono::system_clock::from_time_t(0);
+  point = zeroTime;
   point += std::chrono::milliseconds(900);
 
   EXPECT_EQ(resultTime, point);
 
+  time = "bad time";
+  resultTime = math::stringToTimePoint(time);
+
+  EXPECT_EQ(resultTime, negTime);
+
   time = "";
   resultTime = math::stringToTimePoint(time);
-  point = std::chrono::system_clock::from_time_t(-1);
 
-  EXPECT_EQ(resultTime, point);
+  EXPECT_EQ(resultTime, negTime);
 
   time = "60";
   resultTime = math::stringToTimePoint(time);
-  point = std::chrono::system_clock::from_time_t(-1);
 
-  EXPECT_EQ(resultTime, point);
+  EXPECT_EQ(resultTime, negTime);
 
   time = "60:12";
   resultTime = math::stringToTimePoint(time);
-  point = std::chrono::system_clock::from_time_t(-1);
 
-  EXPECT_EQ(resultTime, point);
+  EXPECT_EQ(resultTime, negTime);
 
   time = "12:12.9999";
   resultTime = math::stringToTimePoint(time);
-  point = std::chrono::system_clock::from_time_t(-1);
 
-  EXPECT_EQ(resultTime, point);
+  EXPECT_EQ(resultTime, negTime);
 
   time = "25:12:12.99";
   resultTime = math::stringToTimePoint(time);
-  point = std::chrono::system_clock::from_time_t(-1);
 
-  EXPECT_EQ(resultTime, point);
+  EXPECT_EQ(resultTime, negTime);
 
   time = "999999999999999 5:12:12.5";
   resultTime = math::stringToTimePoint(time);
-  point = std::chrono::system_clock::from_time_t(-1);
 
-  EXPECT_EQ(resultTime, point);
+  EXPECT_EQ(resultTime, negTime);
 }
 
 /////////////////////////////////////////////////
