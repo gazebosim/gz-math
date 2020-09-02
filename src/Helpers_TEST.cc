@@ -526,11 +526,8 @@ TEST(HelpersTest, timePointToSecNsec)
   EXPECT_EQ(parts.first, 0);
   EXPECT_EQ(parts.second, 0);
 
-  using std::chrono::duration_cast;
-  using std::chrono::nanoseconds;
-  using std::chrono::steady_clock;
   std::chrono::steady_clock::time_point point;
-  point +=std::chrono::nanoseconds(1000);
+  point += std::chrono::nanoseconds(1000);
   parts = math::timePointToSecNsec(point);
 
   EXPECT_EQ(parts.first, 0);
