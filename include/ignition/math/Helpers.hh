@@ -732,8 +732,6 @@ namespace ignition
 
     /// \brief Convert a std::chrono::steady_clock::time_point to a seconds and
     /// nanoseconds pair.
-    /// NOTE: On gcc, system_clock::time_point has nanosecond precision,
-    // on Windows, it has precision 1/10'000'000 (100ns),
     // and on macOS, microsecond precision.
     /// \param[in] _time The time point to convert.
     /// \return A pair where the first element is the number of seconds and
@@ -753,8 +751,6 @@ namespace ignition
 
     /// \brief Convert seconds and nanoseconds to
     /// std::chrono::steady_clock::time_point.
-    /// NOTE: On gcc, system_clock::time_point has nanosecond precision,
-    // on Windows, it has precision 1/10'000'000 (100ns),
     // and on macOS, microsecond precision.
     /// \param[in] _sec The seconds to convert.
     /// \param[in] _nanosec The nanoseconds to convert.
@@ -773,8 +769,6 @@ namespace ignition
 
     /// \brief Convert a std::chrono::steady_clock::duration to a seconds and
     /// nanoseconds pair.
-    /// NOTE: On gcc, system_clock::time_point has nanosecond precision,
-    // on Windows, it has precision 1/10'000'000 (100ns),
     // and on macOS, microsecond precision.
     /// \param[in] _dur The duration to convert.
     /// \return A pair where the first element is the number of seconds and
@@ -792,10 +786,14 @@ namespace ignition
     typedef std::chrono::duration<uint64_t, std::ratio<86400>> days;
 
     /// \brief break down durations
-    /// \param[in] d Duration to breaw down
+    /// NOTE: the template arguments must be properly ordered according
+    /// to magnitude and there can be no duplicates.
+    /// This function uses the braces initializer to split all the templated
+    /// duration. The initializer will be called recursievely due the `...`
+    /// \param[in] d Duration to break down
     /// \return A tuple based on the durations specified
     template<class...Durations, class DurationIn>
-    std::tuple<Durations...> break_down_durations(DurationIn d) {
+    std::tuple<Durations...> breakDownDurations(DurationIn d) {
       std::tuple<Durations...> retval;
       using discard = int[];
       (void)discard{0, (void((
@@ -813,23 +811,23 @@ namespace ignition
       const std::chrono::steady_clock::time_point &_point)
     {
       auto duration = _point - secNsecToTimePoint(0, 0);
-      auto clean_duration = break_down_durations<days,
-                                                 std::chrono::hours,
-                                                 std::chrono::minutes,
-                                                 std::chrono::seconds,
-                                                 std::chrono::milliseconds>(
-                                                   duration);
+      auto cleanDuration = breakDownDurations<days,
+                                              std::chrono::hours,
+                                              std::chrono::minutes,
+                                              std::chrono::seconds,
+                                              std::chrono::milliseconds>(
+                                                duration);
       std::ostringstream output_string;
       output_string << std::setw(2) << std::setfill('0')
-                    << std::get<0>(clean_duration).count() << " "
+                    << std::get<0>(cleanDuration).count() << " "
                     << std::setw(2) << std::setfill('0')
-                    << std::get<1>(clean_duration).count() << ":"
+                    << std::get<1>(cleanDuration).count() << ":"
                     << std::setw(2) << std::setfill('0')
-                    << std::get<2>(clean_duration).count() << ":"
+                    << std::get<2>(cleanDuration).count() << ":"
                     << std::setfill('0') << std::setw(6)
                     << std::fixed << std::setprecision(3)
-                    << std::get<3>(clean_duration).count() +
-                       std::get<4>(clean_duration).count()/1000.0;
+                    << std::get<3>(cleanDuration).count() +
+                       std::get<4>(cleanDuration).count()/1000.0;
       return output_string.str();
     }
 
