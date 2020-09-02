@@ -17,18 +17,18 @@
 #ifndef IGNITION_MATH_FUNCTIONS_HH_
 #define IGNITION_MATH_FUNCTIONS_HH_
 
+#include <algorithm>
 #include <chrono>
 #include <cmath>
-#include <algorithm>
-#include <limits>
-#include <string>
-#include <iostream>
-#include <sstream>
+#include <cstdint>
 #include <iomanip>
-#include <vector>
+#include <iostream>
+#include <limits>
+#include <sstream>
+#include <string>
 #include <tuple>
 #include <utility>
-#include <cstdint>
+#include <vector>
 
 #include <ignition/math/config.hh>
 #include "ignition/math/Export.hh"
