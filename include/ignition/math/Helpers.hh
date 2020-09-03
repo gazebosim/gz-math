@@ -940,7 +940,7 @@ namespace ignition
 
         // Multiplier because "4" = 400 ms, "04" = 40 ms, and "004" = 4 ms
         numberMilliseconds = std::stoi(millisecondString) *
-          (1000 / pow(10, millisecondString.length()));
+          static_cast<uint64_t>(1000 / pow(10, millisecondString.length()));
       }
 
       // TODO(anyone): Replace below day conversion with std::chrono::days.
