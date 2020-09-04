@@ -840,7 +840,7 @@ namespace ignition
         const std::string &_timeString)
     {
       std::chrono::steady_clock::time_point timePoint =
-        math::secNsecToTimePoint(-1, 0);
+        math::secNsecToTimePoint(0, 0);
 
       if (_timeString.empty())
         return timePoint;
@@ -908,7 +908,7 @@ namespace ignition
         {
           numberDays = std::stoi(dayString);
         }
-        catch (const std::out_of_range &oor)
+        catch (const std::out_of_range &)
         {
           return timePoint;
         }
