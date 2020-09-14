@@ -732,7 +732,6 @@ namespace ignition
 
     /// \brief Convert a std::chrono::steady_clock::time_point to a seconds and
     /// nanoseconds pair.
-    // and on macOS, microsecond precision.
     /// \param[in] _time The time point to convert.
     /// \return A pair where the first element is the number of seconds and
     /// the second is the number of nanoseconds.
@@ -751,7 +750,6 @@ namespace ignition
 
     /// \brief Convert seconds and nanoseconds to
     /// std::chrono::steady_clock::time_point.
-    // and on macOS, microsecond precision.
     /// \param[in] _sec The seconds to convert.
     /// \param[in] _nanosec The nanoseconds to convert.
     /// \return A std::chrono::steady_clock::time_point based on the number of
@@ -767,9 +765,26 @@ namespace ignition
       return result;
     }
 
+    /// \brief Convert seconds and nanoseconds to
+    /// std::chrono::steady_clock::duration.
+    /// \param[in] _sec The seconds to convert.
+    /// \param[in] _nanosec The nanoseconds to convert.
+    /// \return A std::chrono::steady_clock::duration based on the number of
+    /// seconds and the number of nanoseconds.
+    inline std::chrono::steady_clock::duration secNsecToDuration(
+        const uint64_t &_sec, const uint64_t &_nanosec)
+    {
+      auto duration = std::chrono::seconds(_sec) + std::chrono::nanoseconds(
+        _nanosec);
+      std::chrono::steady_clock::duration result =
+        std::chrono::steady_clock::duration::zero();
+      using std::chrono::duration_cast;
+      result += duration_cast<std::chrono::steady_clock::duration>(duration);
+      return result;
+    }
+
     /// \brief Convert a std::chrono::steady_clock::duration to a seconds and
     /// nanoseconds pair.
-    // and on macOS, microsecond precision.
     /// \param[in] _dur The duration to convert.
     /// \return A pair where the first element is the number of seconds and
     /// the second is the number of nanoseconds.

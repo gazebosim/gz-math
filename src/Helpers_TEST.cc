@@ -586,6 +586,28 @@ TEST(HelpersTest, timePointToString)
   EXPECT_STREQ(s.c_str(), std::string("00 00:01:23.125").c_str());
 }
 
+
+/////////////////////////////////////////////////
+TEST(HelpersTest, secNsecToDuration)
+{
+  using std::chrono::duration_cast;
+  using std::chrono::nanoseconds;
+  using std::chrono::steady_clock;
+
+  std::chrono::steady_clock::duration point =
+    std::chrono::steady_clock::duration::zero();
+  point += std::chrono::hours(24);
+
+  std::chrono::steady_clock::duration s =
+    math::secNsecToDuration(24*60*60, 0);
+  EXPECT_EQ(s, point);
+
+  point = std::chrono::steady_clock::duration::zero();
+  point += std::chrono::nanoseconds(1000);
+  s = math::secNsecToDuration(0, 1000);
+  EXPECT_EQ(s, point);
+}
+
 /////////////////////////////////////////////////
 TEST(HelpersTest, stringToTimePoint)
 {
