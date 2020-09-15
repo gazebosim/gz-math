@@ -893,6 +893,14 @@ namespace ignition
                                                 // .000 - 0.999
 
 
+    /// \brief Split a std::chrono::steady_clock::duration to a string
+    /// \param[in] _timeString The string to convert in general format
+    /// \param[out] numberDays number of days in the string
+    /// \param[out] numberHours number of hours in the string
+    /// \param[out] numberMinutes number of minutes in the string
+    /// \param[out] numberSeconds number of seconds in the string
+    /// \param[out] numberMilliseconds number of milliseconds in the string
+    /// \return True if the regex was able to split the string otherwise False
     inline bool splitTimeBasedOnTimeRegex(
         const std::string &_timeString,
         uint64_t & numberDays, uint64_t & numberHours,
@@ -974,8 +982,8 @@ namespace ignition
     /// \param[in] _timeString The string to convert in general format
     /// "dd hh:mm:ss.nnn" where n is millisecond value
     /// \return A std::chrono::steady_clock::duration containing the
-    /// string's time value. If it isn't possible to convert, the time will
-    /// be negative 1 second.
+    /// string's time value. If it isn't possible to convert, the duration will
+    /// be zero.
     inline std::chrono::steady_clock::duration stringToDuration(
         const std::string &_timeString)
     {
