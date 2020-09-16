@@ -2,7 +2,7 @@
 
 ## Ignition Math 6.x.x
 
-## Ignition Math 6.5.0 (2020-09-16)
+## Ignition Math 6.6.0 (2020-09-16)
 
 1. Add chrono duration helper functions
     * [Pull request 158](https://github.com/ignitionrobotics/ign-math/pull/158)
