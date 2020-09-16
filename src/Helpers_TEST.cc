@@ -770,3 +770,28 @@ TEST(HelpersTest, roundUpMultiple)
   EXPECT_EQ(0, math::roundUpMultiple(0, -2));
   EXPECT_EQ(-2, math::roundUpMultiple(-2, -2));
 }
+
+/////////////////////////////////////////////////
+TEST(HelpersTest, roundDownMultiple)
+{
+  EXPECT_EQ(0, math::roundDownMultiple(0, 0));
+  EXPECT_EQ(12, math::roundDownMultiple(12, 0));
+
+  EXPECT_EQ(1, math::roundDownMultiple(1, 1));
+  EXPECT_EQ(100, math::roundDownMultiple(100, 10));
+  EXPECT_EQ(48, math::roundDownMultiple(48, 12));
+
+  EXPECT_EQ(2, math::roundDownMultiple(3, 2));
+  EXPECT_EQ(0, math::roundDownMultiple(3, 23));
+  EXPECT_EQ(6, math::roundDownMultiple(6, 3));
+  EXPECT_EQ(6, math::roundDownMultiple(7, 3));
+
+  EXPECT_EQ(-10, math::roundDownMultiple(-9, 2));
+  EXPECT_EQ(-9, math::roundDownMultiple(-7, 3));
+
+  EXPECT_EQ(-2, math::roundDownMultiple(-1, 2));
+
+  EXPECT_EQ(2, math::roundDownMultiple(2, -2));
+  EXPECT_EQ(0, math::roundDownMultiple(0, -2));
+  EXPECT_EQ(-2, math::roundDownMultiple(-2, -2));
+}
