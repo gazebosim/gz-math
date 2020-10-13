@@ -1107,6 +1107,107 @@ namespace ignition
       }
 
       /// \brief Set inertial properties based on a Material and equivalent
+      /// capsule aligned with Z axis.
+      /// \param[in] _mat Material that specifies a density. Uniform density
+      /// is used.
+      /// \param[in] _length Length of capsule along Z axis.
+      /// \param[in] _radius Radius of capsule.
+      /// \param[in] _rot Rotational offset of equivalent capsule.
+      /// \return True if inertial properties were set successfully.
+      public: bool SetFromCapsuleZ(const Material &_mat,
+                                   const T _length,
+                                   const T _radius,
+                            const Quaternion<T> &_rot = Quaternion<T>::Identity)
+      {
+        // Check that density, _radius and _length are strictly positive
+        // and that quaternion is valid
+        if (_mat.Density() <= 0 || _length <= 0 || _radius <= 0 ||
+            _rot == Quaternion<T>::Zero)
+        {
+          return false;
+        }
+        T volume = IGN_PI * _radius * _radius * (_length + 4. / 3. * _radius);
+        return this->SetFromCapsuleZ(_mat.Density() * volume,
+                                      _length, _radius, _rot);
+      }
+
+      /// \brief Set inertial properties based on mass and equivalent capsule
+      /// aligned with Z axis.
+      /// \param[in] _mass Mass to set.
+      /// \param[in] _length Length of capsule along Z axis.
+      /// \param[in] _radius Radius of capsule.
+      /// \param[in] _rot Rotational offset of equivalent capsule.
+      /// \return True if inertial properties were set successfully.
+      public: bool SetFromCapsuleZ(const T _mass,
+                                   const T _length,
+                                   const T _radius,
+                            const Quaternion<T> &_rot = Quaternion<T>::Identity)
+      {
+        // Check that _mass, _radius and _length are strictly positive
+        // and that quaternion is valid
+        if (_mass <= 0 || _length <= 0 || _radius <= 0 ||
+            _rot == Quaternion<T>::Zero)
+        {
+          return false;
+        }
+        this->SetMass(_mass);
+        return this->SetFromCapsuleZ(_length, _radius, _rot);
+      }
+
+      /// \brief Set inertial properties based on equivalent capsule
+      /// aligned with Z axis using the current mass value.
+      /// \param[in] _length Length of capsule along Z axis.
+      /// \param[in] _radius Radius of capsule.
+      /// \param[in] _rot Rotational offset of equivalent capsule.
+      /// \return True if inertial properties were set successfully.
+      public: bool SetFromCapsuleZ(const T _length,
+                                   const T _radius,
+                                   const Quaternion<T> &_rot)
+      {
+        // Check that _mass and _size are strictly positive
+        // and that quaternion is valid
+        if (this->Mass() <= 0 || _length <= 0 || _radius <= 0 ||
+            _rot == Quaternion<T>::Zero)
+        {
+          return false;
+        }
+
+        // Mass of cylinder and hemispheres
+        T sphereMass = this->Mass() / (1. + 0.75 * _length / _radius);
+        T cylinderMass = this->Mass() - sphereMass;
+
+        // Diagonal matrix L with principal moments
+        T radius2 = std::pow(_radius, 2);
+        Matrix3<T> L;
+
+        // Inertia components of cylinder
+        L(0, 0) = cylinderMass / 12.0 * (3*radius2 + std::pow(_length, 2));
+        // the following line is repeated later in this function
+        // L(1, 1) = L(0, 0);
+        L(2, 2) = cylinderMass / 2.0 * radius2;
+
+        // Inertia components of hemispheres
+        //  Centroid of hemisphere:
+        //    3/8 radius from flat base on axis of symmetry
+        //  Moment of inertia about centroid:
+        //    2/5 mass * radius^2 about axis of symmetry
+        //    83/320 mass * radius^2 about other axis
+        //    efunda.com/math/solids/solids_display.cfm?SolidName=Hemisphere
+        // add inertia of hemispheres about their centroid
+        L(0, 0) += sphereMass * 83. / 320. * radius2;
+        // use parallel axis theorem from center of capsule to centroid
+        // of hemispheres.
+        L(0, 0) += sphereMass * std::pow(0.5*_length + 0.375*_radius, 2);
+        L(1, 1) = L(0, 0);
+        // this component about axis of symmetry is same as regular sphere
+        L(2, 2) += sphereMass * 0.4 * radius2;
+
+        // Apply rotational offset.
+        Matrix3<T> R(_rot);
+        return this->SetMoi(R * L * R.Transposed());
+      }
+
+      /// \brief Set inertial properties based on a Material and equivalent
       /// cylinder aligned with Z axis.
       /// \param[in] _mat Material that specifies a density. Uniform density
       /// is used.
