@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Open Source Robotics Foundation
+ * Copyright (C) 2020 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,9 @@
 */
 #ifndef IGNITION_MATH_DETAIL_CAPSULE_HH_
 #define IGNITION_MATH_DETAIL_CAPSULE_HH_
+
+#include <ignition/math/Inertial.hh>
+
 namespace ignition
 {
 namespace math
@@ -91,11 +94,34 @@ bool Capsule<T>::operator==(const Capsule &_capsule) const
 
 //////////////////////////////////////////////////
 template<typename T>
-bool Capsule<T>::MassMatrix(MassMatrix3d &_massMat) const
+bool Capsule<T>::MassMatrix(MassMatrix3<T> &_massMat) const
 {
-  return _massMat.SetFromCapsuleZ(
-      this->material, this->length,
-      this->radius);
+  // mass and moment of inertia of cylinder about centroid
+  MassMatrix3<T> cylinder;
+  cylinder.SetFromCylinderZ(this->material, this->length, this->radius);
+
+  // mass and moment of inertia of hemisphere about centroid
+  const T r2 = this->radius * this->radius;
+  const T hemisphereMass = this->material.Density() *
+      2. / 3. * IGN_PI * r2 * this->radius;
+  // efunda.com/math/solids/solids_display.cfm?SolidName=Hemisphere
+  const T ixx = 83. / 320. * hemisphereMass * r2;
+  const T izz = 2. / 5.  * hemisphereMass * r2;
+  MassMatrix3<T> hemisphere(hemisphereMass, Vector3<T>(ixx, ixx, izz),
+                            Vector3<T>::Zero);;
+
+  // Distance from centroid of cylinder to centroid of hemisphere,
+  // since centroid of hemisphere is 3/8 radius from its flat base
+  const T dz = this->length / 2. + this->radius * 3. / 8.;
+  Inertial<T> upperCap(hemisphere, Pose3<T>(0, 0, dz, 0, 0, 0));
+  Inertial<T> lowerCap(hemisphere, Pose3<T>(0, 0, -dz, 0, 0, 0));
+
+  // Use Inertial class to add MassMatrix3 objects at different poses
+  Inertial<T> capsule =
+      Inertial<T>(cylinder, Pose3<T>::Zero) + upperCap + lowerCap;
+
+  _massMat = capsule.MassMatrix();
+  return _massMat.IsValid();
 }
 
 //////////////////////////////////////////////////

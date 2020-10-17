@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Open Source Robotics Foundation
+ * Copyright (C) 2020 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,7 +96,7 @@ namespace ignition
       /// \return False if computation of the mass matrix failed, which
       /// could be due to an invalid radius (<=0), length (<=0), or density
       /// (<=0).
-      public: bool MassMatrix(MassMatrix3d &_massMat) const;
+      public: bool MassMatrix(MassMatrix3<Precision> &_massMat) const;
 
       /// \brief Check if this capsule is equal to the provided capsule.
       /// Radius, length, and material properties will be checked.
