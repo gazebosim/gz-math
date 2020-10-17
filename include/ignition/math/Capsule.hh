@@ -19,7 +19,6 @@
 
 #include "ignition/math/MassMatrix3.hh"
 #include "ignition/math/Material.hh"
-#include "ignition/math/Quaternion.hh"
 
 namespace ignition
 {
@@ -35,38 +34,28 @@ namespace ignition
     /// \brief A representation of a capsule or sphere-capped cylinder.
     ///
     /// The capsule class supports defining a capsule with a radius,
-    /// length, rotational offset, and material properties. The shape is
-    /// equivalent to a cylinder with capped with hemispheres. Radius and
+    /// length, and material properties. The shape is equivalent to a cylinder
+    /// aligned with the Z-axis and capped with hemispheres. Radius and
     /// length are in meters. See Material for more on material properties.
-    /// By default, a capsule's length is aligned with the Z axis. The
-    /// rotational offset encodes a rotation from the z axis.
     template<typename Precision>
     class Capsule
     {
       /// \brief Default constructor. The default radius and length are both
-      /// zero. The default rotational offset is
-      /// Quaternion<Precision>::Identity.
+      /// zero.
       public: Capsule() = default;
 
       /// \brief Construct a capsule with a length, radius, and optionally
       /// a rotational offset.
       /// \param[in] _length Length of the capsule.
       /// \param[in] _radius Radius of the capsule.
-      /// \param[in] _rotOffset Rotational offset of the capsule.
-      public: Capsule(const Precision _length, const Precision _radius,
-                  const Quaternion<Precision> &_rotOffset =
-                  Quaternion<Precision>::Identity);
+      public: Capsule(const Precision _length, const Precision _radius);
 
-      /// \brief Construct a capsule with a length, radius, material and
-      /// optionally a rotational offset.
+      /// \brief Construct a capsule with a length, radius, and material.
       /// \param[in] _length Length of the capsule.
       /// \param[in] _radius Radius of the capsule.
       /// \param[in] _mat Material property for the capsule.
-      /// \param[in] _rotOffset Rotational offset of the capsule.
       public: Capsule(const Precision _length, const Precision _radius,
-                  const Material &_mat,
-                  const Quaternion<Precision> &_rotOffset =
-                  Quaternion<Precision>::Identity);
+                  const Material &_mat);
 
       /// \brief Destructor
       public: ~Capsule() = default;
@@ -87,21 +76,6 @@ namespace ignition
       /// \param[in] _length The length of the capsule in meters.
       public: void SetLength(const Precision _length);
 
-      /// \brief Get the rotational offset. By default, a capsule's length
-      /// is aligned with the Z axis. The rotational offset encodes
-      /// a rotation from the z axis.
-      /// \return The capsule's rotational offset.
-      /// \sa void SetRotationalOffset(const Quaternion<Precision> &_rot)
-      public: Quaternion<Precision> RotationalOffset() const;
-
-      /// \brief Set the rotation offset.
-      /// See Quaternion<Precision> RotationalOffset() for details on the
-      /// rotational offset.
-      /// \return The capsule's orientation.
-      /// \sa Quaternion<Precision> RotationalOffset() const
-      public: void SetRotationalOffset(
-                  const Quaternion<Precision> &_rotOffset);
-
       /// \brief Set the length in meters.
       /// \param[in] _length The length of the capsule in meters.
       public: void SetLength(const Precision _length) const;
@@ -116,7 +90,7 @@ namespace ignition
 
       /// \brief Get the mass matrix for this capsule. This function
       /// is only meaningful if the capsule's radius, length, and material
-      /// have been set. Optionally, set the rotational offset.
+      /// have been set.
       /// \param[out] _massMat The computed mass matrix will be stored
       /// here.
       /// \return False if computation of the mass matrix failed, which
@@ -164,10 +138,6 @@ namespace ignition
 
       /// \brief the capsule's material.
       private: Material material;
-
-      /// \brief Rotational offset.
-      private: Quaternion<Precision> rotOffset =
-               Quaternion<Precision>::Identity;
     };
 
     /// \typedef Capsule<int> Capsulei

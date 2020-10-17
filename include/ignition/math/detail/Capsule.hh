@@ -23,23 +23,19 @@ namespace math
 
 //////////////////////////////////////////////////
 template<typename T>
-Capsule<T>::Capsule(const T _length, const T _radius,
-    const Quaternion<T> &_rotOffset)
+Capsule<T>::Capsule(const T _length, const T _radius)
 {
   this->length = _length;
   this->radius = _radius;
-  this->rotOffset = _rotOffset;
 }
 
 //////////////////////////////////////////////////
 template<typename T>
-Capsule<T>::Capsule(const T _length, const T _radius,
-    const Material &_mat, const Quaternion<T> &_rotOffset)
+Capsule<T>::Capsule(const T _length, const T _radius, const Material &_mat)
 {
   this->length = _length;
   this->radius = _radius;
   this->material = _mat;
-  this->rotOffset = _rotOffset;
 }
 
 //////////////////////////////////////////////////
@@ -72,20 +68,6 @@ void Capsule<T>::SetLength(const T _length)
 
 //////////////////////////////////////////////////
 template<typename T>
-Quaternion<T> Capsule<T>::RotationalOffset() const
-{
-  return this->rotOffset;
-}
-
-//////////////////////////////////////////////////
-template<typename T>
-void Capsule<T>::SetRotationalOffset(const Quaternion<T> &_rotOffset)
-{
-  this->rotOffset = _rotOffset;
-}
-
-//////////////////////////////////////////////////
-template<typename T>
 const Material &Capsule<T>::Mat() const
 {
   return this->material;
@@ -113,7 +95,7 @@ bool Capsule<T>::MassMatrix(MassMatrix3d &_massMat) const
 {
   return _massMat.SetFromCapsuleZ(
       this->material, this->length,
-      this->radius, this->rotOffset);
+      this->radius);
 }
 
 //////////////////////////////////////////////////

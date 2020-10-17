@@ -30,7 +30,6 @@ TEST(CapsuleTest, Constructor)
     math::Capsuled capsule;
     EXPECT_DOUBLE_EQ(0.0, capsule.Length());
     EXPECT_DOUBLE_EQ(0.0, capsule.Radius());
-    EXPECT_EQ(math::Quaterniond::Identity, capsule.RotationalOffset());
     EXPECT_EQ(math::Material(), capsule.Mat());
 
     math::Capsuled capsule2;
@@ -42,40 +41,22 @@ TEST(CapsuleTest, Constructor)
     math::Capsuled capsule(1.0, 2.0);
     EXPECT_DOUBLE_EQ(1.0, capsule.Length());
     EXPECT_DOUBLE_EQ(2.0, capsule.Radius());
-    EXPECT_EQ(math::Quaterniond::Identity, capsule.RotationalOffset());
     EXPECT_EQ(math::Material(), capsule.Mat());
 
     math::Capsuled capsule2(1.0, 2.0);
     EXPECT_EQ(capsule, capsule2);
   }
 
-  // Length, radius, and rot constructor
-  {
-    math::Capsuled capsule(1.0, 2.0, math::Quaterniond(0.1, 0.2, 0.3));
-    EXPECT_DOUBLE_EQ(1.0, capsule.Length());
-    EXPECT_DOUBLE_EQ(2.0, capsule.Radius());
-    EXPECT_EQ(math::Quaterniond(0.1, 0.2, 0.3),
-        capsule.RotationalOffset());
-    EXPECT_EQ(math::Material(), capsule.Mat());
-
-    math::Capsuled capsule2(1.0, 2.0, math::Quaterniond(0.1, 0.2, 0.3));
-    EXPECT_EQ(capsule, capsule2);
-  }
-
-  // Length, radius, mat and rot constructor
+  // Length, radius, mat
   {
     math::Capsuled capsule(1.0, 2.0,
-        math::Material(math::MaterialType::WOOD),
-        math::Quaterniond(0.1, 0.2, 0.3));
+        math::Material(math::MaterialType::WOOD));
     EXPECT_DOUBLE_EQ(1.0, capsule.Length());
     EXPECT_DOUBLE_EQ(2.0, capsule.Radius());
-    EXPECT_EQ(math::Quaterniond(0.1, 0.2, 0.3),
-        capsule.RotationalOffset());
     EXPECT_EQ(math::Material(math::MaterialType::WOOD), capsule.Mat());
 
     math::Capsuled capsule2(1.0, 2.0,
-        math::Material(math::MaterialType::WOOD),
-        math::Quaterniond(0.1, 0.2, 0.3));
+        math::Material(math::MaterialType::WOOD));
     EXPECT_EQ(capsule, capsule2);
   }
 }
@@ -86,18 +67,14 @@ TEST(CapsuleTest, Mutators)
   math::Capsuled capsule;
   EXPECT_DOUBLE_EQ(0.0, capsule.Length());
   EXPECT_DOUBLE_EQ(0.0, capsule.Radius());
-  EXPECT_EQ(math::Quaterniond::Identity, capsule.RotationalOffset());
   EXPECT_EQ(math::Material(), capsule.Mat());
 
   capsule.SetLength(100.1);
   capsule.SetRadius(.123);
-  capsule.SetRotationalOffset(math::Quaterniond(1.2, 2.3, 3.4));
   capsule.SetMat(math::Material(math::MaterialType::PINE));
 
   EXPECT_DOUBLE_EQ(100.1, capsule.Length());
   EXPECT_DOUBLE_EQ(.123, capsule.Radius());
-  EXPECT_EQ(math::Quaterniond(1.2, 2.3, 3.4),
-    capsule.RotationalOffset());
   EXPECT_EQ(math::Material(math::MaterialType::PINE), capsule.Mat());
 }
 
