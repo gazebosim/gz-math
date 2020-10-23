@@ -1,45 +1,45 @@
 load(
-    "//ign_bazel:cmake_configure_file.bzl",
+    "//ign_bazel:build_defs.bzl",
+    "IGNITION_VISIBILITY",
     "cmake_configure_file",
-)
-load(
-    "//ign_bazel:generate_include_header.bzl",
     "generate_include_header",
-)
-load(
-    "//ign_bazel:ign_export_header.bzl",
+    "ign_config_header",
     "ign_export_header",
 )
 
-package(default_visibility = ["//visibility:public"])
+package(
+    default_visibility = IGNITION_VISIBILITY,
+    features = [
+        "-parse_headers",
+        "-layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+exports_files(["LICENSE"])
 
 PROJECT_NAME = "ignition-math"
+
 PROJECT_MAJOR = 6
-PROJECT_MINOR = 4
+
+PROJECT_MINOR = 6
+
 PROJECT_PATCH = 0
 
 # Generates config.hh based on the version numbers in CMake code.
-cmake_configure_file(
+ign_config_header(
     name = "config",
     src = "include/ignition/math/config.hh.in",
-    out = "include/ignition/math/config.hh",
     cmakelists = ["CMakeLists.txt"],
-    defines = [
-        "PROJECT_VERSION_MAJOR=%d" % (PROJECT_MAJOR),
-        "PROJECT_MAJOR_VERSION=%d" % (PROJECT_MAJOR),
-        "PROJECT_MINOR_VERSION=%d" % (PROJECT_MINOR),
-        "PROJECT_PATCH_VERSION=%d" % (PROJECT_PATCH),
-        "PROJECT_VERSION=%d.%d" % (PROJECT_MAJOR, PROJECT_MINOR),
-        "PROJECT_VERSION_FULL=%d.%d.%d" % (PROJECT_MAJOR, PROJECT_MINOR, PROJECT_PATCH),  # noqa
-        "PROJECT_NAME_NO_VERSION=%s" % (PROJECT_NAME),
-    ],
-    visibility = ["//visibility:private"],
+    project_name = "ignition-math",
+    project_version = (PROJECT_MAJOR, PROJECT_MINOR, PROJECT_PATCH),
 )
 
 ign_export_header(
     name = "include/ignition/math/Export.hh",
-    lib_name = "ignition-math",
     export_base = "IGNITION_MATH",
+    lib_name = "ignition-math",
     visibility = ["//visibility:private"],
 )
 
@@ -119,8 +119,8 @@ public_headers = public_headers_no_gen + [
     "include/ignition/math.hh",
 ]
 
-cc_binary(
-    name = "libignition-math6.so",
+cc_library(
+    name = "ign_math",
     srcs = [
         "src/Angle.cc",
         "src/AxisAlignedBox.cc",
@@ -144,19 +144,20 @@ cc_binary(
         "src/Stopwatch.cc",
         "src/Temperature.cc",
         "src/Vector3Stats.cc",
-    ] + private_headers + public_headers,
+    ] + private_headers,
+    hdrs = public_headers,
+    includes = ["include"],
+)
+
+# use shared library only when absolutely needd
+cc_binary(
+    name = "libignition-math6.so",
     includes = ["include"],
     linkopts = ["-Wl,-soname,libignition-math6.so"],
     linkshared = True,
-    visibility = [],
-)
-
-cc_library(
-    name = "ign_math",
-    srcs = ["libignition-math6.so"],
-    hdrs = public_headers,
-    includes = ["include"],
-    visibility = ["//visibility:public"],
+    deps = [
+        ":ign_math",
+    ],
 )
 
 [cc_test(
@@ -164,7 +165,7 @@ cc_library(
     srcs = [src],
     deps = [
         ":ign_math",
-        "@gtest//:gtest",
+        "@gtest",
         "@gtest//:gtest_main",
     ],
 ) for src in glob(
@@ -173,4 +174,3 @@ cc_library(
         "src/graph/*_TEST.cc",
     ],
 )]
-
