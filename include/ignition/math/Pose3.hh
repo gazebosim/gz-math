@@ -258,6 +258,9 @@ namespace ignition
       }
 
       /// \brief Multiplication operator.
+      /// A is the transform from O to P specified in frame O
+      /// B is the transform from P to Q specified in frame P
+      /// then, A * B is the transform from O to Q specified in frame O
       /// \param[in] _pose The pose to mutlipy by.
       /// \return The resulting pose.
       public: Pose3<T> operator*(const Pose3<T> &_pose) const
