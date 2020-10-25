@@ -276,13 +276,21 @@ TEST(QuaternionTest, MathExp)
 }
 
 /////////////////////////////////////////////////
-TEST(QuaternionTest, Math)
+TEST(QuaternionTest, MathInvert)
 {
   math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
   EXPECT_TRUE(q == math::Quaterniond(0.110616, -0.698401, 0.110616, 0.698401));
 
   q.Invert();
   EXPECT_TRUE(q == math::Quaterniond(0.110616, 0.698401, -0.110616, -0.698401));
+}
+
+
+/////////////////////////////////////////////////
+TEST(QuaternionTest, Math)
+{
+  math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
+  EXPECT_TRUE(q == math::Quaterniond(0.110616, -0.698401, 0.110616, 0.698401));
 
   q.Axis(0, 1, 0, IGN_PI);
   EXPECT_TRUE(q == math::Quaterniond(6.12303e-17, 0, 1, 0));
