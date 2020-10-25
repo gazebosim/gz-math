@@ -244,13 +244,20 @@ TEST(QuaternionTest, Integrate)
 }
 
 /////////////////////////////////////////////////
-TEST(QuaternionTest, Math)
+TEST(QuaternionTest, MathLog)
 {
   math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
   EXPECT_TRUE(q == math::Quaterniond(0.110616, -0.698401, 0.110616, 0.698401));
 
   EXPECT_TRUE(q.Log() ==
       math::Quaterniond(0, -1.02593, 0.162491, 1.02593));
+}
+
+/////////////////////////////////////////////////
+TEST(QuaternionTest, Math)
+{
+  math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
+  EXPECT_TRUE(q == math::Quaterniond(0.110616, -0.698401, 0.110616, 0.698401));
 
   EXPECT_TRUE(q.Exp() ==
       math::Quaterniond(0.545456, -0.588972, 0.093284, 0.588972));
