@@ -310,9 +310,6 @@ TEST(QuaternionTest, Math)
   q.Normalize();
   EXPECT_TRUE(q == math::Quaterniond(0.182574, 0.365148, 0.547723, 0.730297));
 
-  math::Quaterniond q2 = q.Normalized();
-  EXPECT_TRUE(q2 == math::Quaterniond(0.182574, 0.365148, 0.547723, 0.730297));
-
   EXPECT_TRUE(math::equal(q.Roll(), 1.4289, 1e-3));
   EXPECT_TRUE(math::equal(q.Pitch(), -0.339837, 1e-3));
   EXPECT_TRUE(math::equal(q.Yaw(), 2.35619, 1e-3));
