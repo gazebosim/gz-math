@@ -296,6 +296,7 @@ TEST(QuaternionTest, MathAxis)
   EXPECT_EQ(q, math::Quaterniond(0, 1, 0, 0));
 }
 
+/////////////////////////////////////////////////
 TEST(QuaternionTest, MathSet)
 {
   math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
@@ -308,6 +309,14 @@ TEST(QuaternionTest, MathSet)
   EXPECT_TRUE(math::equal(q.Z(), 4.0));
 }
 
+/////////////////////////////////////////////////
+TEST(QuaternionTest, MathNormalized)
+{
+  math::Quaterniond q(1, 2, 3, 4);
+
+  math::Quaterniond q2 = q.Normalized();
+  EXPECT_EQ(q2, math::Quaterniond(0.182574, 0.365148, 0.547723, 0.730297));
+}
 
 /////////////////////////////////////////////////
 TEST(QuaternionTest, Math)
@@ -320,9 +329,6 @@ TEST(QuaternionTest, Math)
   EXPECT_TRUE(math::equal(q.X(), 2.0));
   EXPECT_TRUE(math::equal(q.Y(), 3.0));
   EXPECT_TRUE(math::equal(q.Z(), 4.0));
-
-  math::Quaterniond q2 = q.Normalized();
-  EXPECT_TRUE(q2 == math::Quaterniond(0.182574, 0.365148, 0.547723, 0.730297));
 
   q.Normalize();
   EXPECT_TRUE(q == math::Quaterniond(0.182574, 0.365148, 0.547723, 0.730297));
