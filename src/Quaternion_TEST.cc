@@ -262,7 +262,8 @@ TEST(QuaternionTest, MathExp)
   math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
   EXPECT_EQ(q, math::Quaterniond(0.110616, -0.698401, 0.110616, 0.698401));
 
-  EXPECT_EQ(q.Exp(), math::Quaterniond(0.545456, -0.588972, 0.093284, 0.588972));
+  EXPECT_EQ(q.Exp(),
+            math::Quaterniond(0.545456, -0.588972, 0.093284, 0.588972));
 
   math::Quaterniond q1 = q;
   q1.X(0.000000001);
@@ -295,18 +296,24 @@ TEST(QuaternionTest, MathAxis)
   EXPECT_EQ(q, math::Quaterniond(0, 1, 0, 0));
 }
 
+TEST(QuaternionTest, MathSet)
+{
+  math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
+  EXPECT_EQ(q, math::Quaterniond(0.110616, -0.698401, 0.110616, 0.698401));
+
+  q.Set(1, 2, 3, 4);
+  EXPECT_TRUE(math::equal(q.W(), 1.0));
+  EXPECT_TRUE(math::equal(q.X(), 2.0));
+  EXPECT_TRUE(math::equal(q.Y(), 3.0));
+  EXPECT_TRUE(math::equal(q.Z(), 4.0));
+}
+
 
 /////////////////////////////////////////////////
 TEST(QuaternionTest, Math)
 {
   math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
   EXPECT_TRUE(q == math::Quaterniond(0.110616, -0.698401, 0.110616, 0.698401));
-
-  // q.Axis(0, 1, 0, IGN_PI);
-  // EXPECT_TRUE(q == math::Quaterniond(6.12303e-17, 0, 1, 0));
-
-  // q.Axis(math::Vector3d(1, 0, 0), IGN_PI);
-  // EXPECT_TRUE(q == math::Quaterniond(0, 1, 0, 0));
 
   q.Set(1, 2, 3, 4);
   EXPECT_TRUE(math::equal(q.W(), 1.0));
