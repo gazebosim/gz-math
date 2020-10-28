@@ -319,6 +319,15 @@ TEST(QuaternionTest, MathNormalized)
 }
 
 /////////////////////////////////////////////////
+TEST(QuaternionTest, MathNormalize)
+{
+  math::Quaterniond q(1, 2, 3, 4);
+
+  q.Normalize();
+  EXPECT_EQ(q, math::Quaterniond(0.182574, 0.365148, 0.547723, 0.730297));
+}
+
+/////////////////////////////////////////////////
 TEST(QuaternionTest, Math)
 {
   math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
