@@ -27,6 +27,38 @@
 using namespace ignition;
 
 /////////////////////////////////////////////////
+TEST(QuaternionTest, Construction)
+{
+  math::Quaterniond q(0, 0, 0, 1);
+
+  // Copy constructor
+  math::Quaterniond q2(q);
+  EXPECT_EQ(q2, q);
+
+  // Copy operator
+  math::Quaterniond q3;
+  q3 = q;
+  EXPECT_EQ(q3, q);
+
+  // Move constructor
+  math::Quaterniond q4(std::move(q));
+  EXPECT_EQ(q4, q2);
+  q = q4;
+  EXPECT_EQ(q, q2);
+
+  // Move operator
+  math::Quaterniond q5;
+  q5 = std::move(q2);
+  EXPECT_EQ(q5, q3);
+  q2 = q5;
+  EXPECT_EQ(q2, q3);
+
+  // Inequality
+  math::Quaterniond q6;
+  EXPECT_NE(q6, q3);
+}
+
+/////////////////////////////////////////////////
 TEST(QuaternionTest, Unit)
 {
   math::Quaterniond q;
@@ -212,7 +244,7 @@ TEST(QuaternionTest, Integrate)
 }
 
 /////////////////////////////////////////////////
-TEST(QuaternionTest, Math)
+TEST(QuaternionTest, MathLog)
 {
   math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
   EXPECT_TRUE(q == math::Quaterniond(0.110616, -0.698401, 0.110616, 0.698401));
@@ -220,22 +252,45 @@ TEST(QuaternionTest, Math)
   EXPECT_TRUE(q.Log() ==
       math::Quaterniond(0, -1.02593, 0.162491, 1.02593));
 
-  EXPECT_TRUE(q.Exp() ==
-      math::Quaterniond(0.545456, -0.588972, 0.093284, 0.588972));
-
   math::Quaterniond q1 = q;
   q1.W(2.0);
   EXPECT_TRUE(q1.Log() ==
       math::Quaterniond(0, -0.698401, 0.110616, 0.698401));
+}
 
+/////////////////////////////////////////////////
+TEST(QuaternionTest, MathExp)
+{
+  math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
+  EXPECT_TRUE(q == math::Quaterniond(0.110616, -0.698401, 0.110616, 0.698401));
+
+  EXPECT_TRUE(q.Exp() ==
+    math::Quaterniond(0.545456, -0.588972, 0.093284, 0.588972));
+
+  math::Quaterniond q1 = q;
   q1.X(0.000000001);
   q1.Y(0.0);
   q1.Z(0.0);
   q1.W(0.0);
   EXPECT_TRUE(q1.Exp() == math::Quaterniond(1, 0, 0, 0));
+}
+
+/////////////////////////////////////////////////
+TEST(QuaternionTest, MathInvert)
+{
+  math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
+  EXPECT_TRUE(q == math::Quaterniond(0.110616, -0.698401, 0.110616, 0.698401));
 
   q.Invert();
   EXPECT_TRUE(q == math::Quaterniond(0.110616, 0.698401, -0.110616, -0.698401));
+}
+
+
+/////////////////////////////////////////////////
+TEST(QuaternionTest, Math)
+{
+  math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
+  EXPECT_TRUE(q == math::Quaterniond(0.110616, -0.698401, 0.110616, 0.698401));
 
   q.Axis(0, 1, 0, IGN_PI);
   EXPECT_TRUE(q == math::Quaterniond(6.12303e-17, 0, 1, 0));
@@ -254,7 +309,6 @@ TEST(QuaternionTest, Math)
 
   q.Normalize();
   EXPECT_TRUE(q == math::Quaterniond(0.182574, 0.365148, 0.547723, 0.730297));
-
 
   EXPECT_TRUE(math::equal(q.Roll(), 1.4289, 1e-3));
   EXPECT_TRUE(math::equal(q.Pitch(), -0.339837, 1e-3));
@@ -515,7 +569,7 @@ TEST(QuaternionTest, Slerp)
 }
 
 /////////////////////////////////////////////////
-TEST(QuaterniondTest, From2Axes)
+TEST(QuaternionTest, From2Axes)
 {
   math::Vector3d v1(1.0, 0.0, 0.0);
   math::Vector3d v2(0.0, 1.0, 0.0);
