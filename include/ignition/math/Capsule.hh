@@ -37,6 +37,7 @@ namespace ignition
     /// length, and material properties. The shape is equivalent to a cylinder
     /// aligned with the Z-axis and capped with hemispheres. Radius and
     /// length are in meters. See Material for more on material properties.
+    /// \tparam Precision Scalar numeric type.
     template<typename Precision>
     class Capsule
     {
@@ -44,8 +45,7 @@ namespace ignition
       /// zero.
       public: Capsule() = default;
 
-      /// \brief Construct a capsule with a length, radius, and optionally
-      /// a rotational offset.
+      /// \brief Construct a capsule with a length and radius.
       /// \param[in] _length Length of the capsule.
       /// \param[in] _radius Radius of the capsule.
       public: Capsule(const Precision _length, const Precision _radius);
@@ -56,9 +56,6 @@ namespace ignition
       /// \param[in] _mat Material property for the capsule.
       public: Capsule(const Precision _length, const Precision _radius,
                   const Material &_mat);
-
-      /// \brief Destructor
-      public: ~Capsule() = default;
 
       /// \brief Get the radius in meters.
       /// \return The radius of the capsule in meters.
@@ -75,10 +72,6 @@ namespace ignition
       /// \brief Set the length in meters.
       /// \param[in] _length The length of the capsule in meters.
       public: void SetLength(const Precision _length);
-
-      /// \brief Set the length in meters.
-      /// \param[in] _length The length of the capsule in meters.
-      public: void SetLength(const Precision _length) const;
 
       /// \brief Get the material associated with this capsule.
       /// \return The material assigned to this capsule
