@@ -120,9 +120,9 @@ TEST(CapsuleTest, Mass)
   expectedMassMat.SetInertiaMatrix(ixxIyy, ixxIyy, izz, 0.0, 0.0, 0.0);
   expectedMassMat.SetMass(mass);
 
-  math::MassMatrix3d massMat;
-  capsule.MassMatrix(massMat);
-  EXPECT_EQ(expectedMassMat, massMat);
-  EXPECT_EQ(expectedMassMat.DiagonalMoments(), massMat.DiagonalMoments());
-  EXPECT_DOUBLE_EQ(expectedMassMat.Mass(), massMat.Mass());
+  auto massMat = capsule.MassMatrix();
+  ASSERT_NE(std::nullopt, massMat);
+  EXPECT_EQ(expectedMassMat, *massMat);
+  EXPECT_EQ(expectedMassMat.DiagonalMoments(), massMat->DiagonalMoments());
+  EXPECT_DOUBLE_EQ(expectedMassMat.Mass(), massMat->Mass());
 }

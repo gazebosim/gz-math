@@ -18,6 +18,7 @@
 #define IGNITION_MATH_DETAIL_CAPSULE_HH_
 
 #include <limits>
+#include <optional>
 #include <ignition/math/Helpers.hh>
 #include <ignition/math/Inertial.hh>
 
@@ -96,7 +97,7 @@ bool Capsule<T>::operator==(const Capsule &_capsule) const
 
 //////////////////////////////////////////////////
 template<typename T>
-bool Capsule<T>::MassMatrix(MassMatrix3<T> &_massMat) const
+std::optional< MassMatrix3<T> > Capsule<T>::MassMatrix() const
 {
   // mass and moment of inertia of cylinder about centroid
   MassMatrix3<T> cylinder;
@@ -122,8 +123,12 @@ bool Capsule<T>::MassMatrix(MassMatrix3<T> &_massMat) const
   Inertial<T> capsule =
       Inertial<T>(cylinder, Pose3<T>::Zero) + upperCap + lowerCap;
 
-  _massMat = capsule.MassMatrix();
-  return _massMat.IsValid();
+  if (!capsule.MassMatrix().IsValid())
+  {
+    return std::nullopt;
+  }
+
+  return std::make_optional(capsule.MassMatrix());
 }
 
 //////////////////////////////////////////////////

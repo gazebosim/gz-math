@@ -17,6 +17,7 @@
 #ifndef IGNITION_MATH_CAPSULE_HH_
 #define IGNITION_MATH_CAPSULE_HH_
 
+#include <optional>
 #include "ignition/math/MassMatrix3.hh"
 #include "ignition/math/Material.hh"
 
@@ -84,12 +85,10 @@ namespace ignition
       /// \brief Get the mass matrix for this capsule. This function
       /// is only meaningful if the capsule's radius, length, and material
       /// have been set.
-      /// \param[out] _massMat The computed mass matrix will be stored
-      /// here.
-      /// \return False if computation of the mass matrix failed, which
-      /// could be due to an invalid radius (<=0), length (<=0), or density
-      /// (<=0).
-      public: bool MassMatrix(MassMatrix3<Precision> &_massMat) const;
+      /// \return The computed mass matrix if parameters are valid
+      /// (radius > 0), (length > 0), and (density > 0). Otherwise
+      /// std::nullopt is returned.
+      public: std::optional< MassMatrix3<Precision> > MassMatrix() const;
 
       /// \brief Check if this capsule is equal to the provided capsule.
       /// Radius, length, and material properties will be checked.
