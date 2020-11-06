@@ -17,6 +17,8 @@
 #ifndef IGNITION_MATH_DETAIL_CAPSULE_HH_
 #define IGNITION_MATH_DETAIL_CAPSULE_HH_
 
+#include <limits>
+#include <ignition/math/Helpers.hh>
 #include <ignition/math/Inertial.hh>
 
 namespace ignition
@@ -137,9 +139,11 @@ template<typename T>
 bool Capsule<T>::SetDensityFromMass(const T _mass)
 {
   T newDensity = this->DensityFromMass(_mass);
-  if (newDensity > 0)
-    this->material.SetDensity(newDensity);
-  return newDensity > 0;
+  if (isnan(newDensity))
+    return false;
+
+  this->material.SetDensity(newDensity);
+  return true;
 }
 
 //////////////////////////////////////////////////
@@ -147,7 +151,7 @@ template<typename T>
 T Capsule<T>::DensityFromMass(const T _mass) const
 {
   if (this->radius <= 0 || this->length <=0 || _mass <= 0)
-    return -1.0;
+    return std::numeric_limits<T>::quiet_NaN();
 
   return _mass / this->Volume();
 }

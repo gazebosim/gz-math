@@ -19,6 +19,7 @@
 #include <iostream>
 
 #include "ignition/math/Capsule.hh"
+#include "ignition/math/Helpers.hh"
 
 using namespace ignition;
 
@@ -91,7 +92,7 @@ TEST(CapsuleTest, VolumeAndDensity)
 
   // Bad density
   math::Capsuled capsule2;
-  EXPECT_GT(0.0, capsule2.DensityFromMass(mass));
+  EXPECT_TRUE(math::isnan(capsule2.DensityFromMass(mass)));
 }
 
 //////////////////////////////////////////////////

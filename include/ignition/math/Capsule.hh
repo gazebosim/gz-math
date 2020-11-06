@@ -105,8 +105,8 @@ namespace ignition
       /// values greater than zero. The Material of the capsule is ignored.
       /// \param[in] _mass Mass of the capsule, in kg. This value should be
       /// greater than zero.
-      /// \return Density of the capsule in kg/m^3. A negative value is
-      /// returned if radius, length or _mass is <= 0.
+      /// \return Density of the capsule in kg/m^3. A NaN is returned
+      /// if radius, length or _mass is <= 0.
       public: Precision DensityFromMass(const Precision _mass) const;
 
       /// \brief Set the density of this capsule based on a mass value.
