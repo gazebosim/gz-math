@@ -112,6 +112,8 @@ TEST(CapsuleTest, Mass)
 
   // expected values based on formula used in Open Dynamics Engine
   // https://bitbucket.org/odedevs/ode/src/0.16.2/ode/src/mass.cpp#lines-148:153
+  // and the following article:
+  // https://www.gamedev.net/tutorials/_/technical/math-and-physics/capsule-inertia-tensor-r3856/
   double ixxIyy = (1/12.0) * cylinderMass * (3*r*r + l*l)
     + sphereMass * (0.4*r*r + 0.375*r*l + 0.25*l*l);
   double izz = r*r * (0.5 * cylinderMass + 0.4 * sphereMass);
