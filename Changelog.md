@@ -7,6 +7,9 @@
 1. Capsule: new shape class with inertia calculation method
     * [Pull request 163](https://github.com/ignitionrobotics/ign-math/pull/163)
 
+1. Add missing header to Color.hh
+    * [Pull request 162](https://github.com/ignitionrobotics/ign-math/pull/162)
+
 1. Improve tests of `Vector2`, `Vector3`, `Vector4`, `Quaternion`, and `Pose3`
     * [Pull request 172](https://github.com/ignitionrobotics/ign-math/pull/172)
     * [Pull request 173](https://github.com/ignitionrobotics/ign-math/pull/173)
