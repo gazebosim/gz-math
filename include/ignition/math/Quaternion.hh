@@ -105,7 +105,7 @@ namespace ignition
       /// \brief Destructor
       public: ~Quaternion() {}
 
-      /// \brief Equal operator
+      /// \brief Assignment operator
       /// \param[in] _qt Quaternion<T> to copy
       public: Quaternion<T> &operator=(const Quaternion<T> &_qt)
       {
@@ -242,6 +242,15 @@ namespace ignition
           this->qy /= s;
           this->qz /= s;
         }
+      }
+
+      /// \brief Gets a normalized version of this quaternion
+      /// \return a normalized quaternion
+      public: Quaternion<T> Normalized() const
+      {
+        Quaternion<T> result = *this;
+        result.Normalize();
+        return result;
       }
 
       /// \brief Set the quaternion from an axis and angle
