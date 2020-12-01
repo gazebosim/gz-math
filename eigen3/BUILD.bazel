@@ -6,14 +6,9 @@ load(
 
 package(
     default_visibility = IGNITION_VISIBILITY,
-    features = [
-        "-layering_check",
-    ],
 )
 
 licenses(["notice"])
-
-exports_files(["LICENSE"])
 
 public_headers = [
     "include/ignition/math/eigen3/Conversions.hh",
