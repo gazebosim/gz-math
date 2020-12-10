@@ -21,6 +21,8 @@
 #include <ignition/math/Helpers.hh>
 #include <ignition/math/config.hh>
 
+//really long comment that will fail when running make codecheck ........................
+
 /// \def IGN_RTOD(d)
 /// \brief Macro that converts radians to degrees
 /// \param[in] r radians
