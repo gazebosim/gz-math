@@ -100,16 +100,16 @@ TEST(EllipsoidTest, VolumeAndDensity)
 
   // Check bad cases
   math::Ellipsoidd ellipsoid3(math::Vector3d::Zero);
-  EXPECT_TRUE(math::isnan(ellipsoid3.DensityFromMass(mass)));
+  EXPECT_FALSE(ellipsoid3.SetDensityFromMass(mass));
 
   math::Ellipsoidd ellipsoid4(-math::Vector3d::One);
-  EXPECT_TRUE(math::isnan(ellipsoid4.DensityFromMass(mass)));
+  EXPECT_FALSE(ellipsoid4.SetDensityFromMass(mass));
 
   math::Ellipsoidd ellipsoid5(math::Vector3d(-1, 1, 1));
-  EXPECT_TRUE(math::isnan(ellipsoid5.DensityFromMass(mass)));
+  EXPECT_FALSE(ellipsoid5.SetDensityFromMass(mass));
 
   math::Ellipsoidd ellipsoid6(math::Vector3d(-1, -1, 1));
-  EXPECT_TRUE(math::isnan(ellipsoid6.DensityFromMass(mass)));
+  EXPECT_FALSE(ellipsoid6.SetDensityFromMass(mass));
 }
 
 //////////////////////////////////////////////////

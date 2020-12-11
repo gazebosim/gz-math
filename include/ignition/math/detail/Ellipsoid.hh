@@ -88,13 +88,8 @@ std::optional< MassMatrix3<T> > Ellipsoid<T>::MassMatrix() const
   const T ixx = (mass / 5.) * (y2 + z2);
   const T iyy = (mass / 5.) * (x2 + z2);
   const T izz = (mass / 5.) * (x2 + y2);
-  MassMatrix3<T> matrix(mass, Vector3(ixx, iyy, izz), Vector3<T>::Zero);
-  if (!matrix.IsValid())
-  {
-    return std::nullopt;
-  }
-
-  return matrix;
+  return std::make_optional<MassMatrix3<T>>(
+    mass, Vector3(ixx, iyy, izz), Vector3<T>::Zero);
 }
 
 //////////////////////////////////////////////////
