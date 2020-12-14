@@ -133,8 +133,7 @@ TEST(EllipsoidTest, Mass)
 
   // Zero case
   const math::Ellipsoidd ellipsoid2;
-  const math::MassMatrix3d zeroMass;
-  EXPECT_EQ(zeroMass, ellipsoid2.MassMatrix());
+  EXPECT_EQ(std::nullopt, ellipsoid2.MassMatrix());
 
   // Check bad cases
   const math::Ellipsoidd ellipsoid3(-math::Vector3d::One);
