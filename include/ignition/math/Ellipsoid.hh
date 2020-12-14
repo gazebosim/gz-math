@@ -14,8 +14,8 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_CAPSULE_HH_
-#define IGNITION_MATH_CAPSULE_HH_
+#ifndef IGNITION_MATH_ELLIPSOID_HH_
+#define IGNITION_MATH_ELLIPSOID_HH_
 
 #include <optional>
 #include "ignition/math/MassMatrix3.hh"

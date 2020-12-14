@@ -14,8 +14,8 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_DETAIL_CAPSULE_HH_
-#define IGNITION_MATH_DETAIL_CAPSULE_HH_
+#ifndef IGNITION_MATH_DETAIL_ELLIPSE_HH_
+#define IGNITION_MATH_DETAIL_ELLIPSE_HH_
 
 #include <limits>
 #include <optional>
@@ -76,7 +76,7 @@ bool Ellipsoid<T>::operator==(const Ellipsoid &_ellipsoid) const
 template<typename T>
 std::optional< MassMatrix3<T> > Ellipsoid<T>::MassMatrix() const
 {
-  if (this->radii.X() < 0 || this->radii.Y() < 0 || this->radii.Z() < 0)
+  if (this->radii.X() <= 0 || this->radii.Y() <= 0 || this->radii.Z() <= 0)
     return std::nullopt;
 
   // mass and inertia of ellipsoid taken from
