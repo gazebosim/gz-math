@@ -14,8 +14,8 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_DETAIL_ELLIPSE_HH_
-#define IGNITION_MATH_DETAIL_ELLIPSE_HH_
+#ifndef IGNITION_MATH_DETAIL_ELLIPSOID_HH_
+#define IGNITION_MATH_DETAIL_ELLIPSOID_HH_
 
 #include <limits>
 #include <optional>

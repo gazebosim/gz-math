@@ -47,7 +47,7 @@ namespace ignition
 
       /// \brief Construct a ellipsoid with a Vector3 of three radii.
       /// \param[in] _radii The three radii (x, y, z) defining this ellipsoid
-      public: Ellipsoid(const Vector3<Precision> &_radii);
+      public: explicit Ellipsoid(const Vector3<Precision> &_radii);
 
       /// \brief Construct a ellipsoid with three radii and a material.
       /// \param[in] _radii The three radii (x, y, z) defining this ellipsoid
