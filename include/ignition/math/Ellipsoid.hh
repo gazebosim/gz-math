@@ -25,9 +25,6 @@ namespace ignition
 {
   namespace math
   {
-    // Foward declarations
-    class EllipsoidPrivate;
-
     // Inline bracket to help doxygen filtering.
     inline namespace IGNITION_MATH_VERSION_NAMESPACE {
     //
