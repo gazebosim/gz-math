@@ -10,11 +10,9 @@
 1. Avoid moving a return value, it might prevent (N)RVO
     * [Pull request 183](https://github.com/ignitionrobotics/ign-math/pull/183)
 
-1. Adjust style to match our conventions
-    * [Pull request 181](https://github.com/ignitionrobotics/ign-math/pull/181)
-
 1. Properly handle stream errors when reading math objects
-    * (Pull request 180](https://github.com/ignitionrobotics/ign-math/pull/180)
+    * [Pull request 180](https://github.com/ignitionrobotics/ign-math/pull/180)
+    * [Pull request 181](https://github.com/ignitionrobotics/ign-math/pull/181)
 
 ## Ignition Math 6.7.0 (2020-11-23)
 
