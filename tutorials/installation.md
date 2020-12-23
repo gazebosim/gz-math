@@ -82,7 +82,7 @@ The optional Ruby tests of Ignition Math require:
 
 #### Windows 10
 
-First, follow the `ign-cmake` tutorial for building from source on Windows.
+First, follow the [ign-cmake](https://github.com/ignitionrobotics/ign-cmake) tutorial for building from source on Windows.
 
 The optional Eigen component of Ignition Math requires:
 
@@ -124,20 +124,26 @@ The optional Eigen component of Ignition Math requires:
 
 #### Windows
 
-This assumes you have built `ign-cmake` from source using Conda, for which a Conda environment and a colcon workspace have been created.
+This assumes you have built [ign-cmake](https://github.com/ignitionrobotics/ign-cmake) from source using Conda, for which a Conda environment and a colcon workspace have been created.
 
 1. Navigate to your ``condabin`` if necessary (find it in Anaconda Prompt, ``where conda``)), then activate the Conda environment:
 
+    ```
     conda activate ign-ws
+    ```
 
 1. Navigate to the [colcon](https://colcon.readthedocs.io/en/released/) workspace where `ign-cmake` was built, and then clone the repository.
    We will be using a [colcon] workspace structure.
 
+    ```
     cd ign_ws/src
     # This checks out the `main` branch. You can append `-b ign-cmake#` (replace # with a number) to checkout a specific version
     git clone https://github.com/ignitionrobotics/ign-math.git
+    ```
 
 1. Compile
 
+    ```
     # Replace <#> with the numeric version you cloned
     colcon build --cmake-args -DBUILD_TESTING=OFF --merge-install --packages-up-to ignition-math6
+    ```
