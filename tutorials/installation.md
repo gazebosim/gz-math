@@ -56,6 +56,8 @@ necessary prerequisites followed by building from source.
 
 ### Prerequisites
 
+#### Ubuntu Linux
+
 The optional Eigen component of Ignition Math requires:
 
   * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page). Refer to the [Eigen Documentation](http://eigen.tuxfamily.org/index.php?title=Main_Page#Documentation) for installation instructions. On Ubuntu systems, `apt-get` can be used to install Eigen:
@@ -78,7 +80,19 @@ The optional Ruby tests of Ignition Math require:
     sudo apt-get install swig
     ```
 
+#### Windows 10
+
+First, follow the `ign-cmake` tutorial for building from source on Windows.
+
+The optional Eigen component of Ignition Math requires:
+
+  * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page). Refer to the [Eigen Documentation](http://eigen.tuxfamily.org/index.php?title=Main_Page#Documentation) for installation instructions. On Windows, we will use `conda` to instsall Eigen:
+
+    conda install -c conda-forge eigen
+
 ### Building from source
+
+#### Ubuntu
 
 1. Clone the repository
 
@@ -107,3 +121,23 @@ The optional Ruby tests of Ignition Math require:
     ```
     sudo make install
     ```
+
+#### Windows
+
+This assumes you have built `ign-cmake` from source using Conda, for which a Conda environment and a colcon workspace have been created.
+
+1. Navigate to your ``condabin`` if necessary (find it in Anaconda Prompt, ``where conda``)), then activate the Conda environment:
+
+    conda activate ign-ws
+
+1. Navigate to the [colcon](https://colcon.readthedocs.io/en/released/) workspace where `ign-cmake` was built, and then clone the repository.
+   We will be using a [colcon] workspace structure.
+
+    cd ign_ws/src
+    # This checks out the `main` branch. You can append `-b ign-cmake#` (replace # with a number) to checkout a specific version
+    git clone https://github.com/ignitionrobotics/ign-math.git
+
+1. Compile
+
+    # Replace <#> with the numeric version you cloned
+    colcon build --cmake-args -DBUILD_TESTING=OFF --merge-install --packages-up-to ignition-math6
