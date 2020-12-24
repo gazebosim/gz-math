@@ -4,6 +4,9 @@ Next Tutorial: \ref cppgetstarted
 
 # Install
 
+These instructions are for installing only Ignition Math.
+If you're interested in using all the Ignition libraries, check out this [Ignition installation](https://ignitionrobotics.org/docs/latest/install).
+
 We recommend following the Binary Install instructions to get up and running as quickly and painlessly as possible.
 
 The Source Install instructions should be used if you need the very latest software improvements, you need to modify the code, or you plan to make a contribution.
@@ -34,12 +37,33 @@ sudo apt install libignition-math<#>-dev
 Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
 which version you need.
 
+### Windows
+
+Install [Conda package management system](https://docs.conda.io/projects/conda/en/latest/user-guide/install/download.html).
+Miniconda suffices.
+
+Create if necessary, and activate a Conda environment:
+
+    conda create -n ign-ws
+    conda activate ign-ws
+
+Install Ignition Math:
+
+    conda install libignition-math<#> --channel conda-forge
+
+Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
+which version you need.
+
 ## Source Install
 
-Source installation can be performed in UNIX systems by first installing the
-necessary prerequisites followed by building from source.
+Source installation can be performed by first installing the necessary
+prerequisites followed by building from source.
 
 ### Prerequisites
+
+Ignition Math requires:
+
+  * [Ignition CMake](https://ignitionrobotics.org/libs/cmake)
 
 #### Ubuntu Linux
 
@@ -74,7 +98,7 @@ The optional Eigen component of Ignition Math requires:
   * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page). Refer to the [Eigen Documentation](http://eigen.tuxfamily.org/index.php?title=Main_Page#Documentation) for installation instructions. On Windows, we will use `conda` to install Eigen:
 
     ```
-    conda install -c conda-forge eigen
+    conda install eigen --channel conda-forge
     ```
 
 ### Building from source
@@ -120,7 +144,7 @@ The optional Eigen component of Ignition Math requires:
 
 1. Install dependencies
 
-   View the list of dependencies, replacing `<#>` with the desired version:
+   You can view the list of dependencies, replacing `<#>` with the desired version:
     ```
     conda search libignition-math<#> --channel conda-forge --info
     ```
@@ -134,7 +158,7 @@ The optional Eigen component of Ignition Math requires:
 1. Navigate to where you would like to build the library, and clone the repository.
 
     ```
-    # This checks out the `main` branch. You can append `-b ign-cmake#` (replace # with a number) to checkout a specific version
+    # This checks out the `main` branch. You can append `-b ign-math#` (replace # with a number) to checkout a specific version
     git clone https://github.com/ignitionrobotics/ign-math.git
     ```
 
@@ -148,7 +172,7 @@ The optional Eigen component of Ignition Math requires:
     cmake --build . --config Release
     ```
 
-1. Optionally, install Ignition Math
+1. Optionally, install
 
     ```
     cmake --install . --config Release
