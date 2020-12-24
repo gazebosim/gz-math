@@ -82,13 +82,15 @@ The optional Ruby tests of Ignition Math require:
 
 #### Windows 10
 
-First, follow the [ign-cmake](https://github.com/ignitionrobotics/ign-cmake) tutorial for building from source on Windows.
+First, follow the [ign-cmake](https://github.com/ignitionrobotics/ign-cmake) tutorial for installing Conda, Visual Studio, CMake, etc., prerequisites, and creating a Conda environment.
 
 The optional Eigen component of Ignition Math requires:
 
-  * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page). Refer to the [Eigen Documentation](http://eigen.tuxfamily.org/index.php?title=Main_Page#Documentation) for installation instructions. On Windows, we will use `conda` to instsall Eigen:
+  * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page). Refer to the [Eigen Documentation](http://eigen.tuxfamily.org/index.php?title=Main_Page#Documentation) for installation instructions. On Windows, we will use `conda` to install Eigen:
 
+    ```
     conda install -c conda-forge eigen
+    ```
 
 ### Building from source
 
@@ -124,26 +126,45 @@ The optional Eigen component of Ignition Math requires:
 
 #### Windows
 
-This assumes you have built [ign-cmake](https://github.com/ignitionrobotics/ign-cmake) from source using Conda, for which a Conda environment and a colcon workspace have been created.
-
-1. Navigate to your ``condabin`` if necessary (find it in Anaconda Prompt, ``where conda``)), then activate the Conda environment:
+1. Navigate to ``condabin`` if necessary to use the ``conda`` command (i.e., if Conda is not in your `PATH` environment variable. You can find the location of ``condabin`` in Anaconda Prompt, ``where conda``).
+   Activate the Conda environment created in the prerequisites:
 
     ```
     conda activate ign-ws
     ```
 
-1. Navigate to the [colcon](https://colcon.readthedocs.io/en/released/) workspace where `ign-cmake` was built, and then clone the repository.
-   We will be using a [colcon] workspace structure.
+1. Install dependencies
+
+   View the list of dependencies, replacing `<#>` with the desired version:
+    ```
+    conda search libignition-math<#> --channel conda-forge --info
+    ```
+   See the [Conda release repository](https://github.com/conda-forge/libignition-math4-feedstock) for more information.
+
+   Install dependencies, replacing `<#>` with the desired version:
+    ```
+    conda install libignition-cmake<#> --channel conda-forge
+    ```
+
+1. Navigate to where you would like to build the library, and clone the repository.
 
     ```
-    cd ign_ws/src
     # This checks out the `main` branch. You can append `-b ign-cmake#` (replace # with a number) to checkout a specific version
     git clone https://github.com/ignitionrobotics/ign-math.git
     ```
 
-1. Compile
+1. Configure and build
 
     ```
-    # Replace <#> with the numeric version you cloned
-    colcon build --cmake-args -DBUILD_TESTING=OFF --merge-install --packages-up-to ignition-math6
+    cd ign-math
+    mkdir build
+    cd build
+    cmake .. -DBUILD_TESTING=OFF  # Optionally, -DCMAKE_INSTALL_PREFIX=path\to\install
+    cmake --build . --config Release
+    ```
+
+1. Optionally, install Ignition Math
+
+    ```
+    cmake --install . --config Release
     ```
