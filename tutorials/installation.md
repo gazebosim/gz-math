@@ -2,26 +2,11 @@
 
 Next Tutorial: \ref cppgetstarted
 
-# Overview
-
-This tutorial describes how to install Ignition Math on Linux, Mac OS X and
-Windows via either a binary distribution or from source.
-
-[Install](#install)
-
-* [Binary Install](#binary-install)
-
-* [Source Install](#source-install)
-
-    * [Prerequisites](#prerequisites)
-
-    * [Building from Source](#building-from-source)
-
 # Install
 
-We recommend following the [Binary Install](#binary-install) instructions to get up and running as quickly and painlessly as possible.
+We recommend following the Binary Install instructions to get up and running as quickly and painlessly as possible.
 
-The [Source Install](#source-install) instructions should be used if you need the very latest software improvements, you need to modify the code, or you plan to make a contribution.
+The Source Install instructions should be used if you need the very latest software improvements, you need to modify the code, or you plan to make a contribution.
 
 ## Binary Install
 
