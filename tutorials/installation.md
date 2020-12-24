@@ -18,13 +18,13 @@ The Source Install instructions should be used if you need the very latest softw
 Setup your computer to accept software from
 *packages.osrfoundation.org*:
 
-```{.sh}
+```
 sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
 ```
 
 Setup keys:
 
-```{.sh}
+```
 wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
 ```
 
@@ -44,12 +44,16 @@ Miniconda suffices.
 
 Create if necessary, and activate a Conda environment:
 
-    conda create -n ign-ws
-    conda activate ign-ws
+```
+conda create -n ign-ws
+conda activate ign-ws
+```
 
-Install Ignition Math:
+Install:
 
-    conda install libignition-math<#> --channel conda-forge
+```
+conda install libignition-math<#> --channel conda-forge
+```
 
 Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
 which version you need.
@@ -144,9 +148,9 @@ The optional Eigen component of Ignition Math requires:
 
 1. Install dependencies
 
-   You can view the list of dependencies, replacing `<#>` with the desired version:
+   You can view available versions and their dependencies:
     ```
-    conda search libignition-math<#> --channel conda-forge --info
+    conda search libignition-math* --channel conda-forge --info
     ```
    See the [Conda release repository](https://github.com/conda-forge/libignition-math4-feedstock) for more information.
 
@@ -158,7 +162,7 @@ The optional Eigen component of Ignition Math requires:
 1. Navigate to where you would like to build the library, and clone the repository.
 
     ```
-    # This checks out the `main` branch. You can append `-b ign-math#` (replace # with a number) to checkout a specific version
+    # Optionally, append `-b ign-math#` (replace # with a number) to check out a specific version
     git clone https://github.com/ignitionrobotics/ign-math.git
     ```
 
