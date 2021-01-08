@@ -137,7 +137,7 @@ The optional Eigen component of Ignition Math requires:
   conda activate ign-ws
   ```
 
-1. Install dependencies
+2. Install dependencies
 
   You can view available versions and their dependencies:
   ```
@@ -150,13 +150,13 @@ The optional Eigen component of Ignition Math requires:
   conda install libignition-cmake<#> --channel conda-forge
   ```
 
-1. Navigate to where you would like to build the library, and clone the repository.
+3. Navigate to where you would like to build the library, and clone the repository.
   ```
   # Optionally, append `-b ign-math#` (replace # with a number) to check out a specific version
   git clone https://github.com/ignitionrobotics/ign-math.git
   ```
 
-1. Configure and build
+4. Configure and build
   ```
   cd ign-math
   mkdir build
@@ -165,7 +165,7 @@ The optional Eigen component of Ignition Math requires:
   cmake --build . --config Release
   ```
 
-1. Optionally, install
+5. Optionally, install
   ```
   cmake --install . --config Release
   ```
