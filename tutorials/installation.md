@@ -67,31 +67,28 @@ prerequisites followed by building from source.
 
 Ignition Math requires:
 
-  * [Ignition CMake](https://ignitionrobotics.org/libs/cmake)
+* [Ignition CMake](https://ignitionrobotics.org/libs/cmake)
 
 #### Ubuntu Linux
 
 The optional Eigen component of Ignition Math requires:
 
-  * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page). Refer to the [Eigen Documentation](http://eigen.tuxfamily.org/index.php?title=Main_Page#Documentation) for installation instructions. On Ubuntu systems, `apt-get` can be used to install Eigen:
-
-    ```
-    sudo apt-get install libeigen3-dev
-    ```
+* [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page). Refer to the [Eigen Documentation](http://eigen.tuxfamily.org/index.php?title=Main_Page#Documentation) for installation instructions. On Ubuntu systems, `apt-get` can be used to install Eigen:
+  ```
+  sudo apt-get install libeigen3-dev
+  ```
 
 The optional Ruby tests of Ignition Math require:
 
- * [Ruby](https://www.ruby-lang.org/). Refer to the [Ruby Documentation](https://www.ruby-lang.org/downloads/) for installation instructions. On Ubuntu systems `apt-get` can be used to install Ubuntu Package `ruby-dev`:
+* [Ruby](https://www.ruby-lang.org/). Refer to the [Ruby Documentation](https://www.ruby-lang.org/downloads/) for installation instructions. On Ubuntu systems `apt-get` can be used to install Ubuntu Package `ruby-dev`:
+  ```
+  sudo apt-get install ruby-dev
+  ```
 
-    ```
-    sudo apt-get install ruby-dev
-    ```
-
-  * [Swig](http://www.swig.org/). Refer to the [Swig Documentation](http://www.swig.org/download.html) for installation instructions. On Ubuntu systems `apt-get` can be used to install Swig:
-
-    ```
-    sudo apt-get install swig
-    ```
+* [Swig](http://www.swig.org/). Refer to the [Swig Documentation](http://www.swig.org/download.html) for installation instructions. On Ubuntu systems `apt-get` can be used to install Swig:
+  ```
+  sudo apt-get install swig
+  ```
 
 #### Windows 10
 
@@ -99,85 +96,76 @@ First, follow the [ign-cmake](https://github.com/ignitionrobotics/ign-cmake) tut
 
 The optional Eigen component of Ignition Math requires:
 
-  * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page). Refer to the [Eigen Documentation](http://eigen.tuxfamily.org/index.php?title=Main_Page#Documentation) for installation instructions. On Windows, we will use `conda` to install Eigen:
-
-    ```
-    conda install eigen --channel conda-forge
-    ```
+* [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page). Refer to the [Eigen Documentation](http://eigen.tuxfamily.org/index.php?title=Main_Page#Documentation) for installation instructions. On Windows, we will use `conda` to install Eigen:
+  ```
+  conda install eigen --channel conda-forge
+  ```
 
 ### Building from source
 
 #### Ubuntu
 
 1. Clone the repository
-
-    ```
-    git clone https://github.com/ignitionrobotics/ign-math -b ign-math<#>
-    ```
-    Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
-    which version you need.
+  ```
+  git clone https://github.com/ignitionrobotics/ign-math -b ign-math<#>
+  ```
+  Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
+  which version you need.
 
 2. Install dependencies
-
-    ```
-    export SYSTEM_VERSION=bionic
-    sudo apt -y install \
-      $(sort -u $(find . -iname 'packages-'$SYSTEM_VERSION'.apt' -o -iname 'packages.apt') | tr '\n' ' ')
-    ```
+  ```
+  export SYSTEM_VERSION=bionic
+  sudo apt -y install \
+    $(sort -u $(find . -iname 'packages-'$SYSTEM_VERSION'.apt' -o -iname 'packages.apt') | tr '\n' ' ')
+  ```
 
 3. Configure and build
-
-    ```
-    cd ign-math; mkdir build; cd build; cmake ..; make
-    ```
+  ```
+  cd ign-math; mkdir build; cd build; cmake ..; make
+  ```
 
 4. Optionally, install Ignition Math
-
-    ```
-    sudo make install
-    ```
+  ```
+  sudo make install
+  ```
 
 #### Windows
 
-1. Navigate to ``condabin`` if necessary to use the ``conda`` command (i.e., if Conda is not in your `PATH` environment variable. You can find the location of ``condabin`` in Anaconda Prompt, ``where conda``).
-   Activate the Conda environment created in the prerequisites:
-
-    ```
-    conda activate ign-ws
-    ```
+1. Navigate to `condabin` if necessary to use the `conda` command (i.e., if Conda is not in your `PATH` environment variable. You can find the location of `condabin` in Anaconda Prompt, `where conda`).
+  Activate the Conda environment created in the prerequisites:
+  ```
+  conda activate ign-ws
+  ```
 
 1. Install dependencies
 
-   You can view available versions and their dependencies:
-    ```
-    conda search libignition-math* --channel conda-forge --info
-    ```
-   See the [Conda release repository](https://github.com/conda-forge/libignition-math4-feedstock) for more information.
+  You can view available versions and their dependencies:
+  ```
+  conda search libignition-math* --channel conda-forge --info
+  ```
+  See the [Conda release repository](https://github.com/conda-forge/libignition-math4-feedstock) for more information.
 
-   Install dependencies, replacing `<#>` with the desired version:
-    ```
-    conda install libignition-cmake<#> --channel conda-forge
-    ```
+  Install dependencies, replacing `<#>` with the desired version:
+  ```
+  conda install libignition-cmake<#> --channel conda-forge
+  ```
 
 1. Navigate to where you would like to build the library, and clone the repository.
-
-    ```
-    # Optionally, append `-b ign-math#` (replace # with a number) to check out a specific version
-    git clone https://github.com/ignitionrobotics/ign-math.git
-    ```
+  ```
+  # Optionally, append `-b ign-math#` (replace # with a number) to check out a specific version
+  git clone https://github.com/ignitionrobotics/ign-math.git
+  ```
 
 1. Configure and build
-
-    ```
-    cd ign-math
-    mkdir build
-    cd build
-    cmake .. -DBUILD_TESTING=OFF  # Optionally, -DCMAKE_INSTALL_PREFIX=path\to\install
-    cmake --build . --config Release
-    ```
+  ```
+  cd ign-math
+  mkdir build
+  cd build
+  cmake .. -DBUILD_TESTING=OFF  # Optionally, -DCMAKE_INSTALL_PREFIX=path\to\install
+  cmake --build . --config Release
+  ```
 
 1. Optionally, install
-
-    ```
-    cmake --install . --config Release
-    ```
+  ```
+  cmake --install . --config Release
+  ```
