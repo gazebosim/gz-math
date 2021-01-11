@@ -110,7 +110,7 @@ namespace ignition
 
       /// \brief Move assignment operator
       /// \param[in] _angle Angle to move
-      public: Angle& operator=(Angle &&_angle);
+      public: Angle& operator=(Angle &&_angle) noexcept;
 
       /// \brief Set the value from an angle in radians.
       /// \param[in] _radian Radian value.
