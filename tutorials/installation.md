@@ -2,8 +2,6 @@
 
 Next Tutorial: \ref cppgetstarted
 
-# Install
-
 These instructions are for installing only Ignition Math.
 If you're interested in using all the Ignition libraries, check out this [Ignition installation](https://ignitionrobotics.org/docs/latest/install).
 
@@ -11,9 +9,9 @@ We recommend following the Binary Install instructions to get up and running as 
 
 The Source Install instructions should be used if you need the very latest software improvements, you need to modify the code, or you plan to make a contribution.
 
-## Binary Install
+# Binary Install
 
-### Ubuntu Linux
+## Ubuntu Linux
 
 Setup your computer to accept software from
 *packages.osrfoundation.org*:
@@ -37,7 +35,7 @@ sudo apt install libignition-math<#>-dev
 Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
 which version you need.
 
-### Windows
+## Windows
 
 Install [Conda package management system](https://docs.conda.io/projects/conda/en/latest/user-guide/install/download.html).
 Miniconda suffices.
@@ -58,18 +56,18 @@ conda install libignition-math<#> --channel conda-forge
 Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
 which version you need.
 
-## Source Install
+# Source Install
 
 Source installation can be performed by first installing the necessary
 prerequisites followed by building from source.
 
-### Prerequisites
+## Prerequisites
 
 Ignition Math requires:
 
 * [Ignition CMake](https://ignitionrobotics.org/libs/cmake)
 
-#### Ubuntu Linux
+### Ubuntu Linux
 
 The optional Eigen component of Ignition Math requires:
 
@@ -90,7 +88,7 @@ The optional Ruby tests of Ignition Math require:
   sudo apt-get install swig
   ```
 
-#### Windows 10
+### Windows 10
 
 First, follow the [ign-cmake](https://github.com/ignitionrobotics/ign-cmake) tutorial for installing Conda, Visual Studio, CMake, and other prerequisites, and also for creating a Conda environment.
 
@@ -101,9 +99,9 @@ The optional Eigen component of Ignition Math requires:
   conda install eigen --channel conda-forge
   ```
 
-### Building from source
+## Building from source
 
-#### Ubuntu
+### Ubuntu
 
 1. Clone the repository
   ```
@@ -129,7 +127,7 @@ The optional Eigen component of Ignition Math requires:
   sudo make install
   ```
 
-#### Windows
+### Windows
 
 1. Navigate to `condabin` if necessary to use the `conda` command (i.e., if Conda is not in your `PATH` environment variable. You can find the location of `condabin` in Anaconda Prompt, `where conda`).
   Activate the Conda environment created in the prerequisites:
