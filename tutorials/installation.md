@@ -5,11 +5,11 @@ Next Tutorial: \ref cppgetstarted
 These instructions are for installing only Ignition Math.
 If you're interested in using all the Ignition libraries, check out this [Ignition installation](https://ignitionrobotics.org/docs/latest/install).
 
-We recommend following the Binary Install instructions to get up and running as quickly and painlessly as possible.
+We recommend following the Binary Installation instructions to get up and running as quickly and painlessly as possible.
 
-The Source Install instructions should be used if you need the very latest software improvements, you need to modify the code, or you plan to make a contribution.
+The Source Installation instructions should be used if you need the very latest software improvements, you need to modify the code, or you plan to make a contribution.
 
-# Binary Install
+# Binary Installation
 
 ## Ubuntu Linux
 
@@ -56,7 +56,7 @@ conda install libignition-math<#> --channel conda-forge
 Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
 which version you need.
 
-# Source Install
+# Source Installation
 
 Source installation can be performed by first installing the necessary
 prerequisites followed by building from source.
@@ -99,7 +99,7 @@ The optional Eigen component of Ignition Math requires:
   conda install eigen --channel conda-forge
   ```
 
-## Building from source
+## Building from Source
 
 ### Ubuntu
 
@@ -122,7 +122,7 @@ The optional Eigen component of Ignition Math requires:
   cd ign-math; mkdir build; cd build; cmake ..; make
   ```
 
-4. Optionally, install Ignition Math
+4. Optionally, install
   ```
   sudo make install
   ```
