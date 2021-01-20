@@ -15,19 +15,16 @@ The Source Installation instructions should be used if you need the very latest 
 
 Setup your computer to accept software from
 *packages.osrfoundation.org*:
-
 ```
 sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
 ```
 
 Setup keys:
-
 ```
 wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
 ```
 
 Install Ignition Math:
-
 ```
 sudo apt install libignition-math<#>-dev
 ```
@@ -41,14 +38,12 @@ Install [Conda package management system](https://docs.conda.io/projects/conda/e
 Miniconda suffices.
 
 Create if necessary, and activate a Conda environment:
-
 ```
 conda create -n ign-ws
 conda activate ign-ws
 ```
 
 Install:
-
 ```
 conda install libignition-math<#> --channel conda-forge
 ```
@@ -179,25 +174,21 @@ API and tutorials can be found at [https://ignitionrobotics.org/libs/math](https
 You can also generate the documentation from a clone of this repository by following these steps.
 
 1. You will need Doxygen. On Ubuntu Doxygen can be installed using
-
  ```
  sudo apt-get install doxygen
  ```
 
 2. Clone the repository
-
  ```
  git clone https://github.com/ignitionrobotics/ign-math
  ```
 
 3. Configure and build the documentation.
-
  ```
  cd ign-math; mkdir build; cd build; cmake ../; make doc
  ```
 
 4. View the documentation by running the following command from the build directory.
-
  ```
  firefox doxygen/html/index.html
  ```
@@ -209,13 +200,11 @@ Follow these steps to run tests and static code analysis in your clone of this r
 1. Follow the [source install instruction](https://ignitionrobotics.org/libs/math#source-install).
 
 2. Run tests.
-
  ```
  make test
  ```
 
 3. Static code checker.
-
  ```
  make codecheck
  ```
@@ -237,7 +226,6 @@ The interfaces and Ruby test codes are in the `src` folder. To use a C++ class i
 ### Tests
 
 `make test` already runs all tests, including the ones made in Ruby, but you can run a Ruby test individually using
-
   ```
   ctest -R Ruby_TEST.rb
   ```
