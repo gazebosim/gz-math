@@ -119,7 +119,11 @@ The optional Eigen component of Ignition Math requires:
 
 3. Configure and build
   ```
-  cd ign-math; mkdir build; cd build; cmake ..; make
+  cd ign-math
+  mkdir build
+  cd build
+  cmake ..
+  make
   ```
 
 4. Optionally, install
