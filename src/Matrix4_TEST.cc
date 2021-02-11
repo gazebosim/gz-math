@@ -212,6 +212,39 @@ TEST(Matrix4dTest, Multiply4)
 }
 
 /////////////////////////////////////////////////
+TEST(Matrix4dTest, Multiply)
+{
+  math::Matrix4d mat1(
+      0, 1, 0, 1,
+      0, 1, 1, 0,
+      0, 1, 0, 1,
+      0, 1, 1, 0);
+  math::Matrix4d mat2(
+      2, 3, 5, 7,
+      5, 7, 2, 3,
+      7, 2, 3, 5,
+      3, 5, 7, 2);
+
+  math::Matrix4d mat3 = mat1 * mat2;
+
+  EXPECT_EQ(mat3,
+    math::Matrix4d(
+      8, 12, 9, 5,
+      12, 9, 5, 8,
+      8, 12, 9, 5,
+      12, 9, 5, 8));
+
+  math::Matrix4d mat4 = mat2 * mat1;
+
+  EXPECT_EQ(mat4,
+    math::Matrix4d(
+      0, 17, 10, 7,
+      0, 17, 10, 7,
+      0, 17, 7, 10,
+      0, 17, 7, 10));
+}
+
+/////////////////////////////////////////////////
 TEST(Matrix4dTest, Inverse)
 {
   math::Matrix4d mat(2, 3, 1, 5,
