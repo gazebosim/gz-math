@@ -25,10 +25,11 @@ Build on Unix:
 make
 ```
 
-Build on Windows:
+To build on Windows, make sure the configuration matches `ign-math`'s 
+configuration:
 
 ```
-cmake -build .
+cmake -build . --config Release
 ```
 
 ## Run
@@ -45,6 +46,6 @@ cd examples/build
 Run on Windows:
 
 ```
-cd examples\build\Debug
+cd examples\build\Release
 angle_example.exe
 ```
