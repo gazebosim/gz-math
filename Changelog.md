@@ -2,7 +2,28 @@
 
 ## Ignition Math 6.x.x
 
-## Ignition Math 6.7.0 (2020-1X-XX)
+## Ignition Math 6.8.0 (2021-01-26)
+
+1. Remove unnecessary copy constructor declaration from Box
+    * [Pull request 187](https://github.com/ignitionrobotics/ign-math/pull/187)
+
+1. Windows installation via conda-forge
+    * [Pull request 185](https://github.com/ignitionrobotics/ign-math/pull/185)
+
+1.  Add rule-of-five members for Angle
+    * [Pull request 186](https://github.com/ignitionrobotics/ign-math/pull/186)
+
+1. Ellipsoid: new shape class with inertia calculation method
+    * [Pull request 182](https://github.com/ignitionrobotics/ign-math/pull/182)
+
+1. Avoid moving a return value, it might prevent (N)RVO
+    * [Pull request 183](https://github.com/ignitionrobotics/ign-math/pull/183)
+
+1. Properly handle stream errors when reading math objects
+    * [Pull request 180](https://github.com/ignitionrobotics/ign-math/pull/180)
+    * [Pull request 181](https://github.com/ignitionrobotics/ign-math/pull/181)
+
+## Ignition Math 6.7.0 (2020-11-23)
 
 1. Capsule: new shape class with inertia calculation method
     * [Pull request 163](https://github.com/ignitionrobotics/ign-math/pull/163)
