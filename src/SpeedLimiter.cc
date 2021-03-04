@@ -116,7 +116,8 @@ SpeedLimiter::SpeedLimiter(bool   _hasVelocityLimits,
 SpeedLimiter::~SpeedLimiter() = default;
 
 //////////////////////////////////////////////////
-double SpeedLimiter::Limit(double &_v, double _v0, double _v1, double _dt) const
+double SpeedLimiter::Limit(double &_v, double _v0, double _v1,
+    std::chrono::steady_clock::duration _dt) const
 {
   const double tmp = _v;
 
@@ -148,14 +149,17 @@ double SpeedLimiter::LimitVelocity(double &_v) const
 }
 
 //////////////////////////////////////////////////
-double SpeedLimiter::LimitAcceleration(double &_v, double _v0, double _dt) const
+double SpeedLimiter::LimitAcceleration(double &_v, double _v0,
+    std::chrono::steady_clock::duration _dt) const
 {
   const double tmp = _v;
 
   if (this->dataPtr->hasAccelerationLimits)
   {
-    const double dvMin = this->dataPtr->minAcceleration * _dt;
-    const double dvMax = this->dataPtr->maxAcceleration * _dt;
+    const double dvMin = this->dataPtr->minAcceleration *
+        std::chrono::duration<double>(_dt).count();
+    const double dvMax = this->dataPtr->maxAcceleration *
+        std::chrono::duration<double>(_dt).count();
 
     const double dv = ignition::math::clamp(_v - _v0, dvMin, dvMax);
 
@@ -169,8 +173,8 @@ double SpeedLimiter::LimitAcceleration(double &_v, double _v0, double _dt) const
 }
 
 //////////////////////////////////////////////////
-double SpeedLimiter::LimitJerk(double &_v, double _v0, double _v1, double _dt)
-  const
+double SpeedLimiter::LimitJerk(double &_v, double _v0, double _v1,
+    std::chrono::steady_clock::duration _dt) const
 {
   const double tmp = _v;
 
@@ -179,7 +183,8 @@ double SpeedLimiter::LimitJerk(double &_v, double _v0, double _v1, double _dt)
     const double dv  = _v  - _v0;
     const double dv0 = _v0 - _v1;
 
-    const double dt2 = _dt * _dt;
+    const double dt2 = std::chrono::duration<double>(_dt).count() *
+        std::chrono::duration<double>(_dt).count();
 
     const double daMin = this->dataPtr->minJerk * dt2;
     const double daMax = this->dataPtr->maxJerk * dt2;

@@ -22,6 +22,7 @@
 
 using namespace ignition;
 using namespace math;
+using namespace std::literals::chrono_literals;
 
 /////////////////////////////////////////////////
 TEST(SpeedLimiterTest, Default)
@@ -29,20 +30,20 @@ TEST(SpeedLimiterTest, Default)
   SpeedLimiter limiter;
 
   double vel{5.0};
-  EXPECT_DOUBLE_EQ(1.0, limiter.Limit(vel, 4.0, 3.0, 0.001));
+  EXPECT_DOUBLE_EQ(1.0, limiter.Limit(vel, 4.0, 3.0, 1ms));
   EXPECT_DOUBLE_EQ(5.0, vel);
 
   EXPECT_DOUBLE_EQ(1.0, limiter.LimitVelocity(vel));
   EXPECT_DOUBLE_EQ(5.0, vel);
 
-  EXPECT_DOUBLE_EQ(1.0, limiter.LimitAcceleration(vel, 4.0, 0.001));
+  EXPECT_DOUBLE_EQ(1.0, limiter.LimitAcceleration(vel, 4.0, 1ms));
   EXPECT_DOUBLE_EQ(5.0, vel);
 
-  EXPECT_DOUBLE_EQ(1.0, limiter.LimitJerk(vel, 4.0, 3.0, 0.001));
+  EXPECT_DOUBLE_EQ(1.0, limiter.LimitJerk(vel, 4.0, 3.0, 1ms));
   EXPECT_DOUBLE_EQ(5.0, vel);
 
   vel = 0.0;
-  EXPECT_DOUBLE_EQ(1.0, limiter.Limit(vel, 4.0, 3.0, 0.001));
+  EXPECT_DOUBLE_EQ(1.0, limiter.Limit(vel, 4.0, 3.0, 1ms));
   EXPECT_DOUBLE_EQ(0.0, vel);
 }
 
@@ -76,7 +77,7 @@ TEST(SpeedLimiterTest, LimitAcceleration)
   double maxAcc = 4.0;
   SpeedLimiter limiter(false, true, false, -INF_D, INF_D, minAcc, maxAcc);
 
-  double dt = 1.0;
+  auto dt = 1s;
 
   // Within bounds
   double vel{2.0};
@@ -90,7 +91,7 @@ TEST(SpeedLimiterTest, LimitAcceleration)
   EXPECT_DOUBLE_EQ(0.5, limiter.LimitAcceleration(vel, prevVel, dt));
   EXPECT_DOUBLE_EQ(5.0, vel);
   EXPECT_DOUBLE_EQ(prevVel + maxAcc, vel);
-  EXPECT_DOUBLE_EQ(vel - prevVel, maxAcc * dt);
+  EXPECT_DOUBLE_EQ(vel - prevVel, maxAcc);
 
   // Under lower bound
   vel = -8.0;
@@ -98,7 +99,7 @@ TEST(SpeedLimiterTest, LimitAcceleration)
   EXPECT_DOUBLE_EQ(0.5, limiter.LimitAcceleration(vel, prevVel, dt));
   EXPECT_DOUBLE_EQ(-4.0, vel);
   EXPECT_DOUBLE_EQ(prevVel + minAcc, vel);
-  EXPECT_DOUBLE_EQ(vel - prevVel, minAcc * dt);
+  EXPECT_DOUBLE_EQ(vel - prevVel, minAcc);
 }
 
 /////////////////////////////////////////////////
@@ -109,7 +110,7 @@ TEST(SpeedLimiterTest, LimitJerk)
   SpeedLimiter limiter(false, false, true, -INF_D, INF_D, -INF_D, INF_D,
       minJerk, maxJerk);
 
-  double dt = 1.0;
+  auto dt = 1s;
 
   // Within bounds
   double vel{2.0};
@@ -153,7 +154,7 @@ TEST(SpeedLimiterTest, LimitAll)
   SpeedLimiter limiter(true, true, true, minVel, maxVel, minAcc, maxAcc,
       minJerk, maxJerk);
 
-  double dt = 1.0;
+  auto dt = 1s;
 
   // Within bounds
   double vel{2.0};

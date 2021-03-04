@@ -40,6 +40,7 @@
 #ifndef IGNITION_MATH_SYSTEMS_SPEEDLIMITER_HH_
 #define IGNITION_MATH_SYSTEMS_SPEEDLIMITER_HH_
 
+#include <chrono>
 #include <memory>
 #include <ignition/math/config.hh>
 #include "ignition/math/Helpers.hh"
@@ -92,12 +93,12 @@ inline namespace IGNITION_MATH_VERSION_NAMESPACE {
     /// \param [in, out] _v Velocity to limit [m/s].
     /// \param [in] _v0 Previous velocity to v  [m/s].
     /// \param [in] _v1 Previous velocity to v0 [m/s].
-    /// \param [in] _dt Time step [s].
+    /// \param [in] _dt Time step.
     /// \return Limiting factor, which is (out_v / in_v).
     public: double Limit(double &_v,
                          double _v0,
                          double _v1,
-                         double _dt) const;
+                         std::chrono::steady_clock::duration _dt) const;
 
     /// \brief Limit the velocity.
     /// \param [in, out] _v Velocity to limit [m/s].
@@ -107,23 +108,25 @@ inline namespace IGNITION_MATH_VERSION_NAMESPACE {
     /// \brief Limit the acceleration.
     /// \param [in, out] _v  Velocity [m/s].
     /// \param [in] _v0 Previous velocity [m/s].
-    /// \param [in] _dt Time step [s].
+    /// \param [in] _dt Time step.
     /// \return Limiting factor, which is (out_v / in_v).
-    public: double LimitAcceleration(double &_v,
-                                     double _v0,
-                                     double _dt) const;
+    public: double LimitAcceleration(
+        double &_v,
+        double _v0,
+        std::chrono::steady_clock::duration _dt) const;
 
     /// \brief Limit the jerk.
     /// \param [in, out] _v Velocity to limit [m/s].
     /// \param [in] _v0 Previous velocity to v  [m/s].
     /// \param [in] _v1 Previous velocity to v0 [m/s].
-    /// \param [in] _dt Time step [s].
+    /// \param [in] _dt Time step.
     /// \return Limiting factor, which is (out_v / in_v).
     /// \see http://en.wikipedia.org/wiki/Jerk_%28physics%29#Motion_control.
-    public: double LimitJerk(double &_v,
-                             double _v0,
-                             double _v1,
-                             double _dt) const;
+    public: double LimitJerk(
+        double &_v,
+        double _v0,
+        double _v1,
+        std::chrono::steady_clock::duration _dt) const;
 
 #ifdef _WIN32
 // Disable warning C4251 which is triggered by
