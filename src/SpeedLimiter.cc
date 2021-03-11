@@ -170,8 +170,8 @@ double SpeedLimiter::LimitAcceleration(double &_vel, double _prevVel,
 }
 
 //////////////////////////////////////////////////
-double SpeedLimiter::LimitJerk(double &_vel, double _prevVel, double _prevPrevVel,
-    std::chrono::steady_clock::duration _dt) const
+double SpeedLimiter::LimitJerk(double &_vel, double _prevVel,
+    double _prevPrevVel, std::chrono::steady_clock::duration _dt) const
 {
   const double vDesired = _vel;
 
