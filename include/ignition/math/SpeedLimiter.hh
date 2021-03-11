@@ -106,7 +106,8 @@ inline namespace IGNITION_MATH_VERSION_NAMESPACE {
     /// \return Limiting factor, which is (out _vel - in _vel).
     public: double LimitVelocity(double &_vel) const;
 
-    /// \brief Limit the acceleration.
+    /// \brief Limit the acceleration using a first-order backward difference
+    /// method.
     /// \param [in, out] _vel  Velocity [m/s].
     /// \param [in] _prevVel Previous velocity [m/s].
     /// \param [in] _dt Time step.
@@ -116,7 +117,7 @@ inline namespace IGNITION_MATH_VERSION_NAMESPACE {
         double _prevVel,
         std::chrono::steady_clock::duration _dt) const;
 
-    /// \brief Limit the jerk.
+    /// \brief Limit the jerk using a second-order backward difference method.
     /// \param [in, out] _vel Velocity to limit [m/s].
     /// \param [in] _prevVel Previous velocity to v  [m/s].
     /// \param [in] _prevPrevVel Previous velocity to prevVel [m/s].

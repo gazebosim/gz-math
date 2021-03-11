@@ -27,6 +27,7 @@ using namespace std::literals::chrono_literals;
 /////////////////////////////////////////////////
 TEST(SpeedLimiterTest, Default)
 {
+  // Unlimited by default, the velocity shouldn't change.
   SpeedLimiter limiter;
 
   double vel{5.0};
