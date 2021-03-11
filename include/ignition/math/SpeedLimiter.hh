@@ -1,41 +1,19 @@
-/*********************************************************************
- * Software License Agreement (BSD License)
- *
- *  Copyright (c) 2013, PAL Robotics, S.L.
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions
- *  are met:
- *
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *   * Redistributions in binary form must reproduce the above
- *     copyright notice, this list of conditions and the following
- *     disclaimer in the documentation and/or other materials provided
- *     with the distribution.
- *   * Neither the name of the PAL Robotics nor the names of its
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- *  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- *  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- *  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- *  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- *  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *********************************************************************/
-
 /*
- * Author: Enrique Fernández
- * Modified: Carlos Agüero
- */
+ * Copyright (C) 2021 Open Source Robotics Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+*/
 
 #ifndef IGNITION_MATH_SYSTEMS_SPEEDLIMITER_HH_
 #define IGNITION_MATH_SYSTEMS_SPEEDLIMITER_HH_
@@ -55,77 +33,100 @@ inline namespace IGNITION_MATH_VERSION_NAMESPACE {
   class SpeedLimiterPrivate;
 
   /// \brief Class to limit velocity, acceleration and jerk.
-  /// \ref https://github.com/ros-controls/ros_controllers/tree/melodic-devel/diff_drive_controller
   class IGNITION_MATH_VISIBLE SpeedLimiter
   {
     /// \brief Constructor.
-    /// \param [in] _hasVelocityLimits     If true, applies velocity limits.
-    /// \param [in] _hasAccelerationLimits If true, applies acceleration limits.
-    /// \param [in] _hasJerkLimits         If true, applies jerk limits.
-    /// \param [in] _minVelocity Minimum velocity [m/s], usually <= 0. Defaults
-    ///     to negative infinity.
-    /// \param [in] _maxVelocity Maximum velocity [m/s], usually >= 0. Defaults
-    ///     to positive infinity.
-    /// \param [in] _minAcceleration Minimum acceleration [m/s^2], usually <= 0.
-    ///     Defaults to negative infinity.
-    /// \param [in] _maxAcceleration Maximum acceleration [m/s^2], usually >= 0.
-    ///     Defaults to positive infinity.
-    /// \param [in] _minJerk Minimum jerk [m/s^3], usually <= 0. Defaults to
-    ///     negative infinity.
-    /// \param [in] _maxJerk Maximum jerk [m/s^3], usually >= 0. Defaults to
-    ///     positive infinity.
-    public: SpeedLimiter(
-        bool   _hasVelocityLimits     = false,
-        bool   _hasAccelerationLimits = false,
-        bool   _hasJerkLimits         = false,
-        double _minVelocity           = -INF_D,
-        double _maxVelocity           = INF_D,
-        double _minAcceleration       = -INF_D,
-        double _maxAcceleration       = INF_D,
-        double _minJerk               = -INF_D,
-        double _maxJerk               = INF_D);
+    /// There are no limits by default.
+    public: SpeedLimiter();
 
     /// \brief Destructor.
     public: ~SpeedLimiter();
 
-    /// \brief Limit velocity, acceleration and jerk, as enabled during
-    /// construction.
-    /// \param [in, out] _v Velocity to limit [m/s].
-    /// \param [in] _v0 Previous velocity to v  [m/s].
-    /// \param [in] _v1 Previous velocity to v0 [m/s].
+    /// \brief Set minimum velocity limit in m/s, usually <= 0.
+    /// \param[in] _lim Minimum velocity.
+    public: void SetMinVelocity(double _lim);
+
+    /// \brief Get minimum velocity limit, defaults to negative infinity.
+    /// \return Minimum velocity.
+    public: double MinVelocity() const;
+
+    /// \brief Set maximum velocity limit in m/s, usually >= 0.
+    /// \param[in] _lim Maximum velocity.
+    public: void SetMaxVelocity(double _lim);
+
+    /// \brief Get maximum velocity limit, defaults to positive infinity.
+    /// \return Maximum velocity.
+    public: double MaxVelocity() const;
+
+    /// \brief Set minimum acceleration limit in m/s, usually <= 0.
+    /// \param[in] _lim Minimum acceleration.
+    public: void SetMinAcceleration(double _lim);
+
+    /// \brief Get minimum acceleration limit, defaults to negative infinity.
+    /// \return Minimum acceleration.
+    public: double MinAcceleration() const;
+
+    /// \brief Set maximum acceleration limit in m/s, usually >= 0.
+    /// \param[in] _lim Maximum acceleration.
+    public: void SetMaxAcceleration(double _lim);
+
+    /// \brief Get maximum acceleration limit, defaults to positive infinity.
+    /// \return Maximum acceleration.
+    public: double MaxAcceleration() const;
+
+    /// \brief Set minimum jerk limit in m/s, usually <= 0.
+    /// \param[in] _lim Minimum jerk.
+    public: void SetMinJerk(double _lim);
+
+    /// \brief Get minimum jerk limit, defaults to negative infinity.
+    /// \return Minimum jerk.
+    public: double MinJerk() const;
+
+    /// \brief Set maximum jerk limit in m/s, usually >= 0.
+    /// \param[in] _lim Maximum jerk.
+    public: void SetMaxJerk(double _lim);
+
+    /// \brief Get maximum jerk limit, defaults to positive infinity.
+    /// \return Maximum jerk.
+    public: double MaxJerk() const;
+
+    /// \brief Limit velocity, acceleration and jerk.
+    /// \param [in, out] _vel Velocity to limit [m/s].
+    /// \param [in] _prevVel Previous velocity to v  [m/s].
+    /// \param [in] _prevPrevVel Previous velocity to prevVel [m/s].
     /// \param [in] _dt Time step.
-    /// \return Limiting factor, which is (out_v / in_v).
-    public: double Limit(double &_v,
-                         double _v0,
-                         double _v1,
+    /// \return Limiting factor, which is (out _vel - in _vel).
+    public: double Limit(double &_vel,
+                         double _prevVel,
+                         double _prevPrevVel,
                          std::chrono::steady_clock::duration _dt) const;
 
     /// \brief Limit the velocity.
-    /// \param [in, out] _v Velocity to limit [m/s].
-    /// \return Limiting factor, which is (out_v / in_v).
-    public: double LimitVelocity(double &_v) const;
+    /// \param [in, out] _vel Velocity to limit [m/s].
+    /// \return Limiting factor, which is (out _vel - in _vel).
+    public: double LimitVelocity(double &_vel) const;
 
     /// \brief Limit the acceleration.
-    /// \param [in, out] _v  Velocity [m/s].
-    /// \param [in] _v0 Previous velocity [m/s].
+    /// \param [in, out] _vel  Velocity [m/s].
+    /// \param [in] _prevVel Previous velocity [m/s].
     /// \param [in] _dt Time step.
-    /// \return Limiting factor, which is (out_v / in_v).
+    /// \return Limiting factor, which is (out _vel - in _vel).
     public: double LimitAcceleration(
-        double &_v,
-        double _v0,
+        double &_vel,
+        double _prevVel,
         std::chrono::steady_clock::duration _dt) const;
 
     /// \brief Limit the jerk.
-    /// \param [in, out] _v Velocity to limit [m/s].
-    /// \param [in] _v0 Previous velocity to v  [m/s].
-    /// \param [in] _v1 Previous velocity to v0 [m/s].
+    /// \param [in, out] _vel Velocity to limit [m/s].
+    /// \param [in] _prevVel Previous velocity to v  [m/s].
+    /// \param [in] _prevPrevVel Previous velocity to prevVel [m/s].
     /// \param [in] _dt Time step.
-    /// \return Limiting factor, which is (out_v / in_v).
+    /// \return Limiting factor, which is (out _vel - in _vel).
     /// \see http://en.wikipedia.org/wiki/Jerk_%28physics%29#Motion_control.
     public: double LimitJerk(
-        double &_v,
-        double _v0,
-        double _v1,
+        double &_vel,
+        double _prevVel,
+        double _prevPrevVel,
         std::chrono::steady_clock::duration _dt) const;
 
 #ifdef _WIN32

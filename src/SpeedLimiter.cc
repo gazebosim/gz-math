@@ -1,41 +1,19 @@
-/*********************************************************************
- * Software License Agreement (BSD License)
- *
- *  Copyright (c) 2013, PAL Robotics, S.L.
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions
- *  are met:
- *
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *   * Redistributions in binary form must reproduce the above
- *     copyright notice, this list of conditions and the following
- *     disclaimer in the documentation and/or other materials provided
- *     with the distribution.
- *   * Neither the name of the PAL Robotics nor the names of its
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- *  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- *  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- *  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- *  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- *  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *********************************************************************/
-
 /*
- * Author: Enrique Fernández
- * Modified: Carlos Agüero
- */
+ * Copyright (C) 2021 Open Source Robotics Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+*/
 
 #include "ignition/math/Helpers.hh"
 #include "ignition/math/SpeedLimiter.hh"
@@ -46,37 +24,6 @@ using namespace math;
 /// \brief Private SpeedLimiter data class.
 class ignition::math::SpeedLimiterPrivate
 {
-  /// \brief Class constructor.
-  public: SpeedLimiterPrivate(bool _hasVelocityLimits,
-                              bool _hasAccelerationLimits,
-                              bool _hasJerkLimits,
-                              double _minVelocity,
-                              double _maxVelocity,
-                              double _minAcceleration,
-                              double _maxAcceleration,
-                              double _minJerk,
-                              double _maxJerk)
-    : hasVelocityLimits(_hasVelocityLimits),
-      hasAccelerationLimits(_hasAccelerationLimits),
-      hasJerkLimits(_hasJerkLimits),
-      minVelocity(_minVelocity),
-      maxVelocity(_maxVelocity),
-      minAcceleration(_minAcceleration),
-      maxAcceleration(_maxAcceleration),
-      minJerk(_minJerk),
-      maxJerk(_maxJerk)
-  {
-  }
-
-  /// \brief Enable/Disable velocity.
-  public: bool hasVelocityLimits{false};
-
-  /// \brief Enable/Disable acceleration.
-  public: bool hasAccelerationLimits{false};
-
-  /// \brief Enable/Disable jerk.
-  public: bool hasJerkLimits{false};
-
   /// \brief Minimum velocity limit.
   public: double minVelocity{-std::numeric_limits<double>::infinity()};
 
@@ -97,18 +44,8 @@ class ignition::math::SpeedLimiterPrivate
 };
 
 //////////////////////////////////////////////////
-SpeedLimiter::SpeedLimiter(bool   _hasVelocityLimits,
-                           bool   _hasAccelerationLimits,
-                           bool   _hasJerkLimits,
-                           double _minVelocity,
-                           double _maxVelocity,
-                           double _minAcceleration,
-                           double _maxAcceleration,
-                           double _minJerk,
-                           double _maxJerk)
-  : dataPtr(std::make_unique<SpeedLimiterPrivate>(_hasVelocityLimits,
-      _hasAccelerationLimits, _hasJerkLimits, _minVelocity, _maxVelocity,
-      _minAcceleration, _maxAcceleration, _minJerk, _maxJerk))
+SpeedLimiter::SpeedLimiter()
+  : dataPtr(std::make_unique<SpeedLimiterPrivate>())
 {
 }
 
@@ -116,86 +53,143 @@ SpeedLimiter::SpeedLimiter(bool   _hasVelocityLimits,
 SpeedLimiter::~SpeedLimiter() = default;
 
 //////////////////////////////////////////////////
-double SpeedLimiter::Limit(double &_v, double _v0, double _v1,
-    std::chrono::steady_clock::duration _dt) const
+void SpeedLimiter::SetMinVelocity(double _lim)
 {
-  const double tmp = _v;
-
-  this->LimitJerk(_v, _v0, _v1, _dt);
-  this->LimitAcceleration(_v, _v0, _dt);
-  this->LimitVelocity(_v);
-
-  if (ignition::math::equal(tmp, 0.0))
-    return 1.0;
-  else
-    return _v / tmp;
+  this->dataPtr->minVelocity = _lim;
 }
 
 //////////////////////////////////////////////////
-double SpeedLimiter::LimitVelocity(double &_v) const
+double SpeedLimiter::MinVelocity() const
 {
-  const double tmp = _v;
-
-  if (this->dataPtr->hasVelocityLimits)
-  {
-    _v = ignition::math::clamp(
-      _v, this->dataPtr->minVelocity, this->dataPtr->maxVelocity);
-  }
-
-  if (ignition::math::equal(tmp, 0.0))
-    return 1.0;
-  else
-    return _v / tmp;
+  return this->dataPtr->minVelocity;
 }
 
 //////////////////////////////////////////////////
-double SpeedLimiter::LimitAcceleration(double &_v, double _v0,
-    std::chrono::steady_clock::duration _dt) const
+void SpeedLimiter::SetMaxVelocity(double _lim)
 {
-  const double tmp = _v;
-
-  if (this->dataPtr->hasAccelerationLimits)
-  {
-    const double dvMin = this->dataPtr->minAcceleration *
-        std::chrono::duration<double>(_dt).count();
-    const double dvMax = this->dataPtr->maxAcceleration *
-        std::chrono::duration<double>(_dt).count();
-
-    const double dv = ignition::math::clamp(_v - _v0, dvMin, dvMax);
-
-    _v = _v0 + dv;
-  }
-
-  if (ignition::math::equal(tmp, 0.0))
-    return 1.0;
-  else
-    return _v / tmp;
+  this->dataPtr->maxVelocity = _lim;
 }
 
 //////////////////////////////////////////////////
-double SpeedLimiter::LimitJerk(double &_v, double _v0, double _v1,
+double SpeedLimiter::MaxVelocity() const
+{
+  return this->dataPtr->maxVelocity;
+}
+
+//////////////////////////////////////////////////
+void SpeedLimiter::SetMinAcceleration(double _lim)
+{
+  this->dataPtr->minAcceleration = _lim;
+}
+
+//////////////////////////////////////////////////
+double SpeedLimiter::MinAcceleration() const
+{
+  return this->dataPtr->minAcceleration;
+}
+
+//////////////////////////////////////////////////
+void SpeedLimiter::SetMaxAcceleration(double _lim)
+{
+  this->dataPtr->maxAcceleration = _lim;
+}
+
+//////////////////////////////////////////////////
+double SpeedLimiter::MaxAcceleration() const
+{
+  return this->dataPtr->maxAcceleration;
+}
+
+//////////////////////////////////////////////////
+void SpeedLimiter::SetMinJerk(double _lim)
+{
+  this->dataPtr->minJerk = _lim;
+}
+
+//////////////////////////////////////////////////
+double SpeedLimiter::MinJerk() const
+{
+  return this->dataPtr->minJerk;
+}
+
+//////////////////////////////////////////////////
+void SpeedLimiter::SetMaxJerk(double _lim)
+{
+  this->dataPtr->maxJerk = _lim;
+}
+
+//////////////////////////////////////////////////
+double SpeedLimiter::MaxJerk() const
+{
+  return this->dataPtr->maxJerk;
+}
+
+//////////////////////////////////////////////////
+double SpeedLimiter::Limit(double &_vel, double _prevVel, double _prevPrevVel,
     std::chrono::steady_clock::duration _dt) const
 {
-  const double tmp = _v;
+  const double vDesired = _vel;
 
-  if (this->dataPtr->hasJerkLimits)
-  {
-    const double dv  = _v  - _v0;
-    const double dv0 = _v0 - _v1;
+  this->LimitJerk(_vel, _prevVel, _prevPrevVel, _dt);
+  this->LimitAcceleration(_vel, _prevVel, _dt);
+  this->LimitVelocity(_vel);
 
-    const double dt2 = std::chrono::duration<double>(_dt).count() *
-        std::chrono::duration<double>(_dt).count();
+  return _vel - vDesired;
+}
 
-    const double daMin = this->dataPtr->minJerk * dt2;
-    const double daMax = this->dataPtr->maxJerk * dt2;
+//////////////////////////////////////////////////
+double SpeedLimiter::LimitVelocity(double &_vel) const
+{
+  const double vDesired = _vel;
 
-    const double da = ignition::math::clamp(dv - dv0, daMin, daMax);
+  _vel = ignition::math::clamp(
+    _vel, this->dataPtr->minVelocity, this->dataPtr->maxVelocity);
 
-    _v = _v0 + dv0 + da;
-  }
+  return _vel - vDesired;
+}
 
-  if (ignition::math::equal(tmp, 0.0))
-    return 1.0;
-  else
-    return _v / tmp;
+//////////////////////////////////////////////////
+double SpeedLimiter::LimitAcceleration(double &_vel, double _prevVel,
+    std::chrono::steady_clock::duration _dt) const
+{
+  const double vDesired = _vel;
+
+  const double dtSec = std::chrono::duration<double>(_dt).count();
+
+  if (equal(dtSec, 0.0))
+    return 0.0;
+
+  const double accDesired = (_vel - _prevVel) / dtSec;
+
+  const double accClamped = ignition::math::clamp(accDesired,
+      this->dataPtr->minAcceleration, this->dataPtr->maxAcceleration);
+
+  _vel = _prevVel + accClamped * dtSec;
+
+  return _vel - vDesired;
+}
+
+//////////////////////////////////////////////////
+double SpeedLimiter::LimitJerk(double &_vel, double _prevVel, double _prevPrevVel,
+    std::chrono::steady_clock::duration _dt) const
+{
+  const double vDesired = _vel;
+
+  const double dtSec = std::chrono::duration<double>(_dt).count();
+
+  if (equal(dtSec, 0.0))
+    return 0.0;
+
+  const double accDesired  = (_vel  - _prevVel) / dtSec;
+  const double accPrev = (_prevVel - _prevPrevVel) / dtSec;
+  const double jerkDesired = (accDesired - accPrev) / dtSec;
+
+  const double jerkClamped = ignition::math::clamp(jerkDesired,
+      this->dataPtr->minJerk, this->dataPtr->maxJerk);
+
+  const double accClamped = accPrev + jerkClamped * dtSec;
+
+  _vel = _prevVel + accClamped * dtSec;
+
+  return _vel - vDesired;
 }
