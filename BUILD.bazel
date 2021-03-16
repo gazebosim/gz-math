@@ -44,12 +44,15 @@ ign_export_header(
 public_headers_no_gen = glob([
     "include/ignition/math/*.hh",
     "include/ignition/math/detail/*.hh",
-    "include/ignition/math/graph/*.hh"
+    "include/ignition/math/graph/*.hh",
 ])
 
 private_headers = glob(["src/*.hh"])
 
-sources = glob(["src/*.cc"], exclude=["src/*_TEST.cc"])
+sources = glob(
+    ["src/*.cc"],
+    exclude = ["src/*_TEST.cc"],
+)
 
 generate_include_header(
     name = "mathhh_genrule",
