@@ -30,6 +30,19 @@ TEST(SpeedLimiterTest, Default)
   // Unlimited by default, the velocity shouldn't change.
   SpeedLimiter limiter;
 
+  EXPECT_DOUBLE_EQ(-std::numeric_limits<double>::infinity(),
+      limiter.MinVelocity());
+  EXPECT_DOUBLE_EQ(std::numeric_limits<double>::infinity(),
+      limiter.MaxVelocity());
+  EXPECT_DOUBLE_EQ(-std::numeric_limits<double>::infinity(),
+      limiter.MinAcceleration());
+  EXPECT_DOUBLE_EQ(std::numeric_limits<double>::infinity(),
+      limiter.MaxAcceleration());
+  EXPECT_DOUBLE_EQ(-std::numeric_limits<double>::infinity(),
+      limiter.MinJerk());
+  EXPECT_DOUBLE_EQ(std::numeric_limits<double>::infinity(),
+      limiter.MaxJerk());
+
   double vel{5.0};
   EXPECT_DOUBLE_EQ(0.0, limiter.Limit(vel, 4.0, 3.0, 1ms));
   EXPECT_DOUBLE_EQ(5.0, vel);
@@ -58,6 +71,9 @@ TEST(SpeedLimiterTest, LimitVelocity)
   limiter.SetMinVelocity(minVel);
   limiter.SetMaxVelocity(maxVel);
 
+  EXPECT_DOUBLE_EQ(minVel, limiter.MinVelocity());
+  EXPECT_DOUBLE_EQ(maxVel, limiter.MaxVelocity());
+
   // Within bounds
   double vel{1.0};
   EXPECT_DOUBLE_EQ(0.0, limiter.LimitVelocity(vel));
@@ -83,6 +99,9 @@ TEST(SpeedLimiterTest, LimitAcceleration)
   SpeedLimiter limiter;
   limiter.SetMinAcceleration(minAcc);
   limiter.SetMaxAcceleration(maxAcc);
+
+  EXPECT_DOUBLE_EQ(minAcc, limiter.MinAcceleration());
+  EXPECT_DOUBLE_EQ(maxAcc, limiter.MaxAcceleration());
 
   auto dt = 1s;
   const double dtSec = std::chrono::duration<double>(dt).count();
@@ -126,6 +145,9 @@ TEST(SpeedLimiterTest, LimitJerk)
   SpeedLimiter limiter;
   limiter.SetMinJerk(minJerk);
   limiter.SetMaxJerk(maxJerk);
+
+  EXPECT_DOUBLE_EQ(minJerk, limiter.MinJerk());
+  EXPECT_DOUBLE_EQ(maxJerk, limiter.MaxJerk());
 
   auto dt = 1s;
   const double dtSec = std::chrono::duration<double>(dt).count();
@@ -190,33 +212,47 @@ TEST(SpeedLimiterTest, LimitAll)
   limiter.SetMinJerk(minJerk);
   limiter.SetMaxJerk(maxJerk);
 
+  EXPECT_DOUBLE_EQ(minVel, limiter.MinVelocity());
+  EXPECT_DOUBLE_EQ(maxVel, limiter.MaxVelocity());
+  EXPECT_DOUBLE_EQ(minAcc, limiter.MinAcceleration());
+  EXPECT_DOUBLE_EQ(maxAcc, limiter.MaxAcceleration());
+  EXPECT_DOUBLE_EQ(minJerk, limiter.MinJerk());
+  EXPECT_DOUBLE_EQ(maxJerk, limiter.MaxJerk());
+
   auto dt = 1s;
 
   // Within bounds
   double vel{2.0};
   double velPrev = 1.0;
   double velPrevPrev = 0.5;
-  EXPECT_DOUBLE_EQ(0.0, limiter.LimitJerk(vel, velPrev, velPrevPrev, dt));
+  EXPECT_DOUBLE_EQ(0.0, limiter.Limit(vel, velPrev, velPrevPrev, dt));
   EXPECT_DOUBLE_EQ(2.0, vel);
 
   // Above upper velocity bound
   vel = 5.0;
   velPrev = 2.0;
   velPrevPrev = 1.0;
-  EXPECT_DOUBLE_EQ(-1.0, limiter.LimitJerk(vel, velPrev, velPrevPrev, dt));
+  EXPECT_DOUBLE_EQ(-1.0, limiter.Limit(vel, velPrev, velPrevPrev, dt));
   EXPECT_DOUBLE_EQ(4.0, vel);
 
   // Above upper acceleration bound (desired accel: 3.0)
   vel = 4.0;
   velPrev = 1.0;
   velPrevPrev = 0.0;
-  EXPECT_DOUBLE_EQ(-1.0, limiter.LimitJerk(vel, velPrev, velPrevPrev, dt));
+  EXPECT_DOUBLE_EQ(-1.0, limiter.Limit(vel, velPrev, velPrevPrev, dt));
   EXPECT_DOUBLE_EQ(3.0, vel);
 
   // Above upper jerk bound (desired jerk: 1.5, accel: 1.8)
   vel = 2.1;
   velPrev = 0.3;
   velPrevPrev = 0.0;
-  EXPECT_DOUBLE_EQ(-0.5, limiter.LimitJerk(vel, velPrev, velPrevPrev, dt));
+  EXPECT_DOUBLE_EQ(-0.5, limiter.Limit(vel, velPrev, velPrevPrev, dt));
   EXPECT_DOUBLE_EQ(1.6, vel);
+
+  // No change in zero time
+  dt = 0s;
+  vel = 2.1;
+
+  EXPECT_DOUBLE_EQ(0.0, limiter.Limit(vel, velPrev, velPrevPrev, dt));
+  EXPECT_DOUBLE_EQ(2.1, vel);
 }

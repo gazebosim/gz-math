@@ -58,7 +58,7 @@ inline namespace IGNITION_MATH_VERSION_NAMESPACE {
     /// \return Maximum velocity.
     public: double MaxVelocity() const;
 
-    /// \brief Set minimum acceleration limit in m/s, usually <= 0.
+    /// \brief Set minimum acceleration limit in m/s^2, usually <= 0.
     /// \param[in] _lim Minimum acceleration.
     public: void SetMinAcceleration(double _lim);
 
@@ -66,7 +66,7 @@ inline namespace IGNITION_MATH_VERSION_NAMESPACE {
     /// \return Minimum acceleration.
     public: double MinAcceleration() const;
 
-    /// \brief Set maximum acceleration limit in m/s, usually >= 0.
+    /// \brief Set maximum acceleration limit in m/s^2, usually >= 0.
     /// \param[in] _lim Maximum acceleration.
     public: void SetMaxAcceleration(double _lim);
 
@@ -74,7 +74,7 @@ inline namespace IGNITION_MATH_VERSION_NAMESPACE {
     /// \return Maximum acceleration.
     public: double MaxAcceleration() const;
 
-    /// \brief Set minimum jerk limit in m/s, usually <= 0.
+    /// \brief Set minimum jerk limit in m/s^3, usually <= 0.
     /// \param[in] _lim Minimum jerk.
     public: void SetMinJerk(double _lim);
 
@@ -82,7 +82,7 @@ inline namespace IGNITION_MATH_VERSION_NAMESPACE {
     /// \return Minimum jerk.
     public: double MinJerk() const;
 
-    /// \brief Set maximum jerk limit in m/s, usually >= 0.
+    /// \brief Set maximum jerk limit in m/s^3, usually >= 0.
     /// \param[in] _lim Maximum jerk.
     public: void SetMaxJerk(double _lim);
 
@@ -92,10 +92,10 @@ inline namespace IGNITION_MATH_VERSION_NAMESPACE {
 
     /// \brief Limit velocity, acceleration and jerk.
     /// \param [in, out] _vel Velocity to limit [m/s].
-    /// \param [in] _prevVel Previous velocity to v  [m/s].
-    /// \param [in] _prevPrevVel Previous velocity to prevVel [m/s].
+    /// \param [in] _prevVel Previous velocity to _vel [m/s].
+    /// \param [in] _prevPrevVel Previous velocity to _prevVel [m/s].
     /// \param [in] _dt Time step.
-    /// \return Limiting factor, which is (out _vel - in _vel).
+    /// \return Limiting difference, which is (out _vel - in _vel).
     public: double Limit(double &_vel,
                          double _prevVel,
                          double _prevPrevVel,
@@ -103,7 +103,7 @@ inline namespace IGNITION_MATH_VERSION_NAMESPACE {
 
     /// \brief Limit the velocity.
     /// \param [in, out] _vel Velocity to limit [m/s].
-    /// \return Limiting factor, which is (out _vel - in _vel).
+    /// \return Limiting difference, which is (out _vel - in _vel).
     public: double LimitVelocity(double &_vel) const;
 
     /// \brief Limit the acceleration using a first-order backward difference
@@ -111,7 +111,7 @@ inline namespace IGNITION_MATH_VERSION_NAMESPACE {
     /// \param [in, out] _vel  Velocity [m/s].
     /// \param [in] _prevVel Previous velocity [m/s].
     /// \param [in] _dt Time step.
-    /// \return Limiting factor, which is (out _vel - in _vel).
+    /// \return Limiting difference, which is (out _vel - in _vel).
     public: double LimitAcceleration(
         double &_vel,
         double _prevVel,
@@ -122,7 +122,7 @@ inline namespace IGNITION_MATH_VERSION_NAMESPACE {
     /// \param [in] _prevVel Previous velocity to v  [m/s].
     /// \param [in] _prevPrevVel Previous velocity to prevVel [m/s].
     /// \param [in] _dt Time step.
-    /// \return Limiting factor, which is (out _vel - in _vel).
+    /// \return Limiting difference, which is (out _vel - in _vel).
     /// \see http://en.wikipedia.org/wiki/Jerk_%28physics%29#Motion_control.
     public: double LimitJerk(
         double &_vel,

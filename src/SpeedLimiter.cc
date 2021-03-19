@@ -128,68 +128,68 @@ double SpeedLimiter::MaxJerk() const
 double SpeedLimiter::Limit(double &_vel, double _prevVel, double _prevPrevVel,
     std::chrono::steady_clock::duration _dt) const
 {
-  const double vDesired = _vel;
+  const double vUnclamped = _vel;
 
   this->LimitJerk(_vel, _prevVel, _prevPrevVel, _dt);
   this->LimitAcceleration(_vel, _prevVel, _dt);
   this->LimitVelocity(_vel);
 
-  return _vel - vDesired;
+  return _vel - vUnclamped;
 }
 
 //////////////////////////////////////////////////
 double SpeedLimiter::LimitVelocity(double &_vel) const
 {
-  const double vDesired = _vel;
+  const double vUnclamped = _vel;
 
   _vel = ignition::math::clamp(
     _vel, this->dataPtr->minVelocity, this->dataPtr->maxVelocity);
 
-  return _vel - vDesired;
+  return _vel - vUnclamped;
 }
 
 //////////////////////////////////////////////////
 double SpeedLimiter::LimitAcceleration(double &_vel, double _prevVel,
     std::chrono::steady_clock::duration _dt) const
 {
-  const double vDesired = _vel;
+  const double vUnclamped = _vel;
 
   const double dtSec = std::chrono::duration<double>(_dt).count();
 
   if (equal(dtSec, 0.0))
     return 0.0;
 
-  const double accDesired = (_vel - _prevVel) / dtSec;
+  const double accUnclamped = (_vel - _prevVel) / dtSec;
 
-  const double accClamped = ignition::math::clamp(accDesired,
+  const double accClamped = ignition::math::clamp(accUnclamped,
       this->dataPtr->minAcceleration, this->dataPtr->maxAcceleration);
 
   _vel = _prevVel + accClamped * dtSec;
 
-  return _vel - vDesired;
+  return _vel - vUnclamped;
 }
 
 //////////////////////////////////////////////////
 double SpeedLimiter::LimitJerk(double &_vel, double _prevVel,
     double _prevPrevVel, std::chrono::steady_clock::duration _dt) const
 {
-  const double vDesired = _vel;
+  const double vUnclamped = _vel;
 
   const double dtSec = std::chrono::duration<double>(_dt).count();
 
   if (equal(dtSec, 0.0))
     return 0.0;
 
-  const double accDesired  = (_vel  - _prevVel) / dtSec;
+  const double accUnclamped  = (_vel  - _prevVel) / dtSec;
   const double accPrev = (_prevVel - _prevPrevVel) / dtSec;
-  const double jerkDesired = (accDesired - accPrev) / dtSec;
+  const double jerkUnclamped = (accUnclamped - accPrev) / dtSec;
 
-  const double jerkClamped = ignition::math::clamp(jerkDesired,
+  const double jerkClamped = ignition::math::clamp(jerkUnclamped,
       this->dataPtr->minJerk, this->dataPtr->maxJerk);
 
   const double accClamped = accPrev + jerkClamped * dtSec;
 
   _vel = _prevVel + accClamped * dtSec;
 
-  return _vel - vDesired;
+  return _vel - vUnclamped;
 }
