@@ -280,7 +280,7 @@ TEST(Vector4dTest, Distance)
   EXPECT_DOUBLE_EQ(dist, dist2);
 
   math::Vector4i vecInt(0, 0, 0, 0);
-  int distInt = vec1.Distance({1, 1, 1, 1});
+  int distInt = vecInt.Distance({1, 1, 1, 1});
   EXPECT_EQ(distInt, 2);
 }
 

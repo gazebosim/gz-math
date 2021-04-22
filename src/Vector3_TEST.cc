@@ -145,7 +145,7 @@ TEST(Vector3dTest, Distance)
   EXPECT_DOUBLE_EQ(dist, dist2);
 
   math::Vector3i vecInt(0, 0, 0);
-  int distInt = vec1.Distance({2, 2, 1});
+  int distInt = vecInt.Distance({2, 2, 1});
   EXPECT_EQ(distInt, 3);
 }
 
