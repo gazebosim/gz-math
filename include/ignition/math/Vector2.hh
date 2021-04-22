@@ -94,8 +94,9 @@ namespace ignition
       /// \return The squared length
       public: T SquaredLength() const
       {
-        return std::pow(this->data[0], 2)
-             + std::pow(this->data[1], 2);
+        return
+          this->data[0] * this->data[0] +
+          this->data[1] * this->data[1];
       }
 
       /// \brief Normalize the vector length

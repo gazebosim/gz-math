@@ -420,5 +420,9 @@ TEST(Vector4dTest, Length)
   math::Vector4d v(0.1, -4.2, 2.5, 1.0);
   EXPECT_NEAR(v.Length(), 4.98998997995, 1e-10);
   EXPECT_DOUBLE_EQ(v.SquaredLength(), 24.9);
+
+  // Integer vector
+  EXPECT_EQ(math::Vector4i::One.Length(), 2);
+  EXPECT_EQ(math::Vector4i::One.SquaredLength(), 4);
 }
 
