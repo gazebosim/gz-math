@@ -87,7 +87,7 @@ namespace ignition
       /// \return The length
       public: T Length() const
       {
-        return sqrt(this->SquaredLength());
+        return static_cast<T>(sqrt(this->SquaredLength()));
       }
 
       /// \brief Returns the square of the length (magnitude) of the vector

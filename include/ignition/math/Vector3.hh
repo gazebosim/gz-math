@@ -97,9 +97,10 @@ namespace ignition
       /// \return the distance
       public: T Distance(const Vector3<T> &_pt) const
       {
-        return sqrt((this->data[0]-_pt[0])*(this->data[0]-_pt[0]) +
+        return static_cast<T>(sqrt(
+                    (this->data[0]-_pt[0])*(this->data[0]-_pt[0]) +
                     (this->data[1]-_pt[1])*(this->data[1]-_pt[1]) +
-                    (this->data[2]-_pt[2])*(this->data[2]-_pt[2]));
+                    (this->data[2]-_pt[2])*(this->data[2]-_pt[2])));
       }
 
       /// \brief Calc distance to the given point
@@ -116,7 +117,7 @@ namespace ignition
       /// \return the length
       public: T Length() const
       {
-        return sqrt(this->SquaredLength());
+        return static_cast<T>(sqrt(this->SquaredLength()));
       }
 
       /// \brief Return the square of the length (magnitude) of the vector
