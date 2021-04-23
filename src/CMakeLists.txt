@@ -43,8 +43,6 @@ endif()
 # $ export RUBYLIB=/usr/local/lib/ruby
 # $ ruby -e "require 'ignition/math'; a = Ignition::Math::Angle.new(20); puts a.Degree()"
 if (RUBY_FOUND)
-  include_directories(${RUBY_INCLUDE_DIRS})
-
   foreach (swig_file ${swig_files})
     # Assuming that each swig file has a test
     list(APPEND ruby_tests ${swig_file}_TEST)
@@ -70,6 +68,7 @@ if (RUBY_FOUND)
     $<$<CXX_COMPILER_ID:Clang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter>
     $<$<CXX_COMPILER_ID:AppleClang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter>
   )
+  target_include_directories(math SYSTEM PUBLIC ${RUBY_INCLUDE_DIRS})
 
   SWIG_LINK_LIBRARIES(math ${RUBY_LIBRARY})
   target_compile_features(math PUBLIC ${IGN_CXX_${c++standard}_FEATURES})
