@@ -66,7 +66,7 @@ if (RUBY_FOUND)
 
   # Suppress warnings on SWIG-generated files
   target_compile_options(math PRIVATE 
-    $<$<CXX_COMPILER_ID:GNU>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter>
+    $<$<CXX_COMPILER_ID:GNU>:-Wno-pedantic -Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter>
     $<$<CXX_COMPILER_ID:Clang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter>
     $<$<CXX_COMPILER_ID:AppleClang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter>
   )
