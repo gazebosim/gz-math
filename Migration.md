@@ -53,6 +53,10 @@ release will remove the deprecated code.
     + ***Deprecation:*** public: void W(T)
     + ***Replacement:*** public: void SetW(T)
 
+### Modifications
+
+1. The out stream operator is guaranteed not to return -0.
+
 ## Ignition Math 4.X to 5.X
 
 ### Additions
