@@ -55,7 +55,8 @@ release will remove the deprecated code.
 
 ### Modifications
 
-1. The out stream operator is guaranteed not to return -0.
+1. The out stream operator is guaranteed to return always plain 0 and not to
+   return -0, 0.0 or other instances of zero value.
 
 ## Ignition Math 4.X to 5.X
 
