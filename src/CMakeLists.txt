@@ -26,9 +26,10 @@ if (SWIG_FOUND)
   set(CMAKE_SWIG_FLAGS "")
 
   include_directories(${PROJECT_SOURCE_DIR}/include)
+  include_directories(${PYTHON_INCLUDE_PATH})
 
   set(swig_files
-    ruby
+    ruby/ruby
     Angle
     GaussMarkovProcess
     Rand
@@ -57,9 +58,9 @@ if (RUBY_FOUND)
   # Create the ruby library
 
   if(CMAKE_VERSION VERSION_GREATER 3.8.0)
-    SWIG_ADD_LIBRARY(math LANGUAGE ruby SOURCES ruby.i ${swig_i_files} ${sources})
+    SWIG_ADD_LIBRARY(math LANGUAGE ruby SOURCES ruby/ruby.i ${swig_i_files} ${sources})
   else()
-    SWIG_ADD_MODULE(math ruby ruby.i ${swig_i_files} ${sources})
+    SWIG_ADD_MODULE(math ruby ruby/ruby.i ${swig_i_files} ${sources})
   endif()
 
   # Suppress warnings on SWIG-generated files
@@ -80,4 +81,31 @@ if (RUBY_FOUND)
       ruby -I${CMAKE_BINARY_DIR}/lib ${CMAKE_SOURCE_DIR}/src/${test}.rb
    	  --gtest_output=xml:${CMAKE_BINARY_DIR}/test_results/${test}rb.xml)
   endforeach()
+endif()
+
+#################################
+# Create and install Python interfaces
+# Example usage
+# $ export PYTHONPATH=/ws/install/lib/python/ignition
+# $ export PYTHONPATH=/ws/build/ignition-math6/src:${PYTHONPATH}
+if (SWIG_FOUND AND PYTHONLIBS_FOUND)
+  SET(CMAKE_SWIG_FLAGS "")
+
+  SET_SOURCE_FILES_PROPERTIES(python/python.i PROPERTIES CPLUSPLUS ON)
+  SET_SOURCE_FILES_PROPERTIES(python/python.i PROPERTIES SWIG_FLAGS "-includeall")
+
+  if(CMAKE_VERSION VERSION_GREATER 3.8.0)
+    SWIG_ADD_LIBRARY(pymath LANGUAGE python SOURCES python/python.i ${sources})
+  else()
+    SWIG_ADD_MODULE(pymath python python/python.i ${sources})
+  endif()
+
+  SWIG_LINK_LIBRARIES(pymath ${PYTHON_LIBRARIES})
+  # Suppress warnings on SWIG-generated files
+  target_compile_options(_pymath PRIVATE 
+    $<$<CXX_COMPILER_ID:GNU>:-Wno-pedantic -Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter>
+    $<$<CXX_COMPILER_ID:Clang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter>
+    $<$<CXX_COMPILER_ID:AppleClang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter>
+  )
+  install(TARGETS _pymath DESTINATION ${IGN_LIB_INSTALL_DIR}/python/ignition)
 endif()

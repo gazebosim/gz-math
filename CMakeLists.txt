@@ -57,6 +57,15 @@ if (SWIG_FOUND)
   else()
     message (STATUS "Searching for Ruby - found.")
   endif()
+
+  ########################################
+  # Include python
+  find_package(PythonLibs REQUIRED)
+  if (NOT PYTHONLIBS_FOUND)
+    message (STATUS "Searching for Python - not found.")
+  else()
+    message (STATUS "Searching for Python - found.")
+  endif()
 endif()
 
 #============================================================================
