@@ -29,7 +29,6 @@ if (SWIG_FOUND)
   include_directories(${PYTHON_INCLUDE_PATH})
 
   set(swig_files
-    ruby/ruby
     Angle
     GaussMarkovProcess
     Rand
@@ -51,9 +50,10 @@ if (RUBY_FOUND)
     # Generate the list if .i files
     list(APPEND swig_i_files ${swig_file}.i)
   endforeach()
+  list(APPEND ruby_tests ruby_TEST)
 
   # Turn on c++
-  set_source_files_properties(${swig_i_files} PROPERTIES CPLUSPLUS ON)
+  set_source_files_properties(${swig_i_files} ruby/ruby.i PROPERTIES CPLUSPLUS ON)
 
   # Create the ruby library
 
