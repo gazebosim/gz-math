@@ -87,25 +87,23 @@ endif()
 # Create and install Python interfaces
 # Example usage
 # $ export PYTHONPATH=/ws/install/lib/python/ignition
-# $ export PYTHONPATH=/ws/build/ignition-math6/src:${PYTHONPATH}
-if (SWIG_FOUND AND PYTHONLIBS_FOUND)
-  SET(CMAKE_SWIG_FLAGS "")
+if (PYTHONLIBS_FOUND)
+  set_source_files_properties(python/python.i PROPERTIES CPLUSPLUS ON)
+  set_source_files_properties(python/python.i PROPERTIES SWIG_FLAGS "-includeall")
 
-  SET_SOURCE_FILES_PROPERTIES(python/python.i PROPERTIES CPLUSPLUS ON)
-  SET_SOURCE_FILES_PROPERTIES(python/python.i PROPERTIES SWIG_FLAGS "-includeall")
-
+  set(CMAKE_SWIG_OUTDIR "${CMAKE_INSTALL_PREFIX}/lib/python/ignition")
   if(CMAKE_VERSION VERSION_GREATER 3.8.0)
-    SWIG_ADD_LIBRARY(pymath LANGUAGE python SOURCES python/python.i ${sources})
+    SWIG_ADD_LIBRARY(math LANGUAGE python SOURCES python/python.i ${sources})
   else()
-    SWIG_ADD_MODULE(pymath python python/python.i ${sources})
+    SWIG_ADD_MODULE(math python python/python.i ${sources})
   endif()
 
-  SWIG_LINK_LIBRARIES(pymath ${PYTHON_LIBRARIES})
+  SWIG_LINK_LIBRARIES(math ${PYTHON_LIBRARIES})
   # Suppress warnings on SWIG-generated files
-  target_compile_options(_pymath PRIVATE 
-    $<$<CXX_COMPILER_ID:GNU>:-Wno-pedantic -Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter>
-    $<$<CXX_COMPILER_ID:Clang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter>
-    $<$<CXX_COMPILER_ID:AppleClang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter>
+  target_compile_options(_math PRIVATE
+    $<$<CXX_COMPILER_ID:GNU>:-Wno-pedantic -Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-cast-function-type>
+    $<$<CXX_COMPILER_ID:Clang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-cast-function-type>
+    $<$<CXX_COMPILER_ID:AppleClang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-cast-function-type>
   )
-  install(TARGETS _pymath DESTINATION ${IGN_LIB_INSTALL_DIR}/python/ignition)
+  install(TARGETS _math DESTINATION ${IGN_LIB_INSTALL_DIR}/python/ignition)
 endif()

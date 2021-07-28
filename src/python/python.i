@@ -1,2 +1,2 @@
-%module "pymath"
+%module "math"
 %include ../ign_math.i
