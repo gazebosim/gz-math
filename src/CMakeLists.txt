@@ -90,20 +90,36 @@ endif()
 if (PYTHONLIBS_FOUND)
   set_source_files_properties(python/python.i PROPERTIES CPLUSPLUS ON)
   set_source_files_properties(python/python.i PROPERTIES SWIG_FLAGS "-includeall")
+  set_source_files_properties(python/python.i PROPERTIES SWIG_MODULE_NAME "math")
+  set(SWIG_PY_LIB pymath)
+  set(SWIG_PY_LIB_OUTPUT math)
 
   set(CMAKE_SWIG_OUTDIR "${CMAKE_INSTALL_PREFIX}/lib/python/ignition")
   if(CMAKE_VERSION VERSION_GREATER 3.8.0)
-    SWIG_ADD_LIBRARY(math LANGUAGE python SOURCES python/python.i ${sources})
+    SWIG_ADD_LIBRARY(${SWIG_PY_LIB} LANGUAGE python SOURCES python/python.i ${sources})
   else()
-    SWIG_ADD_MODULE(math python python/python.i ${sources})
+    SWIG_ADD_MODULE(${SWIG_PY_LIB} python python/python.i ${sources})
   endif()
 
-  SWIG_LINK_LIBRARIES(math ${PYTHON_LIBRARIES})
-  # Suppress warnings on SWIG-generated files
-  target_compile_options(_math PRIVATE
-    $<$<CXX_COMPILER_ID:GNU>:-Wno-pedantic -Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-cast-function-type>
-    $<$<CXX_COMPILER_ID:Clang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-cast-function-type>
-    $<$<CXX_COMPILER_ID:AppleClang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-cast-function-type>
+  SWIG_LINK_LIBRARIES(${SWIG_PY_LIB} ${PYTHON_LIBRARIES})
+
+  # When using SWIG 3 to build a python interface there is an extra underscore between the name of
+  # the library given to swig_add_library macro and the generated .so
+  if(NOT ${SWIG_VERSION} VERSION_GREATER 4.0.0)
+    set(SWIG_PY_LIB "_${SWIG_PY_LIB}")
+    set(SWIG_PY_LIB_OUTPUT "_${SWIG_PY_LIB_OUTPUT}")
+  endif()
+
+  set_target_properties(${SWIG_PY_LIB}
+    PROPERTIES
+      OUTPUT_NAME ${SWIG_PY_LIB_OUTPUT}
   )
-  install(TARGETS _math DESTINATION ${IGN_LIB_INSTALL_DIR}/python/ignition)
+
+  # Suppress warnings on SWIG-generated files
+  target_compile_options(${SWIG_PY_LIB} PRIVATE
+    $<$<CXX_COMPILER_ID:GNU>:-Wno-pedantic -Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-cast-function-type -Wno-missing-field-initializers>
+    $<$<CXX_COMPILER_ID:Clang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-cast-function-type -Wno-missing-field-initializers>
+    $<$<CXX_COMPILER_ID:AppleClang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-cast-function-type -Wno-missing-field-initializers>
+  )
+  install(TARGETS ${SWIG_PY_LIB} DESTINATION ${IGN_LIB_INSTALL_DIR}/python/ignition)
 endif()
