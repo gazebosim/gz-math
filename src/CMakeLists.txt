@@ -127,6 +127,10 @@ if (PYTHONLIBS_FOUND)
   
   set(python_files
     python
+    Angle
+    GaussMarkovProcess
+    Rand
+    Vector2
   )
   
   foreach (python_file ${python_files})
@@ -136,6 +140,8 @@ if (PYTHONLIBS_FOUND)
   foreach (test ${python_tests})
     add_test(NAME ${test}.py COMMAND 
       python3 ${CMAKE_SOURCE_DIR}/src/${test}.py)
+    set_tests_properties(${test}.py PROPERTIES
+      ENVIRONMENT "PYTHONPATH=${CMAKE_INSTALL_PREFIX}/lib/python/")
   endforeach()
 
 endif()
