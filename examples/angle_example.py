@@ -18,7 +18,7 @@
 # Modify the PYTHONPATH environment variable to include the ignition math
 # library install path. For example, if you install to /user:
 #
-# $ export PYTHONPATH=/usr/lib/python/ignition:$PYTHONPATH
+# $ export PYTHONPATH=/usr/lib/python/:$PYTHONPATH
 #
 
 import ignition.math

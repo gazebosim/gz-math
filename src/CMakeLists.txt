@@ -86,7 +86,7 @@ endif()
 #################################
 # Create and install Python interfaces
 # Example usage
-# $ export PYTHONPATH=/ws/install/lib/python/ignition
+# $ export PYTHONPATH=/ws/install/lib/python/:$PYTHONPATH
 if (PYTHONLIBS_FOUND)
   set_source_files_properties(python/python.i PROPERTIES CPLUSPLUS ON)
   set_source_files_properties(python/python.i PROPERTIES SWIG_FLAGS "-includeall")
@@ -122,4 +122,20 @@ if (PYTHONLIBS_FOUND)
     $<$<CXX_COMPILER_ID:AppleClang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-cast-function-type -Wno-missing-field-initializers>
   )
   install(TARGETS ${SWIG_PY_LIB} DESTINATION ${IGN_LIB_INSTALL_DIR}/python/ignition)
+
+  # Add the Python tests
+  
+  set(python_files
+    python
+  )
+  
+  foreach (python_file ${python_files})
+    list(APPEND python_tests ${python_file}_TEST)
+  endforeach()
+  
+  foreach (test ${python_tests})
+    add_test(NAME ${test}.py COMMAND 
+      python3 ${CMAKE_SOURCE_DIR}/src/${test}.py)
+  endforeach()
+
 endif()
