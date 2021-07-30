@@ -131,6 +131,8 @@ if (PYTHONLIBS_FOUND)
     GaussMarkovProcess
     Rand
     Vector2
+    Vector3
+    Vector4
   )
   
   foreach (python_file ${python_files})
