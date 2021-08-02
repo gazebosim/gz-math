@@ -18,7 +18,7 @@ import math
 from ignition.math import Vector4d
 
 
-class TestVector3(unittest.TestCase):
+class TestVector4(unittest.TestCase):
 
     def test_construction(self):
         v = Vector4d()
@@ -59,7 +59,7 @@ class TestVector3(unittest.TestCase):
         v = v / 2
         self.assertEqual(v, Vector4d(2, 1, 1, 0.5))
 
-        # __mult__
+        # __mul__
         v = v * Vector4d(2, 3, 3, 4)
         self.assertEqual(v, Vector4d(4, 3, 3, 2))
 

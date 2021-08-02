@@ -123,11 +123,11 @@ if (PYTHONLIBS_FOUND)
   )
   install(TARGETS ${SWIG_PY_LIB} DESTINATION ${IGN_LIB_INSTALL_DIR}/python/ignition)
 
-  # Add the Python testss
+  # Add the Python tests
   set(python_tests
-    python_TEST
     Angle_TEST
     GaussMarkovProcess_TEST
+    python_TEST
     Rand_TEST
     Vector2_TEST
     Vector3_TEST

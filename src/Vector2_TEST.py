@@ -17,7 +17,7 @@ import math
 from ignition.math import Vector2d
 
 
-class Vector2Test(unittest.TestCase):
+class TestVector2(unittest.TestCase):
 
     def test_construction(self):
         v = Vector2d()
@@ -53,7 +53,7 @@ class Vector2Test(unittest.TestCase):
         v.Set(4, 5)
         self.assertTrue(v.Equal(Vector2d(4, 5), 1e-4))
 
-        # Operator GetAbs
+        # Abs
         v.Set(-1, -2)
         self.assertTrue(v.Abs().Equal(Vector2d(1, 2), 1e-4))
 
