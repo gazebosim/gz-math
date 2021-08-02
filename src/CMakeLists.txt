@@ -123,22 +123,17 @@ if (PYTHONLIBS_FOUND)
   )
   install(TARGETS ${SWIG_PY_LIB} DESTINATION ${IGN_LIB_INSTALL_DIR}/python/ignition)
 
-  # Add the Python tests
-  
-  set(python_files
-    python
-    Angle
-    GaussMarkovProcess
-    Rand
-    Vector2
-    Vector3
-    Vector4
+  # Add the Python testss
+  set(python_tests
+    python_TEST
+    Angle_TEST
+    GaussMarkovProcess_TEST
+    Rand_TEST
+    Vector2_TEST
+    Vector3_TEST
+    Vector4_TEST
   )
-  
-  foreach (python_file ${python_files})
-    list(APPEND python_tests ${python_file}_TEST)
-  endforeach()
-  
+
   foreach (test ${python_tests})
     add_test(NAME ${test}.py COMMAND 
       python3 ${CMAKE_SOURCE_DIR}/src/${test}.py)
