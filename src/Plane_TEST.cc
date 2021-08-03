@@ -89,6 +89,17 @@ TEST(PlaneTest, Plane)
     EXPECT_TRUE(plane.Normal() == Vector3d(0, 1, 0));
     EXPECT_TRUE(plane.Size() == Vector2d(4, 4));
   }
+
+  {
+    auto plane = Planed(Vector3d(0, 1, 0), Vector2d(4, 4), 5.0);
+    auto point = plane.GetPointOnPlane(9, 5);
+    EXPECT_NEAR(plane.Normal().Dot(point), plane.Offset(), 1e-3);
+  }
+  {
+    auto plane = Planed(Vector3d(0, 0, 1), Vector2d(4, 4), 5.0);
+    auto point = plane.GetPointOnPlane(9, 7);
+    EXPECT_NEAR(plane.Normal().Dot(point), plane.Offset(), 1e-3);
+  }
 }
 
 /////////////////////////////////////////////////
@@ -149,4 +160,13 @@ TEST(PlaneTest, SideAxisAlignedBox)
     AxisAlignedBox box(Vector3d(0, 0, 0), Vector3d(3, 3, 3));
     EXPECT_EQ(plane.Side(box), Planed::BOTH_SIDE);
   }
+}
+
+/////////////////////////////////////////////////
+TEST(PlaneTest, Intersection)
+{
+  Planed plane(Vector3d(0.5, 0, 1), 1);
+  auto intersect = plane.Intersect(Vector3d(0, 0, 0), Vector3d(1, 0, 1));
+  EXPECT_TRUE(intersect.has_value());
+  EXPECT_NEAR(intersect->Dot(plane.Normal()), plane.Offset(), 1e-6);
 }

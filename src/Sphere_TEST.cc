@@ -131,3 +131,25 @@ TEST(SphereTest, Mass)
   EXPECT_EQ(expectedMassMat, massMat);
   EXPECT_DOUBLE_EQ(expectedMassMat.Mass(), massMat.Mass());
 }
+
+//////////////////////////////////////////////////
+TEST(SphereTest, VolumeBelow)
+{
+  double r = 2;
+  math::Sphered sphere(r);
+
+  {
+    math::Planed _plane(math::Vector3d{0,0,1}, math::Vector2d(4, 4), 2*r);
+    EXPECT_NEAR(sphere.Volume(), sphere.VolumeBelow(_plane), 1e-3);
+  }
+
+  {
+    math::Planed _plane(math::Vector3d{0,0,1}, math::Vector2d(4, 4), -2*r);
+    EXPECT_NEAR(sphere.VolumeBelow(_plane), 0, 1e-3);
+  }
+
+  {
+    math::Planed _plane(math::Vector3d{0,0,1}, 0);
+    EXPECT_NEAR(sphere.Volume()/2, sphere.VolumeBelow(_plane), 1e-3);
+  }
+}

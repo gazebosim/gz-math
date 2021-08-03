@@ -21,6 +21,8 @@
 #include <ignition/math/Vector2.hh>
 #include <ignition/math/Vector3.hh>
 #include <ignition/math/config.hh>
+#include <ignition/math/Plane.hh>
+#include <ignition/math/Line2.hh>
 
 namespace ignition
 {
@@ -117,6 +119,73 @@ namespace ignition
       public: T Distance(const Vector3<T> &_point) const
       {
         return this->normal.Dot(_point) - this->d;
+      }
+
+      /// \brief Given x,y point find corresponding Z point on plane.
+      /// \param[in] x - 2d x coordinate.
+      /// \param[in] y - 2d y coordinate.
+      /// \return coincident point.
+      public: Vector3<T> GetPointOnPlane(const T x, const T y) const
+      {
+        auto z_val = (this->Normal().Z() != 0) ?
+         (this->Offset() - (this->Normal().Dot({x,y,0})))/this->Normal().Z()
+         : 0;
+        auto coincidentPoint = Vector3<T>{x,y,z_val};
+        return coincidentPoint;
+      }
+
+      /// \brief Get the intersection of a line with the plane
+      /// given the line's gradient and a point in parametrized space.
+      /// \param[in] _point A point that lies on a line.
+      /// \param[in] _gradient The gradient of the line.
+      /// \return The point of intersection. std::nullopt if the line is
+      /// parrallel to the plane.
+      public: std::optional<Vector3<T>> Intersect(
+        const Vector3<T> &_point,
+        const Vector3<T> &_gradient) const
+      {
+        if(abs(this->Normal().Dot(_gradient)) < 1e-6)
+        {
+          return std::nullopt;
+        }
+        auto constant = this->Offset() - this->Normal().Dot(_point);
+        auto param = constant/this->Normal().Dot(_gradient);
+        auto intersection = _point + _gradient*param;
+        return intersection;
+      }
+
+      /// \brief Get the volume under a plane.
+      /// \requires The plane is not parallel to the z axis. And the slopes are
+      /// not vertical.
+      /// \param[in] _line1 A line that lies on the plane and bounds the x-axis
+      /// \param[in] _line2 A line that lies on the plane and bounds the x-axis
+      /// \param[in] _ylowerlimit The lower limit of the y-axis
+      /// \param[in] _yupperlimit The upper limit of the y-axis
+      /// \return The volume under the plane.
+      public: T Volume(const Line2<T> &_line1,
+                      const Line2<T> &_line2,
+                      const T _ylowerlimit,
+                      const T _yupperlimit) const
+      {
+        auto l = _ylowerlimit;
+        auto m = _yupperlimit;
+        auto k = this->Offset();
+        auto j = this->Normal().X()/this->Normal().Z();
+        auto n = this->Normal().Y()/this->Normal().Z();
+
+        auto a_1 = _line1.Slope();
+        auto a_2 = _line2.Slope();
+        auto b_1 = _line1[0].Y() - _line1[0].X() * a_1;
+        auto b_2 = _line2[0].Y() - _line2[0].X() * a_1;
+
+        // computed using wolfram alpha:
+        // https://www.wolframalpha.com/input/?i=integral+from+m+to+l+of+%28integral+++%28k+-+jx-+ny%29++dy+from+a_1x+%2B+b_1+to+a_2x+%2Bb_2%29+dx
+        auto vol = 1/6 *
+        (-3 * (l*l - m*m) * (a_1 * (k - b_1 * n)
+        + a_2 * (b_2 * n - k) + (b_2 - b_1) * j)
+        + (a_1 - a_2) * (l*l*l - m*m*m) * (a_1 * n + a_2 * n + 2 * j)
+        + 3 * (b_1 - b_2) * (l - m) * (b_1 * n + b_2 * n - 2 * k));
+        return vol;
       }
 
       /// \brief The side of the plane a point is on.

@@ -21,6 +21,9 @@
 #include <ignition/math/MassMatrix3.hh>
 #include <ignition/math/Material.hh>
 #include <ignition/math/Vector3.hh>
+#include <ignition/math/Plane.hh>
+
+#include <vector>
 
 namespace ignition
 {
@@ -128,6 +131,11 @@ namespace ignition
       /// \return Volume of the box in m^3.
       public: Precision Volume() const;
 
+      /// \brief Get the volume of the box below a plane.
+      /// \param[in] _plane The plane which cuts the box.
+      /// \return Volume below the plane in m^3.
+      public: Precision VolumeBelow(const Plane<Precision> &_plane) const;
+
       /// \brief Compute the box's density given a mass value. The
       /// box is assumed to be solid with uniform density. This
       /// function requires the box's size to be set to
@@ -166,6 +174,10 @@ namespace ignition
 
       /// \brief The box's material.
       private: ignition::math::Material material;
+
+      /// \brief Get intersection between a plane and the box.
+      private: std::vector<Vector3<Precision>> GetIntersections(
+        const Plane<Precision> &_plane) const;
     };
 
     /// \typedef Box<int> Boxi

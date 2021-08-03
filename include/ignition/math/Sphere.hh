@@ -20,6 +20,7 @@
 #include "ignition/math/MassMatrix3.hh"
 #include "ignition/math/Material.hh"
 #include "ignition/math/Quaternion.hh"
+#include "ignition/math/Plane.hh"
 
 namespace ignition
 {
@@ -90,6 +91,12 @@ namespace ignition
       /// \brief Get the volume of the sphere in m^3.
       /// \return Volume of the sphere in m^3.
       public: Precision Volume() const;
+
+      /// \brief Get the volume of sphere below a given plane in m^3.
+      /// It is assumed that the center of the sphere is on the origin
+      /// \param[in] plane - the plane which slices this sphere.
+      /// \return Volume below the sphere in m^3.
+      public: Precision VolumeBelow(const Planed &_plane) const;
 
       /// \brief Compute the sphere's density given a mass value. The
       /// sphere is assumed to be solid with uniform density. This

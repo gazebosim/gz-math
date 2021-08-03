@@ -16,6 +16,8 @@
 */
 #ifndef IGNITION_MATH_DETAIL_BOX_HH_
 #define IGNITION_MATH_DETAIL_BOX_HH_
+
+#include <unordered_set>
 namespace ignition
 {
 namespace math
@@ -115,6 +117,151 @@ T Box<T>::Volume() const
 
 /////////////////////////////////////////////////
 template<typename T>
+std::pair<Line2<T>, Line2<T>> GetIntersectionPairPerpendicularToXAxis(
+  const std::vector<Vector3<T>> &_points)
+{
+  for(int i = 0; i < _points.size(); i++)
+  {
+    for(int j = 0; j < _points.size(); j++)
+    {
+      if(i == j) continue;
+
+      auto line1 = Line2<T>(_points[i].X(), _points[i].Y(),
+        _points[j].X(), _points[j].Y());
+
+      std::unordered_set<int> set{0,1,2,3};
+      set.erase(i);
+      set.erase(j);
+
+      auto it = set.begin();
+      it++;
+      auto line2 = Line2<T>(_points[*it].X(), _points[*it].Y(),
+         _points[*set.begin()].X(), _points[*set.begin()].Y());
+
+      if(line1.Intersect(line2))
+        continue;
+
+      if(!std::isnan(line1.Slope()) && !std::isnan(line2.Slope()))
+        return std::make_pair(line1, line2);
+    }
+  }
+}
+
+/////////////////////////////////////////////////
+template<typename T>
+T Box<T>::VolumeBelow(const Plane<T> &_plane) const
+{
+  // Get coordinates of all vertice of box
+  // TODO: Cache this for performance
+  std::vector<Vector3<T> > vertices {
+    Vector3<T>{this->size.X()/2, this->size.Y()/2, this->size.Z()/2},
+    Vector3<T>{-this->size.X()/2, this->size.Y()/2, this->size.Z()/2},
+    Vector3<T>{this->size.X()/2, -this->size.Y()/2, this->size.Z()/2},
+    Vector3<T>{-this->size.X()/2, -this->size.Y()/2, this->size.Z()/2},
+    Vector3<T>{this->size.X()/2, this->size.Y()/2, -this->size.Z()/2},
+    Vector3<T>{-this->size.X()/2, this->size.Y()/2, -this->size.Z()/2},
+    Vector3<T>{this->size.X()/2, -this->size.Y()/2, -this->size.Z()/2},
+    Vector3<T>{-this->size.X()/2, -this->size.Y()/2, -this->size.Z()/2}
+  };
+
+  auto numVerticesBelow = 0;
+  for(auto &v : vertices)
+  {
+    if(_plane.Distance(v) < 0)
+    {
+      numVerticesBelow++;
+    }
+  }
+
+  if (numVerticesBelow == 0)
+  {
+    return 0;
+  }
+  else if (numVerticesBelow == 1)
+  {
+    // Get vertex which is below the plance
+    Vector3<T> vertex;
+    for(auto &v : vertices)
+    {
+      if(_plane.Distance(v) < 0)
+      {
+        vertex = v;
+      }
+    }
+    // Compute tetrahedron by getting points of intersection
+    auto intersections = GetIntersections(_plane);
+    auto area = (intersections[1] - intersections[0]).Cross(intersections[2] - intersections[0]).Length() / 2;
+    return area * abs(_plane.Distance(vertex)) / 3;
+  }
+  else if (numVerticesBelow == 2)
+  {
+    // Compute integral of area under plane bounded by box
+    auto intersections = GetIntersections(_plane);
+    if(_plane.Normal().Z() != 0)
+    {
+      //TODO: Determine direction of cut
+      // Get integral bounds
+      auto [line1, line2] = GetIntersectionPairPerpendicularToXAxis(intersections);
+      return _plane.Volume(line1, line2, -this->size.X()/2, this->size.X()/2);
+    }
+    else
+    {
+      // Create a a new plane and box with corrected axis.
+    }
+  }
+  else if (numVerticesBelow == 3)
+  {
+
+  }
+  else if (numVerticesBelow == 4)
+  {
+    if(_plane.Normal().Z() == 0)
+    {
+      // Switch Axis
+
+      //Plane<T> newPlane();
+    }
+    // Compute integral of area under plane bounded by box
+    // Setup bounds
+    Line2<T> line1(-this->size.X()/2, -this->size.Y()/2,
+                    this->size.X()/2, -this->size.Y()/2);
+
+    Line2<T> line2(-this->size.X()/2, this->size.Y()/2,
+                    this->size.X()/2, this->size.Y()/2);
+    return _plane.Volume(line1, line2, -this->size.X()/2, this->size.X()/2);
+  }
+  else if (numVerticesBelow == 5)
+  {
+    // Compute ??
+  }
+  else if (numVerticesBelow == 6)
+  {
+    // Compute
+  }
+  else if (numVerticesBelow == 7)
+  {
+    // Get vertex which is below the plance
+    Vector3<T> vertex;
+    for(auto &v : vertices)
+    {
+      if(_plane.Distance(v) > 0)
+      {
+        vertex = v;
+      }
+    }
+    // Compute tetrahedron by getting points of intersection
+    auto intersections = this->GetIntersections(_plane);
+    auto area = 0.5 * (intersections[1] - intersections[0]).Cross(intersections[2] - intersections[0]).Length();
+    return this->Volume() - area * abs(_plane.Distance(vertex)) / 3;
+  }
+  else
+  {
+    return this->Volume();
+  }
+}
+
+/////////////////////////////////////////////////
+template<typename T>
 T Box<T>::DensityFromMass(const T _mass) const
 {
   if (this->size.Min() <= 0|| _mass <= 0)
@@ -139,6 +286,53 @@ bool Box<T>::MassMatrix(MassMatrix3<T> &_massMat) const
 {
   return _massMat.SetFromBox(this->material, this->size);
 }
+
+
+//////////////////////////////////////////////////
+template<typename T>
+std::vector<Vector3<T>> Box<T>::GetIntersections(
+        const Plane<T> &_plane) const
+{
+  std::vector<Vector3<T>> intersections;
+  // These are vertice via which we can describe edges. We only need 4 such
+  // vertices
+  std::vector<Vector3<T> > vertices {
+    Vector3<T>{-this->size.X()/2, -this->size.Y()/2, -this->size.Z()/2},
+    Vector3<T>{this->size.X()/2, this->size.Y()/2, -this->size.Z()/2},
+    Vector3<T>{this->size.X()/2, -this->size.Y()/2, this->size.Z()/2},
+    Vector3<T>{-this->size.X()/2, this->size.Y()/2, this->size.Z()/2}
+  };
+
+  // Axises
+  std::vector<Vector3<T>> axes {
+    Vector3<T>{1, 0, 0},
+    Vector3<T>{0, 1, 0},
+    Vector3<T>{0, 0, 1}
+  };
+
+  // There are 12 edges. However, we just need 4 points to describe the
+  // twelve edges.
+  for(auto &v : vertices)
+  {
+    for(auto &a : axes)
+    {
+      auto intersection = _plane.Intersect(v, a);
+      if(intersection.has_value() &&
+        intersection->X() >= -this->size.X()/2 &&
+        intersection->X() <= this->size.X()/2 &&
+        intersection->Y() >= -this->size.Y()/2 &&
+        intersection->Y() <= this->size.Y()/2 &&
+        intersection->Z() >= -this->size.Z()/2 &&
+        intersection->Z() <= this->size.Z()/2)
+      {
+        intersections.push_back(intersection.value());
+      }
+    }
+  }
+
+  return intersections;
+}
+
 }
 }
 #endif
