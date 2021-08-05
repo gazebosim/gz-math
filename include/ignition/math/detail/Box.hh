@@ -223,12 +223,15 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
     }
     // Compute integral of area under plane bounded by box
     // Setup bounds
+    Plane<T> newPlane(
+      _plane.Normal(), _plane.Offset() + (this->size.Z()/2)*_plane.Normal().Z());
     Line2<T> line1(-this->size.X()/2, -this->size.Y()/2,
                     this->size.X()/2, -this->size.Y()/2);
 
     Line2<T> line2(-this->size.X()/2, this->size.Y()/2,
                     this->size.X()/2, this->size.Y()/2);
-    return _plane.Volume(line1, line2, -this->size.X()/2, this->size.X()/2);
+
+    return newPlane.Volume(line2, line1, -this->size.X()/2, this->size.X()/2);
   }
   else if (numVerticesBelow == 5)
   {

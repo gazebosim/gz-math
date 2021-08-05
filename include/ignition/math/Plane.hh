@@ -169,7 +169,7 @@ namespace ignition
       {
         auto l = _ylowerlimit;
         auto m = _yupperlimit;
-        auto k = this->Offset();
+        auto k = this->Offset()/this->Normal().Z();
         auto j = this->Normal().X()/this->Normal().Z();
         auto n = this->Normal().Y()/this->Normal().Z();
 
@@ -180,11 +180,11 @@ namespace ignition
 
         // computed using wolfram alpha:
         // https://www.wolframalpha.com/input/?i=integral+from+m+to+l+of+%28integral+++%28k+-+jx-+ny%29++dy+from+a_1x+%2B+b_1+to+a_2x+%2Bb_2%29+dx
-        auto vol = 1/6 *
-        (-3 * (l*l - m*m) * (a_1 * (k - b_1 * n)
+        auto vol = 1.0/6.0 *
+        (-3.0 * (l*l - m*m) * (a_1 * (k - b_1 * n)
         + a_2 * (b_2 * n - k) + (b_2 - b_1) * j)
         + (a_1 - a_2) * (l*l*l - m*m*m) * (a_1 * n + a_2 * n + 2 * j)
-        + 3 * (b_1 - b_2) * (l - m) * (b_1 * n + b_2 * n - 2 * k));
+        + 3.0 * (b_1 - b_2) * (l - m) * (b_1 * n + b_2 * n - 2 * k));
         return vol;
       }
 
