@@ -117,7 +117,7 @@ T Box<T>::Volume() const
 
 /////////////////////////////////////////////////
 template<typename T>
-std::pair<Line2<T>, Line2<T>> GetIntersectionPairPerpendicularToXAxis(
+std::pair<Line2<T>, Line2<T>> GetIntersectionPairAlongXAxis(
   const std::vector<Vector3<T>> &_points)
 {
   for(int i = 0; i < _points.size(); i++)
@@ -195,14 +195,16 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
   }
   else if (numVerticesBelow == 2)
   {
+    Plane<T> newPlane(
+      _plane.Normal(), _plane.Offset() + (this->size.Z()/2)*_plane.Normal().Z());
     // Compute integral of area under plane bounded by box
     auto intersections = GetIntersections(_plane);
     if(_plane.Normal().Z() != 0)
     {
       //TODO: Determine direction of cut
       // Get integral bounds
-      auto [line1, line2] = GetIntersectionPairPerpendicularToXAxis(intersections);
-      return _plane.Volume(line1, line2, -this->size.X()/2, this->size.X()/2);
+      auto [line1, line2] = GetIntersectionPairAlongXAxis(intersections);
+      return abs(newPlane.Volume(line1, line2, -this->size.X()/2, this->size.X()/2));
     }
     else
     {
