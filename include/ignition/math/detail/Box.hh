@@ -149,6 +149,74 @@ std::pair<Line2<T>, Line2<T>> GetIntersectionPairAlongXAxis(
 
 /////////////////////////////////////////////////
 template<typename T>
+std::optional<Line2<T>> GetLineOfEntryAlongZPlane(
+  const std::vector<Vector3<T>> &_points,
+  float _zplane_value,
+  Vector3<T> axis = Vector3<T>(0,0,1)
+)
+{
+  Vector3<T> points[2];
+  int numPoints = 0;
+  for(auto v : _zplane_value)
+  {
+    if (v.Dot(axis) == _zplane_value)
+    {
+      points[numPoints] = v;
+      numPoints++;
+    }
+
+    if (numPoints == 2)
+      break;
+  }
+  if(numPoints != 2)
+    return std::nullopt;
+  return Line2<T>(points[0], points[1]);
+}
+
+/////////////////////////////////////////////////
+template<typename>
+Vector3<T> axisOfCut(const Box<T>& box, std::vector<Vector3<T>>& intersections)
+{
+  int numXAxis = 0;
+  int numYAxis = 0;
+  int numZAxis = 0;
+
+  for(auto point: intersections)
+  {
+    if(point.X() == -this->size.X()/2 || point.X() == this->size.X()/2)
+    {
+      numXAxis++;
+    }
+
+    if(point.Y() == -this->size.Y()/2 || point.Y() == this->size.Y()/2)
+    {
+      numYAxis++;
+    }
+
+    if(point.Z() == -this->size.Z()/2 || point.Z() == this->size.Z()/2)
+    {
+      numZAxis++;
+    }
+  }
+
+  if(numXAxis >= numYAxis && numXAxis >= numZAxis)
+  {
+    return Vector3<T> (1,0,0);
+  }
+
+  if(numYAxis >= numXAxis && numYAxis >= numZAxis)
+  {
+    return Vector3<T> (1,0,0);
+  }
+
+  if(numZAxis >= numYAxis && numZAxis >= numXAxis)
+  {
+    return Vector3<T> (1,0,0);
+  }
+}
+
+/////////////////////////////////////////////////
+template<typename T>
 T Box<T>::VolumeBelow(const Plane<T> &_plane) const
 {
   // Get coordinates of all vertice of box
@@ -164,105 +232,21 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
     Vector3<T>{-this->size.X()/2, -this->size.Y()/2, -this->size.Z()/2}
   };
 
-  auto numVerticesBelow = 0;
+  std::vector<Vector3<T>> verticesBelow;
   for(auto &v : vertices)
   {
     if(_plane.Distance(v) < 0)
     {
-      numVerticesBelow++;
+      verticesBelow.push_back(v);
     }
   }
 
-  if (numVerticesBelow == 0)
-  {
-    return 0;
-  }
-  else if (numVerticesBelow == 1)
-  {
-    // Get vertex which is below the plance
-    Vector3<T> vertex;
-    for(auto &v : vertices)
-    {
-      if(_plane.Distance(v) < 0)
-      {
-        vertex = v;
-      }
-    }
-    // Compute tetrahedron by getting points of intersection
-    auto intersections = GetIntersections(_plane);
-    auto area = (intersections[1] - intersections[0]).Cross(intersections[2] - intersections[0]).Length() / 2;
-    return area * abs(_plane.Distance(vertex)) / 3;
-  }
-  else if (numVerticesBelow == 2)
-  {
-    Plane<T> newPlane(
-      _plane.Normal(), _plane.Offset() + (this->size.Z()/2)*_plane.Normal().Z());
-    // Compute integral of area under plane bounded by box
-    auto intersections = GetIntersections(_plane);
-    if(_plane.Normal().Z() != 0)
-    {
-      //TODO: Determine direction of cut
-      // Get integral bounds
-      auto [line1, line2] = GetIntersectionPairAlongXAxis(intersections);
-      return abs(newPlane.Volume(line1, line2, -this->size.X()/2, this->size.X()/2));
-    }
-    else
-    {
-      // Create a a new plane and box with corrected axis.
-    }
-  }
-  else if (numVerticesBelow == 3)
-  {
+  auto intersectionPoints = GetIntersections(_plane);
 
-  }
-  else if (numVerticesBelow == 4)
-  {
-    if(_plane.Normal().Z() == 0)
-    {
-      // Switch Axis
+  // std::vector<Vector3<T>> polytopeEdges = 
 
-      //Plane<T> newPlane();
-    }
-    // Compute integral of area under plane bounded by box
-    // Setup bounds
-    Plane<T> newPlane(
-      _plane.Normal(), _plane.Offset() + (this->size.Z()/2)*_plane.Normal().Z());
-    Line2<T> line1(-this->size.X()/2, -this->size.Y()/2,
-                    this->size.X()/2, -this->size.Y()/2);
-
-    Line2<T> line2(-this->size.X()/2, this->size.Y()/2,
-                    this->size.X()/2, this->size.Y()/2);
-
-    return newPlane.Volume(line2, line1, -this->size.X()/2, this->size.X()/2);
-  }
-  else if (numVerticesBelow == 5)
-  {
-    // Compute ??
-  }
-  else if (numVerticesBelow == 6)
-  {
-    // Compute
-  }
-  else if (numVerticesBelow == 7)
-  {
-    // Get vertex which is below the plance
-    Vector3<T> vertex;
-    for(auto &v : vertices)
-    {
-      if(_plane.Distance(v) > 0)
-      {
-        vertex = v;
-      }
-    }
-    // Compute tetrahedron by getting points of intersection
-    auto intersections = this->GetIntersections(_plane);
-    auto area = 0.5 * (intersections[1] - intersections[0]).Cross(intersections[2] - intersections[0]).Length();
-    return this->Volume() - area * abs(_plane.Distance(vertex)) / 3;
-  }
-  else
-  {
-    return this->Volume();
-  }
+  // Construct a convex hull. Use the Gift-Wrapping method for simplicity
+  // Intersection Points will form the first face.
 }
 
 /////////////////////////////////////////////////
