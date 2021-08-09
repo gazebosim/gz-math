@@ -17,6 +17,9 @@
 #ifndef IGNITION_MATH_DETAIL_BOX_HH_
 #define IGNITION_MATH_DETAIL_BOX_HH_
 
+#include "ignition/math/Triangle3.hh"
+
+#include <queue>
 #include <unordered_set>
 namespace ignition
 {
@@ -117,103 +120,65 @@ T Box<T>::Volume() const
 
 /////////////////////////////////////////////////
 template<typename T>
-std::pair<Line2<T>, Line2<T>> GetIntersectionPairAlongXAxis(
-  const std::vector<Vector3<T>> &_points)
-{
-  for(int i = 0; i < _points.size(); i++)
-  {
-    for(int j = 0; j < _points.size(); j++)
-    {
-      if(i == j) continue;
-
-      auto line1 = Line2<T>(_points[i].X(), _points[i].Y(),
-        _points[j].X(), _points[j].Y());
-
-      std::unordered_set<int> set{0,1,2,3};
-      set.erase(i);
-      set.erase(j);
-
-      auto it = set.begin();
-      it++;
-      auto line2 = Line2<T>(_points[*it].X(), _points[*it].Y(),
-         _points[*set.begin()].X(), _points[*set.begin()].Y());
-
-      if(line1.Intersect(line2))
-        continue;
-
-      if(!std::isnan(line1.Slope()) && !std::isnan(line2.Slope()))
-        return std::make_pair(line1, line2);
-    }
-  }
-}
-
+struct TriangleFace {
+  Triangle3<T> triangle;
+  std::size_t indices[3];
+};
 /////////////////////////////////////////////////
 template<typename T>
-std::optional<Line2<T>> GetLineOfEntryAlongZPlane(
-  const std::vector<Vector3<T>> &_points,
-  float _zplane_value,
-  Vector3<T> axis = Vector3<T>(0,0,1)
-)
+bool isConvexOuterFace(
+  const TriangleFace<T> &_face, const std::vector<Vector3<T>> &_vertices)
 {
-  Vector3<T> points[2];
-  int numPoints = 0;
-  for(auto v : _zplane_value)
+  Plane<T> plane(_face.triangle.Normal(),
+    _face.triangle.Normal().Dot(_vertices[_face.indices[0]]));
+
+  std::optional<bool> signPositive = std::nullopt;
+
+  for (auto v: _vertices)
   {
-    if (v.Dot(axis) == _zplane_value)
+    auto dist = plane.Distance(v);
+    if (dist == 0) continue;
+
+    if (dist > 0)
     {
-      points[numPoints] = v;
-      numPoints++;
+      if (signPositive.has_value())
+      {
+        if(!signPositive.value()) return false;
+      }
+      signPositive = true;
     }
-
-    if (numPoints == 2)
-      break;
+    else
+    {
+      if (signPositive.has_value())
+      {
+        if(signPositive.value()) return false;
+      }
+      signPositive = false;
+    }
   }
-  if(numPoints != 2)
-    return std::nullopt;
-  return Line2<T>(points[0], points[1]);
-}
 
+  return true;
+}
 /////////////////////////////////////////////////
-template<typename>
-Vector3<T> axisOfCut(const Box<T>& box, std::vector<Vector3<T>>& intersections)
+struct Edge
 {
-  int numXAxis = 0;
-  int numYAxis = 0;
-  int numZAxis = 0;
+  std::size_t a, b;
 
-  for(auto point: intersections)
+  Edge(std::size_t _a, std::size_t _b): a(_a), b(_b) {}
+
+  bool operator==(const Edge& other)  const
   {
-    if(point.X() == -this->size.X()/2 || point.X() == this->size.X()/2)
-    {
-      numXAxis++;
-    }
-
-    if(point.Y() == -this->size.Y()/2 || point.Y() == this->size.Y()/2)
-    {
-      numYAxis++;
-    }
-
-    if(point.Z() == -this->size.Z()/2 || point.Z() == this->size.Z()/2)
-    {
-      numZAxis++;
-    }
+    return (a == other.a && b == other.b) ||
+          (a == other.b && b == other.a);
   }
-
-  if(numXAxis >= numYAxis && numXAxis >= numZAxis)
+};
+/////////////////////////////////////////////////
+struct EdgeHash {
+  std::size_t operator()(const Edge &_e) const
   {
-    return Vector3<T> (1,0,0);
-  }
-
-  if(numYAxis >= numXAxis && numYAxis >= numZAxis)
-  {
-    return Vector3<T> (1,0,0);
-  }
-
-  if(numZAxis >= numYAxis && numZAxis >= numXAxis)
-  {
-    return Vector3<T> (1,0,0);
-  }
-}
+    return std::hash<std::size_t>()(_e.a) ^ std::hash<std::size_t>()(_e.b);
+  };
+};
 
 /////////////////////////////////////////////////
 template<typename T>
@@ -232,7 +197,7 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
     Vector3<T>{-this->size.X()/2, -this->size.Y()/2, -this->size.Z()/2}
   };
 
-  std::vector<Vector3<T>> verticesBelow;
+  std::vector<Vector3<T> >  verticesBelow;
   for(auto &v : vertices)
   {
     if(_plane.Distance(v) < 0)
@@ -241,12 +206,74 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
     }
   }
 
-  auto intersectionPoints = GetIntersections(_plane);
+  if(verticesBelow.size() == 0)
+    return 0;
+  //if(verticesBelow.size() == 8)
+  //  return Volume();
 
-  // std::vector<Vector3<T>> polytopeEdges = 
+  auto intersections = GetIntersections(_plane);
+  verticesBelow.insert(verticesBelow.end(),
+    intersections.begin(), intersections.end());
 
-  // Construct a convex hull. Use the Gift-Wrapping method for simplicity
-  // Intersection Points will form the first face.
+  /// Get the convex hull triangle mesh of the vertices in the shape.
+  /// This uses the so called Gift-Wrapping algorithm. It isn't the most
+  /// efficient but given the smalll number of points it should be fast enough.
+  std::queue<Edge> activeEdges;
+
+  std::vector<TriangleFace<T>> triangles;
+  triangles.push_back(TriangleFace<T>{
+    Triangle3<T>{
+      verticesBelow[verticesBelow.size() - 1],
+      verticesBelow[verticesBelow.size() - 2],
+      verticesBelow[verticesBelow.size() - 3]},
+    {verticesBelow.size() - 1, verticesBelow.size() - 2, verticesBelow.size() - 3}
+    });
+  activeEdges.emplace(verticesBelow.size() - 1, verticesBelow.size() - 2);
+  activeEdges.emplace(verticesBelow.size() - 2, verticesBelow.size() - 3);
+  activeEdges.emplace(verticesBelow.size() - 1, verticesBelow.size() - 3);
+
+  std::unordered_set<Edge, EdgeHash> exploredEdges;
+  while(!activeEdges.empty())
+  {
+    auto edge = activeEdges.front();
+    activeEdges.pop();
+    if(exploredEdges.count(edge) != 0)
+      continue;
+    exploredEdges.insert(edge);
+    for (std::size_t i = 0; i < verticesBelow.size(); ++i)
+    {
+      if (i == edge.a || i == edge.b) continue;
+      // Attempt to create a triangle
+      TriangleFace<T> newTriangle{
+        Triangle3<T>(
+          verticesBelow[edge.a],
+          verticesBelow[edge.b],
+          verticesBelow[i]),
+        {edge.a, edge.b, i}
+      };
+
+      if(!isConvexOuterFace(newTriangle, verticesBelow)) continue;
+
+      triangles.push_back(newTriangle);
+
+      if(exploredEdges.count(edge) == 0)
+        activeEdges.emplace(i, edge.a);
+      if(exploredEdges.count(edge) == 0)
+        activeEdges.emplace(i, edge.b);
+    }
+  }
+
+  // Calculate the volume of the triangles
+  // https://n-e-r-v-o-u-s.com/blog/?p=4415
+  T volume = 0;
+  for(auto triangle : triangles)
+  {
+    auto crossProduct = verticesBelow[triangle.indices[0]]
+        .Cross(verticesBelow[triangle.indices[1]]);
+    volume += crossProduct.Dot(verticesBelow[triangle.indices[2]]);
+  }
+
+  return abs(volume)/6;
 }
 
 /////////////////////////////////////////////////
