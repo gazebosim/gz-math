@@ -60,7 +60,7 @@ if (SWIG_FOUND)
 
   ########################################
   # Include python
-  find_package(PythonLibs REQUIRED)
+  find_package(PythonLibs QUIET)
   if (NOT PYTHONLIBS_FOUND)
     message (STATUS "Searching for Python - not found.")
   else()
