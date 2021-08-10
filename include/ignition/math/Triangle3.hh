@@ -234,6 +234,41 @@ namespace ignition
         return false;
       }
 
+      /// \brief Get whether a triangle overlaps with another triangle.
+      /// \return boolean indicating whether the triangles overlap.
+      public: bool Overlaps(const Triangle3<T> &_triangle) const
+      {
+        int sideCount = 0;
+        for(unsigned int i = 0; i < 3; ++i)
+        {
+          for(unsigned int j = i; j < 3; ++j)
+          {
+            Vector3d unused;
+            if(this->Side(i).Intersect(_triangle.Side(j), unused))
+            {
+              sideCount++;
+            }
+          }
+        }
+        /// If the triangles are adjacent to each other they may share an
+        /// intersecting edge. However if two triangles overlap they must have
+        /// at least two intersecting edges.
+        if(sideCount > 1)
+        {
+          return true;
+        }
+
+        // Check if any of the points of the triangles are inside the other
+        for(unsigned int i = 0; i < 3; ++i)
+        {
+          if(_triangle.Contains(this->pts[i]))
+            return true;
+          if(this->Contains(_triangle.pts[i]))
+            return true;
+        }
+        return false;
+      }
+
       /// \brief Get the length of the triangle's perimeter.
       /// \return Sum of the triangle's line segments.
       public: T Perimeter() const

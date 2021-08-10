@@ -202,6 +202,27 @@ TEST(Triangle3Test, Intersects)
   }
 }
 
+TEST(Triangle3Test, Overlaps)
+{
+  Triangle3d tri(Vector3d(0, 0, 0),
+                 Vector3d(0, 1, 0),
+                 Vector3d(1, 0, 0));
+  Triangle3d tri2(Vector3d(0, 0, 0),
+                 Vector3d(0, 1, 0),
+                 Vector3d(1, 0, 0));
+  EXPECT_TRUE(tri.Overlaps(tri2));
+
+  tri2.Set(Vector3d(0, 1, 0),
+          Vector3d(0, 0, 0),
+          Vector3d(1, 0, 0));
+  EXPECT_TRUE(tri.Overlaps(tri2));
+
+  tri2.Set(Vector3d(100, 100, 100),
+          Vector3d(100, 101, 100),
+          Vector3d(101, 100, 100));
+  EXPECT_FALSE(tri.Overlaps(tri2));
+}
+
 /////////////////////////////////////////////////
 TEST(Triangle3Test, ContainsPt)
 {

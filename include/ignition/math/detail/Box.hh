@@ -123,6 +123,20 @@ template<typename T>
 struct TriangleFace {
   Triangle3<T> triangle;
   std::size_t indices[3];
+
+  bool operator==(const TriangleFace &_t) const
+  {
+    std::unordered_set<std::size_t> indices1, indices2;
+    indices1.insert(this->indices[0]);
+    indices1.insert(this->indices[1]);
+    indices1.insert(this->indices[2]);
+
+    indices2.insert(_t.indices[0]);
+    indices2.insert(_t.indices[1]);
+    indices2.insert(_t.indices[2]);
+
+    return indices1 == indices2;
+  }
 };
 /////////////////////////////////////////////////
 template<typename T>
@@ -182,6 +196,31 @@ struct EdgeHash {
 
 /////////////////////////////////////////////////
 template<typename T>
+struct TriangleFaceHash {
+  std::size_t operator()(const TriangleFace<T> &_t) const
+  {
+    return std::hash<std::size_t>()(_t.indices[0])
+      ^ std::hash<std::size_t>()(_t.indices[1])
+      ^ std::hash<std::size_t>()(_t.indices[2]);
+  }
+};
+/////////////////////////////////////////////////
+template<typename T>
+bool HasOverlap(
+  const TriangleFace<T>& face,
+  const std::unordered_set<TriangleFace<T>, TriangleFaceHash<T>> &_faces)
+{
+  for (auto f: _faces)
+  {
+    if(f.triangle.Overlaps(face.triangle))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+/////////////////////////////////////////////////
+template<typename T>
 T Box<T>::VolumeBelow(const Plane<T> &_plane) const
 {
   // Get coordinates of all vertice of box
@@ -220,8 +259,8 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
   /// efficient but given the smalll number of points it should be fast enough.
   std::queue<Edge> activeEdges;
 
-  std::vector<TriangleFace<T>> triangles;
-  triangles.push_back(TriangleFace<T>{
+  std::unordered_set<TriangleFace<T>, TriangleFaceHash<T>> triangles;
+  triangles.insert(TriangleFace<T>{
     Triangle3<T>{
       verticesBelow[verticesBelow.size() - 1],
       verticesBelow[verticesBelow.size() - 2],
@@ -252,26 +291,51 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
         {edge.a, edge.b, i}
       };
 
-      if(!isConvexOuterFace(newTriangle, verticesBelow)) continue;
+      std::cout << "Testing edge " << verticesBelow[edge.a]
+        << "--" << verticesBelow[edge.b] << std::endl;
+      std::cout << "Point: " << verticesBelow[i] << std::endl;
 
-      triangles.push_back(newTriangle);
+      if(!isConvexOuterFace(newTriangle, verticesBelow)
+        || HasOverlap(newTriangle, triangles)) continue;
 
-      if(exploredEdges.count(edge) == 0)
-        activeEdges.emplace(i, edge.a);
-      if(exploredEdges.count(edge) == 0)
-        activeEdges.emplace(i, edge.b);
+      std::cout << "Accepted" << std::endl;
+
+      bool triangleIsNew = false;
+      Edge newEdge1{edge.a, i};
+      if(exploredEdges.count(newEdge1) == 0)
+      {
+        triangleIsNew = true;
+        activeEdges.push(newEdge1);
+      }
+      Edge newEdge2{edge.b, i};
+      if(exploredEdges.count(newEdge2) == 0)
+      {
+        triangleIsNew = true;
+        activeEdges.push(newEdge2);
+      }
+      if(triangleIsNew)
+      {
+        triangles.insert(newTriangle);
+      }
     }
   }
 
   // Calculate the volume of the triangles
   // https://n-e-r-v-o-u-s.com/blog/?p=4415
   T volume = 0;
+  std::cout << "Triangle Mesh" << std::endl;
   for(auto triangle : triangles)
   {
+    std::cout << "\tT: " << std::endl;
+    std::cout <<  "\t\t" << verticesBelow[triangle.indices[0]] << std::endl;
+    std::cout <<  "\t\t" << verticesBelow[triangle.indices[1]] << std::endl;
+    std::cout <<  "\t\t" << verticesBelow[triangle.indices[2]] << std::endl;
     auto crossProduct = verticesBelow[triangle.indices[0]]
         .Cross(verticesBelow[triangle.indices[1]]);
     volume += crossProduct.Dot(verticesBelow[triangle.indices[2]]);
   }
+
+  std::cout << "Triangles " << triangles.size() <<std::endl;
 
   return abs(volume)/6;
 }
