@@ -260,6 +260,14 @@ namespace ignition
         return n.Normalize();
       }
 
+      /// \brief Get Projection of another onto this vector
+      /// \param[in] _v the vector
+      /// \return the projection
+      public: T Project(const Vector3<T> &_v) const
+      {
+        return this->Dot(_v) / this->Length();
+      }
+
       /// \brief Get distance to a line
       /// \param[in] _pt1 first point on the line
       /// \param[in] _pt2 second point on the line

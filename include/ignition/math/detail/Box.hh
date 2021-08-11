@@ -219,6 +219,53 @@ bool HasOverlap(
   }
   return false;
 }
+//////////////////////////////////////////////////
+template <typename T>
+std::vector<Triangle3<T>> TrianglesInPlane(Plane<T> &_plane,
+  std::vector<Vector3<T>> _vertices)
+{
+  std::vector<Triangle3<T>> triangles;
+  std::vector<Vector3<T>> pointsInPlane;
+  Vector3<T> centroid;
+  for(auto pt: _vertices)
+  {
+    if(_plane.Side(pt) == Plane<T>::NO_SIDE)
+    {
+      pointsInPlane.push_back(pt);
+      centroid += pt;
+    }
+  }
+  centroid /= pointsInPlane.size();
+
+  if(pointsInPlane.size() < 3)
+    return {};
+
+  auto axis1 = (pointsInPlane[0] - centroid).Normalize();
+  auto axis2 = axis1.Cross(_plane.Normal()).Normalize();
+
+  std::sort(pointsInPlane.begin(), pointsInPlane.end(),
+    [centroid, axis1, axis2] (const Vector3<T> &a, const Vector3<T> &b)
+    {
+      auto aDisplacement = a - centroid;
+      auto bDisplacement = b - centroid;
+
+      auto aX = axis1.Project(aDisplacement);
+      auto aY = axis2.Project(aDisplacement);
+
+      auto bX = axis1.Project(bDisplacement);
+      auto bY = axis2.Project(bDisplacement);
+
+      return atan2(aY, aX) < atan2(bY, bX);
+    });
+  for(std::size_t i = 0; i < pointsInPlane.size(); ++i)
+  {
+    triangles.push_back(
+      Triangle3<T>(pointsInPlane[i],
+        pointsInPlane[(i+1) % pointsInPlane.size()], centroid));
+  }
+
+  return triangles;
+}
 /////////////////////////////////////////////////
 template<typename T>
 T Box<T>::VolumeBelow(const Plane<T> &_plane) const
@@ -254,70 +301,25 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
   verticesBelow.insert(verticesBelow.end(),
     intersections.begin(), intersections.end());
 
-  /// Get the convex hull triangle mesh of the vertices in the shape.
-  /// This uses the so called Gift-Wrapping algorithm. It isn't the most
-  /// efficient but given the smalll number of points it should be fast enough.
-  std::queue<Edge> activeEdges;
+  // Fit six planes to the vertices in the shape.
+  std::vector<Triangle3<T>> triangles;
 
-  std::unordered_set<TriangleFace<T>, TriangleFaceHash<T>> triangles;
-  triangles.insert(TriangleFace<T>{
-    Triangle3<T>{
-      verticesBelow[verticesBelow.size() - 1],
-      verticesBelow[verticesBelow.size() - 2],
-      verticesBelow[verticesBelow.size() - 3]},
-    {verticesBelow.size() - 1, verticesBelow.size() - 2, verticesBelow.size() - 3}
-    });
-  activeEdges.emplace(verticesBelow.size() - 1, verticesBelow.size() - 2);
-  activeEdges.emplace(verticesBelow.size() - 2, verticesBelow.size() - 3);
-  activeEdges.emplace(verticesBelow.size() - 1, verticesBelow.size() - 3);
+  std::vector<Plane<T>> planes {
+    Plane<T>{Vector3<T>{0, 0, 1}, this->Size().Z()/2},
+    Plane<T>{Vector3<T>{0, 0, 1}, -this->Size().Z()/2},
+    Plane<T>{Vector3<T>{1, 0, 0}, this->Size().X()/2},
+    Plane<T>{Vector3<T>{1, 0, 0}, -this->Size().X()/2},
+    Plane<T>{Vector3<T>{0, 1, 0}, this->Size().Y()/2},
+    Plane<T>{Vector3<T>{0, 1, 0}, -this->Size().Y()/2},
+    _plane
+  };
 
-  std::unordered_set<Edge, EdgeHash> exploredEdges;
-  while(!activeEdges.empty())
+  for(auto &p : planes)
   {
-    auto edge = activeEdges.front();
-    activeEdges.pop();
-    if(exploredEdges.count(edge) != 0)
-      continue;
-    exploredEdges.insert(edge);
-    for (std::size_t i = 0; i < verticesBelow.size(); ++i)
-    {
-      if (i == edge.a || i == edge.b) continue;
-      // Attempt to create a triangle
-      TriangleFace<T> newTriangle{
-        Triangle3<T>(
-          verticesBelow[edge.a],
-          verticesBelow[edge.b],
-          verticesBelow[i]),
-        {edge.a, edge.b, i}
-      };
-
-      std::cout << "Testing edge " << verticesBelow[edge.a]
-        << "--" << verticesBelow[edge.b] << std::endl;
-      std::cout << "Point: " << verticesBelow[i] << std::endl;
-
-      if(!isConvexOuterFace(newTriangle, verticesBelow)
-        || HasOverlap(newTriangle, triangles)) continue;
-
-      std::cout << "Accepted" << std::endl;
-
-      bool triangleIsNew = false;
-      Edge newEdge1{edge.a, i};
-      if(exploredEdges.count(newEdge1) == 0)
-      {
-        triangleIsNew = true;
-        activeEdges.push(newEdge1);
-      }
-      Edge newEdge2{edge.b, i};
-      if(exploredEdges.count(newEdge2) == 0)
-      {
-        triangleIsNew = true;
-        activeEdges.push(newEdge2);
-      }
-      if(triangleIsNew)
-      {
-        triangles.insert(newTriangle);
-      }
-    }
+    auto new_triangles = TrianglesInPlane(p, verticesBelow);
+    triangles.insert(triangles.end(),
+      new_triangles.begin(),
+      new_triangles.end());
   }
 
   // Calculate the volume of the triangles
@@ -327,18 +329,18 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
   for(auto triangle : triangles)
   {
     std::cout << "\tT: " << std::endl;
-    std::cout <<  "\t\t" << verticesBelow[triangle.indices[0]] << std::endl;
-    std::cout <<  "\t\t" << verticesBelow[triangle.indices[1]] << std::endl;
-    std::cout <<  "\t\t" << verticesBelow[triangle.indices[2]] << std::endl;
-    auto crossProduct = verticesBelow[triangle.indices[0]]
-        .Cross(verticesBelow[triangle.indices[1]]);
-    volume += crossProduct.Dot(verticesBelow[triangle.indices[2]]);
+    std::cout <<  "\t\t" << triangle[0] << std::endl;
+    std::cout <<  "\t\t" << triangle[1] << std::endl;
+    std::cout <<  "\t\t" << triangle[2] << std::endl;
+  
+    auto crossProduct = triangle[2].Cross(triangle[1]);
+    volume += std::fabs(crossProduct.Dot(triangle[0]));
   }
 
-  std::cout << "Triangles " << triangles.size() <<std::endl;
-
-  return abs(volume)/6;
+  return volume/6;
 }
+
+
 
 /////////////////////////////////////////////////
 template<typename T>

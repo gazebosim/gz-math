@@ -236,17 +236,27 @@ namespace ignition
 
       /// \brief Get whether a triangle overlaps with another triangle.
       /// \return boolean indicating whether the triangles overlap.
-      public: bool Overlaps(const Triangle3<T> &_triangle) const
+      public: bool Overlaps(const Triangle3<T> &_triangle, T thresh=1e-6) const
       {
         int sideCount = 0;
         for(unsigned int i = 0; i < 3; ++i)
         {
           for(unsigned int j = i; j < 3; ++j)
           {
-            Vector3d unused;
-            if(this->Side(i).Intersect(_triangle.Side(j), unused))
+            Vector3d intersection;
+            if(this->Side(i).Intersect(_triangle.Side(j), intersection))
             {
-              sideCount++;
+              bool countSide = true;
+              for(unsigned int k = 0; k < 3; ++k)
+              {
+                if(this->pts[k].Distance(intersection) < thresh||
+                  _triangle.pts[k].Distance(intersection) < thresh)
+                {
+                  countSide = false;
+                }
+              }
+              if(countSide)
+                sideCount++;
             }
           }
         }
@@ -255,17 +265,18 @@ namespace ignition
         /// at least two intersecting edges.
         if(sideCount > 1)
         {
+          std::cout<< "Sides: " << sideCount << std::endl;
           return true;
         }
 
         // Check if any of the points of the triangles are inside the other
-        for(unsigned int i = 0; i < 3; ++i)
+        /*for(unsigned int i = 0; i < 3; ++i)
         {
           if(_triangle.Contains(this->pts[i]))
             return true;
           if(this->Contains(_triangle.pts[i]))
             return true;
-        }
+        }*/
         return false;
       }
 
