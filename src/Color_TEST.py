@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import unittest
+import math
 from ignition.math import Color
 from ignition.math import Vector3f
 
@@ -170,6 +171,13 @@ class TestColor(unittest.TestCase):
         self.assertAlmostEqual(1.0, clr.B())
         self.assertAlmostEqual(1.0, clr.A())
 
+        clr.SetFromHSV(300, 0.5, 1.0)
+        self.assertAlmostEqual(1.0, clr[0])
+        self.assertAlmostEqual(0.5, clr[1])
+        self.assertAlmostEqual(1.0, clr[2])
+        self.assertAlmostEqual(1.0, clr[3])
+        self.assertTrue(math.isnan(clr[4]))
+
         clr.Set(0.1, 0.2, 0.3, 0.4)
         clr = clr + 0.2
         self.assertTrue(clr == Color(0.3, 0.4, 0.5, 0.6))
@@ -285,6 +293,10 @@ class TestColor(unittest.TestCase):
         self.assertAlmostEqual(clr2.A(), 0.1)
 
         self.assertTrue(clr2 != clr)
+
+    def test_stream_out(self):
+        c = Color(0.1, 0.2, 0.3, 0.5)
+        self.assertAlmostEqual(str(c), "0.1 0.2 0.3 0.5")
 
     def test_HSV(self):
         clr = Color()

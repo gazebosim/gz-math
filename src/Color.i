@@ -23,6 +23,8 @@
 #include <ignition/math/config.hh>
 %}
 
+%include "std_string.i"
+
 namespace ignition
 {
   namespace math
@@ -90,5 +92,20 @@ namespace ignition
         private: float b = 0;
         private: float a = 1;
       };
+
+      %extend Color{
+        float __getitem__(const unsigned int i)
+        {
+          return (*$self)[i];
+        }
+      }
+
+      %extend Color {
+        std::string __str__() const {
+          std::ostringstream out;
+          out << *$self;
+          return out.str();
+        }
+      }
   }
 }
