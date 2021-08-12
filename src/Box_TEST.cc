@@ -118,35 +118,27 @@ TEST(BoxTest, VolumeAndDensity)
 TEST(BoxTest, VolumeBelow)
 {
   {
-    // Case 0: No vertices below the plane
     math::Boxd box(2.0, 2.0, 2.0);
     math::Planed plane(math::Vector3d(0.0, 0.0, 1.0), -5.0);
-    //EXPECT_DOUBLE_EQ(0.0, box.VolumeBelow(plane));
+    EXPECT_DOUBLE_EQ(0.0, box.VolumeBelow(plane));
   }
   {
-    // Case 1: only one vertex below the plane
-    math::Boxd box(2.0, 2.0, 2.0);
-    math::Planed plane(math::Vector3d(1.0, 1.0, 1.0), -1.1);
-    //EXPECT_LT(box.VolumeBelow(plane), box.Volume());
-  }
-  {
-    // Case 2: two vertices below the plane
-    math::Boxd box(2.0, 2.0, 2.0);
-    math::Planed plane(math::Vector3d(1.0, 0.0, 1.0), -0.5);
-    //EXPECT_DOUBLE_EQ(2.0, box.VolumeBelow(plane));
-
-    math::Planed plane2(math::Vector3d(0.0, 1.0, 1.0), -0.5);
-    //EXPECT_DOUBLE_EQ(2.0, box.VolumeBelow(plane2));
-  }
-  {
-    // Case 3: three vertices below the plane
-  }
-  {
-    // Case 4: four vertices below the plane
     math::Boxd box(2.0, 2.0, 2.0);
     math::Planed plane(math::Vector3d(0, 0, 2.0), 0);
 
     EXPECT_DOUBLE_EQ(box.Volume()/2, box.VolumeBelow(plane));
+  }
+
+  {
+    math::Boxd box(2.0, 2.0, 2.0);
+    math::Planed plane(math::Vector3d(0, 0, 1.0), 0.5);
+
+    EXPECT_DOUBLE_EQ(3*box.Volume()/4, box.VolumeBelow(plane));
+  }
+  {
+    math::Boxd box(2.0, 2.0, 2.0);
+    math::Planed plane(math::Vector3d(0.0, 0.0, 1.0), 20.0);
+    EXPECT_DOUBLE_EQ(box.Volume(), box.VolumeBelow(plane));
   }
 }
 

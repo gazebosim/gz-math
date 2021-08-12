@@ -19,8 +19,6 @@
 
 #include "ignition/math/Triangle3.hh"
 
-#include <queue>
-#include <unordered_set>
 namespace ignition
 {
 namespace math
@@ -118,113 +116,12 @@ T Box<T>::Volume() const
   return this->size.X() * this->size.Y() * this->size.Z();
 }
 
-/////////////////////////////////////////////////
-template<typename T>
-struct TriangleFace {
-  Triangle3<T> triangle;
-  std::size_t indices[3];
-
-  bool operator==(const TriangleFace &_t) const
-  {
-    std::unordered_set<std::size_t> indices1, indices2;
-    indices1.insert(this->indices[0]);
-    indices1.insert(this->indices[1]);
-    indices1.insert(this->indices[2]);
-
-    indices2.insert(_t.indices[0]);
-    indices2.insert(_t.indices[1]);
-    indices2.insert(_t.indices[2]);
-
-    return indices1 == indices2;
-  }
-};
-/////////////////////////////////////////////////
-template<typename T>
-bool isConvexOuterFace(
-  const TriangleFace<T> &_face, const std::vector<Vector3<T>> &_vertices)
-{
-  Plane<T> plane(_face.triangle.Normal(),
-    _face.triangle.Normal().Dot(_vertices[_face.indices[0]]));
-
-  std::optional<bool> signPositive = std::nullopt;
-
-  for (auto v: _vertices)
-  {
-    auto dist = plane.Distance(v);
-    if (dist == 0) continue;
-
-    if (dist > 0)
-    {
-      if (signPositive.has_value())
-      {
-        if(!signPositive.value()) return false;
-      }
-      signPositive = true;
-    }
-    else
-    {
-      if (signPositive.has_value())
-      {
-        if(signPositive.value()) return false;
-      }
-      signPositive = false;
-    }
-  }
-
-  return true;
-}
-/////////////////////////////////////////////////
-struct Edge
-{
-  std::size_t a, b;
-
-  Edge(std::size_t _a, std::size_t _b): a(_a), b(_b) {}
-
-  bool operator==(const Edge& other)  const
-  {
-    return (a == other.a && b == other.b) ||
-          (a == other.b && b == other.a);
-  }
-};
-/////////////////////////////////////////////////
-struct EdgeHash {
-  std::size_t operator()(const Edge &_e) const
-  {
-    return std::hash<std::size_t>()(_e.a) ^ std::hash<std::size_t>()(_e.b);
-  };
-};
-
-/////////////////////////////////////////////////
-template<typename T>
-struct TriangleFaceHash {
-  std::size_t operator()(const TriangleFace<T> &_t) const
-  {
-    return std::hash<std::size_t>()(_t.indices[0])
-      ^ std::hash<std::size_t>()(_t.indices[1])
-      ^ std::hash<std::size_t>()(_t.indices[2]);
-  }
-};
-/////////////////////////////////////////////////
-template<typename T>
-bool HasOverlap(
-  const TriangleFace<T>& face,
-  const std::unordered_set<TriangleFace<T>, TriangleFaceHash<T>> &_faces)
-{
-  for (auto f: _faces)
-  {
-    if(f.triangle.Overlaps(face.triangle))
-    {
-      return true;
-    }
-  }
-  return false;
-}
 //////////////////////////////////////////////////
 template <typename T>
-std::vector<Triangle3<T>> TrianglesInPlane(Plane<T> &_plane,
-  std::vector<Vector3<T>> _vertices)
+std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(Plane<T> &_plane,
+  std::vector<Vector3<T>> &_vertices)
 {
-  std::vector<Triangle3<T>> triangles;
+  std::vector<std::pair<Triangle3<T>, T>> triangles;
   std::vector<Vector3<T>> pointsInPlane;
   Vector3<T> centroid;
   for(auto pt: _vertices)
@@ -259,9 +156,10 @@ std::vector<Triangle3<T>> TrianglesInPlane(Plane<T> &_plane,
     });
   for(std::size_t i = 0; i < pointsInPlane.size(); ++i)
   {
-    triangles.push_back(
+    triangles.emplace_back(
       Triangle3<T>(pointsInPlane[i],
-        pointsInPlane[(i+1) % pointsInPlane.size()], centroid));
+        pointsInPlane[(i+1) % pointsInPlane.size()], centroid),
+      (_plane.Side({0,0,0}) == Plane<T>::POSITIVE_SIDE) ? -1 : 1);
   }
 
   return triangles;
@@ -302,15 +200,15 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
     intersections.begin(), intersections.end());
 
   // Fit six planes to the vertices in the shape.
-  std::vector<Triangle3<T>> triangles;
+  std::vector<std::pair<Triangle3<T>, T>> triangles;
 
   std::vector<Plane<T>> planes {
     Plane<T>{Vector3<T>{0, 0, 1}, this->Size().Z()/2},
-    Plane<T>{Vector3<T>{0, 0, 1}, -this->Size().Z()/2},
+    Plane<T>{Vector3<T>{0, 0, -1}, this->Size().Z()/2},
     Plane<T>{Vector3<T>{1, 0, 0}, this->Size().X()/2},
-    Plane<T>{Vector3<T>{1, 0, 0}, -this->Size().X()/2},
+    Plane<T>{Vector3<T>{-1, 0, 0}, this->Size().X()/2},
     Plane<T>{Vector3<T>{0, 1, 0}, this->Size().Y()/2},
-    Plane<T>{Vector3<T>{0, 1, 0}, -this->Size().Y()/2},
+    Plane<T>{Vector3<T>{0, -1, 0}, this->Size().Y()/2},
     _plane
   };
 
@@ -325,19 +223,14 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
   // Calculate the volume of the triangles
   // https://n-e-r-v-o-u-s.com/blog/?p=4415
   T volume = 0;
-  std::cout << "Triangle Mesh" << std::endl;
   for(auto triangle : triangles)
   {
-    std::cout << "\tT: " << std::endl;
-    std::cout <<  "\t\t" << triangle[0] << std::endl;
-    std::cout <<  "\t\t" << triangle[1] << std::endl;
-    std::cout <<  "\t\t" << triangle[2] << std::endl;
-  
-    auto crossProduct = triangle[2].Cross(triangle[1]);
-    volume += std::fabs(crossProduct.Dot(triangle[0]));
+    auto crossProduct = (triangle.first[2]).Cross(triangle.first[1]);
+    auto meshVolume = std::fabs(crossProduct.Dot(triangle.first[0]));
+    volume += triangle.second * meshVolume;
   }
 
-  return volume/6;
+  return std::fabs(volume)/6;
 }
 
 
