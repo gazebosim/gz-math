@@ -19,6 +19,10 @@
 
 #include "ignition/math/Triangle3.hh"
 
+#include <algorithm>
+#include <utility>
+#include <vector>
+
 namespace ignition
 {
 namespace math
@@ -124,7 +128,7 @@ std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(Plane<T> &_plane,
   std::vector<std::pair<Triangle3<T>, T>> triangles;
   std::vector<Vector3<T>> pointsInPlane;
   Vector3<T> centroid;
-  for(auto pt: _vertices)
+  for(auto &pt : _vertices)
   {
     if(_plane.Side(pt) == Plane<T>::NO_SIDE)
     {
@@ -158,8 +162,8 @@ std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(Plane<T> &_plane,
   {
     triangles.emplace_back(
       Triangle3<T>(pointsInPlane[i],
-        pointsInPlane[(i+1) % pointsInPlane.size()], centroid),
-      (_plane.Side({0,0,0}) == Plane<T>::POSITIVE_SIDE) ? -1 : 1);
+        pointsInPlane[(i + 1) % pointsInPlane.size()], centroid),
+      (_plane.Side({0, 0, 0}) == Plane<T>::POSITIVE_SIDE) ? -1 : 1);
   }
 
   return triangles;
@@ -169,7 +173,7 @@ template<typename T>
 T Box<T>::VolumeBelow(const Plane<T> &_plane) const
 {
   // Get coordinates of all vertice of box
-  // TODO: Cache this for performance
+  // TODO(arjo): Cache this for performance
   std::vector<Vector3<T> > vertices {
     Vector3<T>{this->size.X()/2, this->size.Y()/2, this->size.Z()/2},
     Vector3<T>{-this->size.X()/2, this->size.Y()/2, this->size.Z()/2},
@@ -192,8 +196,6 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
 
   if(verticesBelow.size() == 0)
     return 0;
-  //if(verticesBelow.size() == 8)
-  //  return Volume();
 
   auto intersections = GetIntersections(_plane);
   verticesBelow.insert(verticesBelow.end(),

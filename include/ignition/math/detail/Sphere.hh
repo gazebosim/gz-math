@@ -100,17 +100,17 @@ template<typename T>
 T Sphere<T>::VolumeBelow(const Planed &_plane) const
 {
   auto r = this->radius;
-  //get nearest point to center on plane
-  auto dist = _plane.Distance(Vector3d(0,0,0));
+  // get nearest point to center on plane
+  auto dist = _plane.Distance(Vector3d(0, 0, 0));
 
   if(dist < -r)
   {
-    //sphere is completely below plane
+    // sphere is completely below plane
     return Volume();
   }
   else if(dist > r)
   {
-    //sphere is completely above plane
+    // sphere is completely above plane
     return 0;
   }
 
