@@ -23,6 +23,7 @@
 #include <ignition/math/config.hh>
 #include <ignition/math/Plane.hh>
 #include <ignition/math/Line2.hh>
+#include <optional>
 
 namespace ignition
 {
