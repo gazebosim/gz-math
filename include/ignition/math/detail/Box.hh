@@ -270,7 +270,7 @@ std::optional<Vector3<T>>
     intersections.begin(), intersections.end());
 
   Vector3<T> centroid;
-  for(auto v: verticesBelow)
+  for(auto &v : verticesBelow)
   {
     centroid += v;
   }

@@ -130,7 +130,7 @@ std::optional<Vector3<T>>
   if(dist < -r)
   {
     // sphere is completely below plane
-    return Vector3<T>{0,0,0};
+    return Vector3<T>{0, 0, 0};
   }
   else if(dist > r)
   {
