@@ -120,6 +120,35 @@ T Sphere<T>::VolumeBelow(const Planed &_plane) const
 
 //////////////////////////////////////////////////
 template<typename T>
+std::optional<Vector3<T>>
+ Sphere<T>::CenterOfVolumeBelow(const Planed &_plane) const
+{
+  auto r = this->radius;
+  // get nearest point to center on plane
+  auto dist = _plane.Distance(Vector3d(0, 0, 0));
+
+  if(dist < -r)
+  {
+    // sphere is completely below plane
+    return Vector3<T>{0,0,0};
+  }
+  else if(dist > r)
+  {
+    // sphere is completely above plane
+    return std::nullopt;
+  }
+
+  auto h = r + dist;
+
+  // Formula for geometric centorid:
+  // https://mathworld.wolfram.com/SphericalCap.html
+  auto numerator = 2 * r - h;
+
+  return 3 * numerator * numerator / (4 * (3 * r - h));
+}
+
+//////////////////////////////////////////////////
+template<typename T>
 bool Sphere<T>::SetDensityFromMass(const T _mass)
 {
   T newDensity = this->DensityFromMass(_mass);
