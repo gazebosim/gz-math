@@ -235,8 +235,48 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
   return std::fabs(volume)/6;
 }
 
+/////////////////////////////////////////////////
+template<typename T>
+std::optional<Vector3<T>>
+  Box<T>::CenterOfVolumeBelow(const Plane<T> &_plane) const
+{
+  // Get coordinates of all vertice of box
+  // TODO(arjo): Cache this for performance
+  std::vector<Vector3<T> > vertices {
+    Vector3<T>{this->size.X()/2, this->size.Y()/2, this->size.Z()/2},
+    Vector3<T>{-this->size.X()/2, this->size.Y()/2, this->size.Z()/2},
+    Vector3<T>{this->size.X()/2, -this->size.Y()/2, this->size.Z()/2},
+    Vector3<T>{-this->size.X()/2, -this->size.Y()/2, this->size.Z()/2},
+    Vector3<T>{this->size.X()/2, this->size.Y()/2, -this->size.Z()/2},
+    Vector3<T>{-this->size.X()/2, this->size.Y()/2, -this->size.Z()/2},
+    Vector3<T>{this->size.X()/2, -this->size.Y()/2, -this->size.Z()/2},
+    Vector3<T>{-this->size.X()/2, -this->size.Y()/2, -this->size.Z()/2}
+  };
 
+  std::vector<Vector3<T> >  verticesBelow;
+  for(auto &v : vertices)
+  {
+    if(_plane.Distance(v) < 0)
+    {
+      verticesBelow.push_back(v);
+    }
+  }
 
+  if(verticesBelow.size() == 0)
+    return std::nullopt;
+
+  auto intersections = GetIntersections(_plane);
+  verticesBelow.insert(verticesBelow.end(),
+    intersections.begin(), intersections.end());
+
+  Vector3<T> centroid;
+  for(auto v: verticesBelow)
+  {
+    centroid += v;
+  }
+
+  return centroid;
+}
 /////////////////////////////////////////////////
 template<typename T>
 T Box<T>::DensityFromMass(const T _mass) const

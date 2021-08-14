@@ -136,6 +136,12 @@ namespace ignition
       /// \return Volume below the plane in m^3.
       public: Precision VolumeBelow(const Plane<Precision> &_plane) const;
 
+      /// \brief Center of volume below the plane. This is useful when
+      /// calculating where the buoyancy should be applied.
+      /// \param[in] plane - the plane which slices the sphere.
+      public: std::optional<Vector3<Precision>>
+        CenterOfVolumeBelow(const Plane<Precision> &_plane) const;
+
       /// \brief Compute the box's density given a mass value. The
       /// box is assumed to be solid with uniform density. This
       /// function requires the box's size to be set to
