@@ -59,9 +59,9 @@ if (RUBY_FOUND)
 
   set(CMAKE_SWIG_OUTDIR "${CMAKE_BINARY_DIR}/lib/ruby")
   if(CMAKE_VERSION VERSION_GREATER 3.8.0)
-    SWIG_ADD_LIBRARY(math LANGUAGE ruby SOURCES ruby/ruby.i ${swig_i_files} ${sources})
+    SWIG_ADD_LIBRARY(math LANGUAGE ruby SOURCES ruby/ruby.i ${swig_i_files})
   else()
-    SWIG_ADD_MODULE(math ruby ruby/ruby.i ${swig_i_files} ${sources})
+    SWIG_ADD_MODULE(math ruby ruby/ruby.i ${swig_i_files})
   endif()
 
   # Suppress warnings on SWIG-generated files
@@ -72,7 +72,10 @@ if (RUBY_FOUND)
   )
   target_include_directories(math SYSTEM PUBLIC ${RUBY_INCLUDE_DIRS})
 
-  SWIG_LINK_LIBRARIES(math ${RUBY_LIBRARY})
+  SWIG_LINK_LIBRARIES(math
+    ${RUBY_LIBRARY}
+    ignition-math${PROJECT_VERSION_MAJOR}
+  )
   target_compile_features(math PUBLIC ${IGN_CXX_${c++standard}_FEATURES})
   install(TARGETS math DESTINATION ${IGN_LIB_INSTALL_DIR}/ruby/ignition)
 
@@ -97,12 +100,15 @@ if (PYTHONLIBS_FOUND)
 
   set(CMAKE_SWIG_OUTDIR "${CMAKE_BINARY_DIR}/lib/python")
   if(CMAKE_VERSION VERSION_GREATER 3.8.0)
-    SWIG_ADD_LIBRARY(${SWIG_PY_LIB} LANGUAGE python SOURCES python/python.i ${sources})
+    SWIG_ADD_LIBRARY(${SWIG_PY_LIB} LANGUAGE python SOURCES python/python.i)
   else()
-    SWIG_ADD_MODULE(${SWIG_PY_LIB} python python/python.i ${sources})
+    SWIG_ADD_MODULE(${SWIG_PY_LIB} python python/python.i)
   endif()
 
-  SWIG_LINK_LIBRARIES(${SWIG_PY_LIB} ${PYTHON_LIBRARIES})
+  SWIG_LINK_LIBRARIES(${SWIG_PY_LIB}
+    ${PYTHON_LIBRARIES}
+    ignition-math${PROJECT_VERSION_MAJOR}
+  )
 
   # When using SWIG 3 to build a python interface there is an extra underscore between the name of
   # the library given to swig_add_library macro and the generated .so
