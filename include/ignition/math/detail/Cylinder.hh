@@ -126,6 +126,83 @@ T Cylinder<T>::Volume() const
 
 //////////////////////////////////////////////////
 template<typename T>
+T Cylinder<T>::VolumeBelow(const Plane<T> &_plane) const
+{
+  auto length = this->Length();
+  auto radius = this->Radius();
+
+  if(_plane.Normal().Dot(Vector3<T>{0, 0, 1}) == T(0))
+  {
+    // If the plane is parallel to the cylinder's axis
+    auto dist = _plane.Distance(Vector3<T>(0,0,0));
+
+    if(abs(dist) >= radius)
+    {
+      if(dist < 0)
+      {
+        return Volume();
+      }
+      else
+      {
+        return T(0);
+      }
+    }
+    else
+    {
+      auto volume = CircleSegmentSliceArea(abs(dist)) * this->Length();
+      if(dist < 0)
+      {
+        return volume;
+      }
+      else
+      {
+        return this->Volume() - volume;
+      }
+    }
+  }
+
+  //Compute intersection point of plane
+  auto theta = atan2(_plane.Normal().Y(), _plane.Normal().X());
+  auto x = radius * cos(theta);
+  auto y = radius * sin(theta);
+  auto point_max = _plane.GetPointOnPlane(x, y);
+  x = radius * cos(theta + IGN_PI);
+  y = radius * sin(theta + IGN_PI);
+  auto point_min = _plane.GetPointOnPlane(x, y);
+
+  //Get case type
+  if(abs(point_max.Z()) > length/2)
+  {
+    if(abs(point_min.Z()) > length/2)
+    {
+      // Plane cuts through both flat faces
+      
+    }
+    else
+    {
+      // Cuts through one flat face
+      // Point Min will be the point where it cuts through
+      // Next we need to determine which way is up.
+
+    }
+  }
+  else if(abs(point_min.Z()) > length/2)
+  {
+    // Cuts through one flat face
+  }
+  else
+  {
+    // Plane Cuts through no flat faces.
+    auto a = abs(point_max.Z()) + length/2;
+    auto b = abs(point_min.Z()) + length/2;
+    auto avg_height = (a + b)/2;
+    return avg_height * IGN_PI * radius * radius;
+  }
+
+}
+
+//////////////////////////////////////////////////
+template<typename T>
 bool Cylinder<T>::SetDensityFromMass(const T _mass)
 {
   T newDensity = this->DensityFromMass(_mass);
@@ -142,6 +219,17 @@ T Cylinder<T>::DensityFromMass(const T _mass) const
     return -1.0;
 
   return _mass / this->Volume();
+}
+
+//////////////////////////////////////////////////
+template<typename T>
+T Cylinder<T>::CircleSegmentSliceArea(T _distance) const
+{
+  auto r = this->Radius();
+  auto theta = (_distance != T(0)) ?
+    2 * acos(r/_distance) :
+    IGN_PI;
+  return r * r * (theta - sin(theta)) / 2;
 }
 
 }

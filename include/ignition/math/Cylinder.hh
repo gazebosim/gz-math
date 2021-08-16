@@ -19,6 +19,7 @@
 
 #include "ignition/math/MassMatrix3.hh"
 #include "ignition/math/Material.hh"
+#include "ignition/math/Plane.hh"
 #include "ignition/math/Quaternion.hh"
 
 namespace ignition
@@ -131,6 +132,10 @@ namespace ignition
       /// \return Volume of the cylinder in m^3.
       public: Precision Volume() const;
 
+      /// \brief Get the volume of the cylinder in m^3.
+      /// \return Volume of the cylinder in m^3.
+      public: Precision VolumeBelow(const Plane<Precision> &_plane) const;
+
       /// \brief Compute the cylinder's density given a mass value. The
       /// cylinder is assumed to be solid with uniform density. This
       /// function requires the cylinder's radius and length to be set to
@@ -154,6 +159,8 @@ namespace ignition
       /// cylinder's radius, length, or the _mass value are <= 0.
       /// \sa Precision DensityFromMass(const Precision _mass) const
       public: bool SetDensityFromMass(const Precision _mass);
+
+      private: Precision CircleSegmentSliceArea(Precision _distance) const;
 
       /// \brief Radius of the cylinder.
       private: Precision radius = 0.0;
