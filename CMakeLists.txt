@@ -68,6 +68,10 @@ if (SWIG_FOUND)
   endif()
 endif()
 
+# Location of "fake install folder" used in tests
+# Defined here at root scope so it is available for tests in src and test folders
+set(FAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/fake/install")
+
 #============================================================================
 # Configure the build
 #============================================================================

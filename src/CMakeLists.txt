@@ -131,22 +131,25 @@ if (PYTHONLIBS_FOUND)
   install(TARGETS ${SWIG_PY_LIB} DESTINATION ${IGN_LIB_INSTALL_DIR}/python/ignition)
   install(FILES ${CMAKE_BINARY_DIR}/lib/python/math.py DESTINATION ${IGN_LIB_INSTALL_DIR}/python/ignition)
 
-  # Add the Python tests
-  set(python_tests
-    Angle_TEST
-    GaussMarkovProcess_TEST
-    python_TEST
-    Rand_TEST
-    Vector2_TEST
-    Vector3_TEST
-    Vector4_TEST
-  )
+  if (BUILD_TESTING)
+    # Add the Python tests
+    set(python_tests
+      Angle_TEST
+      GaussMarkovProcess_TEST
+      python_TEST
+      Rand_TEST
+      Vector2_TEST
+      Vector3_TEST
+      Vector4_TEST
+    )
 
-  foreach (test ${python_tests})
-    add_test(NAME ${test}.py COMMAND
-      python3 ${CMAKE_SOURCE_DIR}/src/${test}.py)
-    set_tests_properties(${test}.py PROPERTIES
-      ENVIRONMENT "PYTHONPATH=${CMAKE_INSTALL_PREFIX}/lib/python/")
-  endforeach()
+    foreach (test ${python_tests})
+      add_test(NAME ${test}.py COMMAND
+        python3 ${CMAKE_SOURCE_DIR}/src/${test}.py)
+
+      set_tests_properties(${test}.py PROPERTIES
+        ENVIRONMENT "PYTHONPATH=${FAKE_INSTALL_PREFIX}/lib/python/")
+    endforeach()
+  endif()
 
 endif()
