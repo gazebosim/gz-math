@@ -57,6 +57,7 @@ if (RUBY_FOUND)
 
   # Create the ruby library
 
+  set(CMAKE_SWIG_OUTDIR "${CMAKE_BINARY_DIR}/lib/ruby")
   if(CMAKE_VERSION VERSION_GREATER 3.8.0)
     SWIG_ADD_LIBRARY(math LANGUAGE ruby SOURCES ruby/ruby.i ${swig_i_files} ${sources})
   else()
@@ -94,7 +95,7 @@ if (PYTHONLIBS_FOUND)
   set(SWIG_PY_LIB pymath)
   set(SWIG_PY_LIB_OUTPUT math)
 
-  set(CMAKE_SWIG_OUTDIR "${CMAKE_INSTALL_PREFIX}/lib/python/ignition")
+  set(CMAKE_SWIG_OUTDIR "${CMAKE_BINARY_DIR}/lib/python")
   if(CMAKE_VERSION VERSION_GREATER 3.8.0)
     SWIG_ADD_LIBRARY(${SWIG_PY_LIB} LANGUAGE python SOURCES python/python.i ${sources})
   else()
@@ -122,6 +123,7 @@ if (PYTHONLIBS_FOUND)
     $<$<CXX_COMPILER_ID:AppleClang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-cast-function-type -Wno-missing-field-initializers>
   )
   install(TARGETS ${SWIG_PY_LIB} DESTINATION ${IGN_LIB_INSTALL_DIR}/python/ignition)
+  install(FILES ${CMAKE_BINARY_DIR}/lib/python/math.py DESTINATION ${IGN_LIB_INSTALL_DIR}/python/ignition)
 
   # Add the Python tests
   set(python_tests
@@ -135,7 +137,7 @@ if (PYTHONLIBS_FOUND)
   )
 
   foreach (test ${python_tests})
-    add_test(NAME ${test}.py COMMAND 
+    add_test(NAME ${test}.py COMMAND
       python3 ${CMAKE_SOURCE_DIR}/src/${test}.py)
     set_tests_properties(${test}.py PROPERTIES
       ENVIRONMENT "PYTHONPATH=${CMAKE_INSTALL_PREFIX}/lib/python/")
