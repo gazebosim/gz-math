@@ -16,7 +16,7 @@ import unittest
 import ignition.math
 
 
-class TestVector3(unittest.TestCase):
+class TestPythonInterface(unittest.TestCase):
 
     def test_construction(self):
         angle1 = ignition.math.Angle()
