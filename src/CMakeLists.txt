@@ -112,10 +112,10 @@ if (PYTHONLIBS_FOUND)
 
   # When using SWIG 3 to build a python interface there is an extra underscore between the name of
   # the library given to swig_add_library macro and the generated .so
-  if(NOT ${SWIG_VERSION} VERSION_GREATER 4.0.0)
-    set(SWIG_PY_LIB "_${SWIG_PY_LIB}")
-    set(SWIG_PY_LIB_OUTPUT "_${SWIG_PY_LIB_OUTPUT}")
-  endif()
+  #if(NOT ${SWIG_VERSION} VERSION_GREATER 4.0.0)
+  #  set(SWIG_PY_LIB "_${SWIG_PY_LIB}")
+  #  set(SWIG_PY_LIB_OUTPUT "_${SWIG_PY_LIB_OUTPUT}")
+  #endif()
 
   set_target_properties(${SWIG_PY_LIB}
     PROPERTIES
