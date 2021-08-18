@@ -96,7 +96,6 @@ if (PYTHONLIBS_FOUND)
   set_source_files_properties(python/python.i PROPERTIES SWIG_FLAGS "-includeall")
   set_source_files_properties(python/python.i PROPERTIES SWIG_MODULE_NAME "math")
   set(SWIG_PY_LIB pymath)
-  set(SWIG_PY_LIB_OUTPUT math)
 
   set(CMAKE_SWIG_OUTDIR "${CMAKE_BINARY_DIR}/lib/python")
   if(CMAKE_VERSION VERSION_GREATER 3.8.0)
@@ -111,11 +110,6 @@ if (PYTHONLIBS_FOUND)
   )
 
   set(SWIG_PY_LIB "${SWIG_MODULE_pymath_REAL_NAME}")
-
-  set_target_properties(${SWIG_PY_LIB}
-    PROPERTIES
-      OUTPUT_NAME ${SWIG_PY_LIB_OUTPUT}
-  )
 
   # Suppress warnings on SWIG-generated files
   target_compile_options(${SWIG_PY_LIB} PRIVATE
