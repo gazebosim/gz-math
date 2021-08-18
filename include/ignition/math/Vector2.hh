@@ -40,6 +40,9 @@ namespace ignition
       /// \brief math::Vector2(1, 1)
       public: static const Vector2<T> One;
 
+      /// \brief math::Vector2(NaN, NaN, NaN)
+      public: static const Vector2 NaN;
+
       /// \brief Default Constructor
       public: Vector2()
       {
@@ -578,6 +581,11 @@ namespace ignition
 
     template<typename T>
     const Vector2<T> Vector2<T>::One(1, 1);
+
+    template<typename T>
+    const Vector2<T> Vector2<T>::NaN(
+        std::numeric_limits<T>::quiet_NaN(),
+        std::numeric_limits<T>::quiet_NaN());
 
     typedef Vector2<int> Vector2i;
     typedef Vector2<double> Vector2d;
