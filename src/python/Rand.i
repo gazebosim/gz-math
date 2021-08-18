@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Open Source Robotics Foundation
+ * Copyright (C) 2021 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ namespace ignition
   {
     class Rand
     {
+      %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
       public: static void Seed(unsigned int _seed);
       public: static unsigned int Seed();
       public: static double DblUniform(double _min, double _max);

@@ -26,6 +26,7 @@ namespace ignition
   {
     class GaussMarkovProcess
     {
+      %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
       public: GaussMarkovProcess();
       public: GaussMarkovProcess(double _start, double _theta, double _mu,
                   double _sigma);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Open Source Robotics Foundation
+ * Copyright (C) 2021 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,13 @@ namespace ignition
   {
     class Angle
     {
+      %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
+      %rename("%(uppercase)s", %$isstatic, %$isvariable) "";
       public: static const Angle Zero;
       public: static const Angle Pi;
+      %rename(HALF_PI) HalfPi;
       public: static const Angle HalfPi;
+      %rename(TWO_PI) TwoPi;
       public: static const Angle TwoPi;
       public: Angle();
       public: Angle(double _radian);

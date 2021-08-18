@@ -15,33 +15,34 @@
 import unittest
 from ignition.math import Rand
 
+
 class TestRand(unittest.TestCase):
 
-  def test_rand(self):
-    d = Rand.DblUniform(1, 2)
-    self.assertGreaterEqual(d, 1)
-    self.assertLessEqual(d, 2)
+    def test_rand(self):
+        d = Rand.dbl_uniform(1, 2)
+        self.assertGreaterEqual(d, 1)
+        self.assertLessEqual(d, 2)
 
-    i = Rand.IntUniform(1, 2)
-    self.assertGreaterEqual(i, 1)
-    self.assertLessEqual(i, 2)
+        i = Rand.int_uniform(1, 2)
+        self.assertGreaterEqual(i, 1)
+        self.assertLessEqual(i, 2)
 
-  def test_set_seed(self):
-    N = 10
-    first = []
-    second = []
+    def test_set_seed(self):
+        N = 10
+        first = []
+        second = []
 
-    for i in range(N):
-      Rand.Seed(i)
-      first.append(Rand.IntUniform(-10, 10))
-      second.append(Rand.IntUniform(-10, 10))
+        for i in range(N):
+            Rand.seed(i)
+            first.append(Rand.int_uniform(-10, 10))
+            second.append(Rand.int_uniform(-10, 10))
 
-    for i in range(N):
-      Rand.Seed(i)
-      self.assertEqual(Rand.Seed(), i)
-      self.assertEqual(first[i], Rand.IntUniform(-10, 10))
-      self.assertEqual(second[i], Rand.IntUniform(-10, 10))
+        for i in range(N):
+            Rand.seed(i)
+            self.assertEqual(Rand.seed(), i)
+            self.assertEqual(first[i], Rand.int_uniform(-10, 10))
+            self.assertEqual(second[i], Rand.int_uniform(-10, 10))
 
 
 if __name__ == '__main__':
-  unittest.main()
+    unittest.main()
