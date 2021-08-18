@@ -15,13 +15,11 @@
  *
 */
 
-
 #include <gtest/gtest.h>
 
 #include <ignition/math/eigen3/Util.hh>
 
 /////////////////////////////////////////////////
-/// Check Vector3 conversions
-TEST(EigenUtil, ray2)
+TEST(EigenUtil, MeshToOrientedBox)
 {
 }
