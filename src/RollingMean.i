@@ -26,7 +26,7 @@ namespace ignition
   {
     class RollingMean
     {
-
+      %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
       public: explicit RollingMean(size_t _windowSize = 10);
       public: ~RollingMean();
       public: double Mean() const;

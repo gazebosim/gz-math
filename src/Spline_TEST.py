@@ -23,143 +23,143 @@ class TestSpline(unittest.TestCase):
     def test_spline(self):
         s = Spline()
 
-        s.AddPoint(Vector3d(0, 0, 0))
-        self.assertEqual(1, s.PointCount())
+        s.add_point(Vector3d(0, 0, 0))
+        self.assertEqual(1, s.point_count())
 
-        s.Clear()
-        self.assertEqual(0, s.PointCount())
+        s.clear()
+        self.assertEqual(0, s.point_count())
 
-        s.AddPoint(Vector3d(0, 0, 0))
-        self.assertTrue(s.Point(0) == Vector3d(0, 0, 0))
-        s.AddPoint(Vector3d(1, 1, 1))
-        self.assertTrue(s.Point(1) == Vector3d(1, 1, 1))
+        s.add_point(Vector3d(0, 0, 0))
+        self.assertTrue(s.point(0) == Vector3d(0, 0, 0))
+        s.add_point(Vector3d(1, 1, 1))
+        self.assertTrue(s.point(1) == Vector3d(1, 1, 1))
 
-        # UpdatePoint
-        self.assertFalse(s.UpdatePoint(2, Vector3d(2, 2, 2)))
+        # update_point
+        self.assertFalse(s.update_point(2, Vector3d(2, 2, 2)))
 
-        self.assertTrue(s.UpdatePoint(1, Vector3d(2, 2, 2)))
-        s.AutoCalculate(False)
-        self.assertTrue(s.UpdatePoint(0, Vector3d(-1, -1, -1)))
-        s.AutoCalculate(True)
+        self.assertTrue(s.update_point(1, Vector3d(2, 2, 2)))
+        s.auto_calculate(False)
+        self.assertTrue(s.update_point(0, Vector3d(-1, -1, -1)))
+        s.auto_calculate(True)
 
-        # Interpolate
-        self.assertAlmostEqual(s.Interpolate(0.0), Vector3d(-1, -1, -1))
-        self.assertAlmostEqual(s.Interpolate(0.5), Vector3d(0.5, 0.5, 0.5))
-        self.assertAlmostEqual(s.Interpolate(1.0), Vector3d(2, 2, 2))
+        # interpolate
+        self.assertAlmostEqual(s.interpolate(0.0), Vector3d(-1, -1, -1))
+        self.assertAlmostEqual(s.interpolate(0.5), Vector3d(0.5, 0.5, 0.5))
+        self.assertAlmostEqual(s.interpolate(1.0), Vector3d(2, 2, 2))
 
-        # Interpolate
-        s.AddPoint(Vector3d(4, 4, 4))
-        self.assertAlmostEqual(s.Interpolate(1, 0.2),
+        # interpolate
+        s.add_point(Vector3d(4, 4, 4))
+        self.assertAlmostEqual(s.interpolate(1, 0.2),
                                Vector3d(2.496, 2.496, 2.496))
 
     def test_fixed_tangent(self):
         s = Spline()
 
-        # AddPoint
-        s.AutoCalculate(False)
-        s.AddPoint(Vector3d(0, 0, 0))
-        s.AddPoint(Vector3d(0, 0.5, 0), Vector3d(0, 1, 0))
-        s.AddPoint(Vector3d(0.5, 1, 0), Vector3d(1, 0, 0))
-        s.AddPoint(Vector3d(1, 1, 0), Vector3d(1, 0, 0))
+        # add_point
+        s.auto_calculate(False)
+        s.add_point(Vector3d(0, 0, 0))
+        s.add_point(Vector3d(0, 0.5, 0), Vector3d(0, 1, 0))
+        s.add_point(Vector3d(0.5, 1, 0), Vector3d(1, 0, 0))
+        s.add_point(Vector3d(1, 1, 0), Vector3d(1, 0, 0))
 
-        # UpdatePoint
-        s.UpdatePoint(0, Vector3d(0, 0, 0), Vector3d(0, 1, 0))
+        # update_point
+        s.update_point(0, Vector3d(0, 0, 0), Vector3d(0, 1, 0))
 
-        s.AutoCalculate(True)
+        s.auto_calculate(True)
 
-        s.RecalcTangents()
+        s.recalc_tangents()
 
-        # Interpolate
-        self.assertAlmostEqual(s.Interpolate(0, 0.5), Vector3d(0, 0.25, 0))
-        self.assertAlmostEqual(s.InterpolateTangent(0, 0.5),
+        # interpolate
+        self.assertAlmostEqual(s.interpolate(0, 0.5), Vector3d(0, 0.25, 0))
+        self.assertAlmostEqual(s.interpolate_tangent(0, 0.5),
                                Vector3d(0, 0.25, 0))
-        self.assertAlmostEqual(s.Interpolate(1, 0.5),
+        self.assertAlmostEqual(s.interpolate(1, 0.5),
                                Vector3d(0.125, 0.875, 0))
-        self.assertAlmostEqual(s.Interpolate(2, 0.5), Vector3d(0.75, 1, 0))
-        self.assertAlmostEqual(s.InterpolateTangent(2, 0.5),
+        self.assertAlmostEqual(s.interpolate(2, 0.5), Vector3d(0.75, 1, 0))
+        self.assertAlmostEqual(s.interpolate_tangent(2, 0.5),
                                Vector3d(0.25, 0, 0))
 
     def test_arc_length(self):
         s = Spline()
-        self.assertFalse(math.isfinite(s.ArcLength()))
-        s.AddPoint(Vector3d(1, 1, 1), Vector3d(1, 1, 1))
-        self.assertFalse(math.isfinite(s.ArcLength(0)))
-        s.AddPoint(Vector3d(3, 3, 3), Vector3d(1, 1, 1))
-        s.AddPoint(Vector3d(4, 4, 4), Vector3d(1, 1, 1))
-        self.assertAlmostEqual(s.ArcLength(0, 1.0),
+        self.assertFalse(math.isfinite(s.arc_length()))
+        s.add_point(Vector3d(1, 1, 1), Vector3d(1, 1, 1))
+        self.assertFalse(math.isfinite(s.arc_length(0)))
+        s.add_point(Vector3d(3, 3, 3), Vector3d(1, 1, 1))
+        s.add_point(Vector3d(4, 4, 4), Vector3d(1, 1, 1))
+        self.assertAlmostEqual(s.arc_length(0, 1.0),
                                3.46410161513775, delta=1e-14)
-        self.assertAlmostEqual(s.ArcLength(), 5.19615242270663, delta=1e-14)
-        self.assertAlmostEqual(s.ArcLength(), s.ArcLength(1.0))
-        self.assertFalse(math.isfinite(s.ArcLength(-1.0)))
-        self.assertFalse(math.isfinite(s.ArcLength(4, 0.0)))
+        self.assertAlmostEqual(s.arc_length(), 5.19615242270663, delta=1e-14)
+        self.assertAlmostEqual(s.arc_length(), s.arc_length(1.0))
+        self.assertFalse(math.isfinite(s.arc_length(-1.0)))
+        self.assertFalse(math.isfinite(s.arc_length(4, 0.0)))
 
     def test_tension(self):
         s = Spline()
 
-        s.Tension(0.1)
-        self.assertAlmostEqual(s.Tension(), 0.1)
+        s.tension(0.1)
+        self.assertAlmostEqual(s.tension(), 0.1)
 
     def test_interpolate(self):
         s = Spline()
-        self.assertFalse(s.Interpolate(0, 0.1).IsFinite())
+        self.assertFalse(s.interpolate(0, 0.1).IsFinite())
 
-        s.AddPoint(Vector3d(0, 0, 0))
-        self.assertAlmostEqual(s.Interpolate(0, 0.1), Vector3d(0, 0, 0))
-        self.assertFalse(s.InterpolateTangent(0.1).IsFinite())
+        s.add_point(Vector3d(0, 0, 0))
+        self.assertAlmostEqual(s.interpolate(0, 0.1), Vector3d(0, 0, 0))
+        self.assertFalse(s.interpolate_tangent(0.1).IsFinite())
 
-        s.AddPoint(Vector3d(1, 2, 3))
-        self.assertAlmostEqual(s.Interpolate(0, 0.0), s.Point(0))
-        self.assertFalse(s.Interpolate(0, -0.1).IsFinite())
-        self.assertAlmostEqual(s.InterpolateTangent(0, 0.0), s.Tangent(0))
+        s.add_point(Vector3d(1, 2, 3))
+        self.assertAlmostEqual(s.interpolate(0, 0.0), s.point(0))
+        self.assertFalse(s.interpolate(0, -0.1).IsFinite())
+        self.assertAlmostEqual(s.interpolate_tangent(0, 0.0), s.tangent(0))
 
         # Fast and slow call variations
-        self.assertAlmostEqual(s.Interpolate(0, 0.5), Vector3d(0.5, 1.0, 1.5))
-        self.assertAlmostEqual(s.Interpolate(0, 1.0), s.Point(1))
-        self.assertAlmostEqual(s.InterpolateTangent(0, 0.5),
+        self.assertAlmostEqual(s.interpolate(0, 0.5), Vector3d(0.5, 1.0, 1.5))
+        self.assertAlmostEqual(s.interpolate(0, 1.0), s.point(1))
+        self.assertAlmostEqual(s.interpolate_tangent(0, 0.5),
                                Vector3d(1.25, 2.5, 3.75))
-        self.assertAlmostEqual(s.InterpolateTangent(0, 1.0), s.Tangent(1))
-        self.assertAlmostEqual(s.InterpolateMthDerivative(2, 0.5),
+        self.assertAlmostEqual(s.interpolate_tangent(0, 1.0), s.tangent(1))
+        self.assertAlmostEqual(s.interpolate_mth_derivative(2, 0.5),
                                Vector3d(0, 0, 0))
-        self.assertAlmostEqual(s.InterpolateMthDerivative(2, 1.0),
+        self.assertAlmostEqual(s.interpolate_mth_derivative(2, 1.0),
                                Vector3d(-3, -6, -9))
-        self.assertAlmostEqual(s.InterpolateMthDerivative(3, 0.5),
+        self.assertAlmostEqual(s.interpolate_mth_derivative(3, 0.5),
                                Vector3d(-6, -12, -18))
-        self.assertAlmostEqual(s.InterpolateMthDerivative(3, 1.0),
+        self.assertAlmostEqual(s.interpolate_mth_derivative(3, 1.0),
                                Vector3d(-6, -12, -18))
-        self.assertAlmostEqual(s.InterpolateMthDerivative(4, 0.5),
+        self.assertAlmostEqual(s.interpolate_mth_derivative(4, 0.5),
                                Vector3d(0, 0, 0))
-        self.assertAlmostEqual(s.InterpolateMthDerivative(4, 1.0),
+        self.assertAlmostEqual(s.interpolate_mth_derivative(4, 1.0),
                                Vector3d(0, 0, 0))
 
     def test_point(self):
         s = Spline()
-        self.assertFalse(s.Point(0).IsFinite())
+        self.assertFalse(s.point(0).IsFinite())
 
     def test_tangent(self):
         s = Spline()
-        self.assertFalse(s.Tangent(0).IsFinite())
+        self.assertFalse(s.tangent(0).IsFinite())
 
-        s.AddPoint(Vector3d(0, 0, 0))
-        self.assertFalse(s.Tangent(0).IsFinite())
+        s.add_point(Vector3d(0, 0, 0))
+        self.assertFalse(s.tangent(0).IsFinite())
 
-        s.AddPoint(Vector3d(1, 0, 0))
-        self.assertAlmostEqual(s.Tangent(0), Vector3d(0.5, 0, 0))
+        s.add_point(Vector3d(1, 0, 0))
+        self.assertAlmostEqual(s.tangent(0), Vector3d(0.5, 0, 0))
 
-        s.AddPoint(Vector3d(1, 1, 0), Vector3d(-1, 1, 0))
-        self.assertAlmostEqual(s.Tangent(1), Vector3d(0.5, 0.5, 0))
-        self.assertAlmostEqual(s.Tangent(2), Vector3d(-1, 1, 0))
+        s.add_point(Vector3d(1, 1, 0), Vector3d(-1, 1, 0))
+        self.assertAlmostEqual(s.tangent(1), Vector3d(0.5, 0.5, 0))
+        self.assertAlmostEqual(s.tangent(2), Vector3d(-1, 1, 0))
 
     def test_recalc_tangents(self):
         s = Spline()
 
-        s.AddPoint(Vector3d(0, 0, 0))
-        s.AddPoint(Vector3d(.4, .4, .4))
-        s.AddPoint(Vector3d(0, 0, 0))
+        s.add_point(Vector3d(0, 0, 0))
+        s.add_point(Vector3d(.4, .4, .4))
+        s.add_point(Vector3d(0, 0, 0))
 
-        s.RecalcTangents()
+        s.recalc_tangents()
 
-        self.assertAlmostEqual(s.Interpolate(0, 0.5), Vector3d(0.2, 0.2, 0.2))
-        self.assertAlmostEqual(s.Interpolate(1, 0.5), Vector3d(0.2, 0.2, 0.2))
+        self.assertAlmostEqual(s.interpolate(0, 0.5), Vector3d(0.2, 0.2, 0.2))
+        self.assertAlmostEqual(s.interpolate(1, 0.5), Vector3d(0.2, 0.2, 0.2))
 
 
 if __name__ == '__main__':

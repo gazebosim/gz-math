@@ -32,6 +32,7 @@ namespace ignition
 
     class Spline
     {
+      %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
       public: Spline();
       public: ~Spline();
       public: void Tension(double _t);
@@ -70,11 +71,6 @@ namespace ignition
                                                 const double _s) const;
       public: void AutoCalculate(bool _autoCalc);
       public: void RecalcTangents();
-      private: void Rebuild();
-      private: bool MapToSegment(const double _t,
-                                 unsigned int &_index,
-                                 double &_fraction) const;
-      private: SplinePrivate *dataPtr;
     };
   }
 }

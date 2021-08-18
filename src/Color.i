@@ -31,6 +31,8 @@ namespace ignition
   {
       class Color
       {
+        %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
+        %rename("%(uppercase)s", %$isstatic, %$isvariable) "";
         public: static const Color White;
         public: static const Color Black;
         public: static const Color Red;
