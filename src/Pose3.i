@@ -34,6 +34,9 @@ namespace ignition
     template<typename T>
     class Pose3
     {
+      %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
+      %rename("%(uppercase)s", %$isstatic, %$isvariable) "";
+      
       public: static const Pose3<T> Zero;
 
       public: Pose3() : p(0, 0, 0), q(1, 0, 0, 0);
@@ -68,6 +71,7 @@ namespace ignition
       public: inline Quaternion<T> CoordRotationSub(
                   const Quaternion<T> &_rot) const;
       public: Pose3<T> CoordPoseSolve(const Pose3<T> &_b) const;
+      public: void Reset();
       public: Pose3<T> RotatePositionAboutOrigin(const Quaternion<T> &_q) const;
       public: void Round(int _precision);
       public: inline const Vector3<T> &Pos() const;
@@ -83,17 +87,7 @@ namespace ignition
       public: inline const T Roll() const;
       public: inline const T Pitch() const;
       public: inline const T Yaw() const;
-      
-      private: Vector3<T> p;
-      private: Quaternion<T> q;
     };
-
-    %extend Pose3 {
-        void Reset() {
-          ignition::math::Vector3<T> vect;
-          (*$self).Set(vect, ignition::math::Quaternion<T>::Identity);
-        }
-    }
 
     %extend Pose3 {
         std::string __str__() const {

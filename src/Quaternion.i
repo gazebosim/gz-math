@@ -32,6 +32,9 @@ namespace ignition
     template<typename T>
     class Quaternion
     {
+      %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
+      %rename("%(uppercase)s", %$isstatic, %$isvariable) "";
+
       public: static const Quaternion Identity;
       public: static const Quaternion Zero;
 
@@ -97,11 +100,6 @@ namespace ignition
       public: inline void Y(T _v);
       public: inline void Z(T _v);
       public: inline void W(T _v);
-
-      private: T qw;
-      private: T qx;
-      private: T qy;
-      private: T qz;
     };
 
     %extend Quaternion{

@@ -45,30 +45,30 @@ class TestQuaternion(unittest.TestCase):
 
     def test_unit(self):
         q = Quaterniond()
-        self.assertAlmostEqual(q.W(), 1.0)
-        self.assertAlmostEqual(q.X(), 0.0)
-        self.assertAlmostEqual(q.Y(), 0.0)
-        self.assertAlmostEqual(q.Z(), 0.0)
+        self.assertAlmostEqual(q.w(), 1.0)
+        self.assertAlmostEqual(q.x(), 0.0)
+        self.assertAlmostEqual(q.y(), 0.0)
+        self.assertAlmostEqual(q.z(), 0.0)
 
     def test_construct_values(self):
         q = Quaterniond(1.0, 2.0, 3.0, 4.0)
-        self.assertAlmostEqual(q.W(), 1.0)
-        self.assertAlmostEqual(q.X(), 2.0)
-        self.assertAlmostEqual(q.Y(), 3.0)
-        self.assertAlmostEqual(q.Z(), 4.0)
+        self.assertAlmostEqual(q.w(), 1.0)
+        self.assertAlmostEqual(q.x(), 2.0)
+        self.assertAlmostEqual(q.y(), 3.0)
+        self.assertAlmostEqual(q.z(), 4.0)
 
     def test_construct_zero(self):
         q = Quaterniond(0.0, 0.0, 0.0, 0.0)
-        self.assertAlmostEqual(q.W(), 0.0)
-        self.assertAlmostEqual(q.X(), 0.0)
-        self.assertAlmostEqual(q.Y(), 0.0)
-        self.assertAlmostEqual(q.Z(), 0.0)
+        self.assertAlmostEqual(q.w(), 0.0)
+        self.assertAlmostEqual(q.x(), 0.0)
+        self.assertAlmostEqual(q.y(), 0.0)
+        self.assertAlmostEqual(q.z(), 0.0)
 
-        qI = q.Inverse()
-        self.assertAlmostEqual(qI.W(), 1.0)
-        self.assertAlmostEqual(qI.X(), 0.0)
-        self.assertAlmostEqual(qI.Y(), 0.0)
-        self.assertAlmostEqual(qI.Z(), 0.0)
+        qI = q.inverse()
+        self.assertAlmostEqual(qI.w(), 1.0)
+        self.assertAlmostEqual(qI.x(), 0.0)
+        self.assertAlmostEqual(qI.y(), 0.0)
+        self.assertAlmostEqual(qI.z(), 0.0)
 
     def test_construct_euler(self):
         q = Quaterniond(0, 1, 2)
@@ -77,10 +77,10 @@ class TestQuaternion(unittest.TestCase):
     def test_construct_axis_angle(self):
         q1 = Quaterniond(Vector3d(0, 0, 1), math.pi)
 
-        self.assertAlmostEqual(q1.X(), 0.0)
-        self.assertAlmostEqual(q1.Y(), 0.0)
-        self.assertAlmostEqual(q1.Z(), 1.0)
-        self.assertAlmostEqual(q1.W(), 0.0)
+        self.assertAlmostEqual(q1.x(), 0.0)
+        self.assertAlmostEqual(q1.y(), 0.0)
+        self.assertAlmostEqual(q1.z(), 1.0)
+        self.assertAlmostEqual(q1.w(), 0.0)
 
         q = Quaterniond(q1)
         self.assertTrue(q == q1)
@@ -89,86 +89,86 @@ class TestQuaternion(unittest.TestCase):
         # double
         q = Quaterniond(1, 2, 3, 4)
         q2 = Quaterniond(1.01, 2.015, 3.002, 4.007)
-        self.assertTrue(q.Equal(q2, 0.02))
-        self.assertFalse(q.Equal(q2, 0.01))
+        self.assertTrue(q.equal(q2, 0.02))
+        self.assertFalse(q.equal(q2, 0.01))
 
         # floats
         q3 = Quaternionf(1, 2, 3, 4)
         q4 = Quaternionf(1.05, 2.1, 3.03, 4.04)
-        self.assertTrue(q3.Equal(q4, 0.2))
-        self.assertFalse(q3.Equal(q4, 0.04))
+        self.assertTrue(q3.equal(q4, 0.2))
+        self.assertFalse(q3.equal(q4, 0.04))
 
         # ints
         q5 = Quaternioni(3, 5, -1, 9)
         q6 = Quaternioni(3, 6, 1, 12)
-        self.assertTrue(q5.Equal(q6, 3))
-        self.assertFalse(q5.Equal(q6, 2))
+        self.assertTrue(q5.equal(q6, 3))
+        self.assertFalse(q5.equal(q6, 2))
 
     def test_identity(self):
-        q = Quaterniond.Identity
-        self.assertAlmostEqual(q.W(), 1.0)
-        self.assertAlmostEqual(q.X(), 0.0)
-        self.assertAlmostEqual(q.Y(), 0.0)
-        self.assertAlmostEqual(q.Z(), 0.0)
+        q = Quaterniond.IDENTITY
+        self.assertAlmostEqual(q.w(), 1.0)
+        self.assertAlmostEqual(q.x(), 0.0)
+        self.assertAlmostEqual(q.y(), 0.0)
+        self.assertAlmostEqual(q.z(), 0.0)
 
     def test_mathlog(self):
         q = Quaterniond(math.pi*0.1, math.pi*0.5, math.pi)
-        self.assertAlmostEqual(q.Log(),
+        self.assertAlmostEqual(q.log(),
                                Quaterniond(0, -1.02593, 0.162491, 1.02593))
 
         q1 = Quaterniond(q)
-        q1.W(2.0)
-        self.assertAlmostEqual(q1.Log(),
+        q1.w(2.0)
+        self.assertAlmostEqual(q1.log(),
                                Quaterniond(0, -0.698401, 0.110616, 0.698401))
 
     def test_math_exp(self):
         q = Quaterniond(math.pi*0.1, math.pi*0.5, math.pi)
-        self.assertAlmostEqual(q.Exp(), Quaterniond(0.545456, -0.588972,
+        self.assertAlmostEqual(q.exp(), Quaterniond(0.545456, -0.588972,
                                                     0.093284, 0.588972))
 
         q1 = Quaterniond(q)
-        q1.X(0.000000001)
-        q1.Y(0.0)
-        q1.Z(0.0)
-        q1.W(0.0)
-        self.assertAlmostEqual(q1.Exp(), Quaterniond(1, 0, 0, 0))
+        q1.x(0.000000001)
+        q1.y(0.0)
+        q1.z(0.0)
+        q1.w(0.0)
+        self.assertAlmostEqual(q1.exp(), Quaterniond(1, 0, 0, 0))
 
     def test_math_invert(self):
         q = Quaterniond(math.pi*0.1, math.pi*0.5, math.pi)
 
-        q.Invert()
+        q.invert()
         self.assertAlmostEqual(q, Quaterniond(0.110616, 0.698401,
                                               -0.110616, -0.698401))
 
     def test_math_axis(self):
         q = Quaterniond(math.pi*0.1, math.pi*0.5, math.pi)
 
-        q.Axis(0, 1, 0, math.pi)
+        q.axis(0, 1, 0, math.pi)
         self.assertAlmostEqual(q, Quaterniond(6.12303e-17, 0, 1, 0))
 
-        q.Axis(Vector3d(1, 0, 0), math.pi)
+        q.axis(Vector3d(1, 0, 0), math.pi)
         self.assertAlmostEqual(q, Quaterniond(0, 1, 0, 0))
 
     def test_math_set(self):
         q = Quaterniond(math.pi*0.1, math.pi*0.5, math.pi)
 
-        q.Set(1, 2, 3, 4)
-        self.assertAlmostEqual(q.W(), 1.0)
-        self.assertAlmostEqual(q.X(), 2.0)
-        self.assertAlmostEqual(q.Y(), 3.0)
-        self.assertAlmostEqual(q.Z(), 4.0)
+        q.set(1, 2, 3, 4)
+        self.assertAlmostEqual(q.w(), 1.0)
+        self.assertAlmostEqual(q.x(), 2.0)
+        self.assertAlmostEqual(q.y(), 3.0)
+        self.assertAlmostEqual(q.z(), 4.0)
 
     def test_math_normalized(self):
         q = Quaterniond(1, 2, 3, 4)
 
-        q2 = q.Normalized()
+        q2 = q.normalized()
         self.assertAlmostEqual(q2, Quaterniond(0.182574, 0.365148,
                                                0.547723, 0.730297))
 
     def test_normalize(self):
         q = Quaterniond(1, 2, 3, 4)
 
-        q.Normalize()
+        q.normalize()
         self.assertAlmostEqual(q, Quaterniond(0.182574, 0.365148,
                                                0.547723, 0.730297))
 
@@ -176,7 +176,7 @@ class TestQuaternion(unittest.TestCase):
         q1 = Quaterniond(0.1, 1.2, 2.3)
         q2 = Quaterniond(1.2, 2.3, -3.4)
 
-        q3 = Quaterniond.Slerp(1.0, q1, q2, True)
+        q3 = Quaterniond.slerp(1.0, q1, q2, True)
         self.assertAlmostEqual(q3, Quaterniond(0.554528, -0.717339,
                                                0.32579, 0.267925))
 
@@ -185,10 +185,10 @@ class TestQuaternion(unittest.TestCase):
         v2 = Vector3d(0.0, 1.0, 0.0)
 
         q1 = Quaterniond()
-        q1.From2Axes(v1, v2)
+        q1.from_2axes(v1, v2)
 
         q2 = Quaterniond()
-        q2.From2Axes(v2, v1)
+        q2.from_2axes(v2, v1)
 
         q2Correct = Quaterniond(math.sqrt(2)/2, 0, 0, -math.sqrt(2)/2)
         q1Correct = Quaterniond(math.sqrt(2)/2, 0, 0, math.sqrt(2)/2)
@@ -196,7 +196,7 @@ class TestQuaternion(unittest.TestCase):
         self.assertNotEqual(q1, q2)
         self.assertAlmostEqual(q1Correct, q1)
         self.assertAlmostEqual(q2Correct, q2)
-        self.assertAlmostEqual(Quaterniond.Identity, q1 * q2)
+        self.assertAlmostEqual(Quaterniond.IDENTITY, q1 * q2)
         self.assertAlmostEqual(v2, q1 * v1)
         self.assertAlmostEqual(v1, q2 * v2)
 
@@ -204,13 +204,13 @@ class TestQuaternion(unittest.TestCase):
         v1.Set(0.5, 0.5, 0)
         v2.Set(-0.5, 0.5, 0)
 
-        q1.From2Axes(v1, v2)
-        q2.From2Axes(v2, v1)
+        q1.from_2axes(v1, v2)
+        q2.from_2axes(v2, v1)
 
         self.assertNotEqual(q1, q2)
         self.assertAlmostEqual(q1Correct, q1)
         self.assertAlmostEqual(q2Correct, q2)
-        self.assertAlmostEqual(Quaterniond.Identity, q1 * q2)
+        self.assertAlmostEqual(Quaterniond.IDENTITY, q1 * q2)
         self.assertAlmostEqual(v2, q1 * v1)
         self.assertAlmostEqual(v1, q2 * v2)
 
@@ -219,58 +219,58 @@ class TestQuaternion(unittest.TestCase):
 
         v1.Set(1, 0, 0)
         v2.Set(-1, 0, 0)
-        q1.From2Axes(v1, v2)
+        q1.from_2axes(v1, v2)
         q2 = q1 * q1
-        self.assertTrue(abs(q2.W()-1.0) <= tolerance or
-                        abs(q2.W()-(-1.0)) <= tolerance)
-        self.assertAlmostEqual(q2.X(), 0.0)
-        self.assertAlmostEqual(q2.Y(), 0.0)
-        self.assertAlmostEqual(q2.Z(), 0.0)
+        self.assertTrue(abs(q2.w()-1.0) <= tolerance or
+                        abs(q2.w()-(-1.0)) <= tolerance)
+        self.assertAlmostEqual(q2.x(), 0.0)
+        self.assertAlmostEqual(q2.y(), 0.0)
+        self.assertAlmostEqual(q2.z(), 0.0)
 
         v1.Set(0, 1, 0)
         v2.Set(0, -1, 0)
-        q1.From2Axes(v1, v2)
+        q1.from_2axes(v1, v2)
         q2 = q1 * q1
-        self.assertTrue(abs(q2.W()-1.0) <= tolerance or
-                        abs(q2.W()-(-1.0)) <= tolerance)
-        self.assertAlmostEqual(q2.X(), 0.0)
-        self.assertAlmostEqual(q2.Y(), 0.0)
-        self.assertAlmostEqual(q2.Z(), 0.0)
+        self.assertTrue(abs(q2.w()-1.0) <= tolerance or
+                        abs(q2.w()-(-1.0)) <= tolerance)
+        self.assertAlmostEqual(q2.x(), 0.0)
+        self.assertAlmostEqual(q2.y(), 0.0)
+        self.assertAlmostEqual(q2.z(), 0.0)
 
         v1.Set(0, 0, 1)
         v2.Set(0, 0, -1)
-        q1.From2Axes(v1, v2)
+        q1.from_2axes(v1, v2)
         q2 = q1 * q1
-        self.assertTrue(abs(q2.W()-1.0) <= tolerance or
-                        abs(q2.W()-(-1.0)) <= tolerance)
-        self.assertAlmostEqual(q2.X(), 0.0)
-        self.assertAlmostEqual(q2.Y(), 0.0)
-        self.assertAlmostEqual(q2.Z(), 0.0)
+        self.assertTrue(abs(q2.w()-1.0) <= tolerance or
+                        abs(q2.w()-(-1.0)) <= tolerance)
+        self.assertAlmostEqual(q2.x(), 0.0)
+        self.assertAlmostEqual(q2.y(), 0.0)
+        self.assertAlmostEqual(q2.z(), 0.0)
 
         v1.Set(0, 1, 1)
         v2.Set(0, -1, -1)
-        q1.From2Axes(v1, v2)
+        q1.from_2axes(v1, v2)
         q2 = q1 * q1
-        self.assertTrue(abs(q2.W()-1.0) <= tolerance or
-                        abs(q2.W()-(-1.0)) <= tolerance)
-        self.assertAlmostEqual(q2.X(), 0.0)
-        self.assertAlmostEqual(q2.Y(), 0.0)
-        self.assertAlmostEqual(q2.Z(), 0.0)
+        self.assertTrue(abs(q2.w()-1.0) <= tolerance or
+                        abs(q2.w()-(-1.0)) <= tolerance)
+        self.assertAlmostEqual(q2.x(), 0.0)
+        self.assertAlmostEqual(q2.y(), 0.0)
+        self.assertAlmostEqual(q2.z(), 0.0)
 
     def test_math(self):
         q = Quaterniond(math.pi*0.1, math.pi*0.5, math.pi)
         self.assertTrue(q == Quaterniond(0.110616, -0.698401,
                                          0.110616, 0.698401))
 
-        q.Set(1, 2, 3, 4)
+        q.set(1, 2, 3, 4)
 
-        q.Normalize()
+        q.normalize()
 
-        self.assertAlmostEqual(q.Roll(), 1.4289, delta=1e-3)
-        self.assertAlmostEqual(q.Pitch(), -0.339837, delta=1e-3)
-        self.assertAlmostEqual(q.Yaw(), 2.35619, delta=1e-3)
+        self.assertAlmostEqual(q.roll(), 1.4289, delta=1e-3)
+        self.assertAlmostEqual(q.pitch(), -0.339837, delta=1e-3)
+        self.assertAlmostEqual(q.yaw(), 2.35619, delta=1e-3)
 
-        q.Scale(0.1)
+        q.scale(0.1)
         self.assertTrue(q == Quaterniond(0.990394, 0.051354,
                                          0.0770309, 0.102708))
 
@@ -296,40 +296,40 @@ class TestQuaternion(unittest.TestCase):
         q = q * 5.0
         self.assertTrue(q == Quaterniond(7.67918, -1.184, 2.7592, 4.0149))
 
-        self.assertTrue(q.RotateVectorReverse(Vector3d(1, 2, 3)) ==
+        self.assertTrue(q.rotate_vector_reverse(Vector3d(1, 2, 3)) ==
                         Vector3d(-0.104115, 0.4975, 3.70697))
 
-        self.assertAlmostEqual(q.Dot(Quaterniond(.4, .2, .1)), 7.67183,
+        self.assertAlmostEqual(q.dot(Quaterniond(.4, .2, .1)), 7.67183,
                                delta=1e-3)
 
-        self.assertTrue(Quaterniond.Squad(1.1, Quaterniond(.1, 0, .2),
+        self.assertTrue(Quaterniond.squad(1.1, Quaterniond(.1, 0, .2),
                         Quaterniond(0, .3, .4), Quaterniond(.5, .2, 1),
                         Quaterniond(0, 0, 2), True) ==
                         Quaterniond(0.346807, -0.0511734,
                                     -0.0494723, 0.935232))
 
-        self.assertTrue(Quaterniond.EulerToQuaternion(
+        self.assertTrue(Quaterniond.euler_to_quaternion(
                         Vector3d(.1, .2, .3)) ==
                         Quaterniond(0.983347, 0.0342708,
                                     0.106021, 0.143572))
 
-        q.Round(2)
-        self.assertAlmostEqual(-1.18, q.X())
-        self.assertAlmostEqual(2.76, q.Y())
-        self.assertAlmostEqual(4.01, q.Z())
-        self.assertAlmostEqual(7.68, q.W())
+        q.round(2)
+        self.assertAlmostEqual(-1.18, q.x())
+        self.assertAlmostEqual(2.76, q.y())
+        self.assertAlmostEqual(4.01, q.z())
+        self.assertAlmostEqual(7.68, q.w())
 
-        q.X(0.0)
-        q.Y(0.0)
-        q.Z(0.0)
-        q.W(0.0)
-        q.Normalize()
+        q.x(0.0)
+        q.y(0.0)
+        q.z(0.0)
+        q.w(0.0)
+        q.normalize()
         self.assertTrue(q == Quaterniond())
 
-        q.Axis(0, 0, 0, 0)
+        q.axis(0, 0, 0, 0)
         self.assertTrue(q == Quaterniond())
 
-        self.assertTrue(Quaterniond.EulerToQuaternion(0.1, 0.2, 0.3) ==
+        self.assertTrue(Quaterniond.euler_to_quaternion(0.1, 0.2, 0.3) ==
                         Quaterniond(0.983347, 0.0342708, 0.106021, 0.143572))
 
     def test_stream_out(self):
@@ -337,84 +337,84 @@ class TestQuaternion(unittest.TestCase):
         self.assertEqual(str(q), "0.1 1.2 2.3")
 
     def test_integrate(self):
-        # Integrate by zero, expect no change
+        # integrate by zero, expect no change
         q = Quaterniond(0.5, 0.5, 0.5, 0.5)
-        self.assertAlmostEqual(q, q.Integrate(Vector3d.Zero, 1.0))
-        self.assertAlmostEqual(q, q.Integrate(Vector3d.UnitX, 0.0))
-        self.assertAlmostEqual(q, q.Integrate(Vector3d.UnitY, 0.0))
-        self.assertAlmostEqual(q, q.Integrate(Vector3d.UnitZ, 0.0))
+        self.assertAlmostEqual(q, q.integrate(Vector3d.Zero, 1.0))
+        self.assertAlmostEqual(q, q.integrate(Vector3d.UnitX, 0.0))
+        self.assertAlmostEqual(q, q.integrate(Vector3d.UnitY, 0.0))
+        self.assertAlmostEqual(q, q.integrate(Vector3d.UnitZ, 0.0))
 
-        # Integrate along single axes,
+        # integrate along single axes,
         # expect linear change in roll, pitch, yaw
         q = Quaterniond(1, 0, 0, 0)
-        qRoll = q.Integrate(Vector3d.UnitX, 1.0)
-        qPitch = q.Integrate(Vector3d.UnitY, 1.0)
-        qYaw = q.Integrate(Vector3d.UnitZ, 1.0)
-        self.assertAlmostEqual(qRoll.Euler(), Vector3d.UnitX)
-        self.assertAlmostEqual(qPitch.Euler(), Vector3d.UnitY)
-        self.assertAlmostEqual(qYaw.Euler(), Vector3d.UnitZ)
+        qRoll = q.integrate(Vector3d.UnitX, 1.0)
+        qPitch = q.integrate(Vector3d.UnitY, 1.0)
+        qYaw = q.integrate(Vector3d.UnitZ, 1.0)
+        self.assertAlmostEqual(qRoll.euler(), Vector3d.UnitX)
+        self.assertAlmostEqual(qPitch.euler(), Vector3d.UnitY)
+        self.assertAlmostEqual(qYaw.euler(), Vector3d.UnitZ)
 
-        # Integrate sequentially along single axes in order XYZ,
-        # expect rotations to match Euler Angles
+        # integrate sequentially along single axes in order XYZ,
+        # expect rotations to match euler Angles
         q = Quaterniond(1, 0, 0, 0)
         angle = 0.5
-        qX = q.Integrate(Vector3d.UnitX, angle)
-        qXY = qX.Integrate(Vector3d.UnitY, angle)
-        self.assertAlmostEqual(qXY.Euler(), Vector3d(1, 1, 0)*angle)
-
-        q = Quaterniond(1, 0, 0, 0)
-        angle = 0.5
-        qX = q.Integrate(Vector3d.UnitX, angle)
-        qXZ = qX.Integrate(Vector3d.UnitZ, angle)
-        self.assertAlmostEqual(qXZ.Euler(), Vector3d(1, 0, 1)*angle)
+        qX = q.integrate(Vector3d.UnitX, angle)
+        qXY = qX.integrate(Vector3d.UnitY, angle)
+        self.assertAlmostEqual(qXY.euler(), Vector3d(1, 1, 0)*angle)
 
         q = Quaterniond(1, 0, 0, 0)
         angle = 0.5
-        qY = q.Integrate(Vector3d.UnitY, angle)
-        qYZ = qY.Integrate(Vector3d.UnitZ, angle)
-        self.assertAlmostEqual(qYZ.Euler(), Vector3d(0, 1, 1)*angle)
+        qX = q.integrate(Vector3d.UnitX, angle)
+        qXZ = qX.integrate(Vector3d.UnitZ, angle)
+        self.assertAlmostEqual(qXZ.euler(), Vector3d(1, 0, 1)*angle)
 
         q = Quaterniond(1, 0, 0, 0)
         angle = 0.5
-        qX = q.Integrate(Vector3d.UnitX, angle)
-        qXY = qX.Integrate(Vector3d.UnitY, angle)
-        qXYZ = qXY.Integrate(Vector3d.UnitZ, angle)
-        self.assertAlmostEqual(qXYZ.Euler(), Vector3d.One*angle)
-
-        # Integrate sequentially along single axes in order ZYX,
-        # expect rotations to not match Euler Angles
-        q = Quaterniond(1, 0, 0, 0)
-        angle = 0.5
-        qZ = q.Integrate(Vector3d.UnitZ, angle)
-        qZY = qZ.Integrate(Vector3d.UnitY, angle)
-        self.assertNotEqual(qZY.Euler(), Vector3d(0, 1, 1)*angle)
+        qY = q.integrate(Vector3d.UnitY, angle)
+        qYZ = qY.integrate(Vector3d.UnitZ, angle)
+        self.assertAlmostEqual(qYZ.euler(), Vector3d(0, 1, 1)*angle)
 
         q = Quaterniond(1, 0, 0, 0)
         angle = 0.5
-        qZ = q.Integrate(Vector3d.UnitZ, angle)
-        qZX = qZ.Integrate(Vector3d.UnitX, angle)
-        self.assertNotEqual(qZX.Euler(), Vector3d(1, 0, 1)*angle)
+        qX = q.integrate(Vector3d.UnitX, angle)
+        qXY = qX.integrate(Vector3d.UnitY, angle)
+        qXYZ = qXY.integrate(Vector3d.UnitZ, angle)
+        self.assertAlmostEqual(qXYZ.euler(), Vector3d.One*angle)
+
+        # integrate sequentially along single axes in order ZYX,
+        # expect rotations to not match euler Angles
+        q = Quaterniond(1, 0, 0, 0)
+        angle = 0.5
+        qZ = q.integrate(Vector3d.UnitZ, angle)
+        qZY = qZ.integrate(Vector3d.UnitY, angle)
+        self.assertNotEqual(qZY.euler(), Vector3d(0, 1, 1)*angle)
 
         q = Quaterniond(1, 0, 0, 0)
         angle = 0.5
-        qZ = q.Integrate(Vector3d.UnitZ, angle)
-        qZY = qZ.Integrate(Vector3d.UnitY, angle)
-        qZYX = qZY.Integrate(Vector3d.UnitX, angle)
-        self.assertNotEqual(qZYX.Euler(), Vector3d(1, 1, 1)*angle)
+        qZ = q.integrate(Vector3d.UnitZ, angle)
+        qZX = qZ.integrate(Vector3d.UnitX, angle)
+        self.assertNotEqual(qZX.euler(), Vector3d(1, 0, 1)*angle)
 
         q = Quaterniond(1, 0, 0, 0)
         angle = 0.5
-        qY = q.Integrate(Vector3d.UnitY, angle)
-        qYX = qY.Integrate(Vector3d.UnitX, angle)
-        self.assertNotEqual(qYX.Euler(), Vector3d(1, 1, 0)*angle)
+        qZ = q.integrate(Vector3d.UnitZ, angle)
+        qZY = qZ.integrate(Vector3d.UnitY, angle)
+        qZYX = qZY.integrate(Vector3d.UnitX, angle)
+        self.assertNotEqual(qZYX.euler(), Vector3d(1, 1, 1)*angle)
 
-        # Integrate a full rotation about different axes,
+        q = Quaterniond(1, 0, 0, 0)
+        angle = 0.5
+        qY = q.integrate(Vector3d.UnitY, angle)
+        qYX = qY.integrate(Vector3d.UnitX, angle)
+        self.assertNotEqual(qYX.euler(), Vector3d(1, 1, 0)*angle)
+
+        # integrate a full rotation about different axes,
         # expect no change.
         q = Quaterniond(0.5, 0.5, 0.5, 0.5)
         fourPi = 4 * math.pi
-        qX = q.Integrate(Vector3d.UnitX, fourPi)
-        qY = q.Integrate(Vector3d.UnitY, fourPi)
-        qZ = q.Integrate(Vector3d.UnitZ, fourPi)
+        qX = q.integrate(Vector3d.UnitX, fourPi)
+        qY = q.integrate(Vector3d.UnitY, fourPi)
+        qZ = q.integrate(Vector3d.UnitZ, fourPi)
         self.assertAlmostEqual(q, qX)
         self.assertAlmostEqual(q, qY)
         self.assertAlmostEqual(q, qZ)

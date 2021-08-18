@@ -34,6 +34,9 @@ namespace ignition
     template<typename T>
     class Matrix4
     {
+      %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
+      %rename("%(uppercase)s", %$isstatic, %$isvariable) "";
+      
       public: static const Matrix4<T> Identity;
       public: static const Matrix4<T> Zero;
 
@@ -76,8 +79,6 @@ namespace ignition
       public: bool operator!=(const Matrix4<T> &_m) const;
       public: static Matrix4<T> LookAt(const Vector3<T> &_eye,
           const Vector3<T> &_target, const Vector3<T> &_up = Vector3<T>::UnitZ);
-
-      private: T data[4][4];
     };
 
     %extend Matrix4{

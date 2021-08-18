@@ -34,6 +34,9 @@ namespace ignition
     template<typename T>
     class Matrix3
     {
+      %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
+      %rename("%(uppercase)s", %$isstatic, %$isvariable) "";
+      
       public: static const Matrix3<T> Identity;
       public: static const Matrix3<T> Zero;
       public: Matrix3();
