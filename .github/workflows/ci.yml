@@ -11,9 +11,10 @@ jobs:
         uses: actions/checkout@v2
       - name: Compile and test
         id: ci
-        uses: ignition-tooling/action-ignition-ci@bionic
+        uses: ignition-tooling/action-ignition-ci@chapulina/doxygen
         with:
           codecov-enabled: true
+          doxygen-enabled: true
   focal-ci:
     runs-on: ubuntu-latest
     name: Ubuntu Focal CI
