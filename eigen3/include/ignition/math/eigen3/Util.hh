@@ -39,13 +39,11 @@ namespace ignition
     {
       /// \brief Get covariance matrix from a set of 3d vertices
       /// https://github.com/isl-org/Open3D/blob/76c2baf9debd460900f056a9b51e9a80de9c0e64/cpp/open3d/utility/Eigen.cpp#L305
-      /// \param[in] mesh a mesh of 3d vertices
-      /// \param[in] centroid Mean or centeroid of the 3d vertices
+      /// \param[in] _mesh a mesh of 3d vertices
       /// \return Covariance matrix
       inline Eigen::Matrix3d covarianceMatrix(
         const std::vector<math::Vector3d> &_mesh)
       {
-        Eigen::Matrix3d covariance;
         Eigen::Matrix<double, 9, 1> cumulants;
         cumulants.setZero();
         for (const auto &vertex : _mesh)
@@ -63,6 +61,8 @@ namespace ignition
         }
 
         cumulants /= static_cast<double>(_mesh.size());
+
+        Eigen::Matrix3d covariance;
         covariance(0, 0) = cumulants(3) - cumulants(0) * cumulants(0);
         covariance(1, 1) = cumulants(6) - cumulants(1) * cumulants(1);
         covariance(2, 2) = cumulants(8) - cumulants(2) * cumulants(2);
@@ -77,17 +77,15 @@ namespace ignition
 
       /// \brief Get the oriented 3d bounding box of a mesh points using PCA
       /// http://codextechnicanum.blogspot.com/2015/04/find-minimum-oriented-bounding-box-of.html
-      /// \param[in] mesh a mesh of 3d vertices
+      /// \param[in] _mesh a mesh of 3d vertices
       /// \return Oriented 3D box
       inline ignition::math::OrientedBoxd meshToOrientedBox(
         const std::vector<math::Vector3d> &_mesh)
       {
-        math::OrientedBoxd box;
-
         math::Vector3d mean;
-        for (auto point : _mesh)
+        for (const auto &point : _mesh)
           mean += point;
-        mean /= _mesh.size();
+        mean /= static_cast<double>(_mesh.size());
 
         Eigen::Vector3d centroid = math::eigen3::convert(mean);
         Eigen::Matrix3d covariance = covarianceMatrix(_mesh);
@@ -138,8 +136,10 @@ namespace ignition
             maxPoint.z() - minPoint.z()
         );
         math::Pose3d pose;
-        pose.Rot() = convert(bboxQuaternion);
-        pose.Pos() = convert(bboxTransform);
+        pose.Rot() = math::eigen3::convert(bboxQuaternion);
+        pose.Pos() = math::eigen3::convert(bboxTransform);
+
+        math::OrientedBoxd box;
 
         box.Size(size);
         box.Pose(pose);
