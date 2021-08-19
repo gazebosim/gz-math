@@ -39,14 +39,14 @@ namespace ignition
     {
       /// \brief Get covariance matrix from a set of 3d vertices
       /// https://github.com/isl-org/Open3D/blob/76c2baf9debd460900f056a9b51e9a80de9c0e64/cpp/open3d/utility/Eigen.cpp#L305
-      /// \param[in] _mesh a mesh of 3d vertices
+      /// \param[in] _vertices a vector of 3d vertices
       /// \return Covariance matrix
       inline Eigen::Matrix3d covarianceMatrix(
-        const std::vector<math::Vector3d> &_mesh)
+        const std::vector<math::Vector3d> &_vertices)
       {
         Eigen::Matrix<double, 9, 1> cumulants;
         cumulants.setZero();
-        for (const auto &vertex : _mesh)
+        for (const auto &vertex : _vertices)
         {
           const Eigen::Vector3d &point = math::eigen3::convert(vertex);
           cumulants(0) += point(0);
@@ -60,7 +60,7 @@ namespace ignition
           cumulants(8) += point(2) * point(2);
         }
 
-        cumulants /= static_cast<double>(_mesh.size());
+        cumulants /= static_cast<double>(_vertices.size());
 
         Eigen::Matrix3d covariance;
         covariance(0, 0) = cumulants(3) - cumulants(0) * cumulants(0);
@@ -75,20 +75,26 @@ namespace ignition
         return covariance;
       }
 
-      /// \brief Get the oriented 3d bounding box of a mesh points using PCA
+      /// \brief Get the oriented 3d bounding box of a 3d vertices using PCA
       /// http://codextechnicanum.blogspot.com/2015/04/find-minimum-oriented-bounding-box-of.html
-      /// \param[in] _mesh a mesh of 3d vertices
+      /// \param[in] _vertices a vector of 3d vertices
       /// \return Oriented 3D box
-      inline ignition::math::OrientedBoxd meshToOrientedBox(
-        const std::vector<math::Vector3d> &_mesh)
+      inline ignition::math::OrientedBoxd verticesToOrientedBox(
+        const std::vector<math::Vector3d> &_vertices)
       {
+        math::OrientedBoxd box;
+
+        // Return an empty box if there are no vertices
+        if (_vertices.size() == 0)
+          return box;
+
         math::Vector3d mean;
-        for (const auto &point : _mesh)
+        for (const auto &point : _vertices)
           mean += point;
-        mean /= static_cast<double>(_mesh.size());
+        mean /= static_cast<double>(_vertices.size());
 
         Eigen::Vector3d centroid = math::eigen3::convert(mean);
-        Eigen::Matrix3d covariance = covarianceMatrix(_mesh);
+        Eigen::Matrix3d covariance = covarianceMatrix(_vertices);
 
         // Eigen Vectors
         Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d>
@@ -112,7 +118,7 @@ namespace ignition
         Eigen::Vector3d maxPoint(-INF_I32, -INF_I32, -INF_I32);
 
         // Get the minimum and maximum points of the transformed cloud.
-        for (const auto &point : _mesh)
+        for (const auto &point : _vertices)
         {
           Eigen::Vector4d pt(0, 0, 0, 1);
           pt.head<3>() = convert(point);
@@ -138,8 +144,6 @@ namespace ignition
         math::Pose3d pose;
         pose.Rot() = math::eigen3::convert(bboxQuaternion);
         pose.Pos() = math::eigen3::convert(bboxTransform);
-
-        math::OrientedBoxd box;
 
         box.Size(size);
         box.Pose(pose);

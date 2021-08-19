@@ -23,7 +23,7 @@ using namespace ignition;
 
 /////////////////////////////////////////////////
 /// \brief Test the oriented box converted from a set of vertices
-TEST(EigenUtil, meshToOrientedBox)
+TEST(EigenUtil, verticesToOrientedBox)
 {
   std::vector<math::Vector3d> mesh;
 
@@ -40,7 +40,7 @@ TEST(EigenUtil, meshToOrientedBox)
   mesh.push_back(math::Vector3d(-1, -2, 4));
   mesh.push_back(math::Vector3d(-2, -2, 0.6));
 
-  math::OrientedBoxd box = math::eigen3::meshToOrientedBox(mesh);
+  math::OrientedBoxd box = math::eigen3::verticesToOrientedBox(mesh);
 
   auto position = box.Pose().Pos();
   auto rotation = box.Pose().Rot();
