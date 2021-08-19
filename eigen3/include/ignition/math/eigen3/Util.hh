@@ -60,9 +60,12 @@ namespace ignition
           cumulants(8) += point(2) * point(2);
         }
 
+        Eigen::Matrix3d covariance;
+        if (_vertices.size() == 0)
+          return covariance;
+
         cumulants /= static_cast<double>(_vertices.size());
 
-        Eigen::Matrix3d covariance;
         covariance(0, 0) = cumulants(3) - cumulants(0) * cumulants(0);
         covariance(1, 1) = cumulants(6) - cumulants(1) * cumulants(1);
         covariance(2, 2) = cumulants(8) - cumulants(2) * cumulants(2);
