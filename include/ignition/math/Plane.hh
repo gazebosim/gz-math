@@ -21,8 +21,8 @@
 #include <ignition/math/Vector2.hh>
 #include <ignition/math/Vector3.hh>
 #include <ignition/math/config.hh>
-#include <ignition/math/Plane.hh>
 #include <ignition/math/Line2.hh>
+#include <ignition/math/Matrix4.hh>
 #include <optional>
 
 namespace ignition
@@ -187,6 +187,16 @@ namespace ignition
         + (a_1 - a_2) * (l*l*l - m*m*m) * (a_1 * n + a_2 * n + 2 * j)
         + 3.0 * (b_1 - b_2) * (l - m) * (b_1 * n + b_2 * n - 2 * k));
         return vol;
+      }
+
+      /// \brief Transform a plane into another plane according to a quaternion
+      public: Plane Transform(const Matrix4<T> &_matrix)
+      {
+        auto newNormal = _matrix.Rotation() * this->Normal(); // See what I did there
+        auto newPoint = _matrix * this->GetPointOnPlane(T(0), T(0));
+        auto offset = newNormal.Dot(newPoint);
+
+        return Plane{newPoint, offset};
       }
 
       /// \brief The side of the plane a point is on.

@@ -229,6 +229,15 @@ namespace ignition
         return true;
       }
 
+      /// \brief Calculate distance between line and slope
+      /// \param[in] _pt point which we are measuring distance to.
+      /// \returns Distance from point to line.
+      public: T Distance(const Vector3<T> _pt)
+      {
+        auto d = (_pt - this->pts[0]).Cross(this->pts[1] - this->pts[0]);
+        return d.Length() / (this->pts[1] - this->pts[0]).Length();
+      }
+
       /// \brief Check if this line intersects the given line segment.
       /// \param[in] _line The line to check for intersection.
       /// \param[in] _epsilon The error bounds within which the intersection
