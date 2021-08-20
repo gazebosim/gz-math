@@ -16,8 +16,11 @@ if (SWIG_FOUND)
 
   set(swig_files
     Angle
+    Color
     GaussMarkovProcess
     Rand
+    RollingMean
+    Spline
     Vector2
     Vector3
     Vector4)
