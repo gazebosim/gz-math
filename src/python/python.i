@@ -5,3 +5,6 @@
 %include Vector2.i
 %include Vector3.i
 %include Vector4.i
+%include Color.i
+%include RollingMean.i
+%include Spline.i

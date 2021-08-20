@@ -69,9 +69,12 @@ if (PYTHONLIBS_FOUND)
     # Add the Python tests
     set(python_tests
       Angle_TEST
+      Color_TEST
       GaussMarkovProcess_TEST
       python_TEST
       Rand_TEST
+      RollingMean_TEST
+      Spline_TEST
       Vector2_TEST
       Vector3_TEST
       Vector4_TEST
