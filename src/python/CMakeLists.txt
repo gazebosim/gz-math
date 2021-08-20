@@ -17,6 +17,10 @@ if (SWIG_FOUND)
   set(swig_files
     Angle
     GaussMarkovProcess
+    Matrix3
+    Matrix4
+    Pose3
+    Quaternion
     Rand
     Vector2
     Vector3
@@ -70,7 +74,11 @@ if (PYTHONLIBS_FOUND)
     set(python_tests
       Angle_TEST
       GaussMarkovProcess_TEST
+      Matrix3_TEST
+      Matrix4_TEST
+      Pose3_TEST
       python_TEST
+      Quaternion_TEST
       Rand_TEST
       Vector2_TEST
       Vector3_TEST

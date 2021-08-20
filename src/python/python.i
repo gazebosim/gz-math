@@ -5,3 +5,10 @@
 %include Vector2.i
 %include Vector3.i
 %include Vector4.i
+%include Quaternion.i
+%include Pose3.i
+%include Matrix3.i
+%include Matrix4.i
+
+
+

@@ -185,10 +185,10 @@ class TestQuaternion(unittest.TestCase):
         v2 = Vector3d(0.0, 1.0, 0.0)
 
         q1 = Quaterniond()
-        q1.from_2axes(v1, v2)
+        q1.from_2_axes(v1, v2)
 
         q2 = Quaterniond()
-        q2.from_2axes(v2, v1)
+        q2.from_2_axes(v2, v1)
 
         q2Correct = Quaterniond(math.sqrt(2)/2, 0, 0, -math.sqrt(2)/2)
         q1Correct = Quaterniond(math.sqrt(2)/2, 0, 0, math.sqrt(2)/2)
@@ -201,11 +201,11 @@ class TestQuaternion(unittest.TestCase):
         self.assertAlmostEqual(v1, q2 * v2)
 
         # still the same rotation, but with non-unit vectors
-        v1.Set(0.5, 0.5, 0)
-        v2.Set(-0.5, 0.5, 0)
+        v1.set(0.5, 0.5, 0)
+        v2.set(-0.5, 0.5, 0)
 
-        q1.from_2axes(v1, v2)
-        q2.from_2axes(v2, v1)
+        q1.from_2_axes(v1, v2)
+        q2.from_2_axes(v2, v1)
 
         self.assertNotEqual(q1, q2)
         self.assertAlmostEqual(q1Correct, q1)
@@ -217,9 +217,9 @@ class TestQuaternion(unittest.TestCase):
         # Test various settings of opposite vectors (which need special care)
         tolerance = 1e-4
 
-        v1.Set(1, 0, 0)
-        v2.Set(-1, 0, 0)
-        q1.from_2axes(v1, v2)
+        v1.set(1, 0, 0)
+        v2.set(-1, 0, 0)
+        q1.from_2_axes(v1, v2)
         q2 = q1 * q1
         self.assertTrue(abs(q2.w()-1.0) <= tolerance or
                         abs(q2.w()-(-1.0)) <= tolerance)
@@ -227,9 +227,9 @@ class TestQuaternion(unittest.TestCase):
         self.assertAlmostEqual(q2.y(), 0.0)
         self.assertAlmostEqual(q2.z(), 0.0)
 
-        v1.Set(0, 1, 0)
-        v2.Set(0, -1, 0)
-        q1.from_2axes(v1, v2)
+        v1.set(0, 1, 0)
+        v2.set(0, -1, 0)
+        q1.from_2_axes(v1, v2)
         q2 = q1 * q1
         self.assertTrue(abs(q2.w()-1.0) <= tolerance or
                         abs(q2.w()-(-1.0)) <= tolerance)
@@ -237,9 +237,9 @@ class TestQuaternion(unittest.TestCase):
         self.assertAlmostEqual(q2.y(), 0.0)
         self.assertAlmostEqual(q2.z(), 0.0)
 
-        v1.Set(0, 0, 1)
-        v2.Set(0, 0, -1)
-        q1.from_2axes(v1, v2)
+        v1.set(0, 0, 1)
+        v2.set(0, 0, -1)
+        q1.from_2_axes(v1, v2)
         q2 = q1 * q1
         self.assertTrue(abs(q2.w()-1.0) <= tolerance or
                         abs(q2.w()-(-1.0)) <= tolerance)
@@ -247,9 +247,9 @@ class TestQuaternion(unittest.TestCase):
         self.assertAlmostEqual(q2.y(), 0.0)
         self.assertAlmostEqual(q2.z(), 0.0)
 
-        v1.Set(0, 1, 1)
-        v2.Set(0, -1, -1)
-        q1.from_2axes(v1, v2)
+        v1.set(0, 1, 1)
+        v2.set(0, -1, -1)
+        q1.from_2_axes(v1, v2)
         q2 = q1 * q1
         self.assertTrue(abs(q2.w()-1.0) <= tolerance or
                         abs(q2.w()-(-1.0)) <= tolerance)
@@ -339,82 +339,82 @@ class TestQuaternion(unittest.TestCase):
     def test_integrate(self):
         # integrate by zero, expect no change
         q = Quaterniond(0.5, 0.5, 0.5, 0.5)
-        self.assertAlmostEqual(q, q.integrate(Vector3d.Zero, 1.0))
-        self.assertAlmostEqual(q, q.integrate(Vector3d.UnitX, 0.0))
-        self.assertAlmostEqual(q, q.integrate(Vector3d.UnitY, 0.0))
-        self.assertAlmostEqual(q, q.integrate(Vector3d.UnitZ, 0.0))
+        self.assertAlmostEqual(q, q.integrate(Vector3d.ZERO, 1.0))
+        self.assertAlmostEqual(q, q.integrate(Vector3d.UNIT_X, 0.0))
+        self.assertAlmostEqual(q, q.integrate(Vector3d.UNIT_Y, 0.0))
+        self.assertAlmostEqual(q, q.integrate(Vector3d.UNIT_Z, 0.0))
 
         # integrate along single axes,
         # expect linear change in roll, pitch, yaw
         q = Quaterniond(1, 0, 0, 0)
-        qRoll = q.integrate(Vector3d.UnitX, 1.0)
-        qPitch = q.integrate(Vector3d.UnitY, 1.0)
-        qYaw = q.integrate(Vector3d.UnitZ, 1.0)
-        self.assertAlmostEqual(qRoll.euler(), Vector3d.UnitX)
-        self.assertAlmostEqual(qPitch.euler(), Vector3d.UnitY)
-        self.assertAlmostEqual(qYaw.euler(), Vector3d.UnitZ)
+        qRoll = q.integrate(Vector3d.UNIT_X, 1.0)
+        qPitch = q.integrate(Vector3d.UNIT_Y, 1.0)
+        qYaw = q.integrate(Vector3d.UNIT_Z, 1.0)
+        self.assertAlmostEqual(qRoll.euler(), Vector3d.UNIT_X)
+        self.assertAlmostEqual(qPitch.euler(), Vector3d.UNIT_Y)
+        self.assertAlmostEqual(qYaw.euler(), Vector3d.UNIT_Z)
 
         # integrate sequentially along single axes in order XYZ,
         # expect rotations to match euler Angles
         q = Quaterniond(1, 0, 0, 0)
         angle = 0.5
-        qX = q.integrate(Vector3d.UnitX, angle)
-        qXY = qX.integrate(Vector3d.UnitY, angle)
+        qX = q.integrate(Vector3d.UNIT_X, angle)
+        qXY = qX.integrate(Vector3d.UNIT_Y, angle)
         self.assertAlmostEqual(qXY.euler(), Vector3d(1, 1, 0)*angle)
 
         q = Quaterniond(1, 0, 0, 0)
         angle = 0.5
-        qX = q.integrate(Vector3d.UnitX, angle)
-        qXZ = qX.integrate(Vector3d.UnitZ, angle)
+        qX = q.integrate(Vector3d.UNIT_X, angle)
+        qXZ = qX.integrate(Vector3d.UNIT_Z, angle)
         self.assertAlmostEqual(qXZ.euler(), Vector3d(1, 0, 1)*angle)
 
         q = Quaterniond(1, 0, 0, 0)
         angle = 0.5
-        qY = q.integrate(Vector3d.UnitY, angle)
-        qYZ = qY.integrate(Vector3d.UnitZ, angle)
+        qY = q.integrate(Vector3d.UNIT_Y, angle)
+        qYZ = qY.integrate(Vector3d.UNIT_Z, angle)
         self.assertAlmostEqual(qYZ.euler(), Vector3d(0, 1, 1)*angle)
 
         q = Quaterniond(1, 0, 0, 0)
         angle = 0.5
-        qX = q.integrate(Vector3d.UnitX, angle)
-        qXY = qX.integrate(Vector3d.UnitY, angle)
-        qXYZ = qXY.integrate(Vector3d.UnitZ, angle)
-        self.assertAlmostEqual(qXYZ.euler(), Vector3d.One*angle)
+        qX = q.integrate(Vector3d.UNIT_X, angle)
+        qXY = qX.integrate(Vector3d.UNIT_Y, angle)
+        qXYZ = qXY.integrate(Vector3d.UNIT_Z, angle)
+        self.assertAlmostEqual(qXYZ.euler(), Vector3d.ONE*angle)
 
         # integrate sequentially along single axes in order ZYX,
         # expect rotations to not match euler Angles
         q = Quaterniond(1, 0, 0, 0)
         angle = 0.5
-        qZ = q.integrate(Vector3d.UnitZ, angle)
-        qZY = qZ.integrate(Vector3d.UnitY, angle)
+        qZ = q.integrate(Vector3d.UNIT_Z, angle)
+        qZY = qZ.integrate(Vector3d.UNIT_Y, angle)
         self.assertNotEqual(qZY.euler(), Vector3d(0, 1, 1)*angle)
 
         q = Quaterniond(1, 0, 0, 0)
         angle = 0.5
-        qZ = q.integrate(Vector3d.UnitZ, angle)
-        qZX = qZ.integrate(Vector3d.UnitX, angle)
+        qZ = q.integrate(Vector3d.UNIT_Z, angle)
+        qZX = qZ.integrate(Vector3d.UNIT_X, angle)
         self.assertNotEqual(qZX.euler(), Vector3d(1, 0, 1)*angle)
 
         q = Quaterniond(1, 0, 0, 0)
         angle = 0.5
-        qZ = q.integrate(Vector3d.UnitZ, angle)
-        qZY = qZ.integrate(Vector3d.UnitY, angle)
-        qZYX = qZY.integrate(Vector3d.UnitX, angle)
+        qZ = q.integrate(Vector3d.UNIT_Z, angle)
+        qZY = qZ.integrate(Vector3d.UNIT_Y, angle)
+        qZYX = qZY.integrate(Vector3d.UNIT_X, angle)
         self.assertNotEqual(qZYX.euler(), Vector3d(1, 1, 1)*angle)
 
         q = Quaterniond(1, 0, 0, 0)
         angle = 0.5
-        qY = q.integrate(Vector3d.UnitY, angle)
-        qYX = qY.integrate(Vector3d.UnitX, angle)
+        qY = q.integrate(Vector3d.UNIT_Y, angle)
+        qYX = qY.integrate(Vector3d.UNIT_X, angle)
         self.assertNotEqual(qYX.euler(), Vector3d(1, 1, 0)*angle)
 
         # integrate a full rotation about different axes,
         # expect no change.
         q = Quaterniond(0.5, 0.5, 0.5, 0.5)
         fourPi = 4 * math.pi
-        qX = q.integrate(Vector3d.UnitX, fourPi)
-        qY = q.integrate(Vector3d.UnitY, fourPi)
-        qZ = q.integrate(Vector3d.UnitZ, fourPi)
+        qX = q.integrate(Vector3d.UNIT_X, fourPi)
+        qY = q.integrate(Vector3d.UNIT_Y, fourPi)
+        qZ = q.integrate(Vector3d.UNIT_Z, fourPi)
         self.assertAlmostEqual(q, qX)
         self.assertAlmostEqual(q, qY)
         self.assertAlmostEqual(q, qZ)

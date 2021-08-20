@@ -447,8 +447,8 @@ class TestMatrix4(unittest.TestCase):
         self.assertEqual(m, mT)
 
     def test_look_at(self):
-        self.assertAlmostEqual(Matrix4d.look_at(-Vector3d.UnitX,
-                               Vector3d.Zero).pose(),
+        self.assertAlmostEqual(Matrix4d.look_at(-Vector3d.UNIT_X,
+                               Vector3d.ZERO).pose(),
                                Pose3d(-1, 0, 0, 0, 0, 0))
 
         self.assertAlmostEqual(Matrix4d.look_at(Vector3d(3, 2, 0),
@@ -456,7 +456,7 @@ class TestMatrix4(unittest.TestCase):
                                Pose3d(3, 2, 0, 0, 0, math.pi))
 
         self.assertAlmostEqual(Matrix4d.look_at(Vector3d(1, 6, 1),
-                               Vector3d.One).pose(),
+                               Vector3d.ONE).pose(),
                                Pose3d(1, 6, 1, 0, 0, -math.pi/2))
 
         self.assertAlmostEqual(Matrix4d.look_at(Vector3d(-1, -1, 0),
@@ -468,33 +468,33 @@ class TestMatrix4(unittest.TestCase):
                                Vector3d(999, -0.6, 0)),
                                Matrix4d.look_at(Vector3d(0.1, -5, 222),
                                Vector3d(999, -0.6, 0),
-                               Vector3d.UnitZ))
+                               Vector3d.UNIT_Z))
 
         # up == zero, default up = +z
         self.assertAlmostEqual(Matrix4d.look_at(Vector3d(1.23, 456, 0.7),
                                Vector3d(0, 8.9, -10),
-                               Vector3d.Zero),
+                               Vector3d.ZERO),
                                Matrix4d.look_at(Vector3d(1.23, 456, 0.7),
                                Vector3d(0, 8.9, -10)))
 
         # up == +x, default up = +z
         self.assertAlmostEqual(Matrix4d.look_at(Vector3d(0.25, 9, -5),
                                Vector3d(-6, 0, 0.4),
-                               Vector3d.UnitX),
+                               Vector3d.UNIT_X),
                                Matrix4d.look_at(Vector3d(0.25, 9, -5),
                                Vector3d(-6, 0, 0.4)))
 
         # up == -x, default up = +z
         self.assertAlmostEqual(Matrix4d.look_at(Vector3d(0, 0, 0.2),
                                Vector3d(-8, 0, -6),
-                               -Vector3d.UnitX),
+                               -Vector3d.UNIT_X),
                                Matrix4d.look_at(Vector3d(0, 0, 0.2),
                                Vector3d(-8, 0, -6)))
 
         # eye == target, default direction = +x
-        self.assertAlmostEqual(Matrix4d.look_at(Vector3d.One,
-                               Vector3d.One),
-                               Matrix4d.look_at(Vector3d.One,
+        self.assertAlmostEqual(Matrix4d.look_at(Vector3d.ONE,
+                               Vector3d.ONE),
+                               Matrix4d.look_at(Vector3d.ONE,
                                Vector3d(1.0001, 1, 1)))
 
         # Not possible to keep _up on +z
@@ -502,15 +502,15 @@ class TestMatrix4(unittest.TestCase):
                                Vector3d(-1, 0, 0)),
                                Matrix4d.look_at(Vector3d(-1, 0, 10),
                                Vector3d(-1, 0, 0),
-                               -Vector3d.UnitX))
+                               -Vector3d.UNIT_X))
 
         # Different ups
-        self.assertAlmostEqual(Matrix4d.look_at(Vector3d.One,
+        self.assertAlmostEqual(Matrix4d.look_at(Vector3d.ONE,
                                Vector3d(0, 1, 1),
-                               Vector3d.UnitY).pose(),
+                               Vector3d.UNIT_Y).pose(),
                                Pose3d(1, 1, 1, math.pi/2, 0, math.pi))
 
-        self.assertAlmostEqual(Matrix4d.look_at(Vector3d.One,
+        self.assertAlmostEqual(Matrix4d.look_at(Vector3d.ONE,
                                Vector3d(0, 1, 1),
                                Vector3d(0, 1, 1)).pose(),
                                Pose3d(1, 1, 1, math.pi/4, 0, math.pi))

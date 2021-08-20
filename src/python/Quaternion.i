@@ -63,6 +63,7 @@ namespace ignition
       public: T Pitch() const;
       public: T Yaw() const;
       public: void ToAxis(Vector3<T> &_axis, T &_angle) const;
+      %rename(from_2_axes) From2Axes;
       public: void From2Axes(const Vector3<T> &_v1, const Vector3<T> &_v2);
       public: void Scale(T _scale);
       public: Quaternion<T> operator+(const Quaternion<T> &_qt) const;
@@ -81,8 +82,11 @@ namespace ignition
       public: Vector3<T> RotateVectorReverse(const Vector3<T> &_vec) const;
       public: bool IsFinite() const;
       public: inline void Correct();
+      %rename(x_axis) XAxis;
       public: Vector3<T> XAxis() const;
+      %rename(y_axis) YAxis;
       public: Vector3<T> YAxis() const;
+      %rename(z_axis) ZAxis;
       public: Vector3<T> ZAxis() const;
       public: void Round(int _precision);
       public: T Dot(const Quaternion<T> &_q) const;

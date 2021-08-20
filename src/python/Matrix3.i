@@ -53,6 +53,7 @@ namespace ignition
                         const Vector3<T> &_yAxis,
                         const Vector3<T> &_zAxis);
       public: void Axis(const Vector3<T> &_axis, T _angle);
+      %rename(from_2_axes) From2Axes;
       public: void From2Axes(const Vector3<T> &_v1, const Vector3<T> &_v2);
       public: void Col(unsigned int _c, const Vector3<T> &_v);
       public: Matrix3<T> operator-(const Matrix3<T> &_m) const;

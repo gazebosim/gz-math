@@ -119,7 +119,7 @@ class TestMatrix3(unittest.TestCase):
         self.assertAlmostEqual(Matrix3d.ZERO, matrix * 0)
 
         # Vector3.ZERO
-        self.assertAlmostEqual(Vector3d.Zero, matrix * Vector3d.Zero)
+        self.assertAlmostEqual(Vector3d.ZERO, matrix * Vector3d.ZERO)
 
         # Matrix3.ZERO
         self.assertAlmostEqual(Matrix3d.ZERO, matrix * Matrix3d.ZERO)
@@ -133,11 +133,14 @@ class TestMatrix3(unittest.TestCase):
         # Vector3.Unit
         # right multiply
         self.assertAlmostEqual(Vector3d(matrix(0, 0), matrix(1, 0),
-                                        matrix(2, 0)), matrix * Vector3d.UnitX)
+                                        matrix(2, 0)),
+                               matrix * Vector3d.UNIT_X)
         self.assertAlmostEqual(Vector3d(matrix(0, 1), matrix(1, 1),
-                                        matrix(2, 1)), matrix * Vector3d.UnitY)
+                                        matrix(2, 1)),
+                               matrix * Vector3d.UNIT_Y)
         self.assertAlmostEqual(Vector3d(matrix(0, 2), matrix(1, 2),
-                                        matrix(2, 2)), matrix * Vector3d.UnitZ)
+                                        matrix(2, 2)),
+                               matrix * Vector3d.UNIT_Z)
 
         # Matrix3.IDENTITY
         self.assertAlmostEqual(matrix, matrix * Matrix3d.IDENTITY)
@@ -231,10 +234,10 @@ class TestMatrix3(unittest.TestCase):
         v2 = Vector3d(0.0, 1.0, 0.0)
 
         m1 = Matrix3d()
-        m1.from_2axes(v1, v2)
+        m1.from_2_axes(v1, v2)
 
         m2 = Matrix3d()
-        m2.from_2axes(v2, v1)
+        m2.from_2_axes(v2, v1)
 
         m1Correct = Matrix3d(0, -1, 0,
                              1, 0, 0,
@@ -250,18 +253,18 @@ class TestMatrix3(unittest.TestCase):
         self.assertAlmostEqual(v1, m2 * v2)
 
         # rotation about 45 degrees
-        v1.Set(1.0, 0.0, 0.0)
-        v2.Set(1.0, 1.0, 0.0)
-        m2.from_2axes(v1, v2)
+        v1.set(1.0, 0.0, 0.0)
+        v2.set(1.0, 1.0, 0.0)
+        m2.from_2_axes(v1, v2)
         # m1 is 90 degrees rotation
         self.assertAlmostEqual(m1, m2*m2)
 
         # with non-unit vectors
-        v1.Set(0.5, 0.5, 0)
-        v2.Set(-0.5, 0.5, 0)
+        v1.set(0.5, 0.5, 0)
+        v2.set(-0.5, 0.5, 0)
 
-        m1.from_2axes(v1, v2)
-        m2.from_2axes(v2, v1)
+        m1.from_2_axes(v1, v2)
+        m2.from_2_axes(v2, v1)
 
         self.assertNotEqual(m1, m2)
         self.assertAlmostEqual(m1Correct, m1)
@@ -271,27 +274,27 @@ class TestMatrix3(unittest.TestCase):
         self.assertAlmostEqual(v1, m2 * v2)
 
         # For zero-length vectors, a unit matrix is returned
-        v1.Set(0, 0, 0)
-        v2.Set(-0.5, 0.5, 0)
-        m1.from_2axes(v1, v2)
+        v1.set(0, 0, 0)
+        v2.set(-0.5, 0.5, 0)
+        m1.from_2_axes(v1, v2)
         self.assertAlmostEqual(Matrix3d.IDENTITY, m1)
 
         # For zero-length vectors, a unit matrix is returned
-        v1.Set(-0.5, 0.5, 0)
-        v2.Set(0, 0, 0)
-        m1.from_2axes(v1, v2)
+        v1.set(-0.5, 0.5, 0)
+        v2.set(0, 0, 0)
+        m1.from_2_axes(v1, v2)
         self.assertAlmostEqual(Matrix3d.IDENTITY, m1)
 
         # Parallel vectors
-        v1.Set(1, 0, 0)
-        v2.Set(2, 0, 0)
-        m1.from_2axes(v1, v2)
+        v1.set(1, 0, 0)
+        v2.set(2, 0, 0)
+        m1.from_2_axes(v1, v2)
         self.assertAlmostEqual(Matrix3d.IDENTITY, m1)
 
         # Opposite vectors
-        v1.Set(1, 0, 0)
-        v2.Set(-2, 0, 0)
-        m1.from_2axes(v1, v2)
+        v1.set(1, 0, 0)
+        v2.set(-2, 0, 0)
+        m1.from_2_axes(v1, v2)
         self.assertAlmostEqual(Matrix3d.ZERO - Matrix3d.IDENTITY, m1)
 
 
