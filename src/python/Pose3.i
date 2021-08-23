@@ -17,10 +17,10 @@
 
 %module quaternion
 %{
+  #include <ignition/math/config.hh>
   #include <ignition/math/Pose3.hh>
   #include <ignition/math/Quaternion.hh>
   #include <ignition/math/Vector3.hh>
-  #include <ignition/math/config.hh>
 %}
 
 %include "std_string.i"
@@ -74,7 +74,6 @@ namespace ignition
       public: void Reset();
       public: Pose3<T> RotatePositionAboutOrigin(const Quaternion<T> &_q) const;
       public: void Round(int _precision);
-      public: inline const Vector3<T> &Pos() const;
       public: inline Vector3<T> &Pos();
       public: inline const T X() const;
       public: inline void SetX(T x);
@@ -82,7 +81,6 @@ namespace ignition
       public: inline void SetY(T y);
       public: inline const T Z() const;
       public: inline void SetZ(T z);
-      public: inline const Quaternion<T> &Rot() const;
       public: inline Quaternion<T> &Rot();
       public: inline const T Roll() const;
       public: inline const T Pitch() const;

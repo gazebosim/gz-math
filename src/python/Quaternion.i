@@ -17,10 +17,10 @@
 
 %module quaternion
 %{
-#include <ignition/math/Helpers.hh>
 #include <ignition/math/Angle.hh>
-#include <ignition/math/Vector3.hh>
 #include <ignition/math/config.hh>
+#include <ignition/math/Helpers.hh>
+#include <ignition/math/Vector3.hh>
 %}
 
 %include "std_string.i"
@@ -141,4 +141,3 @@ namespace ignition
     %template(Quaternionf) Quaternion<float>;
   }
 }
-

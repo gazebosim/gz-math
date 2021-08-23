@@ -17,11 +17,11 @@
 
 %module matrix3
 %{
-#include <ignition/math/Matrix3.hh>
-#include <ignition/math/Helpers.hh>
-#include <ignition/math/Vector3.hh>
-#include <ignition/math/Quaternion.hh>
 #include <ignition/math/config.hh>
+#include <ignition/math/Helpers.hh>
+#include <ignition/math/Matrix3.hh>
+#include <ignition/math/Quaternion.hh>
+#include <ignition/math/Vector3.hh>
 %}
 
 %include "std_string.i"
@@ -30,7 +30,6 @@ namespace ignition
 {
   namespace math
   {
-    template <typename T> class Quaternion;
     template<typename T>
     class Matrix3
     {

@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import unittest
 import math
+import unittest
 from ignition.math import Quaterniond
 from ignition.math import Quaternionf
 from ignition.math import Quaternioni

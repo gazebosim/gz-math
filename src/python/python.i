@@ -9,6 +9,3 @@
 %include Pose3.i
 %include Matrix3.i
 %include Matrix4.i
-
-
-
