@@ -35,15 +35,6 @@ namespace ignition
       public: void Clear();
       public: void SetWindowSize(size_t _windowSize);
       public: size_t WindowSize() const;
-
-      #ifdef _WIN32
-      #pragma warning(push)
-      #pragma warning(disable: 4251)
-      #endif
-          private: std::unique_ptr<RollingMeanPrivate> dataPtr;
-      #ifdef _WIN32
-      #pragma warning(pop)
-      #endif
     };
   }
 }

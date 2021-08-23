@@ -17,10 +17,10 @@
 
 %module spline
 %{
-#include <ignition/math/Spline.hh>
-#include <ignition/math/Helpers.hh>
-#include <ignition/math/Vector3.hh>
 #include <ignition/math/config.hh>
+#include <ignition/math/Helpers.hh>
+#include <ignition/math/Spline.hh>
+#include <ignition/math/Vector3.hh>
 %}
 
 namespace ignition
@@ -28,7 +28,6 @@ namespace ignition
   namespace math
   {
     class ControlPoint;
-    class SplinePrivate;
 
     class Spline
     {

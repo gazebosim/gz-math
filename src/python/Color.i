@@ -18,9 +18,9 @@
 %module Color
 %{
 #include <ignition/math/Color.hh>
-#include <ignition/math/Vector3.hh>
-#include <ignition/math/Helpers.hh>
 #include <ignition/math/config.hh>
+#include <ignition/math/Helpers.hh>
+#include <ignition/math/Vector3.hh>
 %}
 
 %include "std_string.i"
@@ -89,10 +89,6 @@ namespace ignition
         public: void G(const float _g);
         public: void B(const float _b);
         public: void A(const float _a);
-        private: float r = 0;
-        private: float g = 0;
-        private: float b = 0;
-        private: float a = 1;
       };
 
       %extend Color{
