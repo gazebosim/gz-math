@@ -31,6 +31,7 @@ namespace ignition
     template<typename T>
     class Line2
     {
+      %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
       public: Line2(const math::Vector2<T> &_ptA, const math::Vector2<T> &_ptB);
       public: Line2(double _x1, double _y1, double _x2, double _y2);
       public: void Set(const math::Vector2<T> &_ptA,

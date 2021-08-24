@@ -27,7 +27,8 @@ namespace ignition
   namespace math
   {
     class Temperature
-    {
+    {      
+      %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
       public: Temperature();
       public: Temperature(const double _temp);
       public: Temperature(const Temperature &_temp);

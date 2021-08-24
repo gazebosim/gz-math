@@ -20,14 +20,14 @@ class TestTemperature(unittest.TestCase):
 
     def test_temperatur_constructor(self):
         temp = Temperature()
-        self.assertAlmostEqual(temp.Kelvin(), 0.0, 1e-6)
+        self.assertAlmostEqual(temp.kelvin(), 0.0, 1e-6)
 
         temp2 = Temperature(1.1)
-        self.assertAlmostEqual(temp2.Kelvin(), 1.1, 1e-6)
+        self.assertAlmostEqual(temp2.kelvin(), 1.1, 1e-6)
 
         temp3 = Temperature(temp2)
-        self.assertAlmostEqual(temp3.Kelvin(), 1.1, delta=1e-6)
-        self.assertAlmostEqual(temp3.Celsius(), -272.05, delta=1e-6)
+        self.assertAlmostEqual(temp3.kelvin(), 1.1, delta=1e-6)
+        self.assertAlmostEqual(temp3.celsius(), -272.05, delta=1e-6)
 
         self.assertTrue(temp2 == temp3)
         self.assertTrue(temp2 == 1.1)
@@ -47,31 +47,31 @@ class TestTemperature(unittest.TestCase):
         self.assertTrue(temp >= 0.0)
 
     def test_temperatur_conversions(self):
-        self.assertAlmostEqual(Temperature.KelvinToCelsius(0), -273.15,
+        self.assertAlmostEqual(Temperature.kelvin_to_celsius(0), -273.15,
                                delta=1e-6)
-        self.assertAlmostEqual(Temperature.KelvinToFahrenheit(300), 80.33,
+        self.assertAlmostEqual(Temperature.kelvin_to_fahrenheit(300), 80.33,
                                delta=1e-6)
-        self.assertAlmostEqual(Temperature.CelsiusToFahrenheit(20.0), 68.0,
+        self.assertAlmostEqual(Temperature.celsius_to_fahrenheit(20.0), 68.0,
                                delta=1e-6)
-        self.assertAlmostEqual(Temperature.CelsiusToKelvin(10.0), 283.15,
+        self.assertAlmostEqual(Temperature.celsius_to_kelvin(10.0), 283.15,
                                delta=1e-6)
-        self.assertAlmostEqual(Temperature.FahrenheitToCelsius(-40.0),
-                               Temperature.CelsiusToFahrenheit(-40.0), 1e-6)
-        self.assertAlmostEqual(Temperature.FahrenheitToKelvin(60.0), 288.7055,
-                               delta=1e-3)
+        self.assertAlmostEqual(Temperature.fahrenheit_to_celsius(-40.0),
+                               Temperature.celsius_to_fahrenheit(-40.0), 1e-6)
+        self.assertAlmostEqual(Temperature.fahrenheit_to_kelvin(60.0),
+                               288.7055, delta=1e-3)
 
     def test_temperatur_mutators_accessors(self):
         temp = Temperature()
-        self.assertAlmostEqual(temp.Kelvin(), 0.0, delta=1e-6)
+        self.assertAlmostEqual(temp.kelvin(), 0.0, delta=1e-6)
 
-        temp.SetKelvin(10)
-        self.assertAlmostEqual(temp.Kelvin(), 10.0, delta=1e-6)
+        temp.set_kelvin(10)
+        self.assertAlmostEqual(temp.kelvin(), 10.0, delta=1e-6)
 
-        temp.SetCelsius(20)
+        temp.set_celsius(20)
         self.assertAlmostEqual(temp(), 293.15, delta=1e-6)
 
-        temp.SetFahrenheit(30)
-        self.assertAlmostEqual(temp.Fahrenheit(), 30.0, delta=1e-6)
+        temp.set_fahrenheit(30)
+        self.assertAlmostEqual(temp.fahrenheit(), 30.0, delta=1e-6)
         self.assertAlmostEqual(temp(), 272.0388889, delta=1e-6)
 
     def test_temperatur_operators(self):
@@ -85,37 +85,37 @@ class TestTemperature(unittest.TestCase):
         temp2 = Temperature(temp)
         self.assertTrue(temp == temp2)
 
-        self.assertAlmostEqual((temp + temp2).Kelvin(), 60, delta=1e-6)
-        self.assertAlmostEqual((temp + 40).Kelvin(), 70, delta=1e-6)
+        self.assertAlmostEqual((temp + temp2).kelvin(), 60, delta=1e-6)
+        self.assertAlmostEqual((temp + 40).kelvin(), 70, delta=1e-6)
 
-        self.assertAlmostEqual((temp - temp2).Kelvin(), 0, delta=1e-6)
-        self.assertAlmostEqual((temp - 20).Kelvin(), 10.0, delta=1e-6)
+        self.assertAlmostEqual((temp - temp2).kelvin(), 0, delta=1e-6)
+        self.assertAlmostEqual((temp - 20).kelvin(), 10.0, delta=1e-6)
 
-        self.assertAlmostEqual((temp * temp2).Kelvin(), 900, delta=1e-6)
-        self.assertAlmostEqual((temp * 2).Kelvin(), 60.0, delta=1e-6)
+        self.assertAlmostEqual((temp * temp2).kelvin(), 900, delta=1e-6)
+        self.assertAlmostEqual((temp * 2).kelvin(), 60.0, delta=1e-6)
 
-        self.assertAlmostEqual((temp / temp2).Kelvin(), 1.0, delta=1e-6)
-        self.assertAlmostEqual((temp / 2).Kelvin(), 15.0, delta=1e-6)
+        self.assertAlmostEqual((temp / temp2).kelvin(), 1.0, delta=1e-6)
+        self.assertAlmostEqual((temp / 2).kelvin(), 15.0, delta=1e-6)
 
         temp += temp2
-        self.assertAlmostEqual(temp.Kelvin(), 60.0, delta=1e-6)
+        self.assertAlmostEqual(temp.kelvin(), 60.0, delta=1e-6)
         temp -= temp2
-        self.assertAlmostEqual(temp.Kelvin(), 30.0, delta=1e-6)
+        self.assertAlmostEqual(temp.kelvin(), 30.0, delta=1e-6)
 
         temp += 5.0
-        self.assertAlmostEqual(temp.Kelvin(), 35.0, delta=1e-6)
+        self.assertAlmostEqual(temp.kelvin(), 35.0, delta=1e-6)
         temp -= 5.0
-        self.assertAlmostEqual(temp.Kelvin(), 30.0, delta=1e-6)
+        self.assertAlmostEqual(temp.kelvin(), 30.0, delta=1e-6)
 
         temp *= temp2
-        self.assertAlmostEqual(temp.Kelvin(), 900, delta=1e-6)
+        self.assertAlmostEqual(temp.kelvin(), 900, delta=1e-6)
         temp /= temp2
-        self.assertAlmostEqual(temp.Kelvin(), 30, delta=1e-6)
+        self.assertAlmostEqual(temp.kelvin(), 30, delta=1e-6)
 
         temp *= 4.0
-        self.assertAlmostEqual(temp.Kelvin(), 120, delta=1e-6)
+        self.assertAlmostEqual(temp.kelvin(), 120, delta=1e-6)
         temp /= 4.0
-        self.assertAlmostEqual(temp.Kelvin(), 30, delta=1e-6)
+        self.assertAlmostEqual(temp.kelvin(), 30, delta=1e-6)
 
         temp3 = Temperature(temp)
         self.assertTrue(temp3 == temp)
