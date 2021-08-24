@@ -1,6 +1,6 @@
 name: PR Collection Labeler
 
-on: pull_request
+on: pull_request_target
 
 jobs:
   pr_collection_labeler:
@@ -8,6 +8,6 @@ jobs:
     steps:
     - name: Add collection labels
       if: github.event.action == 'opened'
-      uses: ignition-tooling/pr-collection-labeler@v1
+      uses: ignition-tooling/pr-collection-labeler@chapulina/classic
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
