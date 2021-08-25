@@ -345,37 +345,6 @@ class TestQuaternion(unittest.TestCase):
                     -0.344106, 0.392882, 0.85278, 0,
                     0, 0, 0, 1))
 
-        matFromQuat = Matrix3d(q)
-        quatFromMat = Quaterniond()
-        quatFromMat.matrix(matFromQuat)
-        self.assertTrue(q == quatFromMat)
-
-        # test the cases where matrix trace is negative
-        # (requires special handling)
-        q = Quaterniond(0, 0, 0, 1)
-        q2 = Quaterniond()
-        q2.matrix(Matrix3d(
-                    -1,  0, 0,
-                    0, -1, 0,
-                    0,  0, 1))
-        self.assertTrue(q == q2)
-
-        q = Quaterniond(0, 0, 1, 0)
-        q2 = Quaterniond()
-        q2.matrix(Matrix3d(
-                    -1,  0,  0,
-                    0,  1,  0,
-                    0,  0, -1))
-        self.assertTrue(q == q2)
-
-        q = Quaterniond(0, 1, 0, 0)
-        q2 = Quaterniond()
-        q2.matrix(Matrix3d(
-                        1,  0,  0,
-                        0, -1,  0,
-                        0,  0, -1))
-        self.assertTrue(q == q2)
-
     def test_stream_out(self):
         q = Quaterniond(0.1, 1.2, 2.3)
         self.assertEqual(str(q), "0.1 1.2 2.3")

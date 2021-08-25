@@ -99,7 +99,7 @@ namespace ignition
                   bool _shortestPath = false);
       public: Quaternion<T> Integrate(const Vector3<T> &_angularVelocity,
                                       const T _deltaT) const;
-      
+
       public: inline void X(T _v);
       public: inline void Y(T _v);
       public: inline void Z(T _v);
@@ -135,5 +135,9 @@ namespace ignition
           return out.str();
         }
     }
+
+    %template(Quaternioni) Quaternion<int>;
+    %template(Quaterniond) Quaternion<double>;
+    %template(Quaternionf) Quaternion<float>;
   }
 }

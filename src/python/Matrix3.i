@@ -36,7 +36,7 @@ namespace ignition
     {
       %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
       %rename("%(uppercase)s", %$isstatic, %$isvariable) "";
-      
+
       public: static const Matrix3<T> Identity;
       public: static const Matrix3<T> Zero;
       public: Matrix3();
@@ -84,18 +84,14 @@ namespace ignition
         }
     }
 
+    %extend Matrix3 {
+      ignition::math::Quaternion<T> to_quaternion() {
+        return ignition::math::Quaternion<T>(*$self);
+      }
+    }
+
     %template(Matrix3i) Matrix3<int>;
     %template(Matrix3d) Matrix3<double>;
     %template(Matrix3f) Matrix3<float>;
-
-    %extend Quaternion {
-      void matrix(const Matrix3<T> &_mat) {
-        (*$self).Matrix(_mat);
-      }
-    }
-    
-    %template(Quaternioni) Quaternion<int>;
-    %template(Quaterniond) Quaternion<double>;
-    %template(Quaternionf) Quaternion<float>;
   }
 }
