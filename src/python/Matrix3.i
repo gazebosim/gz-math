@@ -25,6 +25,7 @@
 %}
 
 %include "std_string.i"
+%include Quaternion.i
 
 namespace ignition
 {
@@ -86,5 +87,15 @@ namespace ignition
     %template(Matrix3i) Matrix3<int>;
     %template(Matrix3d) Matrix3<double>;
     %template(Matrix3f) Matrix3<float>;
+
+    %extend Quaternion {
+      void matrix(const Matrix3<T> &_mat) {
+        (*$self).Matrix(_mat);
+      }
+    }
+    
+    %template(Quaternioni) Quaternion<int>;
+    %template(Quaterniond) Quaternion<double>;
+    %template(Quaternionf) Quaternion<float>;
   }
 }

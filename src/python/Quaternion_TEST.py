@@ -1,10 +1,10 @@
 # Copyright (C) 2021 Open Source Robotics Foundation
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
+# Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#       http://www.apache.org/licenses/LICENSE-2.0
+#       http:#www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,6 +14,8 @@
 
 import math
 import unittest
+from ignition.math import Matrix3d
+from ignition.math import Matrix4d
 from ignition.math import Quaterniond
 from ignition.math import Quaternionf
 from ignition.math import Quaternioni
@@ -170,92 +172,7 @@ class TestQuaternion(unittest.TestCase):
 
         q.normalize()
         self.assertAlmostEqual(q, Quaterniond(0.182574, 0.365148,
-                                               0.547723, 0.730297))
-
-    def test_slerp(self):
-        q1 = Quaterniond(0.1, 1.2, 2.3)
-        q2 = Quaterniond(1.2, 2.3, -3.4)
-
-        q3 = Quaterniond.slerp(1.0, q1, q2, True)
-        self.assertAlmostEqual(q3, Quaterniond(0.554528, -0.717339,
-                                               0.32579, 0.267925))
-
-    def test_from2axes(self):
-        v1 = Vector3d(1.0, 0.0, 0.0)
-        v2 = Vector3d(0.0, 1.0, 0.0)
-
-        q1 = Quaterniond()
-        q1.from_2_axes(v1, v2)
-
-        q2 = Quaterniond()
-        q2.from_2_axes(v2, v1)
-
-        q2Correct = Quaterniond(math.sqrt(2)/2, 0, 0, -math.sqrt(2)/2)
-        q1Correct = Quaterniond(math.sqrt(2)/2, 0, 0, math.sqrt(2)/2)
-
-        self.assertNotEqual(q1, q2)
-        self.assertAlmostEqual(q1Correct, q1)
-        self.assertAlmostEqual(q2Correct, q2)
-        self.assertAlmostEqual(Quaterniond.IDENTITY, q1 * q2)
-        self.assertAlmostEqual(v2, q1 * v1)
-        self.assertAlmostEqual(v1, q2 * v2)
-
-        # still the same rotation, but with non-unit vectors
-        v1.set(0.5, 0.5, 0)
-        v2.set(-0.5, 0.5, 0)
-
-        q1.from_2_axes(v1, v2)
-        q2.from_2_axes(v2, v1)
-
-        self.assertNotEqual(q1, q2)
-        self.assertAlmostEqual(q1Correct, q1)
-        self.assertAlmostEqual(q2Correct, q2)
-        self.assertAlmostEqual(Quaterniond.IDENTITY, q1 * q2)
-        self.assertAlmostEqual(v2, q1 * v1)
-        self.assertAlmostEqual(v1, q2 * v2)
-
-        # Test various settings of opposite vectors (which need special care)
-        tolerance = 1e-4
-
-        v1.set(1, 0, 0)
-        v2.set(-1, 0, 0)
-        q1.from_2_axes(v1, v2)
-        q2 = q1 * q1
-        self.assertTrue(abs(q2.w()-1.0) <= tolerance or
-                        abs(q2.w()-(-1.0)) <= tolerance)
-        self.assertAlmostEqual(q2.x(), 0.0)
-        self.assertAlmostEqual(q2.y(), 0.0)
-        self.assertAlmostEqual(q2.z(), 0.0)
-
-        v1.set(0, 1, 0)
-        v2.set(0, -1, 0)
-        q1.from_2_axes(v1, v2)
-        q2 = q1 * q1
-        self.assertTrue(abs(q2.w()-1.0) <= tolerance or
-                        abs(q2.w()-(-1.0)) <= tolerance)
-        self.assertAlmostEqual(q2.x(), 0.0)
-        self.assertAlmostEqual(q2.y(), 0.0)
-        self.assertAlmostEqual(q2.z(), 0.0)
-
-        v1.set(0, 0, 1)
-        v2.set(0, 0, -1)
-        q1.from_2_axes(v1, v2)
-        q2 = q1 * q1
-        self.assertTrue(abs(q2.w()-1.0) <= tolerance or
-                        abs(q2.w()-(-1.0)) <= tolerance)
-        self.assertAlmostEqual(q2.x(), 0.0)
-        self.assertAlmostEqual(q2.y(), 0.0)
-        self.assertAlmostEqual(q2.z(), 0.0)
-
-        v1.set(0, 1, 1)
-        v2.set(0, -1, -1)
-        q1.from_2_axes(v1, v2)
-        q2 = q1 * q1
-        self.assertTrue(abs(q2.w()-1.0) <= tolerance or
-                        abs(q2.w()-(-1.0)) <= tolerance)
-        self.assertAlmostEqual(q2.x(), 0.0)
-        self.assertAlmostEqual(q2.y(), 0.0)
-        self.assertAlmostEqual(q2.z(), 0.0)
+                                              0.547723, 0.730297))
 
     def test_math(self):
         q = Quaterniond(math.pi*0.1, math.pi*0.5, math.pi)
@@ -332,9 +249,221 @@ class TestQuaternion(unittest.TestCase):
         self.assertTrue(Quaterniond.euler_to_quaternion(0.1, 0.2, 0.3) ==
                         Quaterniond(0.983347, 0.0342708, 0.106021, 0.143572))
 
+        # simple 180 rotation about yaw,
+        # should result in x and y flipping signs
+        q = Quaterniond(0, 0, math.pi)
+        v = Vector3d(1, 2, 3)
+        r1 = q.rotate_vector(v)
+        r2 = q.rotate_vector_reverse(v)
+        self.assertTrue(r1 == Vector3d(-1, -2, 3))
+        self.assertTrue(r2 == Vector3d(-1, -2, 3))
+
+        # simple  90 rotation about yaw, should map x to y, y to -x
+        # simple -90 rotation about yaw, should map x to -y, y to x
+        q = Quaterniond(0, 0, 0.5 * math.pi)
+        v = Vector3d(1, 2, 3)
+        r1 = q.rotate_vector(v)
+        r2 = q.rotate_vector_reverse(v)
+        self.assertTrue(r1 == Vector3d(-2, 1, 3))
+        self.assertTrue(r2 == Vector3d(2, -1, 3))
+        self.assertTrue(q.inverse().x_axis() == Vector3d(0, -1, 0))
+        self.assertTrue(q.inverse().y_axis() == Vector3d(1, 0, 0))
+        self.assertTrue(q.inverse().z_axis() == Vector3d(0, 0, 1))
+
+        # Test RPY fixed-body-frame convention:
+        # Rotate each unit vector in roll and pitch
+        q = Quaterniond(math.pi/2.0, math.pi/2.0, 0)
+        v1 = Vector3d(1, 0, 0)
+        r1 = q.rotate_vector(v1)
+        # 90 degrees about x does nothing,
+        # 90 degrees about y sends point down to -z
+        self.assertAlmostEqual(r1, Vector3d(0, 0, -1))
+
+        v2 = Vector3d(0, 1, 0)
+        r2 = q.rotate_vector(v2)
+        # 90 degrees about x sends point to +z
+        # 90 degrees about y sends point to +x
+        self.assertAlmostEqual(r2, Vector3d(1, 0, 0))
+
+        v3 = Vector3d(0, 0, 1)
+        r3 = q.rotate_vector(v3)
+        # 90 degrees about x sends point to -y
+        # 90 degrees about y does nothing
+        self.assertAlmostEqual(r3, Vector3d(0, -1, 0))
+
+        # now try a harder case (axis[1,2,3], rotation[0.3*pi])
+        # verified with octave
+        q.axis(Vector3d(1, 2, 3), 0.3*math.pi)
+        self.assertTrue(q.inverse().x_axis() ==
+                        Vector3d(0.617229, -0.589769, 0.520770))
+        self.assertTrue(q.inverse().y_axis() ==
+                        Vector3d(0.707544, 0.705561, -0.039555))
+        self.assertTrue(q.inverse().z_axis() ==
+                        Vector3d(-0.344106, 0.392882, 0.852780))
+
+        # rotate about the axis of rotation should not change axis
+        v = Vector3d(1, 2, 3)
+        r1 = q.rotate_vector(v)
+        r2 = q.rotate_vector_reverse(v)
+        self.assertTrue(r1 == Vector3d(1, 2, 3))
+        self.assertTrue(r2 == Vector3d(1, 2, 3))
+
+        # rotate unit vectors
+        v = Vector3d(0, 0, 1)
+        r1 = q.rotate_vector(v)
+        r2 = q.rotate_vector_reverse(v)
+        self.assertTrue(r1 == Vector3d(0.520770, -0.039555, 0.852780))
+        self.assertTrue(r2 == Vector3d(-0.34411, 0.39288, 0.85278))
+        v = Vector3d(0, 1, 0)
+        r1 = q.rotate_vector(v)
+        r2 = q.rotate_vector_reverse(v)
+        self.assertTrue(r1 == Vector3d(-0.58977, 0.70556, 0.39288))
+        self.assertTrue(r2 == Vector3d(0.707544, 0.705561, -0.039555))
+        v = Vector3d(1, 0, 0)
+        r1 = q.rotate_vector(v)
+        r2 = q.rotate_vector_reverse(v)
+        self.assertTrue(r1 == Vector3d(0.61723, 0.70754, -0.34411))
+        self.assertTrue(r2 == Vector3d(0.61723, -0.58977, 0.52077))
+
+        self.assertTrue(-q == Quaterniond(-0.891007, -0.121334,
+                                          -0.242668, -0.364002))
+
+        self.assertTrue(Matrix3d(q) == Matrix3d(
+                    0.617229, -0.589769, 0.52077,
+                    0.707544, 0.705561, -0.0395554,
+                    -0.344106, 0.392882, 0.85278))
+
+        matFromQ = Matrix3d(q)
+        self.assertTrue(matFromQ == Matrix3d(
+                    0.617229, -0.589769, 0.52077,
+                    0.707544, 0.705561, -0.0395554,
+                    -0.344106, 0.392882, 0.85278))
+
+        self.assertTrue(Matrix4d(q) == Matrix4d(
+                    0.617229, -0.589769, 0.52077, 0,
+                    0.707544, 0.705561, -0.0395554, 0,
+                    -0.344106, 0.392882, 0.85278, 0,
+                    0, 0, 0, 1))
+
+        matFromQuat = Matrix3d(q)
+        quatFromMat = Quaterniond()
+        quatFromMat.matrix(matFromQuat)
+        self.assertTrue(q == quatFromMat)
+
+        # test the cases where matrix trace is negative
+        # (requires special handling)
+        q = Quaterniond(0, 0, 0, 1)
+        q2 = Quaterniond()
+        q2.matrix(Matrix3d(
+                    -1,  0, 0,
+                    0, -1, 0,
+                    0,  0, 1))
+        self.assertTrue(q == q2)
+
+        q = Quaterniond(0, 0, 1, 0)
+        q2 = Quaterniond()
+        q2.matrix(Matrix3d(
+                    -1,  0,  0,
+                    0,  1,  0,
+                    0,  0, -1))
+        self.assertTrue(q == q2)
+
+        q = Quaterniond(0, 1, 0, 0)
+        q2 = Quaterniond()
+        q2.matrix(Matrix3d(
+                        1,  0,  0,
+                        0, -1,  0,
+                        0,  0, -1))
+        self.assertTrue(q == q2)
+
     def test_stream_out(self):
         q = Quaterniond(0.1, 1.2, 2.3)
         self.assertEqual(str(q), "0.1 1.2 2.3")
+
+    def test_slerp(self):
+        q1 = Quaterniond(0.1, 1.2, 2.3)
+        q2 = Quaterniond(1.2, 2.3, -3.4)
+
+        q3 = Quaterniond.slerp(1.0, q1, q2, True)
+        self.assertAlmostEqual(q3, Quaterniond(0.554528, -0.717339,
+                                               0.32579, 0.267925))
+
+    def test_from_2_axes(self):
+        v1 = Vector3d(1.0, 0.0, 0.0)
+        v2 = Vector3d(0.0, 1.0, 0.0)
+
+        q1 = Quaterniond()
+        q1.from_2_axes(v1, v2)
+
+        q2 = Quaterniond()
+        q2.from_2_axes(v2, v1)
+
+        q2Correct = Quaterniond(math.sqrt(2)/2, 0, 0, -math.sqrt(2)/2)
+        q1Correct = Quaterniond(math.sqrt(2)/2, 0, 0, math.sqrt(2)/2)
+
+        self.assertNotEqual(q1, q2)
+        self.assertAlmostEqual(q1Correct, q1)
+        self.assertAlmostEqual(q2Correct, q2)
+        self.assertAlmostEqual(Quaterniond.IDENTITY, q1 * q2)
+        self.assertAlmostEqual(v2, q1 * v1)
+        self.assertAlmostEqual(v1, q2 * v2)
+
+        # still the same rotation, but with non-unit vectors
+        v1.set(0.5, 0.5, 0)
+        v2.set(-0.5, 0.5, 0)
+
+        q1.from_2_axes(v1, v2)
+        q2.from_2_axes(v2, v1)
+
+        self.assertNotEqual(q1, q2)
+        self.assertAlmostEqual(q1Correct, q1)
+        self.assertAlmostEqual(q2Correct, q2)
+        self.assertAlmostEqual(Quaterniond.IDENTITY, q1 * q2)
+        self.assertAlmostEqual(v2, q1 * v1)
+        self.assertAlmostEqual(v1, q2 * v2)
+
+        # Test various settings of opposite vectors (which need special care)
+        tolerance = 1e-4
+
+        v1.set(1, 0, 0)
+        v2.set(-1, 0, 0)
+        q1.from_2_axes(v1, v2)
+        q2 = q1 * q1
+        self.assertTrue(abs(q2.w()-1.0) <= tolerance or
+                        abs(q2.w()-(-1.0)) <= tolerance)
+        self.assertAlmostEqual(q2.x(), 0.0)
+        self.assertAlmostEqual(q2.y(), 0.0)
+        self.assertAlmostEqual(q2.z(), 0.0)
+
+        v1.set(0, 1, 0)
+        v2.set(0, -1, 0)
+        q1.from_2_axes(v1, v2)
+        q2 = q1 * q1
+        self.assertTrue(abs(q2.w()-1.0) <= tolerance or
+                        abs(q2.w()-(-1.0)) <= tolerance)
+        self.assertAlmostEqual(q2.x(), 0.0)
+        self.assertAlmostEqual(q2.y(), 0.0)
+        self.assertAlmostEqual(q2.z(), 0.0)
+
+        v1.set(0, 0, 1)
+        v2.set(0, 0, -1)
+        q1.from_2_axes(v1, v2)
+        q2 = q1 * q1
+        self.assertTrue(abs(q2.w()-1.0) <= tolerance or
+                        abs(q2.w()-(-1.0)) <= tolerance)
+        self.assertAlmostEqual(q2.x(), 0.0)
+        self.assertAlmostEqual(q2.y(), 0.0)
+        self.assertAlmostEqual(q2.z(), 0.0)
+
+        v1.set(0, 1, 1)
+        v2.set(0, -1, -1)
+        q1.from_2_axes(v1, v2)
+        q2 = q1 * q1
+        self.assertTrue(abs(q2.w()-1.0) <= tolerance or
+                        abs(q2.w()-(-1.0)) <= tolerance)
+        self.assertAlmostEqual(q2.x(), 0.0)
+        self.assertAlmostEqual(q2.y(), 0.0)
+        self.assertAlmostEqual(q2.z(), 0.0)
 
     def test_integrate(self):
         # integrate by zero, expect no change

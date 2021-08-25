@@ -135,9 +135,5 @@ namespace ignition
           return out.str();
         }
     }
-
-    %template(Quaternioni) Quaternion<int>;
-    %template(Quaterniond) Quaternion<double>;
-    %template(Quaternionf) Quaternion<float>;
   }
 }
