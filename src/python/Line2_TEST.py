@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import unittest
 import math
+import unittest
 from ignition.math import Line2d
 from ignition.math import Vector2d
 
@@ -21,23 +21,23 @@ from ignition.math import Vector2d
 class TestLine2d(unittest.TestCase):
 
     def test_construction(self):
-        lineA = Line2d(0, 0, 10, 10)
-        self.assertAlmostEqual(lineA[0].x(), 0.0)
-        self.assertAlmostEqual(lineA[0].y(), 0.0)
-        self.assertAlmostEqual(lineA[1].x(), 10.0)
-        self.assertAlmostEqual(lineA[1].y(), 10.0)
+        line_a = Line2d(0, 0, 10, 10)
+        self.assertAlmostEqual(line_a[0].x(), 0.0)
+        self.assertAlmostEqual(line_a[0].y(), 0.0)
+        self.assertAlmostEqual(line_a[1].x(), 10.0)
+        self.assertAlmostEqual(line_a[1].y(), 10.0)
 
-        lineB = Line2d(Vector2d(1, 2), Vector2d(3, 4))
-        self.assertAlmostEqual(lineB[0].x(), 1.0)
-        self.assertAlmostEqual(lineB[0].y(), 2.0)
-        self.assertAlmostEqual(lineB[1].x(), 3.0)
-        self.assertAlmostEqual(lineB[1].y(), 4.0)
+        line_b = Line2d(Vector2d(1, 2), Vector2d(3, 4))
+        self.assertAlmostEqual(line_b[0].x(), 1.0)
+        self.assertAlmostEqual(line_b[0].y(), 2.0)
+        self.assertAlmostEqual(line_b[1].x(), 3.0)
+        self.assertAlmostEqual(line_b[1].y(), 4.0)
 
-        self.assertAlmostEqual(lineB[2].x(), lineB[1].x())
+        self.assertAlmostEqual(line_b[2].x(), line_b[1].x())
 
     def test_length(self):
-        lineA = Line2d(0, 0, 10, 10)
-        self.assertAlmostEqual(lineA.length(), math.sqrt(200), delta=1e-10)
+        line_a = Line2d(0, 0, 10, 10)
+        self.assertAlmostEqual(line_a.length(), math.sqrt(200), delta=1e-10)
 
     def test_slope(self):
         line = Line2d(0, 0, 10, 10)
@@ -59,152 +59,152 @@ class TestLine2d(unittest.TestCase):
         line = Line2d(0, 0, 0, 0)
         self.assertTrue(line.parallel(line, 1e-10))
 
-        lineA = Line2d(0, 0, 10, 0)
-        lineB = Line2d(0, 0, 10, 0)
-        self.assertTrue(lineA.parallel(lineB, 1e-10))
+        line_a = Line2d(0, 0, 10, 0)
+        line_b = Line2d(0, 0, 10, 0)
+        self.assertTrue(line_a.parallel(line_b, 1e-10))
 
-        lineB.set(0, 0, 0, 10)
-        self.assertFalse(lineA.parallel(lineB))
+        line_b.set(0, 0, 0, 10)
+        self.assertFalse(line_a.parallel(line_b))
 
-        lineB.set(0, 10, 10, 10)
-        self.assertTrue(lineA.parallel(lineB))
+        line_b.set(0, 10, 10, 10)
+        self.assertTrue(line_a.parallel(line_b))
 
-        lineB.set(0, 10, 10, 10.00001)
-        self.assertFalse(lineA.parallel(lineB, 1e-10))
-        self.assertFalse(lineA.parallel(lineB))
-        self.assertTrue(lineA.parallel(lineB, 1e-3))
+        line_b.set(0, 10, 10, 10.00001)
+        self.assertFalse(line_a.parallel(line_b, 1e-10))
+        self.assertFalse(line_a.parallel(line_b))
+        self.assertTrue(line_a.parallel(line_b, 1e-3))
 
     def test_collinear_line(self):
         # Line is always collinear with itself
         line = Line2d(0, 0, 10, 0)
         self.assertTrue(line.collinear(line, 1e-10))
 
-        lineA = Line2d(0, 0, 10, 0)
-        lineB = Line2d(0, 0, 10, 0)
-        self.assertTrue(lineA.collinear(lineB, 1e-10))
+        line_a = Line2d(0, 0, 10, 0)
+        line_b = Line2d(0, 0, 10, 0)
+        self.assertTrue(line_a.collinear(line_b, 1e-10))
 
-        lineB.set(0, 10, 10, 10)
-        self.assertFalse(lineA.collinear(lineB))
+        line_b.set(0, 10, 10, 10)
+        self.assertFalse(line_a.collinear(line_b))
 
-        lineB.set(9, 0, 10, 0.00001)
-        self.assertFalse(lineA.collinear(lineB, 1e-10))
-        self.assertFalse(lineA.collinear(lineB))
-        self.assertTrue(lineA.collinear(lineB, 1e-3))
+        line_b.set(9, 0, 10, 0.00001)
+        self.assertFalse(line_a.collinear(line_b, 1e-10))
+        self.assertFalse(line_a.collinear(line_b))
+        self.assertTrue(line_a.collinear(line_b, 1e-3))
 
     def test_collinear_point(self):
-        lineA = Line2d(0, 0, 10, 0)
+        line_a = Line2d(0, 0, 10, 0)
         pt = Vector2d(0, 0)
-        self.assertTrue(lineA.collinear(pt))
+        self.assertTrue(line_a.collinear(pt))
 
-        ptLine = Line2d(pt, pt)
-        self.assertTrue(lineA.collinear(ptLine))
+        pt_line = Line2d(pt, pt)
+        self.assertTrue(line_a.collinear(pt_line))
 
         pt.set(1000, 0)
-        self.assertTrue(lineA.collinear(pt, 1e-10))
+        self.assertTrue(line_a.collinear(pt, 1e-10))
 
-        ptLine = Line2d(pt, pt)
-        self.assertTrue(lineA.parallel(ptLine))
-        self.assertFalse(lineA.intersect(ptLine))
-        self.assertFalse(lineA.collinear(ptLine, 1e-10))
+        pt_line = Line2d(pt, pt)
+        self.assertTrue(line_a.parallel(pt_line))
+        self.assertFalse(line_a.intersect(pt_line))
+        self.assertFalse(line_a.collinear(pt_line, 1e-10))
 
         pt.set(10, 0)
-        ptLine.set(pt, pt)
-        self.assertTrue(lineA.collinear(ptLine, 1e-10))
+        pt_line.set(pt, pt)
+        self.assertTrue(line_a.collinear(pt_line, 1e-10))
 
         pt.set(0, 0.00001)
-        self.assertFalse(lineA.collinear(pt))
-        self.assertTrue(lineA.collinear(pt, 1e-3))
+        self.assertFalse(line_a.collinear(pt))
+        self.assertTrue(line_a.collinear(pt, 1e-3))
 
-        ptLine = Line2d(pt, pt)
-        self.assertFalse(lineA.collinear(ptLine))
-        self.assertTrue(lineA.parallel(ptLine))
-        self.assertFalse(lineA.intersect(ptLine))
-        self.assertTrue(lineA.intersect(ptLine, 1e-2))
-        self.assertTrue(lineA.collinear(ptLine, 1e-3))
+        pt_line = Line2d(pt, pt)
+        self.assertFalse(line_a.collinear(pt_line))
+        self.assertTrue(line_a.parallel(pt_line))
+        self.assertFalse(line_a.intersect(pt_line))
+        self.assertTrue(line_a.intersect(pt_line, 1e-2))
+        self.assertTrue(line_a.collinear(pt_line, 1e-3))
 
         pt.set(0, -0.00001)
-        self.assertFalse(lineA.collinear(pt))
-        self.assertTrue(lineA.collinear(pt, 1e-3))
+        self.assertFalse(line_a.collinear(pt))
+        self.assertTrue(line_a.collinear(pt, 1e-3))
 
-        ptLine = Line2d(pt, pt)
-        self.assertFalse(lineA.collinear(ptLine))
-        self.assertTrue(lineA.collinear(ptLine, 1e-4))
+        pt_line = Line2d(pt, pt)
+        self.assertFalse(line_a.collinear(pt_line))
+        self.assertTrue(line_a.collinear(pt_line, 1e-4))
 
     def test_intersect(self):
         pt = Vector2d()
 
         # parallel horizontal lines
-        lineA = Line2d(1, 1, 2, 1)
-        lineB = Line2d(1, 2, 2, 2)
-        self.assertFalse(lineA.intersect(lineB, pt))
+        line_a = Line2d(1, 1, 2, 1)
+        line_b = Line2d(1, 2, 2, 2)
+        self.assertFalse(line_a.intersect(line_b, pt))
 
         # parallel vertical lines
-        lineA.set(1, 1, 1, 10)
-        lineB.set(2, 1, 2, 10)
-        self.assertFalse(lineA.intersect(lineB, pt))
+        line_a.set(1, 1, 1, 10)
+        line_b.set(2, 1, 2, 10)
+        self.assertFalse(line_a.intersect(line_b, pt))
 
         # Two lines that form an inverted T with a gap
-        lineA.set(1, 1, 1, 10)
-        lineB.set(0, 0, 2, 0)
-        self.assertFalse(lineA.intersect(lineB, pt))
+        line_a.set(1, 1, 1, 10)
+        line_b.set(0, 0, 2, 0)
+        self.assertFalse(line_a.intersect(line_b, pt))
 
         # Two lines that form a T with a gap
-        lineA.set(1, 1, 1, 10)
-        lineB.set(0, 10.1, 2, 10.1)
-        self.assertFalse(lineA.intersect(lineB, pt))
+        line_a.set(1, 1, 1, 10)
+        line_b.set(0, 10.1, 2, 10.1)
+        self.assertFalse(line_a.intersect(line_b, pt))
 
         # Two lines that form an inverted T with a gap
-        lineA.set(0, -10, 0, 10)
-        lineB.set(1, 0, 10, 0)
-        self.assertFalse(lineA.intersect(lineB, pt))
+        line_a.set(0, -10, 0, 10)
+        line_b.set(1, 0, 10, 0)
+        self.assertFalse(line_a.intersect(line_b, pt))
 
         # Two lines that form a T with a gap
-        lineA.set(0, -10, 0, 10)
-        lineB.set(-1, 0, -10, 0)
-        self.assertFalse(lineA.intersect(lineB, pt))
+        line_a.set(0, -10, 0, 10)
+        line_b.set(-1, 0, -10, 0)
+        self.assertFalse(line_a.intersect(line_b, pt))
 
         # Two collinear lines, one starts where the other stopped
-        lineA.set(1, 1, 1, 10)
-        lineB.set(1, 10, 1, 11)
-        self.assertTrue(lineA.intersect(lineB, pt))
+        line_a.set(1, 1, 1, 10)
+        line_b.set(1, 10, 1, 11)
+        self.assertTrue(line_a.intersect(line_b, pt))
         self.assertEqual(pt, Vector2d(1, 10))
 
         # Two collinear lines, one overlaps the other
-        lineA.set(0, 0, 0, 10)
-        lineB.set(0, 9, 0, 11)
-        self.assertTrue(lineA.intersect(lineB, pt))
+        line_a.set(0, 0, 0, 10)
+        line_b.set(0, 9, 0, 11)
+        self.assertTrue(line_a.intersect(line_b, pt))
         self.assertEqual(pt, Vector2d(0, 9))
 
         # Two collinear lines, one overlaps the other
-        lineA.set(0, 0, 0, 10)
-        lineB.set(0, -10, 0, 1)
-        self.assertTrue(lineA.intersect(lineB, pt))
+        line_a.set(0, 0, 0, 10)
+        line_b.set(0, -10, 0, 1)
+        self.assertTrue(line_a.intersect(line_b, pt))
         self.assertEqual(pt, Vector2d(0, 1))
 
         # Two intersecting lines
-        lineA.set(0, 0, 10, 10)
-        lineB.set(0, 10, 10, 0)
-        self.assertTrue(lineA.intersect(lineB, pt))
+        line_a.set(0, 0, 10, 10)
+        line_b.set(0, 10, 10, 0)
+        self.assertTrue(line_a.intersect(line_b, pt))
         self.assertEqual(pt, Vector2d(5, 5))
 
     def test_equality(self):
-        lineA = Line2d(1, 1, 2, 1)
-        lineB = Line2d(1, 2, 2, 2)
+        line_a = Line2d(1, 1, 2, 1)
+        line_b = Line2d(1, 2, 2, 2)
 
-        self.assertTrue(lineA != lineB)
-        self.assertTrue(lineA == lineA)
+        self.assertTrue(line_a != line_b)
+        self.assertTrue(line_a == line_a)
 
-        lineB.set(1, 1, 2, 1.1)
-        self.assertFalse(lineA == lineB)
+        line_b.set(1, 1, 2, 1.1)
+        self.assertFalse(line_a == line_b)
 
-        lineB.set(1, 1, 2.1, 1)
-        self.assertFalse(lineA == lineB)
+        line_b.set(1, 1, 2.1, 1)
+        self.assertFalse(line_a == line_b)
 
-        lineB.set(1, 1.1, 2, 1)
-        self.assertFalse(lineA == lineB)
+        line_b.set(1, 1.1, 2, 1)
+        self.assertFalse(line_a == line_b)
 
-        lineB.set(1.1, 1, 2, 1)
-        self.assertFalse(lineA == lineB)
+        line_b.set(1.1, 1, 2, 1)
+        self.assertFalse(line_a == line_b)
 
     def test_serialization(self):
         line = Line2d(0, 1, 2, 3)

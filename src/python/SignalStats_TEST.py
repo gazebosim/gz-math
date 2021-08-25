@@ -12,16 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import unittest
 import math
+import unittest
 from ignition.math import Rand
-from ignition.math import SignalMaximum
-from ignition.math import SignalMinimum
-from ignition.math import SignalMean
-from ignition.math import SignalVariance
-from ignition.math import SignalRootMeanSquare
 from ignition.math import SignalMaxAbsoluteValue
+from ignition.math import SignalMaximum
+from ignition.math import SignalMean
+from ignition.math import SignalMinimum
+from ignition.math import SignalRootMeanSquare
 from ignition.math import SignalStats
+from ignition.math import SignalVariance
 
 
 class TestSignalStats(unittest.TestCase):
@@ -353,13 +353,13 @@ class TestSignalStats(unittest.TestCase):
         # en.wikipedia.org/wiki/Variance#Distribution_of_the_sample_variance
         # We will use 5 sigma (4e-5 chance of failure)
         var = SignalVariance()
-        stdDev = 3.14159
+        std_dev = 3.14159
         count = 10000
         sigma = 5.0
         for i in range(count):
-            var.insert_data(Rand.dbl_normal(0.0, stdDev))
+            var.insert_data(Rand.dbl_normal(0.0, std_dev))
 
-        variance = stdDev*stdDev
+        variance = std_dev*std_dev
         sampleVariance2 = 2 * variance*variance / (count - 1)
         self.assertAlmostEqual(var.value(), variance,
                                delta=sigma*math.sqrt(sampleVariance2))
