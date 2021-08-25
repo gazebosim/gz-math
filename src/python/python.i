@@ -5,3 +5,5 @@
 %include Vector2.i
 %include Vector3.i
 %include Vector4.i
+%include PID.i
+%include SemanticVersion.i
