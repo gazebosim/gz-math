@@ -27,7 +27,7 @@ namespace ignition
   namespace math
   {
     class Temperature
-    {      
+    {
       %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
       public: Temperature();
       public: Temperature(const double _temp);
@@ -75,8 +75,8 @@ namespace ignition
       public: bool operator>=(const Temperature &_temp) const;
       public: bool operator>=(const double _temp) const;
     };
-    
-    %extend Temperature 
+
+    %extend Temperature
     {
       std::string __str__() const {
         std::ostringstream out;

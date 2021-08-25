@@ -18,7 +18,7 @@ from ignition.math import Temperature
 
 class TestTemperature(unittest.TestCase):
 
-    def test_temperatur_constructor(self):
+    def test_temperature_constructor(self):
         temp = Temperature()
         self.assertAlmostEqual(temp.kelvin(), 0.0, 1e-6)
 
@@ -46,7 +46,7 @@ class TestTemperature(unittest.TestCase):
         self.assertFalse(temp >= 0.1)
         self.assertTrue(temp >= 0.0)
 
-    def test_temperatur_conversions(self):
+    def test_temperature_conversions(self):
         self.assertAlmostEqual(Temperature.kelvin_to_celsius(0), -273.15,
                                delta=1e-6)
         self.assertAlmostEqual(Temperature.kelvin_to_fahrenheit(300), 80.33,
@@ -60,7 +60,7 @@ class TestTemperature(unittest.TestCase):
         self.assertAlmostEqual(Temperature.fahrenheit_to_kelvin(60.0),
                                288.7055, delta=1e-3)
 
-    def test_temperatur_mutators_accessors(self):
+    def test_temperature_mutators_accessors(self):
         temp = Temperature()
         self.assertAlmostEqual(temp.kelvin(), 0.0, delta=1e-6)
 
@@ -74,7 +74,7 @@ class TestTemperature(unittest.TestCase):
         self.assertAlmostEqual(temp.fahrenheit(), 30.0, delta=1e-6)
         self.assertAlmostEqual(temp(), 272.0388889, delta=1e-6)
 
-    def test_temperatur_operators(self):
+    def test_temperature_operators(self):
         temp = Temperature(20)
         self.assertAlmostEqual(temp(), 20, delta=1e-6)
 

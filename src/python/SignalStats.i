@@ -30,7 +30,7 @@ namespace ignition
   namespace math
   {
     class SignalMaximum
-    {      
+    {
       %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
       public: virtual void Reset();
       public: virtual size_t Count() const;
@@ -40,7 +40,7 @@ namespace ignition
     };
 
     class SignalMean
-    {      
+    {
       %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
       public: virtual void Reset();
       public: virtual size_t Count() const;
@@ -50,7 +50,7 @@ namespace ignition
     };
 
     class SignalMinimum
-    {      
+    {
       %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
       public: virtual void Reset();
       public: virtual size_t Count() const;
@@ -60,7 +60,7 @@ namespace ignition
     };
 
     class SignalRootMeanSquare
-    {      
+    {
       %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
       public: virtual void Reset();
       public: virtual size_t Count() const;
@@ -70,7 +70,7 @@ namespace ignition
     };
 
     class SignalMaxAbsoluteValue
-    {      
+    {
       %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
       public: virtual void Reset();
       public: virtual size_t Count() const;
@@ -80,7 +80,7 @@ namespace ignition
     };
 
     class SignalVariance
-    {      
+    {
       %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
       public: virtual void Reset();
       public: virtual size_t Count() const;
@@ -90,7 +90,7 @@ namespace ignition
     };
 
     class SignalStats
-    {      
+    {
       %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
       public: SignalStats();
       public: ~SignalStats();

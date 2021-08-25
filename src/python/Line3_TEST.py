@@ -117,7 +117,8 @@ class TestLine3d(unittest.TestCase):
         line_a = Line3d(1, 1, 1, 0, 0, 0)
         line_b = Line3d(2, 2, 2, 0, 0, 0)
         line_c = Line3d(0, 0, 0, 1, 1, 1)
-        self.assertTrue(line_a.direction() == (line_a[1] - line_a[0]).normalize())
+        self.assertTrue(line_a.direction() ==
+                        (line_a[1] - line_a[0]).normalize())
         self.assertTrue(line_a.direction() == line_b.direction())
         self.assertFalse(line_a.direction() == line_c.direction())
 

@@ -67,7 +67,7 @@ namespace ignition
       }
     }
 
-    %extend Line2 
+    %extend Line2
     {
       std::string __str__() const {
         std::ostringstream out;
@@ -75,7 +75,7 @@ namespace ignition
         return out.str();
       }
     }
-    
+
     %template(Line2i) Line2<int>;
     %template(Line2d) Line2<double>;
     %template(Line2f) Line2<float>;
