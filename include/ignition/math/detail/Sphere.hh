@@ -144,7 +144,7 @@ std::optional<Vector3<T>>
   // https://mathworld.wolfram.com/SphericalCap.html
   auto numerator = 2 * r - h;
 
-  return 3 * numerator * numerator / (4 * (3 * r - h));
+  return {3 * numerator * numerator / (4 * (3 * r - h))};
 }
 
 //////////////////////////////////////////////////
