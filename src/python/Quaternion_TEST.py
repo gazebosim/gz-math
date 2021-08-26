@@ -187,6 +187,11 @@ class TestQuaternion(unittest.TestCase):
         self.assertAlmostEqual(q.pitch(), -0.339837, delta=1e-3)
         self.assertAlmostEqual(q.yaw(), 2.35619, delta=1e-3)
 
+        axis, angle = q.to_axis()
+        self.assertAlmostEqual(
+            axis, Vector3d(0.371391, 0.557086, 0.742781), delta=1e-3)
+        self.assertAlmostEqual(angle, 2.77438, delta=1e-3)
+
         q.scale(0.1)
         self.assertTrue(q == Quaterniond(0.990394, 0.051354,
                                          0.0770309, 0.102708))
@@ -248,6 +253,15 @@ class TestQuaternion(unittest.TestCase):
 
         self.assertTrue(Quaterniond.euler_to_quaternion(0.1, 0.2, 0.3) ==
                         Quaterniond(0.983347, 0.0342708, 0.106021, 0.143572))
+
+        # to_axis() method
+        q.x(0.0)
+        q.y(0.0)
+        q.z(0.0)
+        q.w(0.0)
+        axis, angle = q.to_axis()
+        self.assertAlmostEqual(axis, Vector3d(1., 0., 0.), delta=1e-3)
+        self.assertAlmostEqual(angle, 0., delta=1e-3)
 
         # simple 180 rotation about yaw,
         # should result in x and y flipping signs

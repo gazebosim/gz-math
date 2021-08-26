@@ -25,6 +25,14 @@
 
 %include "std_string.i"
 
+%inline %{
+  template<typename D>
+  struct ToAxisOutput {
+    ignition::math::Vector3<D> axis;
+    D angle;
+  };
+%}
+
 namespace ignition
 {
   namespace math
@@ -62,7 +70,6 @@ namespace ignition
       public: T Roll() const;
       public: T Pitch() const;
       public: T Yaw() const;
-      public: void ToAxis(Vector3<T> &_axis, T &_angle) const;
       %rename(from_2_axes) From2Axes;
       public: void From2Axes(const Vector3<T> &_v1, const Vector3<T> &_v2);
       public: void Scale(T _scale);
@@ -104,7 +111,25 @@ namespace ignition
       public: inline void Y(T _v);
       public: inline void Z(T _v);
       public: inline void W(T _v);
+
+      %pythoncode %{
+      def to_axis(self):
+          to_axis_output = self._to_axis()
+          return [to_axis_output.axis, to_axis_output.angle]
+      %}
     };
+
+    %extend Quaternion{
+        inline ToAxisOutput<T> _to_axis() {
+          ignition::math::Vector3<T> axis;
+          T angle;
+          (*$self).ToAxis(axis, angle);
+          ToAxisOutput<T> output;
+          output.axis = axis;
+          output.angle = angle;
+          return output;
+        }
+    }
 
     %extend Quaternion{
         inline T W() const
@@ -141,3 +166,6 @@ namespace ignition
     %template(Quaternionf) Quaternion<float>;
   }
 }
+    %template(ToAxisOutputi) ToAxisOutput<int>;
+    %template(ToAxisOutputd) ToAxisOutput<double>;
+    %template(ToAxisOutputf) ToAxisOutput<float>;
