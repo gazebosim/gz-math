@@ -26,9 +26,6 @@ namespace ignition
 {
   namespace math
   {
-
-    class SemanticVersionPrivate;
-
     class SemanticVersion
     {
       %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";

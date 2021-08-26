@@ -80,9 +80,8 @@ namespace ignition
     };
 
     %extend PID {
-      double Update(const double error, double dt) {
-        std::chrono::duration<double> _dt(dt);
-        return (*$self).Update(error, _dt);
+      double Update(const double error, const double dt) {
+        return (*$self).Update(error, std::chrono::duration<double>(dt));
       }
     }
   }
