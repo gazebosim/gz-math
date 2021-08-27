@@ -62,7 +62,7 @@ namespace ignition
 
         Eigen::Matrix3d covariance;
         if (_vertices.size() == 0)
-          return covariance;
+          return Eigen::Matrix3d::Zero();
 
         cumulants /= static_cast<double>(_vertices.size());
 
