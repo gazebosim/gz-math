@@ -44,6 +44,9 @@ namespace ignition
       inline Eigen::Matrix3d covarianceMatrix(
         const std::vector<math::Vector3d> &_vertices)
       {
+        if (_vertices.empty())
+          return Eigen::Matrix3d::Identity();
+
         Eigen::Matrix<double, 9, 1> cumulants;
         cumulants.setZero();
         for (const auto &vertex : _vertices)
@@ -61,8 +64,6 @@ namespace ignition
         }
 
         Eigen::Matrix3d covariance;
-        if (_vertices.size() == 0)
-          return Eigen::Matrix3d::Zero();
 
         cumulants /= static_cast<double>(_vertices.size());
 
@@ -78,7 +79,8 @@ namespace ignition
         return covariance;
       }
 
-      /// \brief Get the oriented 3d bounding box of a 3d vertices using PCA
+      /// \brief Get the oriented 3d bounding box of a set of 3d
+      /// vertices using PCA
       /// http://codextechnicanum.blogspot.com/2015/04/find-minimum-oriented-bounding-box-of.html
       /// \param[in] _vertices a vector of 3d vertices
       /// \return Oriented 3D box
@@ -88,7 +90,7 @@ namespace ignition
         math::OrientedBoxd box;
 
         // Return an empty box if there are no vertices
-        if (_vertices.size() == 0)
+        if (_vertices.empty())
           return box;
 
         math::Vector3d mean;
@@ -105,7 +107,7 @@ namespace ignition
         Eigen::Matrix3d eigenVectorsPCA = eigenSolver.eigenvectors();
 
         // This line is necessary for proper orientation in some cases.
-        // The numbers come out the same without it, but The signs are
+        // The numbers come out the same without it, but the signs are
         // different and the box doesn't get correctly oriented in some cases.
         eigenVectorsPCA.col(2) =
           eigenVectorsPCA.col(0).cross(eigenVectorsPCA.col(1));
