@@ -25,22 +25,23 @@ using namespace ignition;
 /// \brief Test the oriented box converted from a set of vertices
 TEST(EigenUtil, verticesToOrientedBox)
 {
-  std::vector<math::Vector3d> mesh;
+  std::vector<math::Vector3d> vertices;
 
-  mesh.push_back(math::Vector3d(1, 0, 0.5));
-  mesh.push_back(math::Vector3d(2, 0.1, 0.4));
-  mesh.push_back(math::Vector3d(2, 1, 3));
-  mesh.push_back(math::Vector3d(1.6, 0.3, 0.1));
-  mesh.push_back(math::Vector3d(1.5, 0.5, 1));
-  mesh.push_back(math::Vector3d(1.4, 1, 3));
-  mesh.push_back(math::Vector3d(1, 0.4, 0.7));
-  mesh.push_back(math::Vector3d(0.9, 1.3, 0));
-  mesh.push_back(math::Vector3d(0.6, 4, 2));
-  mesh.push_back(math::Vector3d(0, 3, 3));
-  mesh.push_back(math::Vector3d(-1, -2, 4));
-  mesh.push_back(math::Vector3d(-2, -2, 0.6));
+  vertices.push_back(math::Vector3d(1, 0, 0.5));
+  vertices.push_back(math::Vector3d(2, 0.1, 0.4));
+  vertices.push_back(math::Vector3d(2, 1, 3));
+  vertices.push_back(math::Vector3d(1.6, 0.3, 0.1));
+  vertices.push_back(math::Vector3d(1.5, 0.5, 1));
+  vertices.push_back(math::Vector3d(1.4, 1, 3));
+  vertices.push_back(math::Vector3d(1, 0.4, 0.7));
+  vertices.push_back(math::Vector3d(0.9, 1.3, 0));
+  vertices.push_back(math::Vector3d(0.6, 4, 2));
+  vertices.push_back(math::Vector3d(0, 3, 3));
+  vertices.push_back(math::Vector3d(-1, -2, 4));
+  vertices.push_back(math::Vector3d(-2, -2, 0.6));
 
-  math::OrientedBoxd box = math::eigen3::verticesToOrientedBox(mesh);
+  math::OrientedBoxd box = math::eigen3::verticesToOrientedBox(
+    vertices);
 
   auto position = box.Pose().Pos();
   auto rotation = box.Pose().Rot();
@@ -59,4 +60,94 @@ TEST(EigenUtil, verticesToOrientedBox)
   EXPECT_NEAR(rotation.Roll(), -1.66, error);
   EXPECT_NEAR(rotation.Pitch(), 0.4, error);
   EXPECT_NEAR(rotation.Yaw(), 2.7, error);
+}
+
+/////////////////////////////////////////////////
+TEST(EigenUtil, emptyVertices)
+{
+  std::vector<math::Vector3d> emptyVertices;
+
+  math::OrientedBoxd box = math::eigen3::verticesToOrientedBox(
+    emptyVertices);
+
+  auto position = box.Pose().Pos();
+  auto rotation = box.Pose().Rot();
+  auto size = box.Size();
+
+  EXPECT_DOUBLE_EQ(size.X(), 0);
+  EXPECT_DOUBLE_EQ(size.Y(), 0);
+  EXPECT_DOUBLE_EQ(size.Z(), 0);
+
+  EXPECT_DOUBLE_EQ(position.X(), 0);
+  EXPECT_DOUBLE_EQ(position.Y(), 0);
+  EXPECT_DOUBLE_EQ(position.Z(), 0);
+
+  EXPECT_DOUBLE_EQ(rotation.Roll(), 0);
+  EXPECT_DOUBLE_EQ(rotation.Pitch(),0);
+  EXPECT_DOUBLE_EQ(rotation.Yaw(),  0);
+}
+
+/////////////////////////////////////////////////
+TEST(EigenUtil, simpleBox)
+{
+  std::vector<math::Vector3d> vertices;
+
+  vertices.push_back(math::Vector3d(-1,-1,-1));
+  vertices.push_back(math::Vector3d(-1,1,-1));
+  vertices.push_back(math::Vector3d(1,-1,-1));
+  vertices.push_back(math::Vector3d(1,1,-1));
+  vertices.push_back(math::Vector3d(-1,-1,1));
+  vertices.push_back(math::Vector3d(-1,1,1));
+  vertices.push_back(math::Vector3d(1,-1,1));
+  vertices.push_back(math::Vector3d(1,1,1));
+
+  math::OrientedBoxd box = math::eigen3::verticesToOrientedBox(
+    vertices);
+
+  auto position = box.Pose().Pos();
+  auto rotation = box.Pose().Rot();
+  auto size = box.Size();
+
+  double error = 0.1;
+
+  EXPECT_NEAR(size.X(), 2, error);
+  EXPECT_NEAR(size.Y(), 2, error);
+  EXPECT_NEAR(size.Z(), 2, error);
+
+  EXPECT_NEAR(position.X(), 0, error);
+  EXPECT_NEAR(position.Y(), 0, error);
+  EXPECT_NEAR(position.Z(), 0, error);
+
+  EXPECT_NEAR(rotation.Roll(), 0, error);
+  EXPECT_NEAR(rotation.Pitch(), 0, error);
+  EXPECT_NEAR(rotation.Yaw(), 0, error);
+}
+
+/////////////////////////////////////////////////
+TEST(EigenUtil, covarianceTest)
+{
+  std::vector<math::Vector3d> vertices;
+
+  vertices.push_back(math::Vector3d(1, 0, 0.5));
+  vertices.push_back(math::Vector3d(2, 0.1, 0.4));
+  vertices.push_back(math::Vector3d(2, 1, 3));
+  vertices.push_back(math::Vector3d(1.6, 0.3, 0.1));
+  vertices.push_back(math::Vector3d(1.5, 0.5, 1));
+  vertices.push_back(math::Vector3d(1.4, 1, 3));
+  vertices.push_back(math::Vector3d(1, 0.4, 0.7));
+
+  Eigen::Matrix3d covariance = math::eigen3::covarianceMatrix(
+    vertices);
+
+  double error = 0.1;
+
+  EXPECT_NEAR(covariance(0), 0.145714, error);
+  EXPECT_NEAR(covariance(1), 0.04, error);
+  EXPECT_NEAR(covariance(2), 0.115714, error);
+  EXPECT_NEAR(covariance(3), 0.04, error);
+  EXPECT_NEAR(covariance(4), 0.136327, error);
+  EXPECT_NEAR(covariance(5), 0.392653, error);
+  EXPECT_NEAR(covariance(6), 0.115714, error);
+  EXPECT_NEAR(covariance(7), 0.392653, error);
+  EXPECT_NEAR(covariance(8), 1.29959, error);
 }
