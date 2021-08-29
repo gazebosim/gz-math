@@ -171,24 +171,27 @@ T Cylinder<T>::VolumeBelow(const Plane<T> &_plane) const
   auto point_min = _plane.GetPointOnPlane(x, y);
 
   //Get case type
-  if(abs(point_max.Z()) > length/2)
+  if(point_max.Z() > length/2 && point_min.Z() < -length/2)
   {
-    if(abs(point_min.Z()) > length/2)
-    {
-      // Plane cuts through both flat faces
-      
-    }
-    else
-    {
-      // Cuts through one flat face
-      // Point Min will be the point where it cuts through
-      // Next we need to determine which way is up.
+    // Plane cuts through both faces
+    auto topPoints =
+      this->GetCylinderIntersectionsAtZ(_plane, length/2);
+    auto bottomPoints =
+      this->GetCylinderIntersectionsAtZ(_plane, -length/2);
 
-    }
+    auto topChord = topPoints.first - topPoints.second;
   }
-  else if(abs(point_min.Z()) > length/2)
+  else if(point_max.Z() > length/2 && point_min.Z() >= -length/2)
   {
-    // Cuts through one flat face
+    // Plane cuts through only top face
+    auto topPoints =
+      GetCylinderIntersectionsAtZ(_plane, length/2);
+    Line3<T> chord(topPoints.first, topPoints.second);
+    auto a = chord.Length()/2;
+    auto side = _plane.Distance(Vector3<T>{0, 0, length/2});
+    //auto b = (side < 0) ?
+    //  this->radius - chord.Distance(Vector3<T>{0, 0, length/2}):
+    //  this->radius + chord.Distance(Vector3<T>{0, 0, length/2});
   }
   else
   {
@@ -223,7 +226,7 @@ T Cylinder<T>::DensityFromMass(const T _mass) const
 
 //////////////////////////////////////////////////
 template<typename T>
-T Cylinder<T>::CircleSegmentSliceArea(T _distance) const
+T Cylinder<T>::CircleSegmentSliceArea(const T _distance) const
 {
   auto r = this->Radius();
   auto theta = (_distance != T(0)) ?
@@ -232,6 +235,48 @@ T Cylinder<T>::CircleSegmentSliceArea(T _distance) const
   return r * r * (theta - sin(theta)) / 2;
 }
 
+//////////////////////////////////////////////////
+template<typename T>
+T Cylinder<T>::CylindricalWedgeVolume(
+  const T _b, const T _a, const T _h)
+{
+  auto r = this->Radius();
+  auto psi = IGN_PI_2 + atan((_b - r)/_a);
+  return _h/(3*_b)*(_a*(3*r*r - _a*_a) + 3*r*r*(_b-r)*psi);
+}
+
+//////////////////////////////////////////////////
+template<typename T>
+std::pair<Vector3<T>, Vector3<T>>
+  Cylinder<T>::GetCylinderIntersectionsAtZ(
+    const Plane<T> &_plane,
+    const T z) const
+{
+  auto k = (_plane.Offset() - _plane.Normal().Z() * z)
+    / this->Radius();
+  auto a = _plane.Normal().X();
+  auto b = _plane.Normal().Y();
+
+  auto internal = (b - sqrt(a*a + b*b - k*k))/(a+k);
+  auto theta1 = 2*(atan(internal));
+  auto theta2 = 2*(atan(-internal));
+
+  math::Vector3d intersect1
+  {
+    this->Radius() * cos(theta1),
+    this->Radius() * sin(theta1),
+    z
+  };
+
+  math::Vector3d intersect2
+  {
+    this->Radius() * cos(theta2),
+    this->Radius() * sin(theta2),
+    z
+  };
+
+  return {intersect1, intersect2};
+}
 }
 }
 #endif
