@@ -156,8 +156,8 @@ namespace ignition
       }
 
       /// \brief Get the volume under a plane.
-      /// \requires The plane is not parallel to the z axis. And the slopes are
-      /// not vertical.
+      /// Requires that the plane is not parallel to the z axis. And the slopes
+      /// are not vertical.
       /// \param[in] _line1 A line that lies on the plane and bounds the x-axis
       /// \param[in] _line2 A line that lies on the plane and bounds the x-axis
       /// \param[in] _ylowerlimit The lower limit of the y-axis
