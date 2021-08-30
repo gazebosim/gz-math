@@ -179,7 +179,6 @@ namespace ignition
       /// \param[out] _ipt1 Return value of the first intersection point,
       /// only valid if the return value of the function is true.
       /// \return True if the given line intersects this triangle.
-      #include <iostream>
       public: bool Intersects(const Line3<T> &_line, Vector3<T> &_ipt1) const
       {
         // Triangle normal
