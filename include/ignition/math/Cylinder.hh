@@ -22,6 +22,8 @@
 #include "ignition/math/Plane.hh"
 #include "ignition/math/Quaternion.hh"
 
+#include <pair>
+
 namespace ignition
 {
   namespace math

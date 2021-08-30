@@ -134,7 +134,7 @@ T Cylinder<T>::VolumeBelow(const Plane<T> &_plane) const
   if(_plane.Normal().Dot(Vector3<T>{0, 0, 1}) == T(0))
   {
     // If the plane is parallel to the cylinder's axis
-    auto dist = _plane.Distance(Vector3<T>(0,0,0));
+    auto dist = _plane.Distance(Vector3<T>(0, 0, 0));
 
     if(abs(dist) >= radius)
     {
@@ -161,7 +161,7 @@ T Cylinder<T>::VolumeBelow(const Plane<T> &_plane) const
     }
   }
 
-  //Compute intersection point of plane
+  // Compute intersection point of plane
   auto theta = atan2(_plane.Normal().Y(), _plane.Normal().X());
   auto x = radius * cos(theta);
   auto y = radius * sin(theta);
@@ -170,7 +170,7 @@ T Cylinder<T>::VolumeBelow(const Plane<T> &_plane) const
   y = radius * sin(theta + IGN_PI);
   auto point_min = _plane.GetPointOnPlane(x, y);
 
-  //Get case type
+  // Get case type
   if(point_max.Z() > length/2 && point_min.Z() < -length/2)
   {
     // Plane cuts through both faces
@@ -189,7 +189,7 @@ T Cylinder<T>::VolumeBelow(const Plane<T> &_plane) const
     Line3<T> chord(topPoints.first, topPoints.second);
     auto a = chord.Length()/2;
     auto side = _plane.Distance(Vector3<T>{0, 0, length/2});
-    //auto b = (side < 0) ?
+    // auto b = (side < 0) ?
     //  this->radius - chord.Distance(Vector3<T>{0, 0, length/2}):
     //  this->radius + chord.Distance(Vector3<T>{0, 0, length/2});
   }
