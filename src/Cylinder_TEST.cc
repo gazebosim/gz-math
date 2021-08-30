@@ -138,23 +138,3 @@ TEST(CylinderTest, Mass)
   EXPECT_EQ(expectedMassMat, massMat);
   EXPECT_DOUBLE_EQ(expectedMassMat.Mass(), massMat.Mass());
 }
-
-////////////////////////////////////////////////
-TEST(CylinderTest, VolumeBelow)
-{
-  math::Cylinderd cylinder(1.0, 1.0);
-  {
-    math::Planed plane(math::Vector3d(0, 1, 0), 0);
-    EXPECT_DOUBLE_EQ(cylinder.Volume()/2, cylinder.VolumeBelow(plane));
-  }
-
-  {
-    math::Planed plane(math::Vector3d(0, 1, 0), -100);
-    EXPECT_DOUBLE_EQ(0.0, cylinder.VolumeBelow(plane));
-  }
-
-  {
-    math::Planed plane(math::Vector3d(0, 1, 0), 100);
-    EXPECT_DOUBLE_EQ(cylinder.Volume(), cylinder.VolumeBelow(plane));
-  }
-}
