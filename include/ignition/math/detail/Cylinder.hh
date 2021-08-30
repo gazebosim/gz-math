@@ -16,6 +16,9 @@
 */
 #ifndef IGNITION_MATH_DETAIL_CYLINDER_HH_
 #define IGNITION_MATH_DETAIL_CYLINDER_HH_
+
+#include <utility>
+
 namespace ignition
 {
 namespace math
