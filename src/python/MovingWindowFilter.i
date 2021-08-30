@@ -43,8 +43,5 @@ namespace math
     %template(MovingWindowFilteri) MovingWindowFilter<int>;
     %template(MovingWindowFilterd) MovingWindowFilter<double>;
     %template(MovingWindowFilterv3) MovingWindowFilter<Vector3<double>>;
-
-
-
 }
 }

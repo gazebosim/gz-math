@@ -19,8 +19,6 @@ from ignition.math import MovingWindowFilterv3
 from ignition.math import Vector3d
 
 
-
-
 class TestFilter(unittest.TestCase):
 
     def test_set_window_size(self):

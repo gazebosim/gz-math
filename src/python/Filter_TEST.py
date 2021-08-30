@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import math
 import unittest
 from ignition.math import BiQuadd
 from ignition.math import BiQuadVector3
@@ -93,6 +92,7 @@ class TestFilter(unittest.TestCase):
         self.assertEqual(filter_b.value(), Vector3d(0, 0, 0))
         self.assertEqual(filter_b.process(Vector3d(0.1, 20.3, 33.45)),
                          Vector3d(0.031748, 6.44475, 10.6196))
+
 
 if __name__ == '__main__':
     unittest.main()
