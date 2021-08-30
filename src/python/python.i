@@ -9,3 +9,7 @@
 %include Pose3.i
 %include Matrix3.i
 %include Matrix4.i
+%include Filter.i
+%include RotationSpline.i
+%include MovingWindowFilter.i
+

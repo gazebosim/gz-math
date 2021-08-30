@@ -16,12 +16,15 @@ if (SWIG_FOUND)
 
   set(swig_files
     Angle
+    Filter
     GaussMarkovProcess
     Matrix3
     Matrix4
+    MovingWindowFilter
     Pose3
     Quaternion
     Rand
+    RotationSpline
     Vector2
     Vector3
     Vector4)
@@ -73,13 +76,16 @@ if (PYTHONLIBS_FOUND)
     # Add the Python tests
     set(python_tests
       Angle_TEST
+      Filter_TEST
       GaussMarkovProcess_TEST
       Matrix3_TEST
       Matrix4_TEST
+      MovingWindowFilter_TEST
       Pose3_TEST
       python_TEST
       Quaternion_TEST
       Rand_TEST
+      RotationSpline_TEST
       Vector2_TEST
       Vector3_TEST
       Vector4_TEST
