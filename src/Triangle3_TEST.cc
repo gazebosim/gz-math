@@ -202,36 +202,6 @@ TEST(Triangle3Test, Intersects)
   }
 }
 
-TEST(Triangle3Test, Overlaps)
-{
-  Triangle3d tri(Vector3d(0, 0, 0),
-                 Vector3d(0, 1, 0),
-                 Vector3d(1, 0, 0));
-  Triangle3d tri2(Vector3d(0, 0, 0),
-                 Vector3d(0, 1, 0),
-                 Vector3d(1, 0, 0));
-  EXPECT_TRUE(tri.Overlaps(tri2));
-
-  tri2.Set(Vector3d(0, 1, 0),
-          Vector3d(0, 0, 0),
-          Vector3d(1, 0, 0));
-  EXPECT_TRUE(tri.Overlaps(tri2));
-
-  tri2.Set(Vector3d(100, 100, 100),
-          Vector3d(100, 101, 100),
-          Vector3d(101, 100, 100));
-  EXPECT_FALSE(tri.Overlaps(tri2));
-
-  tri.Set(Vector3d(0, 0, 5),
-          Vector3d(0, 5, 0),
-          Vector3d(5, 0, 0));
-  tri2.Set(Vector3d(0, 0, 1),
-          Vector3d(0, 1, 0),
-          Vector3d(1, 0, 0));
-  EXPECT_TRUE(tri.Overlaps(tri2));
-  EXPECT_TRUE(tri2.Overlaps(tri));
-}
-
 /////////////////////////////////////////////////
 TEST(Triangle3Test, ContainsPt)
 {

@@ -179,6 +179,7 @@ namespace ignition
       /// \param[out] _ipt1 Return value of the first intersection point,
       /// only valid if the return value of the function is true.
       /// \return True if the given line intersects this triangle.
+      #include <iostream>
       public: bool Intersects(const Line3<T> &_line, Vector3<T> &_ipt1) const
       {
         // Triangle normal
@@ -231,42 +232,6 @@ namespace ignition
           }
         }
 
-        return false;
-      }
-
-      /// \brief Get whether a triangle overlaps with another triangle.
-      /// \return boolean indicating whether the triangles overlap.
-      public: bool Overlaps(const Triangle3<T> &_triangle,
-                            T thresh = 1e-6) const
-      {
-        int sideCount = 0;
-        for(unsigned int i = 0; i < 3; ++i)
-        {
-          for(unsigned int j = i; j < 3; ++j)
-          {
-            Vector3d intersection;
-            if(this->Side(i).Intersect(_triangle.Side(j), intersection))
-            {
-              sideCount++;
-            }
-          }
-        }
-        /// If the triangles are adjacent to each other they may share an
-        /// intersecting edge. However if two triangles overlap they must have
-        /// at least two intersecting edges.
-        if(sideCount > 1)
-        {
-          return true;
-        }
-
-        // Check if any of the points of the triangles are inside the other
-        for(unsigned int i = 0; i < 3; ++i)
-        {
-          if(_triangle.Contains(this->pts[i]))
-            return true;
-          if(this->Contains(_triangle.pts[i]))
-            return true;
-        }
         return false;
       }
 
