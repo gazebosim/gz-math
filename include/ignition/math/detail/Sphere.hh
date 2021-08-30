@@ -94,7 +94,7 @@ T Sphere<T>::Volume() const
 {
   return (4.0/3.0) * IGN_PI * std::pow(this->radius, 3);
 }
-#include <iostream>
+
 //////////////////////////////////////////////////
 template<typename T>
 T Sphere<T>::VolumeBelow(const Planed &_plane) const
@@ -102,6 +102,8 @@ T Sphere<T>::VolumeBelow(const Planed &_plane) const
   auto r = this->radius;
   // get nearest point to center on plane
   auto dist = _plane.Distance(Vector3d(0, 0, 0));
+
+  std::cout << dist << "\n";
 
   if(dist < -r)
   {
