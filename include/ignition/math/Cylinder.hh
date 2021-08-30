@@ -161,20 +161,6 @@ namespace ignition
       /// \sa Precision DensityFromMass(const Precision _mass) const
       public: bool SetDensityFromMass(const Precision _mass);
 
-      private: Precision
-        CircleSegmentSliceArea(const Precision _distance) const;
-
-      /// \brief Get volume of a wedge cut from this cylinder.
-      private: Precision CylindricalWedgeVolume(
-        const Precision _b,
-        const Precision _a,
-        const Precision _h);
-
-      private: std::pair<Vector3<Precision>, Vector3<Precision>>
-        GetCylinderIntersectionsAtZ(
-          const Plane<Precision> &_plane,
-          const Precision z) const;
-
       /// \brief Radius of the cylinder.
       private: Precision radius = 0.0;
 
