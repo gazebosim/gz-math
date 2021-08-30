@@ -189,16 +189,6 @@ namespace ignition
         return vol;
       }
 
-      /// \brief Transform a plane into another plane according to a quaternion
-      public: Plane Transform(const Matrix4<T> &_matrix)
-      {
-        auto newNormal = _matrix.Rotation() * this->Normal(); // See what I did there
-        auto newPoint = _matrix * this->GetPointOnPlane(T(0), T(0));
-        auto offset = newNormal.Dot(newPoint);
-
-        return Plane{newPoint, offset};
-      }
-
       /// \brief The side of the plane a point is on.
       /// \param[in] _point The 3D point to check.
       /// \return Plane::NEGATIVE_SIDE if the distance from the point to the
