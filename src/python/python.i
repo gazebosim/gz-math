@@ -9,3 +9,5 @@
 %include Line3.i
 %include SignalStats.i
 %include Temperature.i
+%include Kmeans.i
+%include Vector3Stats.i
