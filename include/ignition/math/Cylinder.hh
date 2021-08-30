@@ -22,7 +22,7 @@
 #include "ignition/math/Plane.hh"
 #include "ignition/math/Quaternion.hh"
 
-#include <pair>
+#include <utility>
 
 namespace ignition
 {
