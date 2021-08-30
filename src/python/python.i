@@ -6,5 +6,9 @@
 %include Vector3.i
 %include Vector4.i
 %include Color.i
+%include Line2.i
+%include Line3.i
 %include RollingMean.i
+%include SignalStats.i
 %include Spline.i
+%include Temperature.i
