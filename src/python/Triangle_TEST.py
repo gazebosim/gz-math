@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import unittest
 import math
+import unittest
 from ignition.math import Line2d
 from ignition.math import Triangled
 from ignition.math import Vector2d
