@@ -9,3 +9,6 @@
 %include Line3.i
 %include SignalStats.i
 %include Temperature.i
+%include MaterialType.i
+%include Material.i
+
