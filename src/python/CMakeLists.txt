@@ -13,17 +13,6 @@ if (SWIG_FOUND)
 
   include_directories(${PROJECT_SOURCE_DIR}/include)
   include_directories(${PYTHON_INCLUDE_PATH})
-
-  set(swig_files
-    Angle
-    Color
-    GaussMarkovProcess
-    Rand
-    RollingMean
-    Spline
-    Vector2
-    Vector3
-    Vector4)
 endif()
 
 #################################
