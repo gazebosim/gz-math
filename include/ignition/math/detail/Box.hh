@@ -136,7 +136,7 @@ std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(Plane<T> &_plane,
       centroid += pt;
     }
   }
-  centroid /= pointsInPlane.size();
+  centroid /= T(pointsInPlane.size());
 
   if(pointsInPlane.size() < 3)
     return {};

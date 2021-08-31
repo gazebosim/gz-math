@@ -128,7 +128,7 @@ namespace ignition
       /// \return coincident point.
       public: Vector3<T> GetPointOnPlane(const T x, const T y) const
       {
-        auto z_val = (this->Normal().Z() != 0) ?
+        auto z_val = (this->Normal().Z() != T(0)) ?
          (this->Offset() - (this->Normal().Dot({x, y, 0})))/this->Normal().Z()
          : 0;
         auto coincidentPoint = Vector3<T>{x, y, z_val};
