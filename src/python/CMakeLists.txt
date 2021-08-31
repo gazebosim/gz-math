@@ -50,9 +50,9 @@ if (PYTHONLIBS_FOUND)
 
   # Suppress warnings on SWIG-generated files
   target_compile_options(${SWIG_PY_LIB} PRIVATE
-    $<$<CXX_COMPILER_ID:GNU>:-Wno-pedantic -Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-cast-function-type -Wno-missing-field-initializers>
-    $<$<CXX_COMPILER_ID:Clang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-cast-function-type -Wno-missing-field-initializers>
-    $<$<CXX_COMPILER_ID:AppleClang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-cast-function-type -Wno-missing-field-initializers>
+    $<$<CXX_COMPILER_ID:GNU>:-Wno-pedantic -Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-cast-function-type -Wno-missing-field-initializers -Wno-class-memaccess>
+    $<$<CXX_COMPILER_ID:Clang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-cast-function-type -Wno-missing-field-initializers -Wno-class-memaccess>
+    $<$<CXX_COMPILER_ID:AppleClang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-cast-function-type -Wno-missing-field-initializers -Wno-class-memaccess>
   )
   install(TARGETS ${SWIG_PY_LIB} DESTINATION ${IGN_LIB_INSTALL_DIR}/python/ignition)
   install(FILES ${CMAKE_BINARY_DIR}/lib/python/math.py DESTINATION ${IGN_LIB_INSTALL_DIR}/python/ignition)
@@ -63,10 +63,14 @@ if (PYTHONLIBS_FOUND)
       Angle_TEST
       Color_TEST
       GaussMarkovProcess_TEST
+      Line2_TEST
+      Line3_TEST
       python_TEST
       Rand_TEST
       RollingMean_TEST
+      SignalStats_TEST
       Spline_TEST
+      Temperature_TEST
       Vector2_TEST
       Vector3_TEST
       Vector4_TEST
