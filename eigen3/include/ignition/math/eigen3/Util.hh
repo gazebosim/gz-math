@@ -126,7 +126,7 @@ namespace ignition
         for (const auto &point : _vertices)
         {
           Eigen::Vector4d pt(0, 0, 0, 1);
-          pt.head<3>() = convert(point);
+          pt.head<3>() = math::eigen3::convert(point);
           Eigen::Vector4d tfPoint = projectionTransform * pt;
           minPoint = minPoint.cwiseMin(tfPoint.head<3>());
           maxPoint = maxPoint.cwiseMax(tfPoint.head<3>());

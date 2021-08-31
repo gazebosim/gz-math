@@ -83,8 +83,8 @@ TEST(EigenUtil, emptyVertices)
   EXPECT_DOUBLE_EQ(position.Z(), 0);
 
   EXPECT_DOUBLE_EQ(rotation.Roll(), 0);
-  EXPECT_DOUBLE_EQ(rotation.Pitch(),0);
-  EXPECT_DOUBLE_EQ(rotation.Yaw(),  0);
+  EXPECT_DOUBLE_EQ(rotation.Pitch(), 0);
+  EXPECT_DOUBLE_EQ(rotation.Yaw(), 0);
 }
 
 /////////////////////////////////////////////////
@@ -150,4 +150,23 @@ TEST(EigenUtil, covarianceTest)
   EXPECT_NEAR(covariance(6), 0.115714, error);
   EXPECT_NEAR(covariance(7), 0.392653, error);
   EXPECT_NEAR(covariance(8), 1.29959, error);
+}
+
+/////////////////////////////////////////////////
+TEST(EigenUtil, covarianceEmptyTest)
+{
+  std::vector<math::Vector3d> vertices;
+
+  Eigen::Matrix3d covariance = math::eigen3::covarianceMatrix(
+    vertices);
+
+  EXPECT_DOUBLE_EQ(covariance(0), 1);
+  EXPECT_DOUBLE_EQ(covariance(1), 0);
+  EXPECT_DOUBLE_EQ(covariance(2), 0);
+  EXPECT_DOUBLE_EQ(covariance(3), 0);
+  EXPECT_DOUBLE_EQ(covariance(4), 1);
+  EXPECT_DOUBLE_EQ(covariance(5), 0);
+  EXPECT_DOUBLE_EQ(covariance(6), 0);
+  EXPECT_DOUBLE_EQ(covariance(7), 0);
+  EXPECT_DOUBLE_EQ(covariance(8), 1);
 }
