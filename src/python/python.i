@@ -13,3 +13,4 @@
 %include Matrix4.i
 %include SignalStats.i
 %include Temperature.i
+%include Triangle.i
