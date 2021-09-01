@@ -125,10 +125,13 @@ namespace ignition
       /// \brief Given x,y point find corresponding Z point on plane.
       /// \param[in] x - 2d x coordinate.
       /// \param[in] y - 2d y coordinate.
+      /// \param[in] eps - The value to consider zero. Defaults to 1e-16
       /// \return coincident point.
-      public: Vector3<T> GetPointOnPlane(const T x, const T y) const
+      public: Vector3<T> GetPointOnPlane(const T x,  
+        const T y,
+        const T eps = 1e-16) const
       {
-        auto z_val = (this->Normal().Z() != T(0)) ?
+        auto z_val = (std::fabs(this->Normal().Z()) < eps) ?
          (this->Offset() - (this->Normal().Dot({x, y, 0})))/this->Normal().Z()
          : 0;
         auto coincidentPoint = Vector3<T>{x, y, z_val};
