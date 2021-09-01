@@ -127,7 +127,7 @@ namespace ignition
       /// \param[in] y - 2d y coordinate.
       /// \param[in] eps - The value to consider zero. Defaults to 1e-16
       /// \return coincident point.
-      public: Vector3<T> GetPointOnPlane(const T x,  
+      public: Vector3<T> GetPointOnPlane(const T x,
         const T y,
         const T eps = 1e-16) const
       {
