@@ -131,7 +131,7 @@ namespace ignition
         const T y,
         const T eps = 1e-16) const
       {
-        auto z_val = (std::fabs(this->Normal().Z()) < eps) ?
+        auto z_val = (std::fabs(this->Normal().Z()) > eps) ?
          (this->Offset() - (this->Normal().Dot({x, y, 0})))/this->Normal().Z()
          : 0;
         auto coincidentPoint = Vector3<T>{x, y, z_val};
