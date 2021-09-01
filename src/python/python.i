@@ -12,3 +12,4 @@
 %include SignalStats.i
 %include Spline.i
 %include Temperature.i
+%include Triangle.i

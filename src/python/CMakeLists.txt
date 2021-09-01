@@ -71,6 +71,7 @@ if (PYTHONLIBS_FOUND)
       SignalStats_TEST
       Spline_TEST
       Temperature_TEST
+      Triangle_TEST
       Vector2_TEST
       Vector3_TEST
       Vector4_TEST
