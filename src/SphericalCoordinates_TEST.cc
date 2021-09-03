@@ -441,7 +441,7 @@ TEST(SphericalCoordinatesTest, NoHeading)
   math::SphericalCoordinates sc(st, lat, lon, elev, heading);
 
   // Origin matches input
-  auto latLonAlt = sc.SphericalFromLocalPosition({0,0,0});
+  auto latLonAlt = sc.SphericalFromLocalPosition({0, 0, 0});
   EXPECT_DOUBLE_EQ(lat.Degree(), latLonAlt.X());
   EXPECT_DOUBLE_EQ(lon.Degree(), latLonAlt.Y());
   EXPECT_DOUBLE_EQ(elev, latLonAlt.Z());
@@ -519,7 +519,7 @@ TEST(SphericalCoordinatesTest, WithHeading)
   math::SphericalCoordinates sc(st, lat, lon, elev, IGN_DTOR(90));
 
   // Origin matches input
-  auto latLonAlt = sc.SphericalFromLocalPosition({0,0,0});
+  auto latLonAlt = sc.SphericalFromLocalPosition({0, 0, 0});
   EXPECT_DOUBLE_EQ(lat.Degree(), latLonAlt.X());
   EXPECT_DOUBLE_EQ(lon.Degree(), latLonAlt.Y());
   EXPECT_DOUBLE_EQ(elev, latLonAlt.Z());
@@ -573,7 +573,7 @@ TEST(SphericalCoordinatesTest, WithHeading)
       {{math::Vector3d::UnitX, -math::Vector3d::UnitY},
       {-math::Vector3d::UnitX, math::Vector3d::UnitY},
       {math::Vector3d::UnitY, math::Vector3d::UnitX},
-      {-math::Vector3d::UnitY,-math::Vector3d::UnitX}};
+      {-math::Vector3d::UnitY, -math::Vector3d::UnitX}};
   for (auto [global, local] : globalLocal)
   {
     auto localRes = sc.LocalFromGlobalVelocity(global);
