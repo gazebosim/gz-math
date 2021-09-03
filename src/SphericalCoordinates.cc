@@ -103,7 +103,7 @@ SphericalCoordinates::SurfaceType SphericalCoordinates::Convert(
 std::string SphericalCoordinates::Convert(
     SphericalCoordinates::SurfaceType _type)
 {
-  if (EARTH_WGS84)
+  if (_type == EARTH_WGS84)
     return "EARTH_WGS84";
 
   std::cerr << "SurfaceType not recognized, "
