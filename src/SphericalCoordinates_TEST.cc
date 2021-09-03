@@ -128,6 +128,8 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
     math::SphericalCoordinates sc(st, lat, lon, elev, heading);
 
     // Check GlobalFromLocal with heading offset of 90 degrees
+    // Heading 0:  X == East, Y == North, Z == Up
+    // Heading 90: X == North, Y == West , Z == Up
     {
       // local frame
       ignition::math::Vector3d xyz;
@@ -136,8 +138,8 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
 
       xyz.Set(1, 0, 0);
       enu = sc.GlobalFromLocalVelocity(xyz);
-      EXPECT_NEAR(enu.Y(), xyz.X(), 1e-6);
-      EXPECT_NEAR(enu.X(), -xyz.Y(), 1e-6);
+      EXPECT_NEAR(enu.Y()/*North*/, xyz.X(), 1e-6);
+      EXPECT_NEAR(enu.X()/*East*/, -xyz.Y(), 1e-6);
       EXPECT_EQ(xyz, sc.LocalFromGlobalVelocity(enu));
 
       xyz.Set(0, 1, 0);
@@ -253,6 +255,49 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
       EXPECT_NEAR(tmp.Z(), goog_s.Z(), 1e-2);
     }
   }
+
+  // Give no heading offset to confirm ENU frame
+  {
+    ignition::math::Angle lat(0.3), lon(-1.2), heading(0.0);
+    double elev = 354.1;
+    math::SphericalCoordinates sc(st, lat, lon, elev, heading);
+
+    // Check GlobalFromLocal with no heading offset
+    {
+      // local frame
+      ignition::math::Vector3d xyz;
+      // east, north, up
+      ignition::math::Vector3d enu;
+
+      xyz.Set(1, 0, 0);
+      enu = sc.VelocityTransform(xyz,
+        math::SphericalCoordinates::LOCAL_FIXED,
+        math::SphericalCoordinates::GLOBAL);
+      EXPECT_EQ(xyz, enu);
+      EXPECT_EQ(xyz, sc.LocalFromGlobalVelocity(enu));
+
+      xyz.Set(0, 1, 0);
+      enu = sc.VelocityTransform(xyz,
+        math::SphericalCoordinates::LOCAL_FIXED,
+        math::SphericalCoordinates::GLOBAL);
+      EXPECT_EQ(xyz, enu);
+      EXPECT_EQ(xyz, sc.LocalFromGlobalVelocity(enu));
+
+      xyz.Set(1, -1, 0);
+      enu = sc.VelocityTransform(xyz,
+        math::SphericalCoordinates::LOCAL_FIXED,
+        math::SphericalCoordinates::GLOBAL);
+      EXPECT_EQ(xyz, enu);
+      EXPECT_EQ(xyz, sc.LocalFromGlobalVelocity(enu));
+
+      xyz.Set(2243.52334, 556.35, 435.6553);
+      enu = sc.VelocityTransform(xyz,
+        math::SphericalCoordinates::LOCAL_FIXED,
+        math::SphericalCoordinates::GLOBAL);
+      EXPECT_EQ(xyz, enu);
+      EXPECT_EQ(xyz, sc.LocalFromGlobalVelocity(enu));
+    }
+  }
 }
 
 //////////////////////////////////////////////////
@@ -306,7 +351,7 @@ TEST(SphericalCoordinatesTest, BadCoordinateType)
   math::SphericalCoordinates sc;
   math::Vector3d pos(1, 2, -4);
   math::Vector3d result = sc.PositionTransform(pos,
-      static_cast<math::SphericalCoordinates::CoordinateType>(5),
+      static_cast<math::SphericalCoordinates::CoordinateType>(7),
       static_cast<math::SphericalCoordinates::CoordinateType>(6));
 
   EXPECT_EQ(result, pos);
@@ -328,13 +373,13 @@ TEST(SphericalCoordinatesTest, BadCoordinateType)
   EXPECT_EQ(result, pos);
 
   result = sc.VelocityTransform(pos,
-      static_cast<math::SphericalCoordinates::CoordinateType>(5),
+      static_cast<math::SphericalCoordinates::CoordinateType>(7),
       math::SphericalCoordinates::ECEF);
   EXPECT_EQ(result, pos);
 
   result = sc.VelocityTransform(pos,
       math::SphericalCoordinates::ECEF,
-      static_cast<math::SphericalCoordinates::CoordinateType>(5));
+      static_cast<math::SphericalCoordinates::CoordinateType>(7));
   EXPECT_EQ(result, pos);
 }
 
@@ -382,4 +427,162 @@ TEST(SphericalCoordinatesTest, AssignmentOp)
 
   math::SphericalCoordinates sc2 = sc1;
   EXPECT_EQ(sc1, sc2);
+}
+
+//////////////////////////////////////////////////
+TEST(SphericalCoordinatesTest, NoHeading)
+{
+  // Default heading
+  auto st = math::SphericalCoordinates::EARTH_WGS84;
+  math::Angle lat(IGN_DTOR(-22.9));
+  math::Angle lon(IGN_DTOR(-43.2));
+  math::Angle heading(0.0);
+  double elev = 0;
+  math::SphericalCoordinates sc(st, lat, lon, elev, heading);
+
+  // Origin matches input
+  auto latLonAlt = sc.SphericalFromLocalPosition({0,0,0});
+  EXPECT_DOUBLE_EQ(lat.Degree(), latLonAlt.X());
+  EXPECT_DOUBLE_EQ(lon.Degree(), latLonAlt.Y());
+  EXPECT_DOUBLE_EQ(elev, latLonAlt.Z());
+
+  auto xyzOrigin = sc.LocalFromSphericalPosition(latLonAlt);
+  EXPECT_EQ(math::Vector3d::Zero, xyzOrigin);
+
+  // Check how different lat/lon affect the local position
+
+  // Increase latitude == go North == go +Y
+  {
+    auto xyz = sc.LocalFromSphericalPosition(
+        {lat.Degree() + 1.0, lon.Degree(), elev});
+    EXPECT_NEAR(xyzOrigin.X(), xyz.X(), 1e-6);
+    EXPECT_LT(xyzOrigin.Y(), xyz.Y());
+  }
+
+  // Decrease latitude == go South == go -Y
+  {
+    auto xyz = sc.LocalFromSphericalPosition(
+        {lat.Degree() - 1.0, lon.Degree(), elev});
+    EXPECT_NEAR(xyzOrigin.X(), xyz.X(), 1e-6);
+    EXPECT_GT(xyzOrigin.Y(), xyz.Y());
+  }
+
+  // Increase longitude == go East == go +X (and a bit -Y)
+  {
+    auto xyz = sc.LocalFromSphericalPosition(
+        {lat.Degree(), lon.Degree() + 1.0, elev});
+    EXPECT_LT(xyzOrigin.X(), xyz.X());
+    EXPECT_GT(xyzOrigin.Y(), xyz.Y());
+  }
+
+  // Decrease longitude == go West == go -X (and a bit -Y)
+  {
+    auto xyz = sc.LocalFromSphericalPosition(
+        {lat.Degree(), lon.Degree() - 1.0, elev});
+    EXPECT_GT(xyzOrigin.X(), xyz.X());
+    EXPECT_GT(xyzOrigin.Y(), xyz.Y());
+  }
+
+  // Check how global and local velocities are connected
+
+  // Velocity in +X (East), +Y (North), -X (West), -Y (South)
+  for (auto global : {
+      math::Vector3d::UnitX,
+      math::Vector3d::UnitY,
+      -math::Vector3d::UnitX,
+      -math::Vector3d::UnitY})
+  {
+    auto local = sc.LocalFromGlobalVelocity(global);
+    EXPECT_EQ(global, local);
+
+    // This function is broken
+    global = sc.GlobalFromLocalVelocity(local);
+    EXPECT_NE(global, local);
+
+    // Directly call fixed version
+    global = sc.VelocityTransform(local,
+        math::SphericalCoordinates::LOCAL_FIXED,
+        math::SphericalCoordinates::GLOBAL);
+    EXPECT_EQ(global, local);
+  }
+}
+
+//////////////////////////////////////////////////
+TEST(SphericalCoordinatesTest, WithHeading)
+{
+  // Heading 90 deg: X == North, Y == West , Z == Up
+  auto st = math::SphericalCoordinates::EARTH_WGS84;
+  math::Angle lat(IGN_DTOR(-22.9));
+  math::Angle lon(IGN_DTOR(-43.2));
+  math::Angle heading(0.0);
+  double elev = 0;
+  math::SphericalCoordinates sc(st, lat, lon, elev, IGN_DTOR(90));
+
+  // Origin matches input
+  auto latLonAlt = sc.SphericalFromLocalPosition({0,0,0});
+  EXPECT_DOUBLE_EQ(lat.Degree(), latLonAlt.X());
+  EXPECT_DOUBLE_EQ(lon.Degree(), latLonAlt.Y());
+  EXPECT_DOUBLE_EQ(elev, latLonAlt.Z());
+
+  auto xyzOrigin = sc.LocalFromSphericalPosition(latLonAlt);
+  EXPECT_EQ(math::Vector3d::Zero, xyzOrigin);
+
+  // Check how different lat/lon affect the local position
+
+  // Increase latitude == go North == go +X
+  {
+    auto xyz = sc.LocalFromSphericalPosition(
+        {lat.Degree() + 1.0, lon.Degree(), elev});
+    EXPECT_NEAR(xyzOrigin.Y(), xyz.Y(), 1e-6);
+    EXPECT_LT(xyzOrigin.X(), xyz.X());
+  }
+
+  // Decrease latitude == go South == go -X
+  {
+    auto xyz = sc.LocalFromSphericalPosition(
+        {lat.Degree() - 1.0, lon.Degree(), elev});
+    EXPECT_NEAR(xyzOrigin.Y(), xyz.Y(), 1e-6);
+    EXPECT_GT(xyzOrigin.X(), xyz.X());
+  }
+
+  // Increase longitude == go East == go -Y (and a bit -X)
+  {
+    auto xyz = sc.LocalFromSphericalPosition(
+        {lat.Degree(), lon.Degree() + 1.0, elev});
+    EXPECT_GT(xyzOrigin.Y(), xyz.Y());
+    EXPECT_GT(xyzOrigin.X(), xyz.X());
+  }
+
+  // Decrease longitude == go West == go +Y (and a bit -X)
+  {
+    auto xyz = sc.LocalFromSphericalPosition(
+        {lat.Degree(), lon.Degree() - 1.0, elev});
+    EXPECT_LT(xyzOrigin.Y(), xyz.Y());
+    EXPECT_GT(xyzOrigin.X(), xyz.X());
+  }
+
+  // Check how global and local velocities are connected
+
+  // Global     | Local
+  // ---------- | ------
+  // +X (East)  | -Y
+  // -X (West)  | +Y
+  // +Y (North) | +X
+  // -Y (South) | -X
+  std::vector<std::pair<math::Vector3d, math::Vector3d>> globalLocal =
+      {{math::Vector3d::UnitX, -math::Vector3d::UnitY},
+      {-math::Vector3d::UnitX, math::Vector3d::UnitY},
+      {math::Vector3d::UnitY, math::Vector3d::UnitX},
+      {-math::Vector3d::UnitY,-math::Vector3d::UnitX}};
+  for (auto [global, local] : globalLocal)
+  {
+    auto localRes = sc.LocalFromGlobalVelocity(global);
+    EXPECT_EQ(local, localRes);
+
+    // Directly call fixed version
+    auto globalRes = sc.VelocityTransform(local,
+        math::SphericalCoordinates::LOCAL_FIXED,
+        math::SphericalCoordinates::GLOBAL);
+    EXPECT_EQ(global, globalRes);
+  }
 }

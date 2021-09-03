@@ -372,8 +372,19 @@ ignition::math::Vector3d SphericalCoordinates::PositionTransform(
             this->dataPtr->sinHea);
         tmp.Y(-_pos.X() * this->dataPtr->sinHea - _pos.Y() *
             this->dataPtr->cosHea);
+        tmp = this->dataPtr->origin + this->dataPtr->rotGlobalToECEF * tmp;
+        break;
       }
-      /* Falls through. */
+
+    case LOCAL_FIXED:
+      {
+        tmp.X(_pos.X() * this->dataPtr->cosHea + _pos.Y() *
+            this->dataPtr->sinHea);
+        tmp.Y(-_pos.X() * this->dataPtr->sinHea + _pos.Y() *
+            this->dataPtr->cosHea);
+        tmp = this->dataPtr->origin + this->dataPtr->rotGlobalToECEF * tmp;
+        break;
+      }
 
     case GLOBAL:
       {
@@ -440,6 +451,7 @@ ignition::math::Vector3d SphericalCoordinates::PositionTransform(
 
     // Convert from ECEF TO LOCAL
     case LOCAL:
+    case LOCAL_FIXED:
       tmp = this->dataPtr->rotECEFToGlobal * (tmp - this->dataPtr->origin);
 
       tmp = ignition::math::Vector3d(
@@ -477,13 +489,21 @@ ignition::math::Vector3d SphericalCoordinates::VelocityTransform(
   // First, convert to an ECEF vector
   switch (_in)
   {
-    // ENU (note no break at end of case)
+    // ENU
     case LOCAL:
       tmp.X(-_vel.X() * this->dataPtr->cosHea + _vel.Y() *
             this->dataPtr->sinHea);
       tmp.Y(-_vel.X() * this->dataPtr->sinHea - _vel.Y() *
             this->dataPtr->cosHea);
-      /* Falls through. */
+      tmp = this->dataPtr->rotGlobalToECEF * tmp;
+      break;
+    case LOCAL_FIXED:
+      tmp.X(_vel.X() * this->dataPtr->cosHea + _vel.Y() *
+            this->dataPtr->sinHea);
+      tmp.Y(-_vel.X() * this->dataPtr->sinHea + _vel.Y() *
+            this->dataPtr->cosHea);
+      tmp = this->dataPtr->rotGlobalToECEF * tmp;
+      break;
     // spherical
     case GLOBAL:
       tmp = this->dataPtr->rotGlobalToECEF * tmp;
@@ -511,6 +531,7 @@ ignition::math::Vector3d SphericalCoordinates::VelocityTransform(
 
     // Convert from ECEF to local
     case LOCAL:
+    case LOCAL_FIXED:
       tmp = this->dataPtr->rotECEFToGlobal * tmp;
       tmp = ignition::math::Vector3d(
           tmp.X() * this->dataPtr->cosHea - tmp.Y() * this->dataPtr->sinHea,
