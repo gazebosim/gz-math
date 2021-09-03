@@ -61,11 +61,11 @@ namespace ignition
 
                 /// \brief Heading-adjusted tangent plane (X, Y, Z)
                 /// This has kept a bug for backwards compatibility, use
-                /// LOCAL_FIXED for the correct behaviour.
+                /// LOCAL2 for the correct behaviour.
                 LOCAL = 4,
 
                 /// \brief Heading-adjusted tangent plane (X, Y, Z)
-                LOCAL_FIXED = 5
+                LOCAL2 = 5
               };
 
       /// \brief Constructor.
@@ -99,7 +99,7 @@ namespace ignition
       ///
       /// There's a known bug with this computation that can't be fixed on
       /// version 6 to avoid behaviour changes. Directly call
-      /// `PositionTransform(_xyz, LOCAL_FIXED, SPHERICAL)` for correct results.
+      /// `PositionTransform(_xyz, LOCAL2, SPHERICAL)` for correct results.
       ///
       /// \param[in] _xyz Cartesian position vector in the heading-adjusted
       /// world frame.
@@ -114,7 +114,7 @@ namespace ignition
       ///
       /// There's a known bug with this computation that can't be fixed on
       /// version 6 to avoid behaviour changes. Directly call
-      /// `VelocityTransform(_xyz, LOCAL_FIXED, GLOBAL)` for correct results.
+      /// `VelocityTransform(_xyz, LOCAL2, GLOBAL)` for correct results.
       ///
       /// \param[in] _xyz Cartesian velocity vector in the heading-adjusted
       /// world frame.

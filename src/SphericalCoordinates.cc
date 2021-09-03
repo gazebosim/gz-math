@@ -376,7 +376,7 @@ ignition::math::Vector3d SphericalCoordinates::PositionTransform(
         break;
       }
 
-    case LOCAL_FIXED:
+    case LOCAL2:
       {
         tmp.X(_pos.X() * this->dataPtr->cosHea + _pos.Y() *
             this->dataPtr->sinHea);
@@ -451,7 +451,7 @@ ignition::math::Vector3d SphericalCoordinates::PositionTransform(
 
     // Convert from ECEF TO LOCAL
     case LOCAL:
-    case LOCAL_FIXED:
+    case LOCAL2:
       tmp = this->dataPtr->rotECEFToGlobal * (tmp - this->dataPtr->origin);
 
       tmp = ignition::math::Vector3d(
@@ -497,7 +497,7 @@ ignition::math::Vector3d SphericalCoordinates::VelocityTransform(
             this->dataPtr->cosHea);
       tmp = this->dataPtr->rotGlobalToECEF * tmp;
       break;
-    case LOCAL_FIXED:
+    case LOCAL2:
       tmp.X(_vel.X() * this->dataPtr->cosHea + _vel.Y() *
             this->dataPtr->sinHea);
       tmp.Y(-_vel.X() * this->dataPtr->sinHea + _vel.Y() *
@@ -531,7 +531,7 @@ ignition::math::Vector3d SphericalCoordinates::VelocityTransform(
 
     // Convert from ECEF to local
     case LOCAL:
-    case LOCAL_FIXED:
+    case LOCAL2:
       tmp = this->dataPtr->rotECEFToGlobal * tmp;
       tmp = ignition::math::Vector3d(
           tmp.X() * this->dataPtr->cosHea - tmp.Y() * this->dataPtr->sinHea,
