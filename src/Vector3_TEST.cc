@@ -144,26 +144,6 @@ TEST(Vector3dTest, Vector3d)
   EXPECT_EQ(math::Vector3d::UnitZ, math::Vector3d(0, 0, 1));
   EXPECT_EQ(math::Vector3f::UnitZ, math::Vector3f(0, 0, 1));
   EXPECT_EQ(math::Vector3i::UnitZ, math::Vector3i(0, 0, 1));
-
-  auto nanVec = math::Vector3d::NaN;
-  EXPECT_FALSE(nanVec.IsFinite());
-  EXPECT_TRUE(math::isnan(nanVec.X()));
-  EXPECT_TRUE(math::isnan(nanVec.Y()));
-  EXPECT_TRUE(math::isnan(nanVec.Z()));
-
-  nanVec.Correct();
-  EXPECT_EQ(math::Vector3d::Zero, nanVec);
-  EXPECT_TRUE(nanVec.IsFinite());
-
-  auto nanVecF = math::Vector3f::NaN;
-  EXPECT_FALSE(nanVecF.IsFinite());
-  EXPECT_TRUE(math::isnan(nanVecF.X()));
-  EXPECT_TRUE(math::isnan(nanVecF.Y()));
-  EXPECT_TRUE(math::isnan(nanVecF.Z()));
-
-  nanVecF.Correct();
-  EXPECT_EQ(math::Vector3f::Zero, nanVecF);
-  EXPECT_TRUE(nanVecF.IsFinite());
 }
 
 /////////////////////////////////////////////////
@@ -501,3 +481,26 @@ TEST(Vector3dTest, NoException)
   EXPECT_NO_THROW(ss << vInf);
 }
 
+/////////////////////////////////////////////////
+TEST(Vector3dTest, NaN)
+{
+  auto nanVec = math::Vector3d::NaN;
+  EXPECT_FALSE(nanVec.IsFinite());
+  EXPECT_TRUE(math::isnan(nanVec.X()));
+  EXPECT_TRUE(math::isnan(nanVec.Y()));
+  EXPECT_TRUE(math::isnan(nanVec.Z()));
+
+  nanVec.Correct();
+  EXPECT_EQ(math::Vector3d::Zero, nanVec);
+  EXPECT_TRUE(nanVec.IsFinite());
+
+  auto nanVecF = math::Vector3f::NaN;
+  EXPECT_FALSE(nanVecF.IsFinite());
+  EXPECT_TRUE(math::isnan(nanVecF.X()));
+  EXPECT_TRUE(math::isnan(nanVecF.Y()));
+  EXPECT_TRUE(math::isnan(nanVecF.Z()));
+
+  nanVecF.Correct();
+  EXPECT_EQ(math::Vector3f::Zero, nanVecF);
+  EXPECT_TRUE(nanVecF.IsFinite());
+}

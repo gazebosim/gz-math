@@ -459,6 +459,10 @@ TEST(Vector4Test, NaN)
 
   auto nanVecF = math::Vector4f::NaN;
   EXPECT_FALSE(nanVecF.IsFinite());
+  EXPECT_TRUE(math::isnan(nanVecF.X()));
+  EXPECT_TRUE(math::isnan(nanVecF.Y()));
+  EXPECT_TRUE(math::isnan(nanVecF.Z()));
+  EXPECT_TRUE(math::isnan(nanVecF.W()));
 
   nanVecF.Correct();
   EXPECT_EQ(math::Vector4f::Zero, nanVecF);

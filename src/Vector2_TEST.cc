@@ -457,6 +457,8 @@ TEST(Vector2Test, NaN)
 
   auto nanVecF = math::Vector2f::NaN;
   EXPECT_FALSE(nanVecF.IsFinite());
+  EXPECT_TRUE(math::isnan(nanVecF.X()));
+  EXPECT_TRUE(math::isnan(nanVecF.Y()));
 
   nanVecF.Correct();
   EXPECT_EQ(math::Vector2f::Zero, nanVecF);
