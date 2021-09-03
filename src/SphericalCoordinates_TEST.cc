@@ -77,6 +77,10 @@ TEST(SphericalCoordinatesTest, Convert)
 
   EXPECT_EQ(math::SphericalCoordinates::EARTH_WGS84,
             math::SphericalCoordinates::Convert("OTHER-COORD"));
+
+  EXPECT_EQ("EARTH_WGS84", math::SphericalCoordinates::Convert(st));
+  EXPECT_EQ("EARTH_WGS84", math::SphericalCoordinates::Convert(
+      static_cast<math::SphericalCoordinates::SurfaceType>(2)));
 }
 
 //////////////////////////////////////////////////

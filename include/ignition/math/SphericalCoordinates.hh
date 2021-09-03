@@ -128,6 +128,11 @@ namespace ignition
       /// \return Conversion to SurfaceType.
       public: static SurfaceType Convert(const std::string &_str);
 
+      /// \brief Convert a SurfaceType to a string.
+      /// \param[in] _type Surface type
+      /// \return Type as string
+      public: static std::string Convert(SurfaceType _type);
+
       /// \brief Get the distance between two points expressed in geographic
       /// latitude and longitude. It assumes that both points are at sea level.
       /// Example: _latA = 38.0016667 and _lonA = -123.0016667) represents

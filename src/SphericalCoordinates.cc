@@ -100,6 +100,18 @@ SphericalCoordinates::SurfaceType SphericalCoordinates::Convert(
 }
 
 //////////////////////////////////////////////////
+std::string SphericalCoordinates::Convert(
+    SphericalCoordinates::SurfaceType _type)
+{
+  if (EARTH_WGS84)
+    return "EARTH_WGS84";
+
+  std::cerr << "SurfaceType not recognized, "
+    << "EARTH_WGS84 returned by default" << std::endl;
+  return "EARTH_WGS84";
+}
+
+//////////////////////////////////////////////////
 SphericalCoordinates::SphericalCoordinates()
   : dataPtr(new SphericalCoordinatesPrivate)
 {
