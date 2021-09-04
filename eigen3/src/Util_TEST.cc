@@ -92,14 +92,14 @@ TEST(EigenUtil, simpleBox)
 {
   std::vector<math::Vector3d> vertices;
 
-  vertices.push_back(math::Vector3d(-1,-1,-1));
-  vertices.push_back(math::Vector3d(-1,1,-1));
-  vertices.push_back(math::Vector3d(1,-1,-1));
-  vertices.push_back(math::Vector3d(1,1,-1));
-  vertices.push_back(math::Vector3d(-1,-1,1));
-  vertices.push_back(math::Vector3d(-1,1,1));
-  vertices.push_back(math::Vector3d(1,-1,1));
-  vertices.push_back(math::Vector3d(1,1,1));
+  vertices.push_back(math::Vector3d(-1, -1, -1));
+  vertices.push_back(math::Vector3d(-1, 1, -1));
+  vertices.push_back(math::Vector3d(1, -1, -1));
+  vertices.push_back(math::Vector3d(1, 1, -1));
+  vertices.push_back(math::Vector3d(-1, -1, 1));
+  vertices.push_back(math::Vector3d(-1, 1, 1));
+  vertices.push_back(math::Vector3d(1, -1, 1));
+  vertices.push_back(math::Vector3d(1, 1, 1));
 
   math::OrientedBoxd box = math::eigen3::verticesToOrientedBox(
     vertices);
