@@ -17,7 +17,9 @@ if (SWIG_FOUND)
   set(swig_files
     Angle
     GaussMarkovProcess
+    PID
     Rand
+    SemanticVersion
     Vector2
     Vector3
     Vector4)
@@ -73,14 +75,17 @@ if (PYTHONLIBS_FOUND)
       Kmeans_TEST
       Line2_TEST
       Line3_TEST
+      PID_TEST
       python_TEST
       Rand_TEST
+      SemanticVersion_TEST
       SignalStats_TEST
       Vector2_TEST
       Vector3_TEST
       Vector3Stats_TEST
       Vector4_TEST
       Temperature_TEST
+      Triangle_TEST
     )
 
     foreach (test ${python_tests})
