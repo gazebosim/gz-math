@@ -21,7 +21,9 @@ if (SWIG_FOUND)
     Matrix4
     Pose3
     Quaternion
+    PID
     Rand
+    SemanticVersion
     Vector2
     Vector3
     Vector4)
@@ -78,10 +80,12 @@ if (PYTHONLIBS_FOUND)
       Line3_TEST
       Matrix3_TEST
       Matrix4_TEST
+      PID_TEST
       Pose3_TEST
       python_TEST
       Quaternion_TEST
       Rand_TEST
+      SemanticVersion_TEST
       SignalStats_TEST
       Vector2_TEST
       Vector3_TEST

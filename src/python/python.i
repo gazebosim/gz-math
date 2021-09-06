@@ -11,6 +11,8 @@
 %include Line3.i
 %include Matrix3.i
 %include Matrix4.i
+%include PID.i
+%include SemanticVersion.i
 %include SignalStats.i
 %include Temperature.i
 %include Triangle.i
