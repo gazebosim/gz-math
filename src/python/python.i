@@ -8,7 +8,9 @@
 %include Color.i
 %include Line2.i
 %include Line3.i
+%include PID.i
 %include RollingMean.i
+%include SemanticVersion.i
 %include SignalStats.i
 %include Spline.i
 %include Temperature.i

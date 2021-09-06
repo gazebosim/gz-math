@@ -65,9 +65,11 @@ if (PYTHONLIBS_FOUND)
       GaussMarkovProcess_TEST
       Line2_TEST
       Line3_TEST
+      PID_TEST
       python_TEST
       Rand_TEST
       RollingMean_TEST
+      SemanticVersion_TEST
       SignalStats_TEST
       Spline_TEST
       Temperature_TEST
