@@ -21,6 +21,10 @@ ign_configure_project(VERSION_SUFFIX)
 # Set project-specific options
 #============================================================================
 
+option(USE_SYSTEM_PATHS_FOR_RUBY_INSTALLATION
+      "Install ruby modules in standard system paths in the system"
+      OFF)
+
 option(USE_SYSTEM_PATHS_FOR_PYTHON_INSTALLATION
       "Install python modules in standard system paths in the system"
       OFF)
