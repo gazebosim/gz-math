@@ -71,27 +71,28 @@ if (PYTHONLIBS_FOUND)
         COMMAND "${PYTHON_EXECUTABLE}" -c "if True:
 	  from distutils import sysconfig as sc
 	  print(sc.get_python_lib(plat_specific=True))"
-        OUTPUT_VARIABLE Python3_SITELIB
+        OUTPUT_VARIABLE Python3_SITEARCH
         OUTPUT_STRIP_TRAILING_WHITESPACE)
     else()
       # Get install variable from Python3 module
-      # Python3_SITELIB is available from 3.12 on, workaround if needed:
-      find_package(Python3 REQUIRED)
+      # Python3_SITEARCH is available from 3.12 on, workaround if needed:
+      find_package(Python3 COMPONENTS Development)
     endif()
 
     if(USE_DIST_PACKAGES_FOR_PYTHON)
-      string(REPLACE "site-packages" "dist-packages" IGN_PYTHON_INSTALL_PATH ${Python3_SITELIB})
+      string(REPLACE "site-packages" "dist-packages" IGN_PYTHON_INSTALL_PATH ${Python3_SITEARCH})
     else()
       # custom cmake command is returning dist-packages
-      string(REPLACE "dist-packages" "site-packages" IGN_PYTHON_INSTALL_PATH ${Python3_SITELIB})
+      string(REPLACE "dist-packages" "site-packages" IGN_PYTHON_INSTALL_PATH ${Python3_SITEARCH})
     endif()
   else()
     # If not a system installation, respect local paths
     set(IGN_PYTHON_INSTALL_PATH ${IGN_LIB_INSTALL_DIR}/python)
   endif()
 
-  install(TARGETS ${SWIG_PY_LIB} DESTINATION ${IGN_LIB_INSTALL_DIR}/python/ignition)
-  install(FILES ${CMAKE_BINARY_DIR}/lib/python/math.py DESTINATION ${IGN_PYTHON_INSTALL_PATH}/ignition)
+  set(IGN_PYTHON_INSTALL_PATH "${IGN_PYTHON_INSTALL_PATH}/ignition")
+  install(TARGETS ${SWIG_PY_LIB} DESTINATION ${IGN_PYTHON_INSTALL_PATH})
+  install(FILES ${CMAKE_BINARY_DIR}/lib/python/math.py DESTINATION ${IGN_PYTHON_INSTALL_PATH})
 
   if (BUILD_TESTING)
     # Add the Python tests
