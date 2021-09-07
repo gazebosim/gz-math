@@ -76,7 +76,7 @@ if (PYTHONLIBS_FOUND)
     else()
       # Get install variable from Python3 module
       # Python3_SITEARCH is available from 3.12 on, workaround if needed:
-      find_package(Python3 COMPONENTS Development)
+      find_package(Python3 COMPONENTS Interpreter)
     endif()
 
     if(USE_DIST_PACKAGES_FOR_PYTHON)
