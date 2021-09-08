@@ -63,6 +63,7 @@ if (PYTHONLIBS_FOUND)
       Angle_TEST
       Color_TEST
       GaussMarkovProcess_TEST
+      Kmeans_TEST
       Line2_TEST
       Line3_TEST
       PID_TEST
@@ -76,6 +77,7 @@ if (PYTHONLIBS_FOUND)
       Triangle_TEST
       Vector2_TEST
       Vector3_TEST
+      Vector3Stats_TEST
       Vector4_TEST
     )
 
