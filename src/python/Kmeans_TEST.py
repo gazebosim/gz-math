@@ -72,37 +72,6 @@ class TestKmeans(unittest.TestCase):
         self.assertEqual(labels[7], labels[8])
         self.assertEqual(labels[8], labels[9])
 
-        # Check that there are two centroids.
-        self.assertEqual(centroids.size(), 2)
-        # Check that the observations are clustered properly.
-        self.assertEqual(labels[0], labels[1])
-        self.assertEqual(labels[1], labels[2])
-        self.assertEqual(labels[2], labels[3])
-        self.assertEqual(labels[3], labels[4])
-
-        self.assertNotEqual(labels[4], labels[5])
-
-        self.assertEqual(labels[5], labels[6])
-        self.assertEqual(labels[6], labels[7])
-        self.assertEqual(labels[7], labels[8])
-        self.assertEqual(labels[8], labels[9])
-
-        # Check that there are two centroids.
-        self.assertEqual(centroids.size(), 2)
-
-        # Check that the observations are clustered properly.
-        self.assertEqual(labels[0], labels[1])
-        self.assertEqual(labels[1], labels[2])
-        self.assertEqual(labels[2], labels[3])
-        self.assertEqual(labels[3], labels[4])
-
-        self.assertNotEqual(labels[4], labels[5])
-
-        self.assertEqual(labels[5], labels[6])
-        self.assertEqual(labels[6], labels[7])
-        self.assertEqual(labels[7], labels[8])
-        self.assertEqual(labels[8], labels[9])
-
         # Check the centroids.
         expected_centroid1 = Vector3d(1.2, 1.0, 0.0)
         expected_centroid2 = Vector3d(5.2, 1.0, 0.0)
