@@ -76,6 +76,7 @@ if (PYTHONLIBS_FOUND)
     set(python_tests
       Angle_TEST
       GaussMarkovProcess_TEST
+      Kmeans_TEST
       Line2_TEST
       Line3_TEST
       Matrix3_TEST
@@ -89,6 +90,7 @@ if (PYTHONLIBS_FOUND)
       SignalStats_TEST
       Vector2_TEST
       Vector3_TEST
+      Vector3Stats_TEST
       Vector4_TEST
       Temperature_TEST
       Triangle_TEST

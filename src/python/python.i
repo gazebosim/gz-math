@@ -16,3 +16,5 @@
 %include SignalStats.i
 %include Temperature.i
 %include Triangle.i
+%include Kmeans.i
+%include Vector3Stats.i
