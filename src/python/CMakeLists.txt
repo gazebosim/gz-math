@@ -13,16 +13,6 @@ if (SWIG_FOUND)
 
   include_directories(${PROJECT_SOURCE_DIR}/include)
   include_directories(${PYTHON_INCLUDE_PATH})
-
-  set(swig_files
-    Angle
-    GaussMarkovProcess
-    PID
-    Rand
-    SemanticVersion
-    Vector2
-    Vector3
-    Vector4)
 endif()
 
 #################################
@@ -98,19 +88,24 @@ if (PYTHONLIBS_FOUND)
     # Add the Python tests
     set(python_tests
       Angle_TEST
+      Color_TEST
       GaussMarkovProcess_TEST
+      Kmeans_TEST
       Line2_TEST
       Line3_TEST
       PID_TEST
       python_TEST
       Rand_TEST
+      RollingMean_TEST
       SemanticVersion_TEST
       SignalStats_TEST
-      Vector2_TEST
-      Vector3_TEST
-      Vector4_TEST
+      Spline_TEST
       Temperature_TEST
       Triangle_TEST
+      Vector2_TEST
+      Vector3_TEST
+      Vector3Stats_TEST
+      Vector4_TEST
     )
 
     foreach (test ${python_tests})
