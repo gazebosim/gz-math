@@ -489,21 +489,49 @@ TEST(SphericalCoordinatesTest, NoHeading)
     EXPECT_GT(xyzOrigin.Y(), xyz.Y());
   }
 
+  // Increase altitude
+  {
+    auto xyz = sc.LocalFromSphericalPosition(
+        {lat.Degree(), lon.Degree(), elev + 10.0});
+    EXPECT_NEAR(xyzOrigin.X(), xyz.X(), 1e-6);
+    EXPECT_NEAR(xyzOrigin.Y(), xyz.Y(), 1e-6);
+    EXPECT_NEAR(xyzOrigin.Z() + 10.0, xyz.Z(), 1e-6);
+  }
+
+  // Decrease altitude
+  {
+    auto xyz = sc.LocalFromSphericalPosition(
+        {lat.Degree(), lon.Degree(), elev - 10.0});
+    EXPECT_NEAR(xyzOrigin.X(), xyz.X(), 1e-6);
+    EXPECT_NEAR(xyzOrigin.Y(), xyz.Y(), 1e-6);
+    EXPECT_NEAR(xyzOrigin.Z() - 10.0, xyz.Z(), 1e-6);
+  }
+
   // Check how global and local velocities are connected
 
-  // Velocity in +X (East), +Y (North), -X (West), -Y (South)
+  // Velocity in
+  // +X (East), +Y (North), -X (West), -Y (South), +Z (up), -Z (down)
   for (auto global : {
       math::Vector3d::UnitX,
       math::Vector3d::UnitY,
+      math::Vector3d::UnitZ,
       -math::Vector3d::UnitX,
-      -math::Vector3d::UnitY})
+      -math::Vector3d::UnitY,
+      -math::Vector3d::UnitZ})
   {
     auto local = sc.LocalFromGlobalVelocity(global);
     EXPECT_EQ(global, local);
 
-    // This function is broken
+    // This function is broken for horizontal velocities
     global = sc.GlobalFromLocalVelocity(local);
-    EXPECT_NE(global, local);
+    if (abs(global.Z()) < 0.1)
+    {
+      EXPECT_NE(global, local);
+    }
+    else
+    {
+      EXPECT_EQ(global, local);
+    }
 
     // Directly call fixed version
     global = sc.VelocityTransform(local,
