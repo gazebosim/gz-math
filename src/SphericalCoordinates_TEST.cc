@@ -471,7 +471,8 @@ TEST(SphericalCoordinatesTest, NoHeading)
     EXPECT_GT(xyzOrigin.Y(), xyz.Y());
   }
 
-  // Increase longitude == go East == go +X (and a bit -Y)
+  // Increase longitude == go East == go +X
+  // Also move a bit -Y because this is the Southern Hemisphere
   {
     auto xyz = sc.LocalFromSphericalPosition(
         {lat.Degree(), lon.Degree() + 1.0, elev});
@@ -479,7 +480,8 @@ TEST(SphericalCoordinatesTest, NoHeading)
     EXPECT_GT(xyzOrigin.Y(), xyz.Y());
   }
 
-  // Decrease longitude == go West == go -X (and a bit -Y)
+  // Decrease longitude == go West == go -X
+  // Also move a bit -Y because this is the Southern Hemisphere
   {
     auto xyz = sc.LocalFromSphericalPosition(
         {lat.Degree(), lon.Degree() - 1.0, elev});
@@ -518,9 +520,9 @@ TEST(SphericalCoordinatesTest, WithHeading)
   auto st = math::SphericalCoordinates::EARTH_WGS84;
   math::Angle lat(IGN_DTOR(-22.9));
   math::Angle lon(IGN_DTOR(-43.2));
-  math::Angle heading(0.0);
+  math::Angle heading(IGN_DTOR(90.0));
   double elev = 0;
-  math::SphericalCoordinates sc(st, lat, lon, elev, IGN_DTOR(90));
+  math::SphericalCoordinates sc(st, lat, lon, elev, heading);
 
   // Origin matches input
   auto latLonAlt = sc.SphericalFromLocalPosition({0, 0, 0});
@@ -588,5 +590,52 @@ TEST(SphericalCoordinatesTest, WithHeading)
         math::SphericalCoordinates::LOCAL2,
         math::SphericalCoordinates::GLOBAL);
     EXPECT_EQ(global, globalRes);
+  }
+}
+
+//////////////////////////////////////////////////
+TEST(SphericalCoordinatesTest, Inverse)
+{
+  auto st = math::SphericalCoordinates::EARTH_WGS84;
+  ignition::math::Angle lat(0.3), lon(-1.2), heading(0.5);
+  double elev = 354.1;
+  math::SphericalCoordinates sc(st, lat, lon, elev, heading);
+
+  // GLOBAL <-> LOCAL2
+  {
+    math::Vector3d in(1, 2, -4);
+    auto out = sc.VelocityTransform(in,
+        math::SphericalCoordinates::LOCAL2,
+        math::SphericalCoordinates::GLOBAL);
+    EXPECT_NE(in, out);
+    auto reverse = sc.VelocityTransform(out,
+        math::SphericalCoordinates::GLOBAL,
+        math::SphericalCoordinates::LOCAL2);
+    EXPECT_EQ(in, reverse);
+  }
+
+  {
+    math::Vector3d in(1, 2, -4);
+    auto out = sc.PositionTransform(in,
+        math::SphericalCoordinates::LOCAL2,
+        math::SphericalCoordinates::GLOBAL);
+    EXPECT_NE(in, out);
+    auto reverse = sc.PositionTransform(out,
+        math::SphericalCoordinates::GLOBAL,
+        math::SphericalCoordinates::LOCAL2);
+    EXPECT_EQ(in, reverse);
+  }
+
+  // SPHERICAL <-> LOCAL2
+  {
+    math::Vector3d in(1, 2, -4);
+    auto out = sc.PositionTransform(in,
+        math::SphericalCoordinates::LOCAL2,
+        math::SphericalCoordinates::SPHERICAL);
+    EXPECT_NE(in, out);
+    auto reverse = sc.PositionTransform(out,
+        math::SphericalCoordinates::SPHERICAL,
+        math::SphericalCoordinates::LOCAL2);
+    EXPECT_EQ(in, reverse);
   }
 }
