@@ -5,6 +5,7 @@
 %include Vector2.i
 %include Vector3.i
 %include Vector4.i
+%include Color.i
 %include Pose3.i
 %include Quaternion.i
 %include Line2.i
@@ -12,8 +13,10 @@
 %include Matrix3.i
 %include Matrix4.i
 %include PID.i
+%include RollingMean.i
 %include SemanticVersion.i
 %include SignalStats.i
+%include Spline.i
 %include Temperature.i
 %include Triangle.i
 %include Kmeans.i
