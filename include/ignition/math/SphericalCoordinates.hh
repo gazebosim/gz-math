@@ -100,6 +100,8 @@ namespace ignition
       /// There's a known bug with this computation that can't be fixed on
       /// version 6 to avoid behaviour changes. Directly call
       /// `PositionTransform(_xyz, LOCAL2, SPHERICAL)` for correct results.
+      /// Note that `PositionTransform` returns spherical coordinates in
+      /// radians.
       ///
       /// \param[in] _xyz Cartesian position vector in the heading-adjusted
       /// world frame.
@@ -209,15 +211,17 @@ namespace ignition
       public: void UpdateTransformationMatrix();
 
       /// \brief Convert between positions in SPHERICAL/ECEF/LOCAL/GLOBAL frame
+      /// Spherical coordinates use radians, while the other frames use meters.
       /// \param[in] _pos Position vector in frame defined by parameter _in
       /// \param[in] _in  CoordinateType for input
       /// \param[in] _out CoordinateType for output
-      /// \return Transformed coordinate using cached orgin
+      /// \return Transformed coordinate using cached origin.
       public: ignition::math::Vector3d
               PositionTransform(const ignition::math::Vector3d &_pos,
                   const CoordinateType &_in, const CoordinateType &_out) const;
 
       /// \brief Convert between velocity in SPHERICAL/ECEF/LOCAL/GLOBAL frame
+      /// Spherical coordinates use radians, while the other frames use meters.
       /// \param[in] _vel Velocity vector in frame defined by parameter _in
       /// \param[in] _in  CoordinateType for input
       /// \param[in] _out CoordinateType for output
