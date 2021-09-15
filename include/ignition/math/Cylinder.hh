@@ -19,10 +19,7 @@
 
 #include "ignition/math/MassMatrix3.hh"
 #include "ignition/math/Material.hh"
-#include "ignition/math/Plane.hh"
 #include "ignition/math/Quaternion.hh"
-
-#include <utility>
 
 namespace ignition
 {
