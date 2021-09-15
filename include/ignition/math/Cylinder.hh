@@ -133,10 +133,6 @@ namespace ignition
       /// \return Volume of the cylinder in m^3.
       public: Precision Volume() const;
 
-      /// \brief Get the volume of the cylinder in m^3.
-      /// \return Volume of the cylinder in m^3.
-      public: Precision VolumeBelow(const Plane<Precision> &_plane) const;
-
       /// \brief Compute the cylinder's density given a mass value. The
       /// cylinder is assumed to be solid with uniform density. This
       /// function requires the cylinder's radius and length to be set to

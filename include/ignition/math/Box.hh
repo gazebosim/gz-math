@@ -138,7 +138,7 @@ namespace ignition
 
       /// \brief Center of volume below the plane. This is useful when
       /// calculating where the buoyancy should be applied.
-      /// \param[in] _plane - the plane which slices the sphere.
+      /// \param[in] _plane The plane which slices the sphere.
       public: std::optional<Vector3<Precision>>
         CenterOfVolumeBelow(const Plane<Precision> &_plane) const;
 
@@ -182,7 +182,10 @@ namespace ignition
       private: ignition::math::Material material;
 
       /// \brief Get intersection between a plane and the box.
-      private: std::vector<Vector3<Precision>> GetIntersections(
+      /// \param[in] _plane The plane against which we are testing intersection.
+      /// \returns a list of points along the edges of the box where the
+      /// intersection occurs.
+      private: std::vector<Vector3<Precision>> Intersections(
         const Plane<Precision> &_plane) const;
     };
 

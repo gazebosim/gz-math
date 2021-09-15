@@ -197,7 +197,7 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
   if(verticesBelow.size() == 0)
     return 0;
 
-  auto intersections = GetIntersections(_plane);
+  auto intersections = Intersections(_plane);
   verticesBelow.insert(verticesBelow.end(),
     intersections.begin(), intersections.end());
 
@@ -307,7 +307,7 @@ bool Box<T>::MassMatrix(MassMatrix3<T> &_massMat) const
 
 //////////////////////////////////////////////////
 template<typename T>
-std::vector<Vector3<T>> Box<T>::GetIntersections(
+std::vector<Vector3<T>> Box<T>::Intersections(
         const Plane<T> &_plane) const
 {
   std::vector<Vector3<T>> intersections;
