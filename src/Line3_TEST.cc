@@ -228,6 +228,11 @@ TEST(Line3Test, Distance)
   // Expect false when the first line is a point.
   line.Set(0, 0, 0, 0, 0, 0);
   EXPECT_FALSE(line.Distance(math::Line3d(2, 0, 0, 2, 1, 0), result));
+
+  // Check when measured against a point.
+  line.Set(0, -1, 0, 0, 1, 0);
+  math::Vector3d point(5, 0, 0);
+  EXPECT_EQ(line.Distance(point), 5);
 }
 
 /////////////////////////////////////////////////
@@ -290,4 +295,10 @@ TEST(Line3Test, Coplanar)
 
   EXPECT_FALSE(line.Coplanar(math::Line3d(1, 0, 0, 1, 1, 1)));
   EXPECT_FALSE(line.Coplanar(math::Line3d(1, 0, 1, 2, 0, 0)));
+}
+
+/////////////////////////////////////////////////
+TEST(Line3Test, DistanceVec3)
+{
+  
 }
