@@ -307,7 +307,7 @@ class Vector4_TEST < Test::Unit::TestCase
 
     nanVec.Correct()
     assert(Ignition::Math::Vector4d.Zero == nanVec,
-           "Corrected vector equals zero")
+           "Corrected vector should equal zero")
 
     nanVecF = Ignition::Math::Vector4f.NaN
     assert(!nanVecF.IsFinite(),
@@ -319,7 +319,7 @@ class Vector4_TEST < Test::Unit::TestCase
 
     nanVecF.Correct()
     assert(Ignition::Math::Vector4f.Zero == nanVecF,
-           "Corrected vector equals zero")
+           "Corrected vector should equal zero")
   end
 end
 

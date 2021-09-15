@@ -42,7 +42,7 @@ namespace ignition
       /// \brief math::Vector4(1, 1, 1, 1)
       public: static const Vector4<T> One;
 
-      /// \brief math::Vector4(NaN, NaN, NaN)
+      /// \brief math::Vector4(NaN, NaN, NaN, NaN)
       public: static const Vector4 NaN;
 
       /// \brief Constructor
