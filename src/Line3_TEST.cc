@@ -232,7 +232,7 @@ TEST(Line3Test, Distance)
   // Check when measured against a point.
   line.Set(0, -1, 0, 0, 1, 0);
   math::Vector3d point(5, 0, 0);
-  EXPECT_EQ(line.Distance(point), 5);
+  EXPECT_NEAR(line.Distance(point), 5, 1e-3);
 }
 
 /////////////////////////////////////////////////
