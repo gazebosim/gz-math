@@ -296,9 +296,3 @@ TEST(Line3Test, Coplanar)
   EXPECT_FALSE(line.Coplanar(math::Line3d(1, 0, 0, 1, 1, 1)));
   EXPECT_FALSE(line.Coplanar(math::Line3d(1, 0, 1, 2, 0, 0)));
 }
-
-/////////////////////////////////////////////////
-TEST(Line3Test, DistanceVec3)
-{
-  
-}
