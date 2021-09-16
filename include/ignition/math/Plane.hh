@@ -122,9 +122,9 @@ namespace ignition
         return this->normal.Dot(_point) - this->d;
       }
 
-      /// \brief Get the intersection of a line with the plane
+      /// \brief Get the intersection of an infinite line with the plane,
       /// given the line's gradient and a point in parametrized space.
-      /// \param[in] _point A point that lies on a line.
+      /// \param[in] _point A point that lies on the line.
       /// \param[in] _gradient The gradient of the line.
       /// \param[in] _tolerance The tolerance for determining a line is
       /// parallel to the plane. Optional, default=10^-16
@@ -140,7 +140,7 @@ namespace ignition
           return std::nullopt;
         }
         auto constant = this->Offset() - this->Normal().Dot(_point);
-        auto param = constant/this->Normal().Dot(_gradient);
+        auto param = constant / this->Normal().Dot(_gradient);
         auto intersection = _point + _gradient*param;
         return intersection;
       }
