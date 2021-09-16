@@ -230,12 +230,29 @@ namespace ignition
       }
 
       /// \brief Calculate shortest distance between line and point
-      /// \param[in] _pt point which we are measuring distance to.
+      /// \param[in] _pt Point which we are measuring distance to.
       /// \returns Distance from point to line.
       public: T Distance(const Vector3<T> &_pt)
       {
-        auto d = (_pt - this->pts[0]).Cross(this->pts[1] - this->pts[0]);
-        return d.Length() / (this->pts[1] - this->pts[0]).Length();
+        auto line = this->pts[1] - this->pts[0];
+        auto ptTo0 = _pt - this->pts[0];
+        auto ptTo1 = _pt - this->pts[1];
+
+        // Point is projected beyond pt0
+        if (ptTo0.Dot(line) <= 0.0)
+        {
+          return ptTo0.Length();
+        }
+
+        // Point is projected beyond pt1
+        if (ptTo1.Dot(line) >= 0.0)
+        {
+          return ptTo1.Length();
+        }
+
+        // Distance to point projected onto line
+        auto d = (ptTo0).Cross(line);
+        return d.Length() / (line).Length();
       }
 
       /// \brief Check if this line intersects the given line segment.
