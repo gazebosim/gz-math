@@ -228,11 +228,68 @@ TEST(Line3Test, Distance)
   // Expect false when the first line is a point.
   line.Set(0, 0, 0, 0, 0, 0);
   EXPECT_FALSE(line.Distance(math::Line3d(2, 0, 0, 2, 1, 0), result));
+}
 
-  // Check when measured against a point.
-  line.Set(0, -1, 0, 0, 1, 0);
-  math::Vector3d point(5, 0, 0);
-  EXPECT_NEAR(line.Distance(point), 5, 1e-3);
+/////////////////////////////////////////////////
+TEST(Line3Test, DistanceToPoint)
+{
+  // Line on horizontal plane
+  math::Vector3d pointA{0, -1, 0};
+  math::Vector3d pointB{0, 1, 0};
+  math::Line3d line{pointA, pointB};
+
+  // Point on the line
+  {
+    math::Vector3d point(0, 0.5, 0);
+    EXPECT_DOUBLE_EQ(line.Distance(point), 0.0);
+  }
+
+  // Points projected onto the line
+  {
+    math::Vector3d point(5, 0, 0);
+    EXPECT_DOUBLE_EQ(line.Distance(point), 5);
+  }
+  {
+    math::Vector3d point(-1, -1, 0);
+    EXPECT_DOUBLE_EQ(line.Distance(point), 1);
+  }
+
+  // Points projected beyond the line's ends
+  {
+    math::Vector3d point(0, 2, 0);
+    EXPECT_DOUBLE_EQ(line.Distance(point), 1);
+  }
+  {
+    math::Vector3d point(2, -3, 0);
+    EXPECT_DOUBLE_EQ(line.Distance(point), sqrt(8));
+  }
+
+  // 3D line
+  pointA.Set(1, 1, 1);
+  pointB.Set(-1, -1, -1);
+  line.Set(pointA, pointB);
+
+  // Point on the line
+  {
+    math::Vector3d point(-0.5, -0.5, -0.5);
+    EXPECT_DOUBLE_EQ(line.Distance(point), 0.0);
+  }
+
+  // Point projected onto the line
+  {
+    math::Vector3d point(1, -1, 0);
+    EXPECT_NEAR(line.Distance(point), point.Length(), 1e-3);
+  }
+
+  // Points projected beyond the line's ends
+  {
+    math::Vector3d point(2, 2, 3);
+    EXPECT_NEAR(line.Distance(point), point.Distance(pointA), 1e-3);
+  }
+  {
+    math::Vector3d point(-5, -3, -8);
+    EXPECT_NEAR(line.Distance(point), point.Distance(pointB), 1e-3);
+  }
 }
 
 /////////////////////////////////////////////////
