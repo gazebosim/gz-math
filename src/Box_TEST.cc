@@ -143,6 +143,23 @@ TEST(BoxTest, VolumeBelow)
 }
 
 //////////////////////////////////////////////////
+TEST(BoxTest, CenterOfVolumeBelow)
+{
+  {
+    math::Boxd box(2.0, 2.0, 2.0);
+    math::Planed plane(math::Vector3d(0.0, 0.0, 1.0), -5.0);
+    EXPECT_FALSE(box.CenterOfVolumeBelow(plane).has_value());
+  }
+
+  {
+    math::Boxd box(2.0, 2.0, 2.0);
+    math::Planed plane(math::Vector3d(0.0, 0.0, 1.0), 5.0);
+    EXPECT_TRUE(box.CenterOfVolumeBelow(plane).has_value());
+    EXPECT_EQ(box.CenterOfVolumeBelow(plane), math::Vector3d(0,0,0));
+  }
+}
+
+//////////////////////////////////////////////////
 TEST(BoxTest, Mass)
 {
   double mass = 2.0;
