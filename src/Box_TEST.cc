@@ -113,6 +113,21 @@ TEST(BoxTest, VolumeAndDensity)
   EXPECT_GT(0.0, box2.DensityFromMass(mass));
 }
 
+//////////////////////////////////////////////////
+TEST(BoxTest, Intersects)
+{
+  {
+    math::Boxd box(2.0, 2.0, 2.0);
+    math::Planed plane(math::Vector3d(0.0, 0.0, 1.0), -5.0);
+    EXPECT_EQ(box.Intersections(plane).size(), 0);
+  }
+
+  {
+    math::Boxd box(2.0, 2.0, 2.0);
+    math::Planed plane(math::Vector3d(0.0, 0.0, 1.0), 0);
+    EXPECT_EQ(box.Intersections(plane).size(), 4);
+  }
+}
 
 //////////////////////////////////////////////////
 TEST(BoxTest, VolumeBelow)

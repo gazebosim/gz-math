@@ -175,18 +175,18 @@ namespace ignition
       /// could be due to an invalid size (<=0) or density (<=0).
       public: bool MassMatrix(MassMatrix3<Precision> &_massMat) const;
 
+      /// \brief Get intersection between a plane and the box.
+      /// \param[in] _plane The plane against which we are testing intersection.
+      /// \returns a list of points along the edges of the box where the
+      /// intersection occurs.
+      public: std::vector<Vector3<Precision>> Intersections(
+        const Plane<Precision> &_plane) const;
+
       /// \brief Size of the box.
       private: Vector3<Precision> size = Vector3<Precision>::Zero;
 
       /// \brief The box's material.
       private: ignition::math::Material material;
-
-      /// \brief Get intersection between a plane and the box.
-      /// \param[in] _plane The plane against which we are testing intersection.
-      /// \returns a list of points along the edges of the box where the
-      /// intersection occurs.
-      private: std::vector<Vector3<Precision>> Intersections(
-        const Plane<Precision> &_plane) const;
     };
 
     /// \typedef Box<int> Boxi
