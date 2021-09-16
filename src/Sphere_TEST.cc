@@ -138,18 +138,61 @@ TEST(SphereTest, VolumeBelow)
   double r = 2;
   math::Sphered sphere(r);
 
+  // Fully below
   {
     math::Planed _plane(math::Vector3d{0, 0, 1}, math::Vector2d(4, 4), 2*r);
     EXPECT_NEAR(sphere.Volume(), sphere.VolumeBelow(_plane), 1e-3);
   }
+  {
+    math::Planed _plane(math::Vector3d{0, 0, -1}, math::Vector2d(4, 4), 2*r);
+    EXPECT_NEAR(sphere.Volume(), sphere.VolumeBelow(_plane), 1e-3);
+  }
 
+  // Fully above
   {
     math::Planed _plane(math::Vector3d{0, 0, 1}, math::Vector2d(4, 4), -2*r);
     EXPECT_NEAR(sphere.VolumeBelow(_plane), 0, 1e-3);
   }
 
+  // Hemisphere
   {
     math::Planed _plane(math::Vector3d{0, 0, 1}, 0);
-    EXPECT_NEAR(sphere.Volume()/2, sphere.VolumeBelow(_plane), 1e-3);
+    EXPECT_NEAR(sphere.Volume() / 2, sphere.VolumeBelow(_plane), 1e-3);
   }
+
+  // Vertical plane
+  {
+    math::Planed _plane(math::Vector3d{1, 0, 0}, 0);
+    EXPECT_NEAR(0.0, sphere.VolumeBelow(_plane), 1e-3);
+  }
+
+  // Expectations from https://planetcalc.com/283/
+  {
+    math::Planed _plane(math::Vector3d{0, 0, 1}, 0.5);
+    EXPECT_NEAR(22.90745, sphere.VolumeBelow(_plane), 1e-3);
+  }
+
+  {
+    math::Planed _plane(math::Vector3d{0, 0, 1}, -0.5);
+    EXPECT_NEAR(10.60288, sphere.VolumeBelow(_plane), 1e-3);
+  }
+}
+
+//////////////////////////////////////////////////
+TEST(SphereTest, CenterOfVolumeBelow)
+{
+  double r = 2;
+  math::Sphered sphere(r);
+
+  {
+    math::Planed _plane(math::Vector3d{0, 0, 1}, math::Vector2d(4, 4), 2*r);
+    EXPECT_EQ(Vector3d(0, 0, 0), sphere.CenterOfVolumeBelow(_plane));
+  }
+
+  {
+    math::Planed _plane(math::Vector3d{0, 0, 1}, math::Vector2d(4, 4), -2*r);
+    EXPECT_FALSE(sphere.CenterOfVolumeBelow(_plane));
+  }
+
+  // TODO: test more cases
 }

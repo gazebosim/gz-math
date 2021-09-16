@@ -103,18 +103,24 @@ T Sphere<T>::VolumeBelow(const Planed &_plane) const
   // get nearest point to center on plane
   auto dist = _plane.Distance(Vector3d(0, 0, 0));
 
-  if(dist < -r)
+  if (dist < -r)
   {
     // sphere is completely below plane
     return Volume();
   }
-  else if(dist > r)
+  else if (dist > r)
   {
     // sphere is completely above plane
-    return 0;
+    return 0.0;
   }
 
-  auto h = r + dist;
+  // Vertical plane
+  if (_plane.Normal().Z() < 1e-6)
+  {
+    return 0.0;
+  }
+
+  auto h = r - dist;
   return IGN_PI * h * h * (3 * r - h) / 3;
 }
 

@@ -278,17 +278,17 @@ TEST(Line3Test, DistanceToPoint)
   // Point projected onto the line
   {
     math::Vector3d point(1, -1, 0);
-    EXPECT_NEAR(line.Distance(point), point.Length(), 1e-3);
+    EXPECT_DOUBLE_EQ(line.Distance(point), point.Length());
   }
 
   // Points projected beyond the line's ends
   {
     math::Vector3d point(2, 2, 3);
-    EXPECT_NEAR(line.Distance(point), point.Distance(pointA), 1e-3);
+    EXPECT_DOUBLE_EQ(line.Distance(point), point.Distance(pointA));
   }
   {
     math::Vector3d point(-5, -3, -8);
-    EXPECT_NEAR(line.Distance(point), point.Distance(pointB), 1e-3);
+    EXPECT_DOUBLE_EQ(line.Distance(point), point.Distance(pointB));
   }
 }
 
