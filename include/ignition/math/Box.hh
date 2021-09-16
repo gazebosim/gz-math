@@ -138,7 +138,7 @@ namespace ignition
 
       /// \brief Center of volume below the plane. This is useful when
       /// calculating where the buoyancy should be applied.
-      /// \param[in] _plane The plane which slices the sphere.
+      /// \param[in] _plane The plane which slices the box.
       public: std::optional<Vector3<Precision>>
         CenterOfVolumeBelow(const Plane<Precision> &_plane) const;
 
