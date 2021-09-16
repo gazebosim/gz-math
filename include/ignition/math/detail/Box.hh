@@ -265,7 +265,7 @@ std::optional<Vector3<T>>
   if(verticesBelow.size() == 0)
     return std::nullopt;
 
-  auto intersections = GetIntersections(_plane);
+  auto intersections = Intersections(_plane);
   verticesBelow.insert(verticesBelow.end(),
     intersections.begin(), intersections.end());
 
