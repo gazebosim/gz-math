@@ -119,13 +119,13 @@ TEST(BoxTest, Intersects)
   {
     math::Boxd box(2.0, 2.0, 2.0);
     math::Planed plane(math::Vector3d(0.0, 0.0, 1.0), -5.0);
-    EXPECT_EQ(box.Intersections(plane).size(), 0);
+    EXPECT_EQ(box.Intersections(plane).size(), 0UL);
   }
 
   {
     math::Boxd box(2.0, 2.0, 2.0);
     math::Planed plane(math::Vector3d(0.0, 0.0, 1.0), 0);
-    EXPECT_EQ(box.Intersections(plane).size(), 4);
+    EXPECT_EQ(box.Intersections(plane).size(), 4UL);
   }
 }
 
