@@ -89,17 +89,6 @@ TEST(PlaneTest, Plane)
     EXPECT_TRUE(plane.Normal() == Vector3d(0, 1, 0));
     EXPECT_TRUE(plane.Size() == Vector2d(4, 4));
   }
-
-  {
-    auto plane = Planed(Vector3d(0, 1, 0), Vector2d(4, 4), 5.0);
-    auto point = plane.GetPointOnPlane(9, 5);
-    EXPECT_NEAR(plane.Normal().Dot(point), plane.Offset(), 1e-3);
-  }
-  {
-    auto plane = Planed(Vector3d(0, 0, 1), Vector2d(4, 4), 5.0);
-    auto point = plane.GetPointOnPlane(9, 7);
-    EXPECT_NEAR(plane.Normal().Dot(point), plane.Offset(), 1e-3);
-  }
 }
 
 /////////////////////////////////////////////////
