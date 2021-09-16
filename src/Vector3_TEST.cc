@@ -422,6 +422,18 @@ TEST(Vector3dTest, Multiply)
 }
 
 /////////////////////////////////////////////////
+TEST(Vector3dTest, Projection)
+{
+  math::Vector3d v1(0, 0, 2);
+  math::Vector3d v2(0, 1, 0);
+  math::Vector3d v3(2, 3, 2);
+
+  EXPECT_NEAR(v1.Project(v3), 2, 1e-15);
+  EXPECT_NEAR(v2.Project(v3), 3, 1e-15);
+  EXPECT_NEAR(v1.Project(v2), 0, 1e-15);
+}
+
+/////////////////////////////////////////////////
 TEST(Vector3dTest, NotEqual)
 {
   math::Vector3d vec1(0.1, 0.2, 0.3);
