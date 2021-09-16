@@ -110,7 +110,7 @@ if (PYTHONLIBS_FOUND)
 
     foreach (test ${python_tests})
       add_test(NAME ${test}.py COMMAND
-        python3 ${CMAKE_SOURCE_DIR}/src/python/${test}.py)
+        "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/src/python/${test}.py")
 
       set(_env_vars)
       list(APPEND _env_vars "PYTHONPATH=${FAKE_INSTALL_PREFIX}/lib/python/")
