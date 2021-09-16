@@ -113,6 +113,11 @@ class TestMatrix3(unittest.TestCase):
                                              1344, 1650, 1956,
                                              2064, 2550, 3036))
 
+    def test_stream_out(self):
+        matrix = Matrix3d(1, 2, 3, 4, 5, 6, 7, 8, 9)
+
+        self.assertEqual(str(matA), "1 2 3 4 5 6 7 8 9")
+
     def test_vector3_mul(self):
         matrix = Matrix3d(1, 2, 3, 4, 5, 6, 7, 8, 9)
 
