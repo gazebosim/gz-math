@@ -194,5 +194,5 @@ TEST(SphereTest, CenterOfVolumeBelow)
     EXPECT_FALSE(sphere.CenterOfVolumeBelow(_plane));
   }
 
-  // TODO: test more cases
+  // TODO(anyone): test more cases
 }
