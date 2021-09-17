@@ -16,12 +16,9 @@
 */
 %module movingwindowfilter
 %{
-#include "ignition/math/Export.hh"
 #include "ignition/math/MovingWindowFilter.hh"
 #include "ignition/math/Vector3.hh"
 %}
-
-%import "std_vector.i"
 
 namespace ignition
 {
