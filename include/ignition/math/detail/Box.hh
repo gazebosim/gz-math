@@ -333,7 +333,7 @@ std::vector<Vector3<T>> Box<T>::Intersections(
   {
     for(auto &a : axes)
     {
-      auto intersection = _plane.Intersect(v, a);
+      auto intersection = _plane.Intersection(v, a);
       if(intersection.has_value() &&
         intersection->X() >= -this->size.X()/2 &&
         intersection->X() <= this->size.X()/2 &&

@@ -128,7 +128,7 @@ namespace ignition
       /// \param[in] _gradient The gradient of the line.
       /// \return The point of intersection. std::nullopt if the line is
       /// parrallel to the plane.
-      public: std::optional<Vector3<T>> Intersect(
+      public: std::optional<Vector3<T>> Intersection(
         const Vector3<T> &_point,
         const Vector3<T> &_gradient) const
       {
