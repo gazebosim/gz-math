@@ -264,10 +264,10 @@ namespace ignition
         return n.Normalize();
       }
 
-      /// \brief Get Projection of another onto this vector
+      /// \brief Get Length of a Vector Projection of another onto this vector
       /// \param[in] _v the vector
       /// \return the projection
-      public: T Project(const Vector3<T> &_v) const
+      public: T VectorProjectionLength(const Vector3<T> &_v) const
       {
         return this->Dot(_v) / this->Length();
       }

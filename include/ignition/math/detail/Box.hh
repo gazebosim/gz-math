@@ -141,20 +141,24 @@ std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(Plane<T> &_plane,
   if(pointsInPlane.size() < 3)
     return {};
 
+
+  // Choose a basis in the plane of the triangle
   auto axis1 = (pointsInPlane[0] - centroid).Normalize();
   auto axis2 = axis1.Cross(_plane.Normal()).Normalize();
 
+  // Since the polygon is always convex, we can try to create a fan of triangles
+  // by sorting the points by their angle in the plane basis.
   std::sort(pointsInPlane.begin(), pointsInPlane.end(),
     [centroid, axis1, axis2] (const Vector3<T> &a, const Vector3<T> &b)
     {
       auto aDisplacement = a - centroid;
       auto bDisplacement = b - centroid;
 
-      auto aX = axis1.Project(aDisplacement);
-      auto aY = axis2.Project(aDisplacement);
+      auto aX = axis1.VectorProjectionLength(aDisplacement);
+      auto aY = axis2.VectorProjectionLength(aDisplacement);
 
-      auto bX = axis1.Project(bDisplacement);
-      auto bY = axis2.Project(bDisplacement);
+      auto bX = axis1.VectorProjectionLength(bDisplacement);
+      auto bY = axis2.VectorProjectionLength(bDisplacement);
 
       return atan2(aY, aX) < atan2(bY, bX);
     });
