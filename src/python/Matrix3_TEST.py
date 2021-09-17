@@ -94,24 +94,29 @@ class TestMatrix3(unittest.TestCase):
         matA = Matrix3d(1, 2, 3,
                         4, 5, 6,
                         7, 8, 9)
-        matB = Matrix3d(10, 20, 30,
-                        40, 50, 60,
-                        70, 80, 90)
+        matB = Matrix3d(11, 21, 31,
+                        41, 51, 61,
+                        71, 81, 91)
+
+        mat = matA * matB
+        self.assertAlmostEqual(mat, Matrix3d(306, 366, 426,
+                                             675, 825, 975,
+                                             1044, 1284, 1524))
 
         mat = matB * matA
-        self.assertAlmostEqual(mat, Matrix3d(300, 360, 420,
-                                             660, 810, 960,
-                                             1020, 1260, 1500))
-
-        mat = matB * matA
-        self.assertAlmostEqual(mat, Matrix3d(300, 360, 420,
-                                             660, 810, 960,
-                                             1020, 1260, 1500))
+        self.assertAlmostEqual(mat, Matrix3d(312, 375, 438,
+                                             672, 825, 978,
+                                             1032, 1275, 1518))
 
         mat = mat * 2.0
-        self.assertAlmostEqual(mat, Matrix3d(600, 720, 840,
-                                             1320, 1620, 1920,
-                                             2040, 2520, 3000))
+        self.assertAlmostEqual(mat, Matrix3d(624, 750, 876,
+                                             1344, 1650, 1956,
+                                             2064, 2550, 3036))
+
+    def test_stream_out(self):
+        matrix = Matrix3d(1, 2, 3, 4, 5, 6, 7, 8, 9)
+
+        self.assertEqual(str(matrix), "1 2 3 4 5 6 7 8 9")
 
     def test_vector3_mul(self):
         matrix = Matrix3d(1, 2, 3, 4, 5, 6, 7, 8, 9)
