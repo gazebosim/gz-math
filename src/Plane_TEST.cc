@@ -155,7 +155,7 @@ TEST(PlaneTest, SideAxisAlignedBox)
 TEST(PlaneTest, Intersection)
 {
   Planed plane(Vector3d(0.5, 0, 1), 1);
-  auto intersect = plane.Intersect(Vector3d(0, 0, 0), Vector3d(1, 0, 1));
+  auto intersect = plane.Intersection(Vector3d(0, 0, 0), Vector3d(1, 0, 1));
   EXPECT_TRUE(intersect.has_value());
   EXPECT_NEAR(intersect->Dot(plane.Normal()), plane.Offset(), 1e-6);
 }
