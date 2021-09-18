@@ -70,8 +70,8 @@ namespace math
     class OnePoleVector3
     {
         %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
-         public: virtual const Vector3<double> &Value() const;
-         public: const Vector3<double>& Process(const Vector3<double> &_x);
+        public: virtual const Vector3<double> &Value() const;
+        public: const Vector3<double>& Process(const Vector3<double> &_x);
         public: OnePoleVector3();
         public: OnePoleVector3(double _fc, double _fs)
             : OnePole<Vector3<double>>(_fc, _fs);
