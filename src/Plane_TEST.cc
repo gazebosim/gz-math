@@ -180,11 +180,11 @@ TEST(PlaneTest, Intersection)
   {
     Planed planeBounded(Vector3d(0, 0, 1), Vector2d(0.5, 0.5), 0);
     auto intersect1 =
-      planeBounded.Intersection(Vector3d(0,0,0), Vector3d(0,0,1));
+      planeBounded.Intersection(Vector3d(0, 0, 0), Vector3d(0, 0, 1));
     EXPECT_TRUE(intersect1.has_value());
     EXPECT_EQ(intersect1.value(), Vector3d(0, 0, 0));
     auto intersect2 =
-      planeBounded.Intersection(Vector3d(20,20,0), Vector3d(0,0,1));
+      planeBounded.Intersection(Vector3d(20, 20, 0), Vector3d(0, 0, 1));
     EXPECT_FALSE(intersect2.has_value());
   }
 }

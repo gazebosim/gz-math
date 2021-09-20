@@ -25,8 +25,6 @@
 #include <ignition/math/Quaternion.hh>
 #include <optional>
 
-#include <iostream>
-
 namespace ignition
 {
   namespace math
@@ -145,9 +143,12 @@ namespace ignition
         auto param = constant / this->Normal().Dot(_gradient);
         auto intersection = _point + _gradient*param;
 
-        if(this->Size() == Vector2<T>(0,0))
+        if(this->Size() == Vector2<T>(0, 0))
           return intersection;
 
+        // Check if the point is within the size bounds
+        // To do this we create a Quaternion using Angle, Axis constructor and
+        // rotate the Y and X axis the same amount as the normal.
         auto dotProduct = Vector3<T>::UnitZ.Dot(this->Normal());
         auto angle = acos(dotProduct / this->Normal().Length());
         auto axis = Vector3<T>::UnitZ.Cross(this->Normal().Normalized());
@@ -159,7 +160,6 @@ namespace ignition
         auto xBasis = rotatedXAxis.VectorProjectionLength(intersection);
         auto yBasis = rotatedYAxis.VectorProjectionLength(intersection);
 
-        std::cout << "Basis " << xBasis << ", " << yBasis << "\n";
         if(fabs(xBasis) < this->Size().X() / 2
         && fabs(yBasis) < this->Size().Y() / 2)
         {
