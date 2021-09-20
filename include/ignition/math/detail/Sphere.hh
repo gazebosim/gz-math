@@ -139,14 +139,14 @@ std::optional<Vector3<T>>
   }
 
   // Get the height of the spherical cap
-  auto h = r + dist;
+  auto h = r - dist;
 
   // Formula for geometric centorid:
   // https://mathworld.wolfram.com/SphericalCap.html
   auto numerator = 2 * r - h;
 
   auto z = 3 * numerator * numerator / (4 * (3 * r - h));
-  return z * _plane.Normal().Normalized();
+  return - z * _plane.Normal().Normalized();
 }
 
 //////////////////////////////////////////////////

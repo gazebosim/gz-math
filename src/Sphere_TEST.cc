@@ -197,15 +197,56 @@ TEST(SphereTest, CenterOfVolumeBelow)
   }
 
   {
+    // Halfway point is a good spot to test. Center of Volume for a hemisphere 
+    // is 3/8 its radius. In this case the point should fall below the z-plane
+    math::Planed _plane(math::Vector3d{0, 1, 0}, math::Vector2d(0, 0), 0);
+    EXPECT_EQ(
+      Vector3d(0, -0.75, 0), sphere.CenterOfVolumeBelow(_plane).value());
+  }
+
+  {
+    // Halfway point is a good spot to test. Center of Volume for a hemisphere 
+    // is 3/8 its radius. In this case the point should fall below the z-plane
+    math::Planed _plane(math::Vector3d{0, -1, 0}, math::Vector2d(0, 0), 0);
+    EXPECT_EQ(
+      Vector3d(0, 0.75, 0), sphere.CenterOfVolumeBelow(_plane).value());
+  }
+
+    {
     // Handcalculated value.
+    // Plane at y = 0.8 pointing upwards
+    // Cap height is 2.8
+    // Centroid should be at 0.3375. However, keep in mind this assumes an
+    // inverted cap.
+    // Center of volume below should be at -0.3375
     math::Planed _plane(math::Vector3d{0, 1, 0}, math::Vector2d(0, 0), 0.4 * r);
+    EXPECT_EQ(
+      Vector3d(0, -0.3375, 0), sphere.CenterOfVolumeBelow(_plane).value());
+  }
+
+  {
+    // Handcalculated value.
+    math::Planed _plane(math::Vector3d{0, 1, 0},
+      math::Vector2d(0, 0), -0.4 * r);
+
+    EXPECT_EQ(
+      Vector3d(0, -1.225, 0), sphere.CenterOfVolumeBelow(_plane).value());
+  }
+
+  {
+    // Handcalculated value.
+    math::Planed _plane(math::Vector3d{0, -1, 0},
+      math::Vector2d(0, 0), -0.4 * r);
+
     EXPECT_EQ(
       Vector3d(0, 0.3375, 0), sphere.CenterOfVolumeBelow(_plane).value());
   }
 
   {
     // Handcalculated value.
-    math::Planed _plane(math::Vector3d{0, -1, 0}, math::Vector2d(0, 0), -0.4 * r);
+    math::Planed _plane(math::Vector3d{0, -1, 0},
+      math::Vector2d(0, 0), 0.4 * r);
+
     EXPECT_EQ(
       Vector3d(0, 1.225, 0), sphere.CenterOfVolumeBelow(_plane).value());
   }
@@ -213,10 +254,12 @@ TEST(SphereTest, CenterOfVolumeBelow)
   {
     // Weighted sums of the center of volume results in (0,0,0).
     math::Planed _plane1(math::Vector3d{0, 0, 1}, -0.5);
+    // Flip plane1 axis
     math::Planed _plane2(math::Vector3d{0, 0, -1}, -0.5);
     EXPECT_EQ(
       sphere.CenterOfVolumeBelow(_plane1).value() * sphere.VolumeBelow(_plane1)
-      + sphere.CenterOfVolumeBelow(_plane2).value() * sphere.VolumeBelow(_plane2),
+      + sphere.CenterOfVolumeBelow(_plane2).value() 
+        * sphere.VolumeBelow(_plane2),
       math::Vector3d(0, 0, 0)
     );
   }
