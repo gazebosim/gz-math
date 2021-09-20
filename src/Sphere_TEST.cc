@@ -198,7 +198,7 @@ TEST(SphereTest, CenterOfVolumeBelow)
 
   {
     // Halfway point is a good spot to test. Center of Volume for a hemisphere
-    // is 3/8 its radius. In this case the point should fall below the z-plane
+    // is 3/8 its radius. In this case the point should fall below the y-plane
     math::Planed _plane(math::Vector3d{0, 1, 0}, math::Vector2d(0, 0), 0);
     EXPECT_EQ(
       Vector3d(0, -0.75, 0), sphere.CenterOfVolumeBelow(_plane).value());
@@ -206,7 +206,8 @@ TEST(SphereTest, CenterOfVolumeBelow)
 
   {
     // Halfway point is a good spot to test. Center of Volume for a hemisphere
-    // is 3/8 its radius. In this case the point should fall below the z-plane
+    // is 3/8 its radius. In this case the point should fall above the y-plane
+    // thanks to flipped normal
     math::Planed _plane(math::Vector3d{0, -1, 0}, math::Vector2d(0, 0), 0);
     EXPECT_EQ(
       Vector3d(0, 0.75, 0), sphere.CenterOfVolumeBelow(_plane).value());
@@ -239,7 +240,7 @@ TEST(SphereTest, CenterOfVolumeBelow)
       math::Vector2d(0, 0), -0.4 * r);
 
     EXPECT_EQ(
-      Vector3d(0, 0.3375, 0), sphere.CenterOfVolumeBelow(_plane).value());
+      Vector3d(0, 1.225, 0), sphere.CenterOfVolumeBelow(_plane).value());
   }
 
   {
@@ -248,7 +249,7 @@ TEST(SphereTest, CenterOfVolumeBelow)
       math::Vector2d(0, 0), 0.4 * r);
 
     EXPECT_EQ(
-      Vector3d(0, 1.225, 0), sphere.CenterOfVolumeBelow(_plane).value());
+      Vector3d(0, 0.3375, 0), sphere.CenterOfVolumeBelow(_plane).value());
   }
 
   {
