@@ -143,6 +143,8 @@ TEST(SphereTest, VolumeBelow)
     math::Planed _plane(math::Vector3d{0, 0, 1}, math::Vector2d(4, 4), 2*r);
     EXPECT_NEAR(sphere.Volume(), sphere.VolumeBelow(_plane), 1e-3);
   }
+
+  // Fully below (because plane is rotated down)
   {
     math::Planed _plane(math::Vector3d{0, 0, -1}, math::Vector2d(4, 4), 2*r);
     EXPECT_NEAR(sphere.Volume(), sphere.VolumeBelow(_plane), 1e-3);
@@ -163,7 +165,7 @@ TEST(SphereTest, VolumeBelow)
   // Vertical plane
   {
     math::Planed _plane(math::Vector3d{1, 0, 0}, 0);
-    EXPECT_NEAR(0.0, sphere.VolumeBelow(_plane), 1e-3);
+    EXPECT_NEAR(sphere.Volume() / 2, sphere.VolumeBelow(_plane), 1e-3);
   }
 
   // Expectations from https://planetcalc.com/283/
@@ -185,14 +187,37 @@ TEST(SphereTest, CenterOfVolumeBelow)
   math::Sphered sphere(r);
 
   {
-    math::Planed _plane(math::Vector3d{0, 0, 1}, math::Vector2d(4, 4), 2*r);
+    math::Planed _plane(math::Vector3d{0, 0, 1}, math::Vector2d(0, 0), 2 * r);
     EXPECT_EQ(Vector3d(0, 0, 0), sphere.CenterOfVolumeBelow(_plane));
   }
 
   {
-    math::Planed _plane(math::Vector3d{0, 0, 1}, math::Vector2d(4, 4), -2*r);
-    EXPECT_FALSE(sphere.CenterOfVolumeBelow(_plane));
+    math::Planed _plane(math::Vector3d{0, 0, 1}, math::Vector2d(0, 0), -2 * r);
+    EXPECT_FALSE(sphere.CenterOfVolumeBelow(_plane).has_value());
   }
 
-  // TODO: test more cases
+  {
+    // Handcalculated value.
+    math::Planed _plane(math::Vector3d{0, 1, 0}, math::Vector2d(0, 0), 0.4 * r);
+    EXPECT_EQ(
+      Vector3d(0, 0.3375, 0), sphere.CenterOfVolumeBelow(_plane).value());
+  }
+
+  {
+    // Handcalculated value.
+    math::Planed _plane(math::Vector3d{0, -1, 0}, math::Vector2d(0, 0), -0.4 * r);
+    EXPECT_EQ(
+      Vector3d(0, 1.225, 0), sphere.CenterOfVolumeBelow(_plane).value());
+  }
+
+  {
+    // Weighted sums of the center of volume results in (0,0,0).
+    math::Planed _plane1(math::Vector3d{0, 0, 1}, -0.5);
+    math::Planed _plane2(math::Vector3d{0, 0, -1}, -0.5);
+    EXPECT_EQ(
+      sphere.CenterOfVolumeBelow(_plane1).value() * sphere.VolumeBelow(_plane1)
+      + sphere.CenterOfVolumeBelow(_plane2).value() * sphere.VolumeBelow(_plane2),
+      math::Vector3d(0, 0, 0)
+    );
+  }
 }

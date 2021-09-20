@@ -105,18 +105,12 @@ T Sphere<T>::VolumeBelow(const Planed &_plane) const
 
   if (dist < -r)
   {
-    // sphere is completely below plane
+    // sphere is below plane.
     return Volume();
   }
   else if (dist > r)
   {
     // sphere is completely above plane
-    return 0.0;
-  }
-
-  // Vertical plane
-  if (_plane.Normal().Z() < 1e-6)
-  {
     return 0.0;
   }
 
@@ -144,13 +138,15 @@ std::optional<Vector3<T>>
     return std::nullopt;
   }
 
+  // Get the height of the spherical cap
   auto h = r + dist;
 
   // Formula for geometric centorid:
   // https://mathworld.wolfram.com/SphericalCap.html
   auto numerator = 2 * r - h;
 
-  return Vector3<T>{0, 0, 3 * numerator * numerator / (4 * (3 * r - h))};
+  auto z = 3 * numerator * numerator / (4 * (3 * r - h));
+  return z * _plane.Normal().Normalized();
 }
 
 //////////////////////////////////////////////////
