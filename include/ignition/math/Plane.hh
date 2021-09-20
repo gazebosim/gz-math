@@ -22,8 +22,10 @@
 #include <ignition/math/Vector3.hh>
 #include <ignition/math/config.hh>
 #include <ignition/math/Line2.hh>
-#include <ignition/math/Matrix4.hh>
+#include <ignition/math/Quaternion.hh>
 #include <optional>
+
+#include <iostream>
 
 namespace ignition
 {
@@ -142,7 +144,28 @@ namespace ignition
         auto constant = this->Offset() - this->Normal().Dot(_point);
         auto param = constant / this->Normal().Dot(_gradient);
         auto intersection = _point + _gradient*param;
-        return intersection;
+
+        if(this->Size() == Vector2<T>(0,0))
+          return intersection;
+
+        auto dotProduct = Vector3<T>::UnitZ.Dot(this->Normal());
+        auto angle = acos(dotProduct / this->Normal().Length());
+        auto axis = Vector3<T>::UnitZ.Cross(this->Normal().Normalized());
+        Quaternion<T> rotation(axis, angle);
+
+        Vector3<T> rotatedXAxis = rotation * Vector3<T>::UnitX;
+        Vector3<T> rotatedYAxis = rotation * Vector3<T>::UnitY;
+
+        auto xBasis = rotatedXAxis.VectorProjectionLength(intersection);
+        auto yBasis = rotatedYAxis.VectorProjectionLength(intersection);
+
+        std::cout << "Basis " << xBasis << ", " << yBasis << "\n";
+        if(fabs(xBasis) < this->Size().X() / 2
+        && fabs(yBasis) < this->Size().Y() / 2)
+        {
+          return intersection;
+        }
+        return std::nullopt;
       }
 
       /// \brief The side of the plane a point is on.

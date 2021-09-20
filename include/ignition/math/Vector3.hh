@@ -266,7 +266,8 @@ namespace ignition
 
       /// \brief Get Length of a Vector Projection of another onto this vector
       /// \param[in] _v the vector
-      /// \return the projection
+      /// \return the projection. Note: If the length of the current vector is
+      /// zero this method will return a NaN
       public: T VectorProjectionLength(const Vector3<T> &_v) const
       {
         return this->Dot(_v) / this->Length();
