@@ -172,6 +172,22 @@ TEST(BoxTest, CenterOfVolumeBelow)
     EXPECT_TRUE(box.CenterOfVolumeBelow(plane).has_value());
     EXPECT_EQ(box.CenterOfVolumeBelow(plane), math::Vector3d(0, 0, 0));
   }
+
+  {
+    math::Boxd box(2.0, 2.0, 2.0);
+    math::Planed plane(math::Vector3d(0.0, 0.0, 1.0), 0);
+    EXPECT_TRUE(box.CenterOfVolumeBelow(plane).has_value());
+    EXPECT_EQ(box.CenterOfVolumeBelow(plane).value(),
+      math::Vector3d(0, 0, -0.5));
+  }
+
+  {
+    math::Boxd box(2.0, 2.0, 2.0);
+    math::Planed plane(math::Vector3d(0.0, 0.0, -1.0), 0);
+    EXPECT_TRUE(box.CenterOfVolumeBelow(plane).has_value());
+    EXPECT_EQ(box.CenterOfVolumeBelow(plane).value(),
+      math::Vector3d(0, 0, 0.5));
+  }
 }
 
 //////////////////////////////////////////////////

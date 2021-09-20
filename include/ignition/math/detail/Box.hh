@@ -238,7 +238,7 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
 
   return std::fabs(volume)/6;
 }
-
+#include <iostream>
 /////////////////////////////////////////////////
 template<typename T>
 std::optional<Vector3<T>>
@@ -279,7 +279,7 @@ std::optional<Vector3<T>>
     centroid += v;
   }
 
-  return centroid;
+  return centroid / verticesBelow.size();
 }
 /////////////////////////////////////////////////
 template<typename T>
