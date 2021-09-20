@@ -213,7 +213,7 @@ TEST(SphereTest, CenterOfVolumeBelow)
       Vector3d(0, 0.75, 0), sphere.CenterOfVolumeBelow(_plane).value());
   }
 
-    {
+  {
     // Handcalculated value.
     // Plane at y = 0.8 pointing upwards
     // Cap height is 2.8
