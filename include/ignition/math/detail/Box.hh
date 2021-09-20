@@ -279,7 +279,7 @@ std::optional<Vector3<T>>
     centroid += v;
   }
 
-  return centroid / verticesBelow.size();
+  return centroid / static_cast<T>(verticesBelow.size());
 }
 /////////////////////////////////////////////////
 template<typename T>
