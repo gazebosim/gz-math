@@ -156,24 +156,24 @@ TEST(PlaneTest, Intersection)
 {
   Planed plane(Vector3d(0.5, 0, 1), 1);
   {
-    auto intersect = plane.Intersect(Vector3d(0, 0, 0), Vector3d(1, 0, 1));
+    auto intersect = plane.Intersection(Vector3d(0, 0, 0), Vector3d(1, 0, 1));
     EXPECT_TRUE(intersect.has_value());
     EXPECT_NEAR(intersect->Dot(plane.Normal()), plane.Offset(), 1e-6);
   }
 
   plane.Set(Vector3d(1, 0, 0), 2);
   {
-    auto intersect = plane.Intersect(Vector3d(0, 0, 0), Vector3d(1, 0, 0));
+    auto intersect = plane.Intersection(Vector3d(0, 0, 0), Vector3d(1, 0, 0));
     EXPECT_TRUE(intersect.has_value());
     EXPECT_EQ(intersect.value(), Vector3d(2, 0, 0));
   }
   {
-    auto intersect = plane.Intersect(Vector3d(1, 1, 0), Vector3d(-1, -1, 0));
+    auto intersect = plane.Intersection(Vector3d(1, 1, 0), Vector3d(-1, -1, 0));
     EXPECT_TRUE(intersect.has_value());
     EXPECT_EQ(intersect.value(), Vector3d(2, 2, 0));
   }
   {
-    auto intersect = plane.Intersect(Vector3d(0, 0, 0), Vector3d(0, 1, 0));
+    auto intersect = plane.Intersection(Vector3d(0, 0, 0), Vector3d(0, 1, 0));
     EXPECT_FALSE(intersect.has_value());
   }
 }
