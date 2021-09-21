@@ -238,7 +238,7 @@ namespace ignition
         auto ptTo0 = _pt - this->pts[0];
         auto ptTo1 = _pt - this->pts[1];
 
-        // Point is projected beyond pt0
+        // Point is projected beyond pt0 or the line has length 0
         if (ptTo0.Dot(line) <= 0.0)
         {
           return ptTo0.Length();
@@ -251,6 +251,8 @@ namespace ignition
         }
 
         // Distance to point projected onto line
+        // line.Length() will have to be > 0 at this point otherwise it would
+        // return at line 244.
         auto d = ptTo0.Cross(line);
         return d.Length() / line.Length();
       }
