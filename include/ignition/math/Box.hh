@@ -20,8 +20,8 @@
 #include <ignition/math/config.hh>
 #include <ignition/math/MassMatrix3.hh>
 #include <ignition/math/Material.hh>
-#include <ignition/math/Vector3.hh>
 #include <ignition/math/Plane.hh>
+#include <ignition/math/Vector3.hh>
 
 #include <set>
 
