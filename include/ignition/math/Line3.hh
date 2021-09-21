@@ -231,9 +231,8 @@ namespace ignition
 
       /// \brief Calculate shortest distance between line and point
       /// \param[in] _pt Point which we are measuring distance to.
-      /// \param[in] _epsilon Tolerance below which assume this line is a point.
       /// \returns Distance from point to line.
-      public: T Distance(const Vector3<T> &_pt, const T _epsilon = 1e-6)
+      public: T Distance(const Vector3<T> &_pt)
       {
         auto line = this->pts[1] - this->pts[0];
         auto ptTo0 = _pt - this->pts[0];
@@ -253,11 +252,6 @@ namespace ignition
 
         // Distance to point projected onto line
         auto d = ptTo0.Cross(line);
-
-        // If line has length zero assume its a point.
-        if(line.Length() <= _epsilon)
-          return ptTo0.Length();
-
         return d.Length() / line.Length();
       }
 
