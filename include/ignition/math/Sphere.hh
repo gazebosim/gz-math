@@ -94,18 +94,20 @@ namespace ignition
 
       /// \brief Get the volume of sphere below a given plane in m^3.
       /// It is assumed that the center of the sphere is on the origin
-      /// The plane's orientation is not considered.
-      /// \param[in] _plane The plane which slices this sphere.
+      /// \param[in] _plane The plane which slices this sphere, expressed
+      /// in the sphere's reference frame.
       /// \return Volume below the sphere in m^3.
-      public: Precision VolumeBelow(const Planed &_plane) const;
+      public: Precision VolumeBelow(const Plane<Precision> &_plane) const;
 
       /// \brief Center of volume below the plane. This is useful for example
       /// when calculating where buoyancy should be applied.
-      /// \param[in] _plane The plane which slices the sphere.
+      /// \param[in] _plane The plane which slices this sphere, expressed
+      /// in the sphere's reference frame.
       /// \return The center of volume if there is anything under the plane,
-      /// otherwise return a std::nullopt.
+      /// otherwise return a std::nullopt. Expressed in the sphere's reference
+      /// frame.
       public: std::optional<Vector3<Precision>>
-        CenterOfVolumeBelow(const Planed &_plane) const;
+        CenterOfVolumeBelow(const Plane<Precision> &_plane) const;
 
       /// \brief Compute the sphere's density given a mass value. The
       /// sphere is assumed to be solid with uniform density. This

@@ -23,7 +23,7 @@
 #include <ignition/math/Vector3.hh>
 #include <ignition/math/Plane.hh>
 
-#include <vector>
+#include <set>
 
 namespace ignition
 {
@@ -132,15 +132,26 @@ namespace ignition
       public: Precision Volume() const;
 
       /// \brief Get the volume of the box below a plane.
-      /// \param[in] _plane The plane which cuts the box.
+      /// \param[in] _plane The plane which cuts the box, expressed in the box's
+      /// frame.
       /// \return Volume below the plane in m^3.
       public: Precision VolumeBelow(const Plane<Precision> &_plane) const;
 
       /// \brief Center of volume below the plane. This is useful when
-      /// calculating where the buoyancy should be applied.
-      /// \param[in] _plane The plane which slices the box.
+      /// calculating where buoyancy should be applied, for example.
+      /// \param[in] _plane The plane which cuts the box, expressed in the box's
+      /// frame.
+      /// \return Center of volume, in box's frame.
       public: std::optional<Vector3<Precision>>
         CenterOfVolumeBelow(const Plane<Precision> &_plane) const;
+
+      /// \brief All the vertices which are on or below the plane.
+      /// \param[in] _plane The plane which cuts the box, expressed in the box's
+      /// frame.
+      /// \return Box vertices which are below the plane, expressed in the box's
+      /// frame.
+      public: std::set<Vector3<Precision>>
+        VerticesBelow(const Plane<Precision> &_plane) const;
 
       /// \brief Compute the box's density given a mass value. The
       /// box is assumed to be solid with uniform density. This
@@ -175,11 +186,12 @@ namespace ignition
       /// could be due to an invalid size (<=0) or density (<=0).
       public: bool MassMatrix(MassMatrix3<Precision> &_massMat) const;
 
-      /// \brief Get intersection between a plane and the box.
+      /// \brief Get intersection between a plane and the box's edges.
+      /// Edges contained on the plane are ignored.
       /// \param[in] _plane The plane against which we are testing intersection.
-      /// \returns a list of points along the edges of the box where the
+      /// \returns A list of points along the edges of the box where the
       /// intersection occurs.
-      public: std::vector<Vector3<Precision>> Intersections(
+      public: std::set<Vector3<Precision>> Intersections(
         const Plane<Precision> &_plane) const;
 
       /// \brief Size of the box.
