@@ -157,8 +157,8 @@ namespace ignition
         Vector3<T> rotatedXAxis = rotation * Vector3<T>::UnitX;
         Vector3<T> rotatedYAxis = rotation * Vector3<T>::UnitY;
 
-        auto xBasis = rotatedXAxis.VectorProjectionLength(intersection);
-        auto yBasis = rotatedYAxis.VectorProjectionLength(intersection);
+        auto xBasis = rotatedXAxis.Dot(intersection);
+        auto yBasis = rotatedYAxis.Dot(intersection);
 
         if (std::abs(xBasis) < this->Size().X() / 2 &&
             std::abs(yBasis) < this->Size().Y() / 2)

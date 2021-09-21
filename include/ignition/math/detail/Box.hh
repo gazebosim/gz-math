@@ -128,6 +128,7 @@ std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(
 {
   std::vector<std::pair<Triangle3<T>, T>> triangles;
   std::vector<Vector3<T>> pointsInPlane;
+
   Vector3<T> centroid;
   for (const auto &pt : _vertices)
   {
@@ -154,11 +155,14 @@ std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(
       auto aDisplacement = _a - centroid;
       auto bDisplacement = _b - centroid;
 
-      auto aX = axis1.VectorProjectionLength(aDisplacement);
-      auto aY = axis2.VectorProjectionLength(aDisplacement);
+      // project line onto the new basis vectors
+      // The axis length will never be zero as we have three different points
+      // and the centroid will be different.
+      auto aX = axis1.Dot(aDisplacement) / axis1.Length();
+      auto aY = axis2.Dot(aDisplacement) / axis2.Length();
 
-      auto bX = axis1.VectorProjectionLength(bDisplacement);
-      auto bY = axis2.VectorProjectionLength(bDisplacement);
+      auto bX = axis1.Dot(bDisplacement) / axis1.Length();
+      auto bY = axis2.Dot(bDisplacement) / axis2.Length();
 
       return atan2(aY, aX) < atan2(bY, bX);
     });
@@ -178,7 +182,7 @@ template<typename T>
 T Box<T>::VolumeBelow(const Plane<T> &_plane) const
 {
   auto verticesBelow = this->VerticesBelow(_plane);
-  if (verticesBelow.size() == 0)
+  if (verticesBelow.empty())
     return 0;
 
   auto intersections = this->Intersections(_plane);
@@ -225,7 +229,7 @@ std::optional<Vector3<T>>
   Box<T>::CenterOfVolumeBelow(const Plane<T> &_plane) const
 {
   auto verticesBelow = this->VerticesBelow(_plane);
-  if (verticesBelow.size() == 0)
+  if (verticesBelow.empty())
     return std::nullopt;
 
   auto intersections = this->Intersections(_plane);
@@ -314,7 +318,7 @@ IntersectionPoints<T> Box<T>::Intersections(
     Vector3<T>{-this->size.X()/2, this->size.Y()/2, this->size.Z()/2}
   };
 
-  // Axises
+  // Axes
   std::vector<Vector3<T>> axes
   {
     Vector3<T>{1, 0, 0},
