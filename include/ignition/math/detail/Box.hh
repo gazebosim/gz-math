@@ -20,6 +20,7 @@
 #include "ignition/math/Triangle3.hh"
 
 #include <algorithm>
+#include <set>
 #include <utility>
 #include <vector>
 
@@ -211,7 +212,7 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
   for (const auto &triangle : triangles)
   {
     auto crossProduct = (triangle.first[2]).Cross(triangle.first[1]);
-    auto meshVolume = std::fabs(crossProduct.Dot(triangle.first[0]));
+    auto meshVolume = std::abs(crossProduct.Dot(triangle.first[0]));
     volume += triangle.second * meshVolume;
   }
 

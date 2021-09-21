@@ -160,8 +160,8 @@ namespace ignition
         auto xBasis = rotatedXAxis.VectorProjectionLength(intersection);
         auto yBasis = rotatedYAxis.VectorProjectionLength(intersection);
 
-        if (fabs(xBasis) < this->Size().X() / 2 &&
-            fabs(yBasis) < this->Size().Y() / 2)
+        if (std::abs(xBasis) < this->Size().X() / 2 &&
+            std::abs(yBasis) < this->Size().Y() / 2)
         {
           return intersection;
         }
