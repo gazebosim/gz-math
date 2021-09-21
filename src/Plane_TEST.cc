@@ -172,11 +172,34 @@ TEST(PlaneTest, Intersection)
     EXPECT_TRUE(intersect.has_value());
     EXPECT_EQ(intersect.value(), Vector3d(2, 2, 0));
   }
+  // Lines on plane
+  {
+    auto intersect = plane.Intersection(Vector3d(2, 0, 0), Vector3d(0, 1, 0));
+    EXPECT_FALSE(intersect.has_value());
+  }
+  {
+    auto intersect = plane.Intersection(Vector3d(2, 0, 0), Vector3d(0, 0, 1));
+    EXPECT_FALSE(intersect.has_value());
+  }
+  {
+    auto intersect = plane.Intersection(Vector3d(2, 0, 0), Vector3d(0, 1, 1));
+    EXPECT_FALSE(intersect.has_value());
+  }
+  // Lines parallel to plane
   {
     auto intersect = plane.Intersection(Vector3d(0, 0, 0), Vector3d(0, 1, 0));
     EXPECT_FALSE(intersect.has_value());
   }
+  {
+    auto intersect = plane.Intersection(Vector3d(0, 0, 0), Vector3d(0, 0, 1));
+    EXPECT_FALSE(intersect.has_value());
+  }
+  {
+    auto intersect = plane.Intersection(Vector3d(0, 0, 0), Vector3d(0, 1, 1));
+    EXPECT_FALSE(intersect.has_value());
+  }
 
+  // Bounded plane
   {
     Planed planeBounded(Vector3d(0, 0, 1), Vector2d(0.5, 0.5), 0);
     auto intersect1 =

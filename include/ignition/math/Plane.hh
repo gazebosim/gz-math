@@ -129,13 +129,13 @@ namespace ignition
       /// \param[in] _tolerance The tolerance for determining a line is
       /// parallel to the plane. Optional, default=10^-16
       /// \return The point of intersection. std::nullopt if the line is
-      /// parrallel to the plane.
+      /// parallel to the plane (including lines on the plane).
       public: std::optional<Vector3<T>> Intersection(
         const Vector3<T> &_point,
         const Vector3<T> &_gradient,
         const double &_tolerance = 1e-6) const
       {
-        if(abs(this->Normal().Dot(_gradient)) < _tolerance)
+        if (std::abs(this->Normal().Dot(_gradient)) < _tolerance)
         {
           return std::nullopt;
         }
@@ -143,7 +143,7 @@ namespace ignition
         auto param = constant / this->Normal().Dot(_gradient);
         auto intersection = _point + _gradient*param;
 
-        if(this->Size() == Vector2<T>(0, 0))
+        if (this->Size() == Vector2<T>(0, 0))
           return intersection;
 
         // Check if the point is within the size bounds
@@ -160,8 +160,8 @@ namespace ignition
         auto xBasis = rotatedXAxis.VectorProjectionLength(intersection);
         auto yBasis = rotatedYAxis.VectorProjectionLength(intersection);
 
-        if(fabs(xBasis) < this->Size().X() / 2
-        && fabs(yBasis) < this->Size().Y() / 2)
+        if (fabs(xBasis) < this->Size().X() / 2 &&
+            fabs(yBasis) < this->Size().Y() / 2)
         {
           return intersection;
         }

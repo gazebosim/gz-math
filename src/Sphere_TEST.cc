@@ -186,11 +186,13 @@ TEST(SphereTest, CenterOfVolumeBelow)
   double r = 2;
   math::Sphered sphere(r);
 
+  // Entire sphere below plane
   {
     math::Planed _plane(math::Vector3d{0, 0, 1}, math::Vector2d(0, 0), 2 * r);
     EXPECT_EQ(Vector3d(0, 0, 0), sphere.CenterOfVolumeBelow(_plane));
   }
 
+  // Entire sphere above plane
   {
     math::Planed _plane(math::Vector3d{0, 0, 1}, math::Vector2d(0, 0), -2 * r);
     EXPECT_FALSE(sphere.CenterOfVolumeBelow(_plane).has_value());

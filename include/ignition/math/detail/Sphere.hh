@@ -97,7 +97,7 @@ T Sphere<T>::Volume() const
 
 //////////////////////////////////////////////////
 template<typename T>
-T Sphere<T>::VolumeBelow(const Planed &_plane) const
+T Sphere<T>::VolumeBelow(const Plane<T> &_plane) const
 {
   auto r = this->radius;
   // get nearest point to center on plane
@@ -121,18 +121,18 @@ T Sphere<T>::VolumeBelow(const Planed &_plane) const
 //////////////////////////////////////////////////
 template<typename T>
 std::optional<Vector3<T>>
- Sphere<T>::CenterOfVolumeBelow(const Planed &_plane) const
+ Sphere<T>::CenterOfVolumeBelow(const Plane<T> &_plane) const
 {
   auto r = this->radius;
   // get nearest point to center on plane
   auto dist = _plane.Distance(Vector3d(0, 0, 0));
 
-  if(dist < -r)
+  if (dist < -r)
   {
     // sphere is completely below plane
     return Vector3<T>{0, 0, 0};
   }
-  else if(dist > r)
+  else if (dist > r)
   {
     // sphere is completely above plane
     return std::nullopt;

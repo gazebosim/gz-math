@@ -122,15 +122,15 @@ T Box<T>::Volume() const
 
 //////////////////////////////////////////////////
 template <typename T>
-std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(Plane<T> &_plane,
-  std::vector<Vector3<T>> &_vertices)
+std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(
+    const Plane<T> &_plane, std::set<Vector3<T>> &_vertices)
 {
   std::vector<std::pair<Triangle3<T>, T>> triangles;
   std::vector<Vector3<T>> pointsInPlane;
   Vector3<T> centroid;
-  for(auto &pt : _vertices)
+  for (const auto &pt : _vertices)
   {
-    if(_plane.Side(pt) == Plane<T>::NO_SIDE)
+    if (_plane.Side(pt) == Plane<T>::NO_SIDE)
     {
       pointsInPlane.push_back(pt);
       centroid += pt;
@@ -138,9 +138,8 @@ std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(Plane<T> &_plane,
   }
   centroid /= T(pointsInPlane.size());
 
-  if(pointsInPlane.size() < 3)
+  if (pointsInPlane.size() < 3)
     return {};
-
 
   // Choose a basis in the plane of the triangle
   auto axis1 = (pointsInPlane[0] - centroid).Normalize();
@@ -149,10 +148,10 @@ std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(Plane<T> &_plane,
   // Since the polygon is always convex, we can try to create a fan of triangles
   // by sorting the points by their angle in the plane basis.
   std::sort(pointsInPlane.begin(), pointsInPlane.end(),
-    [centroid, axis1, axis2] (const Vector3<T> &a, const Vector3<T> &b)
+    [centroid, axis1, axis2] (const Vector3<T> &_a, const Vector3<T> &_b)
     {
-      auto aDisplacement = a - centroid;
-      auto bDisplacement = b - centroid;
+      auto aDisplacement = _a - centroid;
+      auto bDisplacement = _b - centroid;
 
       auto aX = axis1.VectorProjectionLength(aDisplacement);
       auto aY = axis2.VectorProjectionLength(aDisplacement);
@@ -162,7 +161,7 @@ std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(Plane<T> &_plane,
 
       return atan2(aY, aX) < atan2(bY, bX);
     });
-  for(std::size_t i = 0; i < pointsInPlane.size(); ++i)
+  for (std::size_t i = 0; i < pointsInPlane.size(); ++i)
   {
     triangles.emplace_back(
       Triangle3<T>(pointsInPlane[i],
@@ -172,43 +171,23 @@ std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(Plane<T> &_plane,
 
   return triangles;
 }
+
 /////////////////////////////////////////////////
 template<typename T>
 T Box<T>::VolumeBelow(const Plane<T> &_plane) const
 {
-  // Get coordinates of all vertice of box
-  // TODO(arjo): Cache this for performance
-  std::vector<Vector3<T> > vertices {
-    Vector3<T>{this->size.X()/2, this->size.Y()/2, this->size.Z()/2},
-    Vector3<T>{-this->size.X()/2, this->size.Y()/2, this->size.Z()/2},
-    Vector3<T>{this->size.X()/2, -this->size.Y()/2, this->size.Z()/2},
-    Vector3<T>{-this->size.X()/2, -this->size.Y()/2, this->size.Z()/2},
-    Vector3<T>{this->size.X()/2, this->size.Y()/2, -this->size.Z()/2},
-    Vector3<T>{-this->size.X()/2, this->size.Y()/2, -this->size.Z()/2},
-    Vector3<T>{this->size.X()/2, -this->size.Y()/2, -this->size.Z()/2},
-    Vector3<T>{-this->size.X()/2, -this->size.Y()/2, -this->size.Z()/2}
-  };
-
-  std::vector<Vector3<T> >  verticesBelow;
-  for(auto &v : vertices)
-  {
-    if(_plane.Distance(v) < 0)
-    {
-      verticesBelow.push_back(v);
-    }
-  }
-
-  if(verticesBelow.size() == 0)
+  auto verticesBelow = this->VerticesBelow(_plane);
+  if (verticesBelow.size() == 0)
     return 0;
 
-  auto intersections = Intersections(_plane);
-  verticesBelow.insert(verticesBelow.end(),
-    intersections.begin(), intersections.end());
+  auto intersections = this->Intersections(_plane);
+  verticesBelow.merge(intersections);
 
   // Fit six planes to the vertices in the shape.
   std::vector<std::pair<Triangle3<T>, T>> triangles;
 
-  std::vector<Plane<T>> planes {
+  std::vector<Plane<T>> planes
+  {
     Plane<T>{Vector3<T>{0, 0, 1}, this->Size().Z()/2},
     Plane<T>{Vector3<T>{0, 0, -1}, this->Size().Z()/2},
     Plane<T>{Vector3<T>{1, 0, 0}, this->Size().X()/2},
@@ -218,35 +197,56 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
     _plane
   };
 
-  for(auto &p : planes)
+  for (const auto &p : planes)
   {
-    auto new_triangles = TrianglesInPlane(p, verticesBelow);
+    auto newTriangles = TrianglesInPlane(p, verticesBelow);
     triangles.insert(triangles.end(),
-      new_triangles.begin(),
-      new_triangles.end());
+      newTriangles.begin(),
+      newTriangles.end());
   }
 
   // Calculate the volume of the triangles
   // https://n-e-r-v-o-u-s.com/blog/?p=4415
   T volume = 0;
-  for(auto triangle : triangles)
+  for (const auto &triangle : triangles)
   {
     auto crossProduct = (triangle.first[2]).Cross(triangle.first[1]);
     auto meshVolume = std::fabs(crossProduct.Dot(triangle.first[0]));
     volume += triangle.second * meshVolume;
   }
 
-  return std::fabs(volume)/6;
+  return std::abs(volume)/6;
 }
-#include <iostream>
+
 /////////////////////////////////////////////////
 template<typename T>
 std::optional<Vector3<T>>
   Box<T>::CenterOfVolumeBelow(const Plane<T> &_plane) const
 {
+  auto verticesBelow = this->VerticesBelow(_plane);
+  if (verticesBelow.size() == 0)
+    return std::nullopt;
+
+  auto intersections = this->Intersections(_plane);
+  verticesBelow.merge(intersections);
+
+  Vector3<T> centroid;
+  for (const auto &v : verticesBelow)
+  {
+    centroid += v;
+  }
+
+  return centroid / static_cast<T>(verticesBelow.size());
+}
+
+/////////////////////////////////////////////////
+template<typename T>
+std::set<Vector3<T>> Box<T>::VerticesBelow(const Plane<T> &_plane) const
+{
   // Get coordinates of all vertice of box
   // TODO(arjo): Cache this for performance
-  std::vector<Vector3<T> > vertices {
+  std::set<Vector3<T> > vertices
+  {
     Vector3<T>{this->size.X()/2, this->size.Y()/2, this->size.Z()/2},
     Vector3<T>{-this->size.X()/2, this->size.Y()/2, this->size.Z()/2},
     Vector3<T>{this->size.X()/2, -this->size.Y()/2, this->size.Z()/2},
@@ -257,30 +257,18 @@ std::optional<Vector3<T>>
     Vector3<T>{-this->size.X()/2, -this->size.Y()/2, -this->size.Z()/2}
   };
 
-  std::vector<Vector3<T> >  verticesBelow;
-  for(auto &v : vertices)
+  std::set<Vector3<T> >  verticesBelow;
+  for (const auto &v : vertices)
   {
-    if(_plane.Distance(v) < 0)
+    if (_plane.Distance(v) <= 0)
     {
-      verticesBelow.push_back(v);
+      verticesBelow.insert(v);
     }
   }
 
-  if(verticesBelow.size() == 0)
-    return std::nullopt;
-
-  auto intersections = Intersections(_plane);
-  verticesBelow.insert(verticesBelow.end(),
-    intersections.begin(), intersections.end());
-
-  Vector3<T> centroid;
-  for(auto &v : verticesBelow)
-  {
-    centroid += v;
-  }
-
-  return centroid / static_cast<T>(verticesBelow.size());
+  return verticesBelow;
 }
+
 /////////////////////////////////////////////////
 template<typename T>
 T Box<T>::DensityFromMass(const T _mass) const
@@ -311,13 +299,14 @@ bool Box<T>::MassMatrix(MassMatrix3<T> &_massMat) const
 
 //////////////////////////////////////////////////
 template<typename T>
-std::vector<Vector3<T>> Box<T>::Intersections(
+std::set<Vector3<T>> Box<T>::Intersections(
         const Plane<T> &_plane) const
 {
-  std::vector<Vector3<T>> intersections;
-  // These are vertice via which we can describe edges. We only need 4 such
+  std::set<Vector3<T>> intersections;
+  // These are vertices via which we can describe edges. We only need 4 such
   // vertices
-  std::vector<Vector3<T> > vertices {
+  std::vector<Vector3<T> > vertices
+  {
     Vector3<T>{-this->size.X()/2, -this->size.Y()/2, -this->size.Z()/2},
     Vector3<T>{this->size.X()/2, this->size.Y()/2, -this->size.Z()/2},
     Vector3<T>{this->size.X()/2, -this->size.Y()/2, this->size.Z()/2},
@@ -325,7 +314,8 @@ std::vector<Vector3<T>> Box<T>::Intersections(
   };
 
   // Axises
-  std::vector<Vector3<T>> axes {
+  std::vector<Vector3<T>> axes
+  {
     Vector3<T>{1, 0, 0},
     Vector3<T>{0, 1, 0},
     Vector3<T>{0, 0, 1}
@@ -333,20 +323,20 @@ std::vector<Vector3<T>> Box<T>::Intersections(
 
   // There are 12 edges. However, we just need 4 points to describe the
   // twelve edges.
-  for(auto &v : vertices)
+  for (auto &v : vertices)
   {
-    for(auto &a : axes)
+    for (auto &a : axes)
     {
       auto intersection = _plane.Intersection(v, a);
-      if(intersection.has_value() &&
-        intersection->X() >= -this->size.X()/2 &&
-        intersection->X() <= this->size.X()/2 &&
-        intersection->Y() >= -this->size.Y()/2 &&
-        intersection->Y() <= this->size.Y()/2 &&
-        intersection->Z() >= -this->size.Z()/2 &&
-        intersection->Z() <= this->size.Z()/2)
+      if (intersection.has_value() &&
+          intersection->X() >= -this->size.X()/2 &&
+          intersection->X() <= this->size.X()/2 &&
+          intersection->Y() >= -this->size.Y()/2 &&
+          intersection->Y() <= this->size.Y()/2 &&
+          intersection->Z() >= -this->size.Z()/2 &&
+          intersection->Z() <= this->size.Z()/2)
       {
-        intersections.push_back(intersection.value());
+        intersections.insert(intersection.value());
       }
     }
   }
