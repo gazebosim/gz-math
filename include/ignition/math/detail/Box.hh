@@ -122,10 +122,16 @@ T Box<T>::Volume() const
 }
 
 //////////////////////////////////////////////////
+/// \brief Given a *convex* polygon described by the verices in a given plane,
+/// compute the list of triangles which form this polygon. 
+/// \param[in] _plane The plane in which the vertices exist.
+/// \param[in] _vertices The vertices of the polygon.
+/// \return a list of triangles, or and empty vector if _vertices in the _plane
+/// are less than 3.
 template <typename T>
 std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(
     const Plane<T> &_plane, IntersectionPoints<T> &_vertices)
-{
+{ 
   std::vector<std::pair<Triangle3<T>, T>> triangles;
   std::vector<Vector3<T>> pointsInPlane;
 
@@ -188,7 +194,7 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
   auto intersections = this->Intersections(_plane);
   verticesBelow.merge(intersections);
 
-  // Fit six planes to the vertices in the shape.
+  // Reconstruct the cut-box as a triangle mesh by attempting to fit planes.
   std::vector<std::pair<Triangle3<T>, T>> triangles;
 
   std::vector<Plane<T>> planes
@@ -326,8 +332,8 @@ IntersectionPoints<T> Box<T>::Intersections(
     Vector3<T>{0, 0, 1}
   };
 
-  // There are 12 edges. However, we just need 4 points to describe the
-  // twelve edges.
+  // There are 12 edges, which are checked along 3 axes from 4 box corner
+  // points.
   for (auto &v : vertices)
   {
     for (auto &a : axes)
