@@ -126,8 +126,9 @@ T Box<T>::Volume() const
 /// compute the list of triangles which form this polygon.
 /// \param[in] _plane The plane in which the vertices exist.
 /// \param[in] _vertices The vertices of the polygon.
-/// \return A vector of triangles and their centroids, or an empty vector
-/// if _vertices in the _plane are less than 3.
+/// \return A vector of triangles and their sign, or an empty vector
+/// if _vertices in the _plane are less than 3. The sign will be +1 if the
+/// triangle is outward facing, -1 otherwise.
 template <typename T>
 std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(
     const Plane<T> &_plane, IntersectionPoints<T> &_vertices)
