@@ -130,11 +130,10 @@ TEST(BoxTest, Intersections)
 
     auto intersections = box.Intersections(plane);
     ASSERT_EQ(4UL, intersections.size());
-    auto it = intersections.begin();
-    EXPECT_EQ(math::Vector3d(-1.0, -1.0, 0.0), *it++);
-    EXPECT_EQ(math::Vector3d(-1.0, 1.0, 0.0), *it++);
-    EXPECT_EQ(math::Vector3d(1.0, -1.0, 0.0), *it++);
-    EXPECT_EQ(math::Vector3d(1.0, 1.0, 0.0), *it++);
+    EXPECT_EQ(intersections.count(math::Vector3d(-1.0, -1.0, 0.0)), 1UL);
+    EXPECT_EQ(intersections.count(math::Vector3d(-1.0, 1.0, 0.0)), 1UL);
+    EXPECT_EQ(intersections.count(math::Vector3d(1.0, -1.0, 0.0)), 1UL);
+    EXPECT_EQ(intersections.count(math::Vector3d(1.0, 1.0, 0.0)), 1UL);
   }
 
   // Plane coincides with box's face
@@ -144,11 +143,10 @@ TEST(BoxTest, Intersections)
 
     auto intersections = box.Intersections(plane);
     ASSERT_EQ(4UL, intersections.size());
-    auto it = intersections.begin();
-    EXPECT_EQ(math::Vector3d(-1.0, -1.0, 1.0), *it++);
-    EXPECT_EQ(math::Vector3d(-1.0, 1.0, 1.0), *it++);
-    EXPECT_EQ(math::Vector3d(1.0, -1.0, 1.0), *it++);
-    EXPECT_EQ(math::Vector3d(1.0, 1.0, 1.0), *it++);
+    EXPECT_EQ(intersections.count(math::Vector3d(-1.0, -1.0, 1.0)), 1UL);
+    EXPECT_EQ(intersections.count(math::Vector3d(-1.0, 1.0, 1.0)), 1UL);
+    EXPECT_EQ(intersections.count(math::Vector3d(1.0, -1.0, 1.0)), 1UL);
+    EXPECT_EQ(intersections.count(math::Vector3d(1.0, 1.0, 1.0)), 1UL);
   }
 
   // 3 intersections
@@ -158,10 +156,9 @@ TEST(BoxTest, Intersections)
 
     auto intersections = box.Intersections(plane);
     ASSERT_EQ(3UL, intersections.size());
-    auto it = intersections.begin();
-    EXPECT_EQ(math::Vector3d(-1.0, 1.0, 1.0), *it++);
-    EXPECT_EQ(math::Vector3d(1.0, -1.0, 1.0), *it++);
-    EXPECT_EQ(math::Vector3d(1.0, 1.0, -1.0), *it++);
+    EXPECT_EQ(intersections.count(math::Vector3d(1.0, -1.0, 1.0)), 1UL);
+    EXPECT_EQ(intersections.count(math::Vector3d(-1.0, 1.0, 1.0)), 1UL);
+    EXPECT_EQ(intersections.count(math::Vector3d(1.0, 1.0, -1.0)), 1UL);
   }
 
   // 6 intersections
@@ -171,13 +168,12 @@ TEST(BoxTest, Intersections)
 
     auto intersections = box.Intersections(plane);
     ASSERT_EQ(6UL, intersections.size());
-    auto it = intersections.begin();
-    EXPECT_EQ(math::Vector3d(-1.0, 1.0, 0.5), *it++);
-    EXPECT_EQ(math::Vector3d(-1.0, 0.5, 1.0), *it++);
-    EXPECT_EQ(math::Vector3d(1.0, -1.0, 0.5), *it++);
-    EXPECT_EQ(math::Vector3d(0.5, -1.0, 1.0), *it++);
-    EXPECT_EQ(math::Vector3d(1.0, 0.5, -1.0), *it++);
-    EXPECT_EQ(math::Vector3d(0.5, 1.0, -1.0), *it++);
+    EXPECT_EQ(intersections.count(math::Vector3d(-1.0, 1.0, 0.5)), 1UL);
+    EXPECT_EQ(intersections.count(math::Vector3d(-1.0, 0.5, 1.0)), 1UL);
+    EXPECT_EQ(intersections.count(math::Vector3d(1.0, -1.0, 0.5)), 1UL);
+    EXPECT_EQ(intersections.count(math::Vector3d(0.5, -1.0, 1.0)), 1UL);
+    EXPECT_EQ(intersections.count(math::Vector3d(1.0, 0.5, -1.0)), 1UL);
+    EXPECT_EQ(intersections.count(math::Vector3d(0.5, 1.0, -1.0)), 1UL);
   }
 
   // 5 intersections
@@ -188,12 +184,11 @@ TEST(BoxTest, Intersections)
 
     auto intersections = box.Intersections(plane);
     ASSERT_EQ(5UL, intersections.size());
-    auto it = intersections.begin();
-    EXPECT_EQ(math::Vector3d(-1.0, 1.0, 0.25), *it++);
-    EXPECT_EQ(math::Vector3d(-1.0, -0.5, 1.0), *it++);
-    EXPECT_EQ(math::Vector3d(1.0, -1.0, 0.25), *it++);
-    EXPECT_EQ(math::Vector3d(-0.5, -1.0, 1.0), *it++);
-    EXPECT_EQ(math::Vector3d(1.0, 1.0, -0.75), *it++);
+    EXPECT_EQ(intersections.count(math::Vector3d(-1.0, 1.0, 0.25)), 1UL);
+    EXPECT_EQ(intersections.count(math::Vector3d(-1.0, -0.5, 1.0)), 1UL);
+    EXPECT_EQ(intersections.count(math::Vector3d(1.0, -1.0, 0.25)), 1UL);
+    EXPECT_EQ(intersections.count(math::Vector3d(-0.5, -1.0, 1.0)), 1UL);
+    EXPECT_EQ(intersections.count(math::Vector3d(1.0, 1.0, -0.75)), 1UL);
   }
 }
 
@@ -362,11 +357,10 @@ TEST(BoxTest, VerticesBelow)
     auto vertices = box.VerticesBelow(plane);
     ASSERT_EQ(4u, vertices.size());
 
-    auto it = vertices.begin();
-    EXPECT_EQ(nXnYnZ, *it++);
-    EXPECT_EQ(nXpYnZ, *it++);
-    EXPECT_EQ(pXnYnZ, *it++);
-    EXPECT_EQ(pXpYnZ, *it++);
+    EXPECT_EQ(vertices.count(nXnYnZ), 1UL);
+    EXPECT_EQ(vertices.count(nXpYnZ), 1UL);
+    EXPECT_EQ(vertices.count(pXnYnZ), 1UL);
+    EXPECT_EQ(vertices.count(pXpYnZ), 1UL);
   }
   {
     math::Planed plane(math::Vector3d(0, 1, 0), 0.5);
@@ -374,11 +368,10 @@ TEST(BoxTest, VerticesBelow)
     auto vertices = box.VerticesBelow(plane);
     ASSERT_EQ(4u, vertices.size());
 
-    auto it = vertices.begin();
-    EXPECT_EQ(nXnYnZ, *it++);
-    EXPECT_EQ(nXnYpZ, *it++);
-    EXPECT_EQ(pXnYnZ, *it++);
-    EXPECT_EQ(pXnYpZ, *it++);
+    EXPECT_EQ(vertices.count(nXnYnZ), 1UL);
+    EXPECT_EQ(vertices.count(nXnYpZ), 1UL);
+    EXPECT_EQ(vertices.count(pXnYnZ), 1UL);
+    EXPECT_EQ(vertices.count(pXnYpZ), 1UL);
   }
   {
     math::Planed plane(math::Vector3d(-1, 0, 0), -0.5);
@@ -386,11 +379,10 @@ TEST(BoxTest, VerticesBelow)
     auto vertices = box.VerticesBelow(plane);
     ASSERT_EQ(4u, vertices.size());
 
-    auto it = vertices.begin();
-    EXPECT_EQ(pXnYnZ, *it++);
-    EXPECT_EQ(pXnYpZ, *it++);
-    EXPECT_EQ(pXpYnZ, *it++);
-    EXPECT_EQ(pXpYpZ, *it++);
+    EXPECT_EQ(vertices.count(pXnYnZ), 1UL);
+    EXPECT_EQ(vertices.count(pXnYpZ), 1UL);
+    EXPECT_EQ(vertices.count(pXpYnZ), 1UL);
+    EXPECT_EQ(vertices.count(pXpYpZ), 1UL);
   }
   {
     math::Planed plane(math::Vector3d(1, 1, 1), 0.0);
@@ -398,11 +390,10 @@ TEST(BoxTest, VerticesBelow)
     auto vertices = box.VerticesBelow(plane);
     ASSERT_EQ(4u, vertices.size());
 
-    auto it = vertices.begin();
-    EXPECT_EQ(nXnYnZ, *it++);
-    EXPECT_EQ(nXnYpZ, *it++);
-    EXPECT_EQ(nXpYnZ, *it++);
-    EXPECT_EQ(pXnYnZ, *it++);
+    EXPECT_EQ(vertices.count(nXnYnZ), 1UL);
+    EXPECT_EQ(vertices.count(nXnYpZ), 1UL);
+    EXPECT_EQ(vertices.count(nXpYnZ), 1UL);
+    EXPECT_EQ(vertices.count(pXnYnZ), 1UL);
   }
   // 6 vertices
   {
@@ -411,13 +402,12 @@ TEST(BoxTest, VerticesBelow)
     auto vertices = box.VerticesBelow(plane);
     ASSERT_EQ(6u, vertices.size());
 
-    auto it = vertices.begin();
-    EXPECT_EQ(nXpYnZ, *it++);
-    EXPECT_EQ(nXpYpZ, *it++);
-    EXPECT_EQ(pXnYnZ, *it++);
-    EXPECT_EQ(pXnYpZ, *it++);
-    EXPECT_EQ(pXpYnZ, *it++);
-    EXPECT_EQ(pXpYpZ, *it++);
+    EXPECT_EQ(vertices.count(nXpYnZ), 1UL);
+    EXPECT_EQ(vertices.count(nXpYpZ), 1UL);
+    EXPECT_EQ(vertices.count(pXnYnZ), 1UL);
+    EXPECT_EQ(vertices.count(pXnYpZ), 1UL);
+    EXPECT_EQ(vertices.count(pXpYnZ), 1UL);
+    EXPECT_EQ(vertices.count(pXpYpZ), 1UL);
   }
   {
     math::Planed plane(math::Vector3d(0, 1, 1), 0.9);
@@ -425,13 +415,12 @@ TEST(BoxTest, VerticesBelow)
     auto vertices = box.VerticesBelow(plane);
     ASSERT_EQ(6u, vertices.size());
 
-    auto it = vertices.begin();
-    EXPECT_EQ(nXnYnZ, *it++);
-    EXPECT_EQ(nXnYpZ, *it++);
-    EXPECT_EQ(pXnYpZ, *it++);
-    EXPECT_EQ(nXpYnZ, *it++);
-    EXPECT_EQ(pXnYnZ, *it++);
-    EXPECT_EQ(pXpYnZ, *it++);
+    EXPECT_EQ(vertices.count(nXnYnZ), 1UL);
+    EXPECT_EQ(vertices.count(nXnYpZ), 1UL);
+    EXPECT_EQ(vertices.count(pXnYpZ), 1UL);
+    EXPECT_EQ(vertices.count(nXpYnZ), 1UL);
+    EXPECT_EQ(vertices.count(pXnYnZ), 1UL);
+    EXPECT_EQ(vertices.count(pXpYnZ), 1UL);
   }
   // 2 vertices
   {
@@ -440,9 +429,8 @@ TEST(BoxTest, VerticesBelow)
     auto vertices = box.VerticesBelow(plane);
     ASSERT_EQ(2u, vertices.size());
 
-    auto it = vertices.begin();
-    EXPECT_EQ(pXpYnZ, *it++);
-    EXPECT_EQ(pXpYpZ, *it++);
+    EXPECT_EQ(vertices.count(pXpYnZ), 1UL);
+    EXPECT_EQ(vertices.count(pXpYpZ), 1UL);
   }
   // 7 vertices
   {
@@ -451,14 +439,13 @@ TEST(BoxTest, VerticesBelow)
     auto vertices = box.VerticesBelow(plane);
     ASSERT_EQ(7u, vertices.size());
 
-    auto it = vertices.begin();
-    EXPECT_EQ(nXnYnZ, *it++);
-    EXPECT_EQ(nXnYpZ, *it++);
-    EXPECT_EQ(pXnYpZ, *it++);
-    EXPECT_EQ(nXpYnZ, *it++);
-    EXPECT_EQ(nXpYpZ, *it++);
-    EXPECT_EQ(pXnYnZ, *it++);
-    EXPECT_EQ(pXpYnZ, *it++);
+    EXPECT_EQ(vertices.count(nXnYnZ), 1UL);
+    EXPECT_EQ(vertices.count(nXnYpZ), 1UL);
+    EXPECT_EQ(vertices.count(pXnYpZ), 1UL);
+    EXPECT_EQ(vertices.count(nXpYnZ), 1UL);
+    EXPECT_EQ(vertices.count(nXpYpZ), 1UL);
+    EXPECT_EQ(vertices.count(pXnYnZ), 1UL);
+    EXPECT_EQ(vertices.count(pXpYnZ), 1UL);
   }
   // 1 vertex
   {
@@ -467,8 +454,7 @@ TEST(BoxTest, VerticesBelow)
     auto vertices = box.VerticesBelow(plane);
     ASSERT_EQ(1u, vertices.size());
 
-    auto it = vertices.begin();
-    EXPECT_EQ(nXnYnZ, *it++);
+    EXPECT_EQ(vertices.count(nXnYnZ), 1UL);
   }
 }
 

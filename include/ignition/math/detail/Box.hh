@@ -124,7 +124,7 @@ T Box<T>::Volume() const
 //////////////////////////////////////////////////
 template <typename T>
 std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(
-    const Plane<T> &_plane, std::set<Vector3<T>> &_vertices)
+    const Plane<T> &_plane, IntersectionPoints<T> &_vertices)
 {
   std::vector<std::pair<Triangle3<T>, T>> triangles;
   std::vector<Vector3<T>> pointsInPlane;
@@ -242,11 +242,11 @@ std::optional<Vector3<T>>
 
 /////////////////////////////////////////////////
 template<typename T>
-std::set<Vector3<T>> Box<T>::VerticesBelow(const Plane<T> &_plane) const
+IntersectionPoints<T> Box<T>::VerticesBelow(const Plane<T> &_plane) const
 {
   // Get coordinates of all vertice of box
   // TODO(arjo): Cache this for performance
-  std::set<Vector3<T> > vertices
+  IntersectionPoints<T> vertices
   {
     Vector3<T>{this->size.X()/2, this->size.Y()/2, this->size.Z()/2},
     Vector3<T>{-this->size.X()/2, this->size.Y()/2, this->size.Z()/2},
@@ -258,7 +258,7 @@ std::set<Vector3<T>> Box<T>::VerticesBelow(const Plane<T> &_plane) const
     Vector3<T>{-this->size.X()/2, -this->size.Y()/2, -this->size.Z()/2}
   };
 
-  std::set<Vector3<T> >  verticesBelow;
+  IntersectionPoints<T> verticesBelow;
   for (const auto &v : vertices)
   {
     if (_plane.Distance(v) <= 0)
@@ -300,10 +300,10 @@ bool Box<T>::MassMatrix(MassMatrix3<T> &_massMat) const
 
 //////////////////////////////////////////////////
 template<typename T>
-std::set<Vector3<T>> Box<T>::Intersections(
+IntersectionPoints<T> Box<T>::Intersections(
         const Plane<T> &_plane) const
 {
-  std::set<Vector3<T>> intersections;
+  IntersectionPoints<T> intersections;
   // These are vertices via which we can describe edges. We only need 4 such
   // vertices
   std::vector<Vector3<T> > vertices

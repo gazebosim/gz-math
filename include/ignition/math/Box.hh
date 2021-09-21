@@ -23,6 +23,8 @@
 #include <ignition/math/Plane.hh>
 #include <ignition/math/Vector3.hh>
 
+#include "ignition/math/detail/WellOrderedVector.hh"
+
 #include <set>
 
 namespace ignition
@@ -31,7 +33,11 @@ namespace ignition
   {
     // Inline bracket to help doxygen filtering.
     inline namespace IGNITION_MATH_VERSION_NAMESPACE {
-    //
+    /// \brief This is the type used for deduplicating and returning the set of
+    /// intersections.
+    template<typename T>
+    using IntersectionPoints = std::set<Vector3<T>, WellOrderedVectors<T>>;
+
     /// \class Box Box.hh ignition/math/Box.hh
     /// \brief A representation of a box. All units are in meters.
     ///
@@ -150,7 +156,7 @@ namespace ignition
       /// frame.
       /// \return Box vertices which are below the plane, expressed in the box's
       /// frame.
-      public: std::set<Vector3<Precision>>
+      public: IntersectionPoints<Precision>
         VerticesBelow(const Plane<Precision> &_plane) const;
 
       /// \brief Compute the box's density given a mass value. The
@@ -191,7 +197,7 @@ namespace ignition
       /// \param[in] _plane The plane against which we are testing intersection.
       /// \returns A list of points along the edges of the box where the
       /// intersection occurs.
-      public: std::set<Vector3<Precision>> Intersections(
+      public: IntersectionPoints<Precision> Intersections(
         const Plane<Precision> &_plane) const;
 
       /// \brief Size of the box.
