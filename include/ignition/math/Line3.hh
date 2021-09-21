@@ -254,6 +254,7 @@ namespace ignition
         // line.Length() will have to be > 0 at this point otherwise it would
         // return at line 244.
         auto d = ptTo0.Cross(line);
+        assert(lineLength > 0);
         return d.Length() / line.Length();
       }
 
