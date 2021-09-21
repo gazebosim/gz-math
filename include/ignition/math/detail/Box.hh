@@ -123,7 +123,7 @@ T Box<T>::Volume() const
 
 //////////////////////////////////////////////////
 /// \brief Given a *convex* polygon described by the verices in a given plane,
-/// compute the list of triangles which form this polygon. 
+/// compute the list of triangles which form this polygon.
 /// \param[in] _plane The plane in which the vertices exist.
 /// \param[in] _vertices The vertices of the polygon.
 /// \return a list of triangles, or and empty vector if _vertices in the _plane
@@ -131,7 +131,7 @@ T Box<T>::Volume() const
 template <typename T>
 std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(
     const Plane<T> &_plane, IntersectionPoints<T> &_vertices)
-{ 
+{
   std::vector<std::pair<Triangle3<T>, T>> triangles;
   std::vector<Vector3<T>> pointsInPlane;
 
