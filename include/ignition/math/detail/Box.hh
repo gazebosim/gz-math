@@ -126,8 +126,8 @@ T Box<T>::Volume() const
 /// compute the list of triangles which form this polygon.
 /// \param[in] _plane The plane in which the vertices exist.
 /// \param[in] _vertices The vertices of the polygon.
-/// \return a list of triangles, or and empty vector if _vertices in the _plane
-/// are less than 3.
+/// \return A vector of triangles and their centroids, or an empty vector
+/// if _vertices in the _plane are less than 3.
 template <typename T>
 std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(
     const Plane<T> &_plane, IntersectionPoints<T> &_vertices)
@@ -192,6 +192,8 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
     return 0;
 
   auto intersections = this->Intersections(_plane);
+  // TODO(arjo): investigate the use of _epsilon tolerance as this method
+  // implicitly uses Vector3<T>::operator==()
   verticesBelow.merge(intersections);
 
   // Reconstruct the cut-box as a triangle mesh by attempting to fit planes.
