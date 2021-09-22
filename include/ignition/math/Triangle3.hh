@@ -157,7 +157,8 @@ namespace ignition
       /// \return The normal vector for the triangle.
       public: math::Vector3<T> Normal() const
       {
-        return math::Vector3<T>::Normal(this->pts[0], this->pts[1], this->pts[2]);
+        return math::Vector3<T>::Normal(
+          this->pts[0], this->pts[1], this->pts[2]);
       }
 
       /// \brief Get whether the given line intersects an edge of this triangle.
@@ -176,7 +177,8 @@ namespace ignition
       /// \param[out] _ipt1 Return value of the first intersection point,
       /// only valid if the return value of the function is true.
       /// \return True if the given line intersects this triangle.
-      public: bool Intersects(const Line3<T> &_line, math::Vector3<T> &_ipt1) const
+      public: bool Intersects(
+        const Line3<T> &_line, math::Vector3<T> &_ipt1) const
       {
         // Triangle normal
         math::Vector3<T> norm = this->Normal();
