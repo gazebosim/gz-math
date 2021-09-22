@@ -64,6 +64,8 @@ namespace ignition
         this->data[0] = 0;
         this->data[1] = 0;
         this->data[2] = 0;
+        this->head = &data[0];
+        this->tail = &data[2];
       }
 
       /// \brief Constructor
@@ -75,6 +77,8 @@ namespace ignition
         this->data[0] = _x;
         this->data[1] = _y;
         this->data[2] = _z;
+        this->head = &data[0];
+        this->tail = &data[2];
       }
 
       /// \brief Copy constructor
@@ -84,10 +88,66 @@ namespace ignition
         this->data[0] = _v[0];
         this->data[1] = _v[1];
         this->data[2] = _v[2];
+        this->head = &data[0];
+        this->tail = &data[2];
       }
 
       /// \brief Destructor
       public: virtual ~Vector3() {}
+
+      // Iterator code with forward declaration
+      public: class Iterator;
+      public: Iterator begin(){return Iterator(this->head, this->tail);}
+      public: Iterator end(){return Iterator(nullptr, nullptr);}
+      public: class Iterator
+      {
+        public:
+          Iterator()
+          {
+            this->currentPtr = head;
+            this->lastPtr = tail;
+          }
+
+          Iterator(const T* cPtr, const T* lPtr)
+          {
+              this->currentPtr = cPtr;
+              this->lastPtr = lPtr;
+          }
+ 
+          Iterator& operator=(Iterator iterator)
+          {
+            this->currentPtr = iterator.currentPtr;
+            this->lastPtr = iterator.lastPtr;
+            return *this;
+          }
+ 
+          // Prefix ++ overload
+          Iterator& operator++(){
+            if(this->currentPtr == this->lastPtr) currentPtr = nullptr;
+            if (this->currentPtr) currentPtr++;
+            return *this;
+          }
+ 
+        //Postfix ++ overload
+          Iterator operator++(int){
+            Iterator iterator = *this;
+            ++*this;
+            return iterator;
+          }
+ 
+        bool operator!=(const Iterator& iterator){
+            return this->currentPtr != iterator.currentPtr;
+        }
+
+        bool operator==(const Iterator& iterator){
+            return this->currentPtr == iterator.currentPtr;
+        }
+ 
+        int operator*(){return *currentPtr;}
+ 
+        private:
+          const T* currentPtr; const T* lastPtr;
+      };
 
       /// \brief Return the sum of the values
       /// \return the sum
@@ -264,7 +324,7 @@ namespace ignition
         return n.Normalize();
       }
 
-      /// \brief Get distance to an infinite line defined by 2 points.
+      /// \brief Get distance to a line
       /// \param[in] _pt1 first point on the line
       /// \param[in] _pt2 second point on the line
       /// \return the minimum distance from this point to the line
@@ -753,7 +813,7 @@ namespace ignition
       }
 
       /// \brief The x, y, and z values
-      private: T data[3];
+      private: T data[3]; T* head; T* tail;
     };
 
     template<typename T> const Vector3<T> Vector3<T>::Zero(0, 0, 0);
