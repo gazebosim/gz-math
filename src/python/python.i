@@ -22,5 +22,6 @@
 %include Spline.i
 %include Temperature.i
 %include Triangle.i
+%include Triangle3.i
 %include Kmeans.i
 %include Vector3Stats.i
