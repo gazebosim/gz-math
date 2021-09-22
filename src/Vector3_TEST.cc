@@ -147,6 +147,22 @@ TEST(Vector3dTest, Vector3d)
 }
 
 /////////////////////////////////////////////////
+TEST(Vector3dTest, Iterator)
+{
+  math::Vector3d vec(1, 2, 3);
+  auto it = vec.begin();
+
+  EXPECT_EQ(*it, 1);
+  it++;
+
+  EXPECT_EQ(*it, 2);
+  it++;
+
+  EXPECT_EQ(*it, 3);
+  it++;
+}
+
+/////////////////////////////////////////////////
 TEST(Vector3dTest, Distance)
 {
   math::Vector3d vec1(0, 0, 0);
