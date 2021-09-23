@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
 #============================================================================
 # Initialize the project
 #============================================================================
-project(ignition-math6 VERSION 6.8.0)
+project(ignition-math6 VERSION 6.9.0)
 
 #============================================================================
 # Find ignition-cmake
@@ -15,14 +15,23 @@ find_package(ignition-cmake2 2.8.0 REQUIRED)
 # Configure the project
 #============================================================================
 set (c++standard 17)
-ign_configure_project(VERSION_SUFFIX)
+ign_configure_project(VERSION_SUFFIX pre1)
 
 #============================================================================
 # Set project-specific options
 #============================================================================
 
-# ignition-math currently has no options that are unique to it
+option(USE_SYSTEM_PATHS_FOR_RUBY_INSTALLATION
+      "Install ruby modules in standard system paths in the system"
+      OFF)
 
+option(USE_SYSTEM_PATHS_FOR_PYTHON_INSTALLATION
+      "Install python modules in standard system paths in the system"
+      OFF)
+
+option(USE_DIST_PACKAGES_FOR_PYTHON
+      "Use dist-packages instead of site-package to install python modules"
+      OFF)
 
 #============================================================================
 # Search for project-specific dependencies
@@ -60,6 +69,7 @@ if (SWIG_FOUND)
 
   ########################################
   # Include python
+  find_package(PythonInterp 3 REQUIRED) # change to Python3 when Bionic is EOL
   find_package(PythonLibs QUIET)
   if (NOT PYTHONLIBS_FOUND)
     message (STATUS "Searching for Python - not found.")
