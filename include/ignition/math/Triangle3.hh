@@ -127,7 +127,7 @@ namespace ignition
       /// \brief Get whether this triangle contains the given point.
       /// \param[in] _pt Point to check.
       /// \return True if the point is inside or on the triangle.
-      public: bool Contains(const math::Vector3<T> &_pt) const
+      public: bool Contains(const Vector3<T> &_pt) const
       {
         // Make sure the point is on the same plane as the triangle
         if (Planed(this->Normal()).Side(Vector3d(_pt[0], _pt[1], _pt[2]))
@@ -156,7 +156,7 @@ namespace ignition
 
       /// \brief Get the triangle's normal vector.
       /// \return The normal vector for the triangle.
-      public: math::Vector3d Normal() const
+      public: Vector3d Normal() const
       {
         return math::Vector3d::Normal(
           Vector3d(this->pts[0][0], this->pts[0][1], this->pts[0][2]),
