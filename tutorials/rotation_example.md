@@ -7,7 +7,7 @@ This example explains how to use quaternions, euler angles and convert between t
 To compile the code, go to `ign-math/examples` and use `cmake` to compile the code:
 
 ```{.sh}
-hg clone https://bitbucket.org/ignitionrobotics/ign-math/ -b default
+git clone https://github.com/ignitionrobotics/ign-math/ -b master
 cd ign-math/examples
 mkdir build
 cd build
