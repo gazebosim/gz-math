@@ -45,7 +45,7 @@ namespace math
       public: Line3<T> Side(const unsigned int _index) const;
       public: bool Contains(const Line3<T> &_line) const;
       public: bool Contains(const ignition::math::Vector3<T> &_pt) const;
-      public: ignition::math::Vector3<T> Normal() const;
+      public: ignition::math::Vector3d Normal() const;
       public: bool Intersects(const Line3<T> &_line,
                               ignition::math::Vector3<T> &_ipt1) const;
       public: T Perimeter() const;

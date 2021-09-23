@@ -46,9 +46,9 @@ namespace ignition
       /// \param[in] _pt1 First point that defines the triangle.
       /// \param[in] _pt2 Second point that defines the triangle.
       /// \param[in] _pt3 Third point that defines the triangle.
-      public: Triangle3(const math::Vector3<T> &_pt1,
-                        const math::Vector3<T> &_pt2,
-                        const math::Vector3<T> &_pt3)
+      public: Triangle3(const Vector3<T> &_pt1,
+                        const Vector3<T> &_pt2,
+                        const Vector3<T> &_pt3)
       {
         this->Set(_pt1, _pt2, _pt3);
       }
@@ -62,7 +62,7 @@ namespace ignition
       /// \param[in] _index Index of the point to set. _index is clamped
       /// to the range [0,2].
       /// \param[in] _pt Value of the point to set.
-      public: void Set(const unsigned int _index, const math::Vector3<T> &_pt)
+      public: void Set(const unsigned int _index, const Vector3<T> &_pt)
       {
         this->pts[clamp(_index, 0u, 2u)] = _pt;
       }
@@ -76,9 +76,9 @@ namespace ignition
       /// \param[in] _pt1 First point that defines the triangle.
       /// \param[in] _pt2 Second point that defines the triangle.
       /// \param[in] _pt3 Third point that defines the triangle.
-      public: void Set(const math::Vector3<T> &_pt1,
-                       const math::Vector3<T> &_pt2,
-                       const math::Vector3<T> &_pt3)
+      public: void Set(const Vector3<T> &_pt1,
+                       const Vector3<T> &_pt2,
+                       const Vector3<T> &_pt3)
       {
         this->pts[0] = _pt1;
         this->pts[1] = _pt2;
@@ -130,11 +130,12 @@ namespace ignition
       public: bool Contains(const math::Vector3<T> &_pt) const
       {
         // Make sure the point is on the same plane as the triangle
-        if (Plane<T>(this->Normal()).Side(_pt) == Plane<T>::NO_SIDE)
+        if (Planed(this->Normal()).Side(Vector3d(_pt[0], _pt[1], _pt[2]))
+          == Planed::NO_SIDE)
         {
-          math::Vector3<T> v0 = this->pts[2] - this->pts[0];
-          math::Vector3<T> v1 = this->pts[1] - this->pts[0];
-          math::Vector3<T> v2 = _pt - this->pts[0];
+          Vector3<T> v0 = this->pts[2] - this->pts[0];
+          Vector3<T> v1 = this->pts[1] - this->pts[0];
+          Vector3<T> v2 = _pt - this->pts[0];
 
           double dot00 = v0.Dot(v0);
           double dot01 = v0.Dot(v1);
@@ -155,10 +156,12 @@ namespace ignition
 
       /// \brief Get the triangle's normal vector.
       /// \return The normal vector for the triangle.
-      public: math::Vector3<T> Normal() const
+      public: math::Vector3d Normal() const
       {
-        return math::Vector3<T>::Normal(
-          this->pts[0], this->pts[1], this->pts[2]);
+        return math::Vector3d::Normal(
+          Vector3d(this->pts[0][0], this->pts[0][1], this->pts[0][2]),
+          Vector3d(this->pts[1][0], this->pts[1][1], this->pts[1][2]),
+          Vector3d(this->pts[2][0], this->pts[2][1], this->pts[2][2]));
       }
 
       /// \brief Get whether the given line intersects an edge of this triangle.
@@ -178,22 +181,23 @@ namespace ignition
       /// only valid if the return value of the function is true.
       /// \return True if the given line intersects this triangle.
       public: bool Intersects(
-        const Line3<T> &_line, math::Vector3<T> &_ipt1) const
+        const Line3<T> &_line, Vector3<T> &_ipt1) const
       {
         // Triangle normal
-        math::Vector3<T> norm = this->Normal();
+        Vector3d norm = this->Normal();
 
         // Ray direction to intersect with triangle
-        math::Vector3<T> dir = (_line[1] - _line[0]).Normalize();
+        Vector3<T> dir = (_line[1] - _line[0]).Normalize();
 
-        double denom = norm.Dot(dir);
+        double denom = norm.Dot(Vector3d(dir[0], dir[1], dir[3]));
 
         // Handle the case when the line is not co-planar with the triangle
         if (!math::equal(denom, 0.0))
         {
           // Distance from line start to triangle intersection
+          Vector3<T> diff = _line[0] - this->pts[0];
           double intersection =
-            -norm.Dot(_line[0] - this->pts[0]) / denom;
+            -norm.Dot(Vector3d(diff[0], diff[1], diff[2])) / denom;
 
           // Make sure the ray intersects the triangle
           if (intersection < 1.0 || intersection > _line.Length())
@@ -259,13 +263,13 @@ namespace ignition
       /// \param[in] _index: 0, 1, or 2. _index is clamped to the range
       /// [0,2].
       /// \return The triangle point at _index.
-      public: math::Vector3<T> operator[](const size_t _index) const
+      public: Vector3<T> operator[](const size_t _index) const
       {
         return this->pts[clamp(_index, IGN_ZERO_SIZE_T, IGN_TWO_SIZE_T)];
       }
 
       /// The points of the triangle
-      private: math::Vector3<T> pts[3];
+      private: Vector3<T> pts[3];
     };
 
     /// \brief Integer specialization of the Triangle class.
