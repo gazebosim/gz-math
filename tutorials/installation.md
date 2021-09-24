@@ -32,6 +32,22 @@ sudo apt install libignition-math<#>-dev
 Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
 which version you need.
 
+### macOS
+
+On macOS, add OSRF packages:
+  ```
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  brew tap osrf/simulation
+  ```
+
+Install Ignition GUI:
+  ```
+  brew install ignition-math<#>
+  ```
+
+Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
+which version you need.
+
 ## Windows
 
 Install [Conda package management system](https://docs.conda.io/projects/conda/en/latest/user-guide/install/download.html).
@@ -110,6 +126,34 @@ The optional Eigen component of Ignition Math requires:
   export SYSTEM_VERSION=bionic
   sudo apt -y install \
     $(sort -u $(find . -iname 'packages-'$SYSTEM_VERSION'.apt' -o -iname 'packages.apt') | tr '\n' ' ')
+  ```
+
+3. Configure and build
+  ```
+  cd ign-math
+  mkdir build
+  cd build
+  cmake ..
+  make
+  ```
+
+4. Optionally, install
+  ```
+  sudo make install
+  ```
+
+### macOS
+
+1. Clone the repository
+  ```
+  git clone https://github.com/ignitionrobotics/ign-math -b ign-math<#>
+  ```
+  Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
+  which version you need.
+
+2. Install dependencies
+  ```
+  brew install $(sort -u $(find .  -iname 'packages.brew') | tr '\n' ' ')
   ```
 
 3. Configure and build
@@ -229,4 +273,3 @@ The interfaces and Ruby test codes are in the `src` folder. To use a C++ class i
   ```
   ctest -R Ruby_TEST.rb
   ```
-
