@@ -40,7 +40,7 @@ On macOS, add OSRF packages:
   brew tap osrf/simulation
   ```
 
-Install Ignition GUI:
+Install Ignition Math:
   ```
   brew install ignition-math<#>
   ```
@@ -153,8 +153,10 @@ The optional Eigen component of Ignition Math requires:
 
 2. Install dependencies
   ```
-  brew install $(sort -u $(find .  -iname 'packages.brew') | tr '\n' ' ')
+  brew install --only-dependencies ignition-math<#>
   ```
+  Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
+  which version you need.
 
 3. Configure and build
   ```
