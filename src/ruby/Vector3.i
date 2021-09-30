@@ -89,6 +89,9 @@ namespace ignition
       public: bool operator<(const Vector3<T> &_pt) const;
     };
 
+    %rename(__mul__) Vector3<double>::operator*;
+    %rename(__imul__) Vector3<int>::operator*;
+
     %template(Vector3i) Vector3<int>;
     %template(Vector3d) Vector3<double>;
     %template(Vector3f) Vector3<float>;
