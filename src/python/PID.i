@@ -14,7 +14,7 @@
  * limitations under the License.
  *
 */
-%module pid 
+%module pid
 %{
 	#include <ignition/math/PID.hh>
 %}

@@ -20,48 +20,62 @@
 
 int main(int argc, char **argv)
 {
-  // Create a Vector2 called vec2 of doubles using the typedef Vector2d.
-  // The initial x any y values are zero.\n\n";
-  ignition::math::Vector2d vec2;
+  // // Create a Vector2 called vec2 of doubles using the typedef Vector2d.
+  // // The initial x any y values are zero.\n\n";
+  // ignition::math::Vector2d vec2;
+  //
+  // // The x and y component of vec2 can be set at anytime.
+  // vec2.Set(2.0, 4.0);
+  //
+  // // The Vector2 class is a template, so you can also create a Vector2 using
+  // // ignition::math::Vector2<double>
+  // ignition::math::Vector2<double> vec2a;
+  //
+  // vec2a.Set(1.0, 2.0);
+  //
+  // // It's also possible to set initial values. This time we are using
+  // // a Vector2 of floats
+  // ignition::math::Vector2f vec2b(1.2f, 3.4f);
+  //
+  // // We can output the contents of each vector using std::cout
+  // std::cout << "Vec2: " << vec2 << "\n"
+  //           << "Vec2a: " << vec2a << "\n"
+  //           << "Vec2b: " << vec2b << "\n";
+  //
+  // // You can also get access to each component in the vector using the
+  // // X(), Y() accessors or the [] operator.
+  // std::cout << "Vec2: x=" << vec2.X() << " y=" << vec2.Y() << "\n";
+  // std::cout << "Vec2a: x=" << vec2a[0] << " y=" << vec2a[1] << "\n";
+  // std::cout << "Vec2b: x=" << vec2b.X() << " y=" << vec2b[1] << "\n";
+  //
+  // // The [] operator is clamped to the range [0, 1]
+  // std::cout << vec2[3] << std::endl;
+  //
+  // // The Vector2 class overloads many common operators
+  // std::cout << vec2 * vec2a << "\n"
+  //           << vec2 + vec2a << "\n"
+  //           << vec2 - vec2a << "\n"
+  //           << vec2 / vec2a << "\n";
+  //
+  // // There are also many useful function such as finding the distance
+  // // between two vectors
+  // std::cout << vec2.Distance(vec2a) << std::endl;
+  //
+  // // There are more functions in Vector2. Take a look at the API:
+  // // https://ignitionrobotics.org/libs/math
 
-  // The x and y component of vec2 can be set at anytime.
-  vec2.Set(2.0, 4.0);
 
-  // The Vector2 class is a template, so you can also create a Vector2 using
-  // ignition::math::Vector2<double>
-  ignition::math::Vector2<double> vec2a;
+  ignition::math::AxisAlignedBox b(0, 0, 0, 1, 1, 1);
+  auto tu = b.IntersectDist(ignition::math::Vector3d(-1, 0, 0),
+                            ignition::math::Vector3d(1, 0, 0), 0, 1000);
+  std::cout << "-> " << std::get<0>(tu) << std::endl;
+  std::cout << "-> " << std::get<1>(tu) << std::endl;
 
-  vec2a.Set(1.0, 2.0);
+  auto tu2 = b.Intersect(ignition::math::Line3d(-1, 0, 0, 0));
+  std::cout << "-> " << std::get<0>(tu2) << std::endl;
+  std::cout << "-> " << std::get<1>(tu2) << std::endl;
+  std::cout << "-> " << std::get<2>(tu2) << std::endl;
 
-  // It's also possible to set initial values. This time we are using
-  // a Vector2 of floats
-  ignition::math::Vector2f vec2b(1.2f, 3.4f);
 
-  // We can output the contents of each vector using std::cout
-  std::cout << "Vec2: " << vec2 << "\n"
-            << "Vec2a: " << vec2a << "\n"
-            << "Vec2b: " << vec2b << "\n";
-
-  // You can also get access to each component in the vector using the
-  // X(), Y() accessors or the [] operator.
-  std::cout << "Vec2: x=" << vec2.X() << " y=" << vec2.Y() << "\n";
-  std::cout << "Vec2a: x=" << vec2a[0] << " y=" << vec2a[1] << "\n";
-  std::cout << "Vec2b: x=" << vec2b.X() << " y=" << vec2b[1] << "\n";
-
-  // The [] operator is clamped to the range [0, 1]
-  std::cout << vec2[3] << std::endl;
-
-  // The Vector2 class overloads many common operators
-  std::cout << vec2 * vec2a << "\n"
-            << vec2 + vec2a << "\n"
-            << vec2 - vec2a << "\n"
-            << vec2 / vec2a << "\n";
-
-  // There are also many useful function such as finding the distance
-  // between two vectors
-  std::cout << vec2.Distance(vec2a) << std::endl;
-
-  // There are more functions in Vector2. Take a look at the API:
-  // https://ignitionrobotics.org/libs/math
 }
 //! [complete]

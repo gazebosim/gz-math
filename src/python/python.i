@@ -28,3 +28,13 @@
 %include Kmeans.i
 %include Vector3Stats.i
 %include MassMatrix3.i
+%include AxisAlignedBox.i
+%include Plane.i
+%include Frustum.i
+%include Inertial.i
+%include OrientedBox.i
+%include Sphere.i
+%include SphericalCoordinates.i
+%include Box.i
+%include Cylinder.i
+%include DiffDriveOdometry.i
