@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import sys
 import unittest
+
 import ignition.math
 
 
@@ -20,7 +22,33 @@ class TestMaterial(unittest.TestCase):
 
     def test_init(self):
         mats = ignition.math.Material.predefined()
-        self.assertFalse(mats.empty())
+        self.assertTrue(len(mats))
+
+        # Make sure that the number of elements in the MaterialType enum matches
+        # the number of elements in the MaterialDensity::materials map.
+        self.assertEqual(ignition.math.MaterialType_UNKNOWN_MATERIAL, len(mats))
+
+        # Iterate over each element in the enum. Check the that enum value
+        # matches the type value in the mats map.
+        for i in range(ignition.math.MaterialType_UNKNOWN_MATERIAL):
+            # Get the type of the material for MaterialType i.
+            self.assertEqual(i, next(iter(mats.find(i)))[1].type())
+
+            # The name should not be empty
+            self.assertTrue(next(iter(mats.find(i)))[1].name())
+
+            # The density should be less than the max double value and greater than
+            # zero.
+            self.assertLess(next(iter(mats.find(i)))[1].density(), sys.float_info.max)
+            self.assertGreater(next(iter(mats.find(i)))[1].density(), 0.0)
+
+        malicious = ignition.math.Material(42)
+        self.assertEqual(-1.0, malicious.density())
+        self.assertEqual('', malicious.name())
+
+        byDensity = ignition.math.Material(42.2)
+        self.assertEqual(42.2, byDensity.density())
+        self.assertEqual(ignition.math.MaterialType_UNKNOWN_MATERIAL, byDensity.type())
 
     def test_comparison(self):
         aluminum = ignition.math.Material(ignition.math.MaterialType_ALUMINUM)

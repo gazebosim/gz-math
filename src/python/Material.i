@@ -25,7 +25,8 @@
 
 %include "std_string.i"
 %include "std_map.i"
-%template(map_material_type) std::map<ignition::math::MaterialType,
+
+%template(map_material_type) std::map<int,
                                       ignition::math::Material>;
 
 namespace ignition
@@ -41,7 +42,7 @@ namespace math
       public: explicit Material(const double _density);
       public: Material(const Material &_material);
       public: ~Material();
-      public: static const std::map<MaterialType, Material> &Predefined();
+      public: static const std::map<int, Material> &Predefined();
       public: void SetToNearestDensity(
                   const double _value,
                   const double _epsilon = std::numeric_limits<double>::max());
