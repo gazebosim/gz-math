@@ -16,30 +16,35 @@ import unittest
 
 from ignition.math import AxisAlignedBox, Planed, Vector2d, Vector3d
 
+
 class TestPlane(unittest.TestCase):
 
     def test_plane_constructor(self):
-      plane = Planed(Vector3d(1, 0, 0), 0.1)
-      self.assertEqual(plane.normal(), Vector3d(1, 0, 0))
-      # self.assertAlmostEqual(plane.offset(), 0.1, 1e-6)
+        plane = Planed(Vector3d(1, 0, 0), 0.1)
+        self.assertEqual(plane.normal(), Vector3d(1, 0, 0))
+        # self.assertAlmostEqual(plane.offset(), 0.1, 1e-6)
 
-      planeCopy = Planed(plane)
-      self.assertEqual(plane.normal(), planeCopy.normal())
-      self.assertEqual(plane.offset(), planeCopy.offset())
-      self.assertEqual(plane.size(), planeCopy.size())
+        planeCopy = Planed(plane)
+        self.assertEqual(plane.normal(), planeCopy.normal())
+        self.assertEqual(plane.offset(), planeCopy.offset())
+        self.assertEqual(plane.size(), planeCopy.size())
 
     def test_plane_distance(self):
         plane = Planed(Vector3d(0, 0, 1), 0.1)
-        # self.assertAlmostEqual(plane.distance(Vector3d(0, 0, 0),
-        #           Vector3d(0, 0, 1)), 0.1, 1e-6)
-        #
-        # self.assertAlmostEqual(plane.distance(Vector3d(0, 0, 0.1),
-        #           Vector3d(0, 0, 1)), 0, 1e-6)
-        #
-        # self.assertAlmostEqual(plane.distance(Vector3d(0, 0, 0.2),
-        #           Vector3d(0, 0, 1)), -0.1, 1e-6)
-        # self.assertAlmostEqual(plane.distance(Vector3d(0, 0, 0.1),
-        #           Vector3d(1, 0, 0)), 0, 1e-6)
+        self.assertAlmostEqual(plane.distance(
+            Vector3d(0, 0, 0),
+            Vector3d(0, 0, 1)), 0.1, delta=1e-6)
+
+        self.assertAlmostEqual(plane.distance(
+            Vector3d(0, 0, 0.1),
+            Vector3d(0, 0, 1)), 0, delta=1e-6)
+
+        self.assertAlmostEqual(plane.distance(
+            Vector3d(0, 0, 0.2),
+            Vector3d(0, 0, 1)), -0.1, delta=1e-6)
+        self.assertAlmostEqual(plane.distance(
+            Vector3d(0, 0, 0.1),
+            Vector3d(1, 0, 0)), 0, delta=1e-6)
 
     def test_plane(self):
         plane = Planed()
@@ -52,8 +57,9 @@ class TestPlane(unittest.TestCase):
         self.assertEqual(plane.normal(), Vector3d(0, 0, 1))
         self.assertEqual(plane.size(), Vector2d(2, 3))
 
-        self.assertEqual(-1, plane.distance(Vector3d(0, 0, 1),
-              Vector3d(0, 0, -1)))
+        self.assertEqual(-1, plane.distance(
+            Vector3d(0, 0, 1),
+            Vector3d(0, 0, -1)))
 
         plane.set(Vector3d(1, 0, 0), Vector2d(1, 1), 1.0)
         self.assertEqual(plane.offset(), 1.0)
@@ -156,8 +162,4 @@ class TestPlane(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    # plane = Planed(Vector3d(0.5, 0, 1), 1)
-    # intersect = plane.intersection(Vector3d(0, 0, 0), Vector3d(1, 0, 1))
-    # print(intersect)
-
     unittest.main()

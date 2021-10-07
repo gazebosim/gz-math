@@ -35,6 +35,8 @@
 %include OrientedBox.i
 %include Sphere.i
 %include SphericalCoordinates.i
+%include StopWatch.i
 %include Box.i
 %include Cylinder.i
 %include DiffDriveOdometry.i
+%include Vertex.i

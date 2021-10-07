@@ -120,14 +120,6 @@ namespace ignition
                this->material != _b.material;
       }
 
-      public: friend std::ostream &operator<<(std::ostream &_out,
-                                              const ignition::math::OrientedBox<T> &_b)
-      {
-        _out << "Size[" << _b.Size() << "] Pose[" << _b.Pose() << "] "
-          << "ignition::math::Material[" << _b.ignition::math::Material().Name() << "]";
-        return _out;
-      }
-
       public: bool Contains(const ignition::math::Vector3<double> &_p) const
       {
         // Move point to box frame
