@@ -189,7 +189,7 @@ namespace ignition
         // Ray direction to intersect with triangle
         Vector3<T> dir = (_line[1] - _line[0]).Normalize();
 
-        double denom = norm.Dot(Vector3d(dir[0], dir[1], dir[3]));
+        double denom = norm.Dot(Vector3d(dir[0], dir[1], dir[2]));
 
         // Handle the case when the line is not co-planar with the triangle
         if (!math::equal(denom, 0.0))
