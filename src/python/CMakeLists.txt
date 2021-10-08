@@ -111,6 +111,7 @@ if (PYTHONLIBS_FOUND)
       Spline_TEST
       Temperature_TEST
       Triangle_TEST
+      Triangle3_TEST
       Vector2_TEST
       Vector3_TEST
       Vector3Stats_TEST
