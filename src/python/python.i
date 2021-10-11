@@ -1,5 +1,6 @@
 %module "math"
 %include Angle.i
+%include DiffDriveOdometry.i
 %include GaussMarkovProcess.i
 %include Rand.i
 %include Vector2.i

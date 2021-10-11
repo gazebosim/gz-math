@@ -89,6 +89,7 @@ if (PYTHONLIBS_FOUND)
     set(python_tests
       Angle_TEST
       Color_TEST
+      DiffDriveOdometry_TEST
       Filter_TEST
       GaussMarkovProcess_TEST
       Kmeans_TEST
