@@ -39,22 +39,22 @@
 
 
 // The uppercase functions in the pythoncode block are defined with `#define` in cpp
-// but in python. This may generate some issues. A workaround is to create a Python function.
+// but in python this may generate some issues. A workaround is to create a Python function.
 // With sort functions the issue is with the referenced arguments of a templated function,
 // the workaround it's to define the functions in Python (sort2, sort3).
 
 %pythoncode %{
 import math
-def IGN_SPHERE_VOLUME(_radius):
+def ign_sphere_volume(_radius):
    return (4.0*IGN_PI*math.pow(_radius, 3)/3.0)
 
-def IGN_CYLINDER_VOLUME(_r, _l):
+def ign_cylinder_volume(_r, _l):
   return (_l * IGN_PI * math.pow(_r, 2))
 
-def IGN_BOX_VOLUME(_x, _y, _z):
+def ign_box_volume(_x, _y, _z):
   return (_x *_y * _z)
 
-def IGN_BOX_VOLUME_V(_v):
+def ign_box_volume_v(_v):
   return (_v.x() *_v.y() * _v.z())
 
 def sort2(_a, _b):
@@ -71,7 +71,8 @@ def sort3(_a, _b, _c):
     return _a, _b, _c
 %}
 
-%template(VectorFloat) std::vector<double>;
+%template(VectorFloat) std::vector<float>;
+%template(VectorDouble) std::vector<double>;
 %template(VectorInt) std::vector<int>;
 
 // When we use %rename this may conflict with the cpp templates, we will see a error:

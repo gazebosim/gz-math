@@ -15,8 +15,8 @@
 import math
 import unittest
 
-from ignition.math import (IGN_BOX_VOLUME, IGN_BOX_VOLUME_V, IGN_CYLINDER_VOLUME,
-                           IGN_PI, IGN_SPHERE_VOLUME, NAN_I, Vector3d, equal, fixnan,
+from ignition.math import (ign_box_volume, ign_box_volume_v, ign_cylinder_volume,
+                           IGN_PI, ign_sphere_volume, NAN_I, Vector3d, equal, fixnan,
                            greaterOrNearEqual, is_even, is_odd, is_power_of_two, isnan,
                            lessOrNearEqual, max, mean, min,
                            parse_float, parse_int, precision, round_up_multiple,
@@ -86,11 +86,12 @@ class TestHelpers(unittest.TestCase):
         self.assertTrue(is_power_of_two(2))
         self.assertTrue(is_power_of_two(4))
 
-    # MSVC report errors on division by zero
     # Test Helpers::fixnan functions
     def test_fix_nan(self):
         self.assertEqual(fixnan(42.0), 42.0)
         self.assertEqual(fixnan(-42.0), -42.0)
+
+        self.assertEqual(fixnan(math.nan), 0.0)
 
     def test_even(self):
         i = 1
@@ -180,10 +181,17 @@ class TestHelpers(unittest.TestCase):
         self.assertEqual(1, signum(f))
 
     def test_calculation(self):
-        self.assertEqual(2, max([0, 1, 2]))
-        self.assertEqual(0, min([0, 1, 2]))
-        self.assertEqual(1, mean([0, 1, 2]))
-        self.assertEqual(0, variance([0, 1, 2]))
+        values = [0, 10, 20]
+        self.assertEqual(20, max(values))
+        self.assertEqual(0, min(values))
+        self.assertEqual(10, mean(values))
+        self.assertEqual(66, int(variance(values)))
+
+        values2 = [float(0.0), float(10.0), float(20.0)]
+        self.assertEqual(20.0, max(values2))
+        self.assertEqual(0.0, min(values2))
+        self.assertEqual(10.0, mean(values2))
+        self.assertEqual(66.66666412353516, variance(values2))
 
     def test_sort(self):
         a = 2
@@ -234,29 +242,17 @@ class TestHelpers(unittest.TestCase):
         self.assertLess(a, b)
         self.assertLess(b, c)
 
-        a = 2.1
-        b = -1.1e-1
-        a, b = sort2(a, b)
-        self.assertLess(a, b)
-
-        a = 34.5
-        b = -1.34
-        c = 0.194
-        a, b, c = sort3(a, b, c)
-        self.assertLess(a, b)
-        self.assertLess(b, c)
-
     def test_volume(self):
-        self.assertEqual(IGN_SPHERE_VOLUME(1.0), 4.0*IGN_PI*math.pow(1, 3)/3.0)
-        self.assertEqual(IGN_SPHERE_VOLUME(0.1), 4.0*IGN_PI*math.pow(.1, 3)/3.0)
-        self.assertEqual(IGN_SPHERE_VOLUME(-1.1), 4.0*IGN_PI*math.pow(-1.1, 3)/3.0)
+        self.assertEqual(ign_sphere_volume(1.0), 4.0*IGN_PI*math.pow(1, 3)/3.0)
+        self.assertEqual(ign_sphere_volume(0.1), 4.0*IGN_PI*math.pow(.1, 3)/3.0)
+        self.assertEqual(ign_sphere_volume(-1.1), 4.0*IGN_PI*math.pow(-1.1, 3)/3.0)
 
-        self.assertEqual(IGN_CYLINDER_VOLUME(0.5, 2.0), 2 * IGN_PI * math.pow(.5, 2))
-        self.assertEqual(IGN_CYLINDER_VOLUME(1, -1), -1 * IGN_PI * math.pow(1, 2))
+        self.assertEqual(ign_cylinder_volume(0.5, 2.0), 2 * IGN_PI * math.pow(.5, 2))
+        self.assertEqual(ign_cylinder_volume(1, -1), -1 * IGN_PI * math.pow(1, 2))
 
-        self.assertEqual(IGN_BOX_VOLUME(1, 2, 3), 1 * 2 * 3)
-        self.assertEqual(IGN_BOX_VOLUME(.1, .2, .3),
-                         IGN_BOX_VOLUME_V(Vector3d(0.1, 0.2, 0.3)))
+        self.assertEqual(ign_box_volume(1, 2, 3), 1 * 2 * 3)
+        self.assertEqual(ign_box_volume(.1, .2, .3),
+                         ign_box_volume_v(Vector3d(0.1, 0.2, 0.3)))
 
     def test_round_up_multiple(self):
         self.assertEqual(0, round_up_multiple(0, 0))
