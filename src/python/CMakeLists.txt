@@ -107,6 +107,7 @@ if (PYTHONLIBS_FOUND)
       RotationSpline_TEST
       SemanticVersion_TEST
       SignalStats_TEST
+      SphericalCoordinates_TEST
       Spline_TEST
       Temperature_TEST
       Triangle_TEST
