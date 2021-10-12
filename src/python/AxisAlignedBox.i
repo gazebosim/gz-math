@@ -111,10 +111,13 @@ namespace ignition
       public: std::tuple<bool, double, math::Vector3<double>> Intersect(
                   const math::Line3<double> &_line) const;
 
-
       public: std::tuple<bool, double, math::Vector3<double>> Intersect(
           const math::Vector3<double> &_origin, const math::Vector3<double> &_dir,
           const double _min, const double _max) const;
+
+      /// \brief Get the volume of the box in m^3.
+      /// \return Volume of the box in m^3.
+      public: double Volume() const;
     };
   }
 }
