@@ -30,14 +30,13 @@ class TestBox(unittest.TestCase):
         self.assertTrue(_time.running())
         # The start time should be greater than the stop time.
         self.assertGreater(_time.start_time(), _time.stop_time())
-        print(_time.elapsed_stop_time())
         # The elapsed stop time should still be zero.
         self.assertEqual(0, _time.elapsed_stop_time())
 
         # Wait for some time...
         time.sleep(1)
         # Now the elapsed time should be greater than or equal to the time slept.
-        self.assertGreaterEqual(_time.elapsed_run_time() + handleSteadyClock, 100)
+        self.assertGreaterEqual(_time.elapsed_run_time() + handleSteadyClock, 1000)
 
         # Stop the timer.
         self.assertTrue(_time.stop())
@@ -55,7 +54,7 @@ class TestBox(unittest.TestCase):
         time.sleep(1)
         # The elapsed stop time should be greater than or equal to the time
         # slept.
-        self.assertGreaterEqual(_time.elapsed_stop_time() + handleSteadyClock, 100)
+        self.assertGreaterEqual(_time.elapsed_stop_time() + handleSteadyClock, 1000)
         # The elapsed time should be the same.
         self.assertEqual(elapsedTime, _time.elapsed_run_time())
 
