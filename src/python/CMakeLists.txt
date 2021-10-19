@@ -110,6 +110,7 @@ if (PYTHONLIBS_FOUND)
       SignalStats_TEST
       SphericalCoordinates_TEST
       Spline_TEST
+      StopWatch_TEST
       Temperature_TEST
       Triangle_TEST
       Triangle3_TEST
