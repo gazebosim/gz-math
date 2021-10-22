@@ -88,6 +88,7 @@ if (PYTHONLIBS_FOUND)
     # Add the Python tests
     set(python_tests
       Angle_TEST
+      AxisAlignedBox_TEST
       Color_TEST
       Filter_TEST
       GaussMarkovProcess_TEST
@@ -95,6 +96,7 @@ if (PYTHONLIBS_FOUND)
       Kmeans_TEST
       Line2_TEST
       Line3_TEST
+      MassMatrix3_TEST
       Material_TEST
       Matrix3_TEST
       Matrix4_TEST

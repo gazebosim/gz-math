@@ -30,3 +30,5 @@
 %include Triangle3.i
 %include Kmeans.i
 %include Vector3Stats.i
+%include AxisAlignedBox.i
+%include MassMatrix3.i
