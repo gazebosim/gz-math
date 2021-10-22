@@ -73,6 +73,10 @@ class TestAxisAlignedBox(unittest.TestCase):
         box = AxisAlignedBox(Vector3d(0, -1, 2), Vector3d(1, -2, 3))
         self.assertEqual(box.size(), Vector3d(1, 1, 1))
 
+    def test_center(self):
+        box = AxisAlignedBox(Vector3d(0, -1, 2), Vector3d(1, -2, 3))
+        self.assertEqual(box.center(), Vector3d(0.5, -1.5, 2.5))
+
     def test_merge_empty(self):
         box1 = AxisAlignedBox()
         box2 = AxisAlignedBox()
@@ -101,6 +105,14 @@ class TestAxisAlignedBox(unittest.TestCase):
         self.assertFalse(defaultAxisAlignedBox1.contains(Vector3d.ZERO))
 
     def test_minus(self):
+        box1 = AxisAlignedBox(1, 2, 3, 4, 5, 6)
+        sub = Vector3d(1, 1, 1)
+
+        box2 = box1 - sub
+        self.assertEqual(box2.min(), box1.min() - sub)
+        self.assertEqual(box2.max(), box1.max() - sub)
+
+    def test_plus(self):
         box1 = AxisAlignedBox(1, 2, 3, 4, 5, 6)
         add = Vector3d(1, 1, 1)
         box2 = box1 + add
