@@ -91,6 +91,7 @@ if (PYTHONLIBS_FOUND)
       AxisAlignedBox_TEST
       Color_TEST
       Filter_TEST
+      Frustum_TEST
       GaussMarkovProcess_TEST
       Helpers_TEST
       Kmeans_TEST
