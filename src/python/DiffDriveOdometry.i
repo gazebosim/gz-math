@@ -27,30 +27,17 @@
 
 %include "typemaps.i"
 %typemap(in, numinputs=1) const std::chrono::steady_clock::time_point &_time %{
-long val2;
-if (!SWIG_IsOK(SWIG_AsVal_long(swig_obj[1], &val2))) {
-  SWIG_exception_fail(SWIG_ArgError(SWIG_AsVal_long(swig_obj[1], &val2)), "in method '" "DiffDriveOdometry_init" "', argument " "2"" of type '" "long""'");
+if (!PyInt_Check($input)) {
+    PyErr_SetString(PyExc_ValueError, "Expecting an integer");
+    return NULL;
 }
 
 std::chrono::milliseconds dur;
-dur = std::chrono::milliseconds(val2);
+dur = std::chrono::milliseconds(PyInt_AsLong($input));
 
 using std::chrono::duration_cast;
-arg2 = new std::chrono::steady_clock::time_point();
-*arg2 += duration_cast<std::chrono::steady_clock::duration>(dur);
-%}
-
-%typemap(in, numinputs=1) const std::chrono::steady_clock::time_point &_timePoint %{
-long val4;
-if (!SWIG_IsOK(SWIG_AsVal_long(swig_obj[3], &val4))) {
-  SWIG_exception_fail(SWIG_ArgError(SWIG_AsVal_long(swig_obj[3], &val4)), "in method '" "DiffDriveOdometry_update" "', argument " "2"" of type '" "long""'");
-}
-std::chrono::milliseconds dur;
-dur = std::chrono::milliseconds(val4);
-
-using std::chrono::duration_cast;
-arg4 = new std::chrono::steady_clock::time_point();
-*arg4 += duration_cast<std::chrono::steady_clock::duration>(dur);
+$1 = new std::chrono::steady_clock::time_point();
+*$1 += duration_cast<std::chrono::steady_clock::duration>(dur);
 %}
 
 namespace ignition
@@ -70,7 +57,7 @@ namespace ignition
       public: bool Initialized() const;
 
       public: bool Update(const Angle &_leftPos, const Angle &_rightPos,
-                          const std::chrono::steady_clock::time_point &_timePoint);
+                          const std::chrono::steady_clock::time_point &_time);
 
       public: const Angle &Heading() const;
 
