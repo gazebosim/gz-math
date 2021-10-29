@@ -80,6 +80,18 @@ if (PYTHONLIBS_FOUND)
     set(IGN_PYTHON_INSTALL_PATH ${IGN_LIB_INSTALL_DIR}/python)
   endif()
 
+  # TODO(ahcorde): Use ign-cmake to include hooks
+  # Refer to this issue: https://github.com/ignitionrobotics/ign-cmake/issues/185
+  configure_file(
+    "setup.sh.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/share/setup.sh" @ONLY
+  )
+
+  install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/share/setup.sh
+    DESTINATION share/${PROJECT_NAME}
+  )
+
   set(IGN_PYTHON_INSTALL_PATH "${IGN_PYTHON_INSTALL_PATH}/ignition")
   install(TARGETS ${SWIG_PY_LIB} DESTINATION ${IGN_PYTHON_INSTALL_PATH})
   install(FILES ${CMAKE_BINARY_DIR}/lib/python/math.py DESTINATION ${IGN_PYTHON_INSTALL_PATH})
