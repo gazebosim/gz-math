@@ -31,13 +31,9 @@ if (!PyInt_Check($input)) {
     PyErr_SetString(PyExc_ValueError, "Expecting an integer");
     return NULL;
 }
-
-std::chrono::milliseconds dur;
-dur = std::chrono::milliseconds(PyInt_AsLong($input));
-
 using std::chrono::duration_cast;
 $1 = new std::chrono::steady_clock::time_point();
-*$1 += duration_cast<std::chrono::steady_clock::duration>(dur);
+*$1 += duration_cast<std::chrono::steady_clock::duration>(std::chrono::milliseconds(PyInt_AsLong($input)));
 %}
 
 namespace ignition
