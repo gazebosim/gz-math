@@ -4,6 +4,7 @@
 %include GaussMarkovProcess.i
 %include Helpers.i
 %include Rand.i
+%include StopWatch.i
 %include Vector2.i
 %include Vector3.i
 %include Vector4.i
@@ -29,3 +30,5 @@
 %include Triangle3.i
 %include Kmeans.i
 %include Vector3Stats.i
+%include AxisAlignedBox.i
+%include MassMatrix3.i
