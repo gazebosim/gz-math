@@ -22,7 +22,7 @@ class TestPlane(unittest.TestCase):
     def test_plane_constructor(self):
         plane = Planed(Vector3d(1, 0, 0), 0.1)
         self.assertEqual(plane.normal(), Vector3d(1, 0, 0))
-        # self.assertAlmostEqual(plane.offset(), 0.1, 1e-6)
+        self.assertAlmostEqual(plane.offset(), 0.1, 1e-6)
 
         planeCopy = Planed(plane)
         self.assertEqual(plane.normal(), planeCopy.normal())
