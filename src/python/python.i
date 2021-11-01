@@ -6,6 +6,7 @@
 %include StopWatch.i
 %include Vector2.i
 %include Vector3.i
+%include SphericalCoordinates.i
 %include Vector4.i
 %include Color.i
 %include Pose3.i
@@ -30,5 +31,8 @@
 %include Kmeans.i
 %include Vector3Stats.i
 %include AxisAlignedBox.i
+%include Plane.i
 %include MassMatrix3.i
 %include OrientedBox.i
+%include Cylinder.i
+%include Sphere.i
