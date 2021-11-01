@@ -198,7 +198,7 @@ class TestBox(unittest.TestCase):
         box = Boxd(2.0, 2.0, 2.0)
         plane = Planed(Vector3d(1, 1, 1), 0)
 
-        self.assertAlmostEqual(box.volume()/2, box.volume_below(plane), delta=1e-5)
+        self.assertAlmostEqual(box.volume()/2, box.volume_below(plane), delta=1e-15)
 
         # Cut in 3/4
         box = Boxd(2.0, 2.0, 2.0)
