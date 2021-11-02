@@ -89,7 +89,10 @@ if (PYTHONLIBS_FOUND)
     set(python_tests
       Angle_TEST
       AxisAlignedBox_TEST
+      Box_TEST
       Color_TEST
+      Cylinder_TEST
+      DiffDriveOdometry_TEST
       Filter_TEST
       GaussMarkovProcess_TEST
       Helpers_TEST
@@ -103,6 +106,7 @@ if (PYTHONLIBS_FOUND)
       Matrix4_TEST
       MovingWindowFilter_TEST
       PID_TEST
+      Plane_TEST
       Pose3_TEST
       python_TEST
       Quaternion_TEST
@@ -111,6 +115,8 @@ if (PYTHONLIBS_FOUND)
       RotationSpline_TEST
       SemanticVersion_TEST
       SignalStats_TEST
+      Sphere_TEST
+      SphericalCoordinates_TEST
       Spline_TEST
       StopWatch_TEST
       Temperature_TEST
