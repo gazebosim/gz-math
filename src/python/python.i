@@ -1,5 +1,6 @@
 %module "math"
 %include Angle.i
+%include DiffDriveOdometry.i
 %include GaussMarkovProcess.i
 %include Helpers.i
 %include Rand.i
@@ -34,5 +35,6 @@
 %include Plane.i
 %include Frustum.i
 %include MassMatrix3.i
+%include Box.i
 %include Cylinder.i
 %include Sphere.i
