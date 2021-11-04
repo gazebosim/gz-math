@@ -33,9 +33,12 @@ if (PYTHONLIBS_FOUND)
     SWIG_ADD_MODULE(${SWIG_PY_LIB} python python.i)
   endif()
 
+  find_package(pybind11 REQUIRED)
+
   SWIG_LINK_LIBRARIES(${SWIG_PY_LIB}
     ${PYTHON_LIBRARIES}
     ignition-math${PROJECT_VERSION_MAJOR}
+    pybind11::pybind11
   )
 
   if(NOT CMAKE_VERSION VERSION_GREATER_EQUAL 3.13.0)
@@ -79,6 +82,16 @@ if (PYTHONLIBS_FOUND)
     # If not a system installation, respect local paths
     set(IGN_PYTHON_INSTALL_PATH ${IGN_LIB_INSTALL_DIR}/python)
   endif()
+
+  configure_file(
+    "setup.sh.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/share/setup.sh" @ONLY
+  )
+
+  install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/share/setup.sh
+    DESTINATION share/${PROJECT_NAME}
+  )
 
   set(IGN_PYTHON_INSTALL_PATH "${IGN_PYTHON_INSTALL_PATH}/ignition")
   install(TARGETS ${SWIG_PY_LIB} DESTINATION ${IGN_PYTHON_INSTALL_PATH})

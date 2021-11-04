@@ -1,4 +1,13 @@
 %module "math"
+
+%{
+#include <pybind11/pybind11.h>
+%}
+%init %{
+    /* Get registered types from other pybind11 modules */
+    pybind11::detail::get_internals();
+%}
+
 %include Angle.i
 %include GaussMarkovProcess.i
 %include Helpers.i
@@ -39,4 +48,4 @@
 %include Box.i
 %include Cylinder.i
 %include DiffDriveOdometry.i
-%include Vertex.i
+//%include Vertex.i

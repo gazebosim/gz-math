@@ -23,7 +23,6 @@
 #include <ignition/math/SphericalCoordinates.hh>
 #include <ignition/math/Angle.hh>
 #include <ignition/math/Vector3.hh>
-#include <ignition/math/Helpers.hh>
 #include <ignition/math/config.hh>
 %}
 

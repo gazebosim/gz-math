@@ -23,8 +23,6 @@
 #include <ignition/math/config.hh>
 #include <ignition/math/Helpers.hh>
 #include <ignition/math/Line3.hh>
-#include <ignition/math/MassMatrix3.hh>
-#include <ignition/math/Material.hh>
 #include <ignition/math/Vector3.hh>
 %}
 
@@ -117,18 +115,6 @@ namespace ignition
       public: std::tuple<bool, double, math::Vector3<double>> Intersect(
           const math::Vector3<double> &_origin, const math::Vector3<double> &_dir,
           const double _min, const double _max) const;
-
-       public: double Volume() const;
-
-    //  public: double DensityFromMass(const double _mass) const;
-
-  //    public: bool SetDensityFromMass(const double _mass);
-
-  //    public: const ignition::math::Material &Material() const;
-
-      //public: void SetMaterial(const ignition::math::Material &_mat);
-
-//      public: bool MassMatrix(math::MassMatrix3<double> &_massMat) const;
     };
   }
 }

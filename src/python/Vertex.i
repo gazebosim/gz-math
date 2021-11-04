@@ -29,8 +29,14 @@
 #include <ignition/math/Helpers.hh>
 %}
 
-%typemap(in, numinputs=1) const uint64_t _id %{
-  $1 = PyInt_AsLong($input);
+%include "stdint.i"
+%include "typemaps.i"
+%typemap(in) const uint64_t _id %{
+long val2;
+if (!SWIG_IsOK(SWIG_AsVal_long(swig_obj[2], &val2))) {
+  SWIG_exception_fail(SWIG_ArgError(SWIG_AsVal_long(swig_obj[2], &val2)), "in method '" "Vertex_new" "', argument " "2"" of type '" "long""'");
+}
+arg2 = static_cast<uint64_t>(val2);
 %}
 
 namespace ignition
@@ -50,42 +56,16 @@ namespace ignition
 
         public: Vertex(const std::string &_name,
                        const V &_data = V(),
-                       const uint64_t _id = kNullId)
-          : name(_name),
-            data(_data),
-            id(_id)
-        {
-        }
+                       const uint64_t _id = kNullId);
+        public: const V Data() const;
+        public: V Data();
+        public: void SetData(const V &_data);
+        public: uint64_t Id() const;
+        public: void SetId(const uint64_t _id) const;
+        public: const std::string &Name() const;
+        public: void SetName(const std::string &_name);
 
-        public: const V Data() const
-        {
-          return this->data;
-        }
-
-        public: V Data()
-        {
-          return this->data;
-        }
-
-        public: uint64_t Id() const
-        {
-          return this->id;
-        }
-
-        public: const std::string &Name() const
-        {
-          return this->name;
-        }
-
-        public: void SetName(const std::string &_name)
-        {
-          this->name = _name;
-        }
-
-        public: bool Valid() const
-        {
-          return this->id != kNullId;
-        }
+        public: bool Valid() const;
       };
       %template(Vertexi) Vertex<int>;
     }

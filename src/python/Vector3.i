@@ -94,6 +94,14 @@ namespace ignition
       public: bool operator<(const Vector3<T> &_pt) const;
     };
 
+    %extend Vector3 {
+      std::string __str__() const {
+        std::ostringstream out;
+        out << *$self;
+        return out.str();
+      }
+    }
+
     %template(Vector3i) Vector3<int>;
     %template(Vector3d) Vector3<double>;
     %template(Vector3f) Vector3<float>;

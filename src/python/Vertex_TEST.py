@@ -23,17 +23,20 @@ class TestVertex(unittest.TestCase):
     def test_accessors(self):
         data = 5
         vertex = Vertexi('', data)
-        print(dir(vertex.data()))
         self.assertEqual(vertex.name(), '')
         vertex.set_name('new_name')
         self.assertEqual('new_name', vertex.name())
         self.assertEqual(vertex.data(), data)
+        print('id', vertex.id())
+        print('id', ignition.math.KNULLID)
+
         self.assertEqual(vertex.id(), ignition.math.KNULLID)
         self.assertFalse(vertex.valid())
 
         name = 'my_vertex'
         data = 10
         id_var = 2
+        print(type(id_var))
         vertex = Vertexi(name, data, id)
         print(type(vertex.id()))
         self.assertEqual(vertex.name(), name)

@@ -83,11 +83,21 @@ namespace graph
       return this->data;
     }
 
+    public: void SetData(const V &_data)
+    {
+      this->data = _data;
+    }
+
     /// \brief Get the vertex Id.
     /// \return The vertex Id.
     public: VertexId Id() const
     {
       return this->id;
+    }
+
+    public: void SetId(const VertexId &_id)
+    {
+      this->id = _id;
     }
 
     /// \brief Get the vertex name.

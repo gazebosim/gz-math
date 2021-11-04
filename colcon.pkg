@@ -1,0 +1,4 @@
+# Configuration file for colcon (https://colcon.readthedocs.io).
+{
+  "hooks": ["share/ignition-math6/setup.sh"]
+}
