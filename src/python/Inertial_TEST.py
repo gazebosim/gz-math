@@ -178,7 +178,7 @@ class TestInertial(unittest.TestCase):
             Quaterniond(0.4, 0.2, 0.5),
             Quaterniond(-0.1, 0.7, -0.7)]
         for rot in rotations:
-            inertial = inertialRef
+            inertial = Inertiald(m, pose)
             tol = -1e-6
             self.assertTrue(inertial.set_mass_matrix_rotation(rot, tol))
             self.assertEqual(moi, inertial.moi())
@@ -189,7 +189,7 @@ class TestInertial(unittest.TestCase):
             self.assertEqual(rot, inertial.pose().rot())
             self.assertEqual(moi, inertial.moi())
 
-            inertial = inertialRef
+            inertial = Inertiald(m, pose)
 
             self.assertTrue(inertial.set_inertial_rotation(rot))
             self.assertEqual(rot, inertial.pose().rot())
@@ -214,23 +214,23 @@ class TestInertial(unittest.TestCase):
 
     def test_set_rotation_non_unique_diagonal(self):
         self.SetRotation(12, Vector3d(2, 2, 2), Vector3d.ZERO, False)
-        # self.SetRotation(12, Vector3d(2, 2, 3), Vector3d.ZERO, False)
-        # self.SetRotation(12, Vector3d(2, 3, 2), Vector3d.ZERO, False)
+        self.SetRotation(12, Vector3d(2, 2, 3), Vector3d.ZERO, False)
+        self.SetRotation(12, Vector3d(2, 3, 2), Vector3d.ZERO, False)
         self.SetRotation(12, Vector3d(3, 2, 2), Vector3d.ZERO, False)
-        # self.SetRotation(12, Vector3d(2, 3, 3), Vector3d.ZERO, False)
-        # self.SetRotation(12, Vector3d(3, 2, 3), Vector3d.ZERO, False)
-        # self.SetRotation(12, Vector3d(3, 3, 2), Vector3d.ZERO, False)
+        self.SetRotation(12, Vector3d(2, 3, 3), Vector3d.ZERO, False)
+        self.SetRotation(12, Vector3d(3, 2, 3), Vector3d.ZERO, False)
+        self.SetRotation(12, Vector3d(3, 3, 2), Vector3d.ZERO, False)
 
-    # def test_set_rotation_non_unique_non_diagonal(self):
-    #     self.SetRotation(12, Vector3d(4, 4, 3), Vector3d(-1, 0, 0), False)
-    #     self.SetRotation(12, Vector3d(4, 3, 4), Vector3d(0, -1, 0), False)
-    #     self.SetRotation(12, Vector3d(3, 4, 4), Vector3d(0, 0, -1), False)
-    #     self.SetRotation(12, Vector3d(4, 4, 5), Vector3d(-1, 0, 0), False)
-    #     self.SetRotation(12, Vector3d(5, 4, 4), Vector3d(0, 0, -1), False)
-    #     self.SetRotation(12, Vector3d(5.5, 4.125, 4.375),
-    #                      0.25*Vector3d(-math.sqrt(3), 3.0, -math.sqrt(3)/2), False)
-    #     self.SetRotation(12, Vector3d(4.125, 5.5, 4.375),
-    #                      0.25*Vector3d(-math.sqrt(3), -math.sqrt(3)/2, 3.0), False)
+    def test_set_rotation_non_unique_non_diagonal(self):
+        self.SetRotation(12, Vector3d(4, 4, 3), Vector3d(-1, 0, 0), False)
+        self.SetRotation(12, Vector3d(4, 3, 4), Vector3d(0, -1, 0), False)
+        self.SetRotation(12, Vector3d(3, 4, 4), Vector3d(0, 0, -1), False)
+        self.SetRotation(12, Vector3d(4, 4, 5), Vector3d(-1, 0, 0), False)
+        self.SetRotation(12, Vector3d(5, 4, 4), Vector3d(0, 0, -1), False)
+        self.SetRotation(12, Vector3d(5.5, 4.125, 4.375),
+                         Vector3d(-math.sqrt(3), 3.0, -math.sqrt(3)/2)*0.25, False)
+        self.SetRotation(12, Vector3d(4.125, 5.5, 4.375),
+                         Vector3d(-math.sqrt(3), -math.sqrt(3)/2, 3.0)*0.25, False)
 
     # test for diagonalizing MassMatrix
     # verify MOI is conserved
