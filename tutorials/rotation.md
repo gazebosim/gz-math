@@ -1,4 +1,4 @@
-# Rotation example
+\page rotation Rotation example
 
 This example explains how to use quaternions and euler angles, and how to convert between them.
 
@@ -7,7 +7,7 @@ This example explains how to use quaternions and euler angles, and how to conver
 Go to `ign-math/examples` and use `cmake` to compile the code:
 
 ```{.sh}
-git clone https://github.com/ignitionrobotics/ign-math/ -b master
+git clone https://github.com/ignitionrobotics/ign-math/ -b ign-math6
 cd ign-math/examples
 mkdir build
 cd build
