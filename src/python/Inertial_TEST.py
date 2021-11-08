@@ -212,14 +212,14 @@ class TestInertial(unittest.TestCase):
     def test_set_rotation_unique_non_diagonal(self):
         self.SetRotation(12, Vector3d(2, 3, 4), Vector3d(0.3, 0.2, 0.1))
 
-    # def test_set_rotation_non_unique_diagonal(self):
-    #     self.SetRotation(12, Vector3d(2, 2, 2), Vector3d.ZERO, False)
-    #     self.SetRotation(12, Vector3d(2, 2, 3), Vector3d.ZERO, False)
-    #     self.SetRotation(12, Vector3d(2, 3, 2), Vector3d.ZERO, False)
-    #     self.SetRotation(12, Vector3d(3, 2, 2), Vector3d.ZERO, False)
-    #     self.SetRotation(12, Vector3d(2, 3, 3), Vector3d.ZERO, False)
-    #     self.SetRotation(12, Vector3d(3, 2, 3), Vector3d.ZERO, False)
-    #     self.SetRotation(12, Vector3d(3, 3, 2), Vector3d.ZERO, False)
+    def test_set_rotation_non_unique_diagonal(self):
+        self.SetRotation(12, Vector3d(2, 2, 2), Vector3d.ZERO, False)
+        # self.SetRotation(12, Vector3d(2, 2, 3), Vector3d.ZERO, False)
+        # self.SetRotation(12, Vector3d(2, 3, 2), Vector3d.ZERO, False)
+        self.SetRotation(12, Vector3d(3, 2, 2), Vector3d.ZERO, False)
+        # self.SetRotation(12, Vector3d(2, 3, 3), Vector3d.ZERO, False)
+        # self.SetRotation(12, Vector3d(3, 2, 3), Vector3d.ZERO, False)
+        # self.SetRotation(12, Vector3d(3, 3, 2), Vector3d.ZERO, False)
 
     # def test_set_rotation_non_unique_non_diagonal(self):
     #     self.SetRotation(12, Vector3d(4, 4, 3), Vector3d(-1, 0, 0), False)
