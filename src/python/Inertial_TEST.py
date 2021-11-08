@@ -273,10 +273,10 @@ class TestInertial(unittest.TestCase):
         self.Diagonalize(12, Vector3d(3, 4, 4), Vector3d(0, 0, -1))
         self.Diagonalize(12, Vector3d(4, 4, 5), Vector3d(-1, 0, 0))
         self.Diagonalize(12, Vector3d(5, 4, 4), Vector3d(0, 0, -1))
-        # self.Diagonalize(12, Vector3d(5.5, 4.125, 4.375),
-        #                  Vector3d(-math.sqrt(3) * 0.25, 3.0, -math.sqrt(3)/2))
-        # self.Diagonalize(12, Vector3d(4.125, 5.5, 4.375),
-        #                  Vector3d(-math.sqrt(3) * 0.25, -math.sqrt(3)/2, 3.0))
+        self.Diagonalize(12, Vector3d(5.5, 4.125, 4.375),
+                         Vector3d(-math.sqrt(3), 3.0, -math.sqrt(3)/2)*0.25)
+        self.Diagonalize(12, Vector3d(4.125, 5.5, 4.375),
+                         Vector3d(-math.sqrt(3), -math.sqrt(3)/2, 3.0)*0.25)
 
     def test_addition(self):
         # Add two half-cubes together
