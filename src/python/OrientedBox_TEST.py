@@ -53,9 +53,9 @@ class TestOrientedBox(unittest.TestCase):
 
     def test_length(self):
         box = OrientedBoxd(Vector3d(0.1, -2.1, 0.0))
-        self.assertEqual(box.xlength(), 0.1)
-        self.assertEqual(box.ylength(), 2.1)
-        self.assertEqual(box.zlength(), 0.0)
+        self.assertEqual(box.x_length(), 0.1)
+        self.assertEqual(box.y_length(), 2.1)
+        self.assertEqual(box.z_length(), 0.0)
 
     def test_operator_equal(self):
         box = OrientedBoxd(Vector3d(1, 1, 1))

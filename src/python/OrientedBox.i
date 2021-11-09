@@ -35,6 +35,7 @@ namespace ignition
     template<typename T>
     class ignition::math::OrientedBox
     {
+      %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
       public: OrientedBox();
 
       public: OrientedBox(
@@ -52,10 +53,13 @@ namespace ignition
 
       public: virtual ~OrientedBox();
 
+      %rename(x_length) XLength;
       public: T XLength() const;
 
+      %rename(y_length) YLength;
       public: T YLength() const;
 
+      %rename(z_length) ZLength;
       public: T ZLength() const;
 
       public: const ignition::math::Vector3<T> &Size() const;
