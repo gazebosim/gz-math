@@ -97,6 +97,7 @@ if (PYTHONLIBS_FOUND)
       Frustum_TEST
       GaussMarkovProcess_TEST
       Helpers_TEST
+      Inertial_TEST
       Kmeans_TEST
       Line2_TEST
       Line3_TEST
@@ -105,6 +106,7 @@ if (PYTHONLIBS_FOUND)
       Matrix3_TEST
       Matrix4_TEST
       MovingWindowFilter_TEST
+      OrientedBox_TEST
       PID_TEST
       Plane_TEST
       Pose3_TEST
