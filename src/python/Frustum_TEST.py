@@ -534,7 +534,7 @@ class TestFrustrum(unittest.TestCase):
         self.assertTrue(frustum.contains(
                         AxisAlignedBox(Vector3d(0.495, 0.25, 2.1), Vector3d(0.595, 0.35, 2.2))))
         self.assertTrue(frustum.contains(
-                            AxisAlignedBox(Vector3d(0.495, 0.25, 1.8), Vector3d(0.595, 0.35, 1.9))))
+                        AxisAlignedBox(Vector3d(0.495, 0.25, 1.8), Vector3d(0.595, 0.35, 1.9))))
         self.assertTrue(frustum.contains(
                         AxisAlignedBox(Vector3d(0.495, -0.35, 2.1), Vector3d(0.595, -0.25, 2.2))))
         self.assertTrue(frustum.contains(
