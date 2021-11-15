@@ -1,5 +1,3 @@
-find_package(pybind11 REQUIRED)
-
 if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
   # pybind11 logic for setting up a debug build when both a debug and release
   # python interpreter are present in the system seems to be pretty much broken.
@@ -7,51 +5,84 @@ if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
   set(PYTHON_LIBRARIES "${PYTHON_DEBUG_LIBRARIES}")
 endif()
 
+include(FetchContent)
+FetchContent_Declare(
+    pybind11
+    GIT_REPOSITORY https://github.com/pybind/pybind11
+    GIT_TAG        v2.8.1
+)
 
-function(clean_windows_flags target)
-  # Hack to avoid pybind11 issue.
-  #
-  # TODO(ivanpauno):
-  # This can be deleted when we update `pybind11_vendor` to a version including
-  # https://github.com/pybind/pybind11/pull/2590.
-  #
-  # They are enabling /LTCG on Windows to reduce binary size,
-  # but that doesn't play well with MSVC incremental linking (default for Debug/RelWithDebInfo).
-  #
-  # See:
-  # - https://docs.microsoft.com/en-us/cpp/build/reference/incremental-link-incrementally?view=vs-2019
-  # - https://docs.microsoft.com/en-us/cpp/build/reference/ltcg-link-time-code-generation?view=vs-2019
+FetchContent_GetProperties(pybind11)
+if(NOT pybind11_POPULATED)
+    FetchContent_Populate(pybind11)
+    add_subdirectory(${pybind11_SOURCE_DIR} ${pybind11_BINARY_DIR})
+endif()
 
-  if(MSVC AND "${CMAKE_BUILD_TYPE}" STREQUAL "RelWithDebInfo")
-    get_target_property(target_link_libraries ${target} LINK_LIBRARIES)
-    list(REMOVE_ITEM target_link_libraries "$<$<NOT:$<CONFIG:Debug>>:-LTCG>")
-    set_target_properties(${target} PROPERTIES LINK_LIBRARIES "${target_link_libraries}")
+# Split from main extension and converted to pybind11
+pybind11_add_module(math SHARED
+  src/_ignition_math_pybind11.cc
+)
 
-    get_target_property(target_compile_options ${target} COMPILE_OPTIONS)
-    list(REMOVE_ITEM target_compile_options "$<$<NOT:$<CONFIG:Debug>>:/GL>")
-    set_target_properties(${target} PROPERTIES COMPILE_OPTIONS "${target_compile_options}")
+if(USE_SYSTEM_PATHS_FOR_PYTHON_INSTALLATION)
+  if(${CMAKE_VERSION} VERSION_LESS "3.12.0")
+    execute_process(
+      COMMAND "${PYTHON_EXECUTABLE}" -c "if True:
+  from distutils import sysconfig as sc
+  print(sc.get_python_lib(plat_specific=True))"
+      OUTPUT_VARIABLE Python3_SITEARCH
+      OUTPUT_STRIP_TRAILING_WHITESPACE)
+  else()
+    # Get install variable from Python3 module
+    # Python3_SITEARCH is available from 3.12 on, workaround if needed:
+    find_package(Python3 COMPONENTS Interpreter)
   endif()
-endfunction()
 
-# # enables using the Python extensions from the build space for testing
-# file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/test_rclpy/__init__.py" "")
+  if(USE_DIST_PACKAGES_FOR_PYTHON)
+    string(REPLACE "site-packages" "dist-packages" IGN_PYTHON_INSTALL_PATH ${Python3_SITEARCH})
+  else()
+    # custom cmake command is returning dist-packages
+    string(REPLACE "dist-packages" "site-packages" IGN_PYTHON_INSTALL_PATH ${Python3_SITEARCH})
+  endif()
+else()
+  # If not a system installation, respect local paths
+  set(IGN_PYTHON_INSTALL_PATH ${IGN_LIB_INSTALL_DIR}/python)
+endif()
+
+set(IGN_PYTHON_INSTALL_PATH "${IGN_PYTHON_INSTALL_PATH}/ignition")
 
 # Set the build location and install location for a CPython extension
 function(configure_build_install_location _library_name)
   # Install into test_rclpy folder in build space for unit tests to import
   set_target_properties(${_library_name} PROPERTIES
     # Use generator expression to avoid prepending a build type specific directory on Windows
-    LIBRARY_OUTPUT_DIRECTORY $<1:${CMAKE_CURRENT_BINARY_DIR}/test_rclpy>
-    RUNTIME_OUTPUT_DIRECTORY $<1:${CMAKE_CURRENT_BINARY_DIR}/test_rclpy>)
+    LIBRARY_OUTPUT_DIRECTORY $<1:${CMAKE_CURRENT_BINARY_DIR}/test>
+    RUNTIME_OUTPUT_DIRECTORY $<1:${CMAKE_CURRENT_BINARY_DIR}/test>)
 
   # Install library for actual use
   install(TARGETS ${_library_name}
-    DESTINATION "${PYTHON_INSTALL_DIR}/${PROJECT_NAME}"
+    DESTINATION "${IGN_PYTHON_INSTALL_PATH}/"
   )
 endfunction()
 
+configure_build_install_location(math)
 
-# Split from main extension and converted to pybind11
-pybind11_add_module(ignition_math SHARED
-  src/_ignition_math_pybind11.cc
-)
+if (BUILD_TESTING)
+  # Add the Python tests
+  set(python_tests
+    Vector2_TEST
+    Vector3_TEST
+    Vector4_TEST
+  )
+
+  foreach (test ${python_tests})
+    add_test(NAME ${test}.py COMMAND
+    "${PYTHON_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/src/python_pybind11/test/${test}.py")
+
+    set(_env_vars)
+    list(APPEND _env_vars "PYTHONPATH=${FAKE_INSTALL_PREFIX}/lib/python/")
+    list(APPEND _env_vars "LD_LIBRARY_PATH=${FAKE_INSTALL_PREFIX}/lib:$ENV{LD_LIBRARY_PATH}")
+    set_tests_properties(${test}.py PROPERTIES
+      ENVIRONMENT "${_env_vars}")
+  endforeach()
+
+endif()

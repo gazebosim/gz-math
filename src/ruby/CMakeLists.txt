@@ -39,29 +39,41 @@ if (RUBY_FOUND)
 
   # Turn on c++
   set_source_files_properties(${swig_i_files} ruby.i PROPERTIES CPLUSPLUS ON)
+  set(SWIG_RB_LIB rbmath)
+  set(SWIG_RB_LIB_OUTPUT math)
 
   # Create the ruby library
 
   set(CMAKE_SWIG_OUTDIR "${CMAKE_BINARY_DIR}/lib/ruby")
   if(CMAKE_VERSION VERSION_GREATER 3.8.0)
-    SWIG_ADD_LIBRARY(math LANGUAGE ruby SOURCES ruby.i ${swig_i_files})
+    SWIG_ADD_LIBRARY(${SWIG_RB_LIB} LANGUAGE ruby SOURCES ruby.i ${swig_i_files})
   else()
-    SWIG_ADD_MODULE(math ruby ruby.i ${swig_i_files})
+    SWIG_ADD_MODULE(${SWIG_RB_LIB} ruby ruby.i ${swig_i_files})
   endif()
 
   # Suppress warnings on SWIG-generated files
-  target_compile_options(math PRIVATE
+  target_compile_options(${SWIG_RB_LIB} PRIVATE
     $<$<CXX_COMPILER_ID:GNU>:-Wno-pedantic -Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter>
     $<$<CXX_COMPILER_ID:Clang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter>
     $<$<CXX_COMPILER_ID:AppleClang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter>
   )
-  target_include_directories(math SYSTEM PUBLIC ${RUBY_INCLUDE_DIRS})
+  target_include_directories(${SWIG_RB_LIB} SYSTEM PUBLIC ${RUBY_INCLUDE_DIRS})
 
-  SWIG_LINK_LIBRARIES(math
+  SWIG_LINK_LIBRARIES(${SWIG_RB_LIB}
     ${RUBY_LIBRARY}
     ignition-math${PROJECT_VERSION_MAJOR}
   )
-  target_compile_features(math PUBLIC ${IGN_CXX_${c++standard}_FEATURES})
+  target_compile_features(${SWIG_RB_LIB} PUBLIC ${IGN_CXX_${c++standard}_FEATURES})
+
+  if(NOT CMAKE_VERSION VERSION_GREATER_EQUAL 3.13.0)
+    set(SWIG_RB_LIB "_${SWIG_RB_LIB}")
+    set(SWIG_RB_LIB_OUTPUT "_${SWIG_RB_LIB_OUTPUT}")
+  endif()
+
+  set_target_properties(${SWIG_RB_LIB}
+    PROPERTIES
+      OUTPUT_NAME ${SWIG_RB_LIB_OUTPUT}
+  )
 
   if(USE_SYSTEM_PATHS_FOR_RUBY_INSTALLATION)
     execute_process(
@@ -72,7 +84,7 @@ if (RUBY_FOUND)
       set(IGN_RUBY_INSTALL_PATH ${IGN_LIB_INSTALL_DIR}/ruby)
   endif()
   set(IGN_RUBY_INSTALL_PATH "${IGN_RUBY_INSTALL_PATH}/ignition")
-  install(TARGETS math DESTINATION ${IGN_RUBY_INSTALL_PATH})
+  install(TARGETS ${SWIG_RB_LIB} DESTINATION ${IGN_RUBY_INSTALL_PATH})
 
   # Add the ruby tests
   foreach (test ${ruby_tests})

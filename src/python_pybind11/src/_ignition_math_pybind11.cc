@@ -20,7 +20,7 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(ignition_math, m)
+PYBIND11_MODULE(math, m)
 {
   m.doc() = "Ignition Math Python Library.";
 

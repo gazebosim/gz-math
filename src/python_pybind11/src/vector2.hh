@@ -37,27 +37,48 @@ template<typename T>
 void define_math_vector2(py::module &m, const std::string &typestr)
 {
   using Class = ignition::math::Vector2<T>;
+  auto toString = [](const Class &si) {
+    std::stringstream stream;
+    stream << si;
+    return stream.str();
+  };
   std::string pyclass_name = typestr;
   py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(), py::dynamic_attr())
     .def(py::init<>())
     .def(py::init<const T&, const T&>())
     .def(py::init<const Class>())
-    .def("sum", &Class::Sum)
+    .def("sum", &Class::Sum, "Return the sum of the values")
     .def("distance", &Class::Distance, "Calc distance to the given point")
-    .def("length", &Class::Length)
-    .def("squared_length", &Class::SquaredLength)
-    .def("normalize", &Class::Normalize)
-    .def("normalized", &Class::Normalized)
+    .def("length",
+         &Class::Length,
+         "Returns the length (magnitude) of the vector")
+    .def("squared_length",
+         &Class::SquaredLength,
+         "Return the square of the length (magnitude) of the vector")
+         .def("normalize", &Class::Normalize, "Normalize the vector length")
+         .def("normalized", &Class::Normalized, "Return a normalized vector")
     .def("round", &Class::Round)
-    .def("rounded", &Class::Rounded)
-    .def("set", &Class::Set)
-    .def("dot", &Class::Dot)
-    .def("abs", &Class::Abs)
-    .def("abs_dot", &Class::AbsDot)
-    .def("max", py::overload_cast<const Class&>(&Class::Max))
-    .def("max", py::overload_cast<>(&Class::Max, py::const_))
-    .def("min", py::overload_cast<const Class&>(&Class::Min))
-    .def("min", py::overload_cast<>(&Class::Min, py::const_))
+    .def("rounded", &Class::Rounded, "Get a rounded version of this vector")
+    .def("set", &Class::Set, "Set the contents of the vector")
+    .def("dot",
+         &Class::Dot,
+         "Return the dot product of this vector and another vector")
+    .def("abs", &Class::Abs,
+        "Return the absolute dot product of this vector and "
+        "another vector. This is similar to the Dot function, except the "
+        "absolute value of each component of the vector is used.")
+    .def("abs_dot", &Class::AbsDot, " Get the absolute value of the vector")
+    .def("max",
+         py::overload_cast<const Class&>(&Class::Max),
+         "Set this vector's components to the maximum of itself and the "
+         "passed in vector")
+    .def("max", py::overload_cast<>(&Class::Max, py::const_),
+         "Get the maximum value in the vector")
+    .def("min", py::overload_cast<const Class&>(&Class::Min),
+         "Set this vector's components to the minimum of itself and the "
+         "passed in vector")
+    .def("min", py::overload_cast<>(&Class::Min, py::const_),
+         "Get the minimum value in the vector")
     .def(py::self + py::self)
     .def(py::self += py::self)
     .def(py::self + T())
@@ -77,38 +98,34 @@ void define_math_vector2(py::module &m, const std::string &typestr)
     .def(py::self != py::self)
     .def(py::self == py::self)
     .def(-py::self)
-    .def("equal", &Class::Equal)
-    .def("is_finite", &Class::IsFinite)
-    .def("correct", &Class::Correct)
-    .def("x", py::overload_cast<>(&Class::X))
-    .def("y", py::overload_cast<>(&Class::Y))
-    .def("x", py::overload_cast<const T&>(&Class::X))
-    .def("y", py::overload_cast<const T&>(&Class::Y))
-    .def_readonly_static("ZERO", &Class::Zero)
-    .def_readonly_static("ONE", &Class::One)
-    .def_readonly_static("NAN", &Class::NaN)
+    .def("equal", &Class::Equal, "Equal to operator")
+    .def("is_finite",
+         &Class::IsFinite,
+         "See if a point is finite (e.g., not nan)")
+    .def("correct", &Class::Correct, "Corrects any nan values")
+    .def("x", py::overload_cast<>(&Class::X), "Get the x value.")
+    .def("y", py::overload_cast<>(&Class::Y), "Get the y value.")
+    .def("x", py::overload_cast<const T&>(&Class::X), "Get the x value.")
+    .def("y", py::overload_cast<const T&>(&Class::Y), "Get the y value.")
+    .def_readonly_static("ZERO", &Class::Zero, "math::Vector2(0, 0)")
+    .def_readonly_static("ONE", &Class::One, "math::Vector2(1, 1)")
+    .def_readonly_static("NAN", &Class::NaN, "math::Vector3(NaN, NaN)")
     .def("__copy__", [](const Class &self) {
       return Class(self);
     })
     .def("__deepcopy__", [](const Class &self, py::dict) {
       return Class(self);
     }, "memo"_a)
-    .def("__getitem__", py::overload_cast<const std::size_t>(&Class::operator[], py::const_))
-    .def("__setitem__", [](Class* vec, unsigned index, T val) { (*vec)[index] = val; })
-    .def("__str__", [](const Class &si) {
-      std::stringstream stream;
-      stream << si;
-      return stream.str();
-    })
-    .def("__repr__", [](const Class &si) {
-      std::stringstream stream;
-      stream << si;
-      return stream.str();
-    });
+    .def("__getitem__",
+         py::overload_cast<const std::size_t>(&Class::operator[], py::const_))
+    .def("__setitem__",
+         [](Class* vec, unsigned index, T val) { (*vec)[index] = val; })
+    .def("__str__", toString)
+    .def("__repr__", toString);
 }
 
 }  // namespace python
 }  // namespace gazebo
 }  // namespace ignition
 
-#endif  // IGNITION_GAZEBO_PYTHON__SERVER_CONFIG_HPP_
+#endif  // IGNITION_MATH_PYTHON__VECTOR2D_HPP_
