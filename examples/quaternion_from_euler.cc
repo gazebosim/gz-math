@@ -44,7 +44,7 @@ int main(int argc, char **argv)
   if (argc != 4)
   {
     std::cerr << "Invalid usage\n\n"
-              << "Usage (angles specified in radians):\n"
+              << "Usage (angles specified in degrees):\n"
               << "  quaternion_from_euler "
               << "<float_roll> <float_pitch> <float_yaw>\n\n"
               << "Example\n"
@@ -53,9 +53,9 @@ int main(int argc, char **argv)
     return -1;
   }
 
-  double roll = strToDouble(argv[1]);
-  double pitch = strToDouble(argv[2]);
-  double yaw = strToDouble(argv[3]);
+  double roll = IGN_DTOR(strToDouble(argv[1]));
+  double pitch = IGN_DTOR(strToDouble(argv[2]));
+  double yaw = IGN_DTOR(strToDouble(argv[3]));
 
   std::cout << "Converting Euler angles:\n";
   printf(" roll  % .6f radians\n"
@@ -69,13 +69,18 @@ int main(int argc, char **argv)
           IGN_RTOD(pitch),
           IGN_RTOD(yaw));
 
+//![constructor]
   ignition::math::Quaterniond q(roll, pitch, yaw);
   ignition::math::Matrix3d m(q);
+//![constructor]
 
   std::cout << "\nto Quaternion\n";
+//! [access quaterion]
   printf(" W % .6f\n X % .6f\n Y % .6f\n Z % .6f\n",
         q.W(), q.X(), q.Y(), q.Z());
+//! [access quaterion]
 
+//! [rotation matrix]
   std::cout << "\nto Rotation matrix\n";
   printf("   % .6f  % .6f  % .6f\n"
          "   % .6f  % .6f  % .6f\n"
@@ -83,4 +88,5 @@ int main(int argc, char **argv)
           m(0, 0), m(0, 1), m(0, 2),
           m(1, 0), m(1, 1), m(1, 2),
           m(2, 0), m(2, 1), m(2, 2));
+//! [rotation matrix]
 }
