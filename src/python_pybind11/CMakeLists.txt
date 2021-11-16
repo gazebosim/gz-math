@@ -5,6 +5,8 @@ if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
   set(PYTHON_LIBRARIES "${PYTHON_DEBUG_LIBRARIES}")
 endif()
 
+set(PYBIND11_PYTHON_VERSION 3)
+
 find_package(pybind11 QUIET)
 
 if (NOT ${pybind11_FOUND})
@@ -22,10 +24,11 @@ if (NOT ${pybind11_FOUND})
         add_subdirectory(${pybind11_SOURCE_DIR} ${pybind11_BINARY_DIR})
     endif()
   endif()
+  set(pybind11_FOUND TRUE)
 endif()
 
 if (${pybind11_FOUND})
-  message("Building pybind11 interfaces")
+  message(STATUS "Building pybind11 interfaces")
   # Split from main extension and converted to pybind11
   pybind11_add_module(math SHARED
     src/_ignition_math_pybind11.cc
