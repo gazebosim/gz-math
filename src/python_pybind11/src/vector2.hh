@@ -15,6 +15,8 @@
 #ifndef IGNITION_MATH_PYTHON__VECTOR2D_HPP_
 #define IGNITION_MATH_PYTHON__VECTOR2D_HPP_
 
+#include <string>
+
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 
@@ -43,7 +45,10 @@ void define_math_vector2(py::module &m, const std::string &typestr)
     return stream.str();
   };
   std::string pyclass_name = typestr;
-  py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(), py::dynamic_attr())
+  py::class_<Class>(m,
+                    pyclass_name.c_str(),
+                    py::buffer_protocol(),
+                    py::dynamic_attr())
     .def(py::init<>())
     .def(py::init<const T&, const T&>())
     .def(py::init<const Class>())
