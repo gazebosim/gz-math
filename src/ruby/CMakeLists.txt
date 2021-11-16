@@ -42,8 +42,12 @@ if (RUBY_FOUND)
   set(SWIG_RB_LIB rbmath)
   set(SWIG_RB_LIB_OUTPUT math)
 
-  # Create the ruby library
+  if(NOT CMAKE_VERSION VERSION_GREATER_EQUAL 3.13.0)
+    set(SWIG_RB_LIB "_${SWIG_RB_LIB}")
+    set(SWIG_RB_LIB_OUTPUT "_${SWIG_RB_LIB_OUTPUT}")
+  endif()
 
+  # Create the ruby library
   set(CMAKE_SWIG_OUTDIR "${CMAKE_BINARY_DIR}/lib/ruby")
   if(CMAKE_VERSION VERSION_GREATER 3.8.0)
     SWIG_ADD_LIBRARY(${SWIG_RB_LIB} LANGUAGE ruby SOURCES ruby.i ${swig_i_files})
@@ -64,11 +68,6 @@ if (RUBY_FOUND)
     ignition-math${PROJECT_VERSION_MAJOR}
   )
   target_compile_features(${SWIG_RB_LIB} PUBLIC ${IGN_CXX_${c++standard}_FEATURES})
-
-  if(NOT CMAKE_VERSION VERSION_GREATER_EQUAL 3.13.0)
-    set(SWIG_RB_LIB "_${SWIG_RB_LIB}")
-    set(SWIG_RB_LIB_OUTPUT "_${SWIG_RB_LIB_OUTPUT}")
-  endif()
 
   set_target_properties(${SWIG_RB_LIB}
     PROPERTIES
