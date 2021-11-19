@@ -7,7 +7,7 @@ endif()
 
 set(PYBIND11_PYTHON_VERSION 3)
 
-find_package(pybind11 QUIET)
+find_package(pybind11 2.2 QUIET)
 
 if (NOT ${pybind11_FOUND})
   if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.11.0")
