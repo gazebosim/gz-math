@@ -42,11 +42,6 @@ if (RUBY_FOUND)
   set(SWIG_RB_LIB rbmath)
   set(SWIG_RB_LIB_OUTPUT math)
 
-  if(NOT CMAKE_VERSION VERSION_GREATER_EQUAL 3.13.0)
-    set(SWIG_RB_LIB "_${SWIG_RB_LIB}")
-    set(SWIG_RB_LIB_OUTPUT "_${SWIG_RB_LIB_OUTPUT}")
-  endif()
-
   # Create the ruby library
   set(CMAKE_SWIG_OUTDIR "${CMAKE_BINARY_DIR}/lib/ruby")
   if(CMAKE_VERSION VERSION_GREATER 3.8.0)
@@ -88,7 +83,7 @@ if (RUBY_FOUND)
   # Add the ruby tests
   foreach (test ${ruby_tests})
     add_test(NAME ${test}.rb COMMAND
-      ruby -I${CMAKE_BINARY_DIR}/lib ${CMAKE_SOURCE_DIR}/src/ruby/${test}.rb
+      ruby -I${FAKE_INSTALL_PREFIX}/lib/ruby/ignition ${CMAKE_SOURCE_DIR}/src/ruby/${test}.rb
    	  --gtest_output=xml:${CMAKE_BINARY_DIR}/test_results/${test}rb.xml)
   endforeach()
 endif()
