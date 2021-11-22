@@ -108,10 +108,10 @@ namespace ignition
       {
         double d = this->Length();
 
-        if (!equal<T>(static_cast<T>(d), static_cast<T>(0.0)))
+        if (!equal<T>(d, static_cast<T>(0.0)))
         {
-          this->data[0] /= static_cast<T>(d);
-          this->data[1] /= static_cast<T>(d);
+          this->data[0] /= d;
+          this->data[1] /= d;
         }
       }
 
@@ -128,8 +128,8 @@ namespace ignition
       /// \return the result
       public: Vector2 Round()
       {
-        this->data[0] = static_cast<T>(nearbyint(this->data[0]));
-        this->data[1] = static_cast<T>(nearbyint(this->data[1]));
+        this->data[0] = nearbyint(this->data[0]);
+        this->data[1] = nearbyint(this->data[1]);
         return *this;
       }
 
