@@ -66,6 +66,50 @@ TEST(Color, ConstColors)
 }
 
 /////////////////////////////////////////////////
+TEST(Color, ConstexprColors)
+{
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::White.R());
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::White.G());
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::White.B());
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::White.A());
+
+  EXPECT_FLOAT_EQ(0.0f, math::Color::Constant::Black.R());
+  EXPECT_FLOAT_EQ(0.0f, math::Color::Constant::Black.G());
+  EXPECT_FLOAT_EQ(0.0f, math::Color::Constant::Black.B());
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::Black.A());
+
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::Red.R());
+  EXPECT_FLOAT_EQ(0.0f, math::Color::Constant::Red.G());
+  EXPECT_FLOAT_EQ(0.0f, math::Color::Constant::Red.B());
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::Red.A());
+
+  EXPECT_FLOAT_EQ(0.0f, math::Color::Constant::Green.R());
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::Green.G());
+  EXPECT_FLOAT_EQ(0.0f, math::Color::Constant::Green.B());
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::Green.A());
+
+  EXPECT_FLOAT_EQ(0.0f, math::Color::Constant::Blue.R());
+  EXPECT_FLOAT_EQ(0.0f, math::Color::Constant::Blue.G());
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::Blue.B());
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::Blue.A());
+
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::Yellow.R());
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::Yellow.G());
+  EXPECT_FLOAT_EQ(0.0f, math::Color::Constant::Yellow.B());
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::Yellow.A());
+
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::Magenta.R());
+  EXPECT_FLOAT_EQ(0.0f, math::Color::Constant::Magenta.G());
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::Magenta.B());
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::Magenta.A());
+
+  EXPECT_FLOAT_EQ(0.0f, math::Color::Constant::Cyan.R());
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::Cyan.G());
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::Cyan.B());
+  EXPECT_FLOAT_EQ(1.0f, math::Color::Constant::Cyan.A());
+}
+
+/////////////////////////////////////////////////
 TEST(Color, Color)
 {
   math::Color clr0;

@@ -36,22 +36,25 @@ namespace ignition
     /// (A) component. Each color component is in the range [0..1].
     class IGNITION_MATH_VISIBLE Color
     {
+      // This struct of named constants is defined later in this file.
+      public: struct IGNITION_MATH_VISIBLE Constant;
+
       /// \brief (1, 1, 1)
-      public: static const Color White;
+      public: IGN_DEPRECATED(7) static const Color White;
       /// \brief (0, 0, 0)
-      public: static const Color Black;
+      public: IGN_DEPRECATED(7) static const Color Black;
       /// \brief (1, 0, 0)
-      public: static const Color Red;
+      public: IGN_DEPRECATED(7) static const Color Red;
       /// \brief (0, 1, 0)
-      public: static const Color Green;
+      public: IGN_DEPRECATED(7) static const Color Green;
       /// \brief (0, 0, 1)
-      public: static const Color Blue;
+      public: IGN_DEPRECATED(7) static const Color Blue;
       /// \brief (1, 1, 0)
-      public: static const Color Yellow;
+      public: IGN_DEPRECATED(7) static const Color Yellow;
       /// \brief (1, 0, 1)
-      public: static const Color Magenta;
+      public: IGN_DEPRECATED(7) static const Color Magenta;
       /// \brief (0, 1, 1)
-      public: static const Color Cyan;
+      public: IGN_DEPRECATED(7) static const Color Cyan;
 
       /// \typedef RGBA
       /// \brief A RGBA packed value as an unsigned int
@@ -70,22 +73,26 @@ namespace ignition
       public: typedef unsigned int ABGR;
 
       /// \brief Constructor
-      public: Color();
+      public: constexpr Color() = default;
 
       /// \brief Constructor
       /// \param[in] _r Red value (range 0 to 1)
       /// \param[in] _g Green value (range 0 to 1)
       /// \param[in] _b Blue value (range 0 to 1)
       /// \param[in] _a Alpha value (0=transparent, 1=opaque)
-      public: Color(const float _r, const float _g, const float _b,
-                  const float _a = 1.0);
+      public: constexpr Color(const float _r, const float _g, const float _b,
+                              const float _a = 1.0)
+      : r(_r), g(_g), b(_b), a(_a)
+      {
+        this->Clamp();
+      }
 
       /// \brief Copy Constructor
       /// \param[in] _clr Color to copy
-      public: Color(const Color &_clr);
+      public: constexpr Color(const Color &_clr) = default;
 
       /// \brief Destructor
-      public: virtual ~Color();
+      public: ~Color() = default;
 
       /// \brief Reset the color to default values to red=0, green=0,
       /// blue=0, alpha=1.
@@ -123,7 +130,7 @@ namespace ignition
       /// \brief Equal operator
       /// \param[in] _pt Color to copy
       /// \return Reference to this color
-      public: Color &operator=(const Color &_pt);
+      public: constexpr Color &operator=(const Color &_pt) = default;
 
       /// \brief Array index operator
       /// \param[in] _index Color component index(0=red, 1=green, 2=blue,
@@ -242,7 +249,18 @@ namespace ignition
       public: bool operator!=(const Color &_pt) const;
 
       /// \brief Clamp the color values to valid ranges
-      private: void Clamp();
+      private: constexpr void Clamp()
+      {
+        // The comparisons here are carefully written to handle NaNs correctly.
+        if (!(this->r >= 0)) { this->r = 0; }
+        if (!(this->g >= 0)) { this->g = 0; }
+        if (!(this->b >= 0)) { this->b = 0; }
+        if (!(this->a >= 0)) { this->a = 0; }
+        if (this->r > 1) { this->r = this->r/255.0f; }
+        if (this->g > 1) { this->g = this->g/255.0f; }
+        if (this->b > 1) { this->b = this->b/255.0f; }
+        if (this->a > 1) { this->a = 1; }
+      }
 
       /// \brief Stream insertion operator
       /// \param[in] _out the output stream
@@ -345,6 +363,27 @@ namespace ignition
 
       /// \brief Alpha value
       private: float a = 1;
+    };
+
+    /// \class Constant Color.hh ignition/math/Color.hh
+    /// \brief Provides named static constants for colors.
+    struct IGNITION_MATH_VISIBLE Color::Constant {
+      /// \brief (1, 1, 1)
+      public: static constexpr Color White{1, 1, 1};
+      /// \brief (0, 0, 0)
+      public: static constexpr Color Black{0, 0, 0};
+      /// \brief (1, 0, 0)
+      public: static constexpr Color Red{1, 0, 0};
+      /// \brief (0, 1, 0)
+      public: static constexpr Color Green{0, 1, 0};
+      /// \brief (0, 0, 1)
+      public: static constexpr Color Blue{0, 0, 1};
+      /// \brief (1, 1, 0)
+      public: static constexpr Color Yellow{1, 1, 0};
+      /// \brief (1, 0, 1)
+      public: static constexpr Color Magenta{1, 0, 1};
+      /// \brief (0, 1, 1)
+      public: static constexpr Color Cyan{0, 1, 1};
     };
     }
   }

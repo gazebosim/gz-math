@@ -31,29 +31,6 @@ const Color Color::Yellow = Color(1, 1, 0, 1);
 const Color Color::Magenta = Color(1, 0, 1, 1);
 const Color Color::Cyan = Color(0, 1, 1, 1);
 
-//////////////////////////////////////////////////
-Color::Color()
-{
-}
-
-//////////////////////////////////////////////////
-Color::Color(const float _r, const float _g, const float _b, const float _a)
-: r(_r), g(_g), b(_b), a(_a)
-{
-  this->Clamp();
-}
-
-//////////////////////////////////////////////////
-Color::Color(const Color &_pt)
-: r(_pt.r), g(_pt.g), b(_pt.b), a(_pt.a)
-{
-  this->Clamp();
-}
-
-//////////////////////////////////////////////////
-Color::~Color()
-{
-}
 
 //////////////////////////////////////////////////
 void Color::Reset()
@@ -373,17 +350,6 @@ void Color::SetFromABGR(const Color::ABGR _v)
 }
 
 //////////////////////////////////////////////////
-Color &Color::operator=(const Color &_clr)
-{
-  this->r = _clr.r;
-  this->g = _clr.g;
-  this->b = _clr.b;
-  this->a = _clr.a;
-
-  return *this;
-}
-
-//////////////////////////////////////////////////
 Color Color::operator+(const Color &_pt) const
 {
   return Color(this->r + _pt.r, this->g + _pt.g,
@@ -498,22 +464,6 @@ bool Color::operator==(const Color &_pt) const
 bool Color::operator!=(const Color &_pt) const
 {
   return !(*this == _pt);
-}
-
-//////////////////////////////////////////////////
-void Color::Clamp()
-{
-  this->r = this->r < 0 || isnan(this->r) ? 0: this->r;
-  this->r = this->r > 1 ? this->r/255.0f: this->r;
-
-  this->g = this->g < 0 || isnan(this->g) ? 0: this->g;
-  this->g = this->g > 1 ? this->g/255.0f: this->g;
-
-  this->b = this->b < 0 || isnan(this->b) ? 0: this->b;
-  this->b = this->b > 1 ? this->b/255.0f: this->b;
-
-  this->a = this->a < 0 || isnan(this->a) ? 0: this->a;
-  this->a = this->a > 1 ? 1.0f: this->a;
 }
 
 //////////////////////////////////////////////////
