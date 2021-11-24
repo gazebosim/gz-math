@@ -30,6 +30,9 @@
 1. Evict large function definitions from the Helpers.hh header file.
     * [Pull request 288](https://github.com/ignitionrobotics/ign-math/pull/288)
 
+1. Defer regex construction to avoid static initialization.
+    * [Pull request 289](https://github.com/ignitionrobotics/ign-math/pull/289)
+
 ## Ignition Math 6.x
 
 ### Ignition Math 6.x.x
