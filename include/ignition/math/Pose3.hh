@@ -74,7 +74,7 @@ namespace ignition
     {
       /// \brief A Pose3 initialized to zero.
       /// This is equivalent to math::Pose3<T>(0, 0, 0, 0, 0, 0).
-      public: static const Pose3<T> Zero;
+      public: static constexpr Pose3<T> Zero{};
 
       /// \brief Default constructor. This initializes the position
       /// component to zero and the quaternion to identity.
@@ -118,13 +118,10 @@ namespace ignition
 
       /// \brief Copy constructor.
       /// \param[in] _pose Pose3<T> to copy
-      public: Pose3(const Pose3<T> &_pose)
-      : p(_pose.p), q(_pose.q)
-      {
-      }
+      public: Pose3(const Pose3<T> &_pose) = default;
 
       /// \brief Destructor.
-      public: ~Pose3() {}
+      public: ~Pose3() = default;
 
       /// \brief Set the pose from a Vector3<T> and a Quaternion<T>
       /// \param[in] _pos The position.
@@ -280,12 +277,7 @@ namespace ignition
 
       /// \brief Assignment operator
       /// \param[in] _pose Pose3<T> to copy
-      public: Pose3<T> &operator=(const Pose3<T> &_pose)
-      {
-        this->p = _pose.p;
-        this->q = _pose.q;
-        return *this;
-      }
+      public: Pose3<T> &operator=(const Pose3<T> &_pose) = default;
 
       /// \brief Add one point to a vector: result = this + pos.
       /// \param[in] _pos Position to add to this pose
@@ -547,8 +539,6 @@ namespace ignition
       /// \brief The rotation
       private: Quaternion<T> q;
     };
-
-    template<typename T> const Pose3<T> Pose3<T>::Zero(0, 0, 0, 0, 0, 0);
 
     /// typedef Pose3<double> as Pose3d.
     typedef Pose3<double> Pose3d;

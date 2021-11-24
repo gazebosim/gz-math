@@ -35,37 +35,31 @@ namespace ignition
     class Vector2
     {
       /// \brief math::Vector2(0, 0)
-      public: static const Vector2<T> Zero;
+      public: static constexpr Vector2<T> Zero{};
 
       /// \brief math::Vector2(1, 1)
-      public: static const Vector2<T> One;
+      public: static constexpr Vector2<T> One{1, 1};
 
       /// \brief Default Constructor
-      public: Vector2()
+      public: constexpr Vector2()
+      : data{0, 0}
       {
-        this->data[0] = 0;
-        this->data[1] = 0;
       }
 
       /// \brief Constructor
       /// \param[in] _x value along x
       /// \param[in] _y value along y
-      public: Vector2(const T &_x, const T &_y)
+      public: constexpr Vector2(const T &_x, const T &_y)
+      : data{_x, _y}
       {
-        this->data[0] = _x;
-        this->data[1] = _y;
       }
 
       /// \brief Copy constructor
       /// \param[in] _v the value
-      public: Vector2(const Vector2<T> &_v)
-      {
-        this->data[0] = _v[0];
-        this->data[1] = _v[1];
-      }
+      public: constexpr Vector2(const Vector2<T> &_v) = default;
 
       /// \brief Destructor
-      public: virtual ~Vector2() {}
+      public: ~Vector2() = default;
 
       /// \brief Return the sum of the values
       /// \return the sum
@@ -222,13 +216,7 @@ namespace ignition
       /// \brief Assignment operator
       /// \param[in] _v a value for x and y element
       /// \return this
-      public: Vector2 &operator=(const Vector2 &_v)
-      {
-        this->data[0] = _v[0];
-        this->data[1] = _v[1];
-
-        return *this;
-      }
+      public: Vector2 &operator=(const Vector2 &_v) = default;
 
       /// \brief Assignment operator
       /// \param[in] _v the value for x and y element
@@ -574,12 +562,6 @@ namespace ignition
       /// \brief The x and y values.
       private: T data[2];
     };
-
-    template<typename T>
-    const Vector2<T> Vector2<T>::Zero(0, 0);
-
-    template<typename T>
-    const Vector2<T> Vector2<T>::One(1, 1);
 
     typedef Vector2<int> Vector2i;
     typedef Vector2<double> Vector2d;

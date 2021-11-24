@@ -40,50 +40,41 @@ namespace ignition
     class Vector3
     {
       /// \brief math::Vector3(0, 0, 0)
-      public: static const Vector3 Zero;
+      public: static constexpr Vector3 Zero{};
 
       /// \brief math::Vector3(1, 1, 1)
-      public: static const Vector3 One;
+      public: static constexpr Vector3 One{1, 1, 1};
 
       /// \brief math::Vector3(1, 0, 0)
-      public: static const Vector3 UnitX;
+      public: static constexpr Vector3 UnitX{1, 0, 0};
 
       /// \brief math::Vector3(0, 1, 0)
-      public: static const Vector3 UnitY;
+      public: static constexpr Vector3 UnitY{0, 1, 0};
 
       /// \brief math::Vector3(0, 0, 1)
-      public: static const Vector3 UnitZ;
+      public: static constexpr Vector3 UnitZ{0, 0, 1};
 
       /// \brief Constructor
-      public: Vector3()
+      public: constexpr Vector3()
+      : data{0, 0, 0}
       {
-        this->data[0] = 0;
-        this->data[1] = 0;
-        this->data[2] = 0;
       }
 
       /// \brief Constructor
       /// \param[in] _x value along x
       /// \param[in] _y value along y
       /// \param[in] _z value along z
-      public: Vector3(const T &_x, const T &_y, const T &_z)
+      public: constexpr Vector3(const T &_x, const T &_y, const T &_z)
+      : data{_x, _y, _z}
       {
-        this->data[0] = _x;
-        this->data[1] = _y;
-        this->data[2] = _z;
       }
 
       /// \brief Copy constructor
       /// \param[in] _v a vector
-      public: Vector3(const Vector3<T> &_v)
-      {
-        this->data[0] = _v[0];
-        this->data[1] = _v[1];
-        this->data[2] = _v[2];
-      }
+      public: Vector3(const Vector3<T> &_v) = default;
 
       /// \brief Destructor
-      public: virtual ~Vector3() {}
+      public: ~Vector3() = default;
 
       /// \brief Return the sum of the values
       /// \return the sum
@@ -330,14 +321,7 @@ namespace ignition
       /// \brief Assignment operator
       /// \param[in] _v a new value
       /// \return this
-      public: Vector3 &operator=(const Vector3<T> &_v)
-      {
-        this->data[0] = _v[0];
-        this->data[1] = _v[1];
-        this->data[2] = _v[2];
-
-        return *this;
-      }
+      public: Vector3 &operator=(const Vector3<T> &_v) = default;
 
       /// \brief Assignment operator
       /// \param[in] _v assigned to all elements
@@ -770,12 +754,6 @@ namespace ignition
       /// \brief The x, y, and z values
       private: T data[3];
     };
-
-    template<typename T> const Vector3<T> Vector3<T>::Zero(0, 0, 0);
-    template<typename T> const Vector3<T> Vector3<T>::One(1, 1, 1);
-    template<typename T> const Vector3<T> Vector3<T>::UnitX(1, 0, 0);
-    template<typename T> const Vector3<T> Vector3<T>::UnitY(0, 1, 0);
-    template<typename T> const Vector3<T> Vector3<T>::UnitZ(0, 0, 1);
 
     typedef Vector3<int> Vector3i;
     typedef Vector3<double> Vector3d;

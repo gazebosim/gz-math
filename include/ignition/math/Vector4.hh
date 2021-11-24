@@ -36,15 +36,15 @@ namespace ignition
     class Vector4
     {
       /// \brief math::Vector4(0, 0, 0, 0)
-      public: static const Vector4<T> Zero;
+      public: static constexpr Vector4<T> Zero{};
 
       /// \brief math::Vector4(1, 1, 1, 1)
-      public: static const Vector4<T> One;
+      public: static constexpr Vector4<T> One{1, 1, 1, 1};
 
       /// \brief Constructor
-      public: Vector4()
+      public: constexpr Vector4()
+      : data{0, 0, 0, 0}
       {
-        this->data[0] = this->data[1] = this->data[2] = this->data[3] = 0;
       }
 
       /// \brief Constructor with component values
@@ -52,26 +52,18 @@ namespace ignition
       /// \param[in] _y value along y axis
       /// \param[in] _z value along z axis
       /// \param[in] _w value along w axis
-      public: Vector4(const T &_x, const T &_y, const T &_z, const T &_w)
+      public: constexpr Vector4(const T &_x, const T &_y, const T &_z,
+                                const T &_w)
+      : data{_x, _y, _z, _w}
       {
-        this->data[0] = _x;
-        this->data[1] = _y;
-        this->data[2] = _z;
-        this->data[3] = _w;
       }
 
       /// \brief Copy constructor
       /// \param[in] _v vector
-      public: Vector4(const Vector4<T> &_v)
-      {
-        this->data[0] = _v[0];
-        this->data[1] = _v[1];
-        this->data[2] = _v[2];
-        this->data[3] = _v[3];
-      }
+      public: Vector4(const Vector4<T> &_v) = default;
 
       /// \brief Destructor
-      public: virtual ~Vector4() {}
+      public: ~Vector4() = default;
 
       /// \brief Calc distance to the given point
       /// \param[in] _pt the point
@@ -264,15 +256,7 @@ namespace ignition
       /// \brief Assignment operator
       /// \param[in] _v the vector
       /// \return a reference to this vector
-      public: Vector4<T> &operator=(const Vector4<T> &_v)
-      {
-        this->data[0] = _v[0];
-        this->data[1] = _v[1];
-        this->data[2] = _v[2];
-        this->data[3] = _v[3];
-
-        return *this;
-      }
+      public: Vector4<T> &operator=(const Vector4<T> &_v) = default;
 
       /// \brief Assignment operator
       /// \param[in] _value
@@ -729,12 +713,6 @@ namespace ignition
       /// \brief Data values, 0==x, 1==y, 2==z, 3==w
       private: T data[4];
     };
-
-    template<typename T>
-    const Vector4<T> Vector4<T>::Zero(0, 0, 0, 0);
-
-    template<typename T>
-    const Vector4<T> Vector4<T>::One(1, 1, 1, 1);
 
     typedef Vector4<int> Vector4i;
     typedef Vector4<double> Vector4d;

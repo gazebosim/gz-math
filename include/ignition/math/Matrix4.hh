@@ -38,23 +38,27 @@ namespace ignition
     class Matrix4
     {
       /// \brief Identity matrix
-      public: static const Matrix4<T> Identity;
+      public: static constexpr Matrix4<T> Identity{
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1};
 
       /// \brief Zero matrix
-      public: static const Matrix4<T> Zero;
+      public: static constexpr Matrix4<T> Zero{};
 
       /// \brief Constructor
-      public: Matrix4()
+      public: constexpr Matrix4()
+      : data{{0, 0, 0, 0},
+             {0, 0, 0, 0},
+             {0, 0, 0, 0},
+             {0, 0, 0, 0}}
       {
-        memset(this->data, 0, sizeof(this->data[0][0])*16);
       }
 
       /// \brief Copy constructor
       /// \param _m Matrix to copy
-      public: Matrix4(const Matrix4<T> &_m)
-      {
-        memcpy(this->data, _m.data, sizeof(this->data[0][0])*16);
-      }
+      public: Matrix4(const Matrix4<T> &_m) = default;
 
       /// \brief Constructor
       /// \param[in] _v00 Row 0, Col 0 value
@@ -73,15 +77,15 @@ namespace ignition
       /// \param[in] _v31 Row 3, Col 1 value
       /// \param[in] _v32 Row 3, Col 2 value
       /// \param[in] _v33 Row 3, Col 3 value
-      public: Matrix4(T _v00, T _v01, T _v02, T _v03,
-                      T _v10, T _v11, T _v12, T _v13,
-                      T _v20, T _v21, T _v22, T _v23,
-                      T _v30, T _v31, T _v32, T _v33)
+      public: constexpr Matrix4(T _v00, T _v01, T _v02, T _v03,
+                                T _v10, T _v11, T _v12, T _v13,
+                                T _v20, T _v21, T _v22, T _v23,
+                                T _v30, T _v31, T _v32, T _v33)
+      : data{{_v00, _v01, _v02, _v03},
+             {_v10, _v11, _v12, _v13},
+             {_v20, _v21, _v22, _v23},
+             {_v30, _v31, _v32, _v33}}
       {
-        this->Set(_v00, _v01, _v02, _v03,
-                  _v10, _v11, _v12, _v13,
-                  _v20, _v21, _v22, _v23,
-                  _v30, _v31, _v32, _v33);
       }
 
       /// \brief Construct Matrix4 from a quaternion.
@@ -116,7 +120,7 @@ namespace ignition
       }
 
       /// \brief Destructor
-      public: virtual ~Matrix4() {}
+      public: ~Matrix4() = default;
 
       /// \brief Change the values
       /// \param[in] _v00 Row 0, Col 0 value
@@ -547,11 +551,7 @@ namespace ignition
       /// \brief Equal operator. this = _mat
       /// \param _mat Incoming matrix
       /// \return itself
-      public: Matrix4<T> &operator=(const Matrix4<T> &_mat)
-      {
-        memcpy(this->data, _mat.data, sizeof(this->data[0][0])*16);
-        return *this;
-      }
+      public: Matrix4<T> &operator=(const Matrix4<T> &_mat) = default;
 
       /// \brief Equal operator for 3x3 matrix
       /// \param _mat Incoming matrix
@@ -850,20 +850,6 @@ namespace ignition
       /// \brief The 4x4 matrix
       private: T data[4][4];
     };
-
-    template<typename T>
-    const Matrix4<T> Matrix4<T>::Identity(
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
-        0, 0, 0, 1);
-
-    template<typename T>
-    const Matrix4<T> Matrix4<T>::Zero(
-        0, 0, 0, 0,
-        0, 0, 0, 0,
-        0, 0, 0, 0,
-        0, 0, 0, 0);
 
     typedef Matrix4<int> Matrix4i;
     typedef Matrix4<double> Matrix4d;
