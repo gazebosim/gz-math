@@ -18,6 +18,7 @@
 #define IGNITION_MATH_VECTOR2_HH_
 
 #include <algorithm>
+#include <cmath>
 #include <limits>
 
 #include <ignition/math/Helpers.hh>
@@ -106,12 +107,12 @@ namespace ignition
       /// \brief Normalize the vector length
       public: void Normalize()
       {
-        double d = this->Length();
+        T d = this->Length();
 
-        if (!equal<T>(static_cast<T>(d), static_cast<T>(0.0)))
+        if (!equal<T>(d, static_cast<T>(0.0)))
         {
-          this->data[0] /= static_cast<T>(d);
-          this->data[1] /= static_cast<T>(d);
+          this->data[0] /= d;
+          this->data[1] /= d;
         }
       }
 
@@ -128,8 +129,8 @@ namespace ignition
       /// \return the result
       public: Vector2 Round()
       {
-        this->data[0] = static_cast<T>(nearbyint(this->data[0]));
-        this->data[1] = static_cast<T>(nearbyint(this->data[1]));
+        this->data[0] = std::nearbyint(this->data[0]);
+        this->data[1] = std::nearbyint(this->data[1]);
         return *this;
       }
 
