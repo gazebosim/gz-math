@@ -27,44 +27,6 @@ namespace ignition
   {
     // Inline bracket to help doxygen filtering.
     inline namespace IGNITION_MATH_VERSION_NAMESPACE {
-    //
-
-    /// \cond
-    /// \brief Private data members for MovingWindowFilter class.
-    /// This must be in the header due to templatization.
-    template< typename T>
-    class MovingWindowFilterPrivate
-    {
-      // \brief Constructor
-      public: MovingWindowFilterPrivate();
-
-      /// \brief For moving window smoothed value
-      public: unsigned int valWindowSize = 4;
-
-      /// \brief buffer history of raw values
-      public: std::vector<T> valHistory;
-
-      /// \brief iterator pointing to current value in buffer
-      public: typename std::vector<T>::iterator valIter;
-
-      /// \brief keep track of running sum
-      public: T sum;
-
-      /// \brief keep track of number of elements
-      public: unsigned int samples = 0;
-    };
-
-    //////////////////////////////////////////////////
-    template<typename T>
-    MovingWindowFilterPrivate<T>::MovingWindowFilterPrivate()
-    {
-      /// \TODO FIXME hardcoded initial value for now
-      this->valHistory.resize(this->valWindowSize);
-      this->valIter = this->valHistory.begin();
-      this->sum = T();
-    }
-    /// \endcond
-
     /// \brief Base class for MovingWindowFilter. This replaces the
     /// version of MovingWindowFilter in the Ignition Common library.
     ///
@@ -73,10 +35,10 @@ namespace ignition
     class MovingWindowFilter
     {
       /// \brief Constructor
-      public: MovingWindowFilter();
+      public: MovingWindowFilter(unsigned int _windowSize = 4);
 
       /// \brief Destructor
-      public: virtual ~MovingWindowFilter();
+      public: virtual ~MovingWindowFilter() = default;
 
       /// \brief Update value of filter
       /// \param[in] _val new raw value
@@ -98,22 +60,27 @@ namespace ignition
       /// \return Latest filtered value
       public: T Value() const;
 
-      /// \brief Data pointer.
-      private: std::unique_ptr<MovingWindowFilterPrivate<T>> dataPtr;
+      /// \brief For moving window smoothed value
+      protected: unsigned int valWindowSize = 4;
+
+      /// \brief buffer history of raw values
+      protected: std::vector<T> valHistory;
+
+      /// \brief iterator pointing to current value in buffer
+      protected: typename std::vector<T>::iterator valIter;
+
+      /// \brief keep track of running sum
+      protected: T sum;
+
+      /// \brief keep track of number of elements
+      protected: unsigned int samples = 0;
     };
 
     //////////////////////////////////////////////////
     template<typename T>
-    MovingWindowFilter<T>::MovingWindowFilter()
-    : dataPtr(new MovingWindowFilterPrivate<T>())
+    MovingWindowFilter<T>::MovingWindowFilter(unsigned int _windowSize)
     {
-    }
-
-    //////////////////////////////////////////////////
-    template<typename T>
-    MovingWindowFilter<T>::~MovingWindowFilter()
-    {
-      this->dataPtr->valHistory.clear();
+      this->SetWindowSize(_windowSize);
     }
 
     //////////////////////////////////////////////////
@@ -123,32 +90,32 @@ namespace ignition
       // update sum and sample size with incoming _val
 
       // keep running sum
-      this->dataPtr->sum += _val;
+      this->sum += _val;
 
       // shift pointer, wrap around if end has been reached.
-      ++this->dataPtr->valIter;
-      if (this->dataPtr->valIter == this->dataPtr->valHistory.end())
+      ++this->valIter;
+      if (this->valIter == this->valHistory.end())
       {
         // reset iterator to beginning of queue
-        this->dataPtr->valIter = this->dataPtr->valHistory.begin();
+        this->valIter = this->valHistory.begin();
       }
 
       // increment sample size
-      ++this->dataPtr->samples;
+      ++this->samples;
 
-      if (this->dataPtr->samples > this->dataPtr->valWindowSize)
+      if (this->samples > this->valWindowSize)
       {
         // subtract old value if buffer already filled
-        this->dataPtr->sum -= (*this->dataPtr->valIter);
+        this->sum -= (*this->valIter);
         // put new value into queue
-        (*this->dataPtr->valIter) = _val;
+        (*this->valIter) = _val;
         // reduce sample size
-        --this->dataPtr->samples;
+        --this->samples;
       }
       else
       {
         // put new value into queue
-        (*this->dataPtr->valIter) = _val;
+        (*this->valIter) = _val;
       }
     }
 
@@ -156,33 +123,32 @@ namespace ignition
     template<typename T>
     void MovingWindowFilter<T>::SetWindowSize(const unsigned int _n)
     {
-      this->dataPtr->valWindowSize = _n;
-      this->dataPtr->valHistory.clear();
-      this->dataPtr->valHistory.resize(this->dataPtr->valWindowSize);
-      this->dataPtr->valIter = this->dataPtr->valHistory.begin();
-      this->dataPtr->sum = T();
-      this->dataPtr->samples = 0;
+      this->valWindowSize = _n;
+      this->valHistory = std::vector<T>(_n, T());
+      this->valIter = this->valHistory.begin();
+      this->sum = T();
+      this->samples = 0;
     }
 
     //////////////////////////////////////////////////
     template<typename T>
     unsigned int MovingWindowFilter<T>::WindowSize() const
     {
-      return this->dataPtr->valWindowSize;
+      return this->valWindowSize;
     }
 
     //////////////////////////////////////////////////
     template<typename T>
     bool MovingWindowFilter<T>::WindowFilled() const
     {
-      return this->dataPtr->samples == this->dataPtr->valWindowSize;
+      return this->samples == this->valWindowSize;
     }
 
     //////////////////////////////////////////////////
     template<typename T>
     T MovingWindowFilter<T>::Value() const
     {
-      return this->dataPtr->sum / static_cast<double>(this->dataPtr->samples);
+      return this->sum / static_cast<double>(this->samples);
     }
     }
   }
