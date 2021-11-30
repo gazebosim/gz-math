@@ -32,6 +32,9 @@
 
 1. Defer regex construction to avoid static initialization.
     * [Pull request 289](https://github.com/ignitionrobotics/ign-math/pull/289)
+                   
+1. Remove virtual from destructors of copyable classes.
+    * [Pull request 293](https://github.com/ignitionrobotics/ign-math/pull/293)
 
 ## Ignition Math 6.x
 
