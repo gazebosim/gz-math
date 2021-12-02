@@ -83,15 +83,10 @@ namespace ignition
 
       /// \brief Copy constructor.
       /// \param[in] _b OrientedBox to copy.
-      public: OrientedBox(const OrientedBox<T> &_b)
-          : size(_b.size), pose(_b.pose), material(_b.material)
-      {
-      }
+      public: OrientedBox(const OrientedBox<T> &_b) = default;
 
       /// \brief Destructor
-      public: virtual ~OrientedBox()
-      {
-      }
+      public: ~OrientedBox() = default;
 
       /// \brief Get the length along the x dimension
       /// \return Value of the length in the x dimension
@@ -131,7 +126,7 @@ namespace ignition
       /// \brief Set the box size.
       /// \param[in] _size Box size, in its own coordinate frame. Its absolute
       /// value will be taken, so the size is non-negative.
-      public: void Size(Vector3<T> &_size)
+      public: void Size(const Vector3<T> &_size)
       {
         // Enforce non-negative size
         this->size = _size.Abs();
@@ -139,7 +134,7 @@ namespace ignition
 
       /// \brief Set the box pose.
       /// \param[in] _pose Box pose.
-      public: void Pose(Pose3<T> &_pose)
+      public: void Pose(const Pose3<T> &_pose)
       {
         this->pose = _pose;
       }
@@ -147,13 +142,7 @@ namespace ignition
       /// \brief Assignment operator. Set this box to the parameter
       /// \param[in]  _b OrientedBox to copy
       /// \return The new box.
-      public: OrientedBox &operator=(const OrientedBox<T> &_b)
-      {
-        this->size = _b.size;
-        this->pose = _b.pose;
-        this->material = _b.material;
-        return *this;
-      }
+      public: OrientedBox &operator=(const OrientedBox<T> &_b) = default;
 
       /// \brief Equality test operator
       /// \param[in] _b OrientedBox to test
