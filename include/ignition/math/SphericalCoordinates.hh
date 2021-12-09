@@ -17,13 +17,13 @@
 #ifndef IGNITION_MATH_SPHERICALCOORDINATES_HH_
 #define IGNITION_MATH_SPHERICALCOORDINATES_HH_
 
-#include <memory>
 #include <string>
 
 #include <ignition/math/Angle.hh>
 #include <ignition/math/Vector3.hh>
 #include <ignition/math/Helpers.hh>
 #include <ignition/math/config.hh>
+#include <ignition/utils/ImplPtr.hh>
 
 namespace ignition
 {
@@ -31,8 +31,6 @@ namespace ignition
   {
     // Inline bracket to help doxygen filtering.
     inline namespace IGNITION_MATH_VERSION_NAMESPACE {
-    //
-    class SphericalCoordinatesPrivate;
 
     /// \class SphericalCoordinates SphericalCoordinates.hh commmon/common.hh
     /// \brief Convert spherical coordinates for planetary surfaces.
@@ -83,12 +81,6 @@ namespace ignition
                                    const double _elevation,
                                    const ignition::math::Angle &_heading);
 
-      /// \brief Copy constructor.
-      /// \param[in] _sc Spherical coordinates to copy.
-      public: SphericalCoordinates(const SphericalCoordinates &_sc);
-
-      /// \brief Destructor.
-      public: ~SphericalCoordinates();
 
       /// \brief Convert a Cartesian position vector to geodetic coordinates.
       /// \param[in] _xyz Cartesian position vector in the world frame.
@@ -210,25 +202,8 @@ namespace ignition
       /// \return true if this != _sc
       public: bool operator!=(const SphericalCoordinates &_sc) const;
 
-      /// \brief Assignment operator
-      /// \param[in] _sc The spherical coordinates to copy from.
-      /// \return this
-      public: SphericalCoordinates &operator=(
-        const SphericalCoordinates &_sc);
-
-
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::unique_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
-      /// \internal
       /// \brief Pointer to the private data
-      private: std::unique_ptr<SphericalCoordinatesPrivate> dataPtr;
-#ifdef _WIN32
-#pragma warning(pop)
-#endif
+      IGN_UTILS_IMPL_PTR(dataPtr)
     };
     /// \}
     }

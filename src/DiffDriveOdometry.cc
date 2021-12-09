@@ -23,7 +23,7 @@ using namespace math;
 
 // The implementation was borrowed from: https://github.com/ros-controls/ros_controllers/blob/melodic-devel/diff_drive_controller/src/odometry.cpp
 
-class ignition::math::DiffDriveOdometryPrivate
+class ignition::math::DiffDriveOdometry::Implementation
 {
   /// \brief Integrates the velocities (linear and angular) using 2nd order
   /// Runge-Kutta.
@@ -82,15 +82,10 @@ class ignition::math::DiffDriveOdometryPrivate
 
 //////////////////////////////////////////////////
 DiffDriveOdometry::DiffDriveOdometry(size_t _windowSize)
-  : dataPtr(new DiffDriveOdometryPrivate)
+  : dataPtr(ignition::utils::MakeImpl<Implementation>())
 {
   this->dataPtr->linearMean.SetWindowSize(_windowSize);
   this->dataPtr->angularMean.SetWindowSize(_windowSize);
-}
-
-//////////////////////////////////////////////////
-DiffDriveOdometry::~DiffDriveOdometry()
-{
 }
 
 //////////////////////////////////////////////////
@@ -211,7 +206,7 @@ const Angle &DiffDriveOdometry::AngularVelocity() const
 }
 
 //////////////////////////////////////////////////
-void DiffDriveOdometryPrivate::IntegrateRungeKutta2(
+void DiffDriveOdometry::Implementation::IntegrateRungeKutta2(
     double _linear, double _angular)
 {
   const double direction = *this->heading + _angular * 0.5;
@@ -223,7 +218,8 @@ void DiffDriveOdometryPrivate::IntegrateRungeKutta2(
 }
 
 //////////////////////////////////////////////////
-void DiffDriveOdometryPrivate::IntegrateExact(double _linear, double _angular)
+void DiffDriveOdometry::Implementation::IntegrateExact(
+    double _linear, double _angular)
 {
   if (std::fabs(_angular) < 1e-6)
   {

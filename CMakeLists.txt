@@ -29,6 +29,11 @@ ign_configure_project(VERSION_SUFFIX pre1)
 #============================================================================
 
 #--------------------------------------
+# Find ignition-utils
+ign_find_package(ignition-utils1 REQUIRED VERSION 1.0)
+set(IGN_UTILS_VER ${ignition-utils1_VERSION_MAJOR})
+
+#--------------------------------------
 # Find eigen3
 ign_find_package(
   EIGEN3

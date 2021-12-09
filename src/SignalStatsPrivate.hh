@@ -28,7 +28,7 @@ namespace ignition
     inline namespace IGNITION_MATH_VERSION_NAMESPACE
     {
     /// \brief Private data class for the SignalStatistic class.
-    class SignalStatisticPrivate
+    class SignalStatistic::Implementation
     {
       /// \brief Scalar representation of signal data.
       public: double data;
@@ -39,15 +39,6 @@ namespace ignition
 
       /// \brief Count of data values in mean.
       public: unsigned int count;
-
-      /// \brief Clone the SignalStatisticPrivate object. Used for implementing
-      /// copy semantics.
-      public: std::unique_ptr<SignalStatisticPrivate> Clone() const
-      {
-        std::unique_ptr<SignalStatisticPrivate> dataPtr(
-            new SignalStatisticPrivate(*this));
-        return dataPtr;
-      }
     };
 
     class SignalStatistic;
@@ -61,19 +52,10 @@ namespace ignition
     typedef std::vector<SignalStatisticPtr> SignalStatistic_V;
 
     /// \brief Private data class for the SignalStats class.
-    class SignalStatsPrivate
+    class SignalStats::Implementation
     {
       /// \brief Vector of `SignalStatistic`s.
       public: SignalStatistic_V stats;
-
-      /// \brief Clone the SignalStatsPrivate object. Used for implementing
-      /// copy semantics.
-      public: std::unique_ptr<SignalStatsPrivate> Clone() const
-      {
-        std::unique_ptr<SignalStatsPrivate> dataPtr(
-            new SignalStatsPrivate(*this));
-        return dataPtr;
-      }
     };
     }
   }
