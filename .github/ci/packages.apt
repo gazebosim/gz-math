@@ -1,4 +1,5 @@
 libeigen3-dev
 libignition-cmake2-dev
+libignition-utils1-dev
 ruby-dev
 swig
