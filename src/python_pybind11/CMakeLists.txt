@@ -9,24 +9,6 @@ set(PYBIND11_PYTHON_VERSION 3)
 
 find_package(pybind11 2.2 QUIET)
 
-if (NOT ${pybind11_FOUND})
-  if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.11.0")
-    include(FetchContent)
-    FetchContent_Declare(
-        pybind11
-        GIT_REPOSITORY https://github.com/pybind/pybind11
-        GIT_TAG        v2.8.1
-    )
-
-    FetchContent_GetProperties(pybind11)
-    if(NOT pybind11_POPULATED)
-        FetchContent_Populate(pybind11)
-        add_subdirectory(${pybind11_SOURCE_DIR} ${pybind11_BINARY_DIR})
-    endif()
-    set(pybind11_FOUND TRUE)
-  endif()
-endif()
-
 if (${pybind11_FOUND})
   message(STATUS "Building pybind11 interfaces")
   # Split from main extension and converted to pybind11
