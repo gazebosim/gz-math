@@ -518,8 +518,6 @@ TEST(HelpersTest, Pair)
         set.insert(key);
       }
     }
-
-    std::cout << "Tested: " << set.size() << " keys\n.";
 #endif
   }
 }
