@@ -142,9 +142,9 @@ void defineMathVector3(py::module &m, const std::string &typestr)
     .def("z", py::overload_cast<const T&>(&Class::Z), "Get the z value.")
     .def_readonly_static("ZERO", &Class::Zero, "math::Vector3(0, 0, 0)")
     .def_readonly_static("ONE", &Class::One, "math::Vector3(1, 1, 1)")
-    .def_readonly_static("UNIT_X", &Class::UnitX, "math::Vector3(1, 0, 0)")
-    .def_readonly_static("UNIT_Y", &Class::UnitY, "math::Vector3(0, 1, 0)")
-    .def_readonly_static("UNIT_Z", &Class::UnitZ, "math::Vector3(0, 0, 1)")
+    .def_readonly_static("UNITX", &Class::UnitX, "math::Vector3(1, 0, 0)")
+    .def_readonly_static("UNITY", &Class::UnitY, "math::Vector3(0, 1, 0)")
+    .def_readonly_static("UNITZ", &Class::UnitZ, "math::Vector3(0, 0, 1)")
     .def_readonly_static("NAN", &Class::NaN, "math::Vector3(NaN, NaN, NaN)")
     .def("__copy__", [](const Class &self) {
       return Class(self);
