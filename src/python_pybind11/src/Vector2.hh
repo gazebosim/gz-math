@@ -36,7 +36,7 @@ namespace python
  * \param[in] module a pybind11 module to add the definition to
  */
 template<typename T>
-void define_math_vector2(py::module &m, const std::string &typestr)
+void defineMathVector2(py::module &m, const std::string &typestr)
 {
   using Class = ignition::math::Vector2<T>;
   auto toString = [](const Class &si) {
@@ -60,8 +60,8 @@ void define_math_vector2(py::module &m, const std::string &typestr)
     .def("squared_length",
          &Class::SquaredLength,
          "Return the square of the length (magnitude) of the vector")
-         .def("normalize", &Class::Normalize, "Normalize the vector length")
-         .def("normalized", &Class::Normalized, "Return a normalized vector")
+    .def("normalize", &Class::Normalize, "Normalize the vector length")
+    .def("normalized", &Class::Normalized, "Return a normalized vector")
     .def("round", &Class::Round)
     .def("rounded", &Class::Rounded, "Get a rounded version of this vector")
     .def("set", &Class::Set, "Set the contents of the vector")

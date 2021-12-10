@@ -14,9 +14,9 @@
 
 #include <pybind11/pybind11.h>
 
-#include "vector2.hh"
-#include "vector3.hh"
-#include "vector4.hh"
+#include "Vector2.hh"
+#include "Vector3.hh"
+#include "Vector4.hh"
 
 namespace py = pybind11;
 
@@ -24,15 +24,18 @@ PYBIND11_MODULE(math, m)
 {
   m.doc() = "Ignition Math Python Library.";
 
-  ignition::math::python::define_math_vector2<double>(m, "Vector2d");
-  ignition::math::python::define_math_vector2<int>(m, "Vector2i");
-  ignition::math::python::define_math_vector2<float>(m, "Vector2f");
 
-  ignition::math::python::define_math_vector3<double>(m, "Vector3d");
-  ignition::math::python::define_math_vector3<int>(m, "Vector3i");
-  ignition::math::python::define_math_vector3<float>(m, "Vector3f");
 
-  ignition::math::python::define_math_vector4<double>(m, "Vector4d");
-  ignition::math::python::define_math_vector4<int>(m, "Vector4i");
-  ignition::math::python::define_math_vector4<float>(m, "Vector4f");
+
+  ignition::math::python::defineMathVector2<double>(m, "Vector2d");
+  ignition::math::python::defineMathVector2<int>(m, "Vector2i");
+  ignition::math::python::defineMathVector2<float>(m, "Vector2f");
+
+  ignition::math::python::defineMathVector3<double>(m, "Vector3d");
+  ignition::math::python::defineMathVector3<int>(m, "Vector3i");
+  ignition::math::python::defineMathVector3<float>(m, "Vector3f");
+
+  ignition::math::python::defineMathVector4<double>(m, "Vector4d");
+  ignition::math::python::defineMathVector4<int>(m, "Vector4i");
+  ignition::math::python::defineMathVector4<float>(m, "Vector4f");
 }
