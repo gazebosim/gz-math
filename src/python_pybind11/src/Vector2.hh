@@ -136,4 +136,4 @@ void defineMathVector2(py::module &m, const std::string &typestr)
 }  // namespace gazebo
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__VECTOR2D_HPP_
+#endif  // IGNITION_MATH_PYTHON__VECTOR2D_HH_

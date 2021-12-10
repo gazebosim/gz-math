@@ -149,4 +149,4 @@ void defineMathVector4(py::module &m, const std::string &typestr)
 }  // namespace gazebo
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__VECTOR4D_HPP_
+#endif  // IGNITION_MATH_PYTHON__VECTOR4D_HH_
