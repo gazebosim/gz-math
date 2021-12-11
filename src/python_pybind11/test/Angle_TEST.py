@@ -25,7 +25,7 @@ class TestAngle(unittest.TestCase):
         self.assertEqual(0.0, angle1.radian())
 
         angle1.set_degree(90.0)
-        self.assertTrue(angle1 == Angle.HALF_PI)
+        self.assertTrue(angle1 == Angle.HALFPI)
 
         angle1.set_degree(180.0)
         self.assertTrue(angle1 == Angle.PI)
