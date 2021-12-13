@@ -34,7 +34,7 @@ namespace ignition
     ///
     /// The default window size is 4.
     template< typename T>
-    class MovingWindowFilter
+    class IGNITION_MATH_VISIBLE MovingWindowFilter
     {
       /// \brief Constructor
       public: MovingWindowFilter(unsigned int _windowSize = 4);
