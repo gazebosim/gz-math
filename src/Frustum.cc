@@ -27,9 +27,6 @@ using namespace math;
 /// \brief Private data for the Frustum class
 class Frustum::Implementation
 {
-  /// \param[in] _pose Pose of the frustum, which is the vertex (top of
-  /// the pyramid).
-
   /// \brief Near distance
   /// This is the distance from the frustum's vertex to the closest plane
   public: double near {0};
