@@ -18,7 +18,7 @@
 #include "ignition/math/MovingWindowFilter.hh"
 #include "ignition/math/Vector3.hh"
 
-namespace ignition 
+namespace ignition
 {
 namespace math
 {

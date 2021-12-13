@@ -19,6 +19,7 @@
 
 #include <ignition/math/config.hh>
 #include <ignition/math/Export.hh>
+#include <ignition/math/Vector3.hh>
 
 #include <vector>
 
