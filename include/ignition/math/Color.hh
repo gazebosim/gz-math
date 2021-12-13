@@ -37,7 +37,7 @@ namespace ignition
     ///
     /// ## Example
     ///
-    /// \snippet examples/color_example.cc complete 
+    /// \snippet examples/color_example.cc complete
     class IGNITION_MATH_VISIBLE Color
     {
       /// \brief (1, 1, 1)
