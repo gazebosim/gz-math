@@ -27,7 +27,7 @@ namespace python
 /**
  * \param[in] module a pybind11 module to add the definition to
  */
-void defineMathAngle(py::module &m)
+void defineMathAngle(py::module &m, const std::string &typestr)
 {
   using Class = ignition::math::Angle;
   auto toString = [](const Class &si) {
@@ -37,7 +37,7 @@ void defineMathAngle(py::module &m)
   };
   py::class_<Class>(
     m,
-    "Angle",
+    typestr.c_str(),
     py::buffer_protocol(),
     py::dynamic_attr())
     .def(py::init<>())
@@ -46,18 +46,18 @@ void defineMathAngle(py::module &m)
     .def("radian",
          py::overload_cast<>(&Class::Radian, py::const_),
          "Set the value from an angle in radians.")
-    // .def("radian",
-    //      py::overload_cast<double>(&Class::Radian),
-    //      "Set the value from an angle in radians.")
+    .def("radian",
+         py::overload_cast<double>(&Class::Radian),
+         "Set the value from an angle in radians.")
     .def("set_radian",
          &Class::SetRadian,
          "Set the value from an angle in radians.")
     .def("degree",
          py::overload_cast<>(&Class::Degree, py::const_),
          "Set the value from an angle in degree.")
-    // .def("degree",
-    //      py::overload_cast<double>(&Class::Degree),
-    //      "Set the value from an angle in degree.")
+    .def("degree",
+         py::overload_cast<double>(&Class::Degree),
+         "Set the value from an angle in degree.")
     .def("set_degree",
          &Class::SetDegree,
          "Set the value from an angle in degree.")
@@ -91,10 +91,6 @@ void defineMathAngle(py::module &m)
     .def("__deepcopy__", [](const Class &self, py::dict) {
       return Class(self);
     }, "memo"_a)
-    // .def("__getitem__",
-    //      py::overload_cast<const std::size_t>(&Class::operator(), py::const_))
-    // .def("__setitem__",
-    //      [](Class* vec, unsigned index, T val) { (*vec)[index] = val; })
     .def("__str__", toString)
     .def("__repr__", toString);
 }

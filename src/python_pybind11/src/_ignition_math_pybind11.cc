@@ -25,8 +25,7 @@ PYBIND11_MODULE(math, m)
 {
   m.doc() = "Ignition Math Python Library.";
 
-  ignition::math::python::defineMathAngle(m);
-
+  ignition::math::python::defineMathAngle(m, "Angle");
 
 
   ignition::math::python::defineMathVector2<double>(m, "Vector2d");

@@ -35,7 +35,7 @@ namespace python
 /**
  * \param[in] module a pybind11 module to add the definition to
  */
-void defineMathAngle(py::module &m);
+void defineMathAngle(py::module &m, const std::string &typestr);
 }  // namespace python
 }  // namespace gazebo
 }  // namespace ignition
