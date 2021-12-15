@@ -17,13 +17,14 @@
 #ifndef IGNITION_MATH_PYTHON__ANGLE_HPP_
 #define IGNITION_MATH_PYTHON__ANGLE_HPP_
 
+#include <string>
+
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 
 #include <ignition/math/Angle.hh>
 
 namespace py = pybind11;
-using namespace pybind11::literals;
 
 namespace ignition
 {

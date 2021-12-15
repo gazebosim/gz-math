@@ -15,7 +15,11 @@
  *
 */
 
+#include <string>
+
 #include "Angle.hh"
+
+using namespace pybind11::literals;
 
 namespace ignition
 {
