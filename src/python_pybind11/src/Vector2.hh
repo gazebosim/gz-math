@@ -65,17 +65,21 @@ void defineMathVector2(py::module &m, const std::string &typestr)
          "Return the square of the length (magnitude) of the vector")
     .def("normalize", &Class::Normalize, "Normalize the vector length")
     .def("normalized", &Class::Normalized, "Return a normalized vector")
-    .def("round", &Class::Round)
+    .def("round",
+         &Class::Round,
+         "Round to near whole number, return the result.")
     .def("rounded", &Class::Rounded, "Get a rounded version of this vector")
     .def("set", &Class::Set, "Set the contents of the vector")
     .def("dot",
          &Class::Dot,
          "Return the dot product of this vector and another vector")
-    .def("abs", &Class::Abs,
+    .def("abs_dot", &Class::AbsDot,
         "Return the absolute dot product of this vector and "
         "another vector. This is similar to the Dot function, except the "
         "absolute value of each component of the vector is used.")
-    .def("abs_dot", &Class::AbsDot, " Get the absolute value of the vector")
+    .def("abs",
+         &Class::Abs,
+         "Return the absolute dot product of this vector and another vector")
     .def("max",
          py::overload_cast<const Class&>(&Class::Max),
          "Set this vector's components to the maximum of itself and the "
@@ -113,8 +117,8 @@ void defineMathVector2(py::module &m, const std::string &typestr)
     .def("correct", &Class::Correct, "Corrects any nan values")
     .def("x", py::overload_cast<>(&Class::X), "Get the x value.")
     .def("y", py::overload_cast<>(&Class::Y), "Get the y value.")
-    .def("x", py::overload_cast<const T&>(&Class::X), "Get the x value.")
-    .def("y", py::overload_cast<const T&>(&Class::Y), "Get the y value.")
+    .def("x", py::overload_cast<const T&>(&Class::X), "Set the x value.")
+    .def("y", py::overload_cast<const T&>(&Class::Y), "Set the y value.")
     .def_readonly_static("ZERO", &Class::Zero, "math::Vector2(0, 0)")
     .def_readonly_static("ONE", &Class::One, "math::Vector2(1, 1)")
     .def_readonly_static("NAN", &Class::NaN, "math::Vector3(NaN, NaN)")
