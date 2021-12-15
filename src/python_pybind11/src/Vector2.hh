@@ -79,7 +79,7 @@ void defineMathVector2(py::module &m, const std::string &typestr)
         "absolute value of each component of the vector is used.")
     .def("abs",
          &Class::Abs,
-         "Return the absolute dot product of this vector and another vector")
+         "Get the absolute value of the vector")
     .def("max",
          py::overload_cast<const Class&>(&Class::Max),
          "Set this vector's components to the maximum of itself and the "

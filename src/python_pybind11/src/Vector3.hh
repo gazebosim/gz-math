@@ -86,7 +86,7 @@ void defineMathVector3(py::module &m, const std::string &typestr)
          "Return the absolute dot product of this vector and "
          "another vector. This is similar to the Dot function, except the "
          "absolute value of each component of the vector is used.")
-    .def("abs", &Class::Abs, " Get the absolute value of the vector")
+    .def("abs", &Class::Abs, "Get the absolute value of the vector")
     .def("perpendicular",
          &Class::Perpendicular,
          "Return a vector that is perpendicular to this one.")

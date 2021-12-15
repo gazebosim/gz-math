@@ -45,7 +45,7 @@ if (${pybind11_FOUND})
 
   # Set the build location and install location for a CPython extension
   function(configure_build_install_location _library_name)
-    # Install into test_rclpy folder in build space for unit tests to import
+    # Install into test folder in build space for unit tests to import
     set_target_properties(${_library_name} PROPERTIES
       # Use generator expression to avoid prepending a build type specific directory on Windows
       LIBRARY_OUTPUT_DIRECTORY $<1:${CMAKE_CURRENT_BINARY_DIR}/test>
@@ -69,7 +69,7 @@ if (${pybind11_FOUND})
 
     foreach (test ${python_tests})
       add_test(NAME ${test}.py COMMAND
-      "${PYTHON_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/src/python_pybind11/test/${test}.py")
+        "${PYTHON_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/src/python_pybind11/test/${test}.py")
 
       set(_env_vars)
       list(APPEND _env_vars "PYTHONPATH=${FAKE_INSTALL_PREFIX}/lib/python/")
