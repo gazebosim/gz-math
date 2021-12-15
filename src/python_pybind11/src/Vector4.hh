@@ -34,7 +34,7 @@ namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an ignition::gazebo::Vector4
+/// Define a pybind11 wrapper for an ignition::math::Vector4
 /**
  * \param[in] module a pybind11 module to add the definition to
  */
