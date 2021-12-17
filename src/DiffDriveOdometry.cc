@@ -29,13 +29,13 @@ class ignition::math::DiffDriveOdometryPrivate
   /// Runge-Kutta.
   /// \param[in] _linear Linear velocity.
   /// \param[in] _angular Angular velocity.
-  public: void IntegrateRungeKutta2(double _linear, double _angular);
+  public: void IntegrateRungeKutta2(const double _linear, const double _angular);
 
   /// \brief Integrates the velocities (linear and angular) using exact
   /// method.
   /// \param[in] _linear Linear velocity.
   /// \param[in] _angular Angular velocity.
-  public: void IntegrateExact(double _linear, double _angular);
+  public: void IntegrateExact(const double _linear, const double _angular);
 
   /// \brief Current timestamp.
   public: clock::time_point lastUpdateTime;
@@ -165,8 +165,8 @@ bool DiffDriveOdometry::Update(const Angle &_leftPos, const Angle &_rightPos,
 }
 
 //////////////////////////////////////////////////
-void DiffDriveOdometry::SetWheelParams(double _wheelSeparation,
-    double _leftWheelRadius, double _rightWheelRadius)
+void DiffDriveOdometry::SetWheelParams(const double _wheelSeparation,
+    const double _leftWheelRadius, const double _rightWheelRadius)
 {
   this->dataPtr->wheelSeparation = _wheelSeparation;
   this->dataPtr->leftWheelRadius = _leftWheelRadius;
@@ -212,7 +212,7 @@ const Angle &DiffDriveOdometry::AngularVelocity() const
 
 //////////////////////////////////////////////////
 void DiffDriveOdometryPrivate::IntegrateRungeKutta2(
-    double _linear, double _angular)
+    const double _linear, const double _angular)
 {
   const double direction = *this->heading + _angular * 0.5;
 
@@ -223,7 +223,7 @@ void DiffDriveOdometryPrivate::IntegrateRungeKutta2(
 }
 
 //////////////////////////////////////////////////
-void DiffDriveOdometryPrivate::IntegrateExact(double _linear, double _angular)
+void DiffDriveOdometryPrivate::IntegrateExact(const double _linear, const double _angular)
 {
   if (std::fabs(_angular) < 1e-6)
   {
