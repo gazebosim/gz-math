@@ -14,6 +14,7 @@
  * limitations under the License.
  *
 */
+#include <tuple>
 
 #include <pybind11/stl.h>
 
@@ -152,7 +153,8 @@ void defineMathHelpers(py::module &m)
         "Is this a power of 2?")
    .def("round_up_power_of_two",
         &ignition::math::roundUpPowerOfTwo,
-        "Get the smallest power of two that is greater or equal to a given value")
+        "Get the smallest power of two that is greater or equal to a given "
+        "value")
    .def("round_up_multiple",
         &ignition::math::roundUpMultiple,
         "Round a number up to the nearest multiple")
