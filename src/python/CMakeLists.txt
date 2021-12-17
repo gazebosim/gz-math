@@ -90,7 +90,6 @@ if (PYTHONLIBS_FOUND)
       Angle_TEST
       AxisAlignedBox_TEST
       Box_TEST
-      Color_TEST
       Cylinder_TEST
       DiffDriveOdometry_TEST
       Filter_TEST
