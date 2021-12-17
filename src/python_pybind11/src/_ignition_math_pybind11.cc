@@ -14,6 +14,7 @@
 
 #include <pybind11/pybind11.h>
 
+#include "Line2.hh"
 #include "Vector2.hh"
 #include "Vector3.hh"
 #include "Vector4.hh"
@@ -23,9 +24,6 @@ namespace py = pybind11;
 PYBIND11_MODULE(math, m)
 {
   m.doc() = "Ignition Math Python Library.";
-
-
-
 
   ignition::math::python::defineMathVector2<double>(m, "Vector2d");
   ignition::math::python::defineMathVector2<int>(m, "Vector2i");
@@ -38,4 +36,8 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathVector4<double>(m, "Vector4d");
   ignition::math::python::defineMathVector4<int>(m, "Vector4i");
   ignition::math::python::defineMathVector4<float>(m, "Vector4f");
+
+  ignition::math::python::defineMathLine2<int>(m, "Line2i");
+  ignition::math::python::defineMathLine2<double>(m, "Line2d");
+  ignition::math::python::defineMathLine2<float>(m, "Line2f");
 }

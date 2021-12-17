@@ -62,6 +62,7 @@ if (${pybind11_FOUND})
   if (BUILD_TESTING)
     # Add the Python tests
     set(python_tests
+      Line2_TEST
       Vector2_TEST
       Vector3_TEST
       Vector4_TEST
