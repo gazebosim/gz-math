@@ -16,12 +16,15 @@
 */
 
 #include <chrono>
+#include <string>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 #include <pybind11/chrono.h>
 
 #include <ignition/math/GaussMarkovProcess.hh>
+
+#include "GaussMarkovProcess.hh"
 
 namespace py = pybind11;
 
@@ -31,10 +34,6 @@ namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an ignition::gazebo::GaussMarkovProcess
-/**
- * \param[in] module a pybind11 module to add the definition to
- */
 void defineMathGaussMarkovProcess(
   py::module &m, const std::string &typestr)
 {
@@ -70,5 +69,5 @@ void defineMathGaussMarkovProcess(
          "Update the process and get the new value.");
 }
 }  // namespace python
-}  // namespace gazebo
+}  // namespace math
 }  // namespace ignition
