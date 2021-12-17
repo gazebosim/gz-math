@@ -14,7 +14,7 @@
  * limitations under the License.
  *
 */
-
+#include <string>
 #include "DiffDriveOdometry.hh"
 
 namespace ignition

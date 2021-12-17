@@ -20,6 +20,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 #include <pybind11/chrono.h>
+#include <string>
 
 #include <ignition/math/DiffDriveOdometry.hh>
 
