@@ -14,6 +14,7 @@
  * limitations under the License.
  *
 */
+#include <string>
 
 #include "Rand.hh"
 #include <ignition/math/Rand.hh>
