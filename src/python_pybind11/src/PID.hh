@@ -19,7 +19,7 @@
 #define IGNITION_MATH_PYTHON__PID_HH_
 
 #include <pybind11/pybind11.h>
-
+#include <string>
 namespace py = pybind11;
 
 namespace ignition
