@@ -11,6 +11,8 @@ release will remove the deprecated code.
    preserve behaviour, the `LOCAL` frame was left with the bug, and a new
    `LOCAL2` frame was introduced, which can be used to get the correct
    calculations.
+   
+2. **Color::HSV()**: A bug related the the hue output of this function was fixed.
 
 ## Ignition Math 4.X to 5.X
 
