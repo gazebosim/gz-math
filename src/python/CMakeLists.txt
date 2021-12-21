@@ -107,7 +107,6 @@ if (PYTHONLIBS_FOUND)
       Matrix4_TEST
       MovingWindowFilter_TEST
       OrientedBox_TEST
-      PID_TEST
       Plane_TEST
       Pose3_TEST
       python_TEST

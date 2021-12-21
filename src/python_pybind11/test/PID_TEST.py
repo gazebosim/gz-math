@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import datetime
 import unittest
 from ignition.math import PID
 
@@ -107,7 +108,7 @@ class TestPID(unittest.TestCase):
 
     def test_update(self):
         pid = PID()
-        pid.init(1.0, 0.1, 0.5, 10, 0, 20, -20)
+        pid.init(1.0, 0.1, 0.5, 10.0, 0.0, 20.0, -20.0)
 
         result = pid.update(5.0, 0.0)
         self.assertAlmostEqual(result, 0.0)
@@ -144,7 +145,8 @@ class TestPID(unittest.TestCase):
     def update_test(self, _pid, _result, _error,
                     _dt, _p_error, _i_error, _d_error):
 
-        self.assertAlmostEqual(_result, _pid.update(_error, _dt))
+        self.assertAlmostEqual(
+            _result, _pid.update(_error, datetime.timedelta(seconds=_dt)))
         [p_error, i_error, d_error] = _pid.errors()
         self.assertAlmostEqual(p_error, _p_error)
         self.assertAlmostEqual(i_error, _i_error)
@@ -181,9 +183,7 @@ class TestPID(unittest.TestCase):
 
         self.update_test(pid, 0,  1, -1,  1, 0, 0)
         self.update_test(pid, 0,  1, -1,  1, 0, 0)
-        self.update_test(pid, 0, -1, -1, -1, 0, 2)
         self.update_test(pid, 0, -1, -1, -1, 0, 0)
-        self.update_test(pid, 0,  1, -1,  1, 0, -2)
         self.update_test(pid, 0,  1, -1,  1, 0, 0)
 
         pid.reset()
