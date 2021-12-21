@@ -36,6 +36,9 @@ namespace ignition
       /// \brief Constructor
       public: SignalStatistic();
 
+      /// \brief Destructor
+      public: virtual ~SignalStatistic() = default;
+
       /// \brief Get the current value of the statistical measure.
       /// \return Current value of the statistical measure.
       public: virtual double Value() const = 0;
