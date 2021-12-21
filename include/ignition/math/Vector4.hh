@@ -18,6 +18,7 @@
 #define IGNITION_MATH_VECTOR4_HH_
 
 #include <algorithm>
+#include <limits>
 
 #include <ignition/math/Matrix4.hh>
 #include <ignition/math/Helpers.hh>
@@ -40,6 +41,9 @@ namespace ignition
 
       /// \brief math::Vector4(1, 1, 1, 1)
       public: static const Vector4<T> One;
+
+      /// \brief math::Vector4(NaN, NaN, NaN, NaN)
+      public: static const Vector4 NaN;
 
       /// \brief Constructor
       public: Vector4()
@@ -72,10 +76,11 @@ namespace ignition
       /// \return the distance
       public: T Distance(const Vector4<T> &_pt) const
       {
-        return sqrt((this->data[0]-_pt[0])*(this->data[0]-_pt[0]) +
+        return static_cast<T>(sqrt(
+                    (this->data[0]-_pt[0])*(this->data[0]-_pt[0]) +
                     (this->data[1]-_pt[1])*(this->data[1]-_pt[1]) +
                     (this->data[2]-_pt[2])*(this->data[2]-_pt[2]) +
-                    (this->data[3]-_pt[3])*(this->data[3]-_pt[3]));
+                    (this->data[3]-_pt[3])*(this->data[3]-_pt[3])));
       }
 
       /// \brief Calc distance to the given point
@@ -93,17 +98,18 @@ namespace ignition
       /// \return The length
       public: T Length() const
       {
-        return sqrt(this->SquaredLength());
+        return static_cast<T>(sqrt(this->SquaredLength()));
       }
 
       /// \brief Return the square of the length (magnitude) of the vector
       /// \return the length
       public: T SquaredLength() const
       {
-        return std::pow(this->data[0], 2)
-             + std::pow(this->data[1], 2)
-             + std::pow(this->data[2], 2)
-             + std::pow(this->data[3], 2);
+        return
+          this->data[0] * this->data[0] +
+          this->data[1] * this->data[1] +
+          this->data[2] * this->data[2] +
+          this->data[3] * this->data[3];
       }
 
       /// \brief Round to near whole number.
@@ -724,6 +730,12 @@ namespace ignition
 
     template<typename T>
     const Vector4<T> Vector4<T>::One(1, 1, 1, 1);
+
+    template<typename T> const Vector4<T> Vector4<T>::NaN(
+        std::numeric_limits<T>::quiet_NaN(),
+        std::numeric_limits<T>::quiet_NaN(),
+        std::numeric_limits<T>::quiet_NaN(),
+        std::numeric_limits<T>::quiet_NaN());
 
     typedef Vector4<int> Vector4i;
     typedef Vector4<double> Vector4d;

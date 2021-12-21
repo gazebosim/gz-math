@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Open Source Robotics Foundation
+ * Copyright (C) 2021 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,8 +33,11 @@ namespace ignition
     template<typename T>
     class Vector2
     {
+      %rename("%(undercase)s", %$isfunction, %$ismember, %$not %$isconstructor) "";
+      %rename("%(uppercase)s", %$isstatic, %$isvariable) "";
       public: static const Vector2 Zero;
       public: static const Vector2 One;
+      public: static const Vector2 NaN;
 
       public: Vector2();
       public: Vector2(const T &_x, const T &_y);

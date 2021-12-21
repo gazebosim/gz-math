@@ -125,11 +125,25 @@ TEST(Vector3dTest, Vector3d)
   EXPECT_TRUE(v.Equal(math::Vector3d(2, 1, .4)));
 
   // Test the static defines.
-  EXPECT_TRUE(math::Vector3d::Zero == math::Vector3d(0, 0, 0));
-  EXPECT_TRUE(math::Vector3d::One == math::Vector3d(1, 1, 1));
-  EXPECT_TRUE(math::Vector3d::UnitX == math::Vector3d(1, 0, 0));
-  EXPECT_TRUE(math::Vector3d::UnitY == math::Vector3d(0, 1, 0));
-  EXPECT_TRUE(math::Vector3d::UnitZ == math::Vector3d(0, 0, 1));
+  EXPECT_EQ(math::Vector3d::Zero, math::Vector3d(0, 0, 0));
+  EXPECT_EQ(math::Vector3f::Zero, math::Vector3f(0, 0, 0));
+  EXPECT_EQ(math::Vector3i::Zero, math::Vector3i(0, 0, 0));
+
+  EXPECT_EQ(math::Vector3d::One, math::Vector3d(1, 1, 1));
+  EXPECT_EQ(math::Vector3f::One, math::Vector3f(1, 1, 1));
+  EXPECT_EQ(math::Vector3i::One, math::Vector3i(1, 1, 1));
+
+  EXPECT_EQ(math::Vector3d::UnitX, math::Vector3d(1, 0, 0));
+  EXPECT_EQ(math::Vector3f::UnitX, math::Vector3f(1, 0, 0));
+  EXPECT_EQ(math::Vector3i::UnitX, math::Vector3i(1, 0, 0));
+
+  EXPECT_EQ(math::Vector3d::UnitY, math::Vector3d(0, 1, 0));
+  EXPECT_EQ(math::Vector3f::UnitY, math::Vector3f(0, 1, 0));
+  EXPECT_EQ(math::Vector3i::UnitY, math::Vector3i(0, 1, 0));
+
+  EXPECT_EQ(math::Vector3d::UnitZ, math::Vector3d(0, 0, 1));
+  EXPECT_EQ(math::Vector3f::UnitZ, math::Vector3f(0, 0, 1));
+  EXPECT_EQ(math::Vector3i::UnitZ, math::Vector3i(0, 0, 1));
 }
 
 /////////////////////////////////////////////////
@@ -143,6 +157,10 @@ TEST(Vector3dTest, Distance)
 
   double dist2 = vec1.Distance(1, 2, 3);
   EXPECT_DOUBLE_EQ(dist, dist2);
+
+  math::Vector3i vecInt(0, 0, 0);
+  int distInt = vecInt.Distance({2, 2, 1});
+  EXPECT_EQ(distInt, 3);
 }
 
 /////////////////////////////////////////////////
@@ -163,12 +181,15 @@ TEST(Vector3dTest, SquaredLength)
 {
   math::Vector3d vec1(0, 0, 0);
   math::Vector3d vec2(1, 2, 3);
+  math::Vector3i vec3(1, 2, 3);
 
   double sum1 = vec1.SquaredLength();
   double sum2 = vec2.SquaredLength();
+  int sum3 = vec3.SquaredLength();
 
   EXPECT_DOUBLE_EQ(sum1, 0);
   EXPECT_DOUBLE_EQ(sum2, 14);
+  EXPECT_EQ(sum3, 14);
 }
 
 /////////////////////////////////////////////////
@@ -194,6 +215,11 @@ TEST(Vector3dTest, Length)
   math::Vector3d v(0.1, -4.2, 2.5);
   EXPECT_NEAR(v.Length(), 4.88876262463, 1e-10);
   EXPECT_DOUBLE_EQ(v.SquaredLength(), 23.9);
+
+  // Integer vector
+  math::Vector3i vi(1, 2, 2);
+  EXPECT_EQ(vi.Length(), 3);
+  EXPECT_EQ(vi.SquaredLength(), 9);
 }
 
 /////////////////////////////////////////////////
@@ -477,3 +503,26 @@ TEST(Vector3dTest, NoException)
   EXPECT_NO_THROW(ss << vInf);
 }
 
+/////////////////////////////////////////////////
+TEST(Vector3dTest, NaN)
+{
+  auto nanVec = math::Vector3d::NaN;
+  EXPECT_FALSE(nanVec.IsFinite());
+  EXPECT_TRUE(math::isnan(nanVec.X()));
+  EXPECT_TRUE(math::isnan(nanVec.Y()));
+  EXPECT_TRUE(math::isnan(nanVec.Z()));
+
+  nanVec.Correct();
+  EXPECT_EQ(math::Vector3d::Zero, nanVec);
+  EXPECT_TRUE(nanVec.IsFinite());
+
+  auto nanVecF = math::Vector3f::NaN;
+  EXPECT_FALSE(nanVecF.IsFinite());
+  EXPECT_TRUE(math::isnan(nanVecF.X()));
+  EXPECT_TRUE(math::isnan(nanVecF.Y()));
+  EXPECT_TRUE(math::isnan(nanVecF.Z()));
+
+  nanVecF.Correct();
+  EXPECT_EQ(math::Vector3f::Zero, nanVecF);
+  EXPECT_TRUE(nanVecF.IsFinite());
+}

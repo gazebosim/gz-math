@@ -63,7 +63,6 @@ namespace ignition
       protected: ::ignition::utils::ImplPtr<Implementation> dataPtr;
       IGN_UTILS_WARN_RESUME__DLL_INTERFACE_MISSING
     };
-    /// \}
 
     /// \class SignalMaximum SignalStats.hh ignition/math/SignalStats.hh
     /// \brief Computing the maximum value of a discretely sampled signal.
@@ -79,7 +78,6 @@ namespace ignition
       // Documentation inherited.
       public: virtual void InsertData(const double _data) override;
     };
-    /// \}
 
     /// \class SignalMean SignalStats.hh ignition/math/SignalStats.hh
     /// \brief Computing the mean value of a discretely sampled signal.
@@ -95,7 +93,6 @@ namespace ignition
       // Documentation inherited.
       public: virtual void InsertData(const double _data) override;
     };
-    /// \}
 
     /// \class SignalMinimum SignalStats.hh ignition/math/SignalStats.hh
     /// \brief Computing the minimum value of a discretely sampled signal.
@@ -111,7 +108,6 @@ namespace ignition
       // Documentation inherited.
       public: virtual void InsertData(const double _data) override;
     };
-    /// \}
 
     /// \class SignalRootMeanSquare SignalStats.hh ignition/math/SignalStats.hh
     /// \brief Computing the square root of the mean squared value
@@ -128,7 +124,6 @@ namespace ignition
       // Documentation inherited.
       public: virtual void InsertData(const double _data) override;
     };
-    /// \}
 
     /// \class SignalMaxAbsoluteValue SignalStats.hh
     /// ignition/math/SignalStats.hh
@@ -147,7 +142,6 @@ namespace ignition
       // Documentation inherited.
       public: virtual void InsertData(const double _data) override;
     };
-    /// \}
 
     /// \class SignalVariance SignalStats.hh ignition/math/SignalStats.hh
     /// \brief Computing the incremental variance
@@ -164,7 +158,6 @@ namespace ignition
       // Documentation inherited.
       public: virtual void InsertData(const double _data) override;
     };
-    /// \}
 
 
     /// \class SignalStats SignalStats.hh ignition/math/SignalStats.hh
@@ -218,7 +211,6 @@ namespace ignition
       IGN_UTILS_IMPL_PTR(dataPtr)
     };
     }
-    /// \}
   }
 }
 #endif

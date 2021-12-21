@@ -205,7 +205,6 @@ namespace ignition
       /// \brief Pointer to the private data
       IGN_UTILS_IMPL_PTR(dataPtr)
     };
-    /// \}
     }
   }
 }
