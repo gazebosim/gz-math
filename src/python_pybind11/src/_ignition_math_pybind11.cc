@@ -14,6 +14,7 @@
 
 #include <pybind11/pybind11.h>
 
+#include "MovingWindowFilter.hh"
 #include "Vector2.hh"
 #include "Vector3.hh"
 #include "Vector4.hh"
@@ -24,8 +25,12 @@ PYBIND11_MODULE(math, m)
 {
   m.doc() = "Ignition Math Python Library.";
 
-
-
+  ignition::math::python::defineMathMovingWindowFilter<int>(
+    m, "MovingWindowFilteri");
+  ignition::math::python::defineMathMovingWindowFilter<double>(
+    m, "MovingWindowFilterd");
+  ignition::math::python::defineMathMovingWindowFilter
+    <ignition::math::Vector3d>(m, "MovingWindowFilterv3");
 
   ignition::math::python::defineMathVector2<double>(m, "Vector2d");
   ignition::math::python::defineMathVector2<int>(m, "Vector2i");
