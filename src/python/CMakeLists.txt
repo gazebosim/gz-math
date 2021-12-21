@@ -113,7 +113,6 @@ if (PYTHONLIBS_FOUND)
       python_TEST
       Quaternion_TEST
       Rand_TEST
-      RollingMean_TEST
       RotationSpline_TEST
       SemanticVersion_TEST
       SignalStats_TEST
