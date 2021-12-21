@@ -14,7 +14,7 @@
  * limitations under the License.
  *
 */
-
+#include <string>
 #include "RollingMean.hh"
 #include <ignition/math/RollingMean.hh>
 

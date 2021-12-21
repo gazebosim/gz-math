@@ -19,6 +19,7 @@
 #define IGNITION_MATH_PYTHON__ROLLINGMEAN_HH_
 
 #include <pybind11/pybind11.h>
+#include <string>
 
 namespace py = pybind11;
 
