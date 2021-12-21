@@ -15,7 +15,8 @@
 import math
 import unittest
 from ignition.math import Matrix3d
-from ignition.math import Quaterniond
+# TODO(ahcorde): Enable this test when Quaterion is ported
+# from ignition.math import Quaterniond
 from ignition.math import Vector3d
 
 
@@ -303,34 +304,35 @@ class TestMatrix3(unittest.TestCase):
         m1.from_2_axes(v1, v2)
         self.assertAlmostEqual(Matrix3d.ZERO - Matrix3d.IDENTITY, m1)
 
-    def test_to_quaternion(self):
-        q = Quaterniond(math.pi/2.0, math.pi/2.0, 0)
-        matFromQuat = Matrix3d(q)
-        quatFromMat = matFromQuat.to_quaternion()
-        self.assertTrue(q == quatFromMat)
-
-        # test the cases where matrix trace is negative
-        # (requires special handling)
-        q = Quaterniond(0, 0, 0, 1)
-        mat = Matrix3d(-1,  0, 0,
-                       0, -1, 0,
-                       0,  0, 1)
-        q2 = mat.to_quaternion()
-        self.assertTrue(q == q2)
-
-        q = Quaterniond(0, 0, 1, 0)
-        mat = Matrix3d(-1,  0,  0,
-                       0,  1,  0,
-                       0,  0, -1)
-        q2 = mat.to_quaternion()
-        self.assertTrue(q == q2)
-
-        q = Quaterniond(0, 1, 0, 0)
-        mat = Matrix3d(1,  0,  0,
-                       0, -1,  0,
-                       0,  0, -1)
-        q2 = mat.to_quaternion()
-        self.assertTrue(q == q2)
+    # TODO(ahcorde): Enable this test when Quaterion is ported
+    # def test_to_quaternion(self):
+    #     q = Quaterniond(math.pi/2.0, math.pi/2.0, 0)
+    #     matFromQuat = Matrix3d(q)
+    #     quatFromMat = Quaterniond(matFromQuat)
+    #     self.assertTrue(q == quatFromMat)
+    #
+    #     # test the cases where matrix trace is negative
+    #     # (requires special handling)
+    #     q = Quaterniond(0, 0, 0, 1)
+    #     mat = Matrix3d(-1,  0, 0,
+    #                    0, -1, 0,
+    #                    0,  0, 1)
+    #     q2 = Quaterniond(mat)
+    #     self.assertTrue(q == q2)
+    #
+    #     q = Quaterniond(0, 0, 1, 0)
+    #     mat = Matrix3d(-1,  0,  0,
+    #                    0,  1,  0,
+    #                    0,  0, -1)
+    #     q2 = Quaterniond(mat)
+    #     self.assertTrue(q == q2)
+    #
+    #     q = Quaterniond(0, 1, 0, 0)
+    #     mat = Matrix3d(1,  0,  0,
+    #                    0, -1,  0,
+    #                    0,  0, -1)
+    #     q2 = Quaterniond(mat)
+    #     self.assertTrue(q == q2)
 
 
 if __name__ == '__main__':

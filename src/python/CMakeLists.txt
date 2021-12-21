@@ -103,7 +103,6 @@ if (PYTHONLIBS_FOUND)
       Line3_TEST
       MassMatrix3_TEST
       Material_TEST
-      Matrix3_TEST
       Matrix4_TEST
       MovingWindowFilter_TEST
       OrientedBox_TEST
