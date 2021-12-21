@@ -5,6 +5,10 @@ Deprecated code produces compile-time warnings. These warning serve as
 notification to users that their code should be upgraded. The next major
 release will remove the deprecated code.
 
+## Ignition Math 6.9.2 to 6.10.0
+
+1. **Color::HSV()**: A bug related to the hue output of this function was fixed.
+
 ## Ignition Math 6.8 to 6.9
 
 1. **SphericalCoordinates**: A bug related to the LOCAL frame was fixed. To
@@ -12,8 +16,6 @@ release will remove the deprecated code.
    `LOCAL2` frame was introduced, which can be used to get the correct
    calculations.
    
-2. **Color::HSV()**: A bug related the the hue output of this function was fixed.
-
 ## Ignition Math 4.X to 5.X
 
 ### Additions
