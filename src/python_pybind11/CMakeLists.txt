@@ -14,6 +14,7 @@ if (${pybind11_FOUND})
   # Split from main extension and converted to pybind11
   pybind11_add_module(math SHARED
     src/_ignition_math_pybind11.cc
+    src/Angle.cc
     src/DiffDriveOdometry.cc
   )
 
@@ -67,6 +68,7 @@ if (${pybind11_FOUND})
   if (BUILD_TESTING)
     # Add the Python tests
     set(python_tests
+      Angle_TEST
       DiffDriveOdometry_TEST
       Vector2_TEST
       Vector3_TEST
