@@ -71,10 +71,10 @@ class ignition::math::DiffDriveOdometry::Implementation
   public: double rightWheelOldPos{0.0};
 
   /// \brief Rolling mean accumulators for the linear velocity
-  public: RollingMean linearMean;
+  public: RollingMean linearMean {0};
 
   /// \brief Rolling mean accumulators for the angular velocity
-  public: RollingMean angularMean;
+  public: RollingMean angularMean {0};
 
   /// \brief Initialized flag.
   public: bool initialized{false};
