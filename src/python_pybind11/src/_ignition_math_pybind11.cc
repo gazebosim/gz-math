@@ -14,6 +14,7 @@
 
 #include <pybind11/pybind11.h>
 
+#include "Angle.hh"
 #include "GaussMarkovProcess.hh"
 #include "Vector2.hh"
 #include "Vector3.hh"
@@ -25,9 +26,11 @@ PYBIND11_MODULE(math, m)
 {
   m.doc() = "Ignition Math Python Library.";
 
+  ignition::math::python::defineMathAngle(m, "Angle");
+
   ignition::math::python::defineMathGaussMarkovProcess(
     m, "GaussMarkovProcess");
-
+  
   ignition::math::python::defineMathVector2<double>(m, "Vector2d");
   ignition::math::python::defineMathVector2<int>(m, "Vector2i");
   ignition::math::python::defineMathVector2<float>(m, "Vector2f");
