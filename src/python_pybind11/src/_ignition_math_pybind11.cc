@@ -30,7 +30,7 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathGaussMarkovProcess(
     m, "GaussMarkovProcess");
-  
+
   ignition::math::python::defineMathVector2<double>(m, "Vector2d");
   ignition::math::python::defineMathVector2<int>(m, "Vector2i");
   ignition::math::python::defineMathVector2<float>(m, "Vector2f");
