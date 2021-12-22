@@ -16,9 +16,15 @@
 */
 #include <cmath>
 
+#include <array>
+#include <utility>
+
+#include "ignition/math/Angle.hh"
 #include "ignition/math/AxisAlignedBox.hh"
 #include "ignition/math/Frustum.hh"
 #include "ignition/math/Matrix4.hh"
+#include "ignition/math/Plane.hh"
+#include "ignition/math/Pose3.hh"
 
 using namespace ignition;
 using namespace math;
