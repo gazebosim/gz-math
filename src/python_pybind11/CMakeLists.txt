@@ -14,8 +14,9 @@ if (${pybind11_FOUND})
   # Split from main extension and converted to pybind11
   pybind11_add_module(math SHARED
     src/_ignition_math_pybind11.cc
+    src/Angle.cc
     src/RollingMean.cc
-  )
+)
 
   target_link_libraries(math PRIVATE
     ${PROJECT_LIBRARY_TARGET_NAME}
@@ -67,6 +68,7 @@ if (${pybind11_FOUND})
   if (BUILD_TESTING)
     # Add the Python tests
     set(python_tests
+      Angle_TEST
       RollingMean_TEST
       Vector2_TEST
       Vector3_TEST
