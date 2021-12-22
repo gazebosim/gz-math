@@ -14,6 +14,7 @@
 
 #include <pybind11/pybind11.h>
 
+#include "Angle.hh"
 #include "Color.hh"
 #include "Vector2.hh"
 #include "Vector3.hh"
@@ -24,6 +25,8 @@ namespace py = pybind11;
 PYBIND11_MODULE(math, m)
 {
   m.doc() = "Ignition Math Python Library.";
+
+  ignition::math::python::defineMathAngle(m, "Angle");
 
   ignition::math::python::defineMathColor(m, "Color");
 
