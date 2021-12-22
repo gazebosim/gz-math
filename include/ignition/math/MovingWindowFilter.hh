@@ -21,6 +21,8 @@
 #include <ignition/math/Export.hh>
 #include <ignition/math/Vector3.hh>
 
+#include <ignition/utils/SuppressWarning.hh>
+
 #include <vector>
 
 namespace ignition
@@ -65,11 +67,13 @@ namespace ignition
       /// \brief For moving window smoothed value
       protected: unsigned int valWindowSize = 4;
 
+      IGN_UTILS_WARN_IGNORE__DLL_INTERFACE_MISSING
       /// \brief buffer history of raw values
       protected: std::vector<T> valHistory;
 
       /// \brief iterator pointing to current value in buffer
       protected: typename std::vector<T>::iterator valIter;
+      IGN_UTILS_WARN_RESUME__DLL_INTERFACE_MISSING
 
       /// \brief keep track of running sum
       protected: T sum;
