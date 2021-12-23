@@ -84,8 +84,7 @@ class ignition::math::DiffDriveOdometry::Implementation
 DiffDriveOdometry::DiffDriveOdometry(size_t _windowSize)
   : dataPtr(ignition::utils::MakeImpl<Implementation>())
 {
-  this->dataPtr->linearMean.SetWindowSize(_windowSize);
-  this->dataPtr->angularMean.SetWindowSize(_windowSize);
+  this->SetVelocityRollingWindowSize(_windowSize);
 }
 
 //////////////////////////////////////////////////
