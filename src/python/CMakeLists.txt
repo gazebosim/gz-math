@@ -89,13 +89,11 @@ if (PYTHONLIBS_FOUND)
     set(python_tests
       AxisAlignedBox_TEST
       Box_TEST
-      Color_TEST
       Cylinder_TEST
       DiffDriveOdometry_TEST
       Filter_TEST
       Frustum_TEST
       GaussMarkovProcess_TEST
-      Helpers_TEST
       Inertial_TEST
       Kmeans_TEST
       Line3_TEST
@@ -110,7 +108,6 @@ if (PYTHONLIBS_FOUND)
       Pose3_TEST
       python_TEST
       Quaternion_TEST
-      Rand_TEST
       RollingMean_TEST
       RotationSpline_TEST
       SemanticVersion_TEST
