@@ -16,6 +16,8 @@ if (${pybind11_FOUND})
     src/_ignition_math_pybind11.cc
     src/Angle.cc
     src/Color.cc
+    src/Helpers.cc
+    src/Rand.cc
   )
 
   target_link_libraries(math PRIVATE
@@ -70,6 +72,8 @@ if (${pybind11_FOUND})
     set(python_tests
       Angle_TEST
       Color_TEST
+      Helpers_TEST
+      Rand_TEST
       Vector2_TEST
       Vector3_TEST
       Vector4_TEST
