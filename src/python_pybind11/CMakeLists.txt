@@ -74,6 +74,7 @@ if (${pybind11_FOUND})
       Angle_TEST
       Color_TEST
       Helpers_TEST
+      Line2_TEST
       Rand_TEST
       RollingMean_TEST
       Vector2_TEST
