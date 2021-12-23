@@ -14,15 +14,12 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_PYTHON__ANGLE_HPP_
-#define IGNITION_MATH_PYTHON__ANGLE_HPP_
 
-#include <string>
+#ifndef IGNITION_MATH_PYTHON__TEMPERATURE_HH_
+#define IGNITION_MATH_PYTHON__TEMPERATURE_HH_
 
 #include <pybind11/pybind11.h>
-#include <pybind11/operators.h>
-
-#include <ignition/math/Angle.hh>
+#include <string>
 
 namespace py = pybind11;
 
@@ -32,13 +29,14 @@ namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an ignition::math::Angle
+/// Define a pybind11 wrapper for an ignition::math::Temperature
 /**
  * \param[in] module a pybind11 module to add the definition to
+ * \param[in] typestr name of the type used by Python
  */
-void defineMathAngle(py::module &m, const std::string &typestr);
+void defineMathTemperature(py::module &m, const std::string &typestr);
 }  // namespace python
-}  // namespace gazebo
+}  // namespace math
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__ANGLE_HPP_
+#endif  // IGNITION_MATH_PYTHON__TEMPERATURE_HH_

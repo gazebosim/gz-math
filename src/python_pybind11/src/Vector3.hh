@@ -82,11 +82,11 @@ void defineMathVector3(py::module &m, const std::string &typestr)
     .def("dot",
          &Class::Dot,
          "Return the dot product of this vector and another vector")
-    .def("abs", &Class::Abs,
+    .def("abs_dot", &Class::AbsDot,
          "Return the absolute dot product of this vector and "
          "another vector. This is similar to the Dot function, except the "
          "absolute value of each component of the vector is used.")
-    .def("abs_dot", &Class::AbsDot, " Get the absolute value of the vector")
+    .def("abs", &Class::Abs, "Get the absolute value of the vector")
     .def("perpendicular",
          &Class::Perpendicular,
          "Return a vector that is perpendicular to this one.")
@@ -137,14 +137,14 @@ void defineMathVector3(py::module &m, const std::string &typestr)
     .def("x", py::overload_cast<>(&Class::X), "Get the x value.")
     .def("y", py::overload_cast<>(&Class::Y), "Get the y value.")
     .def("z", py::overload_cast<>(&Class::Z), "Get the z value.")
-    .def("x", py::overload_cast<const T&>(&Class::X), "Get the x value.")
-    .def("y", py::overload_cast<const T&>(&Class::Y), "Get the y value.")
-    .def("z", py::overload_cast<const T&>(&Class::Z), "Get the z value.")
+    .def("x", py::overload_cast<const T&>(&Class::X), "Set the x value.")
+    .def("y", py::overload_cast<const T&>(&Class::Y), "Set the y value.")
+    .def("z", py::overload_cast<const T&>(&Class::Z), "Set the z value.")
     .def_readonly_static("ZERO", &Class::Zero, "math::Vector3(0, 0, 0)")
     .def_readonly_static("ONE", &Class::One, "math::Vector3(1, 1, 1)")
-    .def_readonly_static("UNITX", &Class::UnitX, "math::Vector3(1, 0, 0)")
-    .def_readonly_static("UNITY", &Class::UnitY, "math::Vector3(0, 1, 0)")
-    .def_readonly_static("UNITZ", &Class::UnitZ, "math::Vector3(0, 0, 1)")
+    .def_readonly_static("UNIT_X", &Class::UnitX, "math::Vector3(1, 0, 0)")
+    .def_readonly_static("UNIT_Y", &Class::UnitY, "math::Vector3(0, 1, 0)")
+    .def_readonly_static("UNIT_Z", &Class::UnitZ, "math::Vector3(0, 0, 1)")
     .def_readonly_static("NAN", &Class::NaN, "math::Vector3(NaN, NaN, NaN)")
     .def("__copy__", [](const Class &self) {
       return Class(self);

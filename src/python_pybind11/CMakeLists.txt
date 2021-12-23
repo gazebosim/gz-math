@@ -14,7 +14,17 @@ if (${pybind11_FOUND})
   # Split from main extension and converted to pybind11
   pybind11_add_module(math SHARED
     src/_ignition_math_pybind11.cc
-    src/Angle.cc
+		src/Angle.cc
+		src/Color.cc
+		src/DiffDriveOdometry.cc
+		src/GaussMarkovProcess.cc
+		src/Helpers.cc
+		src/PID.cc
+		src/Rand.cc
+		src/RollingMean.cc
+		src/SphericalCoordinates.cc
+		src/StopWatch.cc
+		src/Temperature.cc
   )
 
 	target_link_libraries(math PRIVATE
@@ -50,7 +60,7 @@ if (${pybind11_FOUND})
 
   # Set the build location and install location for a CPython extension
   function(configure_build_install_location _library_name)
-    # Install into test_rclpy folder in build space for unit tests to import
+    # Install into test folder in build space for unit tests to import
     set_target_properties(${_library_name} PROPERTIES
       # Use generator expression to avoid prepending a build type specific directory on Windows
       LIBRARY_OUTPUT_DIRECTORY $<1:${CMAKE_CURRENT_BINARY_DIR}/test>
@@ -67,7 +77,25 @@ if (${pybind11_FOUND})
   if (BUILD_TESTING)
     # Add the Python tests
     set(python_tests
-      Angle_TEST
+			Angle_TEST
+			Color_TEST
+      DiffDriveOdometry_TEST
+			Filter_TEST
+			GaussMarkovProcess_TEST
+			Helpers_TEST
+			Line2_TEST
+			Line3_TEST
+			Matrix3_TEST
+			Matrix4_TEST
+			MovingWindowFilter_TEST
+			PID_TEST
+			Pose3_TEST
+			Quaternion_TEST
+			Rand_TEST
+			RollingMean_TEST
+			SphericalCoordinates_TEST
+			StopWatch_TEST
+			Temperature_TEST
       Vector2_TEST
       Vector3_TEST
       Vector4_TEST
@@ -75,7 +103,7 @@ if (${pybind11_FOUND})
 
     foreach (test ${python_tests})
       add_test(NAME ${test}.py COMMAND
-      "${PYTHON_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/src/python_pybind11/test/${test}.py")
+      	"${PYTHON_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/src/python_pybind11/test/${test}.py")
 
       set(_env_vars)
       list(APPEND _env_vars "PYTHONPATH=${FAKE_INSTALL_PREFIX}/lib/python/")

@@ -14,15 +14,14 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_PYTHON__ANGLE_HPP_
-#define IGNITION_MATH_PYTHON__ANGLE_HPP_
-
-#include <string>
+#ifndef IGNITION_MATH_PYTHON__DIFFDRIVEODOMETRY_HH_
+#define IGNITION_MATH_PYTHON__DIFFDRIVEODOMETRY_HH_
 
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
+#include <pybind11/chrono.h>
 
-#include <ignition/math/Angle.hh>
+#include <ignition/math/DiffDriveOdometry.hh>
 
 namespace py = pybind11;
 
@@ -32,13 +31,14 @@ namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an ignition::math::Angle
+/// Define a py:: wrapper for an ignition::gazebo::DiffDriveOdometry
 /**
- * \param[in] module a pybind11 module to add the definition to
+ * \param[in] module a py:: module to add the definition to
  */
-void defineMathAngle(py::module &m, const std::string &typestr);
+void defineMathDiffDriveOdometry(
+  py::module &m, const std::string &typestr);
 }  // namespace python
 }  // namespace gazebo
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__ANGLE_HPP_
+#endif  // IGNITION_MATH_PYTHON__DIFFDRIVEODOMETRY_HH_

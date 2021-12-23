@@ -15,6 +15,7 @@ if (SWIG_FOUND)
 
   set(swig_files
     Angle
+		DiffDriveOdometry
     GaussMarkovProcess
     Rand
     Vector2

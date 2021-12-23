@@ -101,11 +101,11 @@ class TestVector3(unittest.TestCase):
 
         self.assertEqual(Vector3d.ONE, Vector3d(1, 1, 1))
 
-        self.assertEqual(Vector3d.UNITX, Vector3d(1, 0, 0))
+        self.assertEqual(Vector3d.UNIT_X, Vector3d(1, 0, 0))
 
-        self.assertEqual(Vector3d.UNITY, Vector3d(0, 1, 0))
+        self.assertEqual(Vector3d.UNIT_Y, Vector3d(0, 1, 0))
 
-        self.assertEqual(Vector3d.UNITZ, Vector3d(0, 0, 1))
+        self.assertEqual(Vector3d.UNIT_Z, Vector3d(0, 0, 1))
 
     def test_distance(self):
         vec1 = Vector3d(0, 0, 0)
@@ -143,12 +143,12 @@ class TestVector3(unittest.TestCase):
         self.assertEqual(Vector3d.ZERO.squared_length(), 0.0)
 
         # UnitXYZ vectorsIgnition::
-        self.assertEqual(Vector3d.UNITX.length(), 1.0)
-        self.assertEqual(Vector3d.UNITY.length(), 1.0)
-        self.assertEqual(Vector3d.UNITZ.length(), 1.0)
-        self.assertEqual(Vector3d.UNITX.squared_length(), 1.0)
-        self.assertEqual(Vector3d.UNITY.squared_length(), 1.0)
-        self.assertEqual(Vector3d.UNITZ.squared_length(), 1.0)
+        self.assertEqual(Vector3d.UNIT_X.length(), 1.0)
+        self.assertEqual(Vector3d.UNIT_Y.length(), 1.0)
+        self.assertEqual(Vector3d.UNIT_Z.length(), 1.0)
+        self.assertEqual(Vector3d.UNIT_X.squared_length(), 1.0)
+        self.assertEqual(Vector3d.UNIT_Y.squared_length(), 1.0)
+        self.assertEqual(Vector3d.UNIT_Z.squared_length(), 1.0)
 
         # One vector
         self.assertTrue(Vector3d.ONE.length() -

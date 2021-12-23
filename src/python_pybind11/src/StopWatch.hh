@@ -14,15 +14,11 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_PYTHON__ANGLE_HPP_
-#define IGNITION_MATH_PYTHON__ANGLE_HPP_
 
-#include <string>
+#ifndef IGNITION_MATH_PYTHON__STOPWATCH_HH_
+#define IGNITION_MATH_PYTHON__STOPWATCH_HH_
 
 #include <pybind11/pybind11.h>
-#include <pybind11/operators.h>
-
-#include <ignition/math/Angle.hh>
 
 namespace py = pybind11;
 
@@ -32,13 +28,13 @@ namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an ignition::math::Angle
+/// Define a pybind11 wrapper for an ignition::math::Stopwatch
 /**
  * \param[in] module a pybind11 module to add the definition to
  */
-void defineMathAngle(py::module &m, const std::string &typestr);
+void defineMathStopwatch(py::module &m, const std::string &typestr);
 }  // namespace python
 }  // namespace gazebo
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__ANGLE_HPP_
+#endif  // IGNITION_MATH_PYTHON__STOPWATCH_HH_
