@@ -16,6 +16,7 @@
 
 #include "Angle.hh"
 #include "Helpers.hh"
+#include "Rand.hh"
 #include "Vector2.hh"
 #include "Vector3.hh"
 #include "Vector4.hh"
@@ -29,6 +30,8 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathAngle(m, "Angle");
 
   ignition::math::python::defineMathHelpers(m);
+
+  ignition::math::python::defineMathRand(m, "Rand");
 
   ignition::math::python::defineMathVector2<double>(m, "Vector2d");
   ignition::math::python::defineMathVector2<int>(m, "Vector2i");
