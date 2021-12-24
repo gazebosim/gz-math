@@ -99,7 +99,6 @@ if (PYTHONLIBS_FOUND)
       MassMatrix3_TEST
       Material_TEST
       Matrix3_TEST
-      Matrix4_TEST
       OrientedBox_TEST
       PID_TEST
       Plane_TEST

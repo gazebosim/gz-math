@@ -19,6 +19,7 @@
 #include "Helpers.hh"
 #include "Line2.hh"
 #include "Line3.hh"
+#include "Matrix4.hh"
 #include "MovingWindowFilter.hh"
 #include "Quaternion.hh"
 #include "Rand.hh"
@@ -76,4 +77,8 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathQuaternion<int>(m, "Quaternioni");
   ignition::math::python::defineMathQuaternion<double>(m, "Quaterniond");
   ignition::math::python::defineMathQuaternion<float>(m, "Quaternionf");
+
+  ignition::math::python::defineMathMatrix4<int>(m, "Matrix4i");
+  ignition::math::python::defineMathMatrix4<double>(m, "Matrix4d");
+  ignition::math::python::defineMathMatrix4<float>(m, "Matrix4f");
 }
