@@ -209,8 +209,8 @@ template<typename T>
 class BiQuadTrampoline : public BiQuad<T>
 {
 public:
-  BiQuadTrampoline() : BiQuad<T>() {};
-  BiQuadTrampoline(double _fc, double _fs) : BiQuad<T>(_fc, _fs) {};
+  BiQuadTrampoline() : BiQuad<T>() {}
+  BiQuadTrampoline(double _fc, double _fs) : BiQuad<T>(_fc, _fs) {}
 
   // Trampoline (need one for each virtual function)
   void Fc(double _fc, double _fs) override
