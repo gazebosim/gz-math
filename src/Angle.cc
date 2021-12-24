@@ -25,31 +25,31 @@ const Angle Angle::HalfPi = Angle(IGN_PI_2);
 const Angle Angle::TwoPi = Angle(IGN_PI * 2.0);
 
 //////////////////////////////////////////////////
-Angle::Angle(const double _radian)
+Angle::Angle(double _radian)
 {
   this->value = _radian;
 }
 
 //////////////////////////////////////////////////
-void Angle::Radian(const double _radian)
+void Angle::Radian(double _radian)
 {
   this->value = _radian;
 }
 
 //////////////////////////////////////////////////
-void Angle::SetRadian(const double _radian)
+void Angle::SetRadian(double _radian)
 {
   this->value = _radian;
 }
 
 //////////////////////////////////////////////////
-void Angle::Degree(const double _degree)
+void Angle::Degree(double _degree)
 {
   this->value = _degree * IGN_PI / 180.0;
 }
 
 //////////////////////////////////////////////////
-void Angle::SetDegree(const double _degree)
+void Angle::SetDegree(double _degree)
 {
   this->value = _degree * IGN_PI / 180.0;
 }
