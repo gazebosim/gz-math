@@ -82,6 +82,7 @@ if (${pybind11_FOUND})
       Rand_TEST
       RollingMean_TEST
       StopWatch_TEST
+      Triangle_TEST
       Vector2_TEST
       Vector3_TEST
       Vector4_TEST

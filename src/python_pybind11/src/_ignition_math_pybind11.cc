@@ -24,6 +24,7 @@
 #include "Rand.hh"
 #include "RollingMean.hh"
 #include "StopWatch.hh"
+#include "Triangle.hh"
 #include "Vector2.hh"
 #include "Vector3.hh"
 #include "Vector4.hh"
@@ -72,6 +73,10 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathLine3<int>(m, "Line3i");
   ignition::math::python::defineMathLine3<double>(m, "Line3d");
   ignition::math::python::defineMathLine3<float>(m, "Line3f");
+
+  ignition::math::python::defineMathTriangle<int>(m, "Trianglei");
+  ignition::math::python::defineMathTriangle<double>(m, "Triangled");
+  ignition::math::python::defineMathTriangle<float>(m, "Trianglef");
 
   ignition::math::python::defineMathQuaternion<int>(m, "Quaternioni");
   ignition::math::python::defineMathQuaternion<double>(m, "Quaterniond");
