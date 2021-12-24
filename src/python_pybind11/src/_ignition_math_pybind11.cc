@@ -23,6 +23,7 @@
 #include "Quaternion.hh"
 #include "Rand.hh"
 #include "RollingMean.hh"
+#include "SemanticVersion.hh"
 #include "StopWatch.hh"
 #include "Vector2.hh"
 #include "Vector3.hh"
@@ -50,6 +51,8 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathRand(m, "Rand");
 
   ignition::math::python::defineMathRollingMean(m, "RollingMean");
+
+  ignition::math::python::defineMathSemanticVersion(m, "SemanticVersion");
 
   ignition::math::python::defineMathStopwatch(m, "Stopwatch");
 
