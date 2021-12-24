@@ -15,7 +15,16 @@
 #include <pybind11/pybind11.h>
 
 #include "Angle.hh"
+#include "Color.hh"
+#include "Helpers.hh"
+#include "Line2.hh"
+#include "Line3.hh"
 #include "Matrix3.hh"
+#include "MovingWindowFilter.hh"
+#include "Quaternion.hh"
+#include "Rand.hh"
+#include "RollingMean.hh"
+#include "StopWatch.hh"
 #include "Vector2.hh"
 #include "Vector3.hh"
 #include "Vector4.hh"
@@ -27,6 +36,23 @@ PYBIND11_MODULE(math, m)
   m.doc() = "Ignition Math Python Library.";
 
   ignition::math::python::defineMathAngle(m, "Angle");
+
+  ignition::math::python::defineMathColor(m, "Color");
+
+  ignition::math::python::defineMathHelpers(m);
+
+  ignition::math::python::defineMathMovingWindowFilter<int>(
+    m, "MovingWindowFilteri");
+  ignition::math::python::defineMathMovingWindowFilter<double>(
+    m, "MovingWindowFilterd");
+  ignition::math::python::defineMathMovingWindowFilter
+    <ignition::math::Vector3d>(m, "MovingWindowFilterv3");
+
+  ignition::math::python::defineMathRand(m, "Rand");
+
+  ignition::math::python::defineMathRollingMean(m, "RollingMean");
+
+  ignition::math::python::defineMathStopwatch(m, "Stopwatch");
 
   ignition::math::python::defineMathVector2<double>(m, "Vector2d");
   ignition::math::python::defineMathVector2<int>(m, "Vector2i");
@@ -40,7 +66,19 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathVector4<int>(m, "Vector4i");
   ignition::math::python::defineMathVector4<float>(m, "Vector4f");
 
+  ignition::math::python::defineMathLine2<int>(m, "Line2i");
+  ignition::math::python::defineMathLine2<double>(m, "Line2d");
+  ignition::math::python::defineMathLine2<float>(m, "Line2f");
+
+  ignition::math::python::defineMathLine3<int>(m, "Line3i");
+  ignition::math::python::defineMathLine3<double>(m, "Line3d");
+  ignition::math::python::defineMathLine3<float>(m, "Line3f");
+
   ignition::math::python::defineMathMatrix3<int>(m, "Matrix3i");
   ignition::math::python::defineMathMatrix3<double>(m, "Matrix3d");
   ignition::math::python::defineMathMatrix3<float>(m, "Matrix3f");
+
+  ignition::math::python::defineMathQuaternion<int>(m, "Quaternioni");
+  ignition::math::python::defineMathQuaternion<double>(m, "Quaterniond");
+  ignition::math::python::defineMathQuaternion<float>(m, "Quaternionf");
 }
