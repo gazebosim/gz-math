@@ -78,6 +78,7 @@ if (${pybind11_FOUND})
       Line2_TEST
       Line3_TEST
       MovingWindowFilter_TEST
+      Pose3_TEST
       Quaternion_TEST
       Rand_TEST
       RollingMean_TEST
