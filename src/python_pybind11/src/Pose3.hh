@@ -37,6 +37,7 @@ namespace python
 /// Define a pybind11 wrapper for an ignition::math::Pose3
 /**
  * \param[in] module a pybind11 module to add the definition to
+ * \param[in] typestr name of the type used by Python
  */
 template<typename T>
 void defineMathPose3(py::module &m, const std::string &typestr)
@@ -132,9 +133,6 @@ void defineMathPose3(py::module &m, const std::string &typestr)
     .def("roll", &Class::Roll, "Get the Roll value of the position")
     .def("pitch", &Class::Pitch, "Get the Pitch value of the position")
     .def("yaw", &Class::Yaw, "Get the Yaw value of the position")
-    // .def("set_roll", &Class::SetRoll, "Set the Roll value of the position")
-    // .def("set_pitch", &Class::SetPitch, "Set the Pitch value of the position")
-    // .def("set_yaw", &Class::SetYaw, "Set the Yaw value of the position")
     .def("__copy__", [](const Class &self) {
       return Class(self);
     })
