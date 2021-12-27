@@ -23,6 +23,7 @@
 #include "Quaternion.hh"
 #include "Rand.hh"
 #include "RollingMean.hh"
+#include "SignalStats.hh"
 #include "StopWatch.hh"
 #include "Vector2.hh"
 #include "Vector3.hh"
@@ -50,6 +51,17 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathRand(m, "Rand");
 
   ignition::math::python::defineMathRollingMean(m, "RollingMean");
+
+  ignition::math::python::defineMathSignalStats(m, "SignalStats");
+  ignition::math::python::defineMathSignalStatistic(m, "SignalStatistic");
+  ignition::math::python::defineMathSignalVariance(m, "SignalVariance");
+  ignition::math::python::defineMathSignalMaximum(m, "SignalMaximum");
+  ignition::math::python::defineMathSignalMinimum(m, "SignalMinimum");
+  ignition::math::python::defineMathSignalMaxAbsoluteValue(
+    m, "SignalMaxAbsoluteValue");
+  ignition::math::python::defineMathSignalRootMeanSquare(
+    m, "SignalRootMeanSquare");
+  ignition::math::python::defineMathSignalMean(m, "SignalMean");
 
   ignition::math::python::defineMathStopwatch(m, "Stopwatch");
 

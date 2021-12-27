@@ -107,7 +107,6 @@ if (PYTHONLIBS_FOUND)
       python_TEST
       RotationSpline_TEST
       SemanticVersion_TEST
-      SignalStats_TEST
       Sphere_TEST
       SphericalCoordinates_TEST
       Spline_TEST

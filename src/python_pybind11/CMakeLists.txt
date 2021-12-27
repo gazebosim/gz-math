@@ -19,6 +19,7 @@ if (${pybind11_FOUND})
     src/Helpers.cc
     src/Rand.cc
     src/RollingMean.cc
+    src/SignalStats.cc
     src/StopWatch.cc
   )
 
@@ -81,6 +82,7 @@ if (${pybind11_FOUND})
       Quaternion_TEST
       Rand_TEST
       RollingMean_TEST
+      SignalStats_TEST
       StopWatch_TEST
       Vector2_TEST
       Vector3_TEST
