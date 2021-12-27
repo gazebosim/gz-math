@@ -17,6 +17,7 @@
 #include "Angle.hh"
 #include "Color.hh"
 #include "Helpers.hh"
+#include "Kmeans.hh"
 #include "Line2.hh"
 #include "Line3.hh"
 #include "MovingWindowFilter.hh"
@@ -39,6 +40,8 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathColor(m, "Color");
 
   ignition::math::python::defineMathHelpers(m);
+
+  ignition::math::python::defineMathKmeans(m, "Kmeans");
 
   ignition::math::python::defineMathMovingWindowFilter<int>(
     m, "MovingWindowFilteri");
