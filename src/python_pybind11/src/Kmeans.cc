@@ -45,7 +45,7 @@ void defineMathKmeans(py::module &m, const std::string &typestr)
        "Get the observations to cluster.")
   .def("append_observations",
        &Class::AppendObservations,
-       "Add observations to the cluster..")
+       "Add observations to the cluster.")
   .def("cluster",
        [](Class &self, int k) {
          std::vector<ignition::math::Vector3<double>> centroids;
