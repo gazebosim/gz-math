@@ -17,6 +17,7 @@ if (${pybind11_FOUND})
     src/Angle.cc
     src/Color.cc
     src/Helpers.cc
+    src/Material.cc
     src/Rand.cc
     src/RollingMean.cc
     src/StopWatch.cc
@@ -77,6 +78,7 @@ if (${pybind11_FOUND})
       Helpers_TEST
       Line2_TEST
       Line3_TEST
+      Material_TEST
       MovingWindowFilter_TEST
       Quaternion_TEST
       Rand_TEST

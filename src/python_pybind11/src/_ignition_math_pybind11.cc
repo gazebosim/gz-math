@@ -19,6 +19,7 @@
 #include "Helpers.hh"
 #include "Line2.hh"
 #include "Line3.hh"
+#include "Material.hh"
 #include "MovingWindowFilter.hh"
 #include "Quaternion.hh"
 #include "Rand.hh"
@@ -39,6 +40,8 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathColor(m, "Color");
 
   ignition::math::python::defineMathHelpers(m);
+
+  ignition::math::python::defineMathMaterial(m, "Material");
 
   ignition::math::python::defineMathMovingWindowFilter<int>(
     m, "MovingWindowFilteri");

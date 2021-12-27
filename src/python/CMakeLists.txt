@@ -97,7 +97,6 @@ if (PYTHONLIBS_FOUND)
       Inertial_TEST
       Kmeans_TEST
       MassMatrix3_TEST
-      Material_TEST
       Matrix3_TEST
       Matrix4_TEST
       OrientedBox_TEST
