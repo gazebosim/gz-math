@@ -90,8 +90,6 @@ if (PYTHONLIBS_FOUND)
       AxisAlignedBox_TEST
       Box_TEST
       Cylinder_TEST
-      DiffDriveOdometry_TEST
-      Filter_TEST
       Frustum_TEST
       GaussMarkovProcess_TEST
       Inertial_TEST
