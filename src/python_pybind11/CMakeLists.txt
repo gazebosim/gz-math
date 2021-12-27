@@ -83,6 +83,7 @@ if (${pybind11_FOUND})
       Matrix3_TEST
       Matrix4_TEST
       MovingWindowFilter_TEST
+      Pose3_TEST
       Quaternion_TEST
       Rand_TEST
       RollingMean_TEST
