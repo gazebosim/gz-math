@@ -19,10 +19,12 @@
 #include "Helpers.hh"
 #include "Line2.hh"
 #include "Line3.hh"
+#include "Matrix3.hh"
 #include "MovingWindowFilter.hh"
 #include "Quaternion.hh"
 #include "Rand.hh"
 #include "RollingMean.hh"
+#include "SemanticVersion.hh"
 #include "Spline.hh"
 #include "StopWatch.hh"
 #include "Vector2.hh"
@@ -52,6 +54,8 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathRollingMean(m, "RollingMean");
 
+  ignition::math::python::defineMathSemanticVersion(m, "SemanticVersion");
+
   ignition::math::python::defineMathSpline(m, "Spline");
 
   ignition::math::python::defineMathStopwatch(m, "Stopwatch");
@@ -75,6 +79,10 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathLine3<int>(m, "Line3i");
   ignition::math::python::defineMathLine3<double>(m, "Line3d");
   ignition::math::python::defineMathLine3<float>(m, "Line3f");
+
+  ignition::math::python::defineMathMatrix3<int>(m, "Matrix3i");
+  ignition::math::python::defineMathMatrix3<double>(m, "Matrix3d");
+  ignition::math::python::defineMathMatrix3<float>(m, "Matrix3f");
 
   ignition::math::python::defineMathQuaternion<int>(m, "Quaternioni");
   ignition::math::python::defineMathQuaternion<double>(m, "Quaterniond");

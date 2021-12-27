@@ -19,6 +19,7 @@ if (${pybind11_FOUND})
     src/Helpers.cc
     src/Rand.cc
     src/RollingMean.cc
+    src/SemanticVersion.cc
     src/Spline.cc
     src/StopWatch.cc
   )
@@ -78,10 +79,12 @@ if (${pybind11_FOUND})
       Helpers_TEST
       Line2_TEST
       Line3_TEST
+      Matrix3_TEST
       MovingWindowFilter_TEST
       Quaternion_TEST
       Rand_TEST
       RollingMean_TEST
+      SemanticVersion_TEST
       Spline_TEST
       StopWatch_TEST
       Vector2_TEST
