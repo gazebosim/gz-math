@@ -14,7 +14,10 @@
  * limitations under the License.
  *
 */
+#include <limits>
+#include <map>
 #include <string>
+
 #include "Material.hh"
 #include <ignition/math/Material.hh>
 #include <ignition/math/MaterialType.hh>
@@ -94,7 +97,8 @@ void defineMathMaterial(py::module &m, const std::string &typestr)
        .value("BRASS", ignition::math::MaterialType::BRASS)
        .value("COPPER", ignition::math::MaterialType::COPPER)
        .value("TUNGSTEN", ignition::math::MaterialType::TUNGSTEN)
-       .value("UNKNOWN_MATERIAL", ignition::math::MaterialType::UNKNOWN_MATERIAL)
+       .value("UNKNOWN_MATERIAL",
+              ignition::math::MaterialType::UNKNOWN_MATERIAL)
        .export_values();
 }
 }  // namespace python
