@@ -15,7 +15,14 @@ if (${pybind11_FOUND})
   pybind11_add_module(math SHARED
     src/_ignition_math_pybind11.cc
     src/Angle.cc
+    src/Color.cc
+    src/Helpers.cc
     src/PID.cc
+    src/Rand.cc
+    src/RollingMean.cc
+    src/SemanticVersion.cc
+    src/Spline.cc
+    src/StopWatch.cc
   )
 
   target_link_libraries(math PRIVATE
@@ -69,7 +76,21 @@ if (${pybind11_FOUND})
     # Add the Python tests
     set(python_tests
       Angle_TEST
+      Color_TEST
+      Filter_TEST
+      Helpers_TEST
+      Line2_TEST
+      Line3_TEST
+      Matrix3_TEST
+      MovingWindowFilter_TEST
       PID_TEST
+      Quaternion_TEST
+      Rand_TEST
+      RollingMean_TEST
+      SemanticVersion_TEST
+      Spline_TEST
+      StopWatch_TEST
+      Triangle_TEST
       Vector2_TEST
       Vector3_TEST
       Vector4_TEST
