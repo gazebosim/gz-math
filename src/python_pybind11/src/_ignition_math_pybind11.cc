@@ -23,6 +23,7 @@
 #include "Quaternion.hh"
 #include "Rand.hh"
 #include "RollingMean.hh"
+#include "RotationSpline.hh"
 #include "StopWatch.hh"
 #include "Vector2.hh"
 #include "Vector3.hh"
@@ -48,6 +49,8 @@ PYBIND11_MODULE(math, m)
     <ignition::math::Vector3d>(m, "MovingWindowFilterv3");
 
   ignition::math::python::defineMathRand(m, "Rand");
+
+  ignition::math::python::defineMathRotationSpline(m, "RotationSpline");
 
   ignition::math::python::defineMathRollingMean(m, "RollingMean");
 
