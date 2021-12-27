@@ -91,13 +91,13 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathTriangle<double>(m, "Triangled");
   ignition::math::python::defineMathTriangle<float>(m, "Trianglef");
 
-  ignition::math::python::defineMathQuaternion<int>(m, "Quaternioni");
-  ignition::math::python::defineMathQuaternion<double>(m, "Quaterniond");
-  ignition::math::python::defineMathQuaternion<float>(m, "Quaternionf");
-
   ignition::math::python::defineMathTriangle3<int>(m, "Triangle3i");
   ignition::math::python::defineMathTriangle3<double>(m, "Triangle3d");
   ignition::math::python::defineMathTriangle3<float>(m, "Triangle3f");
+
+  ignition::math::python::defineMathQuaternion<int>(m, "Quaternioni");
+  ignition::math::python::defineMathQuaternion<double>(m, "Quaterniond");
+  ignition::math::python::defineMathQuaternion<float>(m, "Quaternionf");
 
   ignition::math::python::defineMathFilter<int>(m, "Filteri");
   ignition::math::python::defineMathFilter<float>(m, "Filterf");
