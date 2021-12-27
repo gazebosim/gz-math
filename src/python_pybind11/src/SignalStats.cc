@@ -61,7 +61,8 @@ class SignalStatisticTrampoline : public ignition::math::SignalStatistic
 {
 public:
   SignalStatisticTrampoline() : SignalStatistic() {}
-  SignalStatisticTrampoline(const SignalStatistic &_ss) : SignalStatistic(_ss) {}
+  explicit SignalStatisticTrampoline(const SignalStatistic &_ss) :
+    SignalStatistic(_ss) {}
 
   // Trampoline (need one for each virtual function)
   double Value() const override
@@ -480,7 +481,8 @@ void defineMathSignalRootMeanSquare(py::module &m, const std::string &typestr)
 }
 
 //////////////////////////////////////////////////
-class SignalMaxAbsoluteValueTrampoline : public ignition::math::SignalMaxAbsoluteValue
+class SignalMaxAbsoluteValueTrampoline :
+  public ignition::math::SignalMaxAbsoluteValue
 {
 public:
     // Inherit the constructors
