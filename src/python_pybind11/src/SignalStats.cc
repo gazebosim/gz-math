@@ -16,6 +16,7 @@
 */
 #include <pybind11/stl_bind.h>
 
+#include <map>
 #include <string>
 
 #include "SignalStats.hh"
@@ -59,15 +60,15 @@ void defineMathSignalStats(py::module &m, const std::string &typestr)
 class SignalStatisticTrampoline : public ignition::math::SignalStatistic
 {
 public:
-  SignalStatisticTrampoline() : SignalStatistic() {};
-  SignalStatisticTrampoline(const SignalStatistic &_ss) : SignalStatistic(_ss) {};
+  SignalStatisticTrampoline() : SignalStatistic() {}
+  SignalStatisticTrampoline(const SignalStatistic &_ss) : SignalStatistic(_ss) {}
 
   // Trampoline (need one for each virtual function)
   double Value() const override
   {
       PYBIND11_OVERLOAD_PURE(
-          double,                          // Return type (ret_type)
-          ignition::math::SignalStatistic, // Parent class (cname)
+          double,                           // Return type (ret_type)
+          ignition::math::SignalStatistic,  // Parent class (cname)
           // Name of function in C++ (must match Python name) (fn)
           Value,
       );
@@ -411,7 +412,8 @@ void defineMathSignalMean(py::module &m, const std::string &typestr)
 }
 
 //////////////////////////////////////////////////
-class SignalRootMeanSquareTrampoline : public ignition::math::SignalRootMeanSquare
+class SignalRootMeanSquareTrampoline :
+  public ignition::math::SignalRootMeanSquare
 {
 public:
     // Inherit the constructors

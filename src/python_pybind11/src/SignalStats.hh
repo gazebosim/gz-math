@@ -69,7 +69,8 @@ void defineMathSignalVariance(py::module &m, const std::string &typestr);
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
-void defineMathSignalMaxAbsoluteValue(py::module &m, const std::string &typestr);
+void defineMathSignalMaxAbsoluteValue(
+  py::module &m, const std::string &typestr);
 
 /// Define a pybind11 wrapper for an ignition::math::SignalRootMeanSquare
 /**
