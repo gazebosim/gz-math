@@ -91,14 +91,12 @@ if (PYTHONLIBS_FOUND)
       Box_TEST
       Cylinder_TEST
       DiffDriveOdometry_TEST
-      Filter_TEST
       Frustum_TEST
       GaussMarkovProcess_TEST
       Inertial_TEST
       Kmeans_TEST
       MassMatrix3_TEST
       Material_TEST
-      Matrix3_TEST
       Matrix4_TEST
       OrientedBox_TEST
       PID_TEST
@@ -106,12 +104,9 @@ if (PYTHONLIBS_FOUND)
       Pose3_TEST
       python_TEST
       RotationSpline_TEST
-      SemanticVersion_TEST
       Sphere_TEST
       SphericalCoordinates_TEST
-      Spline_TEST
       Temperature_TEST
-      Triangle_TEST
       Triangle3_TEST
       Vector3Stats_TEST
     )
