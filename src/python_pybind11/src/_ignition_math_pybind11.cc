@@ -18,8 +18,10 @@
 #include "Color.hh"
 #include "Filter.hh"
 #include "Helpers.hh"
+#include "Kmeans.hh"
 #include "Line2.hh"
 #include "Line3.hh"
+#include "Material.hh"
 #include "Matrix3.hh"
 #include "Matrix4.hh"
 #include "MovingWindowFilter.hh"
@@ -27,10 +29,12 @@
 #include "Quaternion.hh"
 #include "Rand.hh"
 #include "RollingMean.hh"
+#include "RotationSpline.hh"
 #include "SemanticVersion.hh"
 #include "Spline.hh"
 #include "StopWatch.hh"
 #include "Triangle.hh"
+#include "Triangle3.hh"
 #include "Vector2.hh"
 #include "Vector3.hh"
 #include "Vector4.hh"
@@ -47,6 +51,10 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathHelpers(m);
 
+  ignition::math::python::defineMathKmeans(m, "Kmeans");
+
+  ignition::math::python::defineMathMaterial(m, "Material");
+
   ignition::math::python::defineMathMovingWindowFilter<int>(
     m, "MovingWindowFilteri");
   ignition::math::python::defineMathMovingWindowFilter<double>(
@@ -57,6 +65,8 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathRand(m, "Rand");
 
   ignition::math::python::defineMathRollingMean(m, "RollingMean");
+
+  ignition::math::python::defineMathRotationSpline(m, "RotationSpline");
 
   ignition::math::python::defineMathSemanticVersion(m, "SemanticVersion");
 
@@ -91,6 +101,10 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathTriangle<int>(m, "Trianglei");
   ignition::math::python::defineMathTriangle<double>(m, "Triangled");
   ignition::math::python::defineMathTriangle<float>(m, "Trianglef");
+
+  ignition::math::python::defineMathTriangle3<int>(m, "Triangle3i");
+  ignition::math::python::defineMathTriangle3<double>(m, "Triangle3d");
+  ignition::math::python::defineMathTriangle3<float>(m, "Triangle3f");
 
   ignition::math::python::defineMathQuaternion<int>(m, "Quaternioni");
   ignition::math::python::defineMathQuaternion<double>(m, "Quaterniond");

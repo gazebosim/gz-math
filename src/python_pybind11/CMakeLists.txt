@@ -17,8 +17,11 @@ if (${pybind11_FOUND})
     src/Angle.cc
     src/Color.cc
     src/Helpers.cc
+    src/Kmeans.cc
+    src/Material.cc
     src/Rand.cc
     src/RollingMean.cc
+    src/RotationSpline.cc
     src/SemanticVersion.cc
     src/Spline.cc
     src/StopWatch.cc
@@ -78,8 +81,10 @@ if (${pybind11_FOUND})
       Color_TEST
       Filter_TEST
       Helpers_TEST
+      Kmeans_TEST
       Line2_TEST
       Line3_TEST
+      Material_TEST
       Matrix3_TEST
       Matrix4_TEST
       MovingWindowFilter_TEST
@@ -87,10 +92,12 @@ if (${pybind11_FOUND})
       Quaternion_TEST
       Rand_TEST
       RollingMean_TEST
+      RotationSpline_TEST
       SemanticVersion_TEST
       Spline_TEST
       StopWatch_TEST
       Triangle_TEST
+      Triangle3_TEST
       Vector2_TEST
       Vector3_TEST
       Vector4_TEST
