@@ -56,8 +56,10 @@ int main(int argc, char **argv)
             << "\tOdom angular velocity:\t"
             << *odom.AngularVelocity() << " rad/s" << std::endl;
 
-  // Sleep again, this time rotate the right wheel by 1 degree.
-  std::cout << "--- This time rotate the right wheel by 1 degree. ---"
+  // Sleep again, this time rotate the left wheel by 1 and the right wheel by 2
+  // degrees.
+  std::cout << "--- This time rotate the left wheel by 1 and the right wheel "
+            << "by 2 degrees ---"
             << std::endl;
   auto time2 = time1 + std::chrono::milliseconds(100);
   odom.Update(IGN_DTOR(2.0), IGN_DTOR(3.0), time2);

@@ -55,8 +55,10 @@ print('Angular velocity should be zero since the "robot" is traveling\n' +
       '\tOdom angular velocity:\t{} rad/s'
       .format(odom.angular_velocity()))
 
-# Sleep again, this time rotate the right wheel by 1 degree.
-print('--- This time rotate the right wheel by 1 degree. ---');
+# Sleep again, this time rotate the left wheel by 1 and the right wheel by 2
+# degrees.
+print('--- This time rotate the left wheel by 1 and the right wheel ' +
+      'by 2 degrees ---');
 time2 = time1 + datetime.timedelta(milliseconds=100)
 odom.update(Angle(2.0 * math.pi / 180),
             Angle(3.0 * math.pi / 180),
