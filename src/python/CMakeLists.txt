@@ -94,7 +94,6 @@ if (PYTHONLIBS_FOUND)
       Frustum_TEST
       GaussMarkovProcess_TEST
       Inertial_TEST
-      Kmeans_TEST
       MassMatrix3_TEST
       Matrix4_TEST
       OrientedBox_TEST
@@ -106,7 +105,6 @@ if (PYTHONLIBS_FOUND)
       Sphere_TEST
       SphericalCoordinates_TEST
       Temperature_TEST
-      Triangle3_TEST
       Vector3Stats_TEST
     )
 
