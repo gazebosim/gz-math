@@ -46,7 +46,6 @@ PYBIND11_MODULE(math, m)
   m.doc() = "Ignition Math Python Library.";
 
   ignition::math::python::defineMathAngle(m, "Angle");
-  ignition::math::python::defineMathPID(m, "PID");
 
   ignition::math::python::defineMathColor(m, "Color");
 
@@ -62,6 +61,8 @@ PYBIND11_MODULE(math, m)
     m, "MovingWindowFilterd");
   ignition::math::python::defineMathMovingWindowFilter
     <ignition::math::Vector3d>(m, "MovingWindowFilterv3");
+
+  ignition::math::python::defineMathPID(m, "PID");
 
   ignition::math::python::defineMathRand(m, "Rand");
 

@@ -160,6 +160,7 @@ class TestPID(unittest.TestCase):
         self.update_test(pid, 0, 0, 0, 0, 0, 0)
         self.update_test(pid, 0, 0, 0, 0, 0, 0)
 
+        # dt = 0, no change since previous state
         self.update_test(pid, 0,  1, 0, 0, 0, 0)
         self.update_test(pid, 0,  1, 0, 0, 0, 0)
         self.update_test(pid, 0, -1, 0, 0, 0, 0)
@@ -167,6 +168,7 @@ class TestPID(unittest.TestCase):
         self.update_test(pid, 0,  1, 0, 0, 0, 0)
         self.update_test(pid, 0,  1, 0, 0, 0, 0)
 
+        # dt > 0, but gains still zero
         self.update_test(pid, 0,  1, 1,  1, 0, 1)
         self.update_test(pid, 0,  1, 1,  1, 0, 0)
         self.update_test(pid, 0, -1, 1, -1, 0, -2)
@@ -174,6 +176,7 @@ class TestPID(unittest.TestCase):
         self.update_test(pid, 0,  1, 1,  1, 0, 2)
         self.update_test(pid, 0,  1, 1,  1, 0, 0)
 
+        # dt = 0, no change since previous state
         self.update_test(pid, 0,  1, 0, 1, 0, 0)
         self.update_test(pid, 0,  1, 0, 1, 0, 0)
         self.update_test(pid, 0, -1, 0, 1, 0, 0)
@@ -181,9 +184,13 @@ class TestPID(unittest.TestCase):
         self.update_test(pid, 0,  1, 0, 1, 0, 0)
         self.update_test(pid, 0,  1, 0, 1, 0, 0)
 
+        # dt < 0, but gains still zero
+        # TODO(chapulina) Check why d_error fails in the commented test cases
         self.update_test(pid, 0,  1, -1,  1, 0, 0)
         self.update_test(pid, 0,  1, -1,  1, 0, 0)
+        # self.update_test(pid, 0, -1, -1, -1, 0, 2)
         self.update_test(pid, 0, -1, -1, -1, 0, 0)
+        # self.update_test(pid, 0,  1, -1,  1, 0, -2)
         self.update_test(pid, 0,  1, -1,  1, 0, 0)
 
         pid.reset()
@@ -197,6 +204,7 @@ class TestPID(unittest.TestCase):
         # command hasn't been updated yet
         self.assertAlmostEqual(0.0, pid.cmd())
 
+        # dt = 0, still report cmd = 0
         self.update_test(pid, 0,  1, 0, 0, 0, 0)
         self.update_test(pid, 0,  1, 0, 0, 0, 0)
         self.update_test(pid, 0, -1, 0, 0, 0, 0)
@@ -204,6 +212,7 @@ class TestPID(unittest.TestCase):
         self.update_test(pid, 0,  1, 0, 0, 0, 0)
         self.update_test(pid, 0,  1, 0, 0, 0, 0)
 
+        # dt > 0, report clamped value
         self.update_test(pid, -1,  1, 1,  1, 0, 1)
         self.update_test(pid, -1,  1, 1,  1, 0, 0)
         self.update_test(pid, -1, -1, 1, -1, 0, -2)
@@ -223,6 +232,7 @@ class TestPID(unittest.TestCase):
         [p_err, i_err, d_err] = pid.errors()
         self.assertAlmostEqual(0.0, i_err)
 
+        # dt = 0, still report iErr = 0
         self.update_test(pid, 0,  1, 0, 0, 0, 0)
         self.update_test(pid, 0,  1, 0, 0, 0, 0)
         self.update_test(pid, 0, -1, 0, 0, 0, 0)
@@ -230,6 +240,7 @@ class TestPID(unittest.TestCase):
         self.update_test(pid, 0,  1, 0, 0, 0, 0)
         self.update_test(pid, 0,  1, 0, 0, 0, 0)
 
+        # dt > 0, report clamped value
         self.update_test(pid, -1,  1, 1,  1, -1, 1)
         self.update_test(pid, -1,  1, 1,  1, -1, 0)
         self.update_test(pid, -1, -1, 1, -1, -1, -2)
@@ -245,6 +256,7 @@ class TestPID(unittest.TestCase):
         # cmd hasn't been updated yet
         self.assertAlmostEqual(0.0, pid.cmd())
 
+        # dt = 0, still return 0
         self.update_test(pid, 0,  1, 0, 0, 0, 0)
         self.update_test(pid, 0,  1, 0, 0, 0, 0)
         self.update_test(pid, 0, -1, 0, 0, 0, 0)
@@ -252,6 +264,7 @@ class TestPID(unittest.TestCase):
         self.update_test(pid, 0,  1, 0, 0, 0, 0)
         self.update_test(pid, 0,  1, 0, 0, 0, 0)
 
+        # dt > 0, report negative min value
         self.update_test(pid, -10,  1, 1,  1, -1, 1)
         self.update_test(pid, -10,  1, 1,  1, -1, 0)
         self.update_test(pid, -10, -1, 1, -1, -1, -2)
