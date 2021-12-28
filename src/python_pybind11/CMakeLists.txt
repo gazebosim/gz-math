@@ -15,6 +15,7 @@ if (${pybind11_FOUND})
   pybind11_add_module(math SHARED
     src/_ignition_math_pybind11.cc
     src/Angle.cc
+    src/AxisAlignedBox.cc
     src/Color.cc
     src/GaussMarkovProcess.cc
     src/Helpers.cc
@@ -80,6 +81,7 @@ if (${pybind11_FOUND})
     # Add the Python tests
     set(python_tests
       Angle_TEST
+      AxisAlignedBox_TEST
       Color_TEST
       Filter_TEST
       GaussMarkovProcess_TEST
@@ -89,6 +91,7 @@ if (${pybind11_FOUND})
       Line3_TEST
       Material_TEST
       Matrix3_TEST
+      MassMatrix3_TEST
       MovingWindowFilter_TEST
       Pose3_TEST
       Quaternion_TEST
