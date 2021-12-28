@@ -122,6 +122,9 @@ void defineMathMatrix4(py::module &m, const std::string &typestr)
          "Equality test operator")
     .def("look_at",
          &Class::LookAt,
+         // py::arg("_eye") = ignition::math::Vector3<T>::Zero,
+         py::arg("_target") = ignition::math::Vector3<T>::Zero,
+         py::arg("_up") = ignition::math::Vector3<T>::UnitZ,
          "Get transform which translates to _eye and rotates the X axis "
          "so it faces the _target. The rotation is such that Z axis is in the"
          "_up direction, if possible. The coordinate system is right-handed")
