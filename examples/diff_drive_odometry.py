@@ -12,6 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# This example will only work if the Python interface library was compiled and
+# installed.
+#
+# Modify the PYTHONPATH environment variable to include the ignition math
+# library install path. For example, if you install to /usr:
+#
+# $ export PYTHONPATH=/usr/lib/python:$PYTHONPATH
+
 import datetime
 import math
 
@@ -21,7 +29,7 @@ odom = DiffDriveOdometry()
 
 wheelSeparation = 2.0
 wheelRadius = 0.5
-wheelCircumference = 2 * 3.1416 * wheelRadius
+wheelCircumference = 2 * math.pi * wheelRadius
 
 # This is the linear distance traveled per degree of wheel rotation.
 distPerDegree = wheelCircumference / 360.0
@@ -31,31 +39,33 @@ odom.set_wheel_params(wheelSeparation, wheelRadius, wheelRadius)
 startTime = datetime.datetime.now()
 odom.init(datetime.timedelta())
 
-print('--- Rotate the both wheels by 1 degree. ---')
+# Sleep for a little while, then update the odometry with the new wheel
+# position.
+print('--- Rotate both wheels by 1 degree. ---')
 time1 = startTime + datetime.timedelta(milliseconds=100)
-odom.update(Angle(1.0 * 3.1416 / 180),
-            Angle(1.0 * 3.1416 / 180),
+odom.update(Angle(1.0 * math.pi / 180),
+            Angle(1.0 * math.pi / 180),
             time1 - startTime)
 
-print('Linear velocity: {} Odom linear velocity: {}'.
+print('\tLinear velocity:\t{} m/s\n\tOdom linear velocity:\t{} m/s'.
     format(distPerDegree / 0.1, odom.linear_velocity()))
 
-print('Angular velocity should be zero since the "robot" is traveling' +
-      ' in a straight line:\n' +
-      '\tOdom angular velocity: {}'
+print('Angular velocity should be zero since the "robot" is traveling\n' +
+      'in a straight line:\n' +
+      '\tOdom angular velocity:\t{} rad/s'
       .format(odom.angular_velocity()))
 
 # Sleep again, this time rotate the right wheel by 1 degree.
 print('--- This time rotate the right wheel by 1 degree. ---');
 time2 = time1 + datetime.timedelta(milliseconds=100)
-odom.update(Angle(2.0 * 3.1416 / 180),
-            Angle(3.0 * 3.1416 / 180),
+odom.update(Angle(2.0 * math.pi / 180),
+            Angle(3.0 * math.pi / 180),
             time2 - startTime)
 
-print('The heading should be the arc tangent of the linear distance' +
-      ' traveled by the right wheel (the left wheel was stationary)' +
-      ' divided by the wheel separation.\n' +
-      '\tHeading: {} Odom Heading: {}'.format(
+print('The heading should be the arc tangent of the linear distance\n' +
+      'traveled by the right wheel (the left wheel was stationary)\n' +
+      'divided by the wheel separation.\n' +
+      '\tHeading:\t\t{} rad\n\tOdom Heading:\t\t{} rad'.format(
             math.atan2(distPerDegree, wheelSeparation),
                   odom.heading()))
 
@@ -64,23 +74,20 @@ print('The heading should be the arc tangent of the linear distance' +
 xDistTraveled = math.sin(
     math.atan2(distPerDegree, wheelSeparation)) * wheelSeparation * 0.5
 prevXPos = distPerDegree * 2.0
-print('\tX distance traveled: {} Odom X: {}'.format(
+print('\tX distance traveled:\t{} m\n\tOdom X:\t\t{} m'.format(
         xDistTraveled + prevXPos, odom.x()))
 
-# The Y odom reading should have increased by the cosine of the header *
+# The Y odom reading should have increased by the cosine of the heading *
 # half the wheel separation.
 yDistTraveled = (wheelSeparation * 0.5) - math.cos(
         math.atan2(distPerDegree, wheelSeparation)) * wheelSeparation * 0.5
 prevYPos = 0.0
-print('\tY distance traveled: {} Odom Y: {}'.format(
+print('\tY distance traveled:\t{} m\n\tOdom Y:\t\t{} m'.format(
         yDistTraveled + prevYPos, odom.y()))
 
-# Angular velocity should be the difference between the x and y distance
-# traveled divided by the wheel separation divided by the seconds
-# elapsed.
-print('Angular velocity should be the difference between the x and y' +
-      ' distance traveled divided by the wheel separation divided by' +
-      ' the seconds elapsed.\n' +
-      '\tAngular velocity: {} Odom angular velocity: {}'.format(
+print('Angular velocity should be the difference between the x and y\n' +
+      'distance traveled divided by the wheel separation divided by\n' +
+      'the seconds elapsed.\n' +
+      '\tAngular velocity:\t{} rad/s\n\tOdom angular velocity:\t{} rad/s'.format(
         ((xDistTraveled - yDistTraveled) / wheelSeparation) / 0.1,
         odom.angular_velocity()))

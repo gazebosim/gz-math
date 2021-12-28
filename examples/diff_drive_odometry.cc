@@ -36,26 +36,25 @@ int main(int argc, char **argv)
   // This is the linear distance traveled per degree of wheel rotation.
   double distPerDegree = wheelCircumference / 360.0;
 
+  // Setup the wheel parameters, and initialize
   odom.SetWheelParams(wheelSeparation, wheelRadius, wheelRadius);
   auto startTime = std::chrono::steady_clock::now();
   odom.Init(startTime);
 
   // Sleep for a little while, then update the odometry with the new wheel
   // position.
-  std::cout << "--- Rotate the both wheels by 1 degree. ---" << '\n';
+  std::cout << "--- Rotate both wheels by 1 degree. ---" << '\n';
   auto time1 = startTime + std::chrono::milliseconds(100);
   odom.Update(IGN_DTOR(1.0), IGN_DTOR(1.0), time1);
 
-  // Linear velocity should be dist_traveled / time_elapsed.
-  std::cout << "\tLinear velocity: " << distPerDegree / 0.1
-            << " Odom linear velocity: " << odom.LinearVelocity() << std::endl;
+  std::cout << "\tLinear velocity:\t" << distPerDegree / 0.1 << " m/s"
+            << "\n\tOdom linear velocity:\t" << odom.LinearVelocity() << " m/s"
+            << std::endl;
 
-  // Angular velocity should be zero since the "robot" is traveling in a
-  // straight line.
-  std::cout << "Angular velocity should be zero since the 'robot' is traveling"
-            << " in a straight line:\n"
-            << "\tOdom angular velocity: "
-            << *odom.AngularVelocity() << std::endl;
+  std::cout << "Angular velocity should be zero since the \"robot\" is traveling\n"
+            << "in a straight line:\n"
+            << "\tOdom angular velocity:\t"
+            << *odom.AngularVelocity() << " rad/s" << std::endl;
 
   // Sleep again, this time rotate the right wheel by 1 degree.
   std::cout << "--- This time rotate the right wheel by 1 degree. ---"
@@ -63,39 +62,34 @@ int main(int argc, char **argv)
   auto time2 = time1 + std::chrono::milliseconds(100);
   odom.Update(IGN_DTOR(2.0), IGN_DTOR(3.0), time2);
 
-  // The heading should be the arc tangent of the linear distance traveled
-  // by the right wheel (the left wheel was stationary) divided by the
-  // wheel separation.
-  std::cerr << "The heading should be the arc tangent of the linear distance"
-            << " traveled by the right wheel (the left wheel was stationary)"
-            << " divided by the wheel separation.\n"
-            << "\tHeading: " << atan2(distPerDegree, wheelSeparation)
-            << " Odom Heading " << *odom.Heading() << '\n';
+  std::cout << "The heading should be the arc tangent of the linear distance\n"
+            << "traveled by the right wheel (the left wheel was stationary)\n"
+            << "divided by the wheel separation.\n"
+            << "\tHeading:\t\t" << atan2(distPerDegree, wheelSeparation) << " rad"
+            << "\n\tOdom Heading:\t\t" << *odom.Heading() << " rad" << '\n';
 
   // The X odom reading should have increased by the sine of the heading *
   // half the wheel separation.
   double xDistTraveled =
     sin(atan2(distPerDegree, wheelSeparation)) * wheelSeparation * 0.5;
   double prevXPos = distPerDegree * 2.0;
-  std::cout << "\tX distance traveled " << xDistTraveled + prevXPos
-             << " Odom X: " << odom.X() << std::endl;
+  std::cout << "\tX distance traveled:\t" << xDistTraveled + prevXPos << " m"
+             << "\n\tOdom X:\t\t" << odom.X() << " m" << std::endl;
 
-  // The Y odom reading should have increased by the cosine of the header *
+  // The Y odom reading should have increased by the cosine of the heading *
   // half the wheel separation.
   double yDistTraveled = (wheelSeparation * 0.5) -
       cos(atan2(distPerDegree, wheelSeparation)) * wheelSeparation * 0.5;
   double prevYPos = 0.0;
-  std::cout << "\tY distance traveled " << yDistTraveled + prevYPos
-             << " Odom Y: " << odom.Y() << std::endl;
+  std::cout << "\tY distance traveled:\t" << yDistTraveled + prevYPos << " m"
+             << "\n\tOdom Y:\t\t" << odom.Y() << " m" << std::endl;
 
-  // Angular velocity should be the difference between the x and y distance
-  // traveled divided by the wheel separation divided by the seconds
-  // elapsed.
-  std::cout << "Angular velocity should be the difference between the x and y"
-            << " distance traveled divided by the wheel separation divided by"
-            << " the seconds elapsed.\n"
-            << "\tAngular velocity "
-            << ((xDistTraveled - yDistTraveled) / wheelSeparation) / 0.1
-            << " Odom angular velocity: " << *odom.AngularVelocity() << std::endl;
+  std::cout << "Angular velocity should be the difference between the x and y\n"
+            << "distance traveled divided by the wheel separation divided by\n"
+            << "the seconds elapsed.\n"
+            << "\tAngular velocity:\t"
+            << ((xDistTraveled - yDistTraveled) / wheelSeparation) / 0.1 << " rad/s"
+            << "\n\tOdom angular velocity:\t" << *odom.AngularVelocity() << " rad/s"
+            << std::endl;
 }
 //! [complete]
