@@ -87,7 +87,7 @@ TEST(TemperatureTest, MutatorsAccessors)
 TEST(TemperatureTest, Operators)
 {
   Temperature temp(20);
-  Temperature tempConst(20);
+  const Temperature tempConst(20);
   EXPECT_NEAR(temp(), 20, 1e-6);
 
   temp = 30;
@@ -103,11 +103,11 @@ TEST(TemperatureTest, Operators)
   // const operators
   EXPECT_NEAR((tempConst + tempConst).Kelvin(), 40, 1e-6);
   EXPECT_NEAR((tempConst - tempConst).Kelvin(), 0, 1e-6);
-  EXPECT_NEAR((tempConst * tempConst, 400, 1e-6);
+  EXPECT_NEAR((tempConst * tempConst).Kelvin(), 400, 1e-6);
   EXPECT_NEAR((tempConst / tempConst).Kelvin(), 1.0, 1e-6);
-  EXPECT_NEAR((tempConst + 20, 40, 1e-6);
+  EXPECT_NEAR((tempConst + 20).Kelvin(), 40, 1e-6);
   EXPECT_NEAR((tempConst - 20).Kelvin(), 0, 1e-6);
-  EXPECT_NEAR((tempConst * 20, 400, 1e-6);
+  EXPECT_NEAR((tempConst * 20).Kelvin(), 400, 1e-6);
   EXPECT_NEAR((tempConst / 20).Kelvin(), 1.0, 1e-6);
 
   EXPECT_NEAR((temp - temp2).Kelvin(), 0, 1e-6);
