@@ -17,6 +17,7 @@ if (${pybind11_FOUND})
     src/Angle.cc
     src/AxisAlignedBox.cc
     src/Color.cc
+    src/GaussMarkovProcess.cc
     src/Helpers.cc
     src/Kmeans.cc
     src/Material.cc
@@ -82,6 +83,7 @@ if (${pybind11_FOUND})
       AxisAlignedBox_TEST
       Color_TEST
       Filter_TEST
+      GaussMarkovProcess_TEST
       Helpers_TEST
       Kmeans_TEST
       Line2_TEST
