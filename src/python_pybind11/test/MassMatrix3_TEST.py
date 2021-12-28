@@ -16,8 +16,6 @@ import sys
 import unittest
 import math
 
-import ignition.math
-
 from ignition.math import MassMatrix3d
 from ignition.math import Vector3d
 from ignition.math import Matrix3d

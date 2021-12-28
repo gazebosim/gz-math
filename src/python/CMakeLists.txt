@@ -94,7 +94,6 @@ if (PYTHONLIBS_FOUND)
       Frustum_TEST
       GaussMarkovProcess_TEST
       Inertial_TEST
-      MassMatrix3_TEST
       Matrix4_TEST
       OrientedBox_TEST
       PID_TEST
