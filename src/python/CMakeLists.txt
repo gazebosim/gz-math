@@ -93,21 +93,16 @@ if (PYTHONLIBS_FOUND)
       DiffDriveOdometry_TEST
       Frustum_TEST
       Inertial_TEST
-      Kmeans_TEST
       MassMatrix3_TEST
-      Material_TEST
       Matrix4_TEST
       OrientedBox_TEST
       PID_TEST
       Plane_TEST
-      Pose3_TEST
       python_TEST
-      RotationSpline_TEST
       SignalStats_TEST
       Sphere_TEST
       SphericalCoordinates_TEST
       Temperature_TEST
-      Triangle3_TEST
       Vector3Stats_TEST
     )
 
