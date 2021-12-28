@@ -63,9 +63,9 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathRand(m, "Rand");
 
-  ignition::math::python::defineMathRotationSpline(m, "RotationSpline");
-
   ignition::math::python::defineMathRollingMean(m, "RollingMean");
+
+  ignition::math::python::defineMathRotationSpline(m, "RotationSpline");
 
   ignition::math::python::defineMathSemanticVersion(m, "SemanticVersion");
 
