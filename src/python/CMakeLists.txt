@@ -87,14 +87,10 @@ if (PYTHONLIBS_FOUND)
   if (BUILD_TESTING)
     # Add the Python tests
     set(python_tests
-      AxisAlignedBox_TEST
       Box_TEST
       Cylinder_TEST
-      DiffDriveOdometry_TEST
       Frustum_TEST
-      GaussMarkovProcess_TEST
       Inertial_TEST
-      MassMatrix3_TEST
       Matrix4_TEST
       OrientedBox_TEST
       Plane_TEST
@@ -102,7 +98,6 @@ if (PYTHONLIBS_FOUND)
       SignalStats_TEST
       Sphere_TEST
       SphericalCoordinates_TEST
-      Temperature_TEST
       Vector3Stats_TEST
     )
 

@@ -15,7 +15,10 @@ if (${pybind11_FOUND})
   pybind11_add_module(math SHARED
     src/_ignition_math_pybind11.cc
     src/Angle.cc
+    src/AxisAlignedBox.cc
     src/Color.cc
+    src/DiffDriveOdometry.cc
+    src/GaussMarkovProcess.cc
     src/Helpers.cc
     src/Kmeans.cc
     src/Material.cc
@@ -26,6 +29,7 @@ if (${pybind11_FOUND})
     src/SemanticVersion.cc
     src/Spline.cc
     src/StopWatch.cc
+    src/Temperature.cc
   )
 
   target_link_libraries(math PRIVATE
@@ -79,14 +83,18 @@ if (${pybind11_FOUND})
     # Add the Python tests
     set(python_tests
       Angle_TEST
+      AxisAlignedBox_TEST
       Color_TEST
+      DiffDriveOdometry_TEST
       Filter_TEST
+      GaussMarkovProcess_TEST
       Helpers_TEST
       Kmeans_TEST
       Line2_TEST
       Line3_TEST
       Material_TEST
       Matrix3_TEST
+      MassMatrix3_TEST
       MovingWindowFilter_TEST
       PID_TEST
       Pose3_TEST
@@ -97,6 +105,7 @@ if (${pybind11_FOUND})
       SemanticVersion_TEST
       Spline_TEST
       StopWatch_TEST
+      Temperature_TEST
       Triangle_TEST
       Triangle3_TEST
       Vector2_TEST

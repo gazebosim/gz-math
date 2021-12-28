@@ -15,12 +15,16 @@
 #include <pybind11/pybind11.h>
 
 #include "Angle.hh"
+#include "AxisAlignedBox.hh"
 #include "Color.hh"
+#include "DiffDriveOdometry.hh"
 #include "Filter.hh"
+#include "GaussMarkovProcess.hh"
 #include "Helpers.hh"
 #include "Kmeans.hh"
 #include "Line2.hh"
 #include "Line3.hh"
+#include "MassMatrix3.hh"
 #include "Material.hh"
 #include "Matrix3.hh"
 #include "MovingWindowFilter.hh"
@@ -33,6 +37,7 @@
 #include "SemanticVersion.hh"
 #include "Spline.hh"
 #include "StopWatch.hh"
+#include "Temperature.hh"
 #include "Triangle.hh"
 #include "Triangle3.hh"
 #include "Vector2.hh"
@@ -47,7 +52,15 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathAngle(m, "Angle");
 
+  ignition::math::python::defineMathAxisAlignedBox(m, "AxisAlignedBox");
+
   ignition::math::python::defineMathColor(m, "Color");
+
+  ignition::math::python::defineMathDiffDriveOdometry(
+    m, "DiffDriveOdometry");
+
+  ignition::math::python::defineMathGaussMarkovProcess(
+    m, "GaussMarkovProcess");
 
   ignition::math::python::defineMathHelpers(m);
 
@@ -75,6 +88,8 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathSpline(m, "Spline");
 
   ignition::math::python::defineMathStopwatch(m, "Stopwatch");
+
+  ignition::math::python::defineMathTemperature(m, "Temperature");
 
   ignition::math::python::defineMathVector2<double>(m, "Vector2d");
   ignition::math::python::defineMathVector2<int>(m, "Vector2i");
@@ -115,6 +130,9 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathPose3<int>(m, "Pose3i");
   ignition::math::python::defineMathPose3<double>(m, "Pose3d");
   ignition::math::python::defineMathPose3<float>(m, "Pose3f");
+
+  ignition::math::python::defineMathMassMatrix3<double>(m, "MassMatrix3d");
+  ignition::math::python::defineMathMassMatrix3<float>(m, "MassMatrix3f");
 
   ignition::math::python::defineMathFilter<int>(m, "Filteri");
   ignition::math::python::defineMathFilter<float>(m, "Filterf");
