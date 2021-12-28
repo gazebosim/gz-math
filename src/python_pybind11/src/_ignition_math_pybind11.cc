@@ -15,9 +15,11 @@
 #include <pybind11/pybind11.h>
 
 #include "Angle.hh"
+#include "AxisAlignedBox.hh"
 #include "Color.hh"
 #include "DiffDriveOdometry.hh"
 #include "Filter.hh"
+#include "GaussMarkovProcess.hh"
 #include "Helpers.hh"
 #include "Kmeans.hh"
 #include "Line2.hh"
@@ -47,10 +49,15 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathAngle(m, "Angle");
 
+  ignition::math::python::defineMathAxisAlignedBox(m, "AxisAlignedBox");
+
   ignition::math::python::defineMathColor(m, "Color");
 
   ignition::math::python::defineMathDiffDriveOdometry(
     m, "DiffDriveOdometry");
+
+  ignition::math::python::defineMathGaussMarkovProcess(
+    m, "GaussMarkovProcess");
 
   ignition::math::python::defineMathHelpers(m);
 
