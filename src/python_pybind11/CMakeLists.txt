@@ -84,6 +84,7 @@ if (${pybind11_FOUND})
     set(python_tests
       Angle_TEST
       AxisAlignedBox_TEST
+      Box_TEST
       Color_TEST
       DiffDriveOdometry_TEST
       Filter_TEST

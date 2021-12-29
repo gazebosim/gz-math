@@ -16,6 +16,7 @@
 
 #include "Angle.hh"
 #include "AxisAlignedBox.hh"
+#include "Box.hh"
 #include "Color.hh"
 #include "DiffDriveOdometry.hh"
 #include "Filter.hh"
@@ -141,6 +142,9 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathMassMatrix3<float>(m, "MassMatrix3f");
 
   ignition::math::python::defineMathPlane<double>(m, "Planed");
+
+  ignition::math::python::defineMathBox<double>(m, "Boxd");
+  ignition::math::python::defineMathBox<float>(m, "Boxf");
 
   ignition::math::python::defineMathFilter<int>(m, "Filteri");
   ignition::math::python::defineMathFilter<float>(m, "Filterf");
