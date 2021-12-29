@@ -17,6 +17,7 @@
 #include "Angle.hh"
 #include "AxisAlignedBox.hh"
 #include "Color.hh"
+#include "DiffDriveOdometry.hh"
 #include "Filter.hh"
 #include "GaussMarkovProcess.hh"
 #include "Helpers.hh"
@@ -26,8 +27,10 @@
 #include "MassMatrix3.hh"
 #include "Material.hh"
 #include "Matrix3.hh"
+#include "Matrix4.hh"
 #include "MovingWindowFilter.hh"
 #include "Plane.hh"
+#include "PID.hh"
 #include "Pose3.hh"
 #include "Quaternion.hh"
 #include "Rand.hh"
@@ -36,6 +39,7 @@
 #include "SemanticVersion.hh"
 #include "Spline.hh"
 #include "StopWatch.hh"
+#include "Temperature.hh"
 #include "Triangle.hh"
 #include "Triangle3.hh"
 #include "Vector2.hh"
@@ -54,6 +58,9 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathColor(m, "Color");
 
+  ignition::math::python::defineMathDiffDriveOdometry(
+    m, "DiffDriveOdometry");
+
   ignition::math::python::defineMathGaussMarkovProcess(
     m, "GaussMarkovProcess");
 
@@ -70,6 +77,8 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathMovingWindowFilter
     <ignition::math::Vector3d>(m, "MovingWindowFilterv3");
 
+  ignition::math::python::defineMathPID(m, "PID");
+
   ignition::math::python::defineMathRand(m, "Rand");
 
   ignition::math::python::defineMathRollingMean(m, "RollingMean");
@@ -81,6 +90,8 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathSpline(m, "Spline");
 
   ignition::math::python::defineMathStopwatch(m, "Stopwatch");
+
+  ignition::math::python::defineMathTemperature(m, "Temperature");
 
   ignition::math::python::defineMathVector2<double>(m, "Vector2d");
   ignition::math::python::defineMathVector2<int>(m, "Vector2i");
@@ -105,6 +116,10 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathMatrix3<int>(m, "Matrix3i");
   ignition::math::python::defineMathMatrix3<double>(m, "Matrix3d");
   ignition::math::python::defineMathMatrix3<float>(m, "Matrix3f");
+
+  ignition::math::python::defineMathMatrix4<int>(m, "Matrix4i");
+  ignition::math::python::defineMathMatrix4<double>(m, "Matrix4d");
+  ignition::math::python::defineMathMatrix4<float>(m, "Matrix4f");
 
   ignition::math::python::defineMathTriangle<int>(m, "Trianglei");
   ignition::math::python::defineMathTriangle<double>(m, "Triangled");

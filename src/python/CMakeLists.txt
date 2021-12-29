@@ -89,17 +89,15 @@ if (PYTHONLIBS_FOUND)
     set(python_tests
       Box_TEST
       Cylinder_TEST
-      DiffDriveOdometry_TEST
       Frustum_TEST
       Inertial_TEST
-      Matrix4_TEST
       OrientedBox_TEST
+      Plane_TEST
       PID_TEST
       python_TEST
       SignalStats_TEST
       Sphere_TEST
       SphericalCoordinates_TEST
-      Temperature_TEST
       Vector3Stats_TEST
     )
 
