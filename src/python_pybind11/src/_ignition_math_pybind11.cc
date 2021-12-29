@@ -58,9 +58,6 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathAxisAlignedBox(m, "AxisAlignedBox");
 
-  ignition::math::python::defineMathBox<double>(m, "Boxd");
-  ignition::math::python::defineMathBox<float>(m, "Boxf");
-
   ignition::math::python::defineMathColor(m, "Color");
 
   ignition::math::python::defineMathDiffDriveOdometry(
@@ -85,6 +82,9 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathPID(m, "PID");
 
   ignition::math::python::defineMathPlane<double>(m, "Planed");
+
+  ignition::math::python::defineMathBox<double>(m, "Boxd");
+  ignition::math::python::defineMathBox<float>(m, "Boxf");
 
   ignition::math::python::defineMathRand(m, "Rand");
 
