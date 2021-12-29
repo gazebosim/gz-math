@@ -27,6 +27,7 @@
 #include "Material.hh"
 #include "Matrix3.hh"
 #include "MovingWindowFilter.hh"
+#include "Plane.hh"
 #include "Pose3.hh"
 #include "Quaternion.hh"
 #include "Rand.hh"
@@ -123,6 +124,8 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathMassMatrix3<double>(m, "MassMatrix3d");
   ignition::math::python::defineMathMassMatrix3<float>(m, "MassMatrix3f");
+
+  ignition::math::python::defineMathPlane<double>(m, "Planed");
 
   ignition::math::python::defineMathFilter<int>(m, "Filteri");
   ignition::math::python::defineMathFilter<float>(m, "Filterf");

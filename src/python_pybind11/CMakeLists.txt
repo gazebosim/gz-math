@@ -92,6 +92,7 @@ if (${pybind11_FOUND})
       Matrix3_TEST
       MassMatrix3_TEST
       MovingWindowFilter_TEST
+      Plane_TEST
       Pose3_TEST
       Quaternion_TEST
       Rand_TEST
