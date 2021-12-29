@@ -19,6 +19,7 @@
 #define IGNITION_MATH_PYTHON__BOX_HH_
 
 #include <string>
+#include <vector>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
