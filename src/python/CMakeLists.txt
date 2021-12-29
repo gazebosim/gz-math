@@ -96,7 +96,6 @@ if (PYTHONLIBS_FOUND)
       PID_TEST
       python_TEST
       SignalStats_TEST
-      Sphere_TEST
       SphericalCoordinates_TEST
       Vector3Stats_TEST
     )

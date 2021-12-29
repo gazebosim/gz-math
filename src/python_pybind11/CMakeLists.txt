@@ -106,6 +106,7 @@ if (${pybind11_FOUND})
       RotationSpline_TEST
       SemanticVersion_TEST
       Spline_TEST
+      Sphere_TEST
       StopWatch_TEST
       Temperature_TEST
       Triangle_TEST

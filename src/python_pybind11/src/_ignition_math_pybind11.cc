@@ -38,6 +38,7 @@
 #include "RotationSpline.hh"
 #include "SemanticVersion.hh"
 #include "Spline.hh"
+#include "Sphere.hh"
 #include "StopWatch.hh"
 #include "Temperature.hh"
 #include "Triangle.hh"
@@ -141,6 +142,8 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathMassMatrix3<float>(m, "MassMatrix3f");
 
   ignition::math::python::defineMathPlane<double>(m, "Planed");
+
+  ignition::math::python::defineMathSphere<double>(m, "Sphered");
 
   ignition::math::python::defineMathFilter<int>(m, "Filteri");
   ignition::math::python::defineMathFilter<float>(m, "Filterf");
