@@ -89,7 +89,6 @@ if (PYTHONLIBS_FOUND)
     set(python_tests
       Box_TEST
       Frustum_TEST
-      Inertial_TEST
       OrientedBox_TEST
       Plane_TEST
       python_TEST

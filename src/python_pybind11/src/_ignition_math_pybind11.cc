@@ -22,6 +22,7 @@
 #include "Filter.hh"
 #include "GaussMarkovProcess.hh"
 #include "Helpers.hh"
+#include "Inertial.hh"
 #include "Kmeans.hh"
 #include "Line2.hh"
 #include "Line3.hh"
@@ -141,6 +142,8 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathMassMatrix3<float>(m, "MassMatrix3f");
 
   ignition::math::python::defineMathCylinder<double>(m, "Cylinderd");
+
+  ignition::math::python::defineMathInertial<double>(m, "Inertiald");
 
   ignition::math::python::defineMathFilter<int>(m, "Filteri");
   ignition::math::python::defineMathFilter<float>(m, "Filterf");
