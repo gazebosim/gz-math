@@ -81,11 +81,6 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathPID(m, "PID");
 
-  ignition::math::python::defineMathPlane<double>(m, "Planed");
-
-  ignition::math::python::defineMathBox<double>(m, "Boxd");
-  ignition::math::python::defineMathBox<float>(m, "Boxf");
-
   ignition::math::python::defineMathRand(m, "Rand");
 
   ignition::math::python::defineMathRollingMean(m, "RollingMean");
@@ -107,6 +102,11 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathVector3<double>(m, "Vector3d");
   ignition::math::python::defineMathVector3<int>(m, "Vector3i");
   ignition::math::python::defineMathVector3<float>(m, "Vector3f");
+
+  ignition::math::python::defineMathPlane<double>(m, "Planed");
+
+  ignition::math::python::defineMathBox<double>(m, "Boxd");
+  ignition::math::python::defineMathBox<float>(m, "Boxf");
 
   ignition::math::python::defineMathVector4<double>(m, "Vector4d");
   ignition::math::python::defineMathVector4<int>(m, "Vector4i");
