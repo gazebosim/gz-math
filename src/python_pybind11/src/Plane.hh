@@ -110,11 +110,11 @@ void defineMathPlane(py::module &m, const std::string &typestr)
     }, "memo"_a);
 
     py::enum_<ignition::math::Planed::PlaneSide>(m, "PlaneSide")
-        .value("NEGATIVE_SIDE", ignition::math::Planed::PlaneSide::NEGATIVE_SIDE)
-        .value("POSITIVE_SIDE", ignition::math::Planed::PlaneSide::POSITIVE_SIDE)
-        .value("NO_SIDE", ignition::math::Planed::PlaneSide::NO_SIDE)
-        .value("BOTH_SIDE", ignition::math::Planed::PlaneSide::BOTH_SIDE)
-        .export_values();
+      .value("NEGATIVE_SIDE", ignition::math::Planed::PlaneSide::NEGATIVE_SIDE)
+      .value("POSITIVE_SIDE", ignition::math::Planed::PlaneSide::POSITIVE_SIDE)
+      .value("NO_SIDE", ignition::math::Planed::PlaneSide::NO_SIDE)
+      .value("BOTH_SIDE", ignition::math::Planed::PlaneSide::BOTH_SIDE)
+      .export_values();
 }
 
 }  // namespace python
