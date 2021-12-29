@@ -30,8 +30,8 @@
 #include "Matrix3.hh"
 #include "Matrix4.hh"
 #include "MovingWindowFilter.hh"
-#include "Plane.hh"
 #include "PID.hh"
+#include "Plane.hh"
 #include "Pose3.hh"
 #include "Quaternion.hh"
 #include "Rand.hh"
@@ -57,6 +57,9 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathAxisAlignedBox(m, "AxisAlignedBox");
 
+  ignition::math::python::defineMathBox<double>(m, "Boxd");
+  ignition::math::python::defineMathBox<float>(m, "Boxf");
+
   ignition::math::python::defineMathColor(m, "Color");
 
   ignition::math::python::defineMathDiffDriveOdometry(
@@ -79,6 +82,8 @@ PYBIND11_MODULE(math, m)
     <ignition::math::Vector3d>(m, "MovingWindowFilterv3");
 
   ignition::math::python::defineMathPID(m, "PID");
+
+  ignition::math::python::defineMathPlane<double>(m, "Planed");
 
   ignition::math::python::defineMathRand(m, "Rand");
 
@@ -140,11 +145,6 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathMassMatrix3<double>(m, "MassMatrix3d");
   ignition::math::python::defineMathMassMatrix3<float>(m, "MassMatrix3f");
-
-  ignition::math::python::defineMathPlane<double>(m, "Planed");
-
-  ignition::math::python::defineMathBox<double>(m, "Boxd");
-  ignition::math::python::defineMathBox<float>(m, "Boxf");
 
   ignition::math::python::defineMathFilter<int>(m, "Filteri");
   ignition::math::python::defineMathFilter<float>(m, "Filterf");
