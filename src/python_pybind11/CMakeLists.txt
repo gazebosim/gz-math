@@ -31,6 +31,7 @@ if (${pybind11_FOUND})
     src/Spline.cc
     src/StopWatch.cc
     src/Temperature.cc
+    src/Vector3Stats.cc
   )
 
   target_link_libraries(math PRIVATE
@@ -113,6 +114,7 @@ if (${pybind11_FOUND})
       Triangle3_TEST
       Vector2_TEST
       Vector3_TEST
+      Vector3Stats_TEST
       Vector4_TEST
     )
 

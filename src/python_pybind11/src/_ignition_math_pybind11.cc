@@ -44,6 +44,7 @@
 #include "Triangle3.hh"
 #include "Vector2.hh"
 #include "Vector3.hh"
+#include "Vector3Stats.hh"
 #include "Vector4.hh"
 
 namespace py = pybind11;
@@ -95,6 +96,8 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathSignalMean(m, "SignalMean");
 
   ignition::math::python::defineMathRotationSpline(m, "RotationSpline");
+
+  ignition::math::python::defineMathVector3Stats(m, "Vector3Stats");
 
   ignition::math::python::defineMathSemanticVersion(m, "SemanticVersion");
 
