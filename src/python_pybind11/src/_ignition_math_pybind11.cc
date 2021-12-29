@@ -19,6 +19,7 @@
 #include "Color.hh"
 #include "DiffDriveOdometry.hh"
 #include "Filter.hh"
+#include "Frustum.hh"
 #include "GaussMarkovProcess.hh"
 #include "Helpers.hh"
 #include "Kmeans.hh"
@@ -141,6 +142,8 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathMassMatrix3<float>(m, "MassMatrix3f");
 
   ignition::math::python::defineMathPlane<double>(m, "Planed");
+
+  ignition::math::python::defineMathFrustum(m, "Frustum");
 
   ignition::math::python::defineMathFilter<int>(m, "Filteri");
   ignition::math::python::defineMathFilter<float>(m, "Filterf");
