@@ -18,6 +18,7 @@
 #include "AxisAlignedBox.hh"
 #include "Box.hh"
 #include "Color.hh"
+#include "Cylinder.hh"
 #include "DiffDriveOdometry.hh"
 #include "Filter.hh"
 #include "GaussMarkovProcess.hh"
@@ -31,6 +32,7 @@
 #include "Matrix3.hh"
 #include "Matrix4.hh"
 #include "MovingWindowFilter.hh"
+#include "OrientedBox.hh"
 #include "PID.hh"
 #include "Plane.hh"
 #include "Pose3.hh"
@@ -140,12 +142,16 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathQuaternion<double>(m, "Quaterniond");
   ignition::math::python::defineMathQuaternion<float>(m, "Quaternionf");
 
+  ignition::math::python::defineMathOrientedBox<double>(m, "OrientedBoxd");
+
   ignition::math::python::defineMathPose3<int>(m, "Pose3i");
   ignition::math::python::defineMathPose3<double>(m, "Pose3d");
   ignition::math::python::defineMathPose3<float>(m, "Pose3f");
 
   ignition::math::python::defineMathMassMatrix3<double>(m, "MassMatrix3d");
   ignition::math::python::defineMathMassMatrix3<float>(m, "MassMatrix3f");
+
+  ignition::math::python::defineMathCylinder<double>(m, "Cylinderd");
 
   ignition::math::python::defineMathInertial<double>(m, "Inertiald");
 

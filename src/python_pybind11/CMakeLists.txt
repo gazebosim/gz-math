@@ -86,6 +86,7 @@ if (${pybind11_FOUND})
       AxisAlignedBox_TEST
       Box_TEST
       Color_TEST
+      Cylinder_TEST
       DiffDriveOdometry_TEST
       Filter_TEST
       GaussMarkovProcess_TEST
@@ -99,6 +100,7 @@ if (${pybind11_FOUND})
       Matrix4_TEST
       MassMatrix3_TEST
       MovingWindowFilter_TEST
+      OrientedBox_TEST
       Plane_TEST
       PID_TEST
       Pose3_TEST
