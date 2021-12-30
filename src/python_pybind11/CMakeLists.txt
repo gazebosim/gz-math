@@ -18,6 +18,7 @@ if (${pybind11_FOUND})
     src/AxisAlignedBox.cc
     src/Color.cc
     src/DiffDriveOdometry.cc
+    src/Frustum.cc
     src/GaussMarkovProcess.cc
     src/Helpers.cc
     src/Kmeans.cc
@@ -85,20 +86,26 @@ if (${pybind11_FOUND})
     set(python_tests
       Angle_TEST
       AxisAlignedBox_TEST
+      Box_TEST
       Color_TEST
+      Cylinder_TEST
       DiffDriveOdometry_TEST
       Filter_TEST
+      Frustum_TEST
       GaussMarkovProcess_TEST
       Helpers_TEST
+      Inertial_TEST
       Kmeans_TEST
       Line2_TEST
       Line3_TEST
+      MassMatrix3_TEST
       Material_TEST
       Matrix3_TEST
       Matrix4_TEST
-      MassMatrix3_TEST
       MovingWindowFilter_TEST
+      OrientedBox_TEST
       PID_TEST
+      Plane_TEST
       Pose3_TEST
       Quaternion_TEST
       Rand_TEST
@@ -106,11 +113,12 @@ if (${pybind11_FOUND})
       RotationSpline_TEST
       SemanticVersion_TEST
       SignalStats_TEST
+      Sphere_TEST
       Spline_TEST
       StopWatch_TEST
       Temperature_TEST
-      Triangle_TEST
       Triangle3_TEST
+      Triangle_TEST
       Vector2_TEST
       Vector3_TEST
       Vector4_TEST
