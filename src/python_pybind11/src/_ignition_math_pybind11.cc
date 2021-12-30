@@ -42,6 +42,7 @@
 #include "RollingMean.hh"
 #include "RotationSpline.hh"
 #include "SemanticVersion.hh"
+#include "SignalStats.hh"
 #include "Sphere.hh"
 #include "SphericalCoordinates.hh"
 #include "Spline.hh"
@@ -51,6 +52,7 @@
 #include "Triangle3.hh"
 #include "Vector2.hh"
 #include "Vector3.hh"
+#include "Vector3Stats.hh"
 #include "Vector4.hh"
 
 namespace py = pybind11;
@@ -90,7 +92,20 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathRollingMean(m, "RollingMean");
 
+  ignition::math::python::defineMathSignalStats(m, "SignalStats");
+  ignition::math::python::defineMathSignalStatistic(m, "SignalStatistic");
+  ignition::math::python::defineMathSignalVariance(m, "SignalVariance");
+  ignition::math::python::defineMathSignalMaximum(m, "SignalMaximum");
+  ignition::math::python::defineMathSignalMinimum(m, "SignalMinimum");
+  ignition::math::python::defineMathSignalMaxAbsoluteValue(
+    m, "SignalMaxAbsoluteValue");
+  ignition::math::python::defineMathSignalRootMeanSquare(
+    m, "SignalRootMeanSquare");
+  ignition::math::python::defineMathSignalMean(m, "SignalMean");
+
   ignition::math::python::defineMathRotationSpline(m, "RotationSpline");
+
+  ignition::math::python::defineMathVector3Stats(m, "Vector3Stats");
 
   ignition::math::python::defineMathSemanticVersion(m, "SemanticVersion");
 

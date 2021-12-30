@@ -28,10 +28,12 @@ if (${pybind11_FOUND})
     src/RollingMean.cc
     src/RotationSpline.cc
     src/SemanticVersion.cc
+    src/SignalStats.cc
     src/SphericalCoordinates.cc
     src/Spline.cc
     src/StopWatch.cc
     src/Temperature.cc
+    src/Vector3Stats.cc
   )
 
   target_link_libraries(math PRIVATE
@@ -112,6 +114,7 @@ if (${pybind11_FOUND})
       RollingMean_TEST
       RotationSpline_TEST
       SemanticVersion_TEST
+      SignalStats_TEST
       Sphere_TEST
       SphericalCoordinates_TEST
       Spline_TEST
@@ -121,6 +124,7 @@ if (${pybind11_FOUND})
       Triangle_TEST
       Vector2_TEST
       Vector3_TEST
+      Vector3Stats_TEST
       Vector4_TEST
     )
 
