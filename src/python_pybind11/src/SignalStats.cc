@@ -14,7 +14,7 @@
  * limitations under the License.
  *
 */
-#include <pybind11/stl_bind.h>
+#include <pybind11/stl.h>
 
 #include <map>
 #include <string>
@@ -53,7 +53,6 @@ void defineMathSignalStats(py::module &m, const std::string &typestr)
   .def("insert_statistics",
        &Class::InsertStatistics,
        "Add multiple statistics.");
-   py::bind_map<std::map<std::string, double>>(m, "SignalMap");
 }
 
 //////////////////////////////////////////////////
