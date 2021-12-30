@@ -94,7 +94,8 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathSemanticVersion(m, "SemanticVersion");
 
-  ignition::math::python::defineMathSphericalCoordinates(m, "SphericalCoordinates");
+  ignition::math::python::defineMathSphericalCoordinates(
+    m, "SphericalCoordinates");
 
   ignition::math::python::defineMathSpline(m, "Spline");
 

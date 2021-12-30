@@ -16,7 +16,7 @@
 */
 #include <pybind11/operators.h>
 
-#include "Rand.hh"
+#include "SphericalCoordinates.hh"
 #include <ignition/math/Angle.hh>
 #include <ignition/math/SphericalCoordinates.hh>
 
@@ -108,11 +108,13 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
     .def("position_transform",
          &Class::PositionTransform,
          "Convert between velocity in SPHERICAL/ECEF/LOCAL/GLOBAL frame "
-         "Spherical coordinates use radians, while the other frames use meters.")
+         "Spherical coordinates use radians, while the other frames use "
+         "meters.")
     .def("velocity_transform",
          &Class::VelocityTransform,
          "Convert between velocity in SPHERICAL/ECEF/LOCAL/GLOBAL frame "
-         "Spherical coordinates use radians, while the other frames use meters.");
+         "Spherical coordinates use radians, while the other frames use "
+         "meters.");
 
    py::enum_<Class::CoordinateType>(sphericalCoordinates, "CoordinateType")
        .value("SPHERICAL", Class::CoordinateType::SPHERICAL)
