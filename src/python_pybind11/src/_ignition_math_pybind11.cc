@@ -34,7 +34,6 @@
 #include "Matrix4.hh"
 #include "MovingWindowFilter.hh"
 #include "OrientedBox.hh"
-#include "Plane.hh"
 #include "PID.hh"
 #include "Plane.hh"
 #include "Pose3.hh"
@@ -43,8 +42,8 @@
 #include "RollingMean.hh"
 #include "RotationSpline.hh"
 #include "SemanticVersion.hh"
-#include "Spline.hh"
 #include "Sphere.hh"
+#include "Spline.hh"
 #include "StopWatch.hh"
 #include "Temperature.hh"
 #include "Triangle.hh"
@@ -153,8 +152,6 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathMassMatrix3<double>(m, "MassMatrix3d");
   ignition::math::python::defineMathMassMatrix3<float>(m, "MassMatrix3f");
-
-  ignition::math::python::defineMathPlane<double>(m, "Planed");
 
   ignition::math::python::defineMathSphere<double>(m, "Sphered");
 
