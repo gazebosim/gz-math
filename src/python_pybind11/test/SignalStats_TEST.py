@@ -418,7 +418,7 @@ class TestSignalStats(unittest.TestCase):
         map = stats.map()
         self.assertFalse(len(map) == 0)
         self.assertEqual(len(map), 6)
-        print(map)
+
         self.assertEqual("max" in map.keys(), 1)
         self.assertEqual("maxAbs" in map.keys(), 1)
         self.assertEqual("mean" in map.keys(), 1)
