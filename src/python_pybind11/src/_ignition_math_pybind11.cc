@@ -43,6 +43,7 @@
 #include "RotationSpline.hh"
 #include "SemanticVersion.hh"
 #include "Sphere.hh"
+#include "SphericalCoordinates.hh"
 #include "Spline.hh"
 #include "StopWatch.hh"
 #include "Temperature.hh"
@@ -92,6 +93,8 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathRotationSpline(m, "RotationSpline");
 
   ignition::math::python::defineMathSemanticVersion(m, "SemanticVersion");
+
+  ignition::math::python::defineMathSphericalCoordinates(m, "SphericalCoordinates");
 
   ignition::math::python::defineMathSpline(m, "Spline");
 
