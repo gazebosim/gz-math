@@ -67,6 +67,13 @@ if (SWIG_FOUND)
   else()
     message (STATUS "Searching for Ruby - found version ${RUBY_VERSION}.")
   endif()
+endif()
+
+########################################
+# Find pybind11
+find_package(pybind11 2.2 QUIET)
+if (${pybind11_FOUND})
+  message (STATUS "Searching for pybind11 - found version ${SWIG_VERSION}.")
 
   ########################################
   # Include python
@@ -77,6 +84,9 @@ if (SWIG_FOUND)
   else()
     message (STATUS "Searching for Python - found version ${PYTHONLIBS_VERSION_STRING}.")
   endif()
+else()
+  IGN_BUILD_WARNING("pybind11 is missing: Python interfaces are disabled.")
+  message (STATUS "Searching for pybind11 - not found.")
 endif()
 
 # Location of "fake install folder" used in tests
