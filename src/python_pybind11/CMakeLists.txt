@@ -5,8 +5,6 @@ if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
   set(PYTHON_LIBRARIES "${PYTHON_DEBUG_LIBRARIES}")
 endif()
 
-set(PYBIND11_PYTHON_VERSION 3)
-
 message(STATUS "Building pybind11 interfaces")
 # Split from main extension and converted to pybind11
 pybind11_add_module(math SHARED

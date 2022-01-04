@@ -71,6 +71,8 @@ endif()
 
 ########################################
 # Find pybind11
+set(PYBIND11_PYTHON_VERSION 3)
+
 find_package(pybind11 2.2 QUIET)
 if (${pybind11_FOUND})
   message (STATUS "Searching for pybind11 - found version ${SWIG_VERSION}.")
