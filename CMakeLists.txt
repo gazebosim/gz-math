@@ -70,25 +70,24 @@ if (SWIG_FOUND)
 endif()
 
 ########################################
-# Find pybind11
-set(PYBIND11_PYTHON_VERSION 3)
-
-find_package(pybind11 2.2 QUIET)
-if (${pybind11_FOUND})
-  message (STATUS "Searching for pybind11 - found version ${pybind11_VERSION}.")
-
-  ########################################
-  # Include python
-  find_package(PythonInterp 3 REQUIRED) # change to Python3 when Bionic is EOL
-  find_package(PythonLibs QUIET)
-  if (NOT PYTHONLIBS_FOUND)
-    message (STATUS "Searching for Python - not found.")
-  else()
-    message (STATUS "Searching for Python - found version ${PYTHONLIBS_VERSION_STRING}.")
-  endif()
+# Python bindings
+find_package(PythonInterp 3 REQUIRED) # change to Python3 when Bionic is EOL
+find_package(PythonLibs QUIET)
+if (NOT PYTHONLIBS_FOUND)
+  IGN_BUILD_WARNING("Python is missing: Python interfaces are disabled.")
+  message (STATUS "Searching for Python - not found.")
 else()
-  IGN_BUILD_WARNING("pybind11 is missing: Python interfaces are disabled.")
-  message (STATUS "Searching for pybind11 - not found.")
+  message (STATUS "Searching for Python - found version ${PYTHONLIBS_VERSION_STRING}.")
+
+  set(PYBIND11_PYTHON_VERSION 3)
+  find_package(pybind11 2.2 QUIET)
+
+  if (${pybind11_FOUND})
+    message (STATUS "Searching for pybind11 - found version ${pybind11_VERSION}.")
+  else()
+    IGN_BUILD_WARNING("pybind11 is missing: Python interfaces are disabled.")
+    message (STATUS "Searching for pybind11 - not found.")
+  endif()
 endif()
 
 # Location of "fake install folder" used in tests
