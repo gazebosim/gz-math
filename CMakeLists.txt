@@ -71,9 +71,9 @@ endif()
 
 ########################################
 # Python bindings
-find_package(PythonInterp 3 REQUIRED) # change to Python3 when Bionic is EOL
+find_package(IgnPython QUIET)
 find_package(PythonLibs QUIET)
-if (NOT PYTHONLIBS_FOUND)
+if (NOT PYTHON_FOUND OR NOT PYTHONLIBS_FOUND)
   IGN_BUILD_WARNING("Python is missing: Python interfaces are disabled.")
   message (STATUS "Searching for Python - not found.")
 else()
