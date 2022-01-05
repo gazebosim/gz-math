@@ -73,7 +73,7 @@ endif()
 # Python bindings
 find_package(IgnPython QUIET)
 find_package(PythonLibs QUIET)
-if (NOT PYTHON_FOUND OR NOT PYTHONLIBS_FOUND)
+if (NOT PYTHONINTERP_FOUND OR NOT PYTHONLIBS_FOUND)
   IGN_BUILD_WARNING("Python is missing: Python interfaces are disabled.")
   message (STATUS "Searching for Python - not found.")
 else()
