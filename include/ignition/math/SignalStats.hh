@@ -18,10 +18,10 @@
 #define IGNITION_MATH_SIGNALSTATS_HH_
 
 #include <map>
+#include <memory>
 #include <string>
 #include <ignition/math/Helpers.hh>
 #include <ignition/math/config.hh>
-#include <ignition/utils/ImplPtr.hh>
 
 namespace ignition
 {
@@ -29,6 +29,10 @@ namespace ignition
   {
     // Inline bracket to help doxygen filtering.
     inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    //
+    /// \brief Forward declare private data class.
+    class SignalStatisticPrivate;
+
     /// \class SignalStatistic SignalStats.hh ignition/math/SignalStats.hh
     /// \brief Statistical properties of a discrete time scalar signal.
     class IGNITION_MATH_VISIBLE SignalStatistic
@@ -37,7 +41,11 @@ namespace ignition
       public: SignalStatistic();
 
       /// \brief Destructor
-      public: virtual ~SignalStatistic() = default;
+      public: virtual ~SignalStatistic();
+
+      /// \brief Copy constructor
+      /// \param[in] _ss SignalStatistic to copy
+      public: SignalStatistic(const SignalStatistic &_ss);
 
       /// \brief Get the current value of the statistical measure.
       /// \return Current value of the statistical measure.
@@ -58,13 +66,17 @@ namespace ignition
       /// \brief Forget all previous data.
       public: virtual void Reset();
 
-      public: class Implementation;
-      IGN_UTILS_WARN_IGNORE__DLL_INTERFACE_MISSING
+#ifdef _WIN32
+// Disable warning C4251 which is triggered by
+// std::unique_ptr
+#pragma warning(push)
+#pragma warning(disable: 4251)
+#endif
       /// \brief Pointer to private data.
-      /// Not using macros as it needs to be protected to be accessed from
-      /// derived classes
-      protected: ::ignition::utils::ImplPtr<Implementation> dataPtr;
-      IGN_UTILS_WARN_RESUME__DLL_INTERFACE_MISSING
+      protected: std::unique_ptr<SignalStatisticPrivate> dataPtr;
+#ifdef _WIN32
+#pragma warning(pop)
+#endif
     };
 
     /// \class SignalMaximum SignalStats.hh ignition/math/SignalStats.hh
@@ -162,6 +174,8 @@ namespace ignition
       public: virtual void InsertData(const double _data) override;
     };
 
+    /// \brief Forward declare private data class.
+    class SignalStatsPrivate;
 
     /// \class SignalStats SignalStats.hh ignition/math/SignalStats.hh
     /// \brief Collection of statistics for a scalar signal.
@@ -169,6 +183,13 @@ namespace ignition
     {
       /// \brief Constructor
       public: SignalStats();
+
+      /// \brief Destructor
+      public: ~SignalStats();
+
+      /// \brief Copy constructor
+      /// \param[in] _ss SignalStats to copy
+      public: SignalStats(const SignalStats &_ss);
 
       /// \brief Get number of data points in first statistic.
       /// Technically you can have different numbers of data points
@@ -210,8 +231,22 @@ namespace ignition
       /// \brief Forget all previous data.
       public: void Reset();
 
+      /// \brief Assignment operator
+      /// \param[in] _s A SignalStats to copy
+      /// \return this
+      public: SignalStats &operator=(const SignalStats &_s);
+
+#ifdef _WIN32
+// Disable warning C4251 which is triggered by
+// std::unique_ptr
+#pragma warning(push)
+#pragma warning(disable: 4251)
+#endif
       /// \brief Pointer to private data.
-      IGN_UTILS_IMPL_PTR(dataPtr)
+      private: std::unique_ptr<SignalStatsPrivate> dataPtr;
+#ifdef _WIN32
+#pragma warning(pop)
+#endif
     };
     }
   }

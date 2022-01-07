@@ -24,11 +24,22 @@ using namespace math;
 
 //////////////////////////////////////////////////
 SignalStatistic::SignalStatistic()
-  : dataPtr(ignition::utils::MakeImpl<Implementation>())
+  : dataPtr(new SignalStatisticPrivate)
 {
   this->dataPtr->data = 0.0;
   this->dataPtr->extraData = 0.0;
   this->dataPtr->count = 0;
+}
+
+//////////////////////////////////////////////////
+SignalStatistic::~SignalStatistic()
+{
+}
+
+//////////////////////////////////////////////////
+SignalStatistic::SignalStatistic(const SignalStatistic &_ss)
+  : dataPtr(_ss.dataPtr->Clone())
+{
 }
 
 //////////////////////////////////////////////////
@@ -195,7 +206,18 @@ void SignalVariance::InsertData(const double _data)
 
 //////////////////////////////////////////////////
 SignalStats::SignalStats()
-  : dataPtr(ignition::utils::MakeImpl<Implementation>())
+  : dataPtr(new SignalStatsPrivate)
+{
+}
+
+//////////////////////////////////////////////////
+SignalStats::~SignalStats()
+{
+}
+
+//////////////////////////////////////////////////
+SignalStats::SignalStats(const SignalStats &_ss)
+  : dataPtr(_ss.dataPtr->Clone())
 {
 }
 
@@ -329,3 +351,9 @@ void SignalStats::Reset()
   }
 }
 
+//////////////////////////////////////////////////
+SignalStats &SignalStats::operator=(const SignalStats &_s)
+{
+  this->dataPtr = _s.dataPtr->Clone();
+  return *this;
+}
