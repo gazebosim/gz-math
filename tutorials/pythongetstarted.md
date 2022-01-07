@@ -39,10 +39,11 @@ if __name__ == "__main__":
   main()
 ```
 
-Now let's create to 3D points with arbitrary values. We will use the
-ignition.math.Vector3 class to represent these points. Ignition Math provides a handy
-ignition.math.Vector3d type which is a typedef of `Vector3d`. The result of this
-addition will be a main file similar to the following.
+Now let's create two 3D points with arbitrary values. We will use the
+`ignition.math.Vector3` class to represent these points. Ignition Math provides
+some `Vector3` types which are: `Vector3d` (Vector3 using doubles), `Vector3f` (Vector3 using floats)
+and `Vector3i` (Vector3 using integers). The result of this addition will be a
+main file similar to the following.
 
 ```python
 from ignition.math import Vector3d
@@ -56,7 +57,7 @@ if __name__ == "__main__":
 ```
 
 Finally, we can compute the distance between `point1` and `point2` using the
-ignition.math.Vector3.Distance() function and output the distance value.
+`ignition.math.Vector3.distance()` function and output the distance value.
 
 ```python
 from ignition.math import Vector3d
