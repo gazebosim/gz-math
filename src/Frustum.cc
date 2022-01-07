@@ -73,10 +73,10 @@ Frustum::Frustum()
 }
 
 /////////////////////////////////////////////////
-Frustum::Frustum(const double _near,
-                 const double _far,
+Frustum::Frustum(double _near,
+                 double _far,
                  const Angle &_fov,
-                 const double _aspectRatio,
+                 double _aspectRatio,
                  const Pose3d &_pose)
   : Frustum()
 {
@@ -204,7 +204,7 @@ double Frustum::Near() const
 }
 
 /////////////////////////////////////////////////
-void Frustum::SetNear(const double _near)
+void Frustum::SetNear(double _near)
 {
   this->dataPtr->near = _near;
   this->ComputePlanes();
@@ -217,7 +217,7 @@ double Frustum::Far() const
 }
 
 /////////////////////////////////////////////////
-void Frustum::SetFar(const double _far)
+void Frustum::SetFar(double _far)
 {
   this->dataPtr->far = _far;
   this->ComputePlanes();
@@ -256,7 +256,7 @@ double Frustum::AspectRatio() const
 }
 
 /////////////////////////////////////////////////
-void Frustum::SetAspectRatio(const double _aspectRatio)
+void Frustum::SetAspectRatio(double _aspectRatio)
 {
   this->dataPtr->aspectRatio = _aspectRatio;
   this->ComputePlanes();

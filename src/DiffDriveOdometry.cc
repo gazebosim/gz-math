@@ -29,7 +29,8 @@ class ignition::math::DiffDriveOdometry::Implementation
   /// Runge-Kutta.
   /// \param[in] _linear Linear velocity.
   /// \param[in] _angular Angular velocity.
-  public: void IntegrateRungeKutta2(double _linear, double _angular);
+  public: void IntegrateRungeKutta2(double _linear,
+                                    double _angular);
 
   /// \brief Integrates the velocities (linear and angular) using exact
   /// method.
@@ -217,8 +218,8 @@ void DiffDriveOdometry::Implementation::IntegrateRungeKutta2(
 }
 
 //////////////////////////////////////////////////
-void DiffDriveOdometry::Implementation::IntegrateExact(
-    double _linear, double _angular)
+void DiffDriveOdometry::Implementation::IntegrateExact(double _linear,
+                                double _angular)
 {
   if (std::fabs(_angular) < 1e-6)
   {
