@@ -26,7 +26,7 @@ if (PYTHONLIBS_FOUND)
   set(SWIG_PY_LIB pymath)
   set(SWIG_PY_LIB_OUTPUT math)
 
-  set(CMAKE_SWIG_OUTDIR "${CMAKE_BINARY_DIR}/lib/python")
+  set(CMAKE_SWIG_OUTDIR "${CMAKE_BINARY_DIR}/lib/python/swig")
   if(CMAKE_VERSION VERSION_GREATER 3.8.0)
     SWIG_ADD_LIBRARY(${SWIG_PY_LIB} LANGUAGE python SOURCES python.i)
   else()
@@ -77,43 +77,51 @@ if (PYTHONLIBS_FOUND)
     endif()
   else()
     # If not a system installation, respect local paths
-    set(IGN_PYTHON_INSTALL_PATH ${IGN_LIB_INSTALL_DIR}/python)
+    set(IGN_PYTHON_INSTALL_PATH ${IGN_LIB_INSTALL_DIR}/python/swig)
   endif()
 
   set(IGN_PYTHON_INSTALL_PATH "${IGN_PYTHON_INSTALL_PATH}/ignition")
   install(TARGETS ${SWIG_PY_LIB} DESTINATION ${IGN_PYTHON_INSTALL_PATH})
-  install(FILES ${CMAKE_BINARY_DIR}/lib/python/math.py DESTINATION ${IGN_PYTHON_INSTALL_PATH})
+  install(FILES ${CMAKE_BINARY_DIR}/lib/python/swig/math.py DESTINATION ${IGN_PYTHON_INSTALL_PATH})
 
   if (BUILD_TESTING)
     # Add the Python tests
     set(python_tests
       Angle_TEST
       Color_TEST
+      Filter_TEST
       GaussMarkovProcess_TEST
+      Helpers_TEST
       Kmeans_TEST
       Line2_TEST
       Line3_TEST
+      Material_TEST
+      Matrix3_TEST
+      Matrix4_TEST
+      MovingWindowFilter_TEST
       PID_TEST
+      Pose3_TEST
       python_TEST
+      Quaternion_TEST
       Rand_TEST
       RollingMean_TEST
+      RotationSpline_TEST
       SemanticVersion_TEST
       SignalStats_TEST
       Spline_TEST
+      StopWatch_TEST
       Temperature_TEST
       Triangle_TEST
-      Vector2_TEST
-      Vector3_TEST
+      Triangle3_TEST
       Vector3Stats_TEST
-      Vector4_TEST
     )
 
     foreach (test ${python_tests})
       add_test(NAME ${test}.py COMMAND
-        python3 ${CMAKE_SOURCE_DIR}/src/python/${test}.py)
+        "${PYTHON_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/src/python/${test}.py")
 
       set(_env_vars)
-      list(APPEND _env_vars "PYTHONPATH=${FAKE_INSTALL_PREFIX}/lib/python/")
+      list(APPEND _env_vars "PYTHONPATH=${FAKE_INSTALL_PREFIX}/lib/python/swig")
       list(APPEND _env_vars "LD_LIBRARY_PATH=${FAKE_INSTALL_PREFIX}/lib:$ENV{LD_LIBRARY_PATH}")
       set_tests_properties(${test}.py PROPERTIES
         ENVIRONMENT "${_env_vars}")

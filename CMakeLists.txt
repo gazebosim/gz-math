@@ -15,6 +15,7 @@ find_package(ignition-cmake2 2.8.0 REQUIRED)
 # Configure the project
 #============================================================================
 set (c++standard 17)
+set (CMAKE_CXX_STANDARD 17)
 ign_configure_project(VERSION_SUFFIX pre1)
 
 #============================================================================
@@ -69,6 +70,7 @@ if (SWIG_FOUND)
 
   ########################################
   # Include python
+  find_package(PythonInterp 3 REQUIRED) # change to Python3 when Bionic is EOL
   find_package(PythonLibs QUIET)
   if (NOT PYTHONLIBS_FOUND)
     message (STATUS "Searching for Python - not found.")

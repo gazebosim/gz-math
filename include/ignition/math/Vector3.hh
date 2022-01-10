@@ -154,9 +154,9 @@ namespace ignition
       /// \return the result
       public: Vector3 Round()
       {
-        this->data[0] = nearbyint(this->data[0]);
-        this->data[1] = nearbyint(this->data[1]);
-        this->data[2] = nearbyint(this->data[2]);
+        this->data[0] = static_cast<T>(std::nearbyint(this->data[0]));
+        this->data[1] = static_cast<T>(std::nearbyint(this->data[1]));
+        this->data[2] = static_cast<T>(std::nearbyint(this->data[2]));
         return *this;
       }
 
@@ -255,7 +255,7 @@ namespace ignition
         return n.Normalize();
       }
 
-      /// \brief Get distance to a line
+      /// \brief Get distance to an infinite line defined by 2 points.
       /// \param[in] _pt1 first point on the line
       /// \param[in] _pt2 second point on the line
       /// \return the minimum distance from this point to the line
