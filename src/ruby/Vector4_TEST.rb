@@ -297,7 +297,7 @@ class Vector4_TEST < Test::Unit::TestCase
   end
 
   def test_nan
-    nanVec = Ignition::Math::Vector4d.new(Ignition::Math::Vector4d.NaN)
+    nanVec = Ignition::Math::Vector4d.NaN
     assert(!nanVec.IsFinite(),
            "NaN vector shouldn't be finite")
     assert(nanVec.X().nan?, "X should be NaN")
@@ -309,7 +309,7 @@ class Vector4_TEST < Test::Unit::TestCase
     assert(Ignition::Math::Vector4d.Zero == nanVec,
            "Corrected vector should equal zero")
 
-    nanVecF = Ignition::Math::Vector4f.new(Ignition::Math::Vector4f.NaN)
+    nanVecF = Ignition::Math::Vector4f.NaN
     assert(!nanVecF.IsFinite(),
            "NaN vector shouldn't be finite")
     assert(nanVecF.X().nan?, "X should be NaN")
