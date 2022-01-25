@@ -2,7 +2,7 @@
 
 ## Ignition Math 6.x.x
 
-## Ignition Math 6.9.3 (2022-01-XX)
+## Ignition Math 6.10.0 (2022-01-25)
 
 1. Use const instead of constexpr in Ellipsoid constructor
     * [Pull request #366](https://github.com/ignitionrobotics/ign-math/pull/366)
