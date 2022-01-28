@@ -120,18 +120,14 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathVector2(m, "Vector2");
 
-  ignition::math::python::defineMathVector3<double>(m, "Vector3d");
-  ignition::math::python::defineMathVector3<int>(m, "Vector3i");
-  ignition::math::python::defineMathVector3<float>(m, "Vector3f");
+  ignition::math::python::defineMathVector3(m, "Vector3");
 
   ignition::math::python::defineMathPlane<double>(m, "Planed");
 
   ignition::math::python::defineMathBox<double>(m, "Boxd");
   ignition::math::python::defineMathBox<float>(m, "Boxf");
 
-  ignition::math::python::defineMathVector4<double>(m, "Vector4d");
-  ignition::math::python::defineMathVector4<int>(m, "Vector4i");
-  ignition::math::python::defineMathVector4<float>(m, "Vector4f");
+  ignition::math::python::defineMathVector4(m, "Vector4");
 
   ignition::math::python::defineMathLine2<int>(m, "Line2i");
   ignition::math::python::defineMathLine2<double>(m, "Line2d");

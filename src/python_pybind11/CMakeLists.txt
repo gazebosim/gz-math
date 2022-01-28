@@ -29,6 +29,8 @@ pybind11_add_module(math SHARED
   src/StopWatch.cc
   src/Temperature.cc
   src/Vector2.cc
+  src/Vector3.cc
+  src/Vector4.cc
   src/Vector3Stats.cc
 )
 
