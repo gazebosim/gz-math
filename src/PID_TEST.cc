@@ -121,7 +121,14 @@ TEST(PidTest, EqualOperatorCornerCase)
   EXPECT_DOUBLE_EQ(pid.CmdOffset(), 1.23);
   EXPECT_DOUBLE_EQ(pid.Cmd(), 0.0);
 
+#ifndef _WIN32
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wself-assign-overloaded"
+#endif
   pid = pid;
+#ifndef _WIN32
+# pragma GCC diagnostic pop
+#endif
 
   EXPECT_DOUBLE_EQ(pid.PGain(), 1.0);
   EXPECT_DOUBLE_EQ(pid.IGain(), 2.1);
@@ -336,14 +343,14 @@ TEST(PidTest, Pcontrol)
   for (int i = 0; i < N; ++i)
   {
     double d = static_cast<double>(i);
-    EXPECT_DOUBLE_EQ(-d, pid.Update(d, std::chrono::duration<double>(1)));
+    EXPECT_DOUBLE_EQ(-d, pid.Update(d, dt));
   }
 
   pid.SetPGain(2);
   for (int i = 0; i < N; ++i)
   {
     double d = static_cast<double>(i);
-    EXPECT_DOUBLE_EQ(-2*d, pid.Update(d, std::chrono::duration<double>(1)));
+    EXPECT_DOUBLE_EQ(-2*d, pid.Update(d, dt));
   }
 }
 
@@ -356,7 +363,7 @@ TEST(PidTest, Icontrol)
   for (int i = 0; i < N; ++i)
   {
     double d = static_cast<double>(i+1);
-    EXPECT_DOUBLE_EQ(-d, pid.Update(1, std::chrono::duration<double>(1)));
+    EXPECT_DOUBLE_EQ(-d, pid.Update(1, dt));
   }
 
   pid.SetIGain(2);
@@ -369,13 +376,13 @@ TEST(PidTest, Icontrol)
   }
 
   // confirm that changing gain doesn't cause jumps in integral control
-  EXPECT_DOUBLE_EQ(-I0, pid.Update(0, std::chrono::duration<double>(1)));
-  EXPECT_DOUBLE_EQ(-I0, pid.Update(0, std::chrono::duration<double>(1)));
+  EXPECT_DOUBLE_EQ(-I0, pid.Update(0, dt));
+  EXPECT_DOUBLE_EQ(-I0, pid.Update(0, dt));
 
   for (int i = 0; i < N; ++i)
   {
     double d = static_cast<double>(i+1);
-    EXPECT_DOUBLE_EQ(-I0-2*d, pid.Update(1, std::chrono::duration<double>(1)));
+    EXPECT_DOUBLE_EQ(-I0-2*d, pid.Update(1, dt));
   }
 }
 
@@ -384,19 +391,19 @@ TEST(PidTest, Dcontrol)
 {
   math::PID pid(0, 0, 1);
   std::chrono::duration<double> dt(1);
-  EXPECT_DOUBLE_EQ(1, pid.Update(-1, std::chrono::duration<double>(1)));
+  EXPECT_DOUBLE_EQ(1, pid.Update(-1, dt));
   const int N = 5;
   for (int i = 0; i < N; ++i)
   {
     double d = static_cast<double>(i);
-    EXPECT_DOUBLE_EQ(-1, pid.Update(d, std::chrono::duration<double>(1)));
+    EXPECT_DOUBLE_EQ(-1, pid.Update(d, dt));
   }
 
   pid.SetDGain(2);
-  EXPECT_DOUBLE_EQ(10, pid.Update(-1, std::chrono::duration<double>(1)));
+  EXPECT_DOUBLE_EQ(10, pid.Update(-1, dt));
   for (int i = 0; i < N; ++i)
   {
     double d = static_cast<double>(i);
-    EXPECT_DOUBLE_EQ(-2, pid.Update(d, std::chrono::duration<double>(1)));
+    EXPECT_DOUBLE_EQ(-2, pid.Update(d, dt));
   }
 }
