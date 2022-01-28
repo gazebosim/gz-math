@@ -18,6 +18,7 @@ pybind11_add_module(math SHARED
   src/Helpers.cc
   src/Kmeans.cc
   src/Material.cc
+  src/MovingWindowFilter.cc
   src/PID.cc
   src/Rand.cc
   src/RollingMean.cc

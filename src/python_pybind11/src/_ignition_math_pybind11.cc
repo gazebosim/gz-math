@@ -79,12 +79,7 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathMaterial(m, "Material");
 
-  ignition::math::python::defineMathMovingWindowFilter<int>(
-    m, "MovingWindowFilteri");
-  ignition::math::python::defineMathMovingWindowFilter<double>(
-    m, "MovingWindowFilterd");
-  ignition::math::python::defineMathMovingWindowFilter
-    <ignition::math::Vector3d>(m, "MovingWindowFilterv3");
+  ignition::math::python::defineMathMovingWindowFilter(m, "MovingWindowFilter");
 
   ignition::math::python::defineMathPID(m, "PID");
 
