@@ -324,6 +324,21 @@ TEST(QuaternionTest, MathAxis)
 {
   math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
 
+#ifndef _WIN32
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+  // Deprecated in ign-math7
+  q.Axis(0, 1, 0, IGN_PI);
+  EXPECT_EQ(q, math::Quaterniond(6.12303e-17, 0, 1, 0));
+
+  // Deprecated in ign-math7
+  q.Axis(1, 0, 0, IGN_PI);
+  EXPECT_EQ(q, math::Quaterniond(0, 1, 0, 0));
+#ifndef _WIN32
+# pragma GCC diagnostic pop
+#endif
+
   q.SetFromAxisAngle(0, 1, 0, IGN_PI);
   EXPECT_EQ(q, math::Quaterniond(6.12303e-17, 0, 1, 0));
 
