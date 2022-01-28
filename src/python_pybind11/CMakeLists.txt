@@ -13,6 +13,7 @@ pybind11_add_module(math SHARED
   src/AxisAlignedBox.cc
   src/Color.cc
   src/DiffDriveOdometry.cc
+  src/Filter.cc
   src/Frustum.cc
   src/GaussMarkovProcess.cc
   src/Helpers.cc
