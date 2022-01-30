@@ -108,40 +108,6 @@ TEST(PidTest, SetValues)
 }
 
 /////////////////////////////////////////////////
-TEST(PidTest, EqualOperatorCornerCase)
-{
-  math::PID pid(1.0, 2.1, -4.5, 10.5, 1.4, 45, -35, 1.23);
-  EXPECT_DOUBLE_EQ(pid.PGain(), 1.0);
-  EXPECT_DOUBLE_EQ(pid.IGain(), 2.1);
-  EXPECT_DOUBLE_EQ(pid.DGain(), -4.5);
-  EXPECT_DOUBLE_EQ(pid.IMax(), 10.5);
-  EXPECT_DOUBLE_EQ(pid.IMin(), 1.4);
-  EXPECT_DOUBLE_EQ(pid.CmdMax(), 45.0);
-  EXPECT_DOUBLE_EQ(pid.CmdMin(), -35.0);
-  EXPECT_DOUBLE_EQ(pid.CmdOffset(), 1.23);
-  EXPECT_DOUBLE_EQ(pid.Cmd(), 0.0);
-
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wself-assign-overloaded"
-#endif
-  pid = pid;
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
-
-  EXPECT_DOUBLE_EQ(pid.PGain(), 1.0);
-  EXPECT_DOUBLE_EQ(pid.IGain(), 2.1);
-  EXPECT_DOUBLE_EQ(pid.DGain(), -4.5);
-  EXPECT_DOUBLE_EQ(pid.IMax(), 10.5);
-  EXPECT_DOUBLE_EQ(pid.IMin(), 1.4);
-  EXPECT_DOUBLE_EQ(pid.CmdMax(), 45.0);
-  EXPECT_DOUBLE_EQ(pid.CmdMin(), -35.0);
-  EXPECT_DOUBLE_EQ(pid.CmdOffset(), 1.23);
-  EXPECT_DOUBLE_EQ(pid.Cmd(), 0.0);
-}
-
-/////////////////////////////////////////////////
 TEST(PidTest, Update)
 {
   math::PID pid;
