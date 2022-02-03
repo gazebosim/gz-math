@@ -18,6 +18,7 @@ pybind11_add_module(math SHARED
   src/GaussMarkovProcess.cc
   src/Helpers.cc
   src/Kmeans.cc
+  src/Line2.cc
   src/Material.cc
   src/MovingWindowFilter.cc
   src/PID.cc

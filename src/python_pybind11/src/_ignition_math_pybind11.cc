@@ -124,9 +124,7 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathVector4(m, "Vector4");
 
-  ignition::math::python::defineMathLine2<int>(m, "Line2i");
-  ignition::math::python::defineMathLine2<double>(m, "Line2d");
-  ignition::math::python::defineMathLine2<float>(m, "Line2f");
+  ignition::math::python::defineMathLine2(m, "Line2");
 
   ignition::math::python::defineMathLine3<int>(m, "Line3i");
   ignition::math::python::defineMathLine3<double>(m, "Line3d");
