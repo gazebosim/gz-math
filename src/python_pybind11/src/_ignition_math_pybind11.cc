@@ -126,9 +126,7 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathLine2(m, "Line2");
 
-  ignition::math::python::defineMathLine3<int>(m, "Line3i");
-  ignition::math::python::defineMathLine3<double>(m, "Line3d");
-  ignition::math::python::defineMathLine3<float>(m, "Line3f");
+  ignition::math::python::defineMathLine3(m, "Line3");
 
   ignition::math::python::defineMathMatrix3<int>(m, "Matrix3i");
   ignition::math::python::defineMathMatrix3<double>(m, "Matrix3d");

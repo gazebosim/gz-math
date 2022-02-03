@@ -19,6 +19,7 @@ pybind11_add_module(math SHARED
   src/Helpers.cc
   src/Kmeans.cc
   src/Line2.cc
+  src/Line3.cc
   src/Material.cc
   src/MovingWindowFilter.cc
   src/PID.cc
