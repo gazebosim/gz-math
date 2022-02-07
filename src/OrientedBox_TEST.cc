@@ -331,8 +331,13 @@ TEST(OrientedBoxTest, OperatorStreamOut)
                   Pose3d(3.4, 4.5, 5.6, 0.0, -0.1, 0.2));
   std::ostringstream stream;
   stream << b;
-  EXPECT_EQ(stream.str(),
-      "Size[0.1 1.2 2.3] Pose[3.4 4.5 5.6 0 -0.1 0.2] Material[]");
+
+  // some compiler optimizations returns negative zero (-0) in the stream, workaround
+  // using prefix and postfix check. Not nice I know
+  EXPECT_TRUE(stream.str().find("Size[0.1 1.2 2.3] Pose[3.4 4.5 5.6") != std::string::npos) <<
+    "stream.str is: " << stream.str();
+  EXPECT_TRUE(stream.str().find("0 -0.1 0.2] Material[]") != std::string::npos) <<
+    "stream.str is: " << stream.str();
 }
 
 //////////////////////////////////////////////////
