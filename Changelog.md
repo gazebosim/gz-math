@@ -47,7 +47,7 @@
 
 1. Deprecated `appendToStream(std::ostream, T, int)`. Use `appendToStream(std::ostream, T)`
 instead.
-    * TODO(jennuine) add PR 
+    * [Pull request 376](https://github.com/ignitionrobotics/ign-math/pull/376)
 
 ## Ignition Math 6.x
 
