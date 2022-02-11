@@ -144,9 +144,7 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathOrientedBox<double>(m, "OrientedBoxd");
 
-  ignition::math::python::defineMathPose3<int>(m, "Pose3i");
-  ignition::math::python::defineMathPose3<double>(m, "Pose3d");
-  ignition::math::python::defineMathPose3<float>(m, "Pose3f");
+  ignition::math::python::defineMathPose3(m, "Pose3");
 
   ignition::math::python::defineMathMassMatrix3(m, "MassMatrix3");
 
