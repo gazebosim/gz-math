@@ -20,6 +20,7 @@ pybind11_add_module(math SHARED
   src/Kmeans.cc
   src/Line2.cc
   src/Line3.cc
+  src/MassMatrix3.cc
   src/Material.cc
   src/Matrix3.cc
   src/Matrix4.cc
