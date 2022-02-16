@@ -478,6 +478,18 @@ namespace ignition
       }
     }
 
+    /// \brief Append a number to a stream, specialized for int.
+    /// \param[out] _out Output stream.
+    /// \param[in] _number Number to append.
+    /// _precision Not used for int.
+    /// \deprecated Use appendToStream(std::ostream, int) instead.
+    template<>
+    inline void IGN_DEPRECATED(7) appendToStream(
+        std::ostream &_out, int _number, int)
+    {
+      _out << _number;
+    }
+
     /// \brief Append a number to a stream. Makes sure "-0" is returned as "0".
     /// \param[out] _out Output stream.
     /// \param[in] _number Number to append.
@@ -497,9 +509,8 @@ namespace ignition
     /// \brief Append a number to a stream, specialized for int.
     /// \param[out] _out Output stream.
     /// \param[in] _number Number to append.
-    //  _precision Not used for int.
     template<>
-    inline void appendToStream(std::ostream &_out, int _number, int)
+    inline void appendToStream(std::ostream &_out, int _number)
     {
       _out << _number;
     }
