@@ -75,8 +75,14 @@ TEST(PoseTest, Pose)
     EXPECT_TRUE(math::equal((A * B).Rot().Euler().Z(), 3.0*IGN_PI/4.0));
 
     IGN_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+    // Coverage for + operator
     EXPECT_EQ(A * B, B + A);
     EXPECT_NE(A * B, A + B);
+
+    // Coverage for += operator
+    math::Pose3d C(B);
+    C += A;
+    EXPECT_EQ(C, A * B);
     IGN_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
   }
   {
