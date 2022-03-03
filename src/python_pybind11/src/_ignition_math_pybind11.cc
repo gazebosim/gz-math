@@ -132,9 +132,7 @@ PYBIND11_MODULE(math, m)
 
   ignition::math::python::defineMathMatrix4(m, "Matrix4");
 
-  ignition::math::python::defineMathTriangle<int>(m, "Trianglei");
-  ignition::math::python::defineMathTriangle<double>(m, "Triangled");
-  ignition::math::python::defineMathTriangle<float>(m, "Trianglef");
+  ignition::math::python::defineMathTriangle(m, "Triangle");
 
   ignition::math::python::defineMathTriangle3(m, "Triangle3");
 
