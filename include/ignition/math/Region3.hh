@@ -148,7 +148,7 @@ namespace ignition
       }
 
       /// \brief Check if the region intersects `_other` region
-      /// \param[in] _region region to check for intersection
+      /// \param[in] _other region to check for intersection
       /// \return true if it is contained, false otherwise
       public: bool Intersects(const Region3<T>& _other) const
       {

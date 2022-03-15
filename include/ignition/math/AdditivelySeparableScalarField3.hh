@@ -41,7 +41,7 @@ namespace ignition
     ///
     /// ## Example
     ///
-    /// \snippet examples/separable_scalar_field3_example.cc complete
+    /// \snippet examples/additively_separable_scalar_field3_example.cc complete
     template<typename ScalarFunctionT, typename ScalarT>
     class AdditivelySeparableScalarField3
     {
