@@ -303,7 +303,7 @@ namespace ignition
       /// \deprecated Use SetFromAxisAngle(T, T, T, T)
       public: void IGN_DEPRECATED(7) Axis(T _ax, T _ay, T _az, T _aa)
       {
-        this->SetFromAxisAngle(_ax, _ay, _ax, _aa);
+        this->SetFromAxisAngle(_ax, _ay, _az, _aa);
       }
 
       /// \brief Set the quaternion from an axis and angle.
@@ -716,7 +716,6 @@ namespace ignition
       /// \param[in] _scale Amount to scale this quaternion
       public: void Scale(T _scale)
       {
-        Quaternion<T> b;
         Vector3<T> axis;
         T angle;
 
@@ -1056,7 +1055,7 @@ namespace ignition
                                       const T _deltaT) const
       {
         Quaternion<T> deltaQ;
-        Vector3<T> theta = _angularVelocity * _deltaT * 0.5;
+        Vector3<T> theta = _angularVelocity * _deltaT / 2;
         T thetaMagSq = theta.SquaredLength();
         T s;
         if (thetaMagSq * thetaMagSq / 24.0 < MIN_D)
