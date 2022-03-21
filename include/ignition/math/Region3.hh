@@ -18,6 +18,7 @@
 #define IGNITION_MATH_REGION3_HH_
 
 #include <cmath>
+#include <limits>
 #include <ostream>
 #include <utility>
 
@@ -39,11 +40,15 @@ namespace ignition
     /// an intersection of halfspaces. Regions may be open or
     /// closed in their boundaries, if any.
     ///
+    /// Note that the Region3 class is essentially a set R ⊆ R^3.
+    /// For 3D solid box semantics, use the `AxisAlignedBox` class
+    /// instead.
+    ///
     /// ## Example
     ///
     /// \snippet examples/region3_example.cc complete
     template <typename T>
-    class IGNITION_MATH_VISIBLE Region3
+    class Region3
     {
       /// \brief An unbounded region (-∞, ∞) ✕ (-∞, ∞) ✕ (-∞, ∞)
       public: static const Region3<T> &Unbounded;
@@ -184,9 +189,12 @@ namespace ignition
     namespace detail {
        template<typename T>
        const Region3<T> gUnboundedRegion3(
-           Interval<T>::Unbounded,
-           Interval<T>::Unbounded,
-           Interval<T>::Unbounded);
+           Interval<T>::Open(-std::numeric_limits<T>::infinity(),
+                             std::numeric_limits<T>::infinity()),
+           Interval<T>::Open(-std::numeric_limits<T>::infinity(),
+                             std::numeric_limits<T>::infinity()),
+           Interval<T>::Open(-std::numeric_limits<T>::infinity(),
+                             std::numeric_limits<T>::infinity()));
     }
     template<typename T>
     const Region3<T> &Region3<T>::Unbounded = detail::gUnboundedRegion3<T>;
