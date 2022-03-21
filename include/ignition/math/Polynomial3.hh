@@ -41,7 +41,7 @@ namespace ignition
     ///
     /// \snippet examples/polynomial3_example.cc complete
     template <typename T>
-    class IGNITION_MATH_VISIBLE Polynomial3
+    class Polynomial3
     {
       /// \brief Constructor
       public: Polynomial3() = default;
