@@ -52,6 +52,7 @@ TEST(Polynomial3Test, Evaluate)
     EXPECT_DOUBLE_EQ(p(0.), 1.);
     EXPECT_DOUBLE_EQ(p(1.), 1.);
     EXPECT_DOUBLE_EQ(p(math::INF_D), 1.);
+    EXPECT_TRUE(std::isnan(p(math::NAN_D)));
   }
   {
     const math::Polynomial3d p(math::Vector4d::One);
@@ -59,6 +60,7 @@ TEST(Polynomial3Test, Evaluate)
     EXPECT_DOUBLE_EQ(p(0.), 1.);
     EXPECT_DOUBLE_EQ(p(1.), 4.);
     EXPECT_DOUBLE_EQ(p(-math::INF_D), -math::INF_D);
+    EXPECT_TRUE(std::isnan(p(math::NAN_D)));
   }
 }
 

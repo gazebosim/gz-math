@@ -71,9 +71,14 @@ namespace ignition
       /// \return the result of evaluating p(`_x`)
       public: T Evaluate(const T &_x) const
       {
-        using std::isfinite, std::abs, std::copysign;
+        using std::isnan, std::isfinite;
+        if (isnan(_x))
+        {
+          return _x;
+        }
         if (!isfinite(_x))
         {
+          using std::abs, std::copysign;
           const T epsilon =
               std::numeric_limits<T>::epsilon();
           if (abs(this->coeffs[0]) >= epsilon)
