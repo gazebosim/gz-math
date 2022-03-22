@@ -895,7 +895,7 @@ namespace ignition
 
     /// \brief Check if the given string represents a time.
     /// An example time string is "0 00:00:00.000", which has the format
-    /// "DAYS HOURS:MINUTES:SECONDS.NANOSECONDS"
+    /// "DAYS HOURS:MINUTES:SECONDS.MILLISECONDS"
     /// \return True if the regex was able to split the string otherwise False
     inline bool isTimeString(const std::string &_timeString)
     {
