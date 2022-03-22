@@ -37,7 +37,7 @@ int main(int argc, char **argv)
   // A polynomial can be evaluated.
   const double x = 0.5;
   std::cout << "Evaluating " << p << " at " << x
-            << " yields " << p(0.5) << std::endl;
+            << " yields " << p(x) << std::endl;
 
   // A polynomial can be queried for its minimum in a given interval,
   // as well as for its global minimum (which may not always be finite).
