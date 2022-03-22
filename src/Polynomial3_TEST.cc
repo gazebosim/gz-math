@@ -68,56 +68,75 @@ TEST(Polynomial3Test, Evaluate)
 TEST(Polynomial3Test, Minimum)
 {
   {
-    const math::Polynomial3d p0 =
+    const math::Polynomial3d p =
         math::Polynomial3d::Constant(1.);
-    EXPECT_TRUE(std::isnan(p0.Minimum(
+    EXPECT_TRUE(std::isnan(p.Minimum(
         math::Intervald::Open(0., 0.))));
-    EXPECT_DOUBLE_EQ(p0.Minimum(), 1.);
+    EXPECT_DOUBLE_EQ(p.Minimum(), 1.);
   }
   {
-    const math::Polynomial3d p1(
+    const math::Polynomial3d p(
         math::Vector4d(0., 0., 1., 1.));
-    EXPECT_TRUE(std::isnan(p1.Minimum(
+    EXPECT_TRUE(std::isnan(p.Minimum(
         math::Intervald::Open(0., 0.))));
-    EXPECT_DOUBLE_EQ(p1.Minimum(
+    EXPECT_DOUBLE_EQ(p.Minimum(
         math::Intervald::Open(0., 1.)), 1.);
-    EXPECT_DOUBLE_EQ(p1.Minimum(), -math::INF_D);
+    EXPECT_DOUBLE_EQ(p.Minimum(), -math::INF_D);
   }
   {
-    const math::Polynomial3d p2(
+    const math::Polynomial3d p(
+        math::Vector4d(0., 0., -1., 1.));
+    EXPECT_TRUE(std::isnan(p.Minimum(
+        math::Intervald::Open(0., 0.))));
+    EXPECT_DOUBLE_EQ(p.Minimum(
+        math::Intervald::Open(0., 1.)), 0.);
+    EXPECT_DOUBLE_EQ(p.Minimum(), -math::INF_D);
+  }
+  {
+    const math::Polynomial3d p(
         math::Vector4d(0., 1., 1., 1.));
-    EXPECT_TRUE(std::isnan(p2.Minimum(
+    EXPECT_TRUE(std::isnan(p.Minimum(
         math::Intervald::Open(0., 0.))));
-    EXPECT_DOUBLE_EQ(p2.Minimum(
+    EXPECT_DOUBLE_EQ(p.Minimum(
         math::Intervald::Open(1., 2.)), 3.);
-    EXPECT_DOUBLE_EQ(p2.Minimum(), 0.75);
+    EXPECT_DOUBLE_EQ(p.Minimum(), 0.75);
   }
   {
-    const math::Polynomial3d p3(
+    const math::Polynomial3d p(
+        math::Vector4d(0., -1., 1., 1.));
+    EXPECT_TRUE(std::isnan(p.Minimum(
+        math::Intervald::Open(0., 0.))));
+    EXPECT_DOUBLE_EQ(p.Minimum(
+        math::Intervald::Open(1., 2.)), -1.);
+    EXPECT_DOUBLE_EQ(p.Minimum(), -math::INF_D);
+  }
+  {
+    const math::Polynomial3d p(
         math::Vector4d(1., 1., 1., 1.));
-    EXPECT_TRUE(std::isnan(p3.Minimum(
+    EXPECT_TRUE(std::isnan(p.Minimum(
         math::Intervald::Open(0., 0.))));
-    EXPECT_DOUBLE_EQ(p3.Minimum(
+    EXPECT_DOUBLE_EQ(p.Minimum(
         math::Intervald::Open(-1., 1.)), 0.);
-    EXPECT_DOUBLE_EQ(p3.Minimum(), -math::INF_D);
+    EXPECT_DOUBLE_EQ(p.Minimum(), -math::INF_D);
   }
   {
-    const math::Polynomial3d p4(
+    const math::Polynomial3d p(
         math::Vector4d(-1., 2., 1., 1.));
-    EXPECT_TRUE(std::isnan(p4.Minimum(
+    EXPECT_TRUE(std::isnan(p.Minimum(
         math::Intervald::Open(0., 0.))));
-    EXPECT_DOUBLE_EQ(p4.Minimum(
-        math::Intervald::Open(-1., 1.)), 3);
-    EXPECT_DOUBLE_EQ(p4.Minimum(), -math::INF_D);
+    EXPECT_DOUBLE_EQ(p.Minimum(
+        math::Intervald::Open(-1., 1.)),
+        0.8873882090776197);
+    EXPECT_DOUBLE_EQ(p.Minimum(), -math::INF_D);
   }
   {
-    const math::Polynomial3d p5(
+    const math::Polynomial3d p(
         math::Vector4d(1., -2., 1., 1.));
-    EXPECT_TRUE(std::isnan(p5.Minimum(
+    EXPECT_TRUE(std::isnan(p.Minimum(
         math::Intervald::Open(0., 0.))));
-    EXPECT_DOUBLE_EQ(p5.Minimum(
+    EXPECT_DOUBLE_EQ(p.Minimum(
         math::Intervald::Open(-1., 1.)), -3);
-    EXPECT_DOUBLE_EQ(p5.Minimum(), -math::INF_D);
+    EXPECT_DOUBLE_EQ(p.Minimum(), -math::INF_D);
   }
 }
 

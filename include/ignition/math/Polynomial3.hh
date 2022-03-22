@@ -126,7 +126,11 @@ namespace ignition
                         this->Evaluate(_interval.RightValue()));
         if (abs(this->coeffs[0]) >= epsilon)
         {
-          // cubic poylnomial
+          // Polynomial function p(x) is cubic, look
+          // for local minima within the given interval
+
+          // Find local extrema by computing the roots
+          // of p'(x), a quadratic polynomial function
           const T a = this->coeffs[0] * T(3.);
           const T b = this->coeffs[1] * T(2.);
           const T c = this->coeffs[2];
@@ -134,12 +138,15 @@ namespace ignition
           const T discriminant = b * b - T(4.) * a * c;
           if (discriminant >= T(0.))
           {
-            const T x0 = (-b + sqrt(discriminant)) / T(2.) * a;
+            // Roots of p'(x) are real, look for local
+            // minima by checking the sign of p''(x),
+            // a linear function.
+            const T x0 = (-b + sqrt(discriminant)) / (T(2.) * a);
             if ((T(2.) * a * x0 + b) > T(0.) && _interval.Contains(x0))
             {
               minimum = min(this->Evaluate(x0), minimum);
             }
-            const T x1 = (-b - sqrt(discriminant)) / T(2.) * a;
+            const T x1 = (-b - sqrt(discriminant)) / (T(2.) * a);
             if ((T(2.) * a * x1 + b) > T(0.) && _interval.Contains(x1))
             {
               minimum = min(this->Evaluate(x1), minimum);
@@ -148,15 +155,16 @@ namespace ignition
         }
         else if (abs(this->coeffs[1]) >= epsilon)
         {
-          // quadratic polynomial
-          const T b = this->coeffs[1] * T(2.);
-          const T c = this->coeffs[2];
-          if (b > T(0.))
+          // Polynomial function p(x) is quadratic,
+          // look for global minima if concave
+          const T a = this->coeffs[1];
+          const T b = this->coeffs[2];
+          if (a > T(0.))
           {
-            const T x = -c / b;
-            if (_interval.Contains(x))
+            const T xmin = -b / (T(2.) * a);
+            if (_interval.Contains(xmin))
             {
-              minimum = min(this->Evaluate(x), minimum);
+              minimum = min(this->Evaluate(xmin), minimum);
             }
           }
         }
