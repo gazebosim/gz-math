@@ -138,18 +138,11 @@ namespace ignition
           const T discriminant = b * b - T(4.) * a * c;
           if (discriminant >= T(0.))
           {
-            // Roots of p'(x) are real, look for local
-            // minima by checking the sign of p''(x),
-            // a linear function.
-            const T x0 = (-b + sqrt(discriminant)) / (T(2.) * a);
-            if ((T(2.) * a * x0 + b) > T(0.) && _interval.Contains(x0))
+            // Roots of p'(x) are real, check local minima
+            const T xmin = (-b + sqrt(discriminant)) / (T(2.) * a);
+            if (_interval.Contains(xmin))
             {
-              minimum = min(this->Evaluate(x0), minimum);
-            }
-            const T x1 = (-b - sqrt(discriminant)) / (T(2.) * a);
-            if ((T(2.) * a * x1 + b) > T(0.) && _interval.Contains(x1))
-            {
-              minimum = min(this->Evaluate(x1), minimum);
+              minimum = min(this->Evaluate(xmin), minimum);
             }
           }
         }
