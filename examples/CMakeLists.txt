@@ -21,6 +21,9 @@ target_link_libraries(vector2_example ignition-math${IGN_MATH_VER}::ignition-mat
 add_executable(interval_example interval_example.cc)
 target_link_libraries(interval_example ignition-math${IGN_MATH_VER}::ignition-math${IGN_MATH_VER})
 
+add_executable(polynomial3_example polynomial3_example.cc)
+target_link_libraries(polynomial3_example ignition-math${IGN_MATH_VER}::ignition-math${IGN_MATH_VER})
+
 add_executable(region3_example region3_example.cc)
 target_link_libraries(region3_example ignition-math${IGN_MATH_VER}::ignition-math${IGN_MATH_VER})
 
