@@ -70,73 +70,275 @@ TEST(Polynomial3Test, Minimum)
   {
     const math::Polynomial3d p =
         math::Polynomial3d::Constant(1.);
-    EXPECT_TRUE(std::isnan(p.Minimum(
-        math::Intervald::Open(0., 0.))));
+    const math::Intervald xInterval =
+        math::Intervald::Open(0., 0.);
+    double xMin = 0.;
+    EXPECT_TRUE(std::isnan(p.Minimum(xInterval)));
+    EXPECT_TRUE(std::isnan(p.Minimum(xInterval, xMin)));
+    EXPECT_TRUE(std::isnan(xMin));
+  }
+  {
+    const math::Polynomial3d p =
+        math::Polynomial3d::Constant(1.);
+    double xMin = math::NAN_D;
     EXPECT_DOUBLE_EQ(p.Minimum(), 1.);
+    EXPECT_DOUBLE_EQ(p.Minimum(xMin), 1.);
+    EXPECT_FALSE(std::isnan(xMin));
   }
   {
     const math::Polynomial3d p(
         math::Vector4d(0., 0., 1., 1.));
-    EXPECT_TRUE(std::isnan(p.Minimum(
-        math::Intervald::Open(0., 0.))));
-    EXPECT_DOUBLE_EQ(p.Minimum(
-        math::Intervald::Open(0., 1.)), 1.);
+    const math::Intervald xInterval =
+        math::Intervald::Open(0., 1.);
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval), 1.);
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval, xMin), 1.);
+    EXPECT_DOUBLE_EQ(xMin, 0.);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(0., 0., 1., 1.));
+    double xMin = math::NAN_D;
     EXPECT_DOUBLE_EQ(p.Minimum(), -math::INF_D);
+    EXPECT_DOUBLE_EQ(p.Minimum(xMin), -math::INF_D);
+    EXPECT_DOUBLE_EQ(xMin, -math::INF_D);
   }
   {
     const math::Polynomial3d p(
         math::Vector4d(0., 0., -1., 1.));
-    EXPECT_TRUE(std::isnan(p.Minimum(
-        math::Intervald::Open(0., 0.))));
-    EXPECT_DOUBLE_EQ(p.Minimum(
-        math::Intervald::Open(0., 1.)), 0.);
+    const math::Intervald xInterval =
+        math::Intervald::Open(0., 1.);
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval), 0.);
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval, xMin), 0.);
+    EXPECT_DOUBLE_EQ(xMin, 1.);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(0., 0., -1., 1.));
+    double xMin = 0.;
     EXPECT_DOUBLE_EQ(p.Minimum(), -math::INF_D);
+    EXPECT_DOUBLE_EQ(p.Minimum(xMin), -math::INF_D);
+    EXPECT_DOUBLE_EQ(xMin, math::INF_D);
   }
   {
     const math::Polynomial3d p(
         math::Vector4d(0., 1., 1., 1.));
-    EXPECT_TRUE(std::isnan(p.Minimum(
-        math::Intervald::Open(0., 0.))));
-    EXPECT_DOUBLE_EQ(p.Minimum(
-        math::Intervald::Open(1., 2.)), 3.);
+    const math::Intervald xInterval =
+        math::Intervald::Open(1., 2.);
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval), 3.);
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval, xMin), 3.);
+    EXPECT_DOUBLE_EQ(xMin, 1.);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(0., 1., 1., 1.));
+    const math::Intervald xInterval =
+        math::Intervald::Open(-1., 0.);
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval), 0.75);
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval, xMin), 0.75);
+    EXPECT_DOUBLE_EQ(xMin, -0.5);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(0., 1., 1., 1.));
+    const math::Intervald xInterval =
+        math::Intervald::Open(-3., -2.);
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval), 3.);
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval, xMin), 3.);
+    EXPECT_DOUBLE_EQ(xMin, -2.);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(0., 1., 1., 1.));
+    double xMin = math::NAN_D;
     EXPECT_DOUBLE_EQ(p.Minimum(), 0.75);
+    EXPECT_DOUBLE_EQ(p.Minimum(xMin), 0.75);
+    EXPECT_DOUBLE_EQ(xMin, -0.5);
   }
   {
     const math::Polynomial3d p(
         math::Vector4d(0., -1., 1., 1.));
-    EXPECT_TRUE(std::isnan(p.Minimum(
-        math::Intervald::Open(0., 0.))));
-    EXPECT_DOUBLE_EQ(p.Minimum(
-        math::Intervald::Open(1., 2.)), -1.);
+    const math::Intervald xInterval =
+        math::Intervald::Open(1., 2.);
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval), -1.);
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval, xMin), -1.);
+    EXPECT_DOUBLE_EQ(xMin, 2.);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(0., -1., 1., 1.));
+    const math::Intervald xInterval =
+        math::Intervald::Open(-2., -1.);
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval), -5.);
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval, xMin), -5.);
+    EXPECT_DOUBLE_EQ(xMin, -2.);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(0., -1., 1., 1.));
+    const math::Intervald xInterval =
+        math::Intervald::Open(0., 1.);
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval), 1.);
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval, xMin), 1.);
+    EXPECT_DOUBLE_EQ(xMin, 0.);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(0., -1., 1., 1.));
+    double xMin = math::NAN_D;
     EXPECT_DOUBLE_EQ(p.Minimum(), -math::INF_D);
+    EXPECT_DOUBLE_EQ(p.Minimum(xMin), -math::INF_D);
+    EXPECT_DOUBLE_EQ(xMin, -math::INF_D);
   }
   {
     const math::Polynomial3d p(
         math::Vector4d(1., 1., 1., 1.));
-    EXPECT_TRUE(std::isnan(p.Minimum(
-        math::Intervald::Open(0., 0.))));
-    EXPECT_DOUBLE_EQ(p.Minimum(
-        math::Intervald::Open(-1., 1.)), 0.);
+    const math::Intervald xInterval =
+        math::Intervald::Open(-1., 1.);
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval), 0.);
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval, xMin), 0.);
+    EXPECT_DOUBLE_EQ(xMin, -1.);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(1., 1., 1., 1.));
+    const math::Intervald xInterval =
+        math::Intervald::Open(-2., -1.);
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval), -5.);
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval, xMin), -5.);
+    EXPECT_DOUBLE_EQ(xMin, -2.);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(1., 1., 1., 1.));
+    const math::Intervald xInterval =
+        math::Intervald::Open(2., 3.);
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval), 15.);
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval, xMin), 15.);
+    EXPECT_DOUBLE_EQ(xMin, 2.);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(1., 1., 1., 1.));
+    double xMin = math::NAN_D;
     EXPECT_DOUBLE_EQ(p.Minimum(), -math::INF_D);
+    EXPECT_DOUBLE_EQ(p.Minimum(xMin), -math::INF_D);
+    EXPECT_DOUBLE_EQ(xMin, -math::INF_D);
   }
   {
     const math::Polynomial3d p(
         math::Vector4d(-1., 2., 1., 1.));
-    EXPECT_TRUE(std::isnan(p.Minimum(
-        math::Intervald::Open(0., 0.))));
-    EXPECT_DOUBLE_EQ(p.Minimum(
-        math::Intervald::Open(-1., 1.)),
-        0.8873882090776197);
+    const math::Intervald xInterval =
+        math::Intervald::Open(-1., 1.);
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval), 0.8873882090776197);
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval, xMin), 0.8873882090776197);
+    EXPECT_DOUBLE_EQ(xMin, -0.2152504370215302);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(-1., 2., 1., 1.));
+    const math::Intervald xInterval =
+        math::Intervald::Open(-3., -2.);
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval), 15.);
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval, xMin), 15.);
+    EXPECT_DOUBLE_EQ(xMin, -2.);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(-1., 2., 1., 1.));
+    const math::Intervald xInterval =
+        math::Intervald::Open(1., 2.);
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval), 3.);
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval, xMin), 3.);
+    EXPECT_DOUBLE_EQ(xMin, 1.);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(-1., 2., 1., 1.));
+    const math::Intervald xInterval =
+        math::Intervald::Open(2., 3.);
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval), -5.);
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval, xMin), -5.);
+    EXPECT_DOUBLE_EQ(xMin, 3.);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(-1., 2., 1., 1.));
+    double xMin = math::NAN_D;
     EXPECT_DOUBLE_EQ(p.Minimum(), -math::INF_D);
+    EXPECT_DOUBLE_EQ(p.Minimum(xMin), -math::INF_D);
+    EXPECT_DOUBLE_EQ(xMin, math::INF_D);
   }
   {
     const math::Polynomial3d p(
         math::Vector4d(1., -2., 1., 1.));
-    EXPECT_TRUE(std::isnan(p.Minimum(
-        math::Intervald::Open(0., 0.))));
-    EXPECT_DOUBLE_EQ(p.Minimum(
-        math::Intervald::Open(-1., 1.)), -3);
+    const math::Intervald xInterval =
+        math::Intervald::Open(-1., 1.);
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval), -3.);
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval, xMin), -3.);
+    EXPECT_DOUBLE_EQ(xMin, -1.);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(1., -2., 1., 1.));
+    const math::Intervald xInterval =
+        math::Intervald::Open(0., 2.);
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval), 1.);
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval, xMin), 1.);
+    EXPECT_DOUBLE_EQ(xMin, 0.);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(1., -2., 1., 1.));
+    const math::Intervald xInterval =
+        math::Intervald::Open(2., 3.);
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval), 3.);
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval, xMin), 3.);
+    EXPECT_DOUBLE_EQ(xMin, 2.);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(1., -2., 1., 1.));
+    double xMin = math::NAN_D;
     EXPECT_DOUBLE_EQ(p.Minimum(), -math::INF_D);
+    EXPECT_DOUBLE_EQ(p.Minimum(xMin), -math::INF_D);
+    EXPECT_DOUBLE_EQ(xMin, -math::INF_D);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(1., -4., -2., -1.));
+    const math::Intervald xInterval =
+        math::Intervald::Open(-1., 6.);
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval), -16.051047904897441);
+    EXPECT_DOUBLE_EQ(p.Minimum(xInterval, xMin), -16.051047904897441);
+    EXPECT_DOUBLE_EQ(xMin, 2.8968052532744766);
+    EXPECT_DOUBLE_EQ(p.Minimum(), -math::INF_D);
+  }
+  {
+    const math::Polynomial3d p(
+        math::Vector4d(1., -4., -2., -1.));
+    double xMin = math::NAN_D;
+    EXPECT_DOUBLE_EQ(p.Minimum(), -math::INF_D);
+    EXPECT_DOUBLE_EQ(p.Minimum(xMin), -math::INF_D);
+    EXPECT_DOUBLE_EQ(xMin, -math::INF_D);
   }
 }
 
