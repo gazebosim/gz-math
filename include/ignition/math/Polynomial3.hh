@@ -111,19 +111,35 @@ namespace ignition
 
       /// \brief Compute polynomial minimum in an `_interval`
       /// \param[in] _interval polynomial argument interval to check
+      /// \param[out] _xMin polynomial argument that yields minimum,
+      ///   or NaN if the interval is empty
       /// \return the polynomial minimum in the given interval,
       ///   or NaN if the interval is empty
-      public: T Minimum(const Interval<T> &_interval) const
+      public: T Minimum(const Interval<T> &_interval, T &_xMin) const
       {
         if (_interval.Empty())
         {
+          _xMin = std::numeric_limits<T>::quiet_NaN();
           return std::numeric_limits<T>::quiet_NaN();
         }
-        using std::min, std::abs, std::sqrt;  // enable ADL
-        constexpr T epsilon = std::numeric_limits<T>::epsilon();
+        T yMin;
         // For open intervals, assume continuity in the limit
-        T minimum = min(this->Evaluate(_interval.LeftValue()),
-                        this->Evaluate(_interval.RightValue()));
+        const T &xLeft = _interval.LeftValue();
+        const T &xRight = _interval.RightValue();
+        const T yLeft = this->Evaluate(xLeft);
+        const T yRight = this->Evaluate(xRight);
+        if (yLeft <= yRight)
+        {
+          yMin = yLeft;
+          _xMin = xLeft;
+        }
+        else
+        {
+          yMin = yRight;
+          _xMin = xRight;
+        }
+        using std::abs, std::sqrt;  // enable ADL
+        constexpr T epsilon = std::numeric_limits<T>::epsilon();
         if (abs(this->coeffs[0]) >= epsilon)
         {
           // Polynomial function p(x) is cubic, look
@@ -139,10 +155,15 @@ namespace ignition
           if (discriminant >= T(0.))
           {
             // Roots of p'(x) are real, check local minima
-            const T xmin = (-b + sqrt(discriminant)) / (T(2.) * a);
-            if (_interval.Contains(xmin))
+            const T x = (-b + sqrt(discriminant)) / (T(2.) * a);
+            if (_interval.Contains(x))
             {
-              minimum = min(this->Evaluate(xmin), minimum);
+              const T y = this->Evaluate(x);
+              if (y < yMin)
+              {
+                _xMin = x;
+                yMin = y;
+              }
             }
           }
         }
@@ -154,21 +175,45 @@ namespace ignition
           const T b = this->coeffs[2];
           if (a > T(0.))
           {
-            const T xmin = -b / (T(2.) * a);
-            if (_interval.Contains(xmin))
+            const T x = -b / (T(2.) * a);
+            if (_interval.Contains(x))
             {
-              minimum = min(this->Evaluate(xmin), minimum);
+              const T y = this->Evaluate(x);
+              if (y < yMin)
+              {
+                _xMin = x;
+                yMin = y;
+              }
             }
           }
         }
-        return minimum;
+        return yMin;
+      }
+
+      /// \brief Compute polynomial minimum in an `_interval`
+      /// \param[in] _interval polynomial argument interval to check
+      /// \return the polynomial minimum in the given interval (may
+      ///   not be finite), or NaN if the interval is empty
+      public: T Minimum(const Interval<T> &_interval) const
+      {
+        T xMin;
+        return this->Minimum(_interval, xMin);
+      }
+
+      /// \brief Compute polynomial minimum
+      /// \param[out] _xMin polynomial argument that yields minimum
+      /// \return the polynomial minimum (may not be finite)
+      public: T Minimum(T &_xMin) const
+      {
+        return this->Minimum(Interval<T>::Unbounded, _xMin);
       }
 
       /// \brief Compute polynomial minimum
       /// \return the polynomial minimum (may not be finite)
       public: T Minimum() const
       {
-        return this->Minimum(Interval<T>::Unbounded);
+        T xMin;
+        return this->Minimum(Interval<T>::Unbounded, xMin);
       }
 
       /// \brief Prints polynomial as p(`_x`) to `_out` stream
