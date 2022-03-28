@@ -96,7 +96,9 @@ bool MovingWindowFilter<T>::WindowFilled() const
 template<typename T>
 T MovingWindowFilter<T>::Value() const
 {
-  return static_cast<T>(this->sum / static_cast<double>(this->samples));
+  auto value =
+    this->sum / static_cast<double>(this->samples);
+  return static_cast<T>(value);
 }
 
 template class MovingWindowFilter<int>;

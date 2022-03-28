@@ -73,10 +73,10 @@ namespace ignition
 
       /// \brief iterator pointing to current value in buffer
       protected: typename std::vector<T>::iterator valIter;
-      IGN_UTILS_WARN_RESUME__DLL_INTERFACE_MISSING
 
       /// \brief keep track of running sum
       protected: T sum;
+      IGN_UTILS_WARN_RESUME__DLL_INTERFACE_MISSING
 
       /// \brief keep track of number of elements
       protected: unsigned int samples = 0;
