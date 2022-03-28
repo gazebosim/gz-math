@@ -24,11 +24,17 @@ target_link_libraries(graph_example ignition-math${IGN_MATH_VER}::ignition-math$
 add_executable(helpers_example helpers_example.cc)
 target_link_libraries(helpers_example ignition-math${IGN_MATH_VER}::ignition-math${IGN_MATH_VER})
 
+add_executable(interval_example interval_example.cc)
+target_link_libraries(interval_example ignition-math${IGN_MATH_VER}::ignition-math${IGN_MATH_VER})
+
 add_executable(kmeans kmeans.cc)
 target_link_libraries(kmeans ignition-math${IGN_MATH_VER}::ignition-math${IGN_MATH_VER})
 
 add_executable(matrix3_example matrix3_example.cc)
 target_link_libraries(matrix3_example ignition-math${IGN_MATH_VER}::ignition-math${IGN_MATH_VER})
+
+add_executable(polynomial3_example polynomial3_example.cc)
+target_link_libraries(polynomial3_example ignition-math${IGN_MATH_VER}::ignition-math${IGN_MATH_VER})
 
 add_executable(pose3_example pose3_example.cc)
 target_link_libraries(pose3_example ignition-math${IGN_MATH_VER}::ignition-math${IGN_MATH_VER})
@@ -44,6 +50,9 @@ target_link_libraries(quaternion_to_euler ignition-math${IGN_MATH_VER}::ignition
 
 add_executable(rand_example rand_example.cc)
 target_link_libraries(rand_example ignition-math${IGN_MATH_VER}::ignition-math${IGN_MATH_VER})
+
+add_executable(region3_example region3_example.cc)
+target_link_libraries(region3_example ignition-math${IGN_MATH_VER}::ignition-math${IGN_MATH_VER})
 
 add_executable(temperature_example temperature_example.cc)
 target_link_libraries(temperature_example ignition-math${IGN_MATH_VER}::ignition-math${IGN_MATH_VER})
