@@ -39,6 +39,21 @@ namespace ignition
     /// a scalar field F in R^3 as a sum of scalar functions i.e.
     /// F(x, y, z) = k (p(x) + q(y) + r(z)).
     ///
+    /// \tparam ScalarFunctionT a callable type that taking a single ScalarT
+    ///   value as argument and returning another ScalarT value. Additionally:
+    ///   - for AdditivelySeparableScalarField3T to have a stream operator
+    ///     overload, ScalarFunctionT must implement a
+    ///     void Print(std::ostream &, const std::string &) method that streams
+    ///     a representation of it using the given string as argument variable
+    ///     name;
+    ///   - for AdditivelySeparableScalarField3T::Minimum to be callable,
+    ///     ScalarFunctionT must implement a
+    ///     ScalarT Minimum(const Interval<ScalarT> &, ScalarT &) method that
+    ///     computes its minimum in the given interval and returns an argument
+    ///     value that yields said minimum.
+    /// \tparam ScalarT a numeric type for which std::numeric_limits<> traits
+    ///   have been specialized.
+    ///
     /// ## Example
     ///
     /// \snippet examples/additively_separable_scalar_field3_example.cc complete
