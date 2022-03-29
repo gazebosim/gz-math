@@ -96,9 +96,45 @@ bool MovingWindowFilter<T>::WindowFilled() const
 template<typename T>
 T MovingWindowFilter<T>::Value() const
 {
-  auto value =
-    this->sum / static_cast<double>(this->samples);
-  return static_cast<T>(value);
+  if (std::is_integral_v<T>)
+  {
+    auto value = this->sum / this->samples;
+    return T(value);
+  }
+  else
+  {
+    auto value = this->sum / static_cast<double>(this->samples);
+    return T(value);
+  }
+}
+
+//////////////////////////////////////////////////
+template<>
+ignition::math::Vector3i
+MovingWindowFilter<ignition::math::Vector3i>::Value() const
+{
+  auto value = this->sum / this->samples;
+  return value;
+}
+
+//////////////////////////////////////////////////
+template<>
+ignition::math::Vector3f
+MovingWindowFilter<ignition::math::Vector3f>::Value() const
+{
+  ignition::math::Vector3f divisor;
+  divisor = static_cast<float>(this->samples);
+  auto value = this->sum / divisor;
+  return value;
+}
+
+//////////////////////////////////////////////////
+template<>
+ignition::math::Vector3d
+MovingWindowFilter<ignition::math::Vector3d>::Value() const
+{
+  auto value = this->sum / this->samples;
+  return value;
 }
 
 template class MovingWindowFilter<int>;
