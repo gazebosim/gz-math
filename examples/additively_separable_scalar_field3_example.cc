@@ -21,30 +21,32 @@
 
 int main(int argc, char **argv)
 {
-  const double k = 1.;
-  const ignition::math::Polynomial3d px(
+  const double kConstant = 1.;
+  const ignition::math::Polynomial3d xPoly(
       ignition::math::Vector4d(0., 1., 0., 1.));
-  const ignition::math::Polynomial3d qy(
+  const ignition::math::Polynomial3d yPoly(
       ignition::math::Vector4d(1., 0., 1., 0.));
-  const ignition::math::Polynomial3d rz(
+  const ignition::math::Polynomial3d zPoly(
       ignition::math::Vector4d(1., 0., 0., -1.));
   using AdditivelySeparableScalarField3dT =
       ignition::math::AdditivelySeparableScalarField3d<
         ignition::math::Polynomial3d>;
-  const AdditivelySeparableScalarField3dT F(k, px, qy, rz);
+  const AdditivelySeparableScalarField3dT scalarField(
+      kConstant, xPoly, yPoly, zPoly);
 
   // A printable, additively separable scalar field.
   std::cout << "An additively separable scalar field in R^3 "
             << "can be expressed as a sum of scalar functions "
-            << "e.g. F(x, y, z) = " << F << std::endl;
+            << "e.g. F(x, y, z) = " << scalarField << std::endl;
 
   // An additively separable scalar field can be evaluated.
   std::cout << "Evaluating F(x, y, z) at (0, 1, 0) yields "
-            << F(ignition::math::Vector3d::UnitY) << std::endl;
+            << scalarField(ignition::math::Vector3d::UnitY)
+            << std::endl;
 
   // An additively separable scalar field can be queried for its
   // minimum (provided the underlying scalar function allows it).
   std::cout << "The global minimum of F(x, y, z) is "
-            << F.Minimum() << std::endl;
+            << scalarField.Minimum() << std::endl;
 }
 //! [complete]
