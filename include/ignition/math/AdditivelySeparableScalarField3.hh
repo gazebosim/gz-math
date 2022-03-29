@@ -85,6 +85,8 @@ namespace ignition
 
       /// \brief Call operator overload
       /// \see SeparableScalarField3::Evaluate()
+      /// \param[in] _point scalar field argument
+      /// \return the result of evaluating `F(_point)`
       public: ScalarT operator()(const Vector3<ScalarT> &_point) const
       {
         return this->Evaluate(_point);
