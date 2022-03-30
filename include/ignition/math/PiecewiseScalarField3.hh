@@ -41,6 +41,18 @@ namespace ignition
     /// in R^3 as a union of scalar fields Pn, defined over regions Rn i.e.
     /// piecewise.
     ///
+    /// \tparam ScalarField3T a callable type taking a single Vector3<ScalarT>
+    ///   value as argument and returning a ScalarT value. Additionally:
+    ///   - for PiecewiseScalarField3 to have a stream operator overload,
+    ///     ScalarField3T must support stream operator overload;
+    ///   - for PiecewiseScalarField3::Minimum to be callable, ScalarField3T
+    ///     must implement a
+    ///     ScalarT Minimum(const Region3<ScalarT> &, Vector3<ScalarT> &)
+    ///     method that computes its minimum in the given region and returns
+    ///     an argument value that yields said minimum.
+    /// \tparam ScalarT a numeric type for which std::numeric_limits<> traits
+    ///   have been specialized.
+    ///
     /// ## Example
     ///
     /// \snippet examples/piecewise_scalar_field3_example.cc complete
@@ -114,6 +126,9 @@ namespace ignition
 
       /// \brief Call operator overload
       /// \see PiecewiseScalarField3::Evaluate()
+      /// \param[in] _p piecewise scalar field argument
+      /// \return the result of evaluating `F(_p)`, or NaN
+      ///   if the scalar field is not defined at `_p`
       public: ScalarT operator()(const Vector3<ScalarT> &_p) const
       {
         return this->Evaluate(_p);
