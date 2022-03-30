@@ -16,9 +16,13 @@
 */
 #include <gtest/gtest.h>
 
+#include <cmath>
+#include <functional>
+
 #include "ignition/math/AdditivelySeparableScalarField3.hh"
 #include "ignition/math/PiecewiseScalarField3.hh"
 #include "ignition/math/Polynomial3.hh"
+#include "ignition/math/Vector3.hh"
 
 using namespace ignition;
 
