@@ -23,12 +23,12 @@
 
 int main(int argc, char **argv)
 {
-  const double k = 1.;
-  const ignition::math::Polynomial3d px(
+  const double kConstant = 1.;
+  const ignition::math::Polynomial3d xPoly(
       ignition::math::Vector4d(0., 1., 0., 1.));
-  const ignition::math::Polynomial3d qy(
+  const ignition::math::Polynomial3d yPoly(
       ignition::math::Vector4d(1., 0., 1., 0.));
-  const ignition::math::Polynomial3d rz(
+  const ignition::math::Polynomial3d zPoly(
       ignition::math::Vector4d(1., 0., 0., -1.));
   using AdditivelySeparableScalarField3dT =
       ignition::math::AdditivelySeparableScalarField3d<
@@ -36,35 +36,38 @@ int main(int argc, char **argv)
   using PiecewiseScalarField3dT =
       ignition::math::PiecewiseScalarField3d<
         AdditivelySeparableScalarField3dT>;
-  const PiecewiseScalarField3dT P({
+  const PiecewiseScalarField3dT scalarField({
       {ignition::math::Region3d(  // x < 0 halfspace
           ignition::math::Intervald::Open(
               -ignition::math::INF_D, 0.),
           ignition::math::Intervald::Unbounded,
           ignition::math::Intervald::Unbounded),
-       AdditivelySeparableScalarField3dT(k, px, qy, rz)},
+       AdditivelySeparableScalarField3dT(
+           kConstant, xPoly, yPoly, zPoly)},
       {ignition::math::Region3d(  // x >= 0 halfspace
           ignition::math::Intervald::LeftClosed(
               0., ignition::math::INF_D),
           ignition::math::Intervald::Unbounded,
           ignition::math::Intervald::Unbounded),
-       AdditivelySeparableScalarField3dT(-k, px, qy, rz)}});
+       AdditivelySeparableScalarField3dT(
+           -kConstant, xPoly, yPoly, zPoly)}});
 
   // A printable piecewise scalar field.
   std::cout << "A piecewise scalar field in R^3 is made up of "
-            << "several pieces e.g. P(x, y, z) = " << P << std::endl;
+            << "several pieces e.g. P(x, y, z) = "
+            << scalarField << std::endl;
 
   // A piecewise scalar field can be evaluated.
   std::cout << "Evaluating P(x, y, z) at (1, 0, 0) yields "
-            << P(ignition::math::Vector3d::UnitX)
+            << scalarField(ignition::math::Vector3d::UnitX)
             << std::endl;
   std::cout << "Evaluating P(x, y, z) at (-1, 0, 0) yields "
-            << P(-ignition::math::Vector3d::UnitX)
+            << scalarField(-ignition::math::Vector3d::UnitX)
             << std::endl;
 
   // A piecewise scalar field can be queried for its minimum
   // (provided the underlying scalar function allows it).
   std::cout << "The global minimum of P(x, y, z) is "
-            << P.Minimum() << std::endl;
+            << scalarField.Minimum() << std::endl;
 }
 //! [complete]
