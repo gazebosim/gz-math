@@ -57,7 +57,7 @@ namespace ignition
     ///
     /// \snippet examples/piecewise_scalar_field3_example.cc complete
     template<typename ScalarField3T, typename ScalarT>
-    class IGNITION_MATH_VISIBLE PiecewiseScalarField3
+    class PiecewiseScalarField3
     {
       /// \brief A scalar field P in R^3 and
       /// the region R in which it is defined
