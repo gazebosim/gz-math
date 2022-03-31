@@ -71,9 +71,9 @@ namespace ignition
 
       /// \brief Constructor
       /// \param[in] _pieces scalar fields Pn and the regions Rn
-      ///   in which these are defined. Regions may not overlap.
-      public: explicit PiecewiseScalarField3(std::vector<Piece> _pieces)
-      : pieces(std::move(_pieces))
+      ///   in which these are defined. Regions should not overlap.
+      public: explicit PiecewiseScalarField3(const std::vector<Piece> &_pieces)
+      : pieces(_pieces)
       {
         for (size_t i = 0; i < pieces.size(); ++i)
         {
@@ -100,6 +100,8 @@ namespace ignition
       }
 
       /// \brief Define piecewise scalar field as `_field` throughout R^3 space
+      /// \param[in] _field a scalar field in R^3
+      /// \return `_field` as a piecewise scalar field
       public: static PiecewiseScalarField3 Throughout(ScalarField3T _field)
       {
         return PiecewiseScalarField3<ScalarField3T, ScalarT>({
@@ -114,7 +116,8 @@ namespace ignition
       {
         auto it = std::find_if(
             this->pieces.begin(), this->pieces.end(),
-            [&](const Piece &piece) {
+            [&](const Piece &piece)
+            {
               return piece.region.Contains(_p);
             });
         if (it == this->pieces.end())
@@ -146,7 +149,8 @@ namespace ignition
       ///   constructed)
       public: ScalarT Minimum(Vector3<ScalarT> &_pMin) const
       {
-        if (this->pieces.empty()) {
+        if (this->pieces.empty())
+        {
           _pMin = Vector3<ScalarT>::NaN;
           return std::numeric_limits<ScalarT>::quiet_NaN();
         }
