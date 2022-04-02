@@ -45,17 +45,15 @@ target_link_libraries(math PRIVATE
 )
 
 if(USE_SYSTEM_PATHS_FOR_PYTHON_INSTALLATION)
+  # Get install variable from Python3 module
   if(${CMAKE_VERSION} VERSION_LESS "3.12.0")
+    # Python3_SITEARCH is available via FindPython3 from 3.12 on, workaround if needed
     execute_process(
-      COMMAND "${PYTHON_EXECUTABLE}" -c "if True:
+      COMMAND "${Python3_EXECUTABLE}" -c "if True:
   from distutils import sysconfig as sc
   print(sc.get_python_lib(plat_specific=True))"
       OUTPUT_VARIABLE Python3_SITEARCH
       OUTPUT_STRIP_TRAILING_WHITESPACE)
-  else()
-    # Get install variable from Python3 module
-    # Python3_SITEARCH is available from 3.12 on, workaround if needed:
-    find_package(Python3 COMPONENTS Interpreter)
   endif()
 
   if(USE_DIST_PACKAGES_FOR_PYTHON)
