@@ -71,16 +71,24 @@ endif()
 
 ########################################
 # Python bindings
-include(IgnPython)
-find_package(PythonLibs QUIET)
-if (NOT PYTHONLIBS_FOUND)
-  IGN_BUILD_WARNING("Python is missing: Python interfaces are disabled.")
-  message (STATUS "Searching for Python - not found.")
+#include(IgnPython) TODO: allow to specify for what it should search and then
+# the code below can be removed; e.g. pybind needs Interpreter and Development components
+# see https://pybind11.readthedocs.io/en/stable/cmake/index.html#new-findpython-mode
+if(${CMAKE_VERSION} VERSION_LESS "3.12.0")
+  find_package(PythonLibs QUIET)
+  set(Python3_FOUND ${PYTHONLIBS_FOUND})
+  set(Python3_VERSION ${PYTHONLIBS_VERSION_STRING})
 else()
-  message (STATUS "Searching for Python - found version ${PYTHONLIBS_VERSION_STRING}.")
+  find_package(Python3 QUIET COMPONENTS Interpreter Development)
+endif()
+
+if (NOT Python3_FOUND)
+  IGN_BUILD_WARNING("Python3 is missing: Python interfaces are disabled.")
+  message (STATUS "Searching for Python3 - not found.")
+else()
+  message (STATUS "Searching for Python3 - found version ${Python3_VERSION}.")
 
   set(PYBIND11_PYTHON_VERSION 3)
-  find_package(Python3 QUIET COMPONENTS Interpreter Development)
   find_package(pybind11 2.2 QUIET)
 
   if (${pybind11_FOUND})
