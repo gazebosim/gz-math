@@ -52,7 +52,8 @@ void helpDefineMathEllipsoid(py::module &m, const std::string &typestr)
                     py::dynamic_attr())
     .def(py::init<>())
     .def(py::init<ignition::math::Vector3<T>>())
-    .def(py::init<ignition::math::Vector3<T>, const ignition::math::Material&>())
+    .def(py::init<ignition::math::Vector3<T>,
+                  const ignition::math::Material&>())
     .def(py::self == py::self)
     .def("radii",
          &Class::Radii,
