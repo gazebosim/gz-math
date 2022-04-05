@@ -13,6 +13,7 @@ pybind11_add_module(math SHARED
   src/AxisAlignedBox.cc
   src/Color.cc
   src/DiffDriveOdometry.cc
+  src/Ellipsoid.cc
   src/Filter.cc
   src/Frustum.cc
   src/GaussMarkovProcess.cc
@@ -101,6 +102,7 @@ if (BUILD_TESTING)
     Color_TEST
     Cylinder_TEST
     DiffDriveOdometry_TEST
+    Ellipsoid_TEST
     Filter_TEST
     Frustum_TEST
     GaussMarkovProcess_TEST
