@@ -67,6 +67,11 @@ void helpDefineMathEllipsoid(py::module &m, const std::string &typestr)
     .def("set_material",
          &Class::SetMat,
          "Set the material associated with this Ellipsoid.")
+    .def("mass_matrix",
+         &Class::MassMatrix,
+         "Get the mass matrix for this box. This function "
+         "is only meaningful if the box's size and material "
+         "have been set.")
     .def("volume",
          &Class::Volume,
          "Get the volume of the Ellipsoid in m^3.")
@@ -76,11 +81,6 @@ void helpDefineMathEllipsoid(py::module &m, const std::string &typestr)
     .def("set_density_from_mass",
          &Class::SetDensityFromMass,
          "Set the density of this box based on a mass value.")
-    .def("mass_matrix",
-         &Class::MassMatrix,
-         "Get the mass matrix for this box. This function "
-         "is only meaningful if the box's size and material "
-         "have been set.")
     .def("__copy__", [](const Class &self) {
       return Class(self);
     })
