@@ -63,17 +63,25 @@ namespace ignition
         /// \return The index of the measurement if found else return nullopt.
         public: std::optional<std::size_t> GetIndex(T _value) const
         {
-          if (axisIndex.find(_value) == axisIndex.end())
+          auto res = axisIndex.find(_value);
+          if (res == axisIndex.end())
           {
             return std::nullopt;
           }
           else
           {
-            return axisIndex[_value];
+            return res->second;
           }
         }
 
-        /// \brief 
+        /// \brief Get interpolators for a measurement.
+        /// \param[in] _value The position of the measurement.
+        /// \param[in] _tol The tolerance for the search.
+        /// \return The indices of the measurements that should be used for
+        /// interpolation. If the value is out of range, an empty vector is
+        /// returned. If the value is exact, a vector with a single index is
+        /// returned otherwise return the two indices which should be used for
+        /// interpolation.
         public: std::vector<std::size_t> GetInterpolators(T _value,
           double _tol=1e-6) const
         {

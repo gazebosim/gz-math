@@ -19,6 +19,7 @@
 #define IGNITION_MATH_VOLUMETRIC_GRID_LOOKUP_FIELD_HH_
 
 #include <vector>
+#include <optional>
 
 #include <ignition/math/Vector3.hh>
 
