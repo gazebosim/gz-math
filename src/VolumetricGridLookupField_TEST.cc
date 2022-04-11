@@ -23,7 +23,7 @@ using namespace ignition;
 using namespace math;
 
 
-TEST(NDArrayLookup, CheckInterpolationExact)
+TEST(VolumetricGridLookupField, CheckInterpolationExact)
 {
   // This tests query performance of 54000 points in a 3D grid.
   std::vector<Vector3d> cloud;
@@ -48,7 +48,7 @@ TEST(NDArrayLookup, CheckInterpolationExact)
   }
 }
 
-TEST(NDArrayLookup, CheckInterpolationBoxEightPoints)
+TEST(VolumetricGridLookupField, CheckInterpolationBoxEightPoints)
 {
   //pcl::PointCloud<pcl::PointXYZ> cloud;
   //cloud.push_back(pcl::PointXYZ(0, 0, 0));
