@@ -50,32 +50,42 @@ TEST(VolumetricGridLookupField, CheckInterpolationExact)
 
 TEST(VolumetricGridLookupField, CheckInterpolationBoxEightPoints)
 {
-  //pcl::PointCloud<pcl::PointXYZ> cloud;
-  //cloud.push_back(pcl::PointXYZ(0, 0, 0));
-  //cloud.push_back(pcl::PointXYZ(0, 0, 1));
-  //cloud.push_back(pcl::PointXYZ(0, 1, 0));
-  //cloud.push_back(pcl::PointXYZ(0, 1, 1));
-  //cloud.push_back(pcl::PointXYZ(1, 0, 0));
-  //cloud.push_back(pcl::PointXYZ(1, 0, 1));
-  //cloud.push_back(pcl::PointXYZ(1, 1, 0));
-  //cloud.push_back(pcl::PointXYZ(1, 1, 1));
-  /*for(double x = 0; x < 300; x += stride_x)
+  std::vector<Vector3d> cloud;
+  cloud.emplace_back(0, 0, 0);
+  cloud.emplace_back(0, 0, 1);
+  cloud.emplace_back(0, 1, 0);
+  cloud.emplace_back(0, 1, 1);
+  cloud.emplace_back(1, 0, 0);
+  cloud.emplace_back(1, 0, 1);
+  cloud.emplace_back(1, 1, 0);
+  cloud.emplace_back(1, 1, 1);
+
+  VolumetricGridLookupField<double> scalarIndex(cloud);
+
   {
-    for(double y = 0; y < 300; y += stride_y)
-    {
-      for(double z = 0; z < 300; z += stride_z)
-      {
-        cloud.push_back(pcl::PointXYZ(x, y, z));
-      }
-    }
+    // Inside, return 8 points
+    auto pos =  Vector3d(0.5, 0.5, 0.5);
+    auto indices = scalarIndex.GetInterpolators(pos);
+    ASSERT_EQ(indices.size(), 8UL);
   }
 
-  VolumetricScalarField scalarIndex(cloud);
-
-  for(std::size_t i = 0; i < cloud.size(); ++i)
   {
-    auto val = scalarIndex.GetInterpolators(cloud[i]);
-    ASSERT_EQ(val.size(), 1);
-    ASSERT_EQ(val[0], i);
-  }*/
+    // Outside, return 0 points
+    auto pos =  Vector3d(-0.5, -0.5, -0.5);
+    auto indices = scalarIndex.GetInterpolators(pos);
+    ASSERT_EQ(indices.size(), 0UL);
+  }
+
+  // On plane, rerutn 4 points
+  {
+    auto pos =  Vector3d(0.5, 0.5, 0);
+    auto indices = scalarIndex.GetInterpolators(pos);
+    ASSERT_EQ(indices.size(), 4UL);
+  }
+  // On edge, return 2 points
+  {
+    auto pos =  Vector3d(0.5, 0, 0);
+    auto indices = scalarIndex.GetInterpolators(pos);
+    ASSERT_EQ(indices.size(), 2UL);
+  }
 }

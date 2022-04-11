@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <map>
 #include <optional>
+#include <vector>
 
 namespace ignition
 {

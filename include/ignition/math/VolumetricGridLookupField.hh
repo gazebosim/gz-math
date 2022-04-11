@@ -57,7 +57,7 @@ namespace ignition
           // The grid may be distorted or the stride between different points
           // may not be the same, but fundamentally the data is structured in
           // may It keeps track of the axis indices for each point in the grid.
-          for(auto pt: _cloud)
+          for(auto pt : _cloud)
           {
             x_indices_by_lat.AddIndexIfNotFound(pt.X());
             y_indices_by_lon.AddIndexIfNotFound(pt.Y());
@@ -101,17 +101,16 @@ namespace ignition
           GetInterpolators(Vector3<T> &_pt) const
         {
           std::vector<std::optional<std::size_t>> interpolators;
-          /// Provides
+
           auto x_indices = x_indices_by_lat.GetInterpolators(_pt.X());
           auto y_indices = y_indices_by_lon.GetInterpolators(_pt.Y());
           auto z_indices = z_indices_by_depth.GetInterpolators(_pt.Z());
 
-          /// At the point
-          for(auto x_index: x_indices)
+          for(auto x_index : x_indices)
           {
-            for(auto y_index: y_indices)
+            for(auto y_index : y_indices)
             {
-              for(auto z_index: z_indices)
+              for(auto z_index : z_indices)
               {
                 auto index = index_table[z_index][y_index][x_index];
                 interpolators.push_back(index);
