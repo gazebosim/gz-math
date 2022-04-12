@@ -23,6 +23,8 @@
 #include <optional>
 #include <vector>
 
+#include <iostream>
+
 namespace ignition
 {
   namespace math
@@ -94,7 +96,7 @@ namespace ignition
             // Out of range
             return {};
           }
-          else if (abs(it->first - _value) < _tol)
+          else if (fabs(it->first - _value) < _tol)
           {
             // Exact match
             return {it->second};

@@ -43,7 +43,7 @@ TEST(VolumetricGridLookupField, CheckInterpolationExact)
   for(std::size_t i = 0; i < cloud.size(); ++i)
   {
     auto val = scalarIndex.GetInterpolators(cloud[i]);
-    ASSERT_EQ(val.size(), 1);
+    ASSERT_EQ(val.size(), 1UL);
     ASSERT_EQ(val[0], i);
   }
 }
@@ -66,26 +66,26 @@ TEST(VolumetricGridLookupField, CheckInterpolationBoxEightPoints)
     // Inside, return 8 points
     auto pos =  Vector3d(0.5, 0.5, 0.5);
     auto indices = scalarIndex.GetInterpolators(pos);
-    ASSERT_EQ(indices.size(), 8UL);
+    EXPECT_EQ(indices.size(), 8UL);
   }
 
   {
     // Outside, return 0 points
     auto pos =  Vector3d(-0.5, -0.5, -0.5);
     auto indices = scalarIndex.GetInterpolators(pos);
-    ASSERT_EQ(indices.size(), 0UL);
+    EXPECT_EQ(indices.size(), 0UL);
   }
 
   // On plane, rerutn 4 points
   {
     auto pos =  Vector3d(0.5, 0.5, 0);
     auto indices = scalarIndex.GetInterpolators(pos);
-    ASSERT_EQ(indices.size(), 4UL);
+    EXPECT_EQ(indices.size(), 4UL);
   }
   // On edge, return 2 points
   {
     auto pos =  Vector3d(0.5, 0, 0);
     auto indices = scalarIndex.GetInterpolators(pos);
-    ASSERT_EQ(indices.size(), 2UL);
+    EXPECT_EQ(indices.size(), 2UL);
   }
 }
