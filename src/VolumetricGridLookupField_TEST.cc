@@ -76,16 +76,32 @@ TEST(VolumetricGridLookupField, CheckInterpolationBoxEightPoints)
     EXPECT_EQ(indices.size(), 0UL);
   }
 
-  // On plane, rerutn 4 points
   {
+    // Outside, return 0 points
+    auto pos =  Vector3d(1.5, 1.5, 1.5);
+    auto indices = scalarIndex.GetInterpolators(pos);
+    EXPECT_EQ(indices.size(), 0UL);
+  }
+  {
+    // On plane, rerutn 4 points
     auto pos =  Vector3d(0.5, 0.5, 0);
     auto indices = scalarIndex.GetInterpolators(pos);
     EXPECT_EQ(indices.size(), 4UL);
   }
-  // On edge, return 2 points
   {
+    // On edge, return 2 points
     auto pos =  Vector3d(0.5, 0, 0);
     auto indices = scalarIndex.GetInterpolators(pos);
     EXPECT_EQ(indices.size(), 2UL);
   }
+}
+
+TEST(VolumetricGridLookupField, AxisIndexTest)
+{
+  AxisIndex<double> axis;
+  axis.AddIndexIfNotFound(300);
+  axis.AddIndexIfNotFound(300);
+  EXPECT_EQ(axis.GetNumUniqueIndices(), 1UL);
+  EXPECT_EQ(axis.GetIndex(300).value(), 0UL);
+  EXPECT_EQ(axis.GetIndex(200).has_value(), false);
 }
