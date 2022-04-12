@@ -84,7 +84,7 @@ namespace ignition
         /// returned otherwise return the two indices which should be used for
         /// interpolation.
         public: std::vector<std::size_t> GetInterpolators(T _value,
-          double _tol=1e-6) const
+          double _tol = 1e-6) const
         {
           // Performs a BST to find the first element that is greater than or
           // equal to the value.
@@ -116,4 +116,4 @@ namespace ignition
     }
   }
 }
-#endif // IGNITION_MATH_DETAIL_AXIS_INDEX_LOOKUP_FIELD_HH_
+#endif
