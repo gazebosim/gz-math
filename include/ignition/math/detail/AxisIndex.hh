@@ -43,6 +43,13 @@ namespace ignition
         /// \brief Number of indices
         private: int numIndices{0};
 
+        public: struct InterpolationPoint1D
+        {
+          T position;
+
+          std::size_t index;
+        };
+
         /// \brief Register the existance of a measurement at _value.
         /// \param[in] _value The position of the measurement.
         public: void AddIndexIfNotFound(T _value)
@@ -56,7 +63,7 @@ namespace ignition
 
         /// \brief Get the number of unique indices.
         /// \return The number of unique indices.
-        public: std::size_t GetNumUniqueIndices()
+        public: std::size_t GetNumUniqueIndices() const
         {
           return axisIndex.size();
         }
@@ -85,7 +92,7 @@ namespace ignition
         /// returned. If the value is exact, a vector with a single index is
         /// returned otherwise return the two indices which should be used for
         /// interpolation.
-        public: std::vector<std::size_t> GetInterpolators(T _value,
+        public: std::vector<std::size_t> GetInterpolators(const T &_value,
           double _tol = 1e-6) const
         {
           // Performs a BST to find the first element that is greater than or

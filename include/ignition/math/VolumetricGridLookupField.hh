@@ -33,8 +33,8 @@ namespace ignition
     inline namespace IGNITION_MATH_VERSION_NAMESPACE {
       template<typename T>
       /// \brief Lookup table for a volumetric dataset. This class is used to
-      /// lookup indices for a large dataset thats organized in a grid. This
-      /// class is not meant to be used by non-grid like data sets. The grid
+      /// lookup indices for a large dataset that's organized in a grid. This
+      /// class is not meant to be used with non-grid like data sets. The grid
       /// may be sparse or non uniform and missing data points.
       class VolumetricGridLookupField
       {
@@ -48,6 +48,18 @@ namespace ignition
         private: std::vector<
           std::vector<std::vector<std::optional<std::size_t>>>> index_table;
 
+        /// \brief Describes an interpolation point.
+        public: struct InterpolationPoint3D
+        {
+          /// \brief The position of the point
+          Vector3<T> position;
+
+          /// \brief The index from which this point was retrieved.
+          /// Can be used by the application calling it to index. The reason
+          /// this is optional is that data may be missing from a sparse grid.
+          std::optional<std::size_t> index;
+        };
+
         /// \brief Constructor
         /// \param[in] _cloud The cloud of points to use to construct the grid.
         public: VolumetricGridLookupField(
@@ -55,8 +67,9 @@ namespace ignition
         {
           // NOTE: This part of the code assumes an exact grid of points.
           // The grid may be distorted or the stride between different points
-          // may not be the same, but fundamentally the data is structured in
-          // may It keeps track of the axis indices for each point in the grid.
+          // may not be the same, but fundamentally the data is structured still
+          // forms a grid-like structure. It keeps track of the axis indices for
+          // each point in the grid.
           for(auto pt : _cloud)
           {
             x_indices_by_lat.AddIndexIfNotFound(pt.X());
@@ -80,10 +93,13 @@ namespace ignition
 
           for(std::size_t i = 0; i < _cloud.size(); ++i)
           {
-            auto pt = _cloud[i];
-            std::size_t x_index = x_indices_by_lat.GetIndex(pt.X()).value();
-            std::size_t y_index = y_indices_by_lon.GetIndex(pt.Y()).value();
-            std::size_t z_index = z_indices_by_depth.GetIndex(pt.Z()).value();
+            const auto &pt = _cloud[i];
+            const std::size_t x_index =
+              x_indices_by_lat.GetIndex(pt.X()).value();
+            const std::size_t y_index =
+              y_indices_by_lon.GetIndex(pt.Y()).value();
+            const std::size_t z_index =
+              z_indices_by_depth.GetIndex(pt.Z()).value();
             index_table[z_index][y_index][x_index] = i;
           }
         }
@@ -98,7 +114,7 @@ namespace ignition
         /// corner one point. If the data is sparse and missing indices then a
         /// nullopt will be returned.
         public: std::vector<std::optional<std::size_t>>
-          GetInterpolators(Vector3<T> &_pt) const
+          GetInterpolators(const Vector3<T> &_pt) const
         {
           std::vector<std::optional<std::size_t>> interpolators;
 
