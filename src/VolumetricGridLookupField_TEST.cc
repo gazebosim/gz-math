@@ -44,7 +44,7 @@ TEST(VolumetricGridLookupField, CheckInterpolationExact)
   {
     auto val = scalarIndex.GetInterpolators(cloud[i]);
     ASSERT_EQ(val.size(), 1UL);
-    ASSERT_EQ(val[0], i);
+    ASSERT_EQ(val[0].index, i);
   }
 }
 

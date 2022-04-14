@@ -25,6 +25,8 @@
 
 #include <iostream>
 
+#include <ignition/math/InterpolationPoint.hh>
+
 namespace ignition
 {
   namespace math
@@ -42,13 +44,6 @@ namespace ignition
 
         /// \brief Number of indices
         private: int numIndices{0};
-
-        public: struct InterpolationPoint1D
-        {
-          T position;
-
-          std::size_t index;
-        };
 
         /// \brief Register the existance of a measurement at _value.
         /// \param[in] _value The position of the measurement.
@@ -92,7 +87,8 @@ namespace ignition
         /// returned. If the value is exact, a vector with a single index is
         /// returned otherwise return the two indices which should be used for
         /// interpolation.
-        public: std::vector<std::size_t> GetInterpolators(const T &_value,
+        public: std::vector<InterpolationPoint1D<T>> GetInterpolators(
+          const T &_value,
           double _tol = 1e-6) const
         {
           // Performs a BST to find the first element that is greater than or
@@ -106,7 +102,7 @@ namespace ignition
           else if (fabs(it->first - _value) < _tol)
           {
             // Exact match
-            return {it->second};
+            return {InterpolationPoint1D<T>{it->first, it->second}};
           }
           else if (it == axisIndex.begin())
           {
@@ -118,7 +114,8 @@ namespace ignition
             // Interpolate
             auto itPrev = it;
             itPrev--;
-            return {itPrev->second, it->second};
+            return {InterpolationPoint1D<T>{itPrev->first, itPrev->second},
+              InterpolationPoint1D<T>{it->first, it->second}};
           }
         }
       };

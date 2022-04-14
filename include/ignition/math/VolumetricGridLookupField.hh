@@ -22,6 +22,7 @@
 #include <optional>
 
 #include <ignition/math/Vector3.hh>
+#include <ignition/math/InterpolationPoint.hh>
 
 #include <ignition/math/detail/AxisIndex.hh>
 
@@ -47,18 +48,6 @@ namespace ignition
 
         private: std::vector<
           std::vector<std::vector<std::optional<std::size_t>>>> index_table;
-
-        /// \brief Describes an interpolation point.
-        public: struct InterpolationPoint3D
-        {
-          /// \brief The position of the point
-          Vector3<T> position;
-
-          /// \brief The index from which this point was retrieved.
-          /// Can be used by the application calling it to index. The reason
-          /// this is optional is that data may be missing from a sparse grid.
-          std::optional<std::size_t> index;
-        };
 
         /// \brief Constructor
         /// \param[in] _cloud The cloud of points to use to construct the grid.
@@ -113,23 +102,31 @@ namespace ignition
         /// four corners, if along an edge two points and if coincident with a
         /// corner one point. If the data is sparse and missing indices then a
         /// nullopt will be returned.
-        public: std::vector<std::optional<std::size_t>>
+        public: std::vector<InterpolationPoint3D<T>>
           GetInterpolators(const Vector3<T> &_pt) const
         {
-          std::vector<std::optional<std::size_t>> interpolators;
+          std::vector<InterpolationPoint3D<T>> interpolators;
 
           auto x_indices = x_indices_by_lat.GetInterpolators(_pt.X());
           auto y_indices = y_indices_by_lon.GetInterpolators(_pt.Y());
           auto z_indices = z_indices_by_depth.GetInterpolators(_pt.Z());
 
-          for(auto x_index : x_indices)
+          for(const auto &x_index : x_indices)
           {
-            for(auto y_index : y_indices)
+            for(const auto &y_index : y_indices)
             {
-              for(auto z_index : z_indices)
+              for(const auto &z_index : z_indices)
               {
-                auto index = index_table[z_index][y_index][x_index];
-                interpolators.push_back(index);
+                auto index = index_table[z_index.index][y_index.index][x_index.index];
+                interpolators.push_back(
+                  InterpolationPoint3D<T>{
+                    Vector3<T>(
+                      x_index.position,
+                      y_index.position,
+                      z_index.position
+                    ),
+                    std::optional{index}
+                  });
               }
             }
           }
