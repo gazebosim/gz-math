@@ -18,7 +18,12 @@
 #ifndef IGNITION_MATH_INTERPOLATION_POINT_HH_
 #define IGNITION_MATH_INTERPOLATION_POINT_HH_
 
+#include <ignition/math/Vector3.hh>
+#include <ignition/math/Vector2.hh>
 
+#include <vector>
+
+#include <iostream>
 namespace ignition
 {
   namespace math
@@ -47,6 +52,118 @@ namespace ignition
       /// Can be used by the application calling it to index.
       std::size_t index;
     };
+
+    /// \brief Linear Interpola
+    template<typename T, typename V>
+    V LinearInterpolate(
+      const InterpolationPoint1D<T> &_a,
+      const InterpolationPoint1D<T> &_b,
+      const std::vector<V>  &_lst,
+      const T &_pos
+      )
+    {
+      auto t =  (_pos - _b.position)/ (_a.position - _b.position);
+      return (1 - t) * _lst[_b.index] + t * _lst[_a.index];
+    }
+
+    /// \brief Linear Interpolate
+    template<typename T, typename V>
+    V LinearInterpolate(
+      const InterpolationPoint3D<T> &_a,
+      const InterpolationPoint3D<T> &_b,
+      const std::vector<V>  &_lst,
+      const Vector3<T> &_pos,
+      const V &_default = V(0)
+      )
+    {
+      auto t =  (_pos - _b.position).Length() / (_a.position - _b.position).Length();
+      auto b_val = (_b.index.has_value()) ? _lst[_b.index.value()]: _default;
+      auto a_val = (_a.index.has_value()) ? _lst[_a.index.value()]: _default;
+      return (1 - t) * b_val + t * a_val;
+    }
+
+    /// \brief Bilinear Interpolate
+    template<typename T, typename V>
+    V BiLinearInterpolate(
+      const std::vector<InterpolationPoint3D<T>> &_a,
+      const std::size_t &_start_index,
+      const std::vector<V>  &_lst,
+      const Vector3<T> &_pos,
+      const V &_default = V(0))
+    {
+      // Project point onto line
+      std::vector<V> linres;
+      auto n0 = _a[_start_index];
+      auto n1 = _a[_start_index + 1];
+      auto proj1 = n1.position-n0.position;
+      auto unitProj1 = proj1.Normalized();
+      auto pos1 =
+        (_pos - n0.position).Dot(unitProj1) * unitProj1 + n0.position;
+      // Apply normal linear interpolation
+      linres.push_back(LinearInterpolate(n0, n1, _lst, pos1, _default));
+
+      // Project point onto second line
+      auto n2 = _a[_start_index + 2];
+      auto n3 = _a[_start_index + 3];
+      auto proj2 = n3.position-n2.position;
+      auto unitProj2 = proj2.Normalized();
+      auto pos2 =
+        (_pos - n2.position).Dot(unitProj1) * unitProj1 + n2.position;
+      linres.push_back(LinearInterpolate(n2, n3, _lst, pos2, _default));
+
+      // Perform final linear interpolation
+      InterpolationPoint3D<T> p1 {
+        pos1,
+        0
+      };
+
+      InterpolationPoint3D<T> p2 {
+        pos2,
+        1
+      };
+      return LinearInterpolate(p1, p2, linres, _pos, _default);
+    }
+
+    template<typename T>
+    ignition::math::Vector3<T> ProjectPointToPlane(
+      const std::vector<InterpolationPoint3D<T>> _points,
+      const std::size_t &_start_index,
+      const Vector3<T> &_pos)
+    {
+      auto n = (_points[_start_index + 1].position - _points[_start_index].position).Cross(
+        _points[_start_index + 2].position - _points[_start_index].position);
+      return _pos - n.Dot(_pos - _points[_start_index].position) * n.Normalized();
+    }
+
+    /// \brief Trilinear interpolation
+    template<typename T, typename V>
+    V TrilinearInterpolate(
+      const std::vector<InterpolationPoint3D<T>> &_a,
+      const std::vector<V> &_lst,
+      const Vector3<T> &_pos,
+      const V &_default = V(0))
+    {
+      std::vector<V> linres;
+      // First plane
+      auto pos1 = ProjectPointToPlane<T>(_a, 0, _pos);
+      linres.push_back(BiLinearInterpolate(_a, 0, _lst, pos1, _default));
+
+      // Second plane
+      auto pos2 = ProjectPointToPlane<T>(_a, 4, _pos);
+      linres.push_back(BiLinearInterpolate(_a, 4, _lst, pos2, _default));
+
+      // Perform final linear interpolation
+      InterpolationPoint3D<T> p1 {
+        pos1,
+        0
+      };
+
+      InterpolationPoint3D<T> p2 {
+        pos2,
+        1
+      };
+      return LinearInterpolate(p1, p2, linres, _pos, _default);
+    }
   }
 }
 #endif
