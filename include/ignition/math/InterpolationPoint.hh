@@ -76,7 +76,8 @@ namespace ignition
       const V &_default = V(0)
       )
     {
-      auto t =  (_pos - _b.position).Length() / (_a.position - _b.position).Length();
+      auto t =
+        (_pos - _b.position).Length() / (_a.position - _b.position).Length();
       auto b_val = (_b.index.has_value()) ? _lst[_b.index.value()]: _default;
       auto a_val = (_a.index.has_value()) ? _lst[_a.index.value()]: _default;
       return (1 - t) * b_val + t * a_val;
@@ -130,9 +131,12 @@ namespace ignition
       const std::size_t &_start_index,
       const Vector3<T> &_pos)
     {
-      auto n = (_points[_start_index + 1].position - _points[_start_index].position).Cross(
+      auto n =
+        (_points[_start_index + 1].position - _points[_start_index].position)
+        .Cross(
         _points[_start_index + 2].position - _points[_start_index].position);
-      return _pos - n.Dot(_pos - _points[_start_index].position) * n.Normalized();
+      return
+        _pos - n.Dot(_pos - _points[_start_index].position) * n.Normalized();
     }
 
     /// \brief Trilinear interpolation

@@ -117,7 +117,8 @@ namespace ignition
             {
               for(const auto &z_index : z_indices)
               {
-                auto index = index_table[z_index.index][y_index.index][x_index.index];
+                auto index =
+                  index_table[z_index.index][y_index.index][x_index.index];
                 interpolators.push_back(
                   InterpolationPoint3D<T>{
                     Vector3<T>(
@@ -141,7 +142,8 @@ namespace ignition
         /// \param[in] _default If a value is not found at a specific point then
         /// this value will be used.
         /// \returns The estimated value for the point.
-        public: template<typename V> std::optional<V> EstimateValueUsingTrilinear(
+        public: template<typename V>
+        std::optional<V> EstimateValueUsingTrilinear(
           const Vector3<T> &_pt,
           const std::vector<V> &_values,
           const V &_default = V(0)) const
@@ -166,7 +168,8 @@ namespace ignition
           }
           else if (interpolators.size() == 4)
           {
-            return BiLinearInterpolate(interpolators, 0, _values, _pt, _default);
+            return BiLinearInterpolate(
+              interpolators, 0, _values, _pt, _default);
           }
           else if (interpolators.size() == 8)
           {

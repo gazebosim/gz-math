@@ -108,7 +108,7 @@ TEST(VolumetricGridLookupField, CheckTrilinearInterpolationBoxEightPoints)
   cloud.emplace_back(1, 1, 0);
   cloud.emplace_back(1, 1, 1);
 
-  std::vector<double> values{0,0,0,0,1,1,1,1};
+  std::vector<double> values{0, 0, 0, 0, 1, 1, 1, 1};
 
   VolumetricGridLookupField<double> scalarIndex(cloud);
 
