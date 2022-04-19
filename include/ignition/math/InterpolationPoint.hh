@@ -21,9 +21,8 @@
 #include <ignition/math/Vector3.hh>
 #include <ignition/math/Vector2.hh>
 
+#include <optional>
 #include <vector>
-
-#include <iostream>
 namespace ignition
 {
   namespace math
