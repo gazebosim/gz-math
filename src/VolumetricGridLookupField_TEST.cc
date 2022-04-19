@@ -96,6 +96,52 @@ TEST(VolumetricGridLookupField, CheckInterpolationBoxEightPoints)
   }
 }
 
+TEST(VolumetricGridLookupField, CheckTrilinearInterpolationBoxEightPoints)
+{
+  std::vector<Vector3d> cloud;
+  cloud.emplace_back(0, 0, 0);
+  cloud.emplace_back(0, 0, 1);
+  cloud.emplace_back(0, 1, 0);
+  cloud.emplace_back(0, 1, 1);
+  cloud.emplace_back(1, 0, 0);
+  cloud.emplace_back(1, 0, 1);
+  cloud.emplace_back(1, 1, 0);
+  cloud.emplace_back(1, 1, 1);
+
+  std::vector<double> values{0,0,0,0,1,1,1,1};
+
+  VolumetricGridLookupField<double> scalarIndex(cloud);
+
+  {
+    // Inside, return 8 points
+    auto pos =  Vector3d(0.5, 0.5, 0.5);
+    auto indices = scalarIndex.EstimateValueUsingTrilinear(pos, values);
+    EXPECT_NEAR(indices.value(), 0.5, 1e-3);
+  }
+
+  {
+    // Outside, return 0 points
+    auto pos =  Vector3d(-0.5, -0.5, -0.5);
+    auto indices = scalarIndex.EstimateValueUsingTrilinear(pos, values);
+    EXPECT_EQ(indices.has_value(), false);
+  }
+
+  {
+    // On plane, rerutn 4 points
+    auto pos =  Vector3d(0, 0.5, 0.5);
+    auto indices = scalarIndex.EstimateValueUsingTrilinear(pos, values);
+    EXPECT_NEAR(indices.value(), 0, 1e-3);
+  }
+
+  {
+    // On edge, return 2 points
+    auto pos =  Vector3d(0, 0, 0.5);
+    auto indices = scalarIndex.EstimateValueUsingTrilinear(pos, values);
+    EXPECT_NEAR(indices.value(), 0, 1e-3);
+  }
+}
+
+
 TEST(VolumetricGridLookupField, AxisIndexTest)
 {
   AxisIndex<double> axis;

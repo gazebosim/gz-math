@@ -133,6 +133,51 @@ namespace ignition
 
           return interpolators;
         }
+
+        /// \brief Estimates the values for a grid given a list of values to
+        /// interpolate. This method uses Trilinear interpolation.
+        /// \param[in] _pt The point to estimate for.
+        /// \param[in] _values The values to interpolate.
+        /// \param[in] _default If a value is not found at a specific point then
+        /// this value will be used.
+        /// \returns The estimated value for the point.
+        public: template<typename V> std::optional<V> EstimateValueUsingTrilinear(
+          const Vector3<T> &_pt,
+          const std::vector<V> &_values,
+          const V &_default = V(0)) const
+        {
+          auto interpolators = GetInterpolators(_pt);
+          if (interpolators.size() == 0)
+          {
+            return std::nullopt;
+          }
+          else if (interpolators.size() == 1)
+          {
+            if (!interpolators[0].index.has_value())
+            {
+              return _default;
+            }
+            return _values[interpolators[0].index.value()];
+          }
+          else if (interpolators.size() == 2)
+          {
+            return LinearInterpolate(interpolators[0], interpolators[1],
+              _values, _pt, _default);
+          }
+          else if (interpolators.size() == 4)
+          {
+            return BiLinearInterpolate(interpolators, 0, _values, _pt, _default);
+          }
+          else if (interpolators.size() == 8)
+          {
+            return TrilinearInterpolate(interpolators, _values, _pt, _default);
+          }
+          else
+          {
+            return std::nullopt;
+          }
+        }
+
       };
     }
   }
