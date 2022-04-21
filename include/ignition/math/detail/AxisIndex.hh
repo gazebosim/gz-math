@@ -25,7 +25,7 @@
 
 #include <iostream>
 
-#include <ignition/math/InterpolationPoint.hh>
+#include <ignition/math/detail/InterpolationPoint.hh>
 
 namespace ignition
 {
