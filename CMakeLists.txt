@@ -9,7 +9,7 @@ project(ignition-math7 VERSION 7.0.0)
 # Find ignition-cmake
 #============================================================================
 # If you get an error at this line, you need to install ignition-cmake
-find_package(ignition-cmake2 2.8.0 REQUIRED)
+find_package(ignition-cmake3 REQUIRED)
 
 #============================================================================
 # Configure the project
@@ -40,8 +40,8 @@ option(USE_DIST_PACKAGES_FOR_PYTHON
 
 #--------------------------------------
 # Find ignition-utils
-ign_find_package(ignition-utils1 REQUIRED VERSION 1.0)
-set(IGN_UTILS_VER ${ignition-utils1_VERSION_MAJOR})
+ign_find_package(ignition-utils2 REQUIRED)
+set(IGN_UTILS_VER ${ignition-utils2_VERSION_MAJOR})
 
 #--------------------------------------
 # Find eigen3

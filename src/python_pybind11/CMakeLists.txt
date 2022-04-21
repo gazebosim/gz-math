@@ -11,8 +11,10 @@ pybind11_add_module(math SHARED
   src/_ignition_math_pybind11.cc
   src/Angle.cc
   src/AxisAlignedBox.cc
+  src/Capsule.cc
   src/Color.cc
   src/DiffDriveOdometry.cc
+  src/Ellipsoid.cc
   src/Filter.cc
   src/Frustum.cc
   src/GaussMarkovProcess.cc
@@ -48,6 +50,19 @@ pybind11_add_module(math SHARED
 target_link_libraries(math PRIVATE
   ${PROJECT_LIBRARY_TARGET_NAME}
 )
+
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  # Workaround for Clang and pybind11 on Focal
+  # https://github.com/pybind/pybind11/issues/1604
+  # Resolved by newer versions of pybind11
+  if(${pybind11_VERSION} VERSION_LESS "2.4.4")
+    target_compile_options(math PRIVATE -fsized-deallocation)
+  endif()
+
+  # Suppress warnings that clang misidentifies:
+  # https://github.com/pybind/pybind11/issues/1893
+  target_compile_options(math PRIVATE -Wno-self-assign-overloaded)
+endif()
 
 if(USE_SYSTEM_PATHS_FOR_PYTHON_INSTALLATION)
   if(${CMAKE_VERSION} VERSION_LESS "3.12.0")
@@ -98,9 +113,11 @@ if (BUILD_TESTING)
     Angle_TEST
     AxisAlignedBox_TEST
     Box_TEST
+    Capsule_TEST
     Color_TEST
     Cylinder_TEST
     DiffDriveOdometry_TEST
+    Ellipsoid_TEST
     Filter_TEST
     Frustum_TEST
     GaussMarkovProcess_TEST
