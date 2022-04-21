@@ -182,7 +182,12 @@ namespace ignition
 
     /// \brief Trilinear interpolation of eight points in 3D space. It assumes
     /// these eight points form a rectangular prism.
-
+    /// \param[in] _a The list of points to interpolate. The list must have 8
+    /// points.
+    /// \param[in] _lst An array of values that are to be used for interpolation
+    /// \param[in] _pos The position to interpolate.
+    /// \param[in] _default The default value to use if a.index or b.index is
+    /// std::nullopt.
     template<typename T, typename V>
     V TrilinearInterpolate(
       const std::vector<InterpolationPoint3D<T>> &_a,
