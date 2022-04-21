@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-#include <ignition/math/InterpolationPoint.hh>
+#include <ignition/math/detail/InterpolationPoint.hh>
 
 #include <gtest/gtest.h>
 

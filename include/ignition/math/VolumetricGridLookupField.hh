@@ -22,7 +22,7 @@
 #include <optional>
 
 #include <ignition/math/Vector3.hh>
-#include <ignition/math/InterpolationPoint.hh>
+#include <ignition/math/detail/InterpolationPoint.hh>
 
 #include <ignition/math/detail/AxisIndex.hh>
 
@@ -149,31 +149,54 @@ namespace ignition
           const V &_default = V(0)) const
         {
           auto interpolators = GetInterpolators(_pt);
-          if (interpolators.size() == 0)
+          return EstimateValueUsingTrilinear(
+            interpolators,
+            _pt,
+            _values,
+            _default);
+        }
+
+        /// \brief Estimates the values for a grid given a list of values to
+        /// interpolate. This method uses Trilinear interpolation.
+        /// \param[in] _interpolators The list of interpolators to use.
+        /// Retrieved by calling GetInterpolators().
+        /// \param[in] _pt The point to estimate for.
+        /// \param[in] _values The values to interpolate.
+        /// \param[in] _default If a value is not found at a specific point then
+        /// this value will be used.
+        /// \returns The estimated value for the point.
+        public: template<typename V>
+        std::optional<V> EstimateValueUsingTrilinear(
+          const std::vector<InterpolationPoint3D<T>> _interpolators,
+          const Vector3<T> &_pt,
+          const std::vector<V> &_values,
+          const V &_default = V(0)) const
+        {
+          if (_interpolators.size() == 0)
           {
             return std::nullopt;
           }
-          else if (interpolators.size() == 1)
+          else if (_interpolators.size() == 1)
           {
-            if (!interpolators[0].index.has_value())
+            if (!_interpolators[0].index.has_value())
             {
               return _default;
             }
-            return _values[interpolators[0].index.value()];
+            return _values[_interpolators[0].index.value()];
           }
-          else if (interpolators.size() == 2)
+          else if (_interpolators.size() == 2)
           {
-            return LinearInterpolate(interpolators[0], interpolators[1],
+            return LinearInterpolate(_interpolators[0], _interpolators[1],
               _values, _pt, _default);
           }
-          else if (interpolators.size() == 4)
+          else if (_interpolators.size() == 4)
           {
             return BiLinearInterpolate(
-              interpolators, 0, _values, _pt, _default);
+              _interpolators, 0, _values, _pt, _default);
           }
-          else if (interpolators.size() == 8)
+          else if (_interpolators.size() == 8)
           {
-            return TrilinearInterpolate(interpolators, _values, _pt, _default);
+            return TrilinearInterpolate(_interpolators, _values, _pt, _default);
           }
           else
           {

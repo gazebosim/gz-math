@@ -52,7 +52,16 @@ namespace ignition
       std::size_t index;
     };
 
-    /// \brief Linear Interpola
+    /// \brief Linear Interpolation of two points along a 1D line.
+    /// \param[in] _a The first point.
+    /// \param[in] _b The second point.
+    /// \param[in] _lst An array of values that are to be used by the
+    /// interpolator. _lst[a.index] and _lst[b.index] are the values
+    /// to be interpolated.
+    /// \param[in] _pos The position to interpolate.
+    /// Warning: This function assumes that the indices of _a and _b correspond
+    /// to values in _lst. It performs no bounds checking whatsoever and if you
+    /// pass it invalid data, it will crash.
     template<typename T, typename V>
     V LinearInterpolate(
       const InterpolationPoint1D<T> &_a,
@@ -65,7 +74,19 @@ namespace ignition
       return (1 - t) * _lst[_b.index] + t * _lst[_a.index];
     }
 
-    /// \brief Linear Interpolate
+    /// \brief Linear Interpolation of two points in 3D space
+    /// \param[in] _a The first point.
+    /// \param[in] _b The second point.
+    /// \param[in] _lst An array of values that are to be used by the
+    /// interpolator. _lst[a.index] and _lst[b.index] are the values
+    /// to be interpolated. If a.index or b.index is std::nullopt then use the
+    /// default value.
+    /// \param[in] _pos The position to interpolate.
+    /// \param[in] _default The default value to use if a.index or b.index is
+    /// std::nullopt.
+    /// Warning: This function assumes that the indices of _a and _b correspond
+    /// to values in _lst. It performs no bounds checking whatsoever and if you
+    /// pass it invalid data, it will crash.
     template<typename T, typename V>
     V LinearInterpolate(
       const InterpolationPoint3D<T> &_a,
@@ -82,7 +103,22 @@ namespace ignition
       return (1 - t) * b_val + t * a_val;
     }
 
-    /// \brief Bilinear Interpolate
+    /// \brief Bilinear interpolation of four points in 3D space. It assumes
+    /// these 4 points form a plane.
+    /// \param[in] _a The list of points to interpolate. The list must have at
+    /// least 4 entries. Furthermore the order of the indices should be such
+    /// that every consecutive pair of indices lie on the same edge.
+    /// \param[in] _start_index The starting index of points to interpolate.
+    /// \param[in] _lst An array of values that are to be used by the
+    /// interpolator. _lst[a.index] and _lst[b.index] are the values
+    /// to be interpolated. If a.index or b.index is std::nullopt then use the
+    /// default value.
+    /// \param[in] _pos The position to interpolate.
+    /// \param[in] _default The default value to use if a.index or b.index is
+    /// std::nullopt.
+    /// Warning: This function assumes that the indices of _a and _b correspond
+    /// to values in _lst. It performs no bounds checking whatsoever and if you
+    /// pass it invalid data, it will crash.
     template<typename T, typename V>
     V BiLinearInterpolate(
       const std::vector<InterpolationPoint3D<T>> &_a,
@@ -124,6 +160,12 @@ namespace ignition
       return LinearInterpolate(p1, p2, linres, _pos, _default);
     }
 
+    /// \brief Project Point onto a plane.
+    /// \param[in] _points a vector of min length _start_index + 3. The points
+    /// at _start_index, _start_index + 1 and  _start_index + 2 are used to
+    /// define the plane.
+    /// \param[in] _start_index defines the slice to use.
+    /// \param[in] _pos The position to project onto the plane
     template<typename T>
     ignition::math::Vector3<T> ProjectPointToPlane(
       const std::vector<InterpolationPoint3D<T>> _points,
@@ -138,7 +180,9 @@ namespace ignition
         _pos - n.Dot(_pos - _points[_start_index].position) * n.Normalized();
     }
 
-    /// \brief Trilinear interpolation
+    /// \brief Trilinear interpolation of eight points in 3D space. It assumes
+    /// these eight points form a rectangular prism.
+
     template<typename T, typename V>
     V TrilinearInterpolate(
       const std::vector<InterpolationPoint3D<T>> &_a,
