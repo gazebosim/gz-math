@@ -28,9 +28,13 @@ TEST(Interpolation, LinearInterpolate)
   InterpolationPoint1D<double> first {0.0, 0};
   InterpolationPoint1D<double> last {1.0, 1};
 
-  EXPECT_NEAR(LinearInterpolate(first, last, vec, 0.0), 0, 1e-3);
-  EXPECT_NEAR(LinearInterpolate(first, last, vec, 1.0), 2, 1e-3);
-  EXPECT_NEAR(LinearInterpolate(first, last, vec, 0.5), 1, 1e-3);
+  EXPECT_DOUBLE_EQ(LinearInterpolate(first, last, vec, 0.0), 0);
+  EXPECT_DOUBLE_EQ(LinearInterpolate(first, last, vec, 1.0), 2);
+  EXPECT_DOUBLE_EQ(LinearInterpolate(first, last, vec, 0.5), 1);
+
+  EXPECT_DOUBLE_EQ(LinearInterpolate(last, first, vec, 0.0), 0);
+  EXPECT_DOUBLE_EQ(LinearInterpolate(last, first, vec, 1.0), 2);
+  EXPECT_DOUBLE_EQ(LinearInterpolate(last, first, vec, 0.5), 1);
 }
 
 TEST(Interpolation, LinearInterpolate3D)

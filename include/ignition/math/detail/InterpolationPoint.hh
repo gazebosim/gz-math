@@ -23,6 +23,8 @@
 
 #include <optional>
 #include <vector>
+
+#include <cassert>
 namespace ignition
 {
   namespace math
@@ -61,7 +63,8 @@ namespace ignition
     /// \param[in] _pos The position to interpolate.
     /// Warning: This function assumes that the indices of _a and _b correspond
     /// to values in _lst. It performs no bounds checking whatsoever and if you
-    /// pass it invalid data, it will crash.
+    /// pass it invalid data, it will crash. It also assumes that _a and _b
+    /// are not in the same position.
     template<typename T, typename V>
     V LinearInterpolate(
       const InterpolationPoint1D<T> &_a,
@@ -70,6 +73,10 @@ namespace ignition
       const T &_pos
       )
     {
+      assert(abs(_a.position - _b.position) > 0);
+      assert(_a.index < _lst.size());
+      assert(_b.index < _lst.size());
+
       auto t =  (_pos - _b.position)/ (_a.position - _b.position);
       return (1 - t) * _lst[_b.index] + t * _lst[_a.index];
     }
