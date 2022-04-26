@@ -149,7 +149,8 @@ namespace ignition
         _a[_start_index].position);
       auto planeScalar = planeNormal.Dot(_a[_start_index].position);
       assert(
-        abs(planeNormal.Dot(_a[_start_index + 3]) - planeScalar) < 0.00001);
+        abs(planeNormal.Dot(_a[_start_index + 3].position) - planeScalar)
+        < 0.00001);
       #endif
 
       // Project point onto line
