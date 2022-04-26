@@ -23,7 +23,7 @@
 #include <optional>
 #include <vector>
 
-#include <iostream>
+#include <cassert>
 
 #include <ignition/math/detail/InterpolationPoint.hh>
 
@@ -81,7 +81,7 @@ namespace ignition
 
         /// \brief Get interpolators for a measurement.
         /// \param[in] _value The position of the measurement.
-        /// \param[in] _tol The tolerance for the search.
+        /// \param[in] _tol The tolerance for the search. Cannot be zero.
         /// \return The indices of the measurements that should be used for
         /// interpolation. If the value is out of range, an empty vector is
         /// returned. If the value is exact, a vector with a single index is
@@ -91,6 +91,7 @@ namespace ignition
           const T &_value,
           double _tol = 1e-6) const
         {
+          assert(_tol > 0);
           // Performs a BST to find the first element that is greater than or
           // equal to the value.
           auto it = axisIndex.lower_bound(_value);
