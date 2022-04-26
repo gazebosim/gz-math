@@ -120,7 +120,7 @@ namespace ignition
     /// \param[in] _a The list of points to interpolate. The list must have at
     /// least 4 entries. Furthermore the order of the indices should be such
     /// that every consecutive pair of indices lie on the same edge. Furthermore
-    /// the 4 points must be coplanar and corners of a rectangular prism.
+    /// the 4 points must be coplanar and corners of a rectangular patch.
     /// \param[in] _start_index The starting index of points to interpolate.
     /// \param[in] _lst An array of values that are to be used by the
     /// interpolator. _lst[a.index] and _lst[b.index] are the values
@@ -140,6 +140,18 @@ namespace ignition
       const Vector3<T> &_pos,
       const V &_default = V(0))
     {
+      /// Assertions
+      #ifndef NDEBUG
+      assert(_a.size() >= _start_index + 4);
+      /// Check if all points co planar.
+      auto planeNormal = (_a[_start_index + 1].position -
+        _a[_start_index].position).Cross(_a[_start_index + 2].position -
+        _a[_start_index].position);
+      auto planeScalar = planeNormal.Dot(_a[_start_index].position);
+      assert(
+        abs(planeNormal.Dot(_a[_start_index + 3]) - planeScalar) < 0.00001);
+      #endif
+
       // Project point onto line
       std::vector<V> linres;
       auto n0 = _a[_start_index];
@@ -196,7 +208,9 @@ namespace ignition
     /// \brief Trilinear interpolation of eight points in 3D space. It assumes
     /// these eight points form a rectangular prism.
     /// \param[in] _a The list of points to interpolate. The list must have 8
-    /// points.
+    /// points. The first 4 points must form a plane as must the last 4.
+    /// The order of the points within a plane should be such that consecutive
+    /// pairs of indices lie on the same edge.
     /// \param[in] _lst An array of values that are to be used for interpolation
     /// \param[in] _pos The position to interpolate.
     /// \param[in] _default The default value to use if a.index or b.index is
@@ -208,6 +222,8 @@ namespace ignition
       const Vector3<T> &_pos,
       const V &_default = V(0))
     {
+      assert(_a.size() == 8);
+
       std::vector<V> linres;
       // First plane
       auto pos1 = ProjectPointToPlane<T>(_a, 0, _pos);
