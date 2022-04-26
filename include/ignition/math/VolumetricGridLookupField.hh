@@ -94,8 +94,12 @@ namespace ignition
         }
 
         /// \brief Retrieves the indices of the points that are to be used for
-        /// interpolation.
+        /// interpolation. Separate tolerance values are used for each axis as
+        /// data may have different magnitudes on each axis.
         /// \param[in] _pt The point to get the interpolators for.
+        /// \param[in] _xTol The tolerance for the x axis.
+        /// \param[in] _yTol The tolerance for the y axis.
+        /// \param[in] _zTol The tolerance for the z axis.
         /// \returns A list of points which are to be used for interpolation. If
         /// the point is in the middle of a grid cell then it returns the four
         /// corners of the grid cell. If its along a plane then it returns the
@@ -103,13 +107,17 @@ namespace ignition
         /// corner one point. If the data is sparse and missing indices then a
         /// nullopt will be returned.
         public: std::vector<InterpolationPoint3D<T>>
-          GetInterpolators(const Vector3<T> &_pt) const
+          GetInterpolators(
+            const Vector3<T> &_pt,
+            double _xTol = 1e-6,
+            double _yTol = 1e-6,
+            double _zTol = 1e-6) const
         {
           std::vector<InterpolationPoint3D<T>> interpolators;
 
-          auto x_indices = x_indices_by_lat.GetInterpolators(_pt.X());
-          auto y_indices = y_indices_by_lon.GetInterpolators(_pt.Y());
-          auto z_indices = z_indices_by_depth.GetInterpolators(_pt.Z());
+          auto x_indices = x_indices_by_lat.GetInterpolators(_pt.X(), _xTol);
+          auto y_indices = y_indices_by_lon.GetInterpolators(_pt.Y(), _yTol);
+          auto z_indices = z_indices_by_depth.GetInterpolators(_pt.Z(), _zTol);
 
           for(const auto &x_index : x_indices)
           {
