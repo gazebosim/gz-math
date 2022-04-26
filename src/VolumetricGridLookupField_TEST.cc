@@ -17,7 +17,7 @@
 
 
 #include <ignition/math/VolumetricGridLookupField.hh>
-
+#include <unordered_set>
 #include <gtest/gtest.h>
 using namespace ignition;
 using namespace math;
@@ -83,10 +83,21 @@ TEST(VolumetricGridLookupField, CheckInterpolationBoxEightPoints)
     EXPECT_EQ(indices.size(), 0UL);
   }
   {
-    // On plane, rerutn 4 points
+    // On plane, return 4 points
     auto pos =  Vector3d(0.5, 0.5, 0);
     auto indices = scalarIndex.GetInterpolators(pos);
     EXPECT_EQ(indices.size(), 4UL);
+    std::unordered_set<std::size_t> returnedIndices;
+    for(auto &index : indices)
+    {
+      EXPECT_TRUE(index.index.has_value());
+      returnedIndices.insert(index.index.value());
+    }
+    EXPECT_EQ(returnedIndices.size(), 4UL);
+    EXPECT_TRUE(returnedIndices.find(0) != returnedIndices.end());
+    EXPECT_TRUE(returnedIndices.find(2) != returnedIndices.end());
+    EXPECT_TRUE(returnedIndices.find(4) != returnedIndices.end());
+    EXPECT_TRUE(returnedIndices.find(6) != returnedIndices.end());
   }
   {
     // On edge, return 2 points
@@ -115,29 +126,29 @@ TEST(VolumetricGridLookupField, CheckTrilinearInterpolationBoxEightPoints)
   {
     // Inside, return 8 points
     auto pos =  Vector3d(0.5, 0.5, 0.5);
-    auto indices = scalarIndex.EstimateValueUsingTrilinear(pos, values);
-    EXPECT_NEAR(indices.value(), 0.5, 1e-3);
+    auto value = scalarIndex.EstimateValueUsingTrilinear(pos, values);
+    EXPECT_NEAR(value.value(), 0.5, 1e-3);
   }
 
   {
-    // Outside, return 0 points
+    // Outside, can't interpolate.
     auto pos =  Vector3d(-0.5, -0.5, -0.5);
-    auto indices = scalarIndex.EstimateValueUsingTrilinear(pos, values);
-    EXPECT_EQ(indices.has_value(), false);
+    auto value = scalarIndex.EstimateValueUsingTrilinear(pos, values);
+    EXPECT_FALSE(value.has_value());
   }
 
   {
-    // On plane, rerutn 4 points
+    // On plane, interpolate using 4 points
     auto pos =  Vector3d(0, 0.5, 0.5);
-    auto indices = scalarIndex.EstimateValueUsingTrilinear(pos, values);
-    EXPECT_NEAR(indices.value(), 0, 1e-3);
+    auto value = scalarIndex.EstimateValueUsingTrilinear(pos, values);
+    EXPECT_NEAR(value.value(), 0, 1e-3);
   }
 
   {
-    // On edge, return 2 points
+    // On edge, interpolate using 2 points
     auto pos =  Vector3d(0, 0, 0.5);
-    auto indices = scalarIndex.EstimateValueUsingTrilinear(pos, values);
-    EXPECT_NEAR(indices.value(), 0, 1e-3);
+    auto value = scalarIndex.EstimateValueUsingTrilinear(pos, values);
+    EXPECT_NEAR(value.value(), 0, 1e-3);
   }
 }
 
