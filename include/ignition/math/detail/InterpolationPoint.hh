@@ -103,8 +103,13 @@ namespace ignition
       const V &_default = V(0)
       )
     {
+      assert(abs((_a.position - _b.position).Length()) > 0);
+      assert((_a.index.has_value()) ? _a.index.value() < _lst.size(): true);
+      assert((_b.index.has_value()) ? _b.index.value() < _lst.size(): true);
+
       auto t =
         (_pos - _b.position).Length() / (_a.position - _b.position).Length();
+
       auto b_val = (_b.index.has_value()) ? _lst[_b.index.value()]: _default;
       auto a_val = (_a.index.has_value()) ? _lst[_a.index.value()]: _default;
       return (1 - t) * b_val + t * a_val;
@@ -114,7 +119,8 @@ namespace ignition
     /// these 4 points form a plane.
     /// \param[in] _a The list of points to interpolate. The list must have at
     /// least 4 entries. Furthermore the order of the indices should be such
-    /// that every consecutive pair of indices lie on the same edge.
+    /// that every consecutive pair of indices lie on the same edge. Furthermore
+    /// the 4 points must be coplanar and corners of a rectangular prism.
     /// \param[in] _start_index The starting index of points to interpolate.
     /// \param[in] _lst An array of values that are to be used by the
     /// interpolator. _lst[a.index] and _lst[b.index] are the values
