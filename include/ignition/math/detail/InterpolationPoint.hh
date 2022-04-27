@@ -103,7 +103,7 @@ namespace ignition
       const V &_default = V(0)
       )
     {
-      assert(abs((_a.position - _b.position).Length()) > 0);
+      assert((_a.position - _b.position).Length() > 0);
       assert((_a.index.has_value()) ? _a.index.value() < _lst.size(): true);
       assert((_b.index.has_value()) ? _b.index.value() < _lst.size(): true);
 
@@ -149,8 +149,8 @@ namespace ignition
         _a[_start_index].position);
       auto planeScalar = planeNormal.Dot(_a[_start_index].position);
       assert(
-        abs(planeNormal.Dot(_a[_start_index + 3].position) - planeScalar)
-        < 0.00001);
+        !(abs(planeNormal.Dot(_a[_start_index + 3].position) - planeScalar) > 0)
+        );
       #endif
 
       // Project point onto line
