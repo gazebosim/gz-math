@@ -150,6 +150,13 @@ TEST(VolumetricGridLookupField, CheckTrilinearInterpolationBoxEightPoints)
     auto value = scalarIndex.EstimateValueUsingTrilinear(pos, values);
     EXPECT_NEAR(value.value(), 0, 1e-3);
   }
+
+  {
+    // On point, get same point.
+    auto pos =  Vector3d(0, 0, 0);
+    auto value = scalarIndex.EstimateValueUsingTrilinear(pos, values);
+    EXPECT_NEAR(value.value(), 0, 1e-3);
+  }
 }
 
 

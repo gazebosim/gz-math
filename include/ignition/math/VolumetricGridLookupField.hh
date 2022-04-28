@@ -109,9 +109,9 @@ namespace ignition
         public: std::vector<InterpolationPoint3D<T>>
           GetInterpolators(
             const Vector3<T> &_pt,
-            double _xTol = 1e-6,
-            double _yTol = 1e-6,
-            double _zTol = 1e-6) const
+            const double _xTol = 1e-6,
+            const double _yTol = 1e-6,
+            const double _zTol = 1e-6) const
         {
           std::vector<InterpolationPoint3D<T>> interpolators;
 
@@ -172,7 +172,9 @@ namespace ignition
         /// \param[in] _values The values to interpolate.
         /// \param[in] _default If a value is not found at a specific point then
         /// this value will be used.
-        /// \returns The estimated value for the point.
+        /// \returns The estimated value for the point. Nullopt if we are
+        /// outside the field. Default value if in the field but no value is
+        /// in the index.
         public: template<typename V>
         std::optional<V> EstimateValueUsingTrilinear(
           const std::vector<InterpolationPoint3D<T>> _interpolators,
@@ -208,6 +210,7 @@ namespace ignition
           }
           else
           {
+            // should never get here
             return std::nullopt;
           }
         }
