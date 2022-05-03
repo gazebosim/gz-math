@@ -17,7 +17,7 @@ licenses(["notice"])
 
 exports_files(["LICENSE"])
 
-PROJECT_NAME = "ignition-math"
+PROJECT_NAME = "gz-math"
 
 PROJECT_MAJOR = 7
 
@@ -30,7 +30,7 @@ ign_config_header(
     name = "config",
     src = "include/ignition/math/config.hh.in",
     cmakelists = ["CMakeLists.txt"],
-    project_name = "ignition-math",
+    project_name = PROJECT_NAME,
     project_version = (PROJECT_MAJOR, PROJECT_MINOR, PROJECT_PATCH),
 )
 
