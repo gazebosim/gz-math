@@ -77,7 +77,7 @@ void helpDefineMathMatrix3(py::module &m, const std::string &typestr)
     .def(py::self != py::self)
     .def("__call__",
          py::overload_cast<size_t, size_t>(&Class::operator()),
-         py::return_value_policy::reference)
+         py::return_value_policy::reference_internal)
     // .def(py::self *= py::self)
     .def("set",
          &Class::Set,
