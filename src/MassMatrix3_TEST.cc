@@ -293,8 +293,12 @@ TEST(MassMatrix3dTest, PrincipalMoments)
     EXPECT_EQ(m.PrincipalMoments(), Ieigen);
     EXPECT_TRUE(m.IsPositive());
     EXPECT_FALSE(m.IsValid());
-    // Test with different tolerances
+    // Ratio between largest diagonal and non-diagonal elements is 0.5
+    // With relative tolerance of 0.49, the matrix is clearly non-diagonal,
+    // so expect PrincipalMoments to return the sorted eigenvectors.
     EXPECT_EQ(m.PrincipalMoments(0.49), Ieigen);
+    // With relative tolerance of 0.51, the matrix appears to be diagonal,
+    // so expect PrincipalMoments to return the diagonal elements.
     EXPECT_EQ(m.PrincipalMoments(0.51), Ixxyyzz);
   }
 
@@ -308,8 +312,12 @@ TEST(MassMatrix3dTest, PrincipalMoments)
     EXPECT_EQ(m.PrincipalMoments(), Ieigen);
     EXPECT_TRUE(m.IsPositive());
     EXPECT_TRUE(m.IsValid());
-    // Test with different tolerances
+    // Ratio between largest diagonal and non-diagonal elements is 0.25
+    // With relative tolerance of 0.24, the matrix is clearly non-diagonal,
+    // so expect PrincipalMoments to return the sorted eigenvectors.
     EXPECT_EQ(m.PrincipalMoments(0.24), Ieigen);
+    // With relative tolerance of 0.26, the matrix appears to be diagonal,
+    // so expect PrincipalMoments to return the diagonal elements.
     EXPECT_EQ(m.PrincipalMoments(0.26), Ixxyyzz);
   }
 
@@ -351,10 +359,13 @@ TEST(MassMatrix3dTest, PrincipalMoments)
     // the accuracy is approximately 2e-2
     EXPECT_TRUE(m.PrincipalMoments().Equal(Ieigen, 2.5e-2));
     EXPECT_FALSE(m.PrincipalMoments().Equal(Ieigen, 1.5e-2));
-    // test PrincipalMoments relative tolerance
-    EXPECT_EQ(m.PrincipalMoments(11e-6), Ixxyyzz);
-    EXPECT_TRUE(m.PrincipalMoments(9e-6).Equal(Ieigen, 2.5e-2));
-    EXPECT_FALSE(m.PrincipalMoments(9e-6).Equal(Ieigen, 1.5e-2));
+    // Ratio between largest diagonal and non-diagonal elements is 1e5
+    // With relative tolerance of 1.1e5, the matrix appears to be diagonal,
+    // so expect PrincipalMoments to return the diagonal elements.
+    EXPECT_EQ(m.PrincipalMoments(1.1e-5), Ixxyyzz);
+    // With relative tolerance of 0.9e5, the matrix is clearly non-diagonal,
+    // so expect PrincipalMoments to return the sorted eigenvectors.
+    EXPECT_TRUE(m.PrincipalMoments(0.9e-5).Equal(Ieigen, 2.5e-2));
     // the default tolerance for == is 1e-6
     // so this should resolve as not equal
     EXPECT_NE(m.PrincipalMoments(), Ieigen);
