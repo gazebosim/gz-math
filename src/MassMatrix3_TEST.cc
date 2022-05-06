@@ -293,6 +293,9 @@ TEST(MassMatrix3dTest, PrincipalMoments)
     EXPECT_EQ(m.PrincipalMoments(), Ieigen);
     EXPECT_TRUE(m.IsPositive());
     EXPECT_FALSE(m.IsValid());
+    // Test with different tolerances
+    EXPECT_EQ(m.PrincipalMoments(0.49), Ieigen);
+    EXPECT_EQ(m.PrincipalMoments(0.51), Ixxyyzz);
   }
 
   // Non-trivial off-diagonal product moments
@@ -305,6 +308,9 @@ TEST(MassMatrix3dTest, PrincipalMoments)
     EXPECT_EQ(m.PrincipalMoments(), Ieigen);
     EXPECT_TRUE(m.IsPositive());
     EXPECT_TRUE(m.IsValid());
+    // Test with different tolerances
+    EXPECT_EQ(m.PrincipalMoments(0.24), Ieigen);
+    EXPECT_EQ(m.PrincipalMoments(0.26), Ixxyyzz);
   }
 
   // Degenerate matrix with eigenvalue of 0
@@ -345,6 +351,10 @@ TEST(MassMatrix3dTest, PrincipalMoments)
     // the accuracy is approximately 2e-2
     EXPECT_TRUE(m.PrincipalMoments().Equal(Ieigen, 2.5e-2));
     EXPECT_FALSE(m.PrincipalMoments().Equal(Ieigen, 1.5e-2));
+    // test PrincipalMoments relative tolerance
+    EXPECT_EQ(m.PrincipalMoments(11e-6), Ixxyyzz);
+    EXPECT_TRUE(m.PrincipalMoments(9e-6).Equal(Ieigen, 2.5e-2));
+    EXPECT_FALSE(m.PrincipalMoments(9e-6).Equal(Ieigen, 1.5e-2));
     // the default tolerance for == is 1e-6
     // so this should resolve as not equal
     EXPECT_NE(m.PrincipalMoments(), Ieigen);
@@ -365,6 +375,17 @@ TEST(MassMatrix3dTest, PrincipalAxesOffsetIdentity)
   EXPECT_TRUE(m.SetOffDiagonalMoments(math::Vector3d::Zero));
   EXPECT_TRUE(m.IsValid());
   EXPECT_EQ(m.PrincipalAxesOffset(), math::Quaterniond::Identity);
+
+  // Non-diagonal matrices may have identity axes offset depending on the
+  // tolerance.
+  m.SetDiagonalMoments(10 * math::Vector3d::One);
+  m.SetOffDiagonalMoments(math::Vector3d::One);
+  EXPECT_TRUE(m.IsValid());
+  // relative tolerance is large enough that it looks like a diagonal matrix
+  // so expect identity
+  EXPECT_EQ(m.PrincipalAxesOffset(0.11), math::Quaterniond::Identity);
+  // relative tolerance is small enough that it should not return identity
+  EXPECT_NE(m.PrincipalAxesOffset(0.09), math::Quaterniond::Identity);
 }
 
 /////////////////////////////////////////////////
@@ -573,6 +594,9 @@ TEST(MassMatrix3dTest, PrincipalAxesOffsetNoRepeat)
   // Non-diagonal inertia matrix with f1 = 0
   VerifyNondiagonalMomentsAndAxes(math::Vector3d(3, 4, 6),
     math::Vector3d(3.0, 5.0, 5.0),
+    math::Vector3d(0, 0, 1));
+  VerifyNondiagonalMomentsAndAxes(math::Vector3d(3000, 4999, 5001),
+    math::Vector3d(3000.0, 5000.0, 5000.0),
     math::Vector3d(0, 0, 1));
   // Non-diagonal inertia matrix with f1 = 0
   VerifyNondiagonalMomentsAndAxes(math::Vector3d(3, 4, 6),
