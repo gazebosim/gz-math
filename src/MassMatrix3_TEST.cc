@@ -776,7 +776,8 @@ TEST(MassMatrix3dTest, EquivalentBox)
     EXPECT_EQ(m, m2);
   }
 
-  // box 1x4x9 rotated by 90 degrees around Z
+  // box 9x4x1 rotated by 90 degrees around Z
+  // equivalent to 4x9x1 after rotation
   {
     const double mass = 12.0;
     const math::Vector3d ixxyyzz(82, 17, 97);
@@ -786,13 +787,15 @@ TEST(MassMatrix3dTest, EquivalentBox)
     EXPECT_TRUE(m.EquivalentBox(size, rot, -1e-6));
     EXPECT_EQ(size, math::Vector3d(9, 4, 1));
     EXPECT_EQ(rot, math::Quaterniond(0, 0, IGN_PI/2));
+    // equivalent to 4x9x1 after rotation
+    EXPECT_EQ((rot * size).Abs(), math::Vector3d(4, 9, 1));
 
     math::MassMatrix3d m2;
     EXPECT_TRUE(m2.SetFromBox(mass, size, rot));
     EXPECT_EQ(m, m2);
   }
 
-  // box 1x4x9 rotated by 45 degrees around Z
+  // box 9x4x1 rotated by 45 degrees around Z
   {
     const double mass = 12.0;
     const math::Vector3d ixxyyzz(49.5, 49.5, 97);
