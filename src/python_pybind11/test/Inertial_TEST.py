@@ -94,7 +94,14 @@ class TestInertial(unittest.TestCase):
 
         # Verify values
         self.assertEqual(inertial.mass_matrix(), m)
+        self.assertEqual(inertial.mass_matrix().mass(), 5.0)
+        self.assertEqual(inertial.mass_matrix().diagonal_moments(), Ixxyyzz)
+        self.assertEqual(inertial.mass_matrix().off_diagonal_moments(), Ixyxzyz)
         self.assertEqual(inertial.pose(), pose)
+
+        # Try setting values of inertial.mass_matrix()
+        self.assertTrue(inertial.mass_matrix().set_mass(6.0))
+        self.assertEqual(inertial.mass_matrix().mass(), 6.0)
 
         # Invalid again if an invalid inertia is set
         mInvalid = MassMatrix3d(-1, Ixxyyzz, Ixyxzyz)
