@@ -1,30 +1,29 @@
 ## Ignition Math 6.x
 
-## Ignition Math 6.11.0 (2022-05-10)
+## Ignition Math 6.11.0 (2022-05-11)
+
+1. MassMatrix3: fix bug in PrincipalAxesOffset tolerances
+    * [Pull request #424](https://github.com/gazebosim/gz-math/pull/424)
 
 1. Fix return policies for some member functions
-    * [Pull request #422](https://github.com/ignitionrobotics/ign-math/pull/422)
+    * [Pull request #422](https://github.com/gazebosim/gz-math/pull/422)
 
 1. Added Ellipsoid Python interface
-    * [Pull request #404](https://github.com/ignitionrobotics/ign-math/pull/404)
+    * [Pull request #404](https://github.com/gazebosim/gz-math/pull/404)
 
 1. Added Capsule Python interface
-    * [Pull request #403](https://github.com/ignitionrobotics/ign-math/pull/403)
+    * [Pull request #403](https://github.com/gazebosim/gz-math/pull/403)
 
 1. Fixes for tests on i386: relax SphericalCoordinates and workaround for negative zero
-    * [Pull request #374](https://github.com/ignitionrobotics/ign-math/pull/374)
+    * [Pull request #374](https://github.com/gazebosim/gz-math/pull/374)
 
 1. Added helper function to check if a string represents a time
-    * [Pull request #389](https://github.com/ignitionrobotics/ign-math/pull/389)
+    * [Pull request #389](https://github.com/gazebosim/gz-math/pull/389)
 
-1. Reduce pybind11 compilation memory part 3
-    * [Pull request #382](https://github.com/ignitionrobotics/ign-math/pull/382)
-
-1. More pybind11 compilation memory savings
-    * [Pull request #373](https://github.com/ignitionrobotics/ign-math/pull/373)
-
-1. Reduce memory required to compile pybind11 interface
-    * [Pull request #371](https://github.com/ignitionrobotics/ign-math/pull/371)
+1. Reduce pybind11 compilation memory
+    * [Pull request #382](https://github.com/gazebosim/gz-math/pull/382)
+    * [Pull request #373](https://github.com/gazebosim/gz-math/pull/373)
+    * [Pull request #371](https://github.com/gazebosim/gz-math/pull/371)
 
 ## Ignition Math 6.10.0 (2022-01-26)
 
