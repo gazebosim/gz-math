@@ -21,7 +21,7 @@
 #include "gz/math/MassMatrix3.hh"
 #include "gz/math/Material.hh"
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

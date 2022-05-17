@@ -21,7 +21,7 @@
 #include <vector>
 #include "gz/math/Export.hh"
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

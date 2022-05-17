@@ -25,7 +25,7 @@
 
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
@@ -264,7 +264,7 @@ namespace ignition
       /// \param _interval Interval to output
       /// \return the stream
       public: friend std::ostream &operator<<(
-        std::ostream &_out, const ignition::math::Interval<T> &_interval)
+        std::ostream &_out, const gz::math::Interval<T> &_interval)
       {
         return _out << (_interval.leftClosed ? "[" : "(")
                     << _interval.leftValue << ", " << _interval.rightValue

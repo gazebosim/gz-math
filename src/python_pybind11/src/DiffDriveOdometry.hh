@@ -26,13 +26,13 @@
 
 namespace py = pybind11;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 namespace python
 {
-/// Define a py:: wrapper for an ignition::gazebo::DiffDriveOdometry
+/// Define a py:: wrapper for an gz::gazebo::DiffDriveOdometry
 /**
  * \param[in] module a py:: module to add the definition to
  */
@@ -40,6 +40,6 @@ void defineMathDiffDriveOdometry(
   py::module &m, const std::string &typestr);
 }  // namespace python
 }  // namespace gazebo
-}  // namespace ignition
+}  // namespace gz
 
 #endif  // GZ_MATH_PYTHON__DIFFDRIVEODOMETRY_HH_

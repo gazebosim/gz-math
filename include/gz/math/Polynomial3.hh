@@ -27,7 +27,7 @@
 #include <gz/math/Vector4.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
@@ -277,7 +277,7 @@ namespace ignition
       /// \param _p Polynomial3 to output
       /// \return the stream
       public: friend std::ostream &operator<<(
-        std::ostream &_out, const ignition::math::Polynomial3<T> &_p)
+        std::ostream &_out, const gz::math::Polynomial3<T> &_p)
       {
         _p.Print(_out, "x");
         return _out;

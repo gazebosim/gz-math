@@ -26,7 +26,7 @@
 #include <gz/math/Vector3.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
@@ -174,7 +174,7 @@ namespace ignition
       /// \param _r Region3 to output
       /// \return the stream
       public: friend std::ostream &operator<<(
-        std::ostream &_out, const ignition::math::Region3<T> &_r)
+        std::ostream &_out, const gz::math::Region3<T> &_r)
       {
         return _out <<_r.ix << " x " << _r.iy << " x " << _r.iz;
       }

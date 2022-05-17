@@ -23,7 +23,7 @@
 #include <gz/math/config.hh>
 #include <gz/utils/ImplPtr.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
@@ -60,7 +60,7 @@ namespace ignition
     /// **Example Usage**
     ///
     /// \code{.cpp}
-    /// ignition::math::DiffDriveOdometry odom;
+    /// gz::math::DiffDriveOdometry odom;
     /// odom.SetWheelParams(2.0, 0.5, 0.5);
     /// odom.Init(std::chrono::steady_clock::now());
     ///

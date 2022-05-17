@@ -79,7 +79,7 @@ constexpr T IGN_MASSMATRIX3_DEFAULT_TOLERANCE = T(10);
 /// \param[in] _v Vector3d that contains the box's dimensions.
 #define IGN_BOX_VOLUME_V(_v) (_v.X() *_v.Y() * _v.Z())
 
-namespace ignition
+namespace gz
 {
   /// \brief Math classes and function useful in robot applications.
   namespace math

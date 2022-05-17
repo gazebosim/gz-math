@@ -28,7 +28,7 @@
 #include <gz/math/config.hh>
 #include <gz/math/Helpers.hh>
 
-namespace ignition
+namespace gz
 {
 namespace math
 {

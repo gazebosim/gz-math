@@ -27,7 +27,7 @@
 
 #include <gz/math/detail/InterpolationPoint.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

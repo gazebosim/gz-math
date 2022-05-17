@@ -25,7 +25,7 @@
 #include <gz/utils/ImplPtr.hh>
 
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
@@ -335,7 +335,7 @@ namespace ignition
       /// \param[in] _temp Temperature to write to the stream.
       /// \return The output stream.
       public: friend std::ostream &operator<<(std::ostream &_out,
-                  const ignition::math::Temperature &_temp)
+                  const gz::math::Temperature &_temp)
               {
                 _out << _temp.Kelvin();
                 return _out;
@@ -347,7 +347,7 @@ namespace ignition
       /// temperature value is in Kelvin.
       /// \return The input stream.
       public: friend std::istream &operator>>(std::istream &_in,
-                  ignition::math::Temperature &_temp)
+                  gz::math::Temperature &_temp)
               {
                 // Skip white spaces
                 _in.setf(std::ios_base::skipws);

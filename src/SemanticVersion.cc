@@ -19,10 +19,10 @@
 
 #include "gz/math/SemanticVersion.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
@@ -55,7 +55,7 @@ namespace ignition
 
 /////////////////////////////////////////////////
 SemanticVersion::SemanticVersion()
-: dataPtr(ignition::utils::MakeImpl<Implementation>())
+: dataPtr(gz::utils::MakeImpl<Implementation>())
 {
 }
 

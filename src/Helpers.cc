@@ -20,7 +20,7 @@
 #include <regex>
 #include <sstream>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

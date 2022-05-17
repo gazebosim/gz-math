@@ -23,7 +23,7 @@
 #include <gz/math/Matrix3.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
@@ -811,7 +811,7 @@ namespace ignition
       }
 
       /// \brief Equality comparison operator. A tolerance of 0.001 is used
-      /// with the ignition::math::equal function for each component of the
+      /// with the gz::math::equal function for each component of the
       /// quaternions.
       /// \param[in] _qt Quaternion<T> for comparison.
       /// \return True if each component of both quaternions is within the
@@ -822,7 +822,7 @@ namespace ignition
       }
 
       /// \brief Not equal to operator. A tolerance of 0.001 is used
-      /// with the ignition::math::equal function for each component of the
+      /// with the gz::math::equal function for each component of the
       /// quaternions.
       /// \param[in] _qt Quaternion for comparison.
       /// \return True if any component of both quaternions is not within
@@ -1197,7 +1197,7 @@ namespace ignition
       /// \param[in] _q quaternion to output
       /// \return the stream
       public: friend std::ostream &operator<<(std::ostream &_out,
-                  const ignition::math::Quaternion<T> &_q)
+                  const gz::math::Quaternion<T> &_q)
       {
         Vector3<T> v(_q.Euler());
         _out << v;
@@ -1209,7 +1209,7 @@ namespace ignition
       /// \param[out] _q Quaternion<T> to read values into
       /// \return The istream
       public: friend std::istream &operator>>(std::istream &_in,
-          ignition::math::Quaternion<T> &_q)
+          gz::math::Quaternion<T> &_q)
       {
         Angle roll, pitch, yaw;
 
@@ -1226,7 +1226,7 @@ namespace ignition
       }
 
       /// \brief Equality comparison test with a tolerance parameter.
-      /// The tolerance is used with the ignition::math::equal function for
+      /// The tolerance is used with the gz::math::equal function for
       /// each component of the quaternions.
       /// \param[in] _q The quaternion to compare against.
       /// \param[in] _tol equality tolerance.

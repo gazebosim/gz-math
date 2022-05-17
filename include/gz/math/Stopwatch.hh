@@ -23,7 +23,7 @@
 #include <gz/math/config.hh>
 #include <gz/utils/ImplPtr.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
@@ -43,7 +43,7 @@ namespace ignition
     /// # Example usage
     ///
     /// ```{.cpp}
-    /// ignition::math::Stopwatch watch;
+    /// gz::math::Stopwatch watch;
     /// watch.Start();
     ///
     /// // do something...

@@ -27,7 +27,7 @@
 #include <gz/math/Vector3.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
@@ -187,7 +187,7 @@ namespace ignition
       /// \return the stream
       public: friend std::ostream &operator<<(
           std::ostream &_out,
-          const ignition::math::PiecewiseScalarField3<
+          const gz::math::PiecewiseScalarField3<
           ScalarField3T, ScalarT> &_field)
       {
         if (_field.pieces.empty())
