@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__HELPERS_HH_
-#define IGNITION_MATH_PYTHON__HELPERS_HH_
+#ifndef GZ_MATH_PYTHON__HELPERS_HH_
+#define GZ_MATH_PYTHON__HELPERS_HH_
 
 #include <pybind11/pybind11.h>
 
@@ -37,4 +37,4 @@ void defineMathHelpers(py::module &m);
 }  // namespace gazebo
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__HELPERS_HH_
+#endif  // GZ_MATH_PYTHON__HELPERS_HH_

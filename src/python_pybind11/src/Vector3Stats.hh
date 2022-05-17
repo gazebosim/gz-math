@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__VECTOR3STATS_HH_
-#define IGNITION_MATH_PYTHON__VECTOR3STATS_HH_
+#ifndef GZ_MATH_PYTHON__VECTOR3STATS_HH_
+#define GZ_MATH_PYTHON__VECTOR3STATS_HH_
 
 #include <string>
 
@@ -40,4 +40,4 @@ void defineMathVector3Stats(py::module &m, const std::string &typestr);
 }  // namespace math
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__VECTOR3STATS_HH_
+#endif  // GZ_MATH_PYTHON__VECTOR3STATS_HH_

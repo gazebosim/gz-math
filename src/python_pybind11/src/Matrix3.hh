@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__MATRIX3_HH_
-#define IGNITION_MATH_PYTHON__MATRIX3_HH_
+#ifndef GZ_MATH_PYTHON__MATRIX3_HH_
+#define GZ_MATH_PYTHON__MATRIX3_HH_
 
 #include <sstream>
 #include <string>
@@ -129,4 +129,4 @@ void helpDefineMathMatrix3(py::module &m, const std::string &typestr)
 }  // namespace math
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__MATRIX3_HH_
+#endif  // GZ_MATH_PYTHON__MATRIX3_HH_

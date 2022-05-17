@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__VECTOR2_HH_
-#define IGNITION_MATH_PYTHON__VECTOR2_HH_
+#ifndef GZ_MATH_PYTHON__VECTOR2_HH_
+#define GZ_MATH_PYTHON__VECTOR2_HH_
 
 #include <sstream>
 #include <string>
@@ -149,4 +149,4 @@ void defineMathVector2(py::module &m, const std::string &typestr);
 }  // namespace gazebo
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__VECTOR2_HH_
+#endif  // GZ_MATH_PYTHON__VECTOR2_HH_

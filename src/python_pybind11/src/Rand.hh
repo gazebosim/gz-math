@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__RAND_HH_
-#define IGNITION_MATH_PYTHON__RAND_HH_
+#ifndef GZ_MATH_PYTHON__RAND_HH_
+#define GZ_MATH_PYTHON__RAND_HH_
 
 #include <pybind11/pybind11.h>
 #include <string>
@@ -38,4 +38,4 @@ void defineMathRand(py::module &m, const std::string &typestr);
 }  // namespace gazebo
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__RAND_HH_
+#endif  // GZ_MATH_PYTHON__RAND_HH_

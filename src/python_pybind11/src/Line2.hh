@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__LINE2_HH_
-#define IGNITION_MATH_PYTHON__LINE2_HH_
+#ifndef GZ_MATH_PYTHON__LINE2_HH_
+#define GZ_MATH_PYTHON__LINE2_HH_
 
 #include <sstream>
 #include <string>
@@ -140,4 +140,4 @@ void defineMathLine2(py::module &m, const std::string &typestr);
 }  // namespace math
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__LINE2_HH_
+#endif  // GZ_MATH_PYTHON__LINE2_HH_

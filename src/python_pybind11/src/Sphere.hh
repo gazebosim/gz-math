@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__SPHERE_HH_
-#define IGNITION_MATH_PYTHON__SPHERE_HH_
+#ifndef GZ_MATH_PYTHON__SPHERE_HH_
+#define GZ_MATH_PYTHON__SPHERE_HH_
 
 #include <string>
 #include <vector>
@@ -100,4 +100,4 @@ void defineMathSphere(py::module &m, const std::string &typestr)
 }  // namespace math
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__SPHERE_HH_
+#endif  // GZ_MATH_PYTHON__SPHERE_HH_

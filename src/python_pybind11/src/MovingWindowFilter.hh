@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__MOVINGWINDOWFILTER_HH_
-#define IGNITION_MATH_PYTHON__MOVINGWINDOWFILTER_HH_
+#ifndef GZ_MATH_PYTHON__MOVINGWINDOWFILTER_HH_
+#define GZ_MATH_PYTHON__MOVINGWINDOWFILTER_HH_
 
 #include <string>
 
@@ -67,4 +67,4 @@ void defineMathMovingWindowFilter(py::module &m, const std::string &typestr);
 }  // namespace math
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__MovingWindowFilterD_HH_
+#endif  // GZ_MATH_PYTHON__MovingWindowFilterD_HH_

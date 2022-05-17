@@ -14,8 +14,8 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_KMEANSPRIVATE_HH_
-#define IGNITION_MATH_KMEANSPRIVATE_HH_
+#ifndef GZ_MATH_KMEANSPRIVATE_HH_
+#define GZ_MATH_KMEANSPRIVATE_HH_
 
 #include <vector>
 #include <gz/math/Vector3.hh>

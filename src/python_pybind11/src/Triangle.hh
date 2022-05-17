@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__TRIANGLE_HH_
-#define IGNITION_MATH_PYTHON__TRIANGLE_HH_
+#ifndef GZ_MATH_PYTHON__TRIANGLE_HH_
+#define GZ_MATH_PYTHON__TRIANGLE_HH_
 
 #include <string>
 
@@ -109,4 +109,4 @@ void helpDefineMathTriangle(py::module &m, const std::string &typestr)
 }  // namespace gazebo
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__TRIANGLE_HH_
+#endif  // GZ_MATH_PYTHON__TRIANGLE_HH_

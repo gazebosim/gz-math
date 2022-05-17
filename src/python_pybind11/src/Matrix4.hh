@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__MATRIX4_HH_
-#define IGNITION_MATH_PYTHON__MATRIX4_HH_
+#ifndef GZ_MATH_PYTHON__MATRIX4_HH_
+#define GZ_MATH_PYTHON__MATRIX4_HH_
 
 #include <sstream>
 #include <string>
@@ -151,4 +151,4 @@ void helpDefineMathMatrix4(py::module &m, const std::string &typestr)
 }  // namespace gazebo
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__MATRIX4_HH_
+#endif  // GZ_MATH_PYTHON__MATRIX4_HH_

@@ -14,8 +14,8 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_PYTHON__DIFFDRIVEODOMETRY_HH_
-#define IGNITION_MATH_PYTHON__DIFFDRIVEODOMETRY_HH_
+#ifndef GZ_MATH_PYTHON__DIFFDRIVEODOMETRY_HH_
+#define GZ_MATH_PYTHON__DIFFDRIVEODOMETRY_HH_
 
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
@@ -42,4 +42,4 @@ void defineMathDiffDriveOdometry(
 }  // namespace gazebo
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__DIFFDRIVEODOMETRY_HH_
+#endif  // GZ_MATH_PYTHON__DIFFDRIVEODOMETRY_HH_

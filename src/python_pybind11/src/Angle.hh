@@ -40,4 +40,4 @@ void defineMathAngle(py::module &m, const std::string &typestr);
 }  // namespace math
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__ANGLE_HPP_
+#endif  // GZ_MATH_PYTHON__ANGLE_HPP_

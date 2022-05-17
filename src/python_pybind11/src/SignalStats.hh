@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__SIGNALSTATS_HH_
-#define IGNITION_MATH_PYTHON__SIGNALSTATS_HH_
+#ifndef GZ_MATH_PYTHON__SIGNALSTATS_HH_
+#define GZ_MATH_PYTHON__SIGNALSTATS_HH_
 
 #include <pybind11/pybind11.h>
 #include <string>
@@ -89,4 +89,4 @@ void defineMathSignalMean(py::module &m, const std::string &typestr);
 }  // namespace math
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__SIGNALSTATS_HH_
+#endif  // GZ_MATH_PYTHON__SIGNALSTATS_HH_

@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__CYLINDER_HH_
-#define IGNITION_MATH_PYTHON__CYLINDER_HH_
+#ifndef GZ_MATH_PYTHON__CYLINDER_HH_
+#define GZ_MATH_PYTHON__CYLINDER_HH_
 
 #include <string>
 
@@ -114,4 +114,4 @@ void defineMathCylinder(py::module &m, const std::string &typestr)
 }  // namespace math
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__CYLINDER_HH_
+#endif  // GZ_MATH_PYTHON__CYLINDER_HH_

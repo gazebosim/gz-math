@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__BOX_HH_
-#define IGNITION_MATH_PYTHON__BOX_HH_
+#ifndef GZ_MATH_PYTHON__BOX_HH_
+#define GZ_MATH_PYTHON__BOX_HH_
 
 #include <string>
 #include <vector>
@@ -135,4 +135,4 @@ void defineMathBox(py::module &m, const std::string &typestr)
 }  // namespace math
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__BOX_HH_
+#endif  // GZ_MATH_PYTHON__BOX_HH_

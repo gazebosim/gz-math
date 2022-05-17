@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__PLANE_HH_
-#define IGNITION_MATH_PYTHON__PLANE_HH_
+#ifndef GZ_MATH_PYTHON__PLANE_HH_
+#define GZ_MATH_PYTHON__PLANE_HH_
 
 #include <string>
 
@@ -121,4 +121,4 @@ void defineMathPlane(py::module &m, const std::string &typestr)
 }  // namespace math
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__PLANE_HH_
+#endif  // GZ_MATH_PYTHON__PLANE_HH_

@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__QUATERNION_HH_
-#define IGNITION_MATH_PYTHON__QUATERNION_HH_
+#ifndef GZ_MATH_PYTHON__QUATERNION_HH_
+#define GZ_MATH_PYTHON__QUATERNION_HH_
 
 #include <sstream>
 #include <string>
@@ -217,4 +217,4 @@ void helpDefineMathQuaternion(py::module &m, const std::string &typestr)
 }  // namespace math
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__QUATERNION_HH_
+#endif  // GZ_MATH_PYTHON__QUATERNION_HH_
