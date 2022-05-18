@@ -15,4 +15,14 @@
  *
  */
 
+#ifndef IGNITION_MATH__CONFIG_HH_
+#define IGNITION_MATH__CONFIG_HH_
+
 #include <gz/math/config.hh>
+
+namespace [[deprecated("Use gz namespace.")]]  ignition
+{
+  using namespace gz;
+}
+
+#endif
