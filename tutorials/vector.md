@@ -93,7 +93,7 @@ ruby vector3_example.rb
 Create a `Vector2` of doubles using the typedef `Vector2d`. It's possible to set initial values or use another object to create a identical copy.
 
 ```{.rb}
-va = Ignition::Math::Vector2d.new(1, 2)
+va = Gz::Math::Vector2d.new(1, 2)
 ```
 
 You can get access to each component in the vector using the `X()`, `Y()` accessors.
@@ -122,7 +122,7 @@ printf("vb.Distance(va) = %f\n", vb.Distance(va))
 You can create vectors with 3 dimensions using the typedef `Vector3d`:
 
 ```{.rb}
-v1 = Ignition::Math::Vector3d.new(0, 0, 0)
+v1 = Gz::Math::Vector3d.new(0, 0, 0)
 ```
 
 You can also get access to each component in the vector using the `X()`, `Y()` and `Z()` accessors:
