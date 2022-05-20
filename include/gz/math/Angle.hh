@@ -218,7 +218,7 @@ namespace gz
       /// \param[in] _a Angle to output.
       /// \return The output stream.
       public: friend std::ostream &operator<<(std::ostream &_out,
-                                              const ignition::math::Angle &_a)
+                                              const gz::math::Angle &_a)
       {
         _out << _a.Radian();
         return _out;
@@ -229,7 +229,7 @@ namespace gz
       /// \param[out] _a Angle to read value into.
       /// \return The input stream.
       public: friend std::istream &operator>>(std::istream &_in,
-                                              ignition::math::Angle &_a)
+                                              gz::math::Angle &_a)
       {
         // Skip white spaces
         _in.setf(std::ios_base::skipws);

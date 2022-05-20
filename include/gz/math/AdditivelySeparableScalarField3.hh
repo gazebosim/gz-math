@@ -145,7 +145,7 @@ namespace gz
       /// \return the stream
       public: friend std::ostream &operator<<(
           std::ostream &_out,
-          const ignition::math::AdditivelySeparableScalarField3<
+          const gz::math::AdditivelySeparableScalarField3<
           ScalarFunctionT, ScalarT> &_field)
       {
         using std::abs;  // enable ADL

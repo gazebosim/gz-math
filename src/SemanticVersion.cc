@@ -55,7 +55,7 @@ namespace gz
 
 /////////////////////////////////////////////////
 SemanticVersion::SemanticVersion()
-: dataPtr(ignition::utils::MakeImpl<Implementation>())
+: dataPtr(gz::utils::MakeImpl<Implementation>())
 {
 }
 

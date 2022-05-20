@@ -34,14 +34,14 @@ namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an ignition::math::Triangle
+/// Define a pybind11 wrapper for an gz::math::Triangle
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathTriangle(py::module &m, const std::string &typestr);
 
-/// Help define a pybind11 wrapper for an ignition::math::Triangle
+/// Help define a pybind11 wrapper for an gz::math::Triangle
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -49,7 +49,7 @@ void defineMathTriangle(py::module &m, const std::string &typestr);
 template<typename T>
 void helpDefineMathTriangle(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::Triangle<T>;
+  using Class = gz::math::Triangle<T>;
   py::class_<Class>(m,
                     typestr.c_str(),
                     py::buffer_protocol(),

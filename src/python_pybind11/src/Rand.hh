@@ -29,7 +29,7 @@ namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an ignition::math::Rand
+/// Define a pybind11 wrapper for an gz::math::Rand
 /**
  * \param[in] module a pybind11 module to add the definition to
  */

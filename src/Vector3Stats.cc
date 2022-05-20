@@ -37,7 +37,7 @@ class Vector3Stats::Implementation
 
 //////////////////////////////////////////////////
 Vector3Stats::Vector3Stats()
-  : dataPtr(ignition::utils::MakeImpl<Implementation>())
+  : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
 }
 

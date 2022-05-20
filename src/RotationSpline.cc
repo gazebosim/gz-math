@@ -37,7 +37,7 @@ class RotationSpline::Implementation
 
 /////////////////////////////////////////////////
 RotationSpline::RotationSpline()
-: dataPtr(ignition::utils::MakeImpl<Implementation>())
+: dataPtr(gz::utils::MakeImpl<Implementation>())
 {
 }
 

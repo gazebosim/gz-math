@@ -33,7 +33,7 @@ namespace python
 {
 void defineMathTemperature(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::Temperature;
+  using Class = gz::math::Temperature;
   std::string pyclass_name = typestr;
   auto toString = [](const Class &si) {
     std::stringstream stream;

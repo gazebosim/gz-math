@@ -41,6 +41,6 @@ printf("The variance of a vector containing {1, 2, 3, 4, 5} is %f.\n",
   Ignition::Math::variance(v))
 
 printf("The result of rounding up 3 to the next power of two is %f.\n",
-    << ignition::math::roundUpPowerOfTwo(3) << std::endl;
+    << gz::math::roundUpPowerOfTwo(3) << std::endl;
 
 

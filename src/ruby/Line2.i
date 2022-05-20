@@ -62,7 +62,7 @@ namespace gz
 
     %extend Line2
     {
-      ignition::math::Vector2<T> __getitem__(unsigned int i) const
+      gz::math::Vector2<T> __getitem__(unsigned int i) const
       {
         return (*$self)[i];
       }

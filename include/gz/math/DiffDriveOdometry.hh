@@ -60,7 +60,7 @@ namespace gz
     /// **Example Usage**
     ///
     /// \code{.cpp}
-    /// ignition::math::DiffDriveOdometry odom;
+    /// gz::math::DiffDriveOdometry odom;
     /// odom.SetWheelParams(2.0, 0.5, 0.5);
     /// odom.Init(std::chrono::steady_clock::now());
     ///

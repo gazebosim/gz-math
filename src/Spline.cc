@@ -28,7 +28,7 @@ using namespace math;
 
 ///////////////////////////////////////////////////////////
 Spline::Spline()
-  : dataPtr(ignition::utils::MakeImpl<Implementation>())
+  : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
 }
 

@@ -595,7 +595,7 @@ namespace gz
       /// \param[in] _m Matrix to output.
       /// \return The stream.
       public: friend std::ostream &operator<<(
-                  std::ostream &_out, const ignition::math::Matrix3<T> &_m)
+                  std::ostream &_out, const gz::math::Matrix3<T> &_m)
       {
         for (auto i : {0, 1, 2})
         {
@@ -617,7 +617,7 @@ namespace gz
       /// \param [out] _m Matrix3 to read values into.
       /// \return The stream.
       public: friend std::istream &operator>>(
-                  std::istream &_in, ignition::math::Matrix3<T> &_m)
+                  std::istream &_in, gz::math::Matrix3<T> &_m)
       {
         // Skip white spaces
         _in.setf(std::ios_base::skipws);

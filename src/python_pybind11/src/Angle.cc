@@ -33,7 +33,7 @@ namespace python
 {
 void defineMathAngle(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::Angle;
+  using Class = gz::math::Angle;
   auto toString = [](const Class &si) {
     std::stringstream stream;
     stream << si;

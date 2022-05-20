@@ -85,8 +85,8 @@ namespace gz
     }
 
     %extend Matrix3 {
-      ignition::math::Quaternion<T> to_quaternion() {
-        return ignition::math::Quaternion<T>(*$self);
+      gz::math::Quaternion<T> to_quaternion() {
+        return gz::math::Quaternion<T>(*$self);
       }
     }
 

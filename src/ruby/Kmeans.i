@@ -23,13 +23,13 @@
 %}
 
 %include "std_vector.i"
-%template(vector_vector3d) std::vector<ignition::math::Vector3<double>>;
+%template(vector_vector3d) std::vector<gz::math::Vector3<double>>;
 %template(vector_uint) std::vector<unsigned int>;
 
 %inline %{
   struct ClusterOutput {
     bool result;
-    std::vector<ignition::math::Vector3<double>> centroids;
+    std::vector<gz::math::Vector3<double>> centroids;
     std::vector<unsigned int> labels;
   };
 %}

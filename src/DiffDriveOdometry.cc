@@ -23,7 +23,7 @@ using namespace math;
 
 // The implementation was borrowed from: https://github.com/ros-controls/ros_controllers/blob/melodic-devel/diff_drive_controller/src/odometry.cpp
 
-class ignition::math::DiffDriveOdometry::Implementation
+class gz::math::DiffDriveOdometry::Implementation
 {
   /// \brief Integrates the velocities (linear and angular) using 2nd order
   /// Runge-Kutta.
@@ -83,7 +83,7 @@ class ignition::math::DiffDriveOdometry::Implementation
 
 //////////////////////////////////////////////////
 DiffDriveOdometry::DiffDriveOdometry(size_t _windowSize)
-  : dataPtr(ignition::utils::MakeImpl<Implementation>())
+  : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
   this->SetVelocityRollingWindowSize(_windowSize);
 }

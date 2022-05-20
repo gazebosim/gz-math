@@ -31,7 +31,7 @@ namespace python
 {
 void defineMathVector3Stats(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::Vector3Stats;
+  using Class = gz::math::Vector3Stats;
   std::string pyclass_name = typestr;
   py::class_<Class>(m,
                     pyclass_name.c_str(),

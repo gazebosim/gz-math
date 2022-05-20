@@ -27,7 +27,7 @@ using namespace math;
 
 //////////////////////////////////////////////////
 Kmeans::Kmeans(const std::vector<Vector3d> &_obs)
-: dataPtr(ignition::utils::MakeImpl<Implementation>())
+: dataPtr(gz::utils::MakeImpl<Implementation>())
 {
   this->Observations(_obs);
 }

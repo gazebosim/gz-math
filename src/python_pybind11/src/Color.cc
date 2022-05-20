@@ -33,7 +33,7 @@ namespace python
 {
 void defineMathColor(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::Color;
+  using Class = gz::math::Color;
   auto toString = [](const Class &si) {
     std::stringstream stream;
     stream << si;

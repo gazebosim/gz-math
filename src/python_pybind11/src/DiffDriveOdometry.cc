@@ -26,7 +26,7 @@ namespace python
 void defineMathDiffDriveOdometry(
   py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::DiffDriveOdometry;
+  using Class = gz::math::DiffDriveOdometry;
   std::string pyclass_name = typestr;
   py::class_<Class>(m,
                     pyclass_name.c_str(),

@@ -71,7 +71,7 @@ public:
     }
 };
 
-/// Help define a pybind11 wrapper for an ignition::math::Filter
+/// Help define a pybind11 wrapper for an gz::math::Filter
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -79,7 +79,7 @@ public:
 template<typename T>
 void helpDefineMathFilter(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::Filter<T>;
+  using Class = gz::math::Filter<T>;
   std::string pyclass_name = typestr;
   py::class_<Class, FilterTrampoline<T>>(m,
                     pyclass_name.c_str(),
@@ -97,7 +97,7 @@ void helpDefineMathFilter(py::module &m, const std::string &typestr)
          "Get the output of the filter.");
 }
 
-/// Define a pybind11 wrapper for an ignition::math::Filter
+/// Define a pybind11 wrapper for an gz::math::Filter
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -123,7 +123,7 @@ public:
   }
 };
 
-/// Help define a pybind11 wrapper for an ignition::math::OnePole
+/// Help define a pybind11 wrapper for an gz::math::OnePole
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -131,7 +131,7 @@ public:
 template<typename T>
 void helpDefineMathOnePole(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::OnePole<T>;
+  using Class = gz::math::OnePole<T>;
   std::string pyclass_name = typestr;
   py::class_<Class, OnePoleTrampoline<T>>(m,
                     pyclass_name.c_str(),
@@ -153,21 +153,21 @@ void helpDefineMathOnePole(py::module &m, const std::string &typestr)
          "Update the filter's output.");
 }
 
-/// Define a pybind11 wrapper for an ignition::math::OnePole
+/// Define a pybind11 wrapper for an gz::math::OnePole
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathOnePole(py::module &m, const std::string &typestr);
 
-/// Define a pybind11 wrapper for an ignition::math::OnePoleQuaterion
+/// Define a pybind11 wrapper for an gz::math::OnePoleQuaterion
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathOnePoleQuaternion(py::module &m, const std::string &typestr);
 
-/// Define a pybind11 wrapper for an ignition::math::OnePoleVector3
+/// Define a pybind11 wrapper for an gz::math::OnePoleVector3
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -213,7 +213,7 @@ public:
   }
 };
 
-/// Help define a pybind11 wrapper for an ignition::math::BiQuad
+/// Help define a pybind11 wrapper for an gz::math::BiQuad
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -221,7 +221,7 @@ public:
 template<typename T>
 void helpDefineMathBiQuad(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::BiQuad<T>;
+  using Class = gz::math::BiQuad<T>;
   std::string pyclass_name = typestr;
   py::class_<Class, BiQuadTrampoline<T>>(m,
                     pyclass_name.c_str(),
@@ -246,14 +246,14 @@ void helpDefineMathBiQuad(py::module &m, const std::string &typestr)
          "Update the filter's output.");
 }
 
-/// Define a pybind11 wrapper for an ignition::math::BiQuad
+/// Define a pybind11 wrapper for an gz::math::BiQuad
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathBiQuad(py::module &m, const std::string &typestr);
 
-/// Define a pybind11 wrapper for an ignition::math::BiQuadVector3
+/// Define a pybind11 wrapper for an gz::math::BiQuadVector3
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python

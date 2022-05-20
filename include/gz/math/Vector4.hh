@@ -689,7 +689,7 @@ namespace gz
       /// \param[in] _pt Vector4 to output
       /// \return The stream
       public: friend std::ostream &operator<<(
-                  std::ostream &_out, const ignition::math::Vector4<T> &_pt)
+                  std::ostream &_out, const gz::math::Vector4<T> &_pt)
       {
         for (auto i : {0, 1, 2, 3})
         {
@@ -706,7 +706,7 @@ namespace gz
       /// \param[in] _pt Vector4 to read values into
       /// \return the stream
       public: friend std::istream &operator>>(
-                  std::istream &_in, ignition::math::Vector4<T> &_pt)
+                  std::istream &_in, gz::math::Vector4<T> &_pt)
       {
         T x, y, z, w;
 

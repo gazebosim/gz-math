@@ -47,7 +47,7 @@ Create a `Vector2` called `vec2` of doubles using the typedef `Vector2d`. **The 
 \snippet examples/vector2_example.cc constructor
 
 
-The `Vector2` class is a template, so you can also create a `Vector2` using `ignition::math::Vector2<double>`:
+The `Vector2` class is a template, so you can also create a `Vector2` using `gz::math::Vector2<double>`:
 
 \snippet examples/vector2_example.cc constructor2
 

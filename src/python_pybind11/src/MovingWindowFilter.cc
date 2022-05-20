@@ -30,7 +30,7 @@ void defineMathMovingWindowFilter(py::module &m, const std::string &typestr)
 {
   helpDefineMathMovingWindowFilter<int>(m, typestr + "i");
   helpDefineMathMovingWindowFilter<double>(m, typestr + "d");
-  helpDefineMathMovingWindowFilter<ignition::math::Vector3d>(m, typestr + "v3");
+  helpDefineMathMovingWindowFilter<gz::math::Vector3d>(m, typestr + "v3");
 }
 
 }  // namespace python

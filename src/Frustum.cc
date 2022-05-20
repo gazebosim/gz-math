@@ -68,7 +68,7 @@ class Frustum::Implementation
 
 /////////////////////////////////////////////////
 Frustum::Frustum()
-  : dataPtr(ignition::utils::MakeImpl<Implementation>())
+  : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
 }
 

@@ -43,7 +43,7 @@ namespace gz
     /// # Example usage
     ///
     /// ```{.cpp}
-    /// ignition::math::Stopwatch watch;
+    /// gz::math::Stopwatch watch;
     /// watch.Start();
     ///
     /// // do something...

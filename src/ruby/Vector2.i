@@ -38,15 +38,15 @@ namespace gz
       public: %extend {
         static Vector2 Zero()
         {
-          return ignition::math::Vector2<T>::Zero;
+          return gz::math::Vector2<T>::Zero;
         }
         static Vector2 One()
         {
-          return ignition::math::Vector2<T>::One;
+          return gz::math::Vector2<T>::One;
         }
         static Vector2 NaN()
         {
-          return ignition::math::Vector2<T>::NaN;
+          return gz::math::Vector2<T>::NaN;
         }
       }
       public: Vector2();

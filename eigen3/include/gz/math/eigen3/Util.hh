@@ -84,7 +84,7 @@ namespace gz
       /// http://codextechnicanum.blogspot.com/2015/04/find-minimum-oriented-bounding-box-of.html
       /// \param[in] _vertices a vector of 3d vertices
       /// \return Oriented 3D box
-      inline ignition::math::OrientedBoxd verticesToOrientedBox(
+      inline gz::math::OrientedBoxd verticesToOrientedBox(
         const std::vector<math::Vector3d> &_vertices)
       {
         math::OrientedBoxd box;

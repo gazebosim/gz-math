@@ -54,7 +54,7 @@ namespace math
 
     %extend Triangle
     {
-      ignition::math::Vector2<T> __getitem__(const unsigned int i) const
+      gz::math::Vector2<T> __getitem__(const unsigned int i) const
       {
         return (*$self)[i];
       }

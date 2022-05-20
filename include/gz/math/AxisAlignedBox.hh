@@ -132,7 +132,7 @@ namespace gz
       /// \param[in] _b AxisAlignedBox to output to the stream
       /// \return The stream
       public: friend std::ostream &operator<<(std::ostream &_out,
-                  const ignition::math::AxisAlignedBox &_b)
+                  const gz::math::AxisAlignedBox &_b)
       {
         _out << "Min[" << _b.Min() << "] Max[" << _b.Max() << "]";
         return _out;

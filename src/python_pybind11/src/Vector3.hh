@@ -35,14 +35,14 @@ namespace math
 {
 namespace python
 {
-/// Help define a pybind11 wrapper for an ignition::math::Vector3
+/// Help define a pybind11 wrapper for an gz::math::Vector3
 /**
  * \param[in] module a pybind11 module to add the definition to
  */
 template<typename T>
 void helpDefineMathVector3(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::Vector3<T>;
+  using Class = gz::math::Vector3<T>;
   auto toString = [](const Class &si) {
     std::stringstream stream;
     stream << si;
@@ -167,7 +167,7 @@ void helpDefineMathVector3(py::module &m, const std::string &typestr)
     .def("__repr__", toString);
 }
 
-/// Define a pybind11 wrapper for an ignition::math::Vector2
+/// Define a pybind11 wrapper for an gz::math::Vector2
 /**
  * \param[in] module a pybind11 module to add the definition to
  */

@@ -26,7 +26,7 @@ namespace python
 {
 void defineMathSpline(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::Spline;
+  using Class = gz::math::Spline;
   std::string pyclass_name = typestr;
   py::class_<Class>(m,
                     pyclass_name.c_str(),

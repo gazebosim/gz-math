@@ -193,7 +193,7 @@ namespace gz
     /// \param[in] _start_index defines the slice to use.
     /// \param[in] _pos The position to project onto the plane
     template<typename T>
-    ignition::math::Vector3<T> ProjectPointToPlane(
+    gz::math::Vector3<T> ProjectPointToPlane(
       const std::vector<InterpolationPoint3D<T>> _points,
       const std::size_t &_start_index,
       const Vector3<T> &_pos)
