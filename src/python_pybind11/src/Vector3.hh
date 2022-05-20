@@ -173,7 +173,7 @@ void helpDefineMathVector3(py::module &m, const std::string &typestr)
  */
 void defineMathVector3(py::module &m, const std::string &typestr);
 }  // namespace python
-}  // namespace gazebo
+}  // namespace math
 }  // namespace ignition
 
 #endif  // IGNITION_MATH_PYTHON__VECTOR3_HH_

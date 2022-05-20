@@ -107,7 +107,7 @@ void helpDefineMathTriangle3(py::module &m, const std::string &typestr)
 }
 
 }  // namespace python
-}  // namespace gazebo
+}  // namespace math
 }  // namespace ignition
 
 #endif  // IGNITION_MATH_PYTHON__TRIANGLE3_HH_

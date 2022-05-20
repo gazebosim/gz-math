@@ -227,5 +227,5 @@ void defineMathHelpers(py::module &m)
   .def_readonly_static("NAN_I", &NAN_I);
 }
 }  // namespace python
-}  // namespace gazebo
+}  // namespace math
 }  // namespace ignition

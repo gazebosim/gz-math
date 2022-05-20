@@ -58,5 +58,5 @@ void defineMathDiffDriveOdometry(
          "Set the velocity rolling window size.");
 }
 }  // namespace python
-}  // namespace gazebo
+}  // namespace math
 }  // namespace ignition

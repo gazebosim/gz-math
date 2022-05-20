@@ -153,7 +153,7 @@ void helpDefineMathVector4(py::module &m, const std::string &typestr)
  */
 void defineMathVector4(py::module &m, const std::string &typestr);
 }  // namespace python
-}  // namespace gazebo
+}  // namespace math
 }  // namespace ignition
 
 #endif  // IGNITION_MATH_PYTHON__VECTOR4_HH_

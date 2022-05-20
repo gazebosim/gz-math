@@ -152,7 +152,7 @@ void helpDefineMathPose3(py::module &m, const std::string &typestr)
     .def("__repr__", toString);
 }
 }  // namespace python
-}  // namespace gazebo
+}  // namespace math
 }  // namespace ignition
 
 #endif  // IGNITION_MATH_PYTHON__POSE3_HH_

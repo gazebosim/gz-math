@@ -34,7 +34,7 @@ namespace python
  */
 void defineMathHelpers(py::module &m);
 }  // namespace python
-}  // namespace gazebo
+}  // namespace math
 }  // namespace ignition
 
 #endif  // IGNITION_MATH_PYTHON__HELPERS_HH_

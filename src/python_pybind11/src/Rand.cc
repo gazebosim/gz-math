@@ -54,5 +54,5 @@ void defineMathRand(py::module &m, const std::string &typestr)
         "Get a integer from a normal distribution");
 }
 }  // namespace python
-}  // namespace gazebo
+}  // namespace math
 }  // namespace ignition
