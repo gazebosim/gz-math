@@ -74,14 +74,14 @@ ruby angle_example.rb
 There are some predefined values:
 
 ```{.rb}
-printf("PI in degrees = %f\n", Ignition::Math::Angle.Pi.Degree)
+printf("PI in degrees = %f\n", Gz::Math::Angle.Pi.Degree)
 ```
 
 Create new objects:
 
 ```{.rb}
-a1 = Ignition::Math::Angle.new(1.5707)
-a2 = Ignition::Math::Angle.new(0.7854)
+a1 = Gz::Math::Angle.new(1.5707)
+a2 = Gz::Math::Angle.new(0.7854)
 ```
 
 Use the values in radians or degrees:
@@ -102,7 +102,7 @@ printf("a1 - a2 = %f radians, %f degrees\n", (a1 - a2).Radian, (a1 - a2).Degree)
 Normalize the value between `-PI` and `PI`.
 
 ```{.rb}
-a3 = Ignition::Math::Angle.new(15.707)
+a3 = Gz::Math::Angle.new(15.707)
 printf("a3 = %f radians, %f degrees\n", a3.Radian, a3.Degree)
 a3.Normalize
 printf("a3.Normalize = %f radians, %f degrees\n", a3.Radian, a3.Degree)
