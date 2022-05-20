@@ -27,7 +27,7 @@ namespace gz
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /// \class PID PID.hh gz/math/PID.hh
     /// \brief Generic PID controller class.

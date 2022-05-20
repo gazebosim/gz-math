@@ -35,7 +35,7 @@ namespace gz
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /// \class MassMatrix3 MassMatrix3.hh gz/math/MassMatrix3.hh
     /// \brief A class for inertial information about a rigid body

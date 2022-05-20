@@ -30,7 +30,7 @@ namespace gz
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /// \class Interval Interval.hh gz/math/Interval.hh
     /// \brief The Interval class represents a range of real numbers.

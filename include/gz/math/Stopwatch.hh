@@ -31,7 +31,7 @@ namespace gz
     using clock = std::chrono::steady_clock;
 
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     /// \class Stopwatch Stopwatch.hh gz/math/Stopwatch.hh
     /// \brief The Stopwatch keeps track of time spent in the run state,
     /// accessed through ElapsedRunTime(), and time spent in the stop state,

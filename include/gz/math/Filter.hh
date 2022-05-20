@@ -27,7 +27,7 @@ namespace gz
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /// \class Filter Filter.hh gz/math/Filter.hh
     /// \brief Filter base class

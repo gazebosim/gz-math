@@ -29,7 +29,7 @@ namespace gz
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
 
     /// \brief Mathematical representation of a frustum and related functions.
     /// This is also known as a view frustum.

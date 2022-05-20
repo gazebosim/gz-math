@@ -26,7 +26,7 @@ namespace gz
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /// \class Pose3 Pose3.hh gz/math/Pose3.hh
     /// \brief The Pose3 class represents a 3D position and rotation. The

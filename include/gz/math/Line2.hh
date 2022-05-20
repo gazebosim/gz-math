@@ -26,7 +26,7 @@ namespace gz
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /// \class Line2 Line2.hh gz/math/Line2.hh
     /// \brief A two dimensional line segment. The line is defined by a

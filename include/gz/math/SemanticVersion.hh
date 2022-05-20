@@ -29,7 +29,7 @@ namespace gz
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     /// \class SemanticVersion SemanticVersion.hh
     ///        gz/math/SemanticVersion.hh
     /// \brief Version comparison class based on Semantic Versioning 2.0.0

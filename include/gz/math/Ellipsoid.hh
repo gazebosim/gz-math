@@ -26,7 +26,7 @@ namespace gz
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /// \class Ellipsoid Ellipsoid.hh gz/math/Ellipsoid.hh
     /// \brief A representation of a general ellipsoid.

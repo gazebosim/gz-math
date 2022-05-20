@@ -32,7 +32,7 @@ namespace gz
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /// \class Polynomial3 Polynomial3.hh gz/math/Polynomial3.hh
     /// \brief The Polynomial3 class represents a cubic polynomial

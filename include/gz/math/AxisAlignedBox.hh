@@ -32,7 +32,7 @@ namespace gz
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     /// \class AxisAlignedBox AxisAlignedBox.hh gz/math/AxisAlignedBox.hh
     /// \brief Mathematical representation of a box that is aligned along
     /// an X,Y,Z axis.

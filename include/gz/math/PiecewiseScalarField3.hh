@@ -32,7 +32,7 @@ namespace gz
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /** \class PiecewiseScalarField3 PiecewiseScalarField3.hh\
      * gz/math/PiecewiseScalarField3.hh

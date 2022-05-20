@@ -31,7 +31,7 @@ namespace gz
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /// \class Region3 Region3.hh gz/math/Region3.hh
     /// \brief The Region3 class represents the cartesian product

@@ -31,7 +31,7 @@ namespace gz
     using clock = std::chrono::steady_clock;
 
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     /** \class DiffDriveOdometry DiffDriveOdometry.hh \
      * gz/math/DiffDriveOdometry.hh
      **/

@@ -30,7 +30,7 @@ namespace gz
     class SpherePrivate;
 
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /// \class Sphere Sphere.hh gz/math/Sphere.hh
     /// \brief A representation of a sphere.

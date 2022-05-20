@@ -45,7 +45,7 @@ namespace gz
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /// \class Angle Angle.hh gz/math/Angle.hh
     /// \brief The Angle class is used to simplify and clarify the use of

@@ -31,7 +31,7 @@ namespace gz
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
       template<typename T>
       /// \brief Lookup table for a volumetric dataset. This class is used to
       /// lookup indices for a large dataset that's organized in a grid. This

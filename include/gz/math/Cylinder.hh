@@ -29,7 +29,7 @@ namespace gz
     class CylinderPrivate;
 
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /// \class Cylinder Cylinder.hh gz/math/Cylinder.hh
     /// \brief A representation of a cylinder.

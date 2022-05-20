@@ -31,7 +31,7 @@ namespace gz
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /// \class Vector2 Vector2.hh gz/math/Vector2.hh
     /// \brief Two dimensional (x, y) vector.

@@ -30,7 +30,7 @@ namespace gz
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /// \class Matrix4 Matrix4.hh gz/math/Matrix4.hh
     /// \brief A 4x4 matrix class
