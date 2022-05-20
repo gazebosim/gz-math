@@ -32,14 +32,14 @@ namespace math
 {
 namespace python
 {
-/// Define a py:: wrapper for an gz::gazebo::DiffDriveOdometry
+/// Define a py:: wrapper for an gz::math::DiffDriveOdometry
 /**
  * \param[in] module a py:: module to add the definition to
  */
 void defineMathDiffDriveOdometry(
   py::module &m, const std::string &typestr);
 }  // namespace python
-}  // namespace gazebo
+}  // namespace math
 }  // namespace gz
 
 #endif  // GZ_MATH_PYTHON__DIFFDRIVEODOMETRY_HH_

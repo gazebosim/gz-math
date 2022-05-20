@@ -146,7 +146,7 @@ void helpDefineMathVector2(py::module &m, const std::string &typestr)
  */
 void defineMathVector2(py::module &m, const std::string &typestr);
 }  // namespace python
-}  // namespace gazebo
+}  // namespace math
 }  // namespace gz
 
 #endif  // GZ_MATH_PYTHON__VECTOR2_HH_

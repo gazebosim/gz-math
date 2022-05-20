@@ -148,7 +148,7 @@ void helpDefineMathMatrix4(py::module &m, const std::string &typestr)
     .def("__repr__", toString);
 }
 }  // namespace python
-}  // namespace gazebo
+}  // namespace math
 }  // namespace gz
 
 #endif  // GZ_MATH_PYTHON__MATRIX4_HH_
