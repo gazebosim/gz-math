@@ -40,7 +40,7 @@ namespace gz
     /// enum.
     ///
     /// This class will replace the
-    /// [MaterialDensity class](https://github.com/ignitionrobotics/ign-common/blob/ign-common1/include/gz/common/MaterialDensity.hh)
+    /// [MaterialDensity class](https://github.com/gazebosim/gz-common/blob/ign-common1/include/gz/common/MaterialDensity.hh)
     /// found in the Ignition Common library, which was at version 1 at the
     /// time of this writing.
     ///

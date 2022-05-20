@@ -2,14 +2,14 @@
 
 **Maintainer:** nate AT openrobotics DOT org
 
-[![GitHub open issues](https://img.shields.io/github/issues-raw/ignitionrobotics/ign-math.svg)](https://github.com/ignitionrobotics/ign-math/issues)
-[![GitHub open pull requests](https://img.shields.io/github/issues-pr-raw/ignitionrobotics/ign-math.svg)](https://github.com/ignitionrobotics/ign-math/pulls)
+[![GitHub open issues](https://img.shields.io/github/issues-raw/gazebosim/gz-math.svg)](https://github.com/gazebosim/gz-math/issues)
+[![GitHub open pull requests](https://img.shields.io/github/issues-pr-raw/gazebosim/gz-math.svg)](https://github.com/gazebosim/gz-math/pulls)
 [![Discourse topics](https://img.shields.io/discourse/https/community.gazebosim.org/topics.svg)](https://community.gazebosim.org)
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 Build | Status
 -- | --
-Test coverage | [![codecov](https://codecov.io/gh/ignitionrobotics/ign-math/branch/ign-math7/graph/badge.svg)](https://codecov.io/gh/ignitionrobotics/ign-math)
+Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-math/branch/ign-math7/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-math)
 Ubuntu Focal  | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_math-ci-ign-math7-focal-amd64)](https://build.osrfoundation.org/job/ignition_math-ci-ign-math7-focal-amd64)
 Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_math-ci-ign-math7-homebrew-amd64)](https://build.osrfoundation.org/job/ignition_math-ci-ign-math7-homebrew-amd64)
 Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ign_math-ign-7-win)](https://build.osrfoundation.org/job/ign_math-ign-7-win)
@@ -52,7 +52,7 @@ See the [installation tutorial](https://ignitionrobotics.org/api/math/6.8/instal
 
 # Usage
 
-Please refer to the [examples directory](https://github.com/ignitionrobotics/ign-math/raw/ign-math7/examples/).
+Please refer to the [examples directory](https://github.com/gazebosim/gz-math/raw/ign-math7/examples/).
 
 # Folder Structure
 
@@ -78,12 +78,12 @@ ign-math
 # Contributing
 
 Please see
-[CONTRIBUTING.md](https://github.com/ignitionrobotics/ign-gazebo/blob/main/CONTRIBUTING.md).
+[CONTRIBUTING.md](https://github.com/gazebosim/gz-sim/blob/main/CONTRIBUTING.md).
 
 # Code of Conduct
 
 Please see
-[CODE_OF_CONDUCT.md](https://github.com/ignitionrobotics/ign-gazebo/blob/main/CODE_OF_CONDUCT.md).
+[CODE_OF_CONDUCT.md](https://github.com/gazebosim/gz-sim/blob/main/CODE_OF_CONDUCT.md).
 
 # Versioning
 
@@ -91,4 +91,4 @@ This library uses [Semantic Versioning](https://semver.org/). Additionally, this
 
 # License
 
-This library is licensed under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0). See also the [LICENSE](https://github.com/ignitionrobotics/ign-math/blob/main/LICENSE) file.
+This library is licensed under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0). See also the [LICENSE](https://github.com/gazebosim/gz-math/blob/main/LICENSE) file.

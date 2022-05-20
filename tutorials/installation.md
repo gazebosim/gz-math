@@ -101,7 +101,7 @@ The optional Ruby tests of Ignition Math require:
 
 ### Windows 10
 
-First, follow the [ign-cmake](https://github.com/ignitionrobotics/ign-cmake) tutorial for installing Conda, Visual Studio, CMake, and other prerequisites, and also for creating a Conda environment.
+First, follow the [ign-cmake](https://github.com/gazebosim/gz-cmake) tutorial for installing Conda, Visual Studio, CMake, and other prerequisites, and also for creating a Conda environment.
 
 The optional Eigen component of Ignition Math requires:
 
@@ -127,7 +127,7 @@ The optional Eigen component of Ignition Math requires:
 
 3. Clone the repository
   ```
-  git clone https://github.com/ignitionrobotics/ign-math -b ign-math<#>
+  git clone https://github.com/gazebosim/gz-math -b ign-math<#>
   ```
   Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
   which version you need.
@@ -150,7 +150,7 @@ The optional Eigen component of Ignition Math requires:
 
 1. Clone the repository
   ```
-  git clone https://github.com/ignitionrobotics/ign-math -b ign-math<#>
+  git clone https://github.com/gazebosim/gz-math -b ign-math<#>
   ```
   Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
   which version you need.
@@ -200,7 +200,7 @@ The optional Eigen component of Ignition Math requires:
 3. Navigate to where you would like to build the library, and clone the repository.
   ```
   # Optionally, append `-b ign-math#` (replace # with a number) to check out a specific version
-  git clone https://github.com/ignitionrobotics/ign-math.git
+  git clone https://github.com/gazebosim/gz-math.git
   ```
 
 4. Configure and build
@@ -230,7 +230,7 @@ You can also generate the documentation from a clone of this repository by follo
 
 2. Clone the repository
  ```
- git clone https://github.com/ignitionrobotics/ign-math
+ git clone https://github.com/gazebosim/gz-math
  ```
 
 3. Configure and build the documentation.

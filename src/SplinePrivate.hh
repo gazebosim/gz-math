@@ -63,7 +63,7 @@ namespace gz
       {
         // Workaround to compare the two vector of vectors in MSVC 2013
         // and MSVC 2015. See
-        // https://github.com/ignitionrobotics/ign-math/issues/70
+        // https://github.com/gazebosim/gz-math/issues/70
         if (this->derivatives.size() != _other.derivatives.size())
           return false;
 
