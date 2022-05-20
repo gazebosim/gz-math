@@ -1,6 +1,6 @@
 \page angle Angle example
 
-This tutorial explains how to use the `Angle` class from Ignition Math library.
+This tutorial explains how to use the `Angle` class from Gazebo Math library.
 
 ## C++ example
 
@@ -57,7 +57,7 @@ Use the method `Normalized` to bound the value between `-PI` and `PI`.
 
 ## Ruby example
 
-This example will only work if the Ruby interface library was compiled and installed. Modify the `RUBYLIB` environment variable to include the Ignition Math library install path. For example, if you install to `/usr`:
+This example will only work if the Ruby interface library was compiled and installed. Modify the `RUBYLIB` environment variable to include the Gazebo Math library install path. For example, if you install to `/usr`:
 
 ```{.sh}
 export RUBYLIB=/usr/lib/ruby:$RUBYLIB

@@ -5,7 +5,7 @@ Deprecated code produces compile-time warnings. These warning serve as
 notification to users that their code should be upgraded. The next major
 release will remove the deprecated code.
 
-## Ignition Math 6.X to 7.X
+## Gazebo Math 6.X to 7.X
 
 ### Breaking Changes
 
@@ -70,18 +70,18 @@ release will remove the deprecated code.
 1. The out stream operator is guaranteed to return always plain 0 and not to
    return -0, 0.0 or other instances of zero value.
 
-## Ignition Math 6.9.2 to 6.10.0
+## Gazebo Math 6.9.2 to 6.10.0
 
 1. **Color::HSV()**: A bug related to the hue output of this function was fixed.
 
-## Ignition Math 6.8 to 6.9
+## Gazebo Math 6.8 to 6.9
 
 1. **SphericalCoordinates**: A bug related to the LOCAL frame was fixed. To
    preserve behaviour, the `LOCAL` frame was left with the bug, and a new
    `LOCAL2` frame was introduced, which can be used to get the correct
    calculations.
 
-## Ignition Math 4.X to 5.X
+## Gazebo Math 4.X to 5.X
 
 ### Additions
 
@@ -127,7 +127,7 @@ release will remove the deprecated code.
 1. **Inertial.hh**
     + The MOI functions have been renamed to Moi.
 
-## Ignition Math 3.X to 4.X
+## Gazebo Math 3.X to 4.X
 
 ### Added dependencies
 
@@ -164,7 +164,7 @@ release will remove the deprecated code.
     + ***Deprecation:*** public: void Translate(T _x, T _y, T _z)
     + ***Replacement:*** public: void SetTranslation(T _x, T _y, T _z)
 
-## Ignition Math 2.X to 3.X
+## Gazebo Math 2.X to 3.X
 
 ### Modifications
 

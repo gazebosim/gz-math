@@ -1,6 +1,6 @@
 \page example_triangle Triangle example
 
-This tutorial explains how to use the `Triangle` class from Ignition Math library.
+This tutorial explains how to use the `Triangle` class from Gazebo Math library.
 
 ## Compile the code
 

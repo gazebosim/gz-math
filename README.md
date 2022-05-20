@@ -1,4 +1,4 @@
-# Ignition Math : Math classes and functions for robot applications
+# Gazebo Math : Math classes and functions for robot applications
 
 **Maintainer:** nate AT openrobotics DOT org
 
@@ -14,7 +14,7 @@ Ubuntu Focal  | [![Build Status](https://build.osrfoundation.org/buildStatus/ico
 Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_math-ci-ign-math7-homebrew-amd64)](https://build.osrfoundation.org/job/ignition_math-ci-ign-math7-homebrew-amd64)
 Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ign_math-ign-7-win)](https://build.osrfoundation.org/job/ign_math-ign-7-win)
 
-Ignition Math, a component of [Ignition
+Gazebo Math, a component of [Ignition
 Robotics](https://ignitionrobotics.org), provides general purpose math
 classes and functions designed for robotic applications.
 
@@ -38,7 +38,7 @@ classes and functions designed for robotic applications.
 
 # Features
 
-Ignition Math provides a wide range of functionality, including:
+Gazebo Math provides a wide range of functionality, including:
 
 * Type-templated pose, matrix, vector, and quaternion classes.
 * Shape representations along with operators to compute volume, density, size and other properties.
@@ -87,7 +87,7 @@ Please see
 
 # Versioning
 
-This library uses [Semantic Versioning](https://semver.org/). Additionally, this library is part of the [Ignition Robotics project](https://ignitionrobotics.org) which periodically releases a versioned set of compatible and complimentary libraries. See the [Ignition Robotics website](https://ignitionrobotics.org) for version and release information.
+This library uses [Semantic Versioning](https://semver.org/). Additionally, this library is part of the [Gazebo Robotics project](https://ignitionrobotics.org) which periodically releases a versioned set of compatible and complimentary libraries. See the [Gazebo Robotics website](https://ignitionrobotics.org) for version and release information.
 
 # License
 

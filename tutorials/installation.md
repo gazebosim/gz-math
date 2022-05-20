@@ -2,7 +2,7 @@
 
 Next Tutorial: \ref cppgetstarted
 
-These instructions are for installing only Ignition Math.
+These instructions are for installing only Gazebo Math.
 If you're interested in using all the Ignition libraries, check out this [Ignition installation](https://ignitionrobotics.org/docs/latest/install).
 
 We recommend following the Binary Installation instructions to get up and running as quickly and painlessly as possible.
@@ -24,7 +24,7 @@ Setup keys:
 wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
 ```
 
-Install Ignition Math:
+Install Gazebo Math:
 ```
 sudo apt install libignition-math<#>-dev
 ```
@@ -40,7 +40,7 @@ On macOS, add OSRF packages:
   brew tap osrf/simulation
   ```
 
-Install Ignition Math:
+Install Gazebo Math:
   ```
   brew install ignition-math<#>
   ```
@@ -74,20 +74,20 @@ prerequisites followed by building from source.
 
 ## Prerequisites
 
-Ignition Math requires:
+Gazebo Math requires:
 
-* [Ignition CMake](https://ignitionrobotics.org/libs/cmake)
+* [Gazebo CMake](https://ignitionrobotics.org/libs/cmake)
 
 ### Ubuntu Linux
 
-The optional Eigen component of Ignition Math requires:
+The optional Eigen component of Gazebo Math requires:
 
 * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page). Refer to the [Eigen Documentation](http://eigen.tuxfamily.org/index.php?title=Main_Page#Documentation) for installation instructions. On Ubuntu systems, `apt-get` can be used to install Eigen:
   ```
   sudo apt-get install libeigen3-dev
   ```
 
-The optional Ruby tests of Ignition Math require:
+The optional Ruby tests of Gazebo Math require:
 
 * [Ruby](https://www.ruby-lang.org/). Refer to the [Ruby Documentation](https://www.ruby-lang.org/downloads/) for installation instructions. On Ubuntu systems `apt-get` can be used to install Ubuntu Package `ruby-dev`:
   ```
@@ -103,7 +103,7 @@ The optional Ruby tests of Ignition Math require:
 
 First, follow the [ign-cmake](https://github.com/gazebosim/gz-cmake) tutorial for installing Conda, Visual Studio, CMake, and other prerequisites, and also for creating a Conda environment.
 
-The optional Eigen component of Ignition Math requires:
+The optional Eigen component of Gazebo Math requires:
 
 * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page). Refer to the [Eigen Documentation](http://eigen.tuxfamily.org/index.php?title=Main_Page#Documentation) for installation instructions. On Windows, we will use `conda` to install Eigen:
   ```

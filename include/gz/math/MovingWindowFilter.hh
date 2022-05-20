@@ -66,7 +66,7 @@ namespace gz
     /// \endcond
 
     /// \brief Base class for MovingWindowFilter. This replaces the
-    /// version of MovingWindowFilter in the Ignition Common library.
+    /// version of MovingWindowFilter in the Gazebo Common library.
     ///
     /// The default window size is 4.
     template< typename T>

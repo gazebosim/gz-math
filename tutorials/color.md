@@ -1,6 +1,6 @@
 \page color Color example
 
-This tutorial explains how to use the `Color` class from Ignition Math library.
+This tutorial explains how to use the `Color` class from Gazebo Math library.
 
 ## Compile the code
 

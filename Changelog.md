@@ -1,8 +1,8 @@
-## Ignition Math 7.x
+## Gazebo Math 7.x
 
-### Ignition Math 7.x.x
+### Gazebo Math 7.x.x
 
-### Ignition Math 7.0.0
+### Gazebo Math 7.0.0
 
 1. Deprecated `Angle::Degree(double)` and `Angle::Radian(double)`. Use `Angle::SetDegree(double)` and `Angle::SetRadian(double)` instead.
     * [BitBucket pull request 326](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/326)
@@ -49,11 +49,11 @@
 instead.
     * [Pull request 376](https://github.com/gazebosim/gz-math/pull/376)
 
-## Ignition Math 6.x
+## Gazebo Math 6.x
 
-### Ignition Math 6.x.x
+### Gazebo Math 6.x.x
 
-## Ignition Math 6.10.0 (2022-01-26)
+## Gazebo Math 6.10.0 (2022-01-26)
 
 1. Use const instead of constexpr in Ellipsoid constructor
     * [Pull request #366](https://github.com/gazebosim/gz-math/pull/366)
@@ -213,7 +213,7 @@ instead.
 1. AxisAlignedBox: deprecate unimplemented methods
     * [Pull request #261](https://github.com/gazebosim/gz-math/pull/261)
 
-## Ignition Math 6.9.2 (2021-10-14)
+## Gazebo Math 6.9.2 (2021-10-14)
 
 1. Added StopWatch Python Interface
     * [Pull request #264](https://github.com/gazebosim/gz-math/pull/264)
@@ -236,7 +236,7 @@ instead.
 1. Remove Cylinder::SetLength const method
     * [Pull request #259](https://github.com/gazebosim/gz-math/pull/259)
 
-## Ignition Math 6.9.1 (2021-09-30)
+## Gazebo Math 6.9.1 (2021-09-30)
 
 1. Avoid assertAlmostEqual for python strings
     * [Pull request #255](https://github.com/gazebosim/gz-math/pull/255)
@@ -244,7 +244,7 @@ instead.
 1. Pose3_TEST.py: use 0.01 (not 0) in string test
     * [Pull request #257](https://github.com/gazebosim/gz-math/pull/257)
 
-## Ignition Math 6.9.0 (2021-09-28)
+## Gazebo Math 6.9.0 (2021-09-28)
 
 1. Volume below a plane for spheres and boxes
     * [Pull request #219](https://github.com/gazebosim/gz-math/pull/219)
@@ -309,7 +309,7 @@ instead.
     * [Pull request #252](https://github.com/gazebosim/gz-math/pull/252)
     * [Pull request #253](https://github.com/gazebosim/gz-math/pull/253)
 
-## Ignition Math 6.8.0 (2021-03-30)
+## Gazebo Math 6.8.0 (2021-03-30)
 
 1. Add speed limiter class
     * [Pull request #194](https://github.com/gazebosim/gz-math/pull/194)
@@ -351,7 +351,7 @@ instead.
     * [Pull request 180](https://github.com/gazebosim/gz-math/pull/180)
     * [Pull request 181](https://github.com/gazebosim/gz-math/pull/181)
 
-## Ignition Math 6.7.0 (2020-11-23)
+## Gazebo Math 6.7.0 (2020-11-23)
 
 1. Capsule: new shape class with inertia calculation method
     * [Pull request 163](https://github.com/gazebosim/gz-math/pull/163)
@@ -379,12 +379,12 @@ instead.
     * [Pull request 168](https://github.com/gazebosim/gz-math/pull/168)
     * [Issue 64](https://github.com/gazebosim/gz-math/issues/64)
 
-## Ignition Math 6.6.0 (2020-09-16)
+## Gazebo Math 6.6.0 (2020-09-16)
 
 1. Add chrono duration helper functions
     * [Pull request 158](https://github.com/gazebosim/gz-math/pull/158)
 
-## Ignition Math 6.5.0 (2020-09-04)
+## Gazebo Math 6.5.0 (2020-09-04)
 
 1. Add string to time function
     * [Pull request 152](https://github.com/gazebosim/gz-math/pull/152)
@@ -470,13 +470,13 @@ instead.
 1. Doxygen fixes for graph classes
     * [BitBucket pull request 331](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/331)
 
-### Ignition Math 6.4.0
+### Gazebo Math 6.4.0
 
 1. Added a function that rounds up a number to the nearest multiple of
    another number.
     * [BitBucket pull request 318](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/318)
 
-### Ignition Math 6.3.0
+### Gazebo Math 6.3.0
 
 1.  Added Odometry class that computes odometry for a two wheeled vehicle.
     * [BitBucket pull request 313](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/313)
@@ -484,7 +484,7 @@ instead.
 1.  Added RollingMean class.
     * [BitBucket pull request 314](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/314)
 
-### Ignition Math 6.2.0
+### Gazebo Math 6.2.0
 
 1.  eigen3: Use linear() instead of rotation() to prevent computation of SVD
     * [BitBucket pull request 311](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/311)
@@ -493,12 +493,12 @@ instead.
     * [BitBucket pull request 301](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/301)
     * [Issue 60](https://github.com/gazebosim/gz-math/issues/60)
 
-### Ignition Math 6.1.0
+### Gazebo Math 6.1.0
 
 1. eigen3: add conversion functions for Eigen::AlignedBox3d <=> ignition::math::AxisAlignedBox
     * [BitBucket pull request 302](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/302)
 
-### Ignition Math 6.0.0
+### Gazebo Math 6.0.0
 
 1. Helper function that converts from `std::chrono::steady_clock::duration` to
    {seconds, nanoseconds}.
@@ -507,11 +507,11 @@ instead.
 1. Upgrade to c++17.
     * [BitBucket pull request 268](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/268)
 
-## Ignition Math 5.x
+## Gazebo Math 5.x
 
-### Ignition Math 5.x.x
+### Gazebo Math 5.x.x
 
-### Ignition Math 5.1.0 (2019-09-11)
+### Gazebo Math 5.1.0 (2019-09-11)
 
 1. GraphAlgorithms: add ToUndirected(DirectedGraph) that copies to an UndirectedGraph.
     * [BitBucket pull request 332](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/332)
@@ -530,7 +530,7 @@ instead.
     * [BitBucket pull request 302](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/302)
 
 
-### Ignition Math 5.0.0 (2018-12-12)
+### Gazebo Math 5.0.0 (2018-12-12)
 
 1. Added a Stopwatch class
     * [BitBucket pull request 279](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/279)
@@ -575,9 +575,9 @@ specify a density.
    in MassMatrix3::ValidMoments
     * [BitBucket pull request 278](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/278)
 
-## Ignition Math 4.x
+## Gazebo Math 4.x
 
-### Ignition Math 4.x.x
+### Gazebo Math 4.x.x
 
 1. Add Graph::EdgeFromVertices function that return an edge, if one exists,
    between two vertices.
@@ -590,15 +590,15 @@ specify a density.
 1. Add Plane copy constructor and fix cppcheck on artful
     * [BitBucket pull request 230](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/230)
 
-1. Added MovingWindowFilter, a copy from Ignition Common. This version will
-   replace the version found in Ignition Common.
+1. Added MovingWindowFilter, a copy from Gazebo Common. This version will
+   replace the version found in Gazebo Common.
     * [BitBucket pull request 239](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/239)
 
 1. Added a Material class, which holds information about materials like wood,
    steel, and iron.
     * [BitBucket pull request 243](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/243)
 
-### Ignition Math 4.0.0 (2017-12-26)
+### Gazebo Math 4.0.0 (2017-12-26)
 
 1. Use std::stoi and std::stod in math::parse* functions to reduce code
     * [BitBucket pull request 224](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/224)
@@ -644,13 +644,13 @@ specify a density.
 1. Added Inline Versioned Namespace
     * [BitBucket pull request 216](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/216/)
 
-## Ignition Math 3.x
+## Gazebo Math 3.x
 
-### Ignition Math 3.x.x
+### Gazebo Math 3.x.x
 
 
 
-### Ignition Math 3.3.0 (2017-11-27)
+### Gazebo Math 3.3.0 (2017-11-27)
 
 1. Fixed frustum falsely saying it contained AABB in some cases
     * [BitBucket pull request 193](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/193)
@@ -674,7 +674,7 @@ specify a density.
 1. Update configure.bat
     * [BitBucket pull request 206](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/206)
 
-### Ignition Math 3.2.0 (2017-05-15)
+### Gazebo Math 3.2.0 (2017-05-15)
 
 1. Construct on first use in Rand class
     * [BitBucket pull request 165](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/165)
@@ -683,13 +683,13 @@ specify a density.
    and tangent forcing.
     * [BitBucket pull request 162](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/162)
 
-### Ignition Math 3.1.0 (2017-04-11)
+### Gazebo Math 3.1.0 (2017-04-11)
 
 1. Added signum functions to Helpers.hh.
     * Contribution from Martin Pecka
     * [BitBucket pull request 153](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/153)
 
-### Ignition Math 3.0.0 (2017-01-05)
+### Gazebo Math 3.0.0 (2017-01-05)
 
 1. Deprecate many IGN_* macros in favor of static const variables in Helpers.hh
     * [BitBucket pull request 138](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/138)
@@ -716,11 +716,11 @@ specify a density.
    Contribution from Silvio Traversaro.
     * [BitBucket pull request 63](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/63)
 
-## Ignition Math 2.x
+## Gazebo Math 2.x
 
 
 
-## Ignition Math 2.9 (2017-11-22)
+## Gazebo Math 2.9 (2017-11-22)
 
 1. Fixed frustum falsely saying it contained AABB in some cases
     * [BitBucket pull request 193](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/193)
@@ -731,9 +731,9 @@ specify a density.
 1. Backport updated configure.bat to ign-math2 and fix cppcheck warnings
     * [BitBucket pull request 207](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/207)
 
-### Ignition Math 2.8
+### Gazebo Math 2.8
 
-### Ignition Math 2.8.0
+### Gazebo Math 2.8.0
 
 1. Added OrientedBox
     * [BitBucket pull request 146](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/146)
@@ -741,9 +741,9 @@ specify a density.
 1. Added an assignment operator to the Frustum class.
     * [BitBucket pull request 144](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/144)
 
-### Ignition Math 2.7
+### Gazebo Math 2.7
 
-### Ignition Math 2.7.0
+### Gazebo Math 2.7.0
 
 1. Add static const variables as alternative to macros in Helpers.hh
     * [BitBucket pull request 137](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/137)
@@ -751,9 +751,9 @@ specify a density.
 1. Add new methods for floating numbers: lessOrEqual and greaterOrEqual
     * [BitBucket pull request 134](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/134)
 
-### Ignition Math 2.6
+### Gazebo Math 2.6
 
-### Ignition Math 2.6.0
+### Gazebo Math 2.6.0
 
 1. Added copy constructor, equality operators and assignment operators to
     SphericalCoordinates class.
@@ -777,9 +777,9 @@ specify a density.
 1. Added SemanticVersion class
     * [BitBucket pull request 120](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/120)
 
-### Ignition Math 2.5
+### Gazebo Math 2.5
 
-### Ignition Math 2.5.0
+### Gazebo Math 2.5.0
 
 1. Added PID class
     * [BitBucket pull request 117](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/117)
@@ -787,15 +787,15 @@ specify a density.
 1. Added SphericalCoordinate class
     * [BitBucket pull request 108](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/108)
 
-### Ignition Math 2.4
+### Gazebo Math 2.4
 
-#### Ignition Math 2.4.1
+#### Gazebo Math 2.4.1
 
 1. Combine inertial properties of different objects, returning the equivalent
    inertial properties as if the objects were welded together.
     * [BitBucket pull request 115](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/115)
 
-#### Ignition Math 2.4.0
+#### Gazebo Math 2.4.0
 
 1. New MassMatrix3 class
     * [BitBucket pull request 112](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/112)
@@ -805,7 +805,7 @@ specify a density.
     * A contribution from Shintaro Noda
     * [BitBucket pull request 113](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/113)
 
-### Ignition Math 2.3.0
+### Gazebo Math 2.3.0
 
 1. Added simple volumes formulas
     * [BitBucket pull request 84](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-math/pull-requests/84)

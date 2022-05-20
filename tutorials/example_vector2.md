@@ -1,6 +1,6 @@
 \page example_vector2 Vector example
 
-This tutorial explains how to use the `Vector` class from Ignition Math library.
+This tutorial explains how to use the `Vector` class from Gazebo Math library.
 
 ## C++ example
 
@@ -75,7 +75,7 @@ There are also many useful function such as finding the distance between two vec
 
 ## Ruby examples
 
-This example will only work if the Ruby interface library was compiled and installed. Modify the `RUBYLIB` environment variable to include the Ignition Math library install path. For example, if you install to `/usr`:
+This example will only work if the Ruby interface library was compiled and installed. Modify the `RUBYLIB` environment variable to include the Gazebo Math library install path. For example, if you install to `/usr`:
 
 ```{.sh}
 export RUBYLIB=/usr/lib/ruby:$RUBYLIB

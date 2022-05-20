@@ -61,7 +61,7 @@ namespace py = pybind11;
 
 PYBIND11_MODULE(math, m)
 {
-  m.doc() = "Ignition Math Python Library.";
+  m.doc() = "Gazebo Math Python Library.";
 
   gz::math::python::defineMathAngle(m, "Angle");
 

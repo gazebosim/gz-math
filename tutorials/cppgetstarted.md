@@ -4,7 +4,7 @@ Previous Tutorial: \ref install
 
 ## Overview
 
-This tutorial describes how to get started using Ignition Math with C++.
+This tutorial describes how to get started using Gazebo Math with C++.
 
 We will run through an example that determines the distance between two
 points in 3D space. Start by creating a bare-bones main file using the
@@ -17,7 +17,7 @@ int main()
 }
 ```
 
-The easiest way to include Ignition Math is through the `ignition/math.hh`
+The easiest way to include Gazebo Math is through the `ignition/math.hh`
 header file. Alternatively, you can include only the header files you need.
 For this example, we'll take the short and easy approach. 
 
@@ -33,7 +33,7 @@ int main()
 ```
 
 Now let's create to 3D points with arbitrary values. We will use the
-gz::math::Vector3 class to represent these points. Ignition Math provides a handy
+gz::math::Vector3 class to represent these points. Gazebo Math provides a handy
 gz::math::Vector3d type which is a typedef of `Vector3<double>`. The result of this
 addition will be a main file similar to the following.
 
