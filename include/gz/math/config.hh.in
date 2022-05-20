@@ -30,10 +30,6 @@
 
 #define GZ_MATH_VERSION_NAMESPACE v${PROJECT_VERSION_MAJOR}
 
-#define GZ_MATH_VERSION_HEADER "Gz Math, version ${PROJECT_VERSION_FULL}\nCopyright (C) 2014 Open Source Robotics Foundation.\nReleased under the Apache 2.0 License.\n\n"
-
-#cmakedefine IGNITION_MATH_BUILD_TYPE_PROFILE 1
-#cmakedefine IGNITION_MATH_BUILD_TYPE_DEBUG 1
-#cmakedefine IGNITION_MATH_BUILD_TYPE_RELEASE 1
+#define GZ_MATH_VERSION_HEADER "Gazebo Math, version ${PROJECT_VERSION_FULL}\nCopyright (C) 2014 Open Source Robotics Foundation.\nReleased under the Apache 2.0 License.\n\n"
 
 #endif
