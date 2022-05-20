@@ -74,7 +74,7 @@ namespace gz
     /// // The left wheel has rotated, the right wheel did not rotate
     /// odom.Update(IGN_DTOR(4), IGN_DTOR(2), std::chrono::steady_clock::now());
     /// \endcode
-    class IGNITION_MATH_VISIBLE DiffDriveOdometry
+    class GZ_MATH_VISIBLE DiffDriveOdometry
     {
       /// \brief Constructor.
       /// \param[in] _windowSize Rolling window size used to compute the

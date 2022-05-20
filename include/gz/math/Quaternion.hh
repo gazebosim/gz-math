@@ -301,7 +301,7 @@ namespace gz
       /// \param[in] _az Z axis
       /// \param[in] _aa Angle in radians
       /// \deprecated Use SetFromAxisAngle(T, T, T, T)
-      public: void IGN_DEPRECATED(7) Axis(T _ax, T _ay, T _az, T _aa)
+      public: void GZ_DEPRECATED(7) Axis(T _ax, T _ay, T _az, T _aa)
       {
         this->SetFromAxisAngle(_ax, _ay, _az, _aa);
       }
@@ -341,7 +341,7 @@ namespace gz
       /// \param[in] _axis Axis
       /// \param[in] _a Angle in radians
       /// \deprecated Use SetFromAxisAngle(const Vector3<T> &_axis, T _a)
-      public: void IGN_DEPRECATED(7) Axis(const Vector3<T> &_axis, T _a)
+      public: void GZ_DEPRECATED(7) Axis(const Vector3<T> &_axis, T _a)
       {
         this->SetFromAxisAngle(_axis, _a);
       }
@@ -373,7 +373,7 @@ namespace gz
       /// Roll is a rotation about x, pitch is about y, yaw is about z.
       /// \param[in] _vec Euler angle
       /// \deprecated Use SetFromEuler(const Vector3<T> &)
-      public: void IGN_DEPRECATED(7) Euler(const Vector3<T> &_vec)
+      public: void GZ_DEPRECATED(7) Euler(const Vector3<T> &_vec)
       {
         this->SetFromEuler(_vec);
       }
@@ -393,7 +393,7 @@ namespace gz
       /// \param[in] _pitch Pitch angle (radians).
       /// \param[in] _yaw Yaw angle (radians).
       /// \deprecated Use SetFromEuler(T, T, T)
-      public: void IGN_DEPRECATED(7) Euler(T _roll, T _pitch, T _yaw)
+      public: void GZ_DEPRECATED(7) Euler(T _roll, T _pitch, T _yaw)
       {
         this->SetFromEuler(_roll, _pitch, _yaw);
       }
@@ -535,7 +535,7 @@ namespace gz
       /// \param[out] _axis rotation axis
       /// \param[out] _angle ccw angle in radians
       /// \deprecated Use AxisAngle(Vector3<T> &_axis, T &_angle) const
-      public: void IGN_DEPRECATED(7) ToAxis(Vector3<T> &_axis, T &_angle) const
+      public: void GZ_DEPRECATED(7) ToAxis(Vector3<T> &_axis, T &_angle) const
       {
         this->AxisAngle(_axis, _angle);
       }
@@ -567,7 +567,7 @@ namespace gz
       /// http://www.euclideanspace.com/maths/geometry/rotations/
       /// conversions/matrixToQuaternion/
       /// \deprecated Use SetFromMatrix(const Matrix3<T>&)
-      public: void IGN_DEPRECATED(7) Matrix(const Matrix3<T> &_mat)
+      public: void GZ_DEPRECATED(7) Matrix(const Matrix3<T> &_mat)
       {
         this->SetFromMatrix(_mat);
       }
@@ -626,7 +626,7 @@ namespace gz
       /// Implementation inspired by
       /// http://stackoverflow.com/a/11741520/1076564
       /// \deprecated Use SetFrom2Axes(const Vector3<T> &, const Vector3<T> &)
-      public: void IGN_DEPRECATED(7) From2Axes(
+      public: void GZ_DEPRECATED(7) From2Axes(
                   const Vector3<T> &_v1, const Vector3<T> &_v2)
       {
         this->SetFrom2Axes(_v1, _v2);
@@ -1134,7 +1134,7 @@ namespace gz
       /// \brief Set the x component.
       /// \param[in] _v The new value for the x quaternion component.
       /// \deprecated Use SetX(T)
-      public: inline void IGN_DEPRECATED(7) X(T _v)
+      public: inline void GZ_DEPRECATED(7) X(T _v)
       {
         this->SetX(_v);
       }
@@ -1149,7 +1149,7 @@ namespace gz
       /// \brief Set the y component.
       /// \param[in] _v The new value for the y quaternion component.
       /// \deprecated Use SetY(T)
-      public: inline void IGN_DEPRECATED(7) Y(T _v)
+      public: inline void GZ_DEPRECATED(7) Y(T _v)
       {
         this->SetY(_v);
       }
@@ -1165,7 +1165,7 @@ namespace gz
       /// \brief Set the z component.
       /// \param[in] _v The new value for the z quaternion component.
       /// \deprecated Use SetZ(T)
-      public: inline void IGN_DEPRECATED(7) Z(T _v)
+      public: inline void GZ_DEPRECATED(7) Z(T _v)
       {
         this->SetZ(_v);
       }
@@ -1180,7 +1180,7 @@ namespace gz
       /// \brief Set the w component.
       /// \param[in] _v The new value for the w quaternion component.
       /// \deprecated Use SetW(T)
-      public: inline void IGN_DEPRECATED(7) W(T _v)
+      public: inline void GZ_DEPRECATED(7) W(T _v)
       {
         this->SetW(_v);
       }

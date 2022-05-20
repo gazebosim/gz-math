@@ -61,7 +61,7 @@ namespace gz
     /// std::cout << "The density of " << mat.Name() is "
     ///   << mat.Density() << std::endl;
     /// ~~~
-    class IGNITION_MATH_VISIBLE Material
+    class GZ_MATH_VISIBLE Material
     {
       /// \brief Constructor.
       public: Material();

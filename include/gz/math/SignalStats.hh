@@ -35,7 +35,7 @@ namespace gz
 
     /// \class SignalStatistic SignalStats.hh gz/math/SignalStats.hh
     /// \brief Statistical properties of a discrete time scalar signal.
-    class IGNITION_MATH_VISIBLE SignalStatistic
+    class GZ_MATH_VISIBLE SignalStatistic
     {
       /// \brief Constructor
       public: SignalStatistic();
@@ -81,7 +81,7 @@ namespace gz
 
     /// \class SignalMaximum SignalStats.hh gz/math/SignalStats.hh
     /// \brief Computing the maximum value of a discretely sampled signal.
-    class IGNITION_MATH_VISIBLE SignalMaximum : public SignalStatistic
+    class GZ_MATH_VISIBLE SignalMaximum : public SignalStatistic
     {
       // Documentation inherited.
       public: virtual double Value() const override;
@@ -96,7 +96,7 @@ namespace gz
 
     /// \class SignalMean SignalStats.hh gz/math/SignalStats.hh
     /// \brief Computing the mean value of a discretely sampled signal.
-    class IGNITION_MATH_VISIBLE SignalMean : public SignalStatistic
+    class GZ_MATH_VISIBLE SignalMean : public SignalStatistic
     {
       // Documentation inherited.
       public: virtual double Value() const override;
@@ -111,7 +111,7 @@ namespace gz
 
     /// \class SignalMinimum SignalStats.hh gz/math/SignalStats.hh
     /// \brief Computing the minimum value of a discretely sampled signal.
-    class IGNITION_MATH_VISIBLE SignalMinimum : public SignalStatistic
+    class GZ_MATH_VISIBLE SignalMinimum : public SignalStatistic
     {
       // Documentation inherited.
       public: virtual double Value() const override;
@@ -127,7 +127,7 @@ namespace gz
     /// \class SignalRootMeanSquare SignalStats.hh gz/math/SignalStats.hh
     /// \brief Computing the square root of the mean squared value
     /// of a discretely sampled signal.
-    class IGNITION_MATH_VISIBLE SignalRootMeanSquare : public SignalStatistic
+    class GZ_MATH_VISIBLE SignalRootMeanSquare : public SignalStatistic
     {
       // Documentation inherited.
       public: virtual double Value() const override;
@@ -145,7 +145,7 @@ namespace gz
     /// \brief Computing the maximum of the absolute value
     /// of a discretely sampled signal.
     /// Also known as the maximum norm, infinity norm, or supremum norm.
-    class IGNITION_MATH_VISIBLE SignalMaxAbsoluteValue : public SignalStatistic
+    class GZ_MATH_VISIBLE SignalMaxAbsoluteValue : public SignalStatistic
     {
       // Documentation inherited.
       public: virtual double Value() const override;
@@ -161,7 +161,7 @@ namespace gz
     /// \class SignalVariance SignalStats.hh gz/math/SignalStats.hh
     /// \brief Computing the incremental variance
     /// of a discretely sampled signal.
-    class IGNITION_MATH_VISIBLE SignalVariance : public SignalStatistic
+    class GZ_MATH_VISIBLE SignalVariance : public SignalStatistic
     {
       // Documentation inherited.
       public: virtual double Value() const override;
@@ -179,7 +179,7 @@ namespace gz
 
     /// \class SignalStats SignalStats.hh gz/math/SignalStats.hh
     /// \brief Collection of statistics for a scalar signal.
-    class IGNITION_MATH_VISIBLE SignalStats
+    class GZ_MATH_VISIBLE SignalStats
     {
       /// \brief Constructor
       public: SignalStats();

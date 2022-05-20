@@ -191,7 +191,7 @@ namespace gz
       /// \param[in] _zAxis The z axis, the third column of the matrix.
       /// \deprecated Use SetAxes(const Vector3<T> &, const Vector3<T> &,
       /// const Vector3<T> &,)
-      public: void IGN_DEPRECATED(7) Axes(const Vector3<T> &_xAxis,
+      public: void GZ_DEPRECATED(7) Axes(const Vector3<T> &_xAxis,
                   const Vector3<T> &_yAxis,
                   const Vector3<T> &_zAxis)
       {
@@ -215,7 +215,7 @@ namespace gz
       /// \param[in] _axis the axis
       /// \param[in] _angle ccw rotation around the axis in radians
       /// \deprecated Use SetFromAxisAngle(const Vector3<T> &, T)
-      public: void IGN_DEPRECATED(7) Axis(const Vector3<T> &_axis, T _angle)
+      public: void GZ_DEPRECATED(7) Axis(const Vector3<T> &_axis, T _angle)
       {
         this->SetFromAxisAngle(_axis, _angle);
       }
@@ -249,7 +249,7 @@ namespace gz
       /// \param[in] _v1 The first vector
       /// \param[in] _v2 The second vector
       /// \deprecated Use SetFrom2Axes(const Vector3<T> &, const Vector3<T> &)
-      public: void IGN_DEPRECATED(7) From2Axes(
+      public: void GZ_DEPRECATED(7) From2Axes(
                   const Vector3<T> &_v1, const Vector3<T> &_v2)
       {
         this->SetFrom2Axes(_v1, _v2);
@@ -303,7 +303,7 @@ namespace gz
       /// range [0, 2].
       /// \param[in] _v The value to set in each row of the column.
       /// \deprecated Use SetCol(unsigned int _c, const Vector3<T> &_v)
-      public: void IGN_DEPRECATED(7) Col(unsigned int _c, const Vector3<T> &_v)
+      public: void GZ_DEPRECATED(7) Col(unsigned int _c, const Vector3<T> &_v)
       {
         this->SetCol(_c, _v);
       }

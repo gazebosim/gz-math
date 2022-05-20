@@ -29,7 +29,7 @@ namespace gz
     inline namespace GZ_MATH_VERSION_NAMESPACE {
     /// \class RotationSpline RotationSpline.hh gz/math/RotationSpline.hh
     /// \brief Spline for rotations
-    class IGNITION_MATH_VISIBLE  RotationSpline
+    class GZ_MATH_VISIBLE  RotationSpline
     {
       /// \brief Constructor. Sets the autoCalc to true
       public: RotationSpline();

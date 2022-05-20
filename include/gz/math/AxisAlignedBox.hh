@@ -36,7 +36,7 @@ namespace gz
     /// \class AxisAlignedBox AxisAlignedBox.hh gz/math/AxisAlignedBox.hh
     /// \brief Mathematical representation of a box that is aligned along
     /// an X,Y,Z axis.
-    class IGNITION_MATH_VISIBLE AxisAlignedBox
+    class GZ_MATH_VISIBLE AxisAlignedBox
     {
       /// \brief Default constructor. This constructor will set the box's
       /// minimum and maximum corners to the highest (max) and lowest

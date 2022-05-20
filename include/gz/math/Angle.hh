@@ -59,7 +59,7 @@ namespace gz
     /// ## Example
     ///
     /// \snippet examples/angle_example.cc complete
-    class IGNITION_MATH_VISIBLE Angle
+    class GZ_MATH_VISIBLE Angle
     {
       /// \brief An angle with a value of zero.
       /// Equivalent to math::Angle(0).
@@ -99,7 +99,7 @@ namespace gz
       /// \brief Set the value from an angle in radians.
       /// \param[in] _radian Radian value.
       /// \deprecated Use void SetRadian(double)
-      public: void IGN_DEPRECATED(7) Radian(double _radian);
+      public: void GZ_DEPRECATED(7) Radian(double _radian);
 
       /// \brief Set the value from an angle in radians.
       /// \param[in] _radian Radian value.
@@ -108,7 +108,7 @@ namespace gz
       /// \brief Set the value from an angle in degrees
       /// \param[in] _degree Degree value
       /// \deprecated Use void SetDegree(double)
-      public: void IGN_DEPRECATED(7) Degree(double _degree);
+      public: void GZ_DEPRECATED(7) Degree(double _degree);
 
       /// \brief Set the value from an angle in degrees
       /// \param[in] _degree Degree value

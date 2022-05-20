@@ -45,7 +45,7 @@ namespace gz
 
     /// \class Rand Rand.hh gz/math/Rand.hh
     /// \brief Random number generator class
-    class IGNITION_MATH_VISIBLE Rand
+    class GZ_MATH_VISIBLE Rand
     {
       /// \brief Set the seed value.
       /// \param[in] _seed The seed used to initialize the randon number

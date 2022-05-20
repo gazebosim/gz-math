@@ -14,8 +14,8 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_PYTHON__AXISALIGNEDBOX_HPP_
-#define IGNITION_MATH_PYTHON__AXISALIGNEDBOX_HPP_
+#ifndef GZ_MATH_PYTHON__AXISALIGNEDBOX_HPP_
+#define GZ_MATH_PYTHON__AXISALIGNEDBOX_HPP_
 
 #include <string>
 

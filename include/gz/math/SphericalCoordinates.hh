@@ -33,7 +33,7 @@ namespace gz
     inline namespace GZ_MATH_VERSION_NAMESPACE {
 
     /// \brief Convert spherical coordinates for planetary surfaces.
-    class IGNITION_MATH_VISIBLE SphericalCoordinates
+    class GZ_MATH_VISIBLE SphericalCoordinates
     {
       /// \enum SurfaceType
       /// \brief Unique identifiers for planetary surface models.

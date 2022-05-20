@@ -35,7 +35,7 @@ namespace gz
     /// \brief Version comparison class based on Semantic Versioning 2.0.0
     /// http://semver.org/
     /// Compares versions and converts versions from string.
-    class IGNITION_MATH_VISIBLE SemanticVersion
+    class GZ_MATH_VISIBLE SemanticVersion
     {
       /// \brief Default constructor. Use the Parse function to populate
       /// an instance with version information.

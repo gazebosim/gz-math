@@ -53,7 +53,7 @@ namespace gz
     ///   timeSys.ElapsedRunTime()).count() << " ms\n";
     /// watch.Stop();
     /// ```
-    class IGNITION_MATH_VISIBLE Stopwatch
+    class GZ_MATH_VISIBLE Stopwatch
     {
       /// \brief Constructor.
       public: Stopwatch();

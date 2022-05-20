@@ -43,7 +43,7 @@ namespace gz
     /// ## Example usage
     ///
     /// \snippet examples/gauss_markov_process_example.cc complete
-    class IGNITION_MATH_VISIBLE GaussMarkovProcess
+    class GZ_MATH_VISIBLE GaussMarkovProcess
     {
       // Default constructor. This sets all the parameters to zero.
       public: GaussMarkovProcess();

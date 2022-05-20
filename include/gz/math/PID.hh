@@ -36,7 +36,7 @@ namespace gz
     /// the state of a system and a user specified target state.
     /// It includes a user-adjustable command offset term (feed-forward).
     // cppcheck-suppress class_X_Y
-    class IGNITION_MATH_VISIBLE PID
+    class GZ_MATH_VISIBLE PID
     {
       /// \brief Constructor, zeros out Pid values when created and
       /// initialize Pid-gains and integral term limits:[iMax:iMin]-[I1:I2].

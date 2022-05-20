@@ -36,7 +36,7 @@ namespace gz
 
     /// \class Spline Spline.hh gz/math/Spline.hh
     /// \brief Splines
-    class IGNITION_MATH_VISIBLE Spline
+    class GZ_MATH_VISIBLE Spline
     {
       /// \brief constructor
       public: Spline();

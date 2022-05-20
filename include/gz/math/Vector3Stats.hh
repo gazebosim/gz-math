@@ -32,7 +32,7 @@ namespace gz
     inline namespace GZ_MATH_VERSION_NAMESPACE {
     /// \class Vector3Stats Vector3Stats.hh gz/math/Vector3Stats.hh
     /// \brief Collection of statistics for a Vector3 signal.
-    class IGNITION_MATH_VISIBLE Vector3Stats
+    class GZ_MATH_VISIBLE Vector3Stats
     {
       /// \brief Constructor
       public: Vector3Stats();

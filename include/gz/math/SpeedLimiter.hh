@@ -33,7 +33,7 @@ inline namespace GZ_MATH_VERSION_NAMESPACE {
   class SpeedLimiterPrivate;
 
   /// \brief Class to limit velocity, acceleration and jerk.
-  class IGNITION_MATH_VISIBLE SpeedLimiter
+  class GZ_MATH_VISIBLE SpeedLimiter
   {
     /// \brief Constructor.
     /// There are no limits by default.

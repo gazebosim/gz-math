@@ -39,7 +39,7 @@ namespace gz
     /// ## Example
     ///
     /// \snippet examples/color_example.cc complete
-    class IGNITION_MATH_VISIBLE Color
+    class GZ_MATH_VISIBLE Color
     {
       /// \brief (1, 1, 1)
       public: static const Color &White;

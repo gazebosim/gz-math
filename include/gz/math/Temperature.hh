@@ -73,7 +73,7 @@ namespace gz
     /// printf("Copied temp and added 23.5K. The new tempurature is %fF\n",
     ///     newTemp.Fahrenheit());
     /// \endcode
-    class IGNITION_MATH_VISIBLE Temperature
+    class GZ_MATH_VISIBLE Temperature
     {
       /// \brief Default constructor.
       public: Temperature();

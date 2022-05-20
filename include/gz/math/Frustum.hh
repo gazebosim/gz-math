@@ -33,7 +33,7 @@ namespace gz
 
     /// \brief Mathematical representation of a frustum and related functions.
     /// This is also known as a view frustum.
-    class IGNITION_MATH_VISIBLE Frustum
+    class GZ_MATH_VISIBLE Frustum
     {
       /// \brief Planes that define the boundaries of the frustum.
       public: enum FrustumPlane
