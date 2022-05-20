@@ -27,7 +27,7 @@
 %include "std_string.i"
 %include Quaternion.i
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

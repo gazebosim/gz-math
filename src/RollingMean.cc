@@ -20,7 +20,7 @@
 #include <deque>
 #include "gz/math/RollingMean.hh"
 
-using namespace ignition::math;
+using namespace gz::math;
 
 /// \brief Private data
 class ignition::math::RollingMean::Implementation

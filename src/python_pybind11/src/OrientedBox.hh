@@ -29,7 +29,7 @@
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -124,6 +124,6 @@ void defineMathOrientedBox(py::module &m, const std::string &typestr)
 
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
 #endif  // IGNITION_MATH_PYTHON__ORIENTEDBOX_HH_

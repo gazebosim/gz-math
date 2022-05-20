@@ -18,7 +18,7 @@
 #include <gz/math/GaussMarkovProcess.hh>
 #include <gz/math/Rand.hh>
 
-using namespace ignition::math;
+using namespace gz::math;
 
 //////////////////////////////////////////////////
 class ignition::math::GaussMarkovProcess::Implementation

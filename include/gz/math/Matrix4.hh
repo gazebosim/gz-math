@@ -25,7 +25,7 @@
 #include <gz/math/Pose3.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

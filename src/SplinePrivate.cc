@@ -19,7 +19,7 @@
 
 #include "SplinePrivate.hh"
 
-namespace ignition
+namespace gz
 {
 namespace math
 {

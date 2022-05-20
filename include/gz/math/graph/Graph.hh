@@ -30,7 +30,7 @@
 #include "gz/math/graph/Edge.hh"
 #include "gz/math/graph/Vertex.hh"
 
-namespace ignition
+namespace gz
 {
 namespace math
 {

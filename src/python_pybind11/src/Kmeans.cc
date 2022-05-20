@@ -21,7 +21,7 @@
 #include <gz/math/Kmeans.hh>
 #include <pybind11/stl.h>
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -57,4 +57,4 @@ void defineMathKmeans(py::module &m, const std::string &typestr)
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz

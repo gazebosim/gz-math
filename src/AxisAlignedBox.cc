@@ -17,7 +17,7 @@
 #include <cmath>
 #include <gz/math/AxisAlignedBox.hh>
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 // Private data for AxisAlignedBox class

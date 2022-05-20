@@ -29,7 +29,7 @@
 %template(map_material_type) std::map<int,
                                       ignition::math::Material>;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {

@@ -26,7 +26,7 @@
 
 #include <gz/math/detail/AxisIndex.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

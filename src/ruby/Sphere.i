@@ -37,7 +37,7 @@
   }
 %}
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

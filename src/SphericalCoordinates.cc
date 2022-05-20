@@ -20,7 +20,7 @@
 #include "gz/math/Matrix3.hh"
 #include "gz/math/SphericalCoordinates.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 // Parameters for EARTH_WGS84 model

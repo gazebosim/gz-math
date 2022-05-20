@@ -27,7 +27,7 @@
 
 #include <set>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

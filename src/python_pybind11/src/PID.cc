@@ -22,7 +22,7 @@
 
 #include "PID.hh"
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -123,4 +123,4 @@ void defineMathPID(py::module &m, const std::string &typestr)
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz

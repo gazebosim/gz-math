@@ -17,7 +17,7 @@
 #include <string>
 #include "DiffDriveOdometry.hh"
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -59,4 +59,4 @@ void defineMathDiffDriveOdometry(
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz

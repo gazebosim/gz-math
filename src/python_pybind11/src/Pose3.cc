@@ -19,7 +19,7 @@
 
 #include "Pose3.hh"
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -34,4 +34,4 @@ void defineMathPose3(py::module &m, const std::string &typestr)
 
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz

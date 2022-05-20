@@ -27,7 +27,7 @@ class ignition::math::Temperature::Implementation
   public: double kelvin{0.0};
 };
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 /////////////////////////////////////////////////

@@ -27,7 +27,7 @@
 #include <gz/math/config.hh>
 #include "gz/math/graph/Vertex.hh"
 
-namespace ignition
+namespace gz
 {
 namespace math
 {

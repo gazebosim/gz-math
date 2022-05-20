@@ -22,7 +22,7 @@
 #include <gz/math/Rand.hh>
 #include "KmeansPrivate.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 //////////////////////////////////////////////////

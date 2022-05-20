@@ -22,7 +22,7 @@
 #include <gz/math/Helpers.hh>
 #include <gz/math/Vector3.hh>
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -228,4 +228,4 @@ void defineMathHelpers(py::module &m)
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz

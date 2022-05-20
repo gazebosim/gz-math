@@ -25,7 +25,7 @@
 #include <gz/math/Quaternion.hh>
 %}
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

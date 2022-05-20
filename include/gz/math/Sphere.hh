@@ -22,7 +22,7 @@
 #include "gz/math/Quaternion.hh"
 #include "gz/math/Plane.hh"
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

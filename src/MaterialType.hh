@@ -20,7 +20,7 @@
 #include <array>
 #include <utility>
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 // This class is used to curly-brace initialize kMaterialData

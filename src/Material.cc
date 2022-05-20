@@ -25,7 +25,7 @@
 // Placing the kMaterialData in a separate file for conveniece and clarity.
 #include "MaterialType.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 // Private data for the Material class

@@ -27,7 +27,7 @@
 
 namespace py = pybind11;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -202,6 +202,6 @@ void helpDefineMathMassMatrix3(py::module &m, const std::string &typestr)
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
 #endif  // IGNITION_MATH_PYTHON__MASSMATRIX3_HH_

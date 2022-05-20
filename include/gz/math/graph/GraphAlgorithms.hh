@@ -29,7 +29,7 @@
 #include "gz/math/graph/Graph.hh"
 #include "gz/math/Helpers.hh"
 
-namespace ignition
+namespace gz
 {
 namespace math
 {

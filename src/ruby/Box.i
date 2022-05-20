@@ -59,7 +59,7 @@
 %template(SetBoxDouble) std::set<ignition::math::Vector3<double>, ignition::math::WellOrderedVectors<double>>;
 %template(SetBoxInt) std::set<ignition::math::Vector3<int>, ignition::math::WellOrderedVectors<int>>;
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

@@ -20,7 +20,7 @@
 
 #include "gz/math/Stopwatch.hh"
 
-using namespace ignition;
+using namespace gz;
 
 /////////////////////////////////////////////////
 // Helper function that runs a few tests

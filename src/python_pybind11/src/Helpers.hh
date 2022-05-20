@@ -22,7 +22,7 @@
 
 namespace py = pybind11;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -35,6 +35,6 @@ namespace python
 void defineMathHelpers(py::module &m);
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
 #endif  // IGNITION_MATH_PYTHON__HELPERS_HH_

@@ -16,7 +16,7 @@
 */
 #include <gz/math/Vector3Stats.hh>
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 /// \brief Private data class for the Vector3Stats class.

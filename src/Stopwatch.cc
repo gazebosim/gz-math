@@ -17,7 +17,7 @@
 #include <chrono>
 #include "gz/math/Stopwatch.hh"
 
-using namespace ignition::math;
+using namespace gz::math;
 
 // Private data class
 class ignition::math::Stopwatch::Implementation

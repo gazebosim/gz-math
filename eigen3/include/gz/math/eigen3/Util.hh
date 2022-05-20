@@ -31,7 +31,7 @@
 #include <gz/math/Vector3.hh>
 #include <gz/math/eigen3/Conversions.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

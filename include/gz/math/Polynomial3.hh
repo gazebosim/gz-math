@@ -27,7 +27,7 @@
 #include <gz/math/Vector4.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

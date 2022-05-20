@@ -29,7 +29,7 @@
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -154,6 +154,6 @@ void helpDefineMathVector4(py::module &m, const std::string &typestr)
 void defineMathVector4(py::module &m, const std::string &typestr);
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
 #endif  // IGNITION_MATH_PYTHON__VECTOR4_HH_

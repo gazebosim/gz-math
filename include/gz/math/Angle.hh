@@ -40,7 +40,7 @@
 /// \return the angle, in range
 #define IGN_NORMALIZE(a) (atan2(sin(a), cos(a)))
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

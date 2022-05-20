@@ -26,7 +26,7 @@
 #include "gz/math/Plane.hh"
 #include "gz/math/Pose3.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 /// \internal

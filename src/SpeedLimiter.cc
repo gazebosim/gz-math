@@ -18,7 +18,7 @@
 #include "gz/math/Helpers.hh"
 #include "gz/math/SpeedLimiter.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 /// \brief Private SpeedLimiter data class.

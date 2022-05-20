@@ -17,7 +17,7 @@
 #include "gz/math/Quaternion.hh"
 #include "gz/math/RotationSpline.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 /// \internal

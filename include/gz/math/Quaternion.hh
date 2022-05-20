@@ -23,7 +23,7 @@
 #include <gz/math/Matrix3.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

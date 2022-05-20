@@ -22,7 +22,7 @@
 #include "SignalStats.hh"
 #include <gz/math/SignalStats.hh>
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -548,4 +548,4 @@ void defineMathSignalMaxAbsoluteValue(py::module &m, const std::string &typestr)
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
