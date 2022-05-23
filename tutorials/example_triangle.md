@@ -69,4 +69,4 @@ The `Intersects` function checks if a line segment intersects the triangle. It a
 
 \snippet examples/triangle_example.cc intersect
 
-There are more functions in `Triangle`. Take a look at the [API](https://ignitionrobotics.org/api/math/6.4/index.html)
+There are more functions in `Triangle`. Take a look at the [API](https://gazebosim.org/api/math/6.4/index.html)

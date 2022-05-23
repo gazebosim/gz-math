@@ -15,7 +15,7 @@ Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/ico
 Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ign_math-ign-7-win)](https://build.osrfoundation.org/job/ign_math-ign-7-win)
 
 Gazebo Math, a component of [Ignition
-Robotics](https://ignitionrobotics.org), provides general purpose math
+Robotics](https://gazebosim.org), provides general purpose math
 classes and functions designed for robotic applications.
 
 # Table of Contents
@@ -48,7 +48,7 @@ Math types.
 
 # Install
 
-See the [installation tutorial](https://ignitionrobotics.org/api/math/6.8/install.html).
+See the [installation tutorial](https://gazebosim.org/api/math/6.8/install.html).
 
 # Usage
 
@@ -87,7 +87,7 @@ Please see
 
 # Versioning
 
-This library uses [Semantic Versioning](https://semver.org/). Additionally, this library is part of the [Gazebo project](https://ignitionrobotics.org) which periodically releases a versioned set of compatible and complimentary libraries. See the [Gazebo website](https://ignitionrobotics.org) for version and release information.
+This library uses [Semantic Versioning](https://semver.org/). Additionally, this library is part of the [Gazebo project](https://gazebosim.org) which periodically releases a versioned set of compatible and complimentary libraries. See the [Gazebo website](https://gazebosim.org) for version and release information.
 
 # License
 

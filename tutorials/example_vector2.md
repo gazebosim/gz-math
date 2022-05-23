@@ -71,7 +71,7 @@ There are also many useful function such as finding the distance between two vec
 
 \snippet examples/vector2_example.cc distance
 
-**There are more functions in Vector2. Take a look at the [API](https://ignitionrobotics.org/libs/math)**
+**There are more functions in Vector2. Take a look at the [API](https://gazebosim.org/libs/math)**
 
 ## Ruby examples
 

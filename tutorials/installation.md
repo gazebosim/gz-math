@@ -3,7 +3,7 @@
 Next Tutorial: \ref cppgetstarted
 
 These instructions are for installing only Gazebo Math.
-If you're interested in using all the Ignition libraries, check out this [Ignition installation](https://ignitionrobotics.org/docs/latest/install).
+If you're interested in using all the Ignition libraries, check out this [Ignition installation](https://gazebosim.org/docs/latest/install).
 
 We recommend following the Binary Installation instructions to get up and running as quickly and painlessly as possible.
 
@@ -76,7 +76,7 @@ prerequisites followed by building from source.
 
 Gazebo Math requires:
 
-* [Gazebo CMake](https://ignitionrobotics.org/libs/cmake)
+* [Gazebo CMake](https://gazebosim.org/libs/cmake)
 
 ### Ubuntu Linux
 
@@ -219,7 +219,7 @@ The optional Eigen component of Gazebo Math requires:
 
 # Documentation
 
-API and tutorials can be found at [https://ignitionrobotics.org/libs/math](https://ignitionrobotics.org/libs/math).
+API and tutorials can be found at [https://gazebosim.org/libs/math](https://gazebosim.org/libs/math).
 
 You can also generate the documentation from a clone of this repository by following these steps.
 
@@ -247,7 +247,7 @@ You can also generate the documentation from a clone of this repository by follo
 
 Follow these steps to run tests and static code analysis in your clone of this repository.
 
-1. Follow the [source install instruction](https://ignitionrobotics.org/libs/math#source-install).
+1. Follow the [source install instruction](https://gazebosim.org/libs/math#source-install).
 
 2. Run tests.
  ```

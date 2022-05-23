@@ -75,6 +75,6 @@ int main(int argc, char **argv)
 //! [distance]
 
   // There are more functions in Vector2. Take a look at the API:
-  // https://ignitionrobotics.org/libs/math
+  // https://gazebosim.org/libs/math
 }
 //! [complete]
