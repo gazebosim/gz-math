@@ -469,8 +469,10 @@ TEST(Inertiald_Test, AdditionSubtraction)
     // -operator
     EXPECT_NE(left, cube - right);
     EXPECT_NE(right, cube - left);
-    EXPECT_DOUBLE_EQ(left.MassMatrix().Mass(), (cube - right).MassMatrix().Mass());
-    EXPECT_DOUBLE_EQ(right.MassMatrix().Mass(), (cube - left).MassMatrix().Mass());
+    EXPECT_DOUBLE_EQ(left.MassMatrix().Mass(),
+        (cube - right).MassMatrix().Mass());
+    EXPECT_DOUBLE_EQ(right.MassMatrix().Mass(),
+        (cube - left).MassMatrix().Mass());
     EXPECT_EQ(left.Pose().Pos(), (cube - right).Pose().Pos());
     EXPECT_EQ(right.Pose().Pos(), (cube - left).Pose().Pos());
     EXPECT_EQ(left.Moi(), (cube - right).Moi());
@@ -485,14 +487,15 @@ TEST(Inertiald_Test, AdditionSubtraction)
     math::MassMatrix3d cubeMM3;
     EXPECT_TRUE(cubeMM3.SetFromBox(mass, size));
     const math::Inertiald sevenCubes =
-        math::Inertiald(cubeMM3, math::Pose3d(-0.5, -0.5, -0.5, 0, 0, 0)) +
-        math::Inertiald(cubeMM3, math::Pose3d(-0.5,  0.5, -0.5, 0, 0, 0)) +
-        math::Inertiald(cubeMM3, math::Pose3d(0.5,  -0.5, -0.5, 0, 0, 0)) +
-        math::Inertiald(cubeMM3, math::Pose3d(0.5,   0.5, -0.5, 0, 0, 0)) +
-        math::Inertiald(cubeMM3, math::Pose3d(-0.5, -0.5, 0.5, 0, 0, 0)) +
-        math::Inertiald(cubeMM3, math::Pose3d(-0.5,  0.5, 0.5, 0, 0, 0)) +
-        math::Inertiald(cubeMM3, math::Pose3d(0.5,  -0.5, 0.5, 0, 0, 0));
-    const math::Inertiald lastCube =  math::Inertiald(cubeMM3, math::Pose3d(0.5,   0.5, 0.5, 0, 0, 0));
+      math::Inertiald(cubeMM3, math::Pose3d(-0.5, -0.5, -0.5, 0, 0, 0)) +
+      math::Inertiald(cubeMM3, math::Pose3d(-0.5,  0.5, -0.5, 0, 0, 0)) +
+      math::Inertiald(cubeMM3, math::Pose3d(0.5,  -0.5, -0.5, 0, 0, 0)) +
+      math::Inertiald(cubeMM3, math::Pose3d(0.5,   0.5, -0.5, 0, 0, 0)) +
+      math::Inertiald(cubeMM3, math::Pose3d(-0.5, -0.5, 0.5, 0, 0, 0)) +
+      math::Inertiald(cubeMM3, math::Pose3d(-0.5,  0.5, 0.5, 0, 0, 0)) +
+      math::Inertiald(cubeMM3, math::Pose3d(0.5,  -0.5, 0.5, 0, 0, 0));
+    const math::Inertiald lastCube =
+      math::Inertiald(cubeMM3, math::Pose3d(0.5,   0.5, 0.5, 0, 0, 0));
     const math::Inertiald addedCube = sevenCubes + lastCube;
 
     math::MassMatrix3d trueCubeMM3;
@@ -509,14 +512,15 @@ TEST(Inertiald_Test, AdditionSubtraction)
     math::MassMatrix3d cubeMM3;
     EXPECT_TRUE(cubeMM3.SetFromBox(mass, size));
     const math::Inertiald sevenCubes =
-          math::Inertiald(cubeMM3, math::Pose3d(-0.5, -0.5, -0.5, 0, 0, 0)) +
-          math::Inertiald(cubeMM3, math::Pose3d(-0.5,  0.5, -0.5, IGN_PI_2, 0, 0)) +
-          math::Inertiald(cubeMM3, math::Pose3d(0.5,  -0.5, -0.5, 0, IGN_PI_2, 0)) +
-          math::Inertiald(cubeMM3, math::Pose3d(0.5,   0.5, -0.5, 0, 0, IGN_PI_2)) +
-          math::Inertiald(cubeMM3, math::Pose3d(-0.5, -0.5, 0.5, IGN_PI, 0, 0)) +
-          math::Inertiald(cubeMM3, math::Pose3d(-0.5,  0.5, 0.5, 0, IGN_PI, 0)) +
-          math::Inertiald(cubeMM3, math::Pose3d(0.5,  -0.5, 0.5, 0, 0, IGN_PI));
-    const math::Inertiald lastCube = math::Inertiald(cubeMM3, math::Pose3d(0.5,   0.5, 0.5, 0, 0, 0));
+      math::Inertiald(cubeMM3, math::Pose3d(-0.5, -0.5, -0.5, 0, 0, 0)) +
+      math::Inertiald(cubeMM3, math::Pose3d(-0.5,  0.5, -0.5, IGN_PI_2, 0, 0)) +
+      math::Inertiald(cubeMM3, math::Pose3d(0.5,  -0.5, -0.5, 0, IGN_PI_2, 0)) +
+      math::Inertiald(cubeMM3, math::Pose3d(0.5,   0.5, -0.5, 0, 0, IGN_PI_2)) +
+      math::Inertiald(cubeMM3, math::Pose3d(-0.5, -0.5, 0.5, IGN_PI, 0, 0)) +
+      math::Inertiald(cubeMM3, math::Pose3d(-0.5,  0.5, 0.5, 0, IGN_PI, 0)) +
+      math::Inertiald(cubeMM3, math::Pose3d(0.5,  -0.5, 0.5, 0, 0, IGN_PI));
+    const math::Inertiald lastCube =
+      math::Inertiald(cubeMM3, math::Pose3d(0.5,   0.5, 0.5, 0, 0, 0));
     const math::Inertiald addedCube = sevenCubes + lastCube;
 
     math::MassMatrix3d trueCubeMM3;
@@ -554,8 +558,10 @@ TEST(Inertiald_Test, AdditionSubtraction)
         ignition::math::Vector3d::Zero,
         cubeMM3.OffDiagonalMoments());
 
-    const math::Inertiald cube1 = math::Inertiald(cubeMM3, math::Pose3d(-0.5, -0.5, -0.5, 0, 0, 0));
-    const math::Inertiald cube2 = math::Inertiald(cubeMM3, math::Pose3d(0.5,  0.5, 0.5, 0, 0, 0));
+    const math::Inertiald cube1 =
+        math::Inertiald(cubeMM3, math::Pose3d(-0.5, -0.5, -0.5, 0, 0, 0));
+    const math::Inertiald cube2 =
+        math::Inertiald(cubeMM3, math::Pose3d(0.5,  0.5, 0.5, 0, 0, 0));
     const math::Inertiald diagonalCubes = cube1 + cube2;
 
     // lumped mass = 6 + 6 = 12
@@ -589,18 +595,26 @@ TEST(Inertiald_Test, AdditionSubtraction)
         diagonalCubes.MassMatrix().OffDiagonalMoments());
 
     // -operator
-    EXPECT_EQ(math::Pose3d(-0.5, -0.5, -0.5, 0, 0, 0), (diagonalCubes - cube2).Pose());
-    EXPECT_EQ(math::Pose3d(0.5,  0.5, 0.5, 0, 0, 0), (diagonalCubes - cube1).Pose());
+    EXPECT_EQ(
+        math::Pose3d(-0.5, -0.5, -0.5, 0, 0, 0),
+        (diagonalCubes - cube2).Pose());
+    EXPECT_EQ(
+        math::Pose3d(0.5,  0.5, 0.5, 0, 0, 0),
+        (diagonalCubes - cube1).Pose());
     EXPECT_DOUBLE_EQ(mass, (diagonalCubes - cube2).MassMatrix().Mass());
     EXPECT_DOUBLE_EQ(mass, (diagonalCubes - cube1).MassMatrix().Mass());
-    EXPECT_EQ(cubeMM3.DiagonalMoments(),
+    EXPECT_EQ(
+        cubeMM3.DiagonalMoments(),
         (diagonalCubes - cube2).MassMatrix().DiagonalMoments());
-    EXPECT_EQ(cubeMM3.DiagonalMoments(),
+    EXPECT_EQ(
+        cubeMM3.DiagonalMoments(),
         (diagonalCubes - cube1).MassMatrix().DiagonalMoments());
-    EXPECT_EQ(cubeMM3.OffDiagonalMoments(),
-              (diagonalCubes - cube2).MassMatrix().OffDiagonalMoments());
-    EXPECT_EQ(cubeMM3.OffDiagonalMoments(),
-              (diagonalCubes - cube1).MassMatrix().OffDiagonalMoments());
+    EXPECT_EQ(
+        cubeMM3.OffDiagonalMoments(),
+        (diagonalCubes - cube2).MassMatrix().OffDiagonalMoments());
+    EXPECT_EQ(
+        cubeMM3.OffDiagonalMoments(),
+        (diagonalCubes - cube1).MassMatrix().OffDiagonalMoments());
   }
 }
 
