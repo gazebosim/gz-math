@@ -603,3 +603,53 @@ TEST(Inertiald_Test, AdditionInvalid)
     EXPECT_TRUE((i0 + i).MassMatrix().IsValid());
   }
 }
+
+/////////////////////////////////////////////////
+TEST(Inertiald_Test, Subtraction){
+
+  // Subtract one half-cube from a full cube
+  { 
+    // full cube
+    const double mass = 12.0;
+    const math::Vector3d size(1, 1, 1);
+    math::MassMatrix3d cubeMM3;
+    EXPECT_TRUE(cubeMM3.SetFromBox(mass, size));
+    const math::Inertiald cube(cubeMM3, math::Pose3d::Zero);
+
+    // two half cubes
+    math::MassMatrix3d half;
+    const math::Vector3d half_size(0.5, 1, 1);
+    EXPECT_TRUE(half.SetFromBox(0.5*mass, half_size));
+    math::Inertiald left(half, math::Pose3d(-0.25, 0, 0, 0, 0, 0));
+    math::Inertiald right(half, math::Pose3d(0.25, 0, 0, 0, 0, 0));
+
+    EXPECT_EQ(right, cube - left);
+    EXPECT_EQ(left, cube - right);
+    // test -= operator
+    {
+      math::Inertiald tmp = cube;
+      tmp -= right;
+      EXPECT_EQ(left, tmp);
+    }
+    {
+      math::Inertiald tmp = right;
+      tmp -= left;
+      EXPECT_EQ(right, tmp);
+    }
+     // Test EquivalentBox
+    {
+      math::Vector3d size2;
+      math::Quaterniond rot2;
+      EXPECT_TRUE((cube - right).MassMatrix().EquivalentBox(size2, rot2));
+      EXPECT_EQ(half_size, size2);
+      EXPECT_EQ(rot2, math::Quaterniond::Identity);
+    }
+    {
+      math::Vector3d size2;
+      math::Quaterniond rot2;
+      EXPECT_TRUE((cube - left).MassMatrix().EquivalentBox(size2, rot2));
+      EXPECT_EQ(half_size, size2);
+      EXPECT_EQ(rot2, math::Quaterniond::Identity);
+    }
+  }
+}
