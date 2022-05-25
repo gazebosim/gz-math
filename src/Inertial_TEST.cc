@@ -652,4 +652,33 @@ TEST(Inertiald_Test, Subtraction){
       EXPECT_EQ(rot2, math::Quaterniond::Identity);
     }
   }
+
+  // Subtract a rotated half-cube from rotated full-cube
+  {
+    // rotated full-cube
+    const double mass = 12.0;
+    const math::Vector3d size(1, 1, 1);
+    math::MassMatrix3d cubeMM3;
+    EXPECT_TRUE(cubeMM3.SetFromBox(mass, size));
+    const math::Inertiald cube(cubeMM3, math::Pose3d(0, 0, 0, IGN_PI_4, 0, 0));
+
+    // two  rotated half-cubes
+    math::MassMatrix3d half;
+    const math::Vector3d half_size(0.5, 1, 1);
+    EXPECT_TRUE(half.SetFromBox(0.5*mass, half_size));
+    math::Inertiald left(half, math::Pose3d(-0.25, 0, 0, IGN_PI_4, 0, 0));
+    math::Inertiald right(half, math::Pose3d(0.25, 0, 0, IGN_PI_4, 0, 0));
+
+    // objects won't match exactly
+    // since inertia matrices will all be in base frame
+    // but mass, center of mass, and base-frame MOI should match
+    EXPECT_NE(left, cube - right);
+    EXPECT_NE(right, cube - left);
+    EXPECT_DOUBLE_EQ(left.MassMatrix().Mass(), (cube - right).MassMatrix().Mass());
+    EXPECT_DOUBLE_EQ(right.MassMatrix().Mass(), (cube - left).MassMatrix().Mass());
+    EXPECT_EQ(left.Pose().Pos(), (cube - right).Pose().Pos());
+    EXPECT_EQ(right.Pose().Pos(), (cube - left).Pose().Pos());
+    EXPECT_EQ(left.Moi(), (cube - right).Moi());
+    EXPECT_EQ(right.Moi(), (cube - left).Moi());
+  }
 }
