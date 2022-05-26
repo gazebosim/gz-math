@@ -58,6 +58,8 @@ void defineMathInertial(py::module &m, const std::string &typestr)
     .def(py::self != py::self)
     .def(py::self += py::self)
     .def(py::self + py::self)
+    .def(py::self -= py::self)
+    .def(py::self - py::self)
     .def("set_mass_matrix",
          &Class::SetMassMatrix,
          py::arg("_m") = ignition::math::MassMatrix3<T>(),
