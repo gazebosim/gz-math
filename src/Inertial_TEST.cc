@@ -404,7 +404,7 @@ TEST(Inertiald_Test, AdditionSubtraction)
       EXPECT_EQ(left, tmp);
     }
     {
-      math::Inertiald tmp = right;
+      math::Inertiald tmp = cube;
       tmp -= left;
       EXPECT_EQ(right, tmp);
     }
