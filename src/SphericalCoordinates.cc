@@ -304,6 +304,26 @@ double SphericalCoordinates::Distance(const ignition::math::Angle &_latA,
 }
 
 //////////////////////////////////////////////////
+/// Based on Haversine formula (http://en.wikipedia.org/wiki/Haversine_formula).
+double SphericalCoordinates::Distance(const ignition::math::Angle &_latA,
+                                      const ignition::math::Angle &_lonA,
+                                      const ignition::math::Angle &_latB,
+                                      const ignition::math::Angle &_lonB,
+                                      const double &_radius)
+{
+  ignition::math::Angle dLat = _latB - _latA;
+  ignition::math::Angle dLon = _lonB - _lonA;
+
+  double a = sin(dLat.Radian() / 2) * sin(dLat.Radian() / 2) +
+             sin(dLon.Radian() / 2) * sin(dLon.Radian() / 2) *
+             cos(_latA.Radian()) * cos(_latB.Radian());
+
+  double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+  double d = _radius * c;
+  return d;
+}
+
+//////////////////////////////////////////////////
 void SphericalCoordinates::UpdateTransformationMatrix()
 {
   // Cache trig results

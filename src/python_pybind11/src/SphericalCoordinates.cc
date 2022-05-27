@@ -58,9 +58,25 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
          py::overload_cast<Class::SurfaceType>(&Class::Convert),
          "Convert a SurfaceType to a string.")
     .def("distance",
-         &Class::Distance,
+         py::overload_cast<
+             const ignition::math::Angle&,
+             const ignition::math::Angle&,
+             const ignition::math::Angle&,
+             const ignition::math::Angle&>(&Class::Distance),
          "Get the distance between two points expressed in geographic "
          "latitude and longitude. It assumes that both points are at sea level."
+         " Example: _latA = 38.0016667 and _lonA = -123.0016667) represents "
+         "the point with latitude 38d 0'6.00\"N and longitude 123d 0'6.00\"W.")
+    .def("distance",
+         py::overload_cast<
+             const ignition::math::Angle&,
+             const ignition::math::Angle&,
+             const ignition::math::Angle&,
+             const ignition::math::Angle&,
+             const double&>(&Class::Distance),
+         "Get the distance between two points expressed in geographic"
+         "latitude and longitude. It assumes that both points are at the"
+         "given radius from the centre of the celestial body."
          " Example: _latA = 38.0016667 and _lonA = -123.0016667) represents "
          "the point with latitude 38d 0'6.00\"N and longitude 123d 0'6.00\"W.")
     .def("surface",

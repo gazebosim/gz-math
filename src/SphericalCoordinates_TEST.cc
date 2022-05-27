@@ -317,6 +317,22 @@ TEST(SphericalCoordinatesTest, Distance)
 }
 
 //////////////////////////////////////////////////
+// Test distance when radius is supplied
+TEST(SphericalCoordinatesTest, DistanceWithRadius)
+{
+  ignition::math::Angle latA, longA, latB, longB;
+  latA.SetDegree(46.250944);
+  longA.SetDegree(-122.249972);
+  latB.SetDegree(46.124953);
+  longB.SetDegree(-122.251683);
+  double earthRadius = 6371000.0;
+  double d = math::SphericalCoordinates::Distance(latA, longA, latB, longB,
+      earthRadius * 0.5);
+
+  EXPECT_NEAR(14002 * 0.5, d, 20);
+}
+
+//////////////////////////////////////////////////
 TEST(SphericalCoordinatesTest, BadSetSurface)
 {
   math::SphericalCoordinates sc;
