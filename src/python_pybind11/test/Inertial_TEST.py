@@ -278,7 +278,7 @@ class TestInertial(unittest.TestCase):
         self.Diagonalize(12, Vector3d(4.125, 5.5, 4.375),
                          Vector3d(-math.sqrt(3), -math.sqrt(3)/2, 3.0)*0.25)
 
-    def test_addition(self):
+    def test_addition_subtraction(self):
         # Add two half-cubes together and
         # Subtract one half-cube from a full cube
         mass = 12.0
@@ -400,6 +400,7 @@ class TestInertial(unittest.TestCase):
         self.assertTrue(trueCubeMM3.set_from_box(mass * 8, size * 2))
         self.assertEqual(addedCube, Inertiald(trueCubeMM3, Pose3d.ZERO))
         self.assertEqual(lastCube, addedCube - sevenCubes)
+        self.assertEqual(sevenCubes, addedCube - lastCube)
 
         # Add eight rotated cubes together into larger cube and
         # Subtract seven rotated cubes from larger cube
@@ -422,6 +423,7 @@ class TestInertial(unittest.TestCase):
         self.assertTrue(trueCubeMM3.set_from_box(mass * 8, size * 2))
         self.assertEqual(addedCube, Inertiald(trueCubeMM3, Pose3d.ZERO))
         self.assertEqual(lastCube, addedCube - sevenCubes)
+        self.assertEqual(sevenCubes, addedCube - lastCube)
 
         # Add two cubes with diagonal corners touching at one point
         #           ┌---------┐
@@ -486,12 +488,8 @@ class TestInertial(unittest.TestCase):
             Vector3d(-3, -3, -3),
             diagonalCubes.mass_matrix().off_diagonal_moments())
         # -operator
-        self.assertEqual(
-            Pose3d(-0.5, -0.5, -0.5, 0, 0, 0),
-            (diagonalCubes - cube2).pose())
-        self.assertEqual(
-            Pose3d(0.5,  0.5, 0.5, 0, 0, 0),
-            (diagonalCubes - cube1).pose())
+        self.assertEqual(cube1.pose(), (diagonalCubes - cube2).pose())
+        self.assertEqual(cube2.pose(), (diagonalCubes - cube1).pose())
         self.assertEqual(mass, (diagonalCubes - cube2).mass_matrix().mass())
         self.assertEqual(mass, (diagonalCubes - cube1).mass_matrix().mass())
         self.assertEqual(

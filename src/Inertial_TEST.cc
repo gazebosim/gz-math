@@ -502,6 +502,7 @@ TEST(Inertiald_Test, AdditionSubtraction)
     EXPECT_TRUE(trueCubeMM3.SetFromBox(8*mass, 2*size));
     EXPECT_EQ(addedCube, math::Inertiald(trueCubeMM3, math::Pose3d::Zero));
     EXPECT_EQ(lastCube, addedCube - sevenCubes);
+    EXPECT_EQ(sevenCubes, addedCube - lastCube);
   }
 
   // Add eight rotated cubes together into larger cube and
@@ -527,6 +528,7 @@ TEST(Inertiald_Test, AdditionSubtraction)
     EXPECT_TRUE(trueCubeMM3.SetFromBox(8*mass, 2*size));
     EXPECT_EQ(addedCube, math::Inertiald(trueCubeMM3, math::Pose3d::Zero));
     EXPECT_EQ(lastCube, addedCube - sevenCubes);
+    EXPECT_EQ(sevenCubes, addedCube - lastCube);
   }
 
   // Add two cubes with diagonal corners touching at one point
@@ -595,12 +597,8 @@ TEST(Inertiald_Test, AdditionSubtraction)
         diagonalCubes.MassMatrix().OffDiagonalMoments());
 
     // -operator
-    EXPECT_EQ(
-        math::Pose3d(-0.5, -0.5, -0.5, 0, 0, 0),
-        (diagonalCubes - cube2).Pose());
-    EXPECT_EQ(
-        math::Pose3d(0.5,  0.5, 0.5, 0, 0, 0),
-        (diagonalCubes - cube1).Pose());
+    EXPECT_EQ(cube1.Pose(), (diagonalCubes - cube2).Pose());
+    EXPECT_EQ(cube2.Pose(), (diagonalCubes - cube1).Pose());
     EXPECT_DOUBLE_EQ(mass, (diagonalCubes - cube2).MassMatrix().Mass());
     EXPECT_DOUBLE_EQ(mass, (diagonalCubes - cube1).MassMatrix().Mass());
     EXPECT_EQ(
