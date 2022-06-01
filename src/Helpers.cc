@@ -182,7 +182,7 @@ namespace gz
       // The following regex takes a time string in the general format of
       // "dd hh:mm:ss.nnn" where n is milliseconds, if just one number is
       // provided, it is assumed to be seconds.
-      static const ignition::utils::NeverDestroyed<std::regex> timeRegex {
+      static const gz::utils::NeverDestroyed<std::regex> timeRegex {
           "^([0-9]+ ){0,1}"                       // day:
                                                   // Any positive integer
 
