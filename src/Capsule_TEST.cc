@@ -20,7 +20,7 @@
 #include "gz/math/Capsule.hh"
 #include "gz/math/Helpers.hh"
 
-using namespace ignition;
+using namespace gz;
 
 /////////////////////////////////////////////////
 TEST(CapsuleTest, Constructor)
