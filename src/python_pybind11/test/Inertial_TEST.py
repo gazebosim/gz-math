@@ -548,12 +548,55 @@ class TestInertial(unittest.TestCase):
         tmp += i
         self.assertEqual(tmp, i)
 
-        # TODO(chapulina) Fix tests after migrating to pybind11
-        # self.assertTrue((i + i0).mass_matrix().is_positive())
-        # self.assertTrue((i0 + i).mass_matrix().is_positive())
-        # self.assertTrue((i + i0).mass_matrix().is_valid())
-        # self.assertTrue((i0 + i).mass_matrix().is_valid())
+        self.assertTrue((i + i0).mass_matrix().is_positive())
+        self.assertTrue((i0 + i).mass_matrix().is_positive())
+        self.assertTrue((i + i0).mass_matrix().is_valid())
+        self.assertTrue((i0 + i).mass_matrix().is_valid())
 
+    def test_subtraction_invalid(self):
+        mass = 12.0
+        m1 = MassMatrix3d()
+        m2 = MassMatrix3d()
+        self.assertTrue(m1.set_from_box(0.5*mass, Vector3d(0.5, 1, 1)))
+        self.assertTrue(m1.is_positive())
+        self.assertTrue(m1.is_valid())
+        self.assertTrue(m2.set_from_box(0.5*mass, Vector3d(0.5, 0.25, 0.25)))
+        self.assertTrue(m2.is_positive())
+        self.assertTrue(m2.is_valid())
+
+        # two inertials with i2 having higher mass than i1
+        i1 = Inertiald(m1, Pose3d(-0.25, 0, 0, 0, 0, 0))
+        i2 = Inertiald(m2, Pose3d(0.25, 0, 0, 0, 0, 0))
+
+        # expect subtraction to equal left argument
+        self.assertEqual(i1, i1 - i2)
+        tmp = copy.copy(i1)
+        tmp -= i2
+        self.assertEqual(tmp, i1)
+
+        # one inertial with zero inertias should not affect the subtraction
+        m1 = MassMatrix3d(mass, Vector3d(2, 3, 4), Vector3d(0.1, 0.2, 0.3))
+        m2 = MassMatrix3d(0.0, Vector3d.ZERO, Vector3d.ZERO)
+        self.assertTrue(m1.is_positive())
+        self.assertTrue(m1.is_valid())
+        self.assertFalse(m2.is_positive())
+        self.assertTrue(m2.is_near_positive())
+        self.assertTrue(m2.is_valid())
+
+        # i2 with zero inertia
+        i1 = Inertiald(m1, Pose3d(-1, 0, 0, 0, 0, 0))
+        i2 = Inertiald(m2, Pose3d(1, 0, 0, 0, 0, 0))
+
+        # expect i2 to not affect the subtraction
+        self.assertEqual(i1, i1 - i2)
+        tmp = copy.copy(i1)
+        tmp -= i2
+        self.assertEqual(tmp, i1)
+
+        self.assertTrue((i1 - i2).mass_matrix().is_positive())
+        self.assertFalse((i2 - i1).mass_matrix().is_positive())
+        self.assertTrue((i1 - i2).mass_matrix().is_valid())
+        self.assertTrue((i2 - i1).mass_matrix().is_valid())
 
 if __name__ == '__main__':
     unittest.main()

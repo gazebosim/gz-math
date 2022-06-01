@@ -677,3 +677,61 @@ TEST(Inertiald_Test, AdditionInvalid)
     EXPECT_TRUE((i0 + i).MassMatrix().IsValid());
   }
 }
+
+TEST(Inertiald_Test, SubtractionInvalid)
+{
+  const double mass = 12.0;
+  {
+    math::MassMatrix3d m1, m2;
+    EXPECT_TRUE(m1.SetFromBox(0.5*mass, math::Vector3d(0.5, 1, 1)));
+    EXPECT_TRUE(m1.IsPositive());
+    EXPECT_TRUE(m1.IsValid());
+    EXPECT_TRUE(m2.SetFromBox(mass, math::Vector3d(0.5, 0.25, 0.25)));
+    EXPECT_TRUE(m2.IsValid());
+    EXPECT_TRUE(m2.IsPositive());
+
+    // two inertials with i2 having higher mass than i1
+    math::Inertiald i1(m1, math::Pose3d(-0.25, 0, 0, 0, 0, 0));
+    math::Inertiald i2(m2, math::Pose3d(0.25, 0, 0, 0, 0, 0));
+
+    // expect subtraction to equal left argument
+    EXPECT_EQ(i1, i1 - i2);
+    {
+      math::Inertiald tmp = i1;
+      tmp -= i2;
+      EXPECT_EQ(tmp, i1);
+    }
+  }
+
+  // one inertial with zero inertias should not affect the subtraction
+  {
+    const math::MassMatrix3d m1(mass,
+                         math::Vector3d(2, 3, 4),
+                         math::Vector3d(0.1, 0.2, 0.3));
+    EXPECT_TRUE(m1.IsPositive());
+    EXPECT_TRUE(m1.IsValid());
+
+    const math::MassMatrix3d m2(0.0,
+                                math::Vector3d::Zero, math::Vector3d::Zero);
+    EXPECT_FALSE(m2.IsPositive());
+    EXPECT_TRUE(m2.IsNearPositive());
+    EXPECT_TRUE(m2.IsValid());
+
+    // i2 with zero inertia
+    math::Inertiald i1(m1, math::Pose3d(-1, 0, 0, 0, 0, 0));
+    math::Inertiald i2(m2, math::Pose3d(1, 0, 0, 0, 0, 0));
+
+    // expect i2 to not affect the subtraction
+    EXPECT_EQ(i1, i1 - i2);
+    {
+      math::Inertiald tmp = i1;
+      tmp -= i2;
+      EXPECT_EQ(tmp, i1);
+    }
+
+    EXPECT_TRUE((i1 - i2).MassMatrix().IsPositive());
+    EXPECT_FALSE((i2 - i1).MassMatrix().IsPositive());
+    EXPECT_TRUE((i1 - i2).MassMatrix().IsValid());
+    EXPECT_TRUE((i2 - i1).MassMatrix().IsValid());
+  }
+}
