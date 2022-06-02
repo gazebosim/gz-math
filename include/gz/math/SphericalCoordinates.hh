@@ -45,8 +45,11 @@ namespace gz
 
                 /// |brief Model of the moon, based on the Selenographic
                 /// coordinate system, see wikipedia: Selenographic
-                /// Coordinate System
-                MOON_SCS = 2
+                /// Coordinate System.
+                MOON_SCS = 2,
+
+                /// |brief Custom surface type
+                CUSTOM_SURFACE = 10
               };
 
       /// \enum CoordinateType
@@ -90,6 +93,15 @@ namespace gz
                                    const double _elevation,
                                    const gz::math::Angle &_heading);
 
+      /// |brief Set the radius of surface, in case the SurfaceType is set
+      /// to CUSTOM_SURFACE.
+      /// Returns true if the SurfaceType was CUSTOM_SURFACE and the radius
+      /// provided is positive, otherwise returns false.
+      /// |param[in] _radius Radius of the custom SurfaceType in meters.
+      public: bool SetSurfaceRadius(const double _radius);
+
+      /// |brief Get the radius of the specified SurfaceType.
+      public: double GetSurfaceRadius() const;
 
       /// \brief Convert a Cartesian position vector to geodetic coordinates.
       /// This performs a `PositionTransform` from LOCAL to SPHERICAL.
@@ -145,6 +157,23 @@ namespace gz
                                      const gz::math::Angle &_lonA,
                                      const gz::math::Angle &_latB,
                                      const gz::math::Angle &_lonB);
+
+      /// \brief Get the distance between two points expressed in geographic
+      /// latitude and longitude. It assumes that both points are at sea level.
+      /// Example: _latA = 38.0016667 and _lonA = -123.0016667) represents
+      /// the point with latitude 38d 0'6.00"N and longitude 123d 0'6.00"W.
+      /// This is different from the static Distance() method as it takes into
+      /// account the surface type.
+      /// \param[in] _latA Latitude of point A.
+      /// \param[in] _lonA Longitude of point A.
+      /// \param[in] _latB Latitude of point B.
+      /// \param[in] _lonB Longitude of point B.
+      /// \return Distance in meters.
+      public: double DistanceBetweenPoints(
+                  const gz::math::Angle &_latA,
+                  const gz::math::Angle &_lonA,
+                  const gz::math::Angle &_latB,
+                  const gz::math::Angle &_lonB);
 
       /// \brief Get SurfaceType currently in use.
       /// \return Current SurfaceType value.

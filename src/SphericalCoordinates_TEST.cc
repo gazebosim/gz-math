@@ -80,7 +80,12 @@ TEST(SphericalCoordinatesTest, Convert)
 
   EXPECT_EQ("EARTH_WGS84", math::SphericalCoordinates::Convert(st));
   EXPECT_EQ("EARTH_WGS84", math::SphericalCoordinates::Convert(
-      static_cast<math::SphericalCoordinates::SurfaceType>(2)));
+      static_cast<math::SphericalCoordinates::SurfaceType>(3)));
+
+  // For the Moon surface type
+  st = math::SphericalCoordinates::MOON_SCS;
+  EXPECT_EQ(math::SphericalCoordinates::Convert("MOON_SCS"), st);
+  EXPECT_EQ("MOON_SCS", math::SphericalCoordinates::Convert(st));
 }
 
 //////////////////////////////////////////////////
@@ -311,17 +316,51 @@ TEST(SphericalCoordinatesTest, Distance)
   longA.SetDegree(-122.249972);
   latB.SetDegree(46.124953);
   longB.SetDegree(-122.251683);
-  double d = math::SphericalCoordinates::Distance(latA, longA, latB, longB);
 
-  EXPECT_NEAR(14002, d, 20);
+  // Calculating distance using the static method.
+  double d1 = math::SphericalCoordinates::Distance(latA, longA, latB, longB);
+  EXPECT_NEAR(14002, d1, 20);
+
+  // Using the non static method. The default surface type is EARTH_WGS84.
+  auto earthSC = math::SphericalCoordinates();
+  double d2 = earthSC.DistanceBetweenPoints(latA, longA, latB, longB);
+  EXPECT_NEAR(d1, d2, 0.1);
+
+  earthSC = math::SphericalCoordinates(
+      math::SphericalCoordinates::SurfaceType::EARTH_WGS84);
+  double d3 = earthSC.DistanceBetweenPoints(latA, longA, latB, longB);
+  EXPECT_NEAR(d2, d3, 0.1);
+
+  //Setting the surface type as Moon.
+  auto moonSC = math::SphericalCoordinates(
+      math::SphericalCoordinates::SurfaceType::MOON_SCS);
+  double d4 = moonSC.DistanceBetweenPoints(latA, longA, latB, longB);
+  EXPECT_NEAR(3820, d4, 5);
+
+  // Using a custom surface.
+  auto customSC = math::SphericalCoordinates(
+      math::SphericalCoordinates::SurfaceType::CUSTOM_SURFACE);
+  // Setting negative radius is not allowed.
+  EXPECT_FALSE(customSC.SetSurfaceRadius(-1000.0));
+  EXPECT_NEAR(customSC.GetSurfaceRadius(), 0.0, 0.001);
+
+  // DistanceBetweenPoints should return invalid result as the radius
+  // for the custom surface is not set.
+  EXPECT_LT(customSC.DistanceBetweenPoints(latA, longA, latB, longB), 0);
+
+  // Setting a positive radius is allowed.
+  EXPECT_TRUE(customSC.SetSurfaceRadius(6371000.0));
+  EXPECT_NEAR(customSC.GetSurfaceRadius(), 6371000.0, 0.01);
+
+  EXPECT_NEAR(customSC.DistanceBetweenPoints(latA, longA, latB, longB), d1, 0.1);
 }
 
 //////////////////////////////////////////////////
 TEST(SphericalCoordinatesTest, BadSetSurface)
 {
   math::SphericalCoordinates sc;
-  sc.SetSurface(static_cast<math::SphericalCoordinates::SurfaceType>(2));
-  EXPECT_EQ(sc.Surface(), 2);
+  sc.SetSurface(static_cast<math::SphericalCoordinates::SurfaceType>(3));
+  EXPECT_EQ(sc.Surface(), 3);
 }
 
 //////////////////////////////////////////////////
