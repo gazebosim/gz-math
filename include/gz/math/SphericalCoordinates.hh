@@ -41,7 +41,12 @@ namespace gz
               {
                 /// \brief Model of reference ellipsoid for earth, based on
                 /// WGS 84 standard. see wikipedia: World_Geodetic_System
-                EARTH_WGS84 = 1
+                EARTH_WGS84 = 1,
+
+                /// |brief Model of the moon, based on the Selenographic
+                /// coordinate system, see wikipedia: Selenographic
+                /// Coordinate System
+                MOON_SCS = 2
               };
 
       /// \enum CoordinateType
@@ -140,24 +145,6 @@ namespace gz
                                      const gz::math::Angle &_lonA,
                                      const gz::math::Angle &_latB,
                                      const gz::math::Angle &_lonB);
-
-
-      /// \brief Get the distance between two points expressed in geographic
-      /// latitude and longitude. It assumes that both points are at the
-      /// given radius from the centre of the celestial body.
-      /// Example: _latA = 38.0016667 and _lonA = -123.0016667) represents
-      /// the point with latitude 38d 0'6.00"N and longitude 123d 0'6.00"W.
-      /// \param[in] _latA Latitude of point A.
-      /// \param[in] _lonA Longitude of point A.
-      /// \param[in] _latB Latitude of point B.
-      /// \param[in] _lonB Longitude of point B.
-      /// \param[in] _radius Radius of the celestial body in metres.
-      /// \return Distance in meters.
-      public: static double Distance(const ignition::math::Angle &_latA,
-                                     const ignition::math::Angle &_lonA,
-                                     const ignition::math::Angle &_latB,
-                                     const ignition::math::Angle &_lonB,
-                                     const double &_radius);
 
       /// \brief Get SurfaceType currently in use.
       /// \return Current SurfaceType value.
