@@ -162,11 +162,44 @@ SphericalCoordinates::SphericalCoordinates(const SurfaceType _type)
       this->dataPtr->surfaceRadius = g_MoonRadius;
       break;
     case CUSTOM_SURFACE:
-      this->dataPtr->surfaceRadius = 0;
+      std::cerr << "Please supply ellipsoidal properties with the custom surface"
+        << std::endl;
       break;
     default:
       std::cerr << "Unknown surface type [" << _type << "]" << std::endl;
   }
+  this->SetElevationReference(0.0);
+}
+
+//////////////////////////////////////////////////
+SphericalCoordinates::SphericalCoordinates(
+    const SurfaceType _type,
+    const double _radius,
+    const double _axisEquatorial,
+    const double _axisPolar,
+    const double _flattening)
+  : SphericalCoordinates()
+{
+  if (_type != CUSTOM_SURFACE)
+  {
+    std::cerr << "Surface type should be set to SURFACE_CUSTOM"
+      << std::endl;
+    return;
+  }
+
+  // Set properties
+  this->dataPtr->surfaceType = _type;
+
+  this->dataPtr->ellA = _axisEquatorial;
+  this->dataPtr->ellB = _axisPolar;
+  this->dataPtr->ellF = _flattening;
+  this->dataPtr->ellE = sqrt(1.0 -
+      std::pow(this->dataPtr->ellB, 2) / std::pow(this->dataPtr->ellA, 2));
+  this->dataPtr->ellP = sqrt(
+      std::pow(this->dataPtr->ellA, 2) / std::pow(this->dataPtr->ellB, 2) -
+      1.0);
+  this->dataPtr->surfaceRadius = _radius;
+
   this->SetElevationReference(0.0);
 }
 
@@ -189,24 +222,6 @@ SphericalCoordinates::SphericalCoordinates(const SurfaceType _type,
 
   // Generate transformation matrix
   this->UpdateTransformationMatrix();
-}
-
-//////////////////////////////////////////////////
-bool SphericalCoordinates::SetSurfaceRadius(const double _radius)
-{
-  if ( (this->Surface() == CUSTOM_SURFACE) && _radius > 0)
-  {
-    this->dataPtr->surfaceRadius = _radius;
-    return true;
-  }
-
-  return false;
-}
-
-//////////////////////////////////////////////////
-double SphericalCoordinates::GetSurfaceRadius() const
-{
-  return this->dataPtr->surfaceRadius;
 }
 
 //////////////////////////////////////////////////
@@ -294,11 +309,6 @@ void SphericalCoordinates::SetSurface(const SurfaceType &_type)
 
       break;
       }
-    case CUSTOM_SURFACE:
-      {
-        // TODO aditya: Add API to get and set semi major axes, eccentricity
-      }
-      break;
     default:
       {
         std::cerr << "Unknown surface type["

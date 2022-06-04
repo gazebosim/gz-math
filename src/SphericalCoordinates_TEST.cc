@@ -339,18 +339,11 @@ TEST(SphericalCoordinatesTest, Distance)
 
   // Using a custom surface.
   auto customSC = math::SphericalCoordinates(
-      math::SphericalCoordinates::SurfaceType::CUSTOM_SURFACE);
-  // Setting negative radius is not allowed.
-  EXPECT_FALSE(customSC.SetSurfaceRadius(-1000.0));
-  EXPECT_NEAR(customSC.GetSurfaceRadius(), 0.0, 0.001);
-
-  // DistanceBetweenPoints should return invalid result as the radius
-  // for the custom surface is not set.
-  EXPECT_LT(customSC.DistanceBetweenPoints(latA, longA, latB, longB), 0);
-
-  // Setting a positive radius is allowed.
-  EXPECT_TRUE(customSC.SetSurfaceRadius(6371000.0));
-  EXPECT_NEAR(customSC.GetSurfaceRadius(), 6371000.0, 0.01);
+      math::SphericalCoordinates::SurfaceType::CUSTOM_SURFACE,
+      6371000.0,
+      6378137.0,
+      6356752.314245,
+      1.0/298.25722);
 
   EXPECT_NEAR(customSC.DistanceBetweenPoints(latA, longA, latB, longB), d1, 0.1);
 }

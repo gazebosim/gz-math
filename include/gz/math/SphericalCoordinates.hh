@@ -81,6 +81,17 @@ namespace gz
       /// \param[in] _type SurfaceType specification.
       public: explicit SphericalCoordinates(const SurfaceType _type);
 
+      /// \brief Constructor with surface type input and properties
+      /// input. To be used for CUSTOM_SURFACE.
+      /// \param[in] _type SurfaceType specification.
+      public: SphericalCoordinates(
+            const SurfaceType _type,
+            const double _radius,
+            const double _axisEquatorial,
+            const double _axisPolar,
+            const double _flattening
+            );
+
       /// \brief Constructor with surface type, angle, and elevation inputs.
       /// \param[in] _type SurfaceType specification.
       /// \param[in] _latitude Reference latitude.
@@ -92,16 +103,6 @@ namespace gz
                                    const gz::math::Angle &_longitude,
                                    const double _elevation,
                                    const gz::math::Angle &_heading);
-
-      /// |brief Set the radius of surface, in case the SurfaceType is set
-      /// to CUSTOM_SURFACE.
-      /// Returns true if the SurfaceType was CUSTOM_SURFACE and the radius
-      /// provided is positive, otherwise returns false.
-      /// |param[in] _radius Radius of the custom SurfaceType in meters.
-      public: bool SetSurfaceRadius(const double _radius);
-
-      /// |brief Get the radius of the specified SurfaceType.
-      public: double GetSurfaceRadius() const;
 
       /// \brief Convert a Cartesian position vector to geodetic coordinates.
       /// This performs a `PositionTransform` from LOCAL to SPHERICAL.
