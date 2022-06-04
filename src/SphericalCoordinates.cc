@@ -162,8 +162,8 @@ SphericalCoordinates::SphericalCoordinates(const SurfaceType _type)
       this->dataPtr->surfaceRadius = g_MoonRadius;
       break;
     case CUSTOM_SURFACE:
-      std::cerr << "Please supply ellipsoidal properties with the custom surface"
-        << std::endl;
+      std::cerr << "Please supply ellipsoidal properties with the "
+        "custom surface." << std::endl;
       break;
     default:
       std::cerr << "Unknown surface type [" << _type << "]" << std::endl;

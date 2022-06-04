@@ -331,7 +331,7 @@ TEST(SphericalCoordinatesTest, Distance)
   double d3 = earthSC.DistanceBetweenPoints(latA, longA, latB, longB);
   EXPECT_NEAR(d2, d3, 0.1);
 
-  //Setting the surface type as Moon.
+  // Setting the surface type as Moon.
   auto moonSC = math::SphericalCoordinates(
       math::SphericalCoordinates::SurfaceType::MOON_SCS);
   double d4 = moonSC.DistanceBetweenPoints(latA, longA, latB, longB);
@@ -345,7 +345,8 @@ TEST(SphericalCoordinatesTest, Distance)
       6356752.314245,
       1.0/298.25722);
 
-  EXPECT_NEAR(customSC.DistanceBetweenPoints(latA, longA, latB, longB), d1, 0.1);
+  EXPECT_NEAR(customSC.DistanceBetweenPoints(latA, longA, latB, longB),
+      d1, 0.1);
 }
 
 //////////////////////////////////////////////////
