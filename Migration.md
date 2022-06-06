@@ -70,6 +70,7 @@ release will remove the deprecated code.
 1. Header files under `ignition/...` are deprecated and will be removed in future versions.
    Use `gz/...` instead.
 1. The following `IGN_` prefixed macros are deprecated and will be removed in future versions.
+   Additionally, they will only be available when including the corresponding `ignition/...` header.
    Use the `GZ_` prefix instead.
    1. `IGN_RTOD`, `IGN_DTOR`
    1. `IGN_NORMALIZE`
