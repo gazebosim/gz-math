@@ -28,15 +28,27 @@
 template <typename T>
 constexpr T IGN_MASSMATRIX3_DEFAULT_TOLERANCE = T(10);
 
-#define IGN_PI   3.14159265358979323846
-#define IGN_PI_2 1.57079632679489661923
-#define IGN_PI_4 0.78539816339744830962
-#define IGN_SQRT2 1.41421356237309504880
+#define GZ_PI   3.14159265358979323846
+#define GZ_PI_2 1.57079632679489661923
+#define GZ_PI_4 0.78539816339744830962
+#define GZ_SQRT2 1.41421356237309504880
 
-#define IGN_SPHERE_VOLUME(_radius) (4.0*IGN_PI*std::pow(_radius, 3)/3.0)
-#define IGN_CYLINDER_VOLUME(_r, _l) (_l * IGN_PI * std::pow(_r, 2))
-#define IGN_BOX_VOLUME(_x, _y, _z) (_x *_y * _z)
-#define IGN_BOX_VOLUME_V(_v) (_v.X() *_v.Y() * _v.Z())
+#define GZ_SPHERE_VOLUME(_radius) (4.0 * GZ_PI * std::pow(_radius, 3)/3.0)
+#define GZ_CYLINDER_VOLUME(_r, _l) (_l * GZ_PI * std::pow(_r, 2))
+#define GZ_BOX_VOLUME(_x, _y, _z) (_x *_y * _z)
+#define GZ_BOX_VOLUME_V(_v) (_v.X() *_v.Y() * _v.Z())
+
+// TODO(CH3): Deprecated. Remove on tock.
+#define IGN_PI GZ_PI
+#define IGN_PI_2 GZ_PI_2
+#define IGN_PI_4 GZ_PI_4
+#define IGN_SQRT2 GZ_SQRT2
+
+// TODO(CH3): Deprecated. Remove on tock.
+#define IGN_SPHERE_VOLUME(_radius) GZ_SPHERE_VOLUME(_radius)
+#define IGN_CYLINDER_VOLUME(_r, _l) GZ_CYLINDER_VOLUME(_r, _l)
+#define IGN_BOX_VOLUME(_x, _y, _z) GZ_BOX_VOLUME(_x, _y, _z)
+#define IGN_BOX_VOLUME_V(_v) GZ_BOX_VOLUME_V(_v)
 
 namespace gz
 {

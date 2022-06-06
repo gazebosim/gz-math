@@ -362,7 +362,7 @@ namespace gz
                 return _in;
               }
 
-      IGN_UTILS_IMPL_PTR(dataPtr)
+      GZ_UTILS_IMPL_PTR(dataPtr)
     };
     }
   }

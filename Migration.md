@@ -69,6 +69,15 @@ release will remove the deprecated code.
 1. The `ignition` namespace is deprecated and will be removed in future versions.  Use `gz` instead.
 1. Header files under `ignition/...` are deprecated and will be removed in future versions.
    Use `gz/...` instead.
+1. The following `IGN_` prefixed macros are deprecated and will be removed in future versions.
+   Use the `GZ_` prefix instead.
+   1. `IGN_RTOD`, `IGN_DTOR`
+   1. `IGN_NORMALIZE`
+   1. `IGN_PI`, `IGN_PI_2`, `IGN_PI_4`
+   1. `IGN_SQRT2`
+   1. `IGN_FP_VOLATILE`
+   1. `IGN_SPHERE_VOLUME`, `IGN_CYLINDER_VOLUME`, `IGN_BOX_VOLUME`, `IGN_BOX_VOLUME_V`
+
 
 ### Modifications
 

@@ -447,11 +447,11 @@ namespace gz
         T sarg = -2 * (copy.qx*copy.qz - copy.qw * copy.qy);
         if (sarg <= T(-1.0))
         {
-          vec.Y(T(-0.5*IGN_PI));
+          vec.Y(T(-0.5*GZ_PI));
         }
         else if (sarg >= T(1.0))
         {
-          vec.Y(T(0.5*IGN_PI));
+          vec.Y(T(0.5*GZ_PI));
         }
         else
         {

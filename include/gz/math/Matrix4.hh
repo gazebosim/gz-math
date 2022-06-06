@@ -305,15 +305,15 @@ namespace gz
 
           if (m31 < 0.0)
           {
-            euler.Y(IGN_PI / 2.0);
-            euler2.Y(IGN_PI / 2.0);
+            euler.Y(GZ_PI / 2.0);
+            euler2.Y(GZ_PI / 2.0);
             euler.X(atan2(m12, m13));
             euler2.X(atan2(m12, m13));
           }
           else
           {
-            euler.Y(-IGN_PI / 2.0);
-            euler2.Y(-IGN_PI / 2.0);
+            euler.Y(-GZ_PI / 2.0);
+            euler2.Y(-GZ_PI / 2.0);
             euler.X(atan2(-m12, -m13));
             euler2.X(atan2(-m12, -m13));
           }
@@ -321,7 +321,7 @@ namespace gz
         else
         {
           euler.Y(-asin(m31));
-          euler2.Y(IGN_PI - euler.Y());
+          euler2.Y(GZ_PI - euler.Y());
 
           euler.X(atan2(m32 / cos(euler.Y()), m33 / cos(euler.Y())));
           euler2.X(atan2(m32 / cos(euler2.Y()), m33 / cos(euler2.Y())));

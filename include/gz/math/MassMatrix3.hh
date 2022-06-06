@@ -516,8 +516,8 @@ namespace gz
 
         // sort the moments from smallest to largest
         T moment0 = (b + 2*sqrt(p) * cos(delta / 3.0)) / 3.0;
-        T moment1 = (b + 2*sqrt(p) * cos((delta + 2*IGN_PI)/3.0)) / 3.0;
-        T moment2 = (b + 2*sqrt(p) * cos((delta - 2*IGN_PI)/3.0)) / 3.0;
+        T moment1 = (b + 2*sqrt(p) * cos((delta + 2*GZ_PI)/3.0)) / 3.0;
+        T moment2 = (b + 2*sqrt(p) * cos((delta - 2*GZ_PI)/3.0)) / 3.0;
         sort3(moment0, moment1, moment2);
         return Vector3<T>(moment0, moment1, moment2);
       }
@@ -673,7 +673,7 @@ namespace gz
           //                   [-1  0  0]
           // That is equivalent to a 90 degree pitch
           if (unequalMoment == 0)
-            result *= Quaternion<T>(0, IGN_PI_2, 0);
+            result *= Quaternion<T>(0, GZ_PI_2, 0);
 
           return result;
         }
@@ -950,7 +950,7 @@ namespace gz
         {
           return false;
         }
-        T volume = IGN_PI * _radius * _radius * _length;
+        T volume = GZ_PI * _radius * _radius * _length;
         return this->SetFromCylinderZ(_mat.Density() * volume,
                                       _length, _radius, _rot);
       }
@@ -1020,7 +1020,7 @@ namespace gz
           return false;
         }
 
-        T volume = (4.0/3.0) * IGN_PI * std::pow(_radius, 3);
+        T volume = (4.0/3.0) * GZ_PI * std::pow(_radius, 3);
         return this->SetFromSphere(_mat.Density() * volume, _radius);
       }
 
