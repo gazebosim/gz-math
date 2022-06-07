@@ -15,6 +15,7 @@
  *
 */
 #include <tuple>
+#include <iostream>
 
 #include <pybind11/stl.h>
 
@@ -65,6 +66,39 @@ float BoxVolume(const float _x, const float _y, const float _z)
 float BoxVolumeV(const gz::math::Vector3d &_v)
 {
   return GZ_BOX_VOLUME_V(_v);
+}
+
+// TODO(CH3): Deprecated. Remove on tock.
+float SphereVolumeDeprecated(const float _radius)
+{
+  std::cerr << "ign_sphere_volume is deprecated. "
+            << "Please use gz_sphere_volume instead"
+            << std::endl;
+  return SphereVolume(_radius);
+}
+
+float CylinderVolumeDeprecated(const float _r, const float _l)
+{
+  std::cerr << "ign_cylinder_volume is deprecated. "
+            << "Please use gz_cylinder_volume instead"
+            << std::endl;
+  return CylinderVolume(_r, _l);
+}
+
+float BoxVolumeDeprecated(const float _x, const float _y, const float _z)
+{
+  std::cerr << "ign_box_volume is deprecated. "
+            << "Please use gz_box_volume instead"
+            << std::endl;
+  return BoxVolume(_x, _y, _z);
+}
+
+float BoxVolumeVDeprecated(const gz::math::Vector3d &_v)
+{
+  std::cerr << "ign_box_volume_v is deprecated. "
+            << "Please use gz_box_volume_v instead"
+            << std::endl;
+  return BoxVolumeV(_v);
 }
 
 /// \brief Sort two numbers, such that _a <= _b
@@ -175,7 +209,22 @@ void defineMathHelpers(py::module &m)
         "Compute box volume")
    .def("gz_box_volume_v",
         &BoxVolumeV,
-        "Compute box volume from vector");
+        "Compute box volume from vector")
+
+   // TODO(CH3): Deprecated. Remove on tock.
+   .def("ign_sphere_volume",
+        &SphereVolumeDeprecated,
+        "[Deprecated] Compute sphere volume")
+   .def("ign_cylinder_volume",
+        &CylinderVolumeDeprecated,
+        "[Deprecated] Compute cylinder volume")
+   .def("ign_box_volume",
+        &BoxVolumeDeprecated,
+        "[Deprecated] Compute box volume")
+   .def("ign_box_volume_v",
+        &BoxVolumeVDeprecated,
+        "[Deprecated] Compute box volume from vector");
+
    py::class_<Class>(m,
                     "Helpers",
                     py::buffer_protocol(),
