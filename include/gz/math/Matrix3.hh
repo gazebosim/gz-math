@@ -50,7 +50,7 @@ namespace gz
     ///
     /// * Ruby
     /// \code{.rb}
-    /// # Modify the RUBYLIB environment variable to include the ignition math
+    /// # Modify the RUBYLIB environment variable to include the Gazebo Math
     /// # library install path. For example, if you install to /user:
     /// #
     /// # $ export RUBYLIB=/usr/lib/ruby:$RUBYLIB
