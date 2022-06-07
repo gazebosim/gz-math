@@ -26,6 +26,10 @@
 %}
 
 template <typename T>
+constexpr T GZ_MASSMATRIX3_DEFAULT_TOLERANCE = T(10);
+
+// TODO(CH3): Deprecated. Remove on tock.
+template <typename T>
 constexpr T IGN_MASSMATRIX3_DEFAULT_TOLERANCE = T(10);
 
 #define GZ_PI   3.14159265358979323846
@@ -54,16 +58,29 @@ namespace gz
 {
   namespace math
   {
-    static const size_t IGN_ZERO_SIZE_T  = 0u;
-    static const size_t IGN_ONE_SIZE_T   = 1u;
-    static const size_t IGN_TWO_SIZE_T   = 2u;
-    static const size_t IGN_THREE_SIZE_T = 3u;
-    static const size_t IGN_FOUR_SIZE_T  = 4u;
-    static const size_t IGN_FIVE_SIZE_T  = 5u;
-    static const size_t IGN_SIX_SIZE_T   = 6u;
-    static const size_t IGN_SEVEN_SIZE_T = 7u;
-    static const size_t IGN_EIGHT_SIZE_T = 8u;
-    static const size_t IGN_NINE_SIZE_T  = 9u;
+    static const size_t GZ_ZERO_SIZE_T  = 0u;
+    static const size_t GZ_ONE_SIZE_T   = 1u;
+    static const size_t GZ_TWO_SIZE_T   = 2u;
+    static const size_t GZ_THREE_SIZE_T = 3u;
+    static const size_t GZ_FOUR_SIZE_T  = 4u;
+    static const size_t GZ_FIVE_SIZE_T  = 5u;
+    static const size_t GZ_SIX_SIZE_T   = 6u;
+    static const size_t GZ_SEVEN_SIZE_T = 7u;
+    static const size_t GZ_EIGHT_SIZE_T = 8u;
+    static const size_t GZ_NINE_SIZE_T  = 9u;
+
+    // TODO(CH3): Deprecated. Remove on tock.
+    constexpr auto GZ_DEPRECATED(7) IGN_ZERO_SIZE_T  = &GZ_ZERO_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_ONE_SIZE_T   = &GZ_ONE_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_TWO_SIZE_T   = &GZ_TWO_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_THREE_SIZE_T = &GZ_THREE_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_FOUR_SIZE_T  = &GZ_FOUR_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_FIVE_SIZE_T  = &GZ_FIVE_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_SIX_SIZE_T   = &GZ_SIX_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_SEVEN_SIZE_T = &GZ_SEVEN_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_EIGHT_SIZE_T = &GZ_EIGHT_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_NINE_SIZE_T  = &GZ_NINE_SIZE_T;
+
     static const double MAX_D = std::numeric_limits<double>::max();
     static const double MIN_D = std::numeric_limits<double>::min();
     static const double LOW_D = std::numeric_limits<double>::lowest();

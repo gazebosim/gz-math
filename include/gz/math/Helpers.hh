@@ -34,6 +34,10 @@
 /// \brief The default tolerance value used by MassMatrix3::IsValid(),
 /// MassMatrix3::IsPositive(), and MassMatrix3::ValidMoments()
 template <typename T>
+constexpr T GZ_MASSMATRIX3_DEFAULT_TOLERANCE = T(10);
+
+// TODO(CH3): Deprecated. Remove on tock.
+template <typename T>
 constexpr T IGN_MASSMATRIX3_DEFAULT_TOLERANCE = T(10);
 
 /// \brief Define GZ_PI, GZ_PI_2, and GZ_PI_4.
@@ -87,34 +91,46 @@ namespace gz
     inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /// \brief size_t type with a value of 0
-    static const size_t IGN_ZERO_SIZE_T  = 0u;
+    static const size_t GZ_ZERO_SIZE_T  = 0u;
 
     /// \brief size_t type with a value of 1
-    static const size_t IGN_ONE_SIZE_T   = 1u;
+    static const size_t GZ_ONE_SIZE_T   = 1u;
 
     /// \brief size_t type with a value of 2
-    static const size_t IGN_TWO_SIZE_T   = 2u;
+    static const size_t GZ_TWO_SIZE_T   = 2u;
 
     /// \brief size_t type with a value of 3
-    static const size_t IGN_THREE_SIZE_T = 3u;
+    static const size_t GZ_THREE_SIZE_T = 3u;
 
     /// \brief size_t type with a value of 4
-    static const size_t IGN_FOUR_SIZE_T  = 4u;
+    static const size_t GZ_FOUR_SIZE_T  = 4u;
 
     /// \brief size_t type with a value of 5
-    static const size_t IGN_FIVE_SIZE_T  = 5u;
+    static const size_t GZ_FIVE_SIZE_T  = 5u;
 
     /// \brief size_t type with a value of 6
-    static const size_t IGN_SIX_SIZE_T   = 6u;
+    static const size_t GZ_SIX_SIZE_T   = 6u;
 
     /// \brief size_t type with a value of 7
-    static const size_t IGN_SEVEN_SIZE_T = 7u;
+    static const size_t GZ_SEVEN_SIZE_T = 7u;
 
     /// \brief size_t type with a value of 8
-    static const size_t IGN_EIGHT_SIZE_T = 8u;
+    static const size_t GZ_EIGHT_SIZE_T = 8u;
 
     /// \brief size_t type with a value of 9
-    static const size_t IGN_NINE_SIZE_T  = 9u;
+    static const size_t GZ_NINE_SIZE_T  = 9u;
+
+    // TODO(CH3): Deprecated. Remove on tock.
+    constexpr auto GZ_DEPRECATED(7) IGN_ZERO_SIZE_T  = &GZ_ZERO_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_ONE_SIZE_T   = &GZ_ONE_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_TWO_SIZE_T   = &GZ_TWO_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_THREE_SIZE_T = &GZ_THREE_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_FOUR_SIZE_T  = &GZ_FOUR_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_FIVE_SIZE_T  = &GZ_FIVE_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_SIX_SIZE_T   = &GZ_SIX_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_SEVEN_SIZE_T = &GZ_SEVEN_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_EIGHT_SIZE_T = &GZ_EIGHT_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_NINE_SIZE_T  = &GZ_NINE_SIZE_T;
 
     /// \brief Double maximum value. This value will be similar to 1.79769e+308
     static const double MAX_D = std::numeric_limits<double>::max();
@@ -153,7 +169,7 @@ namespace gz
     static const uint16_t MIN_UI16 = std::numeric_limits<uint16_t>::min();
 
     /// \brief 16bit unsigned integer lowest value. This is equivalent to
-    /// IGN_UINT16_MIN, and is defined here for completeness.
+    /// GZ_UINT16_MIN, and is defined here for completeness.
     static const uint16_t LOW_UI16 = std::numeric_limits<uint16_t>::lowest();
 
     /// \brief 16-bit unsigned integer positive infinite value
@@ -166,7 +182,7 @@ namespace gz
     static const int16_t MIN_I16 = std::numeric_limits<int16_t>::min();
 
     /// \brief 16bit unsigned integer lowest value. This is equivalent to
-    /// IGN_INT16_MIN, and is defined here for completeness.
+    /// GZ_INT16_MIN, and is defined here for completeness.
     static const int16_t LOW_I16 = std::numeric_limits<int16_t>::lowest();
 
     /// \brief 16-bit unsigned integer positive infinite value
@@ -179,7 +195,7 @@ namespace gz
     static const uint32_t MIN_UI32 = std::numeric_limits<uint32_t>::min();
 
     /// \brief 32bit unsigned integer lowest value. This is equivalent to
-    /// IGN_UINT32_MIN, and is defined here for completeness.
+    /// GZ_UINT32_MIN, and is defined here for completeness.
     static const uint32_t LOW_UI32 = std::numeric_limits<uint32_t>::lowest();
 
     /// \brief 32-bit unsigned integer positive infinite value
@@ -192,7 +208,7 @@ namespace gz
     static const int32_t MIN_I32 = std::numeric_limits<int32_t>::min();
 
     /// \brief 32bit unsigned integer lowest value. This is equivalent to
-    /// IGN_INT32_MIN, and is defined here for completeness.
+    /// GZ_INT32_MIN, and is defined here for completeness.
     static const int32_t LOW_I32 = std::numeric_limits<int32_t>::lowest();
 
     /// \brief 32-bit unsigned integer positive infinite value
@@ -205,7 +221,7 @@ namespace gz
     static const uint64_t MIN_UI64 = std::numeric_limits<uint64_t>::min();
 
     /// \brief 64bit unsigned integer lowest value. This is equivalent to
-    /// IGN_UINT64_MIN, and is defined here for completeness.
+    /// GZ_UINT64_MIN, and is defined here for completeness.
     static const uint64_t LOW_UI64 = std::numeric_limits<uint64_t>::lowest();
 
     /// \brief 64-bit unsigned integer positive infinite value
@@ -218,7 +234,7 @@ namespace gz
     static const int64_t MIN_I64 = std::numeric_limits<int64_t>::min();
 
     /// \brief 64bit unsigned integer lowest value. This is equivalent to
-    /// IGN_INT64_MIN, and is defined here for completeness.
+    /// GZ_INT64_MIN, and is defined here for completeness.
     static const int64_t LOW_I64 = std::numeric_limits<int64_t>::lowest();
 
     /// \brief 64-bit unsigned integer positive infinite value

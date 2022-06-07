@@ -686,8 +686,8 @@ namespace gz
       public: inline const T &operator()(const size_t _row,
                   const size_t _col) const
       {
-        return this->data[clamp(_row, IGN_ZERO_SIZE_T, IGN_THREE_SIZE_T)][
-                          clamp(_col, IGN_ZERO_SIZE_T, IGN_THREE_SIZE_T)];
+        return this->data[clamp(_row, GZ_ZERO_SIZE_T, GZ_THREE_SIZE_T)][
+                          clamp(_col, GZ_ZERO_SIZE_T, GZ_THREE_SIZE_T)];
       }
 
       /// \brief Get a mutable version the value at the specified row,
@@ -699,8 +699,8 @@ namespace gz
       /// \return The value at the specified index
       public: inline T &operator()(const size_t _row, const size_t _col)
       {
-        return this->data[clamp(_row, IGN_ZERO_SIZE_T, IGN_THREE_SIZE_T)]
-                         [clamp(_col, IGN_ZERO_SIZE_T, IGN_THREE_SIZE_T)];
+        return this->data[clamp(_row, GZ_ZERO_SIZE_T, GZ_THREE_SIZE_T)]
+                         [clamp(_col, GZ_ZERO_SIZE_T, GZ_THREE_SIZE_T)];
       }
 
       /// \brief Equality test with tolerance.

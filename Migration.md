@@ -78,6 +78,9 @@ release will remove the deprecated code.
    1. `IGN_SQRT2`
    1. `IGN_FP_VOLATILE`
    1. `IGN_SPHERE_VOLUME`, `IGN_CYLINDER_VOLUME`, `IGN_BOX_VOLUME`, `IGN_BOX_VOLUME_V`
+   1. `IGN_MASSMATRIX3_DEFAULT_TOLERANCE`
+1. All `IGN_*_SIZE_T` variables are deprecated and will be removed in future versions.
+    Please use `GZ_*_SIZE_T` instead.
 
 
 ### Modifications
