@@ -65,7 +65,8 @@ void helpDefineMathPolynomial3(py::module &m, const std::string &typestr)
                     py::dynamic_attr())
     .def(py::init<>())
     .def(py::init<gz::math::Vector4<T>>())
-    .def_static("CONSTANT", &Class::Constant, py::return_value_policy::automatic,
+    .def_static("CONSTANT", &Class::Constant,
+        py::return_value_policy::automatic,
         "Make a constant polynomial")
     .def("coeffs", &Class::Coeffs,
         "Get the polynomial coefficients")
@@ -81,7 +82,8 @@ void helpDefineMathPolynomial3(py::module &m, const std::string &typestr)
         py::overload_cast<const Interval<T>&>(&Class::Minimum, py::const_),
         "Compute polynomial minimum in an interval")
     .def("minimum",
-        py::overload_cast< const Interval<T>& , T& >(&Class::Minimum, py::const_),
+        py::overload_cast< const Interval<T>& , T& >(
+        &Class::Minimum, py::const_),
         "Compute plynomial minimum in an interval")
     .def("print", &Class::Print,
         "Prints polynomial as a p('_x') to '_out' stream")
