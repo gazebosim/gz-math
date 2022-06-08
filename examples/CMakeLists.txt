@@ -15,6 +15,9 @@ target_link_libraries(diff_drive_odometry ignition-math${IGN_MATH_VER}::ignition
 add_executable(gauss_markov_process gauss_markov_process_example.cc)
 target_link_libraries(gauss_markov_process ignition-math${IGN_MATH_VER}::ignition-math${IGN_MATH_VER})
 
+add_executable(matrixx_example matrixx_example.cc)
+target_link_libraries(matrixx_example ignition-math${IGN_MATH_VER}::ignition-math${IGN_MATH_VER})
+
 add_executable(vector2_example vector2_example.cc)
 target_link_libraries(vector2_example ignition-math${IGN_MATH_VER}::ignition-math${IGN_MATH_VER})
 
