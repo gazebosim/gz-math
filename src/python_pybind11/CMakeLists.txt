@@ -28,6 +28,7 @@ pybind11_add_module(math SHARED
   src/Matrix4.cc
   src/MovingWindowFilter.cc
   src/PID.cc
+  src/Polynomial3.cc
   src/Pose3.cc
   src/Quaternion.cc
   src/Rand.cc

@@ -38,6 +38,7 @@
 #include "OrientedBox.hh"
 #include "PID.hh"
 #include "Plane.hh"
+#include "Polynomial3.hh"
 #include "Pose3.hh"
 #include "Quaternion.hh"
 #include "Rand.hh"
@@ -144,6 +145,8 @@ PYBIND11_MODULE(math, m)
   gz::math::python::defineMathTriangle3(m, "Triangle3");
 
   gz::math::python::defineMathQuaternion(m, "Quaternion");
+
+  gz::math::python::defineMathPolynomial3(m, "Polynomial3");
 
   gz::math::python::defineMathOrientedBox<double>(m, "OrientedBoxd");
 
