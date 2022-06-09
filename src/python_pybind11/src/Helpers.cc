@@ -229,7 +229,7 @@ void defineMathHelpers(py::module &m)
                     "Helpers",
                     py::buffer_protocol(),
                     py::dynamic_attr())
-  .def_readonly_static("IGNZEROSIZET", &GZ_ZERO_SIZE_T, "GZ_PI")
+  .def_readonly_static("GZZEROSIZET", &GZ_ZERO_SIZE_T, "GZ_PI")
   .def_readonly_static("GZ_ONE_SIZE_T", &GZ_ONE_SIZE_T)
   .def_readonly_static("GZ_TWO_SIZE_T", &GZ_TWO_SIZE_T)
   .def_readonly_static("GZ_THREE_SIZE_T", &GZ_THREE_SIZE_T)
@@ -239,6 +239,19 @@ void defineMathHelpers(py::module &m)
   .def_readonly_static("GZ_SEVEN_SIZE_T", &GZ_SEVEN_SIZE_T)
   .def_readonly_static("GZ_EIGHT_SIZE_T", &GZ_EIGHT_SIZE_T)
   .def_readonly_static("GZ_NINE_SIZE_T", &GZ_NINE_SIZE_T)
+
+  // TODO(CH3): Deprecated. Remove on tock.
+  .def_readonly_static("IGNZEROSIZET", &GZ_ZERO_SIZE_T, "GZ_PI")
+  .def_readonly_static("IGN_ONE_SIZE_T", &GZ_ONE_SIZE_T)
+  .def_readonly_static("IGN_TWO_SIZE_T", &GZ_TWO_SIZE_T)
+  .def_readonly_static("IGN_THREE_SIZE_T", &GZ_THREE_SIZE_T)
+  .def_readonly_static("IGN_FOUR_SIZE_T", &GZ_FOUR_SIZE_T)
+  .def_readonly_static("IGN_FIVE_SIZE_T", &GZ_FIVE_SIZE_T)
+  .def_readonly_static("IGN_SIX_SIZE_T", &GZ_SIX_SIZE_T)
+  .def_readonly_static("IGN_SEVEN_SIZE_T", &GZ_SEVEN_SIZE_T)
+  .def_readonly_static("IGN_EIGHT_SIZE_T", &GZ_EIGHT_SIZE_T)
+  .def_readonly_static("IGN_NINE_SIZE_T", &GZ_NINE_SIZE_T)
+
   .def_readonly_static("MAX_D", &MAX_D)
   .def_readonly_static("MIN_D", &MIN_D)
   .def_readonly_static("LOW_D", &LOW_D)
