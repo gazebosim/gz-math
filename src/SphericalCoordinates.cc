@@ -60,7 +60,7 @@ class gz::math::SphericalCoordinates::Implementation
   /// \brief Type of surface being used.
   public: SphericalCoordinates::SurfaceType surfaceType;
 
-  /// |brief Radius of the given SurfaceType.
+  /// \brief Radius of the given SurfaceType.
   public: double surfaceRadius = 0;
 
   /// \brief Latitude of reference point.

@@ -43,12 +43,12 @@ namespace gz
                 /// WGS 84 standard. see wikipedia: World_Geodetic_System
                 EARTH_WGS84 = 1,
 
-                /// |brief Model of the moon, based on the Selenographic
+                /// \brief Model of the moon, based on the Selenographic
                 /// coordinate system, see wikipedia: Selenographic
                 /// Coordinate System.
                 MOON_SCS = 2,
 
-                /// |brief Custom surface type
+                /// \brief Custom surface type
                 CUSTOM_SURFACE = 10
               };
 
@@ -84,6 +84,10 @@ namespace gz
       /// \brief Constructor with surface type input and properties
       /// input. To be used for CUSTOM_SURFACE.
       /// \param[in] _type SurfaceType specification.
+      /// \param[in] _radius Radius of the surface.
+      /// \param[in] _axisEquatorial Semi major axis of the surface.
+      /// \param[in] _axisPolar Semi minor axis of the surface.
+      /// \param[in] _axisPolar Flattening parameter of the surface.
       public: SphericalCoordinates(
             const SurfaceType _type,
             const double _radius,
