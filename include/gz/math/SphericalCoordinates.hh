@@ -206,6 +206,18 @@ namespace gz
       /// \param[in] _type SurfaceType value.
       public: void SetSurface(const SurfaceType &_type);
 
+      /// \brief Set SurfaceType for planetary surface model with
+      /// custom ellipsoid properties.
+      /// \param[in] _type SurfaceType value.
+      /// \param[in] _axisEquatorial Equatorial axis of the surface.
+      /// \param[in] _axisPolar Polar axis of the surface.
+      /// \param[in] _flattening Falttening parameter of the surface.
+      public: void SetSurface(
+                  const SurfaceType &_type,
+                  const double _axisEquatorial,
+                  const double _axisPolar,
+                  const double _flattening);
+
       /// \brief Set reference geodetic latitude.
       /// \param[in] _angle Reference geodetic latitude.
       public: void SetLatitudeReference(const gz::math::Angle &_angle);

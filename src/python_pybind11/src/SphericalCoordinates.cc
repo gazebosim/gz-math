@@ -42,6 +42,8 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
     .def(py::init<const Class::SurfaceType, const gz::math::Angle &,
                   const gz::math::Angle &, const double,
                   const gz::math::Angle &>())
+    .def(py::init<const Class::SurfaceType, const double,
+                  const double, const double, const double>())
     .def(py::self != py::self)
     .def(py::self == py::self)
     .def("spherical_from_local_position",
@@ -59,6 +61,12 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
          "Convert a SurfaceType to a string.")
     .def("distance",
          &Class::Distance,
+         "Get the distance between two points expressed in geographic "
+         "latitude and longitude. It assumes that both points are at sea level."
+         " Example: _latA = 38.0016667 and _lonA = -123.0016667) represents "
+         "the point with latitude 38d 0'6.00\"N and longitude 123d 0'6.00\"W.")
+    .def("distance",
+         &Class::DistanceBetweenPoints,
          "Get the distance between two points expressed in geographic "
          "latitude and longitude. It assumes that both points are at sea level."
          " Example: _latA = 38.0016667 and _lonA = -123.0016667) represents "
@@ -81,7 +89,12 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
          "angle from East to x-axis, or equivalently "
          "from North to y-axis.")
     .def("set_surface",
-         &Class::SetSurface,
+         py::overload_cast<const Class::SurfaceType&>(&Class::SetSurface),
+         "Set SurfaceType for planetary surface model.")
+    .def("set_surface",
+         py::overload_cast<const Class::SurfaceType&,
+         const double, const double,
+         const double>(&Class::SetSurface),
          "Set SurfaceType for planetary surface model.")
     .def("set_latitude_reference",
          &Class::SetLatitudeReference,
