@@ -486,6 +486,30 @@ double SphericalCoordinates::DistanceBetweenPoints(
 }
 
 //////////////////////////////////////////////////
+double SphericalCoordinates::GetSurfaceRadius()
+{
+  return this->dataPtr->surfaceRadius;
+}
+
+//////////////////////////////////////////////////
+double SphericalCoordinates::GetSurfaceAxisEquatorial()
+{
+  return this->dataPtr->ellA;
+}
+
+//////////////////////////////////////////////////
+double SphericalCoordinates::GetSurfaceAxisPolar()
+{
+  return this->dataPtr->ellB;
+}
+
+//////////////////////////////////////////////////
+double SphericalCoordinates::GetSurfaceFlattening()
+{
+  return this->dataPtr->ellF;
+}
+
+//////////////////////////////////////////////////
 void SphericalCoordinates::UpdateTransformationMatrix()
 {
   // Cache trig results

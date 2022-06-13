@@ -86,6 +86,11 @@ TEST(SphericalCoordinatesTest, Convert)
   st = math::SphericalCoordinates::MOON_SCS;
   EXPECT_EQ(math::SphericalCoordinates::Convert("MOON_SCS"), st);
   EXPECT_EQ("MOON_SCS", math::SphericalCoordinates::Convert(st));
+
+  // For the custom surface type
+  st = math::SphericalCoordinates::CUSTOM_SURFACE;
+  EXPECT_EQ(math::SphericalCoordinates::Convert("CUSTOM_SURFACE"), st);
+  EXPECT_EQ("CUSTOM_SURFACE", math::SphericalCoordinates::Convert(st));
 }
 
 //////////////////////////////////////////////////
@@ -119,6 +124,39 @@ TEST(SphericalCoordinatesTest, SetFunctions)
     EXPECT_EQ(sc.HeadingOffset(), heading);
     EXPECT_NEAR(sc.ElevationReference(), elev, 1e-6);
   }
+
+  // Moon surface type
+  st = math::SphericalCoordinates::MOON_SCS;
+  math::SphericalCoordinates moonSC(st);
+  moonSC.SetSurface(st);
+  EXPECT_EQ(moonSC.Surface(), st);
+}
+
+//////////////////////////////////////////////////
+/// Test invalid parameters for custom surface
+TEST(SphericalCoordinatesTest, InvalidParameters)
+{
+  // Earth's constants
+  double g_EarthWGS84AxisEquatorial = 6378137.0;
+  double g_EarthWGS84AxisPolar = 6356752.314245;
+  double g_EarthWGS84Flattening = 1.0/298.257223563;
+  double g_EarthRadius = 6371000.0;
+
+  // Create a custom surface with invalid parameters.
+  math::SphericalCoordinates sc(
+      math::SphericalCoordinates::CUSTOM_SURFACE,
+      -1, -1, -1, -1);
+
+  // These should be rejected and default to Earth's
+  // parameters.
+  EXPECT_NEAR(sc.GetSurfaceRadius(), g_EarthRadius,
+      1e-3);
+  EXPECT_NEAR(sc.GetSurfaceAxisEquatorial(),
+      g_EarthWGS84AxisEquatorial, 1e-3);
+  EXPECT_NEAR(sc.GetSurfaceAxisPolar(),
+      g_EarthWGS84AxisPolar, 1e-3);
+  EXPECT_NEAR(sc.GetSurfaceFlattening(),
+      g_EarthWGS84Flattening, 1e-3);
 }
 
 //////////////////////////////////////////////////

@@ -184,6 +184,22 @@ namespace gz
       /// \return Current SurfaceType value.
       public: SurfaceType Surface() const;
 
+      /// \brief Get the radius of the surface.
+      /// \return radius of the surface in use.
+      public: double GetSurfaceRadius();
+
+      /// \brief Get the major axis of the surface.
+      /// \return Equatorial axis of the surface in use.
+      public: double GetSurfaceAxisEquatorial();
+
+      /// \brief Get the minor axis of the surface.
+      /// \return Polar axis of the surface in use.
+      public: double GetSurfaceAxisPolar();
+
+      /// \brief Get the flattening of the surface.
+      /// \return Flattening parameter of the surface in use.
+      public: double GetSurfaceFlattening();
+
       /// \brief Get reference geodetic latitude.
       /// \return Reference geodetic latitude.
       public: gz::math::Angle LatitudeReference() const;
