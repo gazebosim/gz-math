@@ -391,6 +391,11 @@ TEST(SphericalCoordinatesTest, Distance)
   EXPECT_NEAR(3820, d4, 5);
 
   // Using a custom surface.
+  // For custom surfaces, the surface properties need to be set.
+  // THis one will throw an error.
+  auto invalidCustomSC = math::SphericalCoordinates(
+      math::SphericalCoordinates::CUSTOM_SURFACE);
+  // This one should be accepted.
   auto customSC = math::SphericalCoordinates(
       math::SphericalCoordinates::SurfaceType::CUSTOM_SURFACE,
       6371000.0,
@@ -406,6 +411,8 @@ TEST(SphericalCoordinatesTest, Distance)
 TEST(SphericalCoordinatesTest, BadSetSurface)
 {
   math::SphericalCoordinates sc;
+  sc.SetSurface(static_cast<math::SphericalCoordinates::SurfaceType>(3),
+      10, 10, 0);
   sc.SetSurface(static_cast<math::SphericalCoordinates::SurfaceType>(3));
   EXPECT_EQ(sc.Surface(), 3);
 }
