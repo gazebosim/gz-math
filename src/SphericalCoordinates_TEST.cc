@@ -63,6 +63,11 @@ TEST(SphericalCoordinatesTest, Constructor)
     math::SphericalCoordinates sc2(sc);
     EXPECT_EQ(sc, sc2);
   }
+
+  // Bad surface type, this should throw an error
+  math::SphericalCoordinates invalidSC(
+      static_cast<math::SphericalCoordinates::SurfaceType>(3));
+  EXPECT_EQ(invalidSC.Surface(), 3);
 }
 
 //////////////////////////////////////////////////
