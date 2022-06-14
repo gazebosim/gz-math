@@ -320,9 +320,9 @@ void SphericalCoordinates::SetSurface(
     const double _axisPolar,
     const double _flattening)
 {
-  if (_type != EARTH_WGS84 ||
-      _type != MOON_SCS ||
-      _type != CUSTOM_SURFACE)
+  if ((_type != EARTH_WGS84) &&
+      (_type != MOON_SCS) &&
+      (_type != CUSTOM_SURFACE))
   {
     std::cerr << "Unknown surface type["
       << _type << "]\n";
@@ -352,7 +352,7 @@ void SphericalCoordinates::SetSurface(
     this->dataPtr->ellB = g_EarthWGS84AxisPolar;
   }
 
-  if (_flattening > 0)
+  if (_flattening >= 0)
   {
     this->dataPtr->ellF = _flattening;
   }
@@ -471,18 +471,8 @@ double SphericalCoordinates::DistanceBetweenPoints(
              cos(_latA.Radian()) * cos(_latB.Radian());
 
   double c = 2 * atan2(sqrt(a), sqrt(1 - a));
-  if ( this->dataPtr->surfaceRadius > 0 )
-  {
-    double d = this->dataPtr->surfaceRadius * c;
-    return d;
-  }
-  else
-  {
-    std::cerr << "Surface radius is invalid or not set for the given "
-      "surface type" << std::endl;
-  }
-
-  return -1;
+  double d = this->dataPtr->surfaceRadius * c;
+  return d;
 }
 
 //////////////////////////////////////////////////
