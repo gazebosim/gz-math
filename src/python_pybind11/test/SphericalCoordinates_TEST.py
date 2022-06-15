@@ -263,7 +263,7 @@ class TestSphericalCoordinates(unittest.TestCase):
         longA.set_degree(-122.249972)
         latB.set_degree(46.124953)
         longB.set_degree(-122.251683)
-        d = SphericalCoordinates.distance(latA, longA, latB, longB)
+        d = SphericalCoordinates.distance_WGS84(latA, longA, latB, longB)
 
         self.assertAlmostEqual(14002, d, delta=20)
 
