@@ -59,13 +59,14 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
     .def("convert",
          py::overload_cast<Class::SurfaceType>(&Class::Convert),
          "Convert a SurfaceType to a string.")
-    .def("distance",
-         &Class::Distance,
+    .def("distance_WGS84",
+         &Class::DistanceWGS84,
          "Get the distance between two points expressed in geographic "
          "latitude and longitude. It assumes that both points are at sea level."
          " Example: _latA = 38.0016667 and _lonA = -123.0016667) represents "
-         "the point with latitude 38d 0'6.00\"N and longitude 123d 0'6.00\"W.")
-    .def("distance",
+         "the point with latitude 38d 0'6.00\"N and longitude 123d 0'6.00\"W."
+         " This function assumes the surface is EARTH_WGS84.")
+    .def("distance_between_points",
          &Class::DistanceBetweenPoints,
          "Get the distance between two points expressed in geographic "
          "latitude and longitude. It assumes that both points are at sea level."
