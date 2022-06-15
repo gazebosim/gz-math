@@ -437,7 +437,7 @@ gz::math::Vector3d SphericalCoordinates::LocalFromGlobalVelocity(
 
 //////////////////////////////////////////////////
 /// Based on Haversine formula (http://en.wikipedia.org/wiki/Haversine_formula).
-double SphericalCoordinates::Distance(const gz::math::Angle &_latA,
+double SphericalCoordinates::DistanceWGS84(const gz::math::Angle &_latA,
                                       const gz::math::Angle &_lonA,
                                       const gz::math::Angle &_latB,
                                       const gz::math::Angle &_lonB)
@@ -452,6 +452,17 @@ double SphericalCoordinates::Distance(const gz::math::Angle &_latA,
   double c = 2 * atan2(sqrt(a), sqrt(1 - a));
   double d = g_EarthRadius * c;
   return d;
+}
+
+//////////////////////////////////////////////////
+/// Based on Haversine formula (http://en.wikipedia.org/wiki/Haversine_formula).
+double SphericalCoordinates::Distance(const gz::math::Angle &_latA,
+                                      const gz::math::Angle &_lonA,
+                                      const gz::math::Angle &_latB,
+                                      const gz::math::Angle &_lonB)
+{
+  return gz::math::SphericalCoordinates::DistanceWGS84(
+      _latA, _lonA, _latB, _lonB);
 }
 
 //////////////////////////////////////////////////

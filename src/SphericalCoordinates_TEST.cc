@@ -376,7 +376,8 @@ TEST(SphericalCoordinatesTest, Distance)
   longB.SetDegree(-122.251683);
 
   // Calculating distance using the static method.
-  double d1 = math::SphericalCoordinates::Distance(latA, longA, latB, longB);
+  double d1 = math::SphericalCoordinates::DistanceWGS84(
+      latA, longA, latB, longB);
   EXPECT_NEAR(14002, d1, 20);
 
   // Using the non static method. The default surface type is EARTH_WGS84.

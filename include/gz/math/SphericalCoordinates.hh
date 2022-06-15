@@ -158,7 +158,25 @@ namespace gz
       /// \param[in] _latB Latitude of point B.
       /// \param[in] _lonB Longitude of point B.
       /// \return Distance in meters.
-      public: static double Distance(const gz::math::Angle &_latA,
+      /// \deprecated Use DistanceWGS84 instead.
+      public: GZ_DEPRECATED(7) static double Distance(
+                                     const gz::math::Angle &_latA,
+                                     const gz::math::Angle &_lonA,
+                                     const gz::math::Angle &_latB,
+                                     const gz::math::Angle &_lonB);
+
+      /// \brief Get the distance between two points expressed in geographic
+      /// latitude and longitude. It assumes that both points are at sea level.
+      /// Example: _latA = 38.0016667 and _lonA = -123.0016667) represents
+      /// the point with latitude 38d 0'6.00"N and longitude 123d 0'6.00"W.
+      /// This method assumes that the surface model is EARTH_WGS84.
+      /// \param[in] _latA Latitude of point A.
+      /// \param[in] _lonA Longitude of point A.
+      /// \param[in] _latB Latitude of point B.
+      /// \param[in] _lonB Longitude of point B.
+      /// \return Distance in meters.
+      public: static double DistanceWGS84(
+                                     const gz::math::Angle &_latA,
                                      const gz::math::Angle &_lonA,
                                      const gz::math::Angle &_latB,
                                      const gz::math::Angle &_lonB);
