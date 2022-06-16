@@ -154,13 +154,13 @@ TEST(SphericalCoordinatesTest, InvalidParameters)
 
   // These should be rejected and default to Earth's
   // parameters.
-  EXPECT_NEAR(scInvalid.GetSurfaceRadius(), g_EarthRadius,
+  EXPECT_NEAR(scInvalid.SurfaceRadius(), g_EarthRadius,
       1e-3);
-  EXPECT_NEAR(scInvalid.GetSurfaceAxisEquatorial(),
+  EXPECT_NEAR(scInvalid.SurfaceAxisEquatorial(),
       g_EarthWGS84AxisEquatorial, 1e-3);
-  EXPECT_NEAR(scInvalid.GetSurfaceAxisPolar(),
+  EXPECT_NEAR(scInvalid.SurfaceAxisPolar(),
       g_EarthWGS84AxisPolar, 1e-3);
-  EXPECT_NEAR(scInvalid.GetSurfaceFlattening(),
+  EXPECT_NEAR(scInvalid.SurfaceFlattening(),
       g_EarthWGS84Flattening, 1e-3);
 
   // Create a custom surface with valid parameters.
@@ -169,13 +169,13 @@ TEST(SphericalCoordinatesTest, InvalidParameters)
       100, 100, 100, 0);
 
   // These should be accepted
-  EXPECT_NEAR(scValid.GetSurfaceRadius(), 100,
+  EXPECT_NEAR(scValid.SurfaceRadius(), 100,
       1e-3);
-  EXPECT_NEAR(scValid.GetSurfaceAxisEquatorial(),
+  EXPECT_NEAR(scValid.SurfaceAxisEquatorial(),
       100, 1e-3);
-  EXPECT_NEAR(scValid.GetSurfaceAxisPolar(),
+  EXPECT_NEAR(scValid.SurfaceAxisPolar(),
       100, 1e-3);
-  EXPECT_NEAR(scValid.GetSurfaceFlattening(),
+  EXPECT_NEAR(scValid.SurfaceFlattening(),
       0, 1e-3);
 }
 

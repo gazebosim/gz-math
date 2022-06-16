@@ -76,16 +76,16 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
          &Class::Surface,
          "Get SurfaceType currently in use.")
     .def("get_surface_radius",
-         &Class::GetSurfaceRadius,
+         &Class::SurfaceRadius,
          "Get the radius of the surface.")
     .def("get_surface_axis_equatorial",
-         &Class::GetSurfaceAxisEquatorial,
+         &Class::SurfaceAxisEquatorial,
          "Get the major of the surface.")
     .def("get_surface_axis_polar",
-         &Class::GetSurfaceAxisPolar,
+         &Class::SurfaceAxisPolar,
          "Get the minor axis of the surface.")
     .def("get_surface_flattening",
-         &Class::GetSurfaceFlattening,
+         &Class::SurfaceFlattening,
          "Get the flattening parameter of the surface.")
     .def("latitude_reference",
          &Class::LatitudeReference,

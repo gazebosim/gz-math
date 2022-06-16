@@ -18,6 +18,10 @@ release will remove the deprecated code.
     + All mutator functions that lacked a `Set` prefix have been deprecated
     and replaced by version with a `Set` prefix.
 
+1. **SphericalCoordinates.hh**
+    + ***Deprecation:*** public: static double Distance(const Angle&, const Angle&, const Angle&, const Angle&)
+    + ***Replacement:*** public: static double DistanceWGS84(const Angle&, const Angle&, const Angle&, const Angle&)
+
 1. **Matrix3.hh**
     + ***Deprecation:*** public: void Axes(const Vector3<T> &, const Vector3<T> &, const Vector3<T> &)
     + ***Replacement:*** public: void SetAxes(const Vector3<T> &, const Vector3<T> &, const Vector3<T> &)

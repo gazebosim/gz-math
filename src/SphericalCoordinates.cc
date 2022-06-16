@@ -191,7 +191,7 @@ SphericalCoordinates::SphericalCoordinates(
   else
   {
     std::cerr << "Value of _radius should be greater than zero "
-      " defaulting to Earth's flattening value."<< std::endl;
+      " defaulting to Earth's radius."<< std::endl;
     this->dataPtr->surfaceRadius = g_EarthRadius;
   }
 
@@ -358,8 +358,9 @@ void SphericalCoordinates::SetSurface(
   }
   else
   {
-    std::cerr << "Value of _flattening should be greater than zero "
-      " defaulting to Earth's flattening value."<< std::endl;
+    std::cerr << "Value of _flattening should be greater than "
+      " or equal to zero, defaulting to Earth's flattening value."
+      << std::endl;
     this->dataPtr->ellF = g_EarthWGS84Flattening;
   }
 
@@ -487,25 +488,25 @@ double SphericalCoordinates::DistanceBetweenPoints(
 }
 
 //////////////////////////////////////////////////
-double SphericalCoordinates::GetSurfaceRadius()
+double SphericalCoordinates::SurfaceRadius()
 {
   return this->dataPtr->surfaceRadius;
 }
 
 //////////////////////////////////////////////////
-double SphericalCoordinates::GetSurfaceAxisEquatorial()
+double SphericalCoordinates::SurfaceAxisEquatorial()
 {
   return this->dataPtr->ellA;
 }
 
 //////////////////////////////////////////////////
-double SphericalCoordinates::GetSurfaceAxisPolar()
+double SphericalCoordinates::SurfaceAxisPolar()
 {
   return this->dataPtr->ellB;
 }
 
 //////////////////////////////////////////////////
-double SphericalCoordinates::GetSurfaceFlattening()
+double SphericalCoordinates::SurfaceFlattening()
 {
   return this->dataPtr->ellF;
 }
