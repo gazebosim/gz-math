@@ -579,20 +579,20 @@ namespace gz
     /// \brief Parse string into an integer.
     /// \param[in] _input The input string.
     /// \return An integer, or NAN_I if unable to parse the input.
-    int IGNITION_MATH_VISIBLE parseInt(const std::string &_input);
+    int GZ_MATH_VISIBLE parseInt(const std::string &_input);
 
     /// \brief parse string into float.
     /// \param [in] _input The string.
     /// \return A floating point number (can be NaN) or NAN_D if the
     /// _input could not be parsed.
-    double IGNITION_MATH_VISIBLE parseFloat(const std::string &_input);
+    double GZ_MATH_VISIBLE parseFloat(const std::string &_input);
 
     /// \brief Convert a std::chrono::steady_clock::time_point to a seconds and
     /// nanoseconds pair.
     /// \param[in] _time The time point to convert.
     /// \return A pair where the first element is the number of seconds and
     /// the second is the number of nanoseconds.
-    std::pair<int64_t, int64_t> IGNITION_MATH_VISIBLE timePointToSecNsec(
+    std::pair<int64_t, int64_t> GZ_MATH_VISIBLE timePointToSecNsec(
         const std::chrono::steady_clock::time_point &_time);
 
     /// \brief Convert seconds and nanoseconds to
@@ -601,7 +601,7 @@ namespace gz
     /// \param[in] _nanosec The nanoseconds to convert.
     /// \return A std::chrono::steady_clock::time_point based on the number of
     /// seconds and the number of nanoseconds.
-    std::chrono::steady_clock::time_point IGNITION_MATH_VISIBLE
+    std::chrono::steady_clock::time_point GZ_MATH_VISIBLE
       secNsecToTimePoint(
         const uint64_t &_sec, const uint64_t &_nanosec);
 
@@ -611,7 +611,7 @@ namespace gz
     /// \param[in] _nanosec The nanoseconds to convert.
     /// \return A std::chrono::steady_clock::duration based on the number of
     /// seconds and the number of nanoseconds.
-    std::chrono::steady_clock::duration IGNITION_MATH_VISIBLE secNsecToDuration(
+    std::chrono::steady_clock::duration GZ_MATH_VISIBLE secNsecToDuration(
         const uint64_t &_sec, const uint64_t &_nanosec);
 
     /// \brief Convert a std::chrono::steady_clock::duration to a seconds and
@@ -619,7 +619,7 @@ namespace gz
     /// \param[in] _dur The duration to convert.
     /// \return A pair where the first element is the number of seconds and
     /// the second is the number of nanoseconds.
-    std::pair<int64_t, int64_t> IGNITION_MATH_VISIBLE durationToSecNsec(
+    std::pair<int64_t, int64_t> GZ_MATH_VISIBLE durationToSecNsec(
         const std::chrono::steady_clock::duration &_dur);
 
     // TODO(anyone): Replace this with std::chrono::days.
