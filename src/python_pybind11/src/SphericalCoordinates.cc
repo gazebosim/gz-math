@@ -107,7 +107,7 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
     .def("set_surface",
          py::overload_cast<const Class::SurfaceType&,
          const double, const double,
-         const double>(&Class::SetSurface),
+         const double, const double>(&Class::SetSurface),
          "Set SurfaceType for planetary surface model.")
     .def("set_latitude_reference",
          &Class::SetLatitudeReference,

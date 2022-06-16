@@ -144,7 +144,6 @@ SphericalCoordinates::SphericalCoordinates()
   : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
   this->SetSurface(EARTH_WGS84);
-  this->dataPtr->surfaceRadius = g_EarthRadius;
   this->SetElevationReference(0.0);
 }
 
@@ -153,21 +152,6 @@ SphericalCoordinates::SphericalCoordinates(const SurfaceType _type)
   : SphericalCoordinates()
 {
   this->SetSurface(_type);
-  switch(_type)
-  {
-    case EARTH_WGS84:
-      this->dataPtr->surfaceRadius = g_EarthRadius;
-      break;
-    case MOON_SCS:
-      this->dataPtr->surfaceRadius = g_MoonRadius;
-      break;
-    case CUSTOM_SURFACE:
-      std::cerr << "Please supply ellipsoidal properties with the "
-        "custom surface." << std::endl;
-      break;
-    default:
-      std::cerr << "Unknown surface type [" << _type << "]" << std::endl;
-  }
   this->SetElevationReference(0.0);
 }
 
@@ -181,19 +165,8 @@ SphericalCoordinates::SphericalCoordinates(
   : SphericalCoordinates()
 {
   // Set properties
-  this->SetSurface(_type, _axisEquatorial,
+  this->SetSurface(_type, _radius, _axisEquatorial,
       _axisPolar, _flattening);
-
-  if (_radius > 0)
-  {
-    this->dataPtr->surfaceRadius = _radius;
-  }
-  else
-  {
-    std::cerr << "Value of _radius should be greater than zero "
-      " defaulting to Earth's radius."<< std::endl;
-    this->dataPtr->surfaceRadius = g_EarthRadius;
-  }
 
   this->SetElevationReference(0.0);
 }
@@ -278,6 +251,9 @@ void SphericalCoordinates::SetSurface(const SurfaceType &_type)
           std::pow(this->dataPtr->ellA, 2) / std::pow(this->dataPtr->ellB, 2) -
           1.0);
 
+      // Set the radius of the surface.
+      this->dataPtr->surfaceRadius = g_EarthRadius;
+
       break;
       }
     case MOON_SCS:
@@ -302,6 +278,9 @@ void SphericalCoordinates::SetSurface(const SurfaceType &_type)
           std::pow(this->dataPtr->ellA, 2) / std::pow(this->dataPtr->ellB, 2) -
           1.0);
 
+      // Set the radius of the surface.
+      this->dataPtr->surfaceRadius = g_MoonRadius;
+
       break;
       }
     default:
@@ -316,6 +295,7 @@ void SphericalCoordinates::SetSurface(const SurfaceType &_type)
 //////////////////////////////////////////////////
 void SphericalCoordinates::SetSurface(
     const SurfaceType &_type,
+    const double _radius,
     const double _axisEquatorial,
     const double _axisPolar,
     const double _flattening)
@@ -362,6 +342,17 @@ void SphericalCoordinates::SetSurface(
       " or equal to zero, defaulting to Earth's flattening value."
       << std::endl;
     this->dataPtr->ellF = g_EarthWGS84Flattening;
+  }
+
+  if (_radius > 0)
+  {
+    this->dataPtr->surfaceRadius = _radius;
+  }
+  else
+  {
+    std::cerr << "Value of _radius should be greater than zero "
+      " defaulting to Earth's radius."<< std::endl;
+    this->dataPtr->surfaceRadius = g_EarthRadius;
   }
 
   this->dataPtr->ellE = sqrt(1.0 -

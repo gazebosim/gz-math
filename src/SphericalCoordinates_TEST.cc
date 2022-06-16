@@ -418,7 +418,7 @@ TEST(SphericalCoordinatesTest, BadSetSurface)
 {
   math::SphericalCoordinates sc;
   sc.SetSurface(static_cast<math::SphericalCoordinates::SurfaceType>(3),
-      10, 10, 0);
+      10, 10, 10, 0);
   sc.SetSurface(static_cast<math::SphericalCoordinates::SurfaceType>(3));
   EXPECT_EQ(sc.Surface(), 3);
 }

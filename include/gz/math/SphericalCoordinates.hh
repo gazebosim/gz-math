@@ -248,6 +248,7 @@ namespace gz
       /// \param[in] _flattening Falttening parameter of the surface.
       public: void SetSurface(
                   const SurfaceType &_type,
+                  const double _radius,
                   const double _axisEquatorial,
                   const double _axisPolar,
                   const double _flattening);
