@@ -35,7 +35,8 @@ namespace ignition
     /// \tparam RowCount Number of rows in the matrix, must be higher than zero.
     /// \tparam ColCount Number of columns in the matrix, must be higher than
     /// zero.
-    template<typename Precision, std::size_t RowCount, std::size_t ColCount = RowCount>
+    template<typename Precision, std::size_t RowCount,
+        std::size_t ColCount = RowCount>
     class MatrixX
     {
       /// \brief Constructor
@@ -207,7 +208,8 @@ namespace ignition
       /// \param[in] _m Matrix3 to test
       /// \return true if the 2 matrices are equal (using the tolerance 1e-6),
       ///  false otherwise
-      public: bool operator==(const MatrixX<Precision, RowCount, ColCount> &_m) const
+      public: bool operator==(const MatrixX<Precision, RowCount, ColCount> &_m)
+          const
       {
         return this->Equal(_m, static_cast<Precision>(1e-6));
       }
@@ -215,7 +217,8 @@ namespace ignition
       /// \brief Inequality test operator
       /// \param[in] _m Matrix6<T> to test
       /// \return True if not equal (using the default tolerance of 1e-6)
-      public: bool operator!=(const MatrixX<Precision, RowCount, ColCount> &_m) const
+      public: bool operator!=(const MatrixX<Precision, RowCount, ColCount> &_m)
+          const
       {
         return !(*this == _m);
       }
@@ -276,7 +279,8 @@ namespace ignition
       }
 
       /// \brief The matrix
-      private: std::array<std::array<Precision, ColCount>, RowCount> data = {{}};
+      private: std::array<std::array<Precision, ColCount>, RowCount> data =
+          {{}};
    };
 
   template <std::size_t RowCount, std::size_t ColCount = RowCount>
