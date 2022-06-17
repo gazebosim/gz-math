@@ -23,6 +23,46 @@ using namespace ignition;
 using namespace math;
 
 /////////////////////////////////////////////////
+TEST(MatrixXdTest, Types)
+{
+  MatrixX<int, 1, 2> precisionIntRowCol;
+  EXPECT_EQ(1u, precisionIntRowCol.Rows());
+  EXPECT_EQ(2u, precisionIntRowCol.Columns());
+
+  MatrixX<double, 3, 4> precisionDoubleRowCol;
+  EXPECT_EQ(3u, precisionDoubleRowCol.Rows());
+  EXPECT_EQ(4u, precisionDoubleRowCol.Columns());
+
+  MatrixX<float, 2, 1> precisionFloatRowCol;
+  EXPECT_EQ(2u, precisionFloatRowCol.Rows());
+  EXPECT_EQ(1u, precisionFloatRowCol.Columns());
+
+  MatrixXi<3, 3> intRowCol;
+  EXPECT_EQ(3u, intRowCol.Rows());
+  EXPECT_EQ(3u, intRowCol.Columns());
+
+  MatrixXd<3, 1> doubleRowCol;
+  EXPECT_EQ(3u, doubleRowCol.Rows());
+  EXPECT_EQ(1u, doubleRowCol.Columns());
+
+  MatrixXf<1, 3> floatRowCol;
+  EXPECT_EQ(1u, floatRowCol.Rows());
+  EXPECT_EQ(3u, floatRowCol.Columns());
+
+  MatrixXi<5> intSize;
+  EXPECT_EQ(5u, intSize.Rows());
+  EXPECT_EQ(5u, intSize.Columns());
+
+  MatrixXd<6> doubleSize;
+  EXPECT_EQ(6u, doubleSize.Rows());
+  EXPECT_EQ(6u, doubleSize.Columns());
+
+  MatrixXf<2> floatSize;
+  EXPECT_EQ(2u, floatSize.Rows());
+  EXPECT_EQ(2u, floatSize.Columns());
+}
+
+/////////////////////////////////////////////////
 TEST(MatrixXdTest, Construct)
 {
   // Starts with zeroes
