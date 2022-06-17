@@ -19,21 +19,21 @@
 
 int main(int argc, char **argv)
 {
-  ignition::math::MatrixX<double, 2, 3> matd23A(
+  ignition::math::MatrixXd<2, 3> matA(
       0.1, 0.2, 0.3,
       0.4, 0.5, 0.6);
+  std::cout << "Matrix A: " << matA << std::endl;
 
-  ignition::math::MatrixX<double, 2, 3> matd23B(
+  ignition::math::MatrixXd<2, 3> matB(
       1.1, 1.2, 1.3,
       1.4, 1.5, 1.6);
+  std::cout << "Matrix B: " << matB << std::endl;
 
-  auto matSum = matd23A + matd23B;
+  auto matSum = matA + matB;
+  std::cout << "A + B sum: " << matSum << std::endl;
 
-  std::cout << matd23A << std::endl;
-
-  std::cout << matd23B << std::endl;
-
-  std::cout << matSum << std::endl;
+  auto matATrans = matA.Transposed();
+  std::cout << "A transposed: " << matATrans << std::endl;
 
   return 0;
 }

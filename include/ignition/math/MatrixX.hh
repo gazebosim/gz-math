@@ -29,7 +29,11 @@ namespace ignition
     inline namespace IGNITION_MATH_VERSION_NAMESPACE {
     //
     /// \class MatrixX MatrixX.hh ignition/math/MatrixX.hh
-    /// \brief A matrix with any given size.
+    /// \brief A matrix that can have any given size.
+    /// \tparam Precision Precision such as int, double or float.
+    /// \tparam Rows Number of rows in the matrix, must be higher than zero.
+    /// \tparam Columns Number of columns in the matrix, must be higher than
+    /// zero.
     template<typename Precision, std::size_t Rows, std::size_t Columns>
     class MatrixX
     {
@@ -63,7 +67,8 @@ namespace ignition
       }
 
       /// \brief Constructor
-      /// \param[in] _values Values to fill matrix
+      /// \param[in] _values Values to fill matrix. The total number of passed
+      /// values must be equal to Rows * Columns.
       public:
       template<class ... Values>
       MatrixX(Values... _values)
@@ -78,8 +83,9 @@ namespace ignition
       /// \brief Destructor
       public: virtual ~MatrixX() {};
 
-      /// \brief Change the values
-      /// \param[in] _values Values to set.
+      /// \brief Set new values for the matrix.
+      /// \param[in] _values Values to fill matrix. The total number of passed
+      /// values must be equal to Rows * Columns.
       public:
       template<class ... Values>
       void Set(Values... _values)
@@ -92,14 +98,14 @@ namespace ignition
 #pragma clang diagnostic pop
       }
 
-      /// \brief Change value at an index.
-      /// \param[in] _row
-      /// \param[in] _col
-      /// \param[in] _value
+      /// \brief Change value of an element at a given row and column.
+      /// \param[in] _row Row of element, must be < Rows
+      /// \param[in] _col Column of element, must be < Columns
+      /// \param[in] _value New value
       public: void SetElement(std::size_t _row, std::size_t _col,
           Precision _value)
       {
-        this->Clamp(_row, _col, _row, _col);
+        this->Clamp(_row, _col);
         this->data.at(_row).at(_col) = _value;
       }
 
@@ -120,9 +126,9 @@ namespace ignition
         return result;
       }
 
-      /// \brief Equal operator. this = _mat
+      /// \brief Assignment operator.
       /// \param _mat Incoming matrix
-      /// \return itself
+      /// \return This matrix
       public: MatrixX<Precision, Rows, Columns> &operator=(
           const MatrixX<Precision, Rows, Columns> &_mat)
       {
@@ -155,7 +161,7 @@ namespace ignition
       /// \return The value at the specified index
       public: Precision operator()(std::size_t _row, std::size_t _col) const
       {
-        this->Clamp(_row, _col, _row, _col);
+        this->Clamp(_row, _col);
         assert(_row < Rows);
         assert(_col < Columns);
         return this->data.at(_row).at(_col);
@@ -242,13 +248,16 @@ namespace ignition
         return _in;
       }
 
-      private: void Clamp(std::size_t _inRow, std::size_t _inCol,
-          std::size_t &_outRow, std::size_t &_outCol) const
+      /// \brief Helper function to clamp row and column values to fit this
+      /// matrix.
+      /// \param[in, out] _row Row value to clamp.
+      /// \param[in, out] _col Column value to clamp.
+      private: void Clamp(std::size_t &_row, std::size_t &_col) const
       {
-        _outRow = clamp(_inRow, IGN_ZERO_SIZE_T, Rows-1);
-        _outCol = clamp(_inCol, IGN_ZERO_SIZE_T, Columns-1);;
-        assert(_outRow < Rows);
-        assert(_outCol < Columns);
+        _row = clamp(_row, IGN_ZERO_SIZE_T, Rows-1);
+        _col = clamp(_col, IGN_ZERO_SIZE_T, Columns-1);;
+        assert(_row < Rows);
+        assert(_col < Columns);
       }
 
       /// \brief The matrix
