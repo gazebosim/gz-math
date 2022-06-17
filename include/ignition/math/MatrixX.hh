@@ -18,6 +18,7 @@
 #define GZ_MATH_MATRIXX_HH_
 
 #include <cassert>
+#include <utility>
 #include <ignition/math/Helpers.hh>
 #include <ignition/math/config.hh>
 
@@ -71,7 +72,7 @@ namespace ignition
       /// values must be equal to RowCount * ColCount.
       public:
       template<class ... Values>
-      MatrixX(Values... _values)
+      explicit MatrixX(Values... _values)
       {
         static_assert(RowCount > 0 && ColCount > 0,
             "Matrix can't have zero rows or columns.");
@@ -81,7 +82,7 @@ namespace ignition
       }
 
       /// \brief Destructor
-      public: virtual ~MatrixX() {};
+      public: virtual ~MatrixX() {}
 
       /// \brief Get the number of rows in this matrix.
       /// \return The number of rows.
