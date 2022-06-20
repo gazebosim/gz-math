@@ -135,6 +135,7 @@ if (BUILD_TESTING)
     OrientedBox_TEST
     PID_TEST
     Plane_TEST
+    Polynomial3_TEST
     Pose3_TEST
     Quaternion_TEST
     Rand_TEST
