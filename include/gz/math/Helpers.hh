@@ -23,7 +23,6 @@
 #include <cstdint>
 #include <ostream>
 #include <limits>
-#include <regex>
 #include <string>
 #include <tuple>
 #include <utility>
@@ -35,49 +34,53 @@
 /// \brief The default tolerance value used by MassMatrix3::IsValid(),
 /// MassMatrix3::IsPositive(), and MassMatrix3::ValidMoments()
 template <typename T>
+constexpr T GZ_MASSMATRIX3_DEFAULT_TOLERANCE = T(10);
+
+// TODO(CH3): Deprecated. Remove on tock.
+template <typename T>
 constexpr T IGN_MASSMATRIX3_DEFAULT_TOLERANCE = T(10);
 
-/// \brief Define IGN_PI, IGN_PI_2, and IGN_PI_4.
+/// \brief Define GZ_PI, GZ_PI_2, and GZ_PI_4.
 /// This was put here for Windows support.
 #ifdef M_PI
-#define IGN_PI M_PI
-#define IGN_PI_2 M_PI_2
-#define IGN_PI_4 M_PI_4
-#define IGN_SQRT2 M_SQRT2
+#define GZ_PI M_PI
+#define GZ_PI_2 M_PI_2
+#define GZ_PI_4 M_PI_4
+#define GZ_SQRT2 M_SQRT2
 #else
-#define IGN_PI   3.14159265358979323846
-#define IGN_PI_2 1.57079632679489661923
-#define IGN_PI_4 0.78539816339744830962
-#define IGN_SQRT2 1.41421356237309504880
+#define GZ_PI   3.14159265358979323846
+#define GZ_PI_2 1.57079632679489661923
+#define GZ_PI_4 0.78539816339744830962
+#define GZ_SQRT2 1.41421356237309504880
 #endif
 
-/// \brief Define IGN_FP_VOLATILE for FP equality comparisons
+/// \brief Define GZ_FP_VOLATILE for FP equality comparisons
 /// Use volatile parameters when checking floating point equality on
 /// the 387 math coprocessor to work around bugs from the 387 extra precision
 #if defined __FLT_EVAL_METHOD__  &&  __FLT_EVAL_METHOD__ == 2
-#define IGN_FP_VOLATILE volatile
+#define GZ_FP_VOLATILE volatile
 #else
-#define IGN_FP_VOLATILE
+#define GZ_FP_VOLATILE
 #endif
 
 /// \brief Compute sphere volume
 /// \param[in] _radius Sphere radius
-#define IGN_SPHERE_VOLUME(_radius) (4.0*IGN_PI*std::pow(_radius, 3)/3.0)
+#define GZ_SPHERE_VOLUME(_radius) (4.0*GZ_PI*std::pow(_radius, 3)/3.0)
 
 /// \brief Compute cylinder volume
 /// \param[in] _r Cylinder base radius
 /// \param[in] _l Cylinder length
-#define IGN_CYLINDER_VOLUME(_r, _l) (_l * IGN_PI * std::pow(_r, 2))
+#define GZ_CYLINDER_VOLUME(_r, _l) (_l * GZ_PI * std::pow(_r, 2))
 
 /// \brief Compute box volume
 /// \param[in] _x X length
 /// \param[in] _y Y length
 /// \param[in] _z Z length
-#define IGN_BOX_VOLUME(_x, _y, _z) (_x *_y * _z)
+#define GZ_BOX_VOLUME(_x, _y, _z) (_x *_y * _z)
 
 /// \brief Compute box volume from a vector
 /// \param[in] _v Vector3d that contains the box's dimensions.
-#define IGN_BOX_VOLUME_V(_v) (_v.X() *_v.Y() * _v.Z())
+#define GZ_BOX_VOLUME_V(_v) (_v.X() *_v.Y() * _v.Z())
 
 namespace gz
 {
@@ -88,34 +91,46 @@ namespace gz
     inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /// \brief size_t type with a value of 0
-    static const size_t IGN_ZERO_SIZE_T  = 0u;
+    static const size_t GZ_ZERO_SIZE_T  = 0u;
 
     /// \brief size_t type with a value of 1
-    static const size_t IGN_ONE_SIZE_T   = 1u;
+    static const size_t GZ_ONE_SIZE_T   = 1u;
 
     /// \brief size_t type with a value of 2
-    static const size_t IGN_TWO_SIZE_T   = 2u;
+    static const size_t GZ_TWO_SIZE_T   = 2u;
 
     /// \brief size_t type with a value of 3
-    static const size_t IGN_THREE_SIZE_T = 3u;
+    static const size_t GZ_THREE_SIZE_T = 3u;
 
     /// \brief size_t type with a value of 4
-    static const size_t IGN_FOUR_SIZE_T  = 4u;
+    static const size_t GZ_FOUR_SIZE_T  = 4u;
 
     /// \brief size_t type with a value of 5
-    static const size_t IGN_FIVE_SIZE_T  = 5u;
+    static const size_t GZ_FIVE_SIZE_T  = 5u;
 
     /// \brief size_t type with a value of 6
-    static const size_t IGN_SIX_SIZE_T   = 6u;
+    static const size_t GZ_SIX_SIZE_T   = 6u;
 
     /// \brief size_t type with a value of 7
-    static const size_t IGN_SEVEN_SIZE_T = 7u;
+    static const size_t GZ_SEVEN_SIZE_T = 7u;
 
     /// \brief size_t type with a value of 8
-    static const size_t IGN_EIGHT_SIZE_T = 8u;
+    static const size_t GZ_EIGHT_SIZE_T = 8u;
 
     /// \brief size_t type with a value of 9
-    static const size_t IGN_NINE_SIZE_T  = 9u;
+    static const size_t GZ_NINE_SIZE_T  = 9u;
+
+    // TODO(CH3): Deprecated. Remove on tock.
+    constexpr auto GZ_DEPRECATED(7) IGN_ZERO_SIZE_T  = &GZ_ZERO_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_ONE_SIZE_T   = &GZ_ONE_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_TWO_SIZE_T   = &GZ_TWO_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_THREE_SIZE_T = &GZ_THREE_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_FOUR_SIZE_T  = &GZ_FOUR_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_FIVE_SIZE_T  = &GZ_FIVE_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_SIX_SIZE_T   = &GZ_SIX_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_SEVEN_SIZE_T = &GZ_SEVEN_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_EIGHT_SIZE_T = &GZ_EIGHT_SIZE_T;
+    constexpr auto GZ_DEPRECATED(7) IGN_NINE_SIZE_T  = &GZ_NINE_SIZE_T;
 
     /// \brief Double maximum value. This value will be similar to 1.79769e+308
     static const double MAX_D = std::numeric_limits<double>::max();
@@ -154,7 +169,7 @@ namespace gz
     static const uint16_t MIN_UI16 = std::numeric_limits<uint16_t>::min();
 
     /// \brief 16bit unsigned integer lowest value. This is equivalent to
-    /// IGN_UINT16_MIN, and is defined here for completeness.
+    /// GZ_UINT16_MIN, and is defined here for completeness.
     static const uint16_t LOW_UI16 = std::numeric_limits<uint16_t>::lowest();
 
     /// \brief 16-bit unsigned integer positive infinite value
@@ -167,7 +182,7 @@ namespace gz
     static const int16_t MIN_I16 = std::numeric_limits<int16_t>::min();
 
     /// \brief 16bit unsigned integer lowest value. This is equivalent to
-    /// IGN_INT16_MIN, and is defined here for completeness.
+    /// GZ_INT16_MIN, and is defined here for completeness.
     static const int16_t LOW_I16 = std::numeric_limits<int16_t>::lowest();
 
     /// \brief 16-bit unsigned integer positive infinite value
@@ -180,7 +195,7 @@ namespace gz
     static const uint32_t MIN_UI32 = std::numeric_limits<uint32_t>::min();
 
     /// \brief 32bit unsigned integer lowest value. This is equivalent to
-    /// IGN_UINT32_MIN, and is defined here for completeness.
+    /// GZ_UINT32_MIN, and is defined here for completeness.
     static const uint32_t LOW_UI32 = std::numeric_limits<uint32_t>::lowest();
 
     /// \brief 32-bit unsigned integer positive infinite value
@@ -193,7 +208,7 @@ namespace gz
     static const int32_t MIN_I32 = std::numeric_limits<int32_t>::min();
 
     /// \brief 32bit unsigned integer lowest value. This is equivalent to
-    /// IGN_INT32_MIN, and is defined here for completeness.
+    /// GZ_INT32_MIN, and is defined here for completeness.
     static const int32_t LOW_I32 = std::numeric_limits<int32_t>::lowest();
 
     /// \brief 32-bit unsigned integer positive infinite value
@@ -206,7 +221,7 @@ namespace gz
     static const uint64_t MIN_UI64 = std::numeric_limits<uint64_t>::min();
 
     /// \brief 64bit unsigned integer lowest value. This is equivalent to
-    /// IGN_UINT64_MIN, and is defined here for completeness.
+    /// GZ_UINT64_MIN, and is defined here for completeness.
     static const uint64_t LOW_UI64 = std::numeric_limits<uint64_t>::lowest();
 
     /// \brief 64-bit unsigned integer positive infinite value
@@ -219,7 +234,7 @@ namespace gz
     static const int64_t MIN_I64 = std::numeric_limits<int64_t>::min();
 
     /// \brief 64bit unsigned integer lowest value. This is equivalent to
-    /// IGN_INT64_MIN, and is defined here for completeness.
+    /// GZ_INT64_MIN, and is defined here for completeness.
     static const int64_t LOW_I64 = std::numeric_limits<int64_t>::lowest();
 
     /// \brief 64-bit unsigned integer positive infinite value
@@ -361,11 +376,7 @@ namespace gz
     template<typename T>
     inline T max(const std::vector<T> &_values)
     {
-      T max = std::numeric_limits<T>::min();
-      for (unsigned int i = 0; i < _values.size(); ++i)
-        if (_values[i] > max)
-          max = _values[i];
-      return max;
+      return *std::max_element(std::begin(_values), std::end(_values));
     }
 
     /// \brief Get the minimum value of vector of values.
@@ -374,11 +385,7 @@ namespace gz
     template<typename T>
     inline T min(const std::vector<T> &_values)
     {
-      T min = std::numeric_limits<T>::max();
-      for (unsigned int i = 0; i < _values.size(); ++i)
-        if (_values[i] < min)
-          min = _values[i];
-      return min;
+      return *std::min_element(std::begin(_values), std::end(_values));
     }
 
     /// \brief Check if two values are equal, within a tolerance.
@@ -390,7 +397,7 @@ namespace gz
     inline bool equal(const T &_a, const T &_b,
                       const T &_epsilon = T(1e-6))
     {
-      IGN_FP_VOLATILE T diff = std::abs(_a - _b);
+      GZ_FP_VOLATILE T diff = std::abs(_a - _b);
       return diff <= _epsilon;
     }
 
@@ -437,9 +444,8 @@ namespace gz
     template<typename T>
     inline void sort2(T &_a, T &_b)
     {
-      using std::swap;
       if (_b < _a)
-        swap(_a, _b);
+        std::swap(_a, _b);
     }
 
     /// \brief Sort three numbers, such that _a <= _b <= _c.
@@ -573,77 +579,21 @@ namespace gz
     /// \brief Parse string into an integer.
     /// \param[in] _input The input string.
     /// \return An integer, or NAN_I if unable to parse the input.
-    inline int parseInt(const std::string &_input)
-    {
-      // Return NAN_I if it is empty
-      if (_input.empty())
-      {
-        return NAN_I;
-      }
-      // Return 0 if it is all spaces
-      else if (_input.find_first_not_of(' ') == std::string::npos)
-      {
-        return 0;
-      }
-
-      // Otherwise try standard library
-      try
-      {
-        return std::stoi(_input);
-      }
-      // if that fails, return NAN_I
-      catch(...)
-      {
-        return NAN_I;
-      }
-    }
+    int GZ_MATH_VISIBLE parseInt(const std::string &_input);
 
     /// \brief parse string into float.
     /// \param [in] _input The string.
     /// \return A floating point number (can be NaN) or NAN_D if the
     /// _input could not be parsed.
-    inline double parseFloat(const std::string &_input)
-    {
-      // Return NAN_D if it is empty
-      if (_input.empty())
-      {
-        return NAN_D;
-      }
-      // Return 0 if it is all spaces
-      else if (_input.find_first_not_of(' ') == std::string::npos)
-      {
-        return 0;
-      }
-
-      // Otherwise try standard library
-      try
-      {
-        return std::stod(_input);
-      }
-      // if that fails, return NAN_D
-      catch(...)
-      {
-        return NAN_D;
-      }
-    }
+    double GZ_MATH_VISIBLE parseFloat(const std::string &_input);
 
     /// \brief Convert a std::chrono::steady_clock::time_point to a seconds and
     /// nanoseconds pair.
     /// \param[in] _time The time point to convert.
     /// \return A pair where the first element is the number of seconds and
     /// the second is the number of nanoseconds.
-    inline std::pair<int64_t, int64_t> timePointToSecNsec(
-        const std::chrono::steady_clock::time_point &_time)
-    {
-      auto now_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(
-        _time.time_since_epoch());
-      auto now_s = std::chrono::duration_cast<std::chrono::seconds>(
-        _time.time_since_epoch());
-      int64_t seconds = now_s.count();
-      int64_t nanoseconds = std::chrono::duration_cast
-        <std::chrono::nanoseconds>(now_ns - now_s).count();
-      return {seconds, nanoseconds};
-    }
+    std::pair<int64_t, int64_t> GZ_MATH_VISIBLE timePointToSecNsec(
+        const std::chrono::steady_clock::time_point &_time);
 
     /// \brief Convert seconds and nanoseconds to
     /// std::chrono::steady_clock::time_point.
@@ -651,16 +601,9 @@ namespace gz
     /// \param[in] _nanosec The nanoseconds to convert.
     /// \return A std::chrono::steady_clock::time_point based on the number of
     /// seconds and the number of nanoseconds.
-    inline std::chrono::steady_clock::time_point secNsecToTimePoint(
-        const uint64_t &_sec, const uint64_t &_nanosec)
-    {
-      auto duration = std::chrono::seconds(_sec) + std::chrono::nanoseconds(
-        _nanosec);
-      std::chrono::steady_clock::time_point result;
-      using std::chrono::duration_cast;
-      result += duration_cast<std::chrono::steady_clock::duration>(duration);
-      return result;
-    }
+    std::chrono::steady_clock::time_point GZ_MATH_VISIBLE
+      secNsecToTimePoint(
+        const uint64_t &_sec, const uint64_t &_nanosec);
 
     /// \brief Convert seconds and nanoseconds to
     /// std::chrono::steady_clock::duration.
@@ -668,25 +611,16 @@ namespace gz
     /// \param[in] _nanosec The nanoseconds to convert.
     /// \return A std::chrono::steady_clock::duration based on the number of
     /// seconds and the number of nanoseconds.
-    inline std::chrono::steady_clock::duration secNsecToDuration(
-        const uint64_t &_sec, const uint64_t &_nanosec)
-    {
-      return std::chrono::seconds(_sec) + std::chrono::nanoseconds(
-        _nanosec);
-    }
+    std::chrono::steady_clock::duration GZ_MATH_VISIBLE secNsecToDuration(
+        const uint64_t &_sec, const uint64_t &_nanosec);
 
     /// \brief Convert a std::chrono::steady_clock::duration to a seconds and
     /// nanoseconds pair.
     /// \param[in] _dur The duration to convert.
     /// \return A pair where the first element is the number of seconds and
     /// the second is the number of nanoseconds.
-    inline std::pair<int64_t, int64_t> durationToSecNsec(
-        const std::chrono::steady_clock::duration &_dur)
-    {
-      auto s = std::chrono::duration_cast<std::chrono::seconds>(_dur);
-      auto ns = std::chrono::duration_cast<std::chrono::nanoseconds>(_dur-s);
-      return {s.count(), ns.count()};
-    }
+    std::pair<int64_t, int64_t> GZ_MATH_VISIBLE durationToSecNsec(
+        const std::chrono::steady_clock::duration &_dur);
 
     // TODO(anyone): Replace this with std::chrono::days.
     /// This will exist in C++-20
@@ -723,75 +657,6 @@ namespace gz
     std::string GZ_MATH_VISIBLE durationToString(
         const std::chrono::steady_clock::duration &_duration);
 
-    /// \brief Check if the given string represents a time.
-    /// An example time string is "0 00:00:00.000", which has the format
-    /// "DAYS HOURS:MINUTES:SECONDS.MILLISECONDS"
-    /// \return True if the regex was able to split the string otherwise False
-    inline bool isTimeString(const std::string &_timeString)
-    {
-      std::smatch matches;
-
-      // The following regex takes a time string in the general format of
-      // "dd hh:mm:ss.nnn" where n is milliseconds, if just one number is
-      // provided, it is assumed to be seconds
-      static const std::regex time_regex(
-          "^([0-9]+ ){0,1}"                       // day:
-                                                  // Any positive integer
-
-          "(?:([1-9]:|[0-1][0-9]:|2[0-3]:){0,1}"  // hour:
-                                                  // 1 - 9:
-                                                  // 01 - 19:
-                                                  // 20 - 23:
-
-          "([0-9]:|[0-5][0-9]:)){0,1}"            // minute:
-                                                  // 0 - 9:
-                                                  // 00 - 59:
-
-          "(?:([0-9]|[0-5][0-9]){0,1}"            // second:
-                                                  // 0 - 9
-                                                  // 00 - 59
-
-          "(\\.[0-9]{1,3}){0,1})$");              // millisecond:
-                                                  // .0 - .9
-                                                  // .00 - .99
-                                                  // .000 - 0.999
-
-      // `matches` should always be a size of 6 as there are 6 matching
-      // groups in the regex.
-      // 1. The whole regex
-      // 2. The days
-      // 3. The hours
-      // 4. The minutes
-      // 5. The seconds
-      // 6. The milliseconds
-      // Note that the space will remain in the day match, the colon
-      // will remain in the hour and minute matches, and the period will
-      // remain in the millisecond match
-      if (!std::regex_search(_timeString, matches, time_regex) ||
-          matches.size() != 6)
-        return false;
-
-      std::string dayString = matches[1];
-
-      // Days are the only unbounded number, so check first to see if stoi
-      // runs successfully
-      if (!dayString.empty())
-      {
-        // Erase the space
-        dayString.erase(dayString.length() - 1);
-        try
-        {
-          std::stoi(dayString);
-        }
-        catch (const std::out_of_range &)
-        {
-          return false;
-        }
-      }
-
-      return true;
-    }
-
     /// \brief Split a std::chrono::steady_clock::duration to a string
     /// \param[in] _timeString The string to convert in general format
     /// \param[out] numberDays number of days in the string
@@ -805,6 +670,17 @@ namespace gz
         uint64_t & numberDays, uint64_t & numberHours,
         uint64_t & numberMinutes, uint64_t & numberSeconds,
         uint64_t & numberMilliseconds);
+
+    /// \brief Check if the given string represents a time.
+    /// An example time string is "0 00:00:00.000", which has the format
+    /// "DAYS HOURS:MINUTES:SECONDS.MILLISECONDS"
+    /// \return True if the regex was able to split the string otherwise False
+    inline bool isTimeString(const std::string &_timeString)
+    {
+      // These will be thrown away, just for making the function call
+      uint64_t d, h, m, s, ms;
+      return splitTimeBasedOnTimeRegex(_timeString, d, h, m, s, ms);
+    }
 
     /// \brief Convert a string to a std::chrono::steady_clock::duration
     /// \param[in] _timeString The string to convert in general format

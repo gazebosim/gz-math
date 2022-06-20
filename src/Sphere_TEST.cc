@@ -16,7 +16,6 @@
 */
 #include <gtest/gtest.h>
 #include <cmath>
-#include <iostream>
 
 #include "gz/math/Sphere.hh"
 
@@ -97,7 +96,7 @@ TEST(SphereTest, VolumeAndDensity)
 {
   double mass = 1.0;
   math::Sphered sphere(0.001);
-  double expectedVolume = (4.0/3.0) * IGN_PI * std::pow(0.001, 3);
+  double expectedVolume = (4.0/3.0) * GZ_PI * std::pow(0.001, 3);
   EXPECT_DOUBLE_EQ(expectedVolume, sphere.Volume());
 
   double expectedDensity = mass / expectedVolume;
