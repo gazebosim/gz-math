@@ -108,10 +108,14 @@ namespace ignition
       {
         static_assert(RowCount * ColCount == sizeof...(_values),
             "Wrong number of values provided.");
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wmissing-braces"
+#if defined(__clang__)
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wmissing-braces"
+#endif
         this->data = {std::forward<Values>(_values)...};
-#pragma clang diagnostic pop
+#if defined(__clang__)
+  #pragma clang diagnostic pop
+#endif
       }
 
       /// \brief Change value of an element at a given row and column.
@@ -243,7 +247,7 @@ namespace ignition
       }
 
       /// \brief Stream extraction operator
-      /// \param _out output stream
+      /// \param _in Input stream
       /// \param _m Matrix to output
       /// \return the stream
       public: friend std::istream &operator>>(std::istream &_in,
