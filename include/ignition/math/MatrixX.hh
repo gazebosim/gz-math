@@ -17,6 +17,7 @@
 #ifndef GZ_MATH_MATRIXX_HH_
 #define GZ_MATH_MATRIXX_HH_
 
+#include <array>
 #include <cassert>
 #include <utility>
 #include <ignition/math/Helpers.hh>
