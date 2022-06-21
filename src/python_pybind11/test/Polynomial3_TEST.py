@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import unittest
+import math
 from ignition.math import Polynomial3d
 from ignition.math import Vector4d
 
@@ -31,17 +32,42 @@ class TestPolynomial3(unittest.TestCase):
         poly = Polynomial3d.CONSTANT(1.)
         self.assertEqual(poly.coeffs(), Vector4d(0., 0., 0., 1.))
 
-    # TODO
     def test_evaluate(self):
-        pass
-    
-    # TODO
+        p = Polynomial3d.CONSTANT(1.0)
+        self.assertEqual(p(-1.0), 1.0)
+        self.assertEqual(p(0.0), 1.0)
+        self.assertEqual(p(1.0), 1.0)
+        self.assertEqual(p(math.inf), 1.0)
+        self.assertTrue(math.isnan(p(math.nan)))
+
+        p = Polynomial3d(Vector4d.ONE)
+        self.assertEqual(p(-1.0), 0.0)
+        self.assertEqual(p(0.0), 1.0)
+        self.assertEqual(p(1.0), 4.0)
+        self.assertEqual(p(-math.inf), -math.inf)
+        self.assertTrue(math.isnan(p(math.nan)))
+
+    # TODO(aditya) - port Interval to python.
     def test_minimum(self):
         pass
 
     # TODO
-    def test_polynomial_streaming(self):
-        pass
+    def test_polynomial_stream_out(self):
+        p = Polynomial3d(Vector4d.ZERO)
+        self.assertEqual(str(p), "0")
+
+        p = Polynomial3d(Vector4d.ONE)
+        self.assertEqual(str(p), "x^3 + x^2 + x + 1")
+
+        p = Polynomial3d(Vector4d(1, 0, 1, 0))
+        self.assertEqual(str(p), "x^3 + x")
+
+        p = Polynomial3d(Vector4d(0, 1, 0, -1))
+        self.assertEqual(str(p), "x^2 - 1")
+
+        p = Polynomial3d(Vector4d(-1, 2, -2, 0))
+        self.assertEqual(str(p), "-x^3 + 2 x^2 - 2 x")
+
 
 if __name__ == '__main__':
     unittest.main()
