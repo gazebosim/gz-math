@@ -113,6 +113,14 @@ TEST(SphericalCoordinatesTest, SetFunctions)
   EXPECT_EQ(sc.LongitudeReference(), gz::math::Angle());
   EXPECT_EQ(sc.HeadingOffset(), gz::math::Angle());
   EXPECT_NEAR(sc.ElevationReference(), 0.0, 1e-6);
+  EXPECT_NEAR(sc.SurfaceRadius(),
+      6371000.0, 1e-3);
+  EXPECT_NEAR(sc.SurfaceAxisEquatorial(),
+      6378137.0, 1e-3);
+  EXPECT_NEAR(sc.SurfaceAxisPolar(),
+      6356752.314245, 1e-3);
+  EXPECT_NEAR(sc.SurfaceFlattening(),
+      1.0/298.257223563, 1e-5);
 
   {
     gz::math::Angle lat(0.3), lon(-1.2), heading(0.5);
@@ -128,6 +136,14 @@ TEST(SphericalCoordinatesTest, SetFunctions)
     EXPECT_EQ(sc.LongitudeReference(), lon);
     EXPECT_EQ(sc.HeadingOffset(), heading);
     EXPECT_NEAR(sc.ElevationReference(), elev, 1e-6);
+    EXPECT_NEAR(sc.SurfaceRadius(),
+        6371000.0, 1e-3);
+    EXPECT_NEAR(sc.SurfaceAxisEquatorial(),
+        6378137.0, 1e-3);
+    EXPECT_NEAR(sc.SurfaceAxisPolar(),
+        6356752.314245, 1e-3);
+    EXPECT_NEAR(sc.SurfaceFlattening(),
+        1.0/298.257223563, 1e-5);
   }
 
   // Moon surface type
@@ -135,6 +151,14 @@ TEST(SphericalCoordinatesTest, SetFunctions)
   math::SphericalCoordinates moonSC(st);
   moonSC.SetSurface(st);
   EXPECT_EQ(moonSC.Surface(), st);
+  EXPECT_NEAR(moonSC.SurfaceRadius(),
+      1737400.0, 1e-3);
+  EXPECT_NEAR(moonSC.SurfaceAxisEquatorial(),
+      1738100.0, 1e-3);
+  EXPECT_NEAR(moonSC.SurfaceAxisPolar(),
+      1736000.0, 1e-3);
+  EXPECT_NEAR(moonSC.SurfaceFlattening(),
+      0.0012, 1e-5);
 }
 
 //////////////////////////////////////////////////

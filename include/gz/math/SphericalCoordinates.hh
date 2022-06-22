@@ -185,8 +185,8 @@ namespace gz
       /// latitude and longitude. It assumes that both points are at sea level.
       /// Example: _latA = 38.0016667 and _lonA = -123.0016667) represents
       /// the point with latitude 38d 0'6.00"N and longitude 123d 0'6.00"W.
-      /// This is different from the static Distance() method as it takes into
-      /// account the surface type.
+      /// This is different from the deprecated static Distance() method as it
+      /// takes into account the set surface's radius.
       /// \param[in] _latA Latitude of point A.
       /// \param[in] _lonA Longitude of point A.
       /// \param[in] _latB Latitude of point B.
@@ -243,6 +243,7 @@ namespace gz
       /// \brief Set SurfaceType for planetary surface model with
       /// custom ellipsoid properties.
       /// \param[in] _type SurfaceType value.
+      /// \param[in] _radius Radius of the surface.
       /// \param[in] _axisEquatorial Equatorial axis of the surface.
       /// \param[in] _axisPolar Polar axis of the surface.
       /// \param[in] _flattening Falttening parameter of the surface.

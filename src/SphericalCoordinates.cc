@@ -283,6 +283,12 @@ void SphericalCoordinates::SetSurface(const SurfaceType &_type)
 
       break;
       }
+    case CUSTOM_SURFACE:
+      {
+      std::cerr << "For custom surfaces, use SetSurface(type, radius,"
+        "axisEquatorial, axisPolar, flattening)" << std::endl;
+      break;
+      }
     default:
       {
         std::cerr << "Unknown surface type["
