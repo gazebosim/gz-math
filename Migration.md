@@ -149,9 +149,9 @@ release will remove the deprecated code.
 
 ### Added dependencies
 
-1. **ignition-cmake**
-    + Ignition-math now has a build dependency on ignition-cmake, which
-      allows cmake scripts to be shared across all the ignition packages.
+1. **gz-cmake**
+    + gz-math now has a build dependency on gz-cmake, which
+      allows cmake scripts to be shared across all the Gazebo packages.
 
 ### Modifications
 
