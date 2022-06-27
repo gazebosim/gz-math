@@ -11,6 +11,12 @@ release will remove the deprecated code.
 
   1. Removed the Quaternion integer template `Quaternioni`.
 
+  1. The project name has been changed to use the `gz-` prefix, you **must** use the `gz` prefix!
+    * This also means that any generated code that use the project name (e.g. CMake variables, in-source macros) would have to be migrated.
+    * Some non-exhaustive examples of this include:
+      * `GZ_<PROJECT>_<VISIBLE/HIDDEN>`
+      * CMake `-config` files
+      * Paths that depend on the project name
 
 ### Deprecations
 
