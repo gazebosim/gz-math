@@ -15,7 +15,7 @@ Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/ico
 Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ign_math-ign-7-win)](https://build.osrfoundation.org/job/ign_math-ign-7-win)
 
 Gazebo Math, a component of [Gazebo
-Robotics](https://gazebosim.org), provides general purpose math
+Sim](https://gazebosim.org), provides general purpose math
 classes and functions designed for robotic applications.
 
 # Table of Contents
