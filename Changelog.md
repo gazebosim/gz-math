@@ -546,7 +546,7 @@ instead.
    `AxisAlignedBox` class.
     * [BitBucket pull request 257](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/257)
 
-1. Added eigen3 component with functions for converting between Eigen and ign-math types.
+1. Added eigen3 component with functions for converting between Eigen and gz-math types.
     * [BitBucket pull request 256](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/256)
 
 1. Added a `MassMatrix3::SetFromCylinder` function that uses a `Material`
