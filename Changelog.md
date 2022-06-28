@@ -728,7 +728,7 @@ specify a density.
 1. Added Color
     * [BitBucket pull request 150](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/150)
 
-1. Backport updated configure.bat to ign-math2 and fix cppcheck warnings
+1. Backport updated configure.bat to gz-math2 and fix cppcheck warnings
     * [BitBucket pull request 207](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/207)
 
 ### Gazebo Math 2.8
