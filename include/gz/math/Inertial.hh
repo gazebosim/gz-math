@@ -18,6 +18,7 @@
 #define GZ_MATH_INERTIAL_HH_
 
 #include <gz/math/config.hh>
+#include "gz/math/FluidAddedMass.hh"
 #include "gz/math/MassMatrix3.hh"
 #include "gz/math/Pose3.hh"
 
@@ -328,6 +329,9 @@ namespace gz
       /// \brief Pose offset of center of mass reference frame relative
       /// to a base frame.
       private: Pose3<T> pose;
+
+      /// \brief
+      private: FluidAddedMass<T> addedMass;
     };
 
     typedef Inertial<double> Inertiald;
