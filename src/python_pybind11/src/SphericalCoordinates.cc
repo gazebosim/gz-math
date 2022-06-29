@@ -152,6 +152,12 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
    py::enum_<Class::SurfaceType>(sphericalCoordinates, "SurfaceType")
        .value("EARTH_WGS84", Class::SurfaceType::EARTH_WGS84)
        .export_values();
+   py::enum_<Class::SurfaceType>(sphericalCoordinates, "SurfaceType")
+       .value("MOON_SCS", Class::SurfaceType::MOON_SCS)
+       .export_values();
+   py::enum_<Class::SurfaceType>(sphericalCoordinates, "SurfaceType")
+       .value("CUSTOM_SURFACE", Class::SurfaceType::CUSTOM_SURFACE)
+       .export_values();
 }
 }  // namespace python
 }  // namespace math
