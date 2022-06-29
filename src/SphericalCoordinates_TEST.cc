@@ -422,7 +422,7 @@ TEST(SphericalCoordinatesTest, Distance)
 
   // Using a custom surface.
   // For custom surfaces, the surface properties need to be set.
-  // THis one will throw an error.
+  // This one will throw an error.
   auto invalidCustomSC = math::SphericalCoordinates(
       math::SphericalCoordinates::CUSTOM_SURFACE);
   // This one should be accepted.
