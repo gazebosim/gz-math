@@ -87,14 +87,11 @@ namespace gz
       /// \param[in] _radius Radius of the surface.
       /// \param[in] _axisEquatorial Semi major axis of the surface.
       /// \param[in] _axisPolar Semi minor axis of the surface.
-      /// \param[in] _axisPolar Flattening parameter of the surface.
       public: SphericalCoordinates(
             const SurfaceType _type,
             const double _radius,
             const double _axisEquatorial,
-            const double _axisPolar,
-            const double _flattening
-            );
+            const double _axisPolar);
 
       /// \brief Constructor with surface type, angle, and elevation inputs.
       /// \param[in] _type SurfaceType specification.
@@ -246,13 +243,11 @@ namespace gz
       /// \param[in] _radius Radius of the surface.
       /// \param[in] _axisEquatorial Equatorial axis of the surface.
       /// \param[in] _axisPolar Polar axis of the surface.
-      /// \param[in] _flattening Falttening parameter of the surface.
       public: void SetSurface(
                   const SurfaceType &_type,
                   const double _radius,
                   const double _axisEquatorial,
-                  const double _axisPolar,
-                  const double _flattening);
+                  const double _axisPolar);
 
       /// \brief Set reference geodetic latitude.
       /// \param[in] _angle Reference geodetic latitude.

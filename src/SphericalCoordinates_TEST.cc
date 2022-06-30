@@ -174,7 +174,7 @@ TEST(SphericalCoordinatesTest, InvalidParameters)
   // Create a custom surface with invalid parameters.
   math::SphericalCoordinates scInvalid(
       math::SphericalCoordinates::CUSTOM_SURFACE,
-      -1, -1, -1, -1);
+      -1, -1, -1);
 
   // These should be rejected and default to Earth's
   // parameters.
@@ -190,7 +190,7 @@ TEST(SphericalCoordinatesTest, InvalidParameters)
   // Create a custom surface with valid parameters.
   math::SphericalCoordinates scValid(
       math::SphericalCoordinates::CUSTOM_SURFACE,
-      100, 100, 100, 0);
+      100, 100, 100);
 
   // These should be accepted
   EXPECT_NEAR(scValid.SurfaceRadius(), 100,
@@ -430,8 +430,7 @@ TEST(SphericalCoordinatesTest, Distance)
       math::SphericalCoordinates::SurfaceType::CUSTOM_SURFACE,
       6371000.0,
       6378137.0,
-      6356752.314245,
-      1.0/298.25722);
+      6356752.314245);
 
   EXPECT_NEAR(customSC.DistanceBetweenPoints(latA, longA, latB, longB),
       d1, 0.1);
@@ -442,7 +441,7 @@ TEST(SphericalCoordinatesTest, BadSetSurface)
 {
   math::SphericalCoordinates sc;
   sc.SetSurface(static_cast<math::SphericalCoordinates::SurfaceType>(3),
-      10, 10, 10, 0);
+      10, 10, 10);
   sc.SetSurface(static_cast<math::SphericalCoordinates::SurfaceType>(3));
   EXPECT_EQ(sc.Surface(), 3);
 }

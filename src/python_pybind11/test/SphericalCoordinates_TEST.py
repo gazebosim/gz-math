@@ -144,7 +144,7 @@ class TestSphericalCoordinates(unittest.TestCase):
         # Create a custom surface with invalid parameters
         sc_invalid = SphericalCoordinates(
                 SphericalCoordinates.CUSTOM_SURFACE,
-                -1, -1, -1, -1)
+                -1, -1, -1)
 
         # These should be rejected and default to Earth's parameters
         self.assertAlmostEqual(sc_invalid.surface_radius(),
@@ -159,7 +159,7 @@ class TestSphericalCoordinates(unittest.TestCase):
         # Creating a custom surface with valid parameters
         sc_valid = SphericalCoordinates(
                 SphericalCoordinates.CUSTOM_SURFACE,
-                100, 100, 100, 0)
+                100, 100, 100)
 
         # These should be accepted
         self.assertAlmostEqual(sc_valid.surface_radius(),
@@ -367,8 +367,7 @@ class TestSphericalCoordinates(unittest.TestCase):
             SphericalCoordinates.CUSTOM_SURFACE,
             6371000.0,
             6378137.0,
-            6356752.314245,
-            1.0/298.25722);
+            6356752.314245);
 
         self.assertAlmostEqual(valid_custom_sc.distance_between_points(latA, longA, latB, longB),
                 d1, delta=0.1)

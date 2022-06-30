@@ -160,13 +160,12 @@ SphericalCoordinates::SphericalCoordinates(
     const SurfaceType _type,
     const double _radius,
     const double _axisEquatorial,
-    const double _axisPolar,
-    const double _flattening)
+    const double _axisPolar)
   : SphericalCoordinates()
 {
   // Set properties
   this->SetSurface(_type, _radius, _axisEquatorial,
-      _axisPolar, _flattening);
+      _axisPolar);
 
   this->SetElevationReference(0.0);
 }
@@ -286,7 +285,7 @@ void SphericalCoordinates::SetSurface(const SurfaceType &_type)
     case CUSTOM_SURFACE:
       {
       std::cerr << "For custom surfaces, use SetSurface(type, radius,"
-        "axisEquatorial, axisPolar, flattening)" << std::endl;
+        "axisEquatorial, axisPolar)" << std::endl;
       break;
       }
     default:
@@ -303,8 +302,7 @@ void SphericalCoordinates::SetSurface(
     const SurfaceType &_type,
     const double _radius,
     const double _axisEquatorial,
-    const double _axisPolar,
-    const double _flattening)
+    const double _axisPolar)
 {
   if ((_type != EARTH_WGS84) &&
       (_type != MOON_SCS) &&
@@ -316,48 +314,26 @@ void SphericalCoordinates::SetSurface(
   }
 
   this->dataPtr->surfaceType = _type;
-  if (_axisEquatorial > 0)
+
+  if ((_axisEquatorial > 0)
+      && (_axisPolar > 0)
+      && (_axisPolar <= _axisEquatorial)
+      && (_radius > 0))
   {
     this->dataPtr->ellA = _axisEquatorial;
-  }
-  else
-  {
-    std::cerr << "Value of _axisEquatorial should be greater than zero "
-      " defaulting to Earth's equatorial radius." << std::endl;
-    this->dataPtr->ellA = g_EarthWGS84AxisEquatorial;
-  }
-
-  if (_axisPolar > 0)
-  {
     this->dataPtr->ellB = _axisPolar;
-  }
-  else
-  {
-    std::cerr << "Value of _axisPolar should be greater than zero "
-      " defaulting to Earth's polar radius." << std::endl;
-    this->dataPtr->ellB = g_EarthWGS84AxisPolar;
-  }
-
-  if (_flattening >= 0)
-  {
-    this->dataPtr->ellF = _flattening;
-  }
-  else
-  {
-    std::cerr << "Value of _flattening should be greater than "
-      " or equal to zero, defaulting to Earth's flattening value."
-      << std::endl;
-    this->dataPtr->ellF = g_EarthWGS84Flattening;
-  }
-
-  if (_radius > 0)
-  {
+    this->dataPtr->ellF =
+      (_axisEquatorial - _axisPolar) / _axisEquatorial;
     this->dataPtr->surfaceRadius = _radius;
   }
   else
   {
-    std::cerr << "Value of _radius should be greater than zero "
-      " defaulting to Earth's radius."<< std::endl;
+    std::cerr << "Invalid parameters found, defaulting to "
+      "Earth's parameters" << std::endl;
+
+    this->dataPtr->ellA = g_EarthWGS84AxisEquatorial;
+    this->dataPtr->ellB = g_EarthWGS84AxisPolar;
+    this->dataPtr->ellF = g_EarthWGS84Flattening;
     this->dataPtr->surfaceRadius = g_EarthRadius;
   }
 
