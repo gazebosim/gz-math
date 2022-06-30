@@ -43,7 +43,7 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
                   const gz::math::Angle &, const double,
                   const gz::math::Angle &>())
     .def(py::init<const Class::SurfaceType, const double,
-                  const double, const double>())
+                  const double>())
     .def(py::self != py::self)
     .def(py::self == py::self)
     .def("spherical_from_local_position",
@@ -106,8 +106,8 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
          "Set SurfaceType for planetary surface model.")
     .def("set_surface",
          py::overload_cast<const Class::SurfaceType&,
-         const double, const double,
-         const double>(&Class::SetSurface),
+         const double, const double
+         >(&Class::SetSurface),
          "Set SurfaceType for planetary surface model.")
     .def("set_latitude_reference",
          &Class::SetLatitudeReference,

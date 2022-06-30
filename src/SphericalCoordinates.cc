@@ -158,13 +158,12 @@ SphericalCoordinates::SphericalCoordinates(const SurfaceType _type)
 //////////////////////////////////////////////////
 SphericalCoordinates::SphericalCoordinates(
     const SurfaceType _type,
-    const double _radius,
     const double _axisEquatorial,
     const double _axisPolar)
   : SphericalCoordinates()
 {
   // Set properties
-  this->SetSurface(_type, _radius, _axisEquatorial,
+  this->SetSurface(_type, _axisEquatorial,
       _axisPolar);
 
   this->SetElevationReference(0.0);
@@ -300,7 +299,6 @@ void SphericalCoordinates::SetSurface(const SurfaceType &_type)
 //////////////////////////////////////////////////
 void SphericalCoordinates::SetSurface(
     const SurfaceType &_type,
-    const double _radius,
     const double _axisEquatorial,
     const double _axisPolar)
 {
@@ -317,14 +315,15 @@ void SphericalCoordinates::SetSurface(
 
   if ((_axisEquatorial > 0)
       && (_axisPolar > 0)
-      && (_axisPolar <= _axisEquatorial)
-      && (_radius > 0))
+      && (_axisPolar <= _axisEquatorial))
   {
     this->dataPtr->ellA = _axisEquatorial;
     this->dataPtr->ellB = _axisPolar;
     this->dataPtr->ellF =
       (_axisEquatorial - _axisPolar) / _axisEquatorial;
-    this->dataPtr->surfaceRadius = _radius;
+    // Arithmetic mean radius
+    this->dataPtr->surfaceRadius =
+      (2 * _axisEquatorial + _axisPolar) / 3.0;
   }
   else
   {

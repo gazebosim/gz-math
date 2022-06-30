@@ -84,12 +84,10 @@ namespace gz
       /// \brief Constructor with surface type input and properties
       /// input. To be used for CUSTOM_SURFACE.
       /// \param[in] _type SurfaceType specification.
-      /// \param[in] _radius Radius of the surface.
       /// \param[in] _axisEquatorial Semi major axis of the surface.
       /// \param[in] _axisPolar Semi minor axis of the surface.
       public: SphericalCoordinates(
             const SurfaceType _type,
-            const double _radius,
             const double _axisEquatorial,
             const double _axisPolar);
 
@@ -240,12 +238,10 @@ namespace gz
       /// \brief Set SurfaceType for planetary surface model with
       /// custom ellipsoid properties.
       /// \param[in] _type SurfaceType value.
-      /// \param[in] _radius Radius of the surface.
       /// \param[in] _axisEquatorial Equatorial axis of the surface.
       /// \param[in] _axisPolar Polar axis of the surface.
       public: void SetSurface(
                   const SurfaceType &_type,
-                  const double _radius,
                   const double _axisEquatorial,
                   const double _axisPolar);
 
