@@ -1,8 +1,11 @@
-if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
-  # pybind11 logic for setting up a debug build when both a debug and release
-  # python interpreter are present in the system seems to be pretty much broken.
-  # This works around the issue.
-  set(PYTHON_LIBRARIES "${PYTHON_DEBUG_LIBRARIES}")
+if(${CMAKE_VERSION} VERSION_LESS "3.12.0")
+  # TODO: remove once the minimum CMake version is increased
+  if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+    # pybind11 logic for setting up a debug build when both a debug and release
+    # python interpreter are present in the system seems to be pretty much broken.
+    # This works around the issue.
+    set(PYTHON_LIBRARIES "${PYTHON_DEBUG_LIBRARIES}")
+  endif()
 endif()
 
 message(STATUS "Building pybind11 interfaces")
