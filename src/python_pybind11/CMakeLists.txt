@@ -19,6 +19,7 @@ pybind11_add_module(math SHARED
   src/Frustum.cc
   src/GaussMarkovProcess.cc
   src/Helpers.cc
+  src/Interval.cc
   src/Kmeans.cc
   src/Line2.cc
   src/Line3.cc
@@ -110,6 +111,7 @@ if (BUILD_TESTING)
     GaussMarkovProcess_TEST
     Helpers_TEST
     Inertial_TEST
+    Interval_TEST
     Kmeans_TEST
     Line2_TEST
     Line3_TEST
