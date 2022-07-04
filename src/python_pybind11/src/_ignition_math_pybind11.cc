@@ -42,6 +42,7 @@
 #include "Pose3.hh"
 #include "Quaternion.hh"
 #include "Rand.hh"
+#include "Region3.hh"
 #include "RollingMean.hh"
 #include "RotationSpline.hh"
 #include "SemanticVersion.hh"
@@ -133,6 +134,8 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathVector4(m, "Vector4");
 
   ignition::math::python::defineMathInterval(m, "Interval");
+  
+  ignition::math::python::defineMathRegion3(m, "Region3");
 
   ignition::math::python::defineMathLine2(m, "Line2");
 
