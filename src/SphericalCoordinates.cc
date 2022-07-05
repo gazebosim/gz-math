@@ -434,8 +434,10 @@ double SphericalCoordinates::Distance(const gz::math::Angle &_latA,
                                       const gz::math::Angle &_latB,
                                       const gz::math::Angle &_lonB)
 {
+  // LCOV_EXCL_START
   return gz::math::SphericalCoordinates::DistanceWGS84(
       _latA, _lonA, _latB, _lonB);
+  // LCOV_EXCL_STOP
 }
 
 //////////////////////////////////////////////////
@@ -460,25 +462,25 @@ double SphericalCoordinates::DistanceBetweenPoints(
 }
 
 //////////////////////////////////////////////////
-double SphericalCoordinates::SurfaceRadius()
+double SphericalCoordinates::SurfaceRadius() const
 {
   return this->dataPtr->surfaceRadius;
 }
 
 //////////////////////////////////////////////////
-double SphericalCoordinates::SurfaceAxisEquatorial()
+double SphericalCoordinates::SurfaceAxisEquatorial() const
 {
   return this->dataPtr->ellA;
 }
 
 //////////////////////////////////////////////////
-double SphericalCoordinates::SurfaceAxisPolar()
+double SphericalCoordinates::SurfaceAxisPolar() const
 {
   return this->dataPtr->ellB;
 }
 
 //////////////////////////////////////////////////
-double SphericalCoordinates::SurfaceFlattening()
+double SphericalCoordinates::SurfaceFlattening() const
 {
   return this->dataPtr->ellF;
 }

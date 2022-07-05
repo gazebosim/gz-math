@@ -199,19 +199,19 @@ namespace gz
 
       /// \brief Get the radius of the surface.
       /// \return radius of the surface in use.
-      public: double SurfaceRadius();
+      public: double SurfaceRadius() const;
 
       /// \brief Get the major axis of the surface.
       /// \return Equatorial axis of the surface in use.
-      public: double SurfaceAxisEquatorial();
+      public: double SurfaceAxisEquatorial() const;
 
       /// \brief Get the minor axis of the surface.
       /// \return Polar axis of the surface in use.
-      public: double SurfaceAxisPolar();
+      public: double SurfaceAxisPolar() const;
 
       /// \brief Get the flattening of the surface.
       /// \return Flattening parameter of the surface in use.
-      public: double SurfaceFlattening();
+      public: double SurfaceFlattening() const;
 
       /// \brief Get reference geodetic latitude.
       /// \return Reference geodetic latitude.
