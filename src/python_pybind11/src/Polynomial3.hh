@@ -23,7 +23,6 @@
 
 #include <pybind11/pybind11.h>
 
-#include <ignition/math/Vector4.hh>
 #include <ignition/math/Polynomial3.hh>
 #include <ignition/math/Vector4.hh>
 
