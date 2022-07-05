@@ -134,7 +134,7 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathVector4(m, "Vector4");
 
   ignition::math::python::defineMathInterval(m, "Interval");
-  
+
   ignition::math::python::defineMathRegion3(m, "Region3");
 
   ignition::math::python::defineMathLine2(m, "Line2");
