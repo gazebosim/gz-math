@@ -41,7 +41,15 @@ namespace gz
               {
                 /// \brief Model of reference ellipsoid for earth, based on
                 /// WGS 84 standard. see wikipedia: World_Geodetic_System
-                EARTH_WGS84 = 1
+                EARTH_WGS84 = 1,
+
+                /// \brief Model of the moon, based on the Selenographic
+                /// coordinate system, see wikipedia: Selenographic
+                /// Coordinate System.
+                MOON_SCS = 2,
+
+                /// \brief Custom surface type
+                CUSTOM_SURFACE = 10
               };
 
       /// \enum CoordinateType
@@ -73,6 +81,16 @@ namespace gz
       /// \param[in] _type SurfaceType specification.
       public: explicit SphericalCoordinates(const SurfaceType _type);
 
+      /// \brief Constructor with surface type input and properties
+      /// input. To be used for CUSTOM_SURFACE.
+      /// \param[in] _type SurfaceType specification.
+      /// \param[in] _axisEquatorial Semi major axis of the surface.
+      /// \param[in] _axisPolar Semi minor axis of the surface.
+      public: SphericalCoordinates(
+            const SurfaceType _type,
+            const double _axisEquatorial,
+            const double _axisPolar);
+
       /// \brief Constructor with surface type, angle, and elevation inputs.
       /// \param[in] _type SurfaceType specification.
       /// \param[in] _latitude Reference latitude.
@@ -84,7 +102,6 @@ namespace gz
                                    const gz::math::Angle &_longitude,
                                    const double _elevation,
                                    const gz::math::Angle &_heading);
-
 
       /// \brief Convert a Cartesian position vector to geodetic coordinates.
       /// This performs a `PositionTransform` from LOCAL to SPHERICAL.
@@ -136,14 +153,65 @@ namespace gz
       /// \param[in] _latB Latitude of point B.
       /// \param[in] _lonB Longitude of point B.
       /// \return Distance in meters.
-      public: static double Distance(const gz::math::Angle &_latA,
+      /// \deprecated Use DistanceWGS84 instead.
+      public: GZ_DEPRECATED(7) static double Distance(
+                                     const gz::math::Angle &_latA,
                                      const gz::math::Angle &_lonA,
                                      const gz::math::Angle &_latB,
                                      const gz::math::Angle &_lonB);
 
+      /// \brief Get the distance between two points expressed in geographic
+      /// latitude and longitude. It assumes that both points are at sea level.
+      /// Example: _latA = 38.0016667 and _lonA = -123.0016667) represents
+      /// the point with latitude 38d 0'6.00"N and longitude 123d 0'6.00"W.
+      /// This method assumes that the surface model is EARTH_WGS84.
+      /// \param[in] _latA Latitude of point A.
+      /// \param[in] _lonA Longitude of point A.
+      /// \param[in] _latB Latitude of point B.
+      /// \param[in] _lonB Longitude of point B.
+      /// \return Distance in meters.
+      public: static double DistanceWGS84(
+                                     const gz::math::Angle &_latA,
+                                     const gz::math::Angle &_lonA,
+                                     const gz::math::Angle &_latB,
+                                     const gz::math::Angle &_lonB);
+
+      /// \brief Get the distance between two points expressed in geographic
+      /// latitude and longitude. It assumes that both points are at sea level.
+      /// Example: _latA = 38.0016667 and _lonA = -123.0016667) represents
+      /// the point with latitude 38d 0'6.00"N and longitude 123d 0'6.00"W.
+      /// This is different from the deprecated static Distance() method as it
+      /// takes into account the set surface's radius.
+      /// \param[in] _latA Latitude of point A.
+      /// \param[in] _lonA Longitude of point A.
+      /// \param[in] _latB Latitude of point B.
+      /// \param[in] _lonB Longitude of point B.
+      /// \return Distance in meters.
+      public: double DistanceBetweenPoints(
+                  const gz::math::Angle &_latA,
+                  const gz::math::Angle &_lonA,
+                  const gz::math::Angle &_latB,
+                  const gz::math::Angle &_lonB);
+
       /// \brief Get SurfaceType currently in use.
       /// \return Current SurfaceType value.
       public: SurfaceType Surface() const;
+
+      /// \brief Get the radius of the surface.
+      /// \return radius of the surface in use.
+      public: double SurfaceRadius();
+
+      /// \brief Get the major axis of the surface.
+      /// \return Equatorial axis of the surface in use.
+      public: double SurfaceAxisEquatorial();
+
+      /// \brief Get the minor axis of the surface.
+      /// \return Polar axis of the surface in use.
+      public: double SurfaceAxisPolar();
+
+      /// \brief Get the flattening of the surface.
+      /// \return Flattening parameter of the surface in use.
+      public: double SurfaceFlattening();
 
       /// \brief Get reference geodetic latitude.
       /// \return Reference geodetic latitude.
@@ -166,6 +234,16 @@ namespace gz
       /// \brief Set SurfaceType for planetary surface model.
       /// \param[in] _type SurfaceType value.
       public: void SetSurface(const SurfaceType &_type);
+
+      /// \brief Set SurfaceType for planetary surface model with
+      /// custom ellipsoid properties.
+      /// \param[in] _type SurfaceType value.
+      /// \param[in] _axisEquatorial Equatorial axis of the surface.
+      /// \param[in] _axisPolar Polar axis of the surface.
+      public: void SetSurface(
+                  const SurfaceType &_type,
+                  const double _axisEquatorial,
+                  const double _axisPolar);
 
       /// \brief Set reference geodetic latitude.
       /// \param[in] _angle Reference geodetic latitude.
