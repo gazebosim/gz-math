@@ -19,6 +19,7 @@
 
 #include <ignition/math/config.hh>
 #include <ignition/math/Helpers.hh>
+#include <ignition/math/Matrix3.hh>
 
 namespace ignition
 {
@@ -32,6 +33,26 @@ namespace ignition
     template<typename T>
     class Matrix6
     {
+      /// \brief Identifiers for each of the 4 3x3 corners of the matrix.
+      public: enum Corner
+      {
+        /// \brief Top-left corner, consisting of the intersection between the
+        /// first 3 rows and first 3 columns.
+        TOP_LEFT = 1,
+
+        /// \brief Top-right corner, consisting of the intersection between the
+        /// first 3 rows and last 3 columns.
+        TOP_RIGHT = 2,
+
+        /// \brief Bottom-left corner, consisting of the intersection between the
+        /// last 3 rows and first 3 columns.
+        BOTTOM_LEFT = 3,
+
+        /// \brief Bottom-right corner, consisting of the intersection between the
+        /// last 3 rows and last 3 columns.
+        BOTTOM_RIGHT = 4
+      };
+
       /// \brief Size of matrix is fixed to 6x6
       public: static constexpr std::size_t MatrixSize{6};
 
@@ -196,18 +217,47 @@ namespace ignition
       public: Matrix6<T> Transposed() const
       {
         return Matrix6<T>(
-        this->data[0][0], this->data[1][0], this->data[2][0], this->data[3][0],
-            this->data[4][0], this->data[5][0],
-        this->data[0][1], this->data[1][1], this->data[2][1], this->data[3][1],
-            this->data[4][1], this->data[5][1],
-        this->data[0][2], this->data[1][2], this->data[2][2], this->data[3][2],
-            this->data[4][2], this->data[5][2],
-        this->data[0][3], this->data[1][3], this->data[2][3], this->data[3][3],
-            this->data[4][3], this->data[5][3],
-        this->data[0][4], this->data[1][4], this->data[2][4], this->data[3][4],
-            this->data[4][4], this->data[5][4],
-        this->data[0][5], this->data[1][5], this->data[2][5], this->data[3][5],
-            this->data[4][5], this->data[5][5]);
+            this->data[0][0],
+            this->data[1][0],
+            this->data[2][0],
+            this->data[3][0],
+            this->data[4][0],
+            this->data[5][0],
+
+            this->data[0][1],
+            this->data[1][1],
+            this->data[2][1],
+            this->data[3][1],
+            this->data[4][1],
+            this->data[5][1],
+
+            this->data[0][2],
+            this->data[1][2],
+            this->data[2][2],
+            this->data[3][2],
+            this->data[4][2],
+            this->data[5][2],
+
+            this->data[0][3],
+            this->data[1][3],
+            this->data[2][3],
+            this->data[3][3],
+            this->data[4][3],
+            this->data[5][3],
+
+            this->data[0][4],
+            this->data[1][4],
+            this->data[2][4],
+            this->data[3][4],
+            this->data[4][4],
+            this->data[5][4],
+
+            this->data[0][5],
+            this->data[1][5],
+            this->data[2][5],
+            this->data[3][5],
+            this->data[4][5],
+            this->data[5][5]);
       }
 
       /// \brief Assignment operator. this = _mat
@@ -497,18 +547,46 @@ namespace ignition
                          clamp(_col, IGN_ZERO_SIZE_T, IGN_FIVE_SIZE_T)];
      }
 
-      /// \brief Get a mutable version the value at the specified row,
-      /// column index
-      /// \param[in] _col The column index. Index values are clamped to a
-      /// range of [0, 3].
-      /// \param[in] _row the row index. Index values are clamped to a
-      /// range of [0, 3].
-      /// \return The value at the specified index
-      public: inline T &operator()(const size_t _row, const size_t _col)
-      {
-        return this->data[clamp(_row, IGN_ZERO_SIZE_T, IGN_FIVE_SIZE_T)]
-                         [clamp(_col, IGN_ZERO_SIZE_T, IGN_FIVE_SIZE_T)];
-      }
+     /// \brief Get a mutable version the value at the specified row,
+     /// column index
+     /// \param[in] _row the row index. Index values are clamped to a
+     /// range of [0, 3].
+     /// \param[in] _col The column index. Index values are clamped to a
+     /// range of [0, 3].
+     /// \return The value at the specified index
+     public: inline T &operator()(const size_t _row, const size_t _col)
+     {
+       return this->data[clamp(_row, IGN_ZERO_SIZE_T, IGN_FIVE_SIZE_T)]
+                        [clamp(_col, IGN_ZERO_SIZE_T, IGN_FIVE_SIZE_T)];
+     }
+
+     /// \brief Get one of the four 3x3 submatrices that compose this matrix.
+     /// These submatrices are formed by dividing the 6x6 matrix in 4 parts and
+     /// do not overlap with each other.
+     /// \param[in] _corner Which corner to retrieve.
+     /// \return A new matrix containing the values of the submatrix.
+     public: Matrix3<T> Submatrix(Corner _corner) const
+     {
+       size_t row = 0;
+       size_t col = 0;
+       if (_corner == BOTTOM_LEFT || _corner == BOTTOM_RIGHT)
+       {
+         row = 3;
+       }
+       if (_corner == TOP_RIGHT || _corner == BOTTOM_RIGHT)
+       {
+         col = 3;
+       }
+       return {this->data[row + 0][col + 0],
+               this->data[row + 0][col + 1],
+               this->data[row + 0][col + 2],
+               this->data[row + 1][col + 0],
+               this->data[row + 1][col + 1],
+               this->data[row + 1][col + 2],
+               this->data[row + 2][col + 0],
+               this->data[row + 2][col + 1],
+               this->data[row + 2][col + 2]};
+     }
 
       /// \brief Equality test with tolerance.
       /// \param[in] _m the matrix to compare to
