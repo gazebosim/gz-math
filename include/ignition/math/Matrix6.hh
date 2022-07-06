@@ -35,23 +35,23 @@ namespace ignition
     class Matrix6
     {
       /// \brief Identifiers for each of the 4 3x3 corners of the matrix.
-      public: enum Corner
+      public: enum Matrix6Corner
       {
         /// \brief Top-left corner, consisting of the intersection between the
         /// first 3 rows and first 3 columns.
-        TOP_LEFT = 1,
+        TOP_LEFT = 0,
 
         /// \brief Top-right corner, consisting of the intersection between the
         /// first 3 rows and last 3 columns.
-        TOP_RIGHT = 2,
+        TOP_RIGHT = 1,
 
         /// \brief Bottom-left corner, consisting of the intersection between
         /// the last 3 rows and first 3 columns.
-        BOTTOM_LEFT = 3,
+        BOTTOM_LEFT = 2,
 
         /// \brief Bottom-right corner, consisting of the intersection between
         /// the last 3 rows and last 3 columns.
-        BOTTOM_RIGHT = 4
+        BOTTOM_RIGHT = 3
       };
 
       /// \brief Size of matrix is fixed to 6x6
@@ -566,7 +566,7 @@ namespace ignition
      /// do not overlap with each other.
      /// \param[in] _corner Which corner to retrieve.
      /// \return A new matrix containing the values of the submatrix.
-     public: Matrix3<T> Submatrix(Corner _corner) const
+     public: Matrix3<T> Submatrix(Matrix6Corner _corner) const
      {
        size_t row = 0;
        size_t col = 0;
