@@ -130,18 +130,38 @@ namespace ignition
       /// \param[in] _v01 Row 0, Col 1 value
       /// \param[in] _v02 Row 0, Col 2 value
       /// \param[in] _v03 Row 0, Col 3 value
+      /// \param[in] _v04 Row 0, Col 4 value
+      /// \param[in] _v05 Row 0, Col 5 value
       /// \param[in] _v10 Row 1, Col 0 value
       /// \param[in] _v11 Row 1, Col 1 value
       /// \param[in] _v12 Row 1, Col 2 value
       /// \param[in] _v13 Row 1, Col 3 value
+      /// \param[in] _v14 Row 1, Col 4 value
+      /// \param[in] _v15 Row 1, Col 5 value
       /// \param[in] _v20 Row 2, Col 0 value
       /// \param[in] _v21 Row 2, Col 1 value
       /// \param[in] _v22 Row 2, Col 2 value
       /// \param[in] _v23 Row 2, Col 3 value
+      /// \param[in] _v24 Row 2, Col 4 value
+      /// \param[in] _v25 Row 2, Col 5 value
       /// \param[in] _v30 Row 3, Col 0 value
       /// \param[in] _v31 Row 3, Col 1 value
       /// \param[in] _v32 Row 3, Col 2 value
       /// \param[in] _v33 Row 3, Col 3 value
+      /// \param[in] _v34 Row 3, Col 4 value
+      /// \param[in] _v35 Row 3, Col 5 value
+      /// \param[in] _v40 Row 4, Col 0 value
+      /// \param[in] _v41 Row 4, Col 1 value
+      /// \param[in] _v42 Row 4, Col 2 value
+      /// \param[in] _v43 Row 4, Col 3 value
+      /// \param[in] _v44 Row 4, Col 4 value
+      /// \param[in] _v45 Row 4, Col 5 value
+      /// \param[in] _v50 Row 5, Col 0 value
+      /// \param[in] _v51 Row 5, Col 1 value
+      /// \param[in] _v52 Row 5, Col 2 value
+      /// \param[in] _v53 Row 5, Col 3 value
+      /// \param[in] _v54 Row 5, Col 4 value
+      /// \param[in] _v55 Row 5, Col 5 value
       public: void Set(
           T _v00, T _v01, T _v02, T _v03, T _v04, T _v05,
           T _v10, T _v11, T _v12, T _v13, T _v14, T _v15,
