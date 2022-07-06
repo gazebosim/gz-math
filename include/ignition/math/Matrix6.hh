@@ -17,6 +17,7 @@
 #ifndef GZ_MATH_MATRIX6_HH_
 #define GZ_MATH_MATRIX6_HH_
 
+#include <utility>
 #include <ignition/math/config.hh>
 #include <ignition/math/Helpers.hh>
 #include <ignition/math/Matrix3.hh>
@@ -44,12 +45,12 @@ namespace ignition
         /// first 3 rows and last 3 columns.
         TOP_RIGHT = 2,
 
-        /// \brief Bottom-left corner, consisting of the intersection between the
-        /// last 3 rows and first 3 columns.
+        /// \brief Bottom-left corner, consisting of the intersection between
+        /// the last 3 rows and first 3 columns.
         BOTTOM_LEFT = 3,
 
-        /// \brief Bottom-right corner, consisting of the intersection between the
-        /// last 3 rows and last 3 columns.
+        /// \brief Bottom-right corner, consisting of the intersection between
+        /// the last 3 rows and last 3 columns.
         BOTTOM_RIGHT = 4
       };
 
