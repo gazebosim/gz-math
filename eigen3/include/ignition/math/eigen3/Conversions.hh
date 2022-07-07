@@ -67,12 +67,14 @@ namespace ignition
         return matrix;
       }
 
-      /// \brief Convert from ignition::math::Matrix6d to Eigen::Matrix<Precision, 6, 6>.
+      /// \brief Convert from ignition::math::Matrix6d to
+      /// Eigen::Matrix<Precision, 6, 6>.
       /// \param[in] _m ignition::math::Matrix6d to convert.
       /// \return The equivalent Eigen::Matrix<Precision, 6, 6>.
       /// \tparam Precision Precision such as int, double or float.
       template<typename Precision>
-      inline Eigen::Matrix<Precision, 6, 6> convert(const Matrix6<Precision> &_m)
+      inline
+      Eigen::Matrix<Precision, 6, 6> convert(const Matrix6<Precision> &_m)
       {
         Eigen::Matrix<Precision, 6, 6> matrix;
         for (std::size_t i = 0; i < 6; ++i)
@@ -155,12 +157,14 @@ namespace ignition
         return matrix;
       }
 
-      /// \brief Convert Eigen::Matrix<Precision, 6, 6> to ignition::math::Matrix6d.
+      /// \brief Convert Eigen::Matrix<Precision, 6, 6> to
+      /// ignition::math::Matrix6d.
       /// \param[in] _m Eigen::Matrix<Precision, 6, 6> to convert.
       /// \return The equivalent ignition::math::Matrix6d.
       /// \tparam Precision Precision such as int, double or float.
       template<typename Precision>
-      inline Matrix6<Precision> convert(const Eigen::Matrix<Precision, 6, 6> &_m)
+      inline
+      Matrix6<Precision> convert(const Eigen::Matrix<Precision, 6, 6> &_m)
       {
         Matrix6<Precision> matrix;
         for (std::size_t i = 0; i < 6; ++i)
