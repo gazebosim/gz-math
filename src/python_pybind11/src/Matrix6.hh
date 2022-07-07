@@ -82,6 +82,9 @@ void helpDefineMathMatrix6(py::module &_m, const std::string &_typestr)
     .def("submatrix",
          &Class::Submatrix,
          "One of the four 3x3 submatrices that compose this matrix.")
+    .def("set_submatrix",
+         &Class::SetSubmatrix,
+         "Set one of the four 3x3 submatrices that compose this matrix.")
     .def("__copy__", [](const Class &_self) {
       return Class(_self);
     })

@@ -289,7 +289,7 @@ namespace ignition
       /// \brief Multiplication assignment operator. This matrix will
       /// become equal to this * _m2.
       /// \param[in] _m2 Incoming matrix.
-      /// \return This matrix * _mat.
+      /// \return This matrix * _m2.
       public: Matrix6<T> operator*=(const Matrix6<T> &_m2)
       {
         (*this) = (*this) * _m2;
@@ -298,268 +298,30 @@ namespace ignition
 
       /// \brief Multiplication operator
       /// \param[in] _m2 Incoming matrix
-      /// \return This matrix * _mat
+      /// \return This matrix * _m2
       public: Matrix6<T> operator*(const Matrix6<T> &_m2) const
       {
+        auto el = [&](size_t _row, size_t _col) -> T
+        {
+          T result = static_cast<T>(0);
+          for (size_t i = 0; i < MatrixSize; ++i)
+            result += this->data[_row][i] * _m2(i, _col);
+          return result;
+        };
         return Matrix6<T>(
-          this->data[0][0] * _m2(0, 0) +
-          this->data[0][1] * _m2(1, 0) +
-          this->data[0][2] * _m2(2, 0) +
-          this->data[0][3] * _m2(3, 0) +
-          this->data[0][4] * _m2(4, 0) +
-          this->data[0][5] * _m2(5, 0),
-
-          this->data[0][0] * _m2(0, 1) +
-          this->data[0][1] * _m2(1, 1) +
-          this->data[0][2] * _m2(2, 1) +
-          this->data[0][3] * _m2(3, 1) +
-          this->data[0][4] * _m2(4, 1) +
-          this->data[0][5] * _m2(5, 1),
-
-          this->data[0][0] * _m2(0, 2) +
-          this->data[0][1] * _m2(1, 2) +
-          this->data[0][2] * _m2(2, 2) +
-          this->data[0][3] * _m2(3, 2) +
-          this->data[0][4] * _m2(4, 2) +
-          this->data[0][5] * _m2(5, 2),
-
-          this->data[0][0] * _m2(0, 3) +
-          this->data[0][1] * _m2(1, 3) +
-          this->data[0][2] * _m2(2, 3) +
-          this->data[0][3] * _m2(3, 3) +
-          this->data[0][4] * _m2(4, 3) +
-          this->data[0][5] * _m2(5, 3),
-
-          this->data[0][0] * _m2(0, 4) +
-          this->data[0][1] * _m2(1, 4) +
-          this->data[0][2] * _m2(2, 4) +
-          this->data[0][3] * _m2(3, 4) +
-          this->data[0][4] * _m2(4, 4) +
-          this->data[0][5] * _m2(5, 4),
-
-          this->data[0][0] * _m2(0, 5) +
-          this->data[0][1] * _m2(1, 5) +
-          this->data[0][2] * _m2(2, 5) +
-          this->data[0][3] * _m2(3, 5) +
-          this->data[0][4] * _m2(4, 5) +
-          this->data[0][5] * _m2(5, 5),
-
-          this->data[1][0] * _m2(0, 0) +
-          this->data[1][1] * _m2(1, 0) +
-          this->data[1][2] * _m2(2, 0) +
-          this->data[1][3] * _m2(3, 0) +
-          this->data[1][4] * _m2(4, 0) +
-          this->data[1][5] * _m2(5, 0),
-
-          this->data[1][0] * _m2(0, 1) +
-          this->data[1][1] * _m2(1, 1) +
-          this->data[1][2] * _m2(2, 1) +
-          this->data[1][3] * _m2(3, 1) +
-          this->data[1][4] * _m2(4, 1) +
-          this->data[1][5] * _m2(5, 1),
-
-          this->data[1][0] * _m2(0, 2) +
-          this->data[1][1] * _m2(1, 2) +
-          this->data[1][2] * _m2(2, 2) +
-          this->data[1][3] * _m2(3, 2) +
-          this->data[1][4] * _m2(4, 2) +
-          this->data[1][5] * _m2(5, 2),
-
-          this->data[1][0] * _m2(0, 3) +
-          this->data[1][1] * _m2(1, 3) +
-          this->data[1][2] * _m2(2, 3) +
-          this->data[1][3] * _m2(3, 3) +
-          this->data[1][4] * _m2(4, 3) +
-          this->data[1][5] * _m2(5, 3),
-
-          this->data[1][0] * _m2(0, 4) +
-          this->data[1][1] * _m2(1, 4) +
-          this->data[1][2] * _m2(2, 4) +
-          this->data[1][3] * _m2(3, 4) +
-          this->data[1][4] * _m2(4, 4) +
-          this->data[1][5] * _m2(5, 4),
-
-          this->data[1][0] * _m2(0, 5) +
-          this->data[1][1] * _m2(1, 5) +
-          this->data[1][2] * _m2(2, 5) +
-          this->data[1][3] * _m2(3, 5) +
-          this->data[1][4] * _m2(4, 5) +
-          this->data[1][5] * _m2(5, 5),
-
-          this->data[2][0] * _m2(0, 0) +
-          this->data[2][1] * _m2(1, 0) +
-          this->data[2][2] * _m2(2, 0) +
-          this->data[2][3] * _m2(3, 0) +
-          this->data[2][4] * _m2(4, 0) +
-          this->data[2][5] * _m2(5, 0),
-
-          this->data[2][0] * _m2(0, 1) +
-          this->data[2][1] * _m2(1, 1) +
-          this->data[2][2] * _m2(2, 1) +
-          this->data[2][3] * _m2(3, 1) +
-          this->data[2][4] * _m2(4, 1) +
-          this->data[2][5] * _m2(5, 1),
-
-          this->data[2][0] * _m2(0, 2) +
-          this->data[2][1] * _m2(1, 2) +
-          this->data[2][2] * _m2(2, 2) +
-          this->data[2][3] * _m2(3, 2) +
-          this->data[2][4] * _m2(4, 2) +
-          this->data[2][5] * _m2(5, 2),
-
-          this->data[2][0] * _m2(0, 3) +
-          this->data[2][1] * _m2(1, 3) +
-          this->data[2][2] * _m2(2, 3) +
-          this->data[2][3] * _m2(3, 3) +
-          this->data[2][4] * _m2(4, 3) +
-          this->data[2][5] * _m2(5, 3),
-
-          this->data[2][0] * _m2(0, 4) +
-          this->data[2][1] * _m2(1, 4) +
-          this->data[2][2] * _m2(2, 4) +
-          this->data[2][3] * _m2(3, 4) +
-          this->data[2][4] * _m2(4, 4) +
-          this->data[2][5] * _m2(5, 4),
-
-          this->data[2][0] * _m2(0, 5) +
-          this->data[2][1] * _m2(1, 5) +
-          this->data[2][2] * _m2(2, 5) +
-          this->data[2][3] * _m2(3, 5) +
-          this->data[2][4] * _m2(4, 5) +
-          this->data[2][5] * _m2(5, 5),
-
-          this->data[3][0] * _m2(0, 0) +
-          this->data[3][1] * _m2(1, 0) +
-          this->data[3][2] * _m2(2, 0) +
-          this->data[3][3] * _m2(3, 0) +
-          this->data[3][4] * _m2(4, 0) +
-          this->data[3][5] * _m2(5, 0),
-
-          this->data[3][0] * _m2(0, 1) +
-          this->data[3][1] * _m2(1, 1) +
-          this->data[3][2] * _m2(2, 1) +
-          this->data[3][3] * _m2(3, 1) +
-          this->data[3][4] * _m2(4, 1) +
-          this->data[3][5] * _m2(5, 1),
-
-          this->data[3][0] * _m2(0, 2) +
-          this->data[3][1] * _m2(1, 2) +
-          this->data[3][2] * _m2(2, 2) +
-          this->data[3][3] * _m2(3, 2) +
-          this->data[3][4] * _m2(4, 2) +
-          this->data[3][5] * _m2(5, 2),
-
-          this->data[3][0] * _m2(0, 3) +
-          this->data[3][1] * _m2(1, 3) +
-          this->data[3][2] * _m2(2, 3) +
-          this->data[3][3] * _m2(3, 3) +
-          this->data[3][4] * _m2(4, 3) +
-          this->data[3][5] * _m2(5, 3),
-
-          this->data[3][0] * _m2(0, 4) +
-          this->data[3][1] * _m2(1, 4) +
-          this->data[3][2] * _m2(2, 4) +
-          this->data[3][3] * _m2(3, 4) +
-          this->data[3][4] * _m2(4, 4) +
-          this->data[3][5] * _m2(5, 4),
-
-          this->data[3][0] * _m2(0, 5) +
-          this->data[3][1] * _m2(1, 5) +
-          this->data[3][2] * _m2(2, 5) +
-          this->data[3][3] * _m2(3, 5) +
-          this->data[3][4] * _m2(4, 5) +
-          this->data[3][5] * _m2(5, 5),
-
-          this->data[4][0] * _m2(0, 0) +
-          this->data[4][1] * _m2(1, 0) +
-          this->data[4][2] * _m2(2, 0) +
-          this->data[4][3] * _m2(3, 0) +
-          this->data[4][4] * _m2(4, 0) +
-          this->data[4][5] * _m2(5, 0),
-
-          this->data[4][0] * _m2(0, 1) +
-          this->data[4][1] * _m2(1, 1) +
-          this->data[4][2] * _m2(2, 1) +
-          this->data[4][3] * _m2(3, 1) +
-          this->data[4][4] * _m2(4, 1) +
-          this->data[4][5] * _m2(5, 1),
-
-          this->data[4][0] * _m2(0, 2) +
-          this->data[4][1] * _m2(1, 2) +
-          this->data[4][2] * _m2(2, 2) +
-          this->data[4][3] * _m2(3, 2) +
-          this->data[4][4] * _m2(4, 2) +
-          this->data[4][5] * _m2(5, 2),
-
-          this->data[4][0] * _m2(0, 3) +
-          this->data[4][1] * _m2(1, 3) +
-          this->data[4][2] * _m2(2, 3) +
-          this->data[4][3] * _m2(3, 3) +
-          this->data[4][4] * _m2(4, 3) +
-          this->data[4][5] * _m2(5, 3),
-
-          this->data[4][0] * _m2(0, 4) +
-          this->data[4][1] * _m2(1, 4) +
-          this->data[4][2] * _m2(2, 4) +
-          this->data[4][3] * _m2(3, 4) +
-          this->data[4][4] * _m2(4, 4) +
-          this->data[4][5] * _m2(5, 4),
-
-          this->data[4][0] * _m2(0, 5) +
-          this->data[4][1] * _m2(1, 5) +
-          this->data[4][2] * _m2(2, 5) +
-          this->data[4][3] * _m2(3, 5) +
-          this->data[4][4] * _m2(4, 5) +
-          this->data[4][5] * _m2(5, 5),
-
-          this->data[5][0] * _m2(0, 0) +
-          this->data[5][1] * _m2(1, 0) +
-          this->data[5][2] * _m2(2, 0) +
-          this->data[5][3] * _m2(3, 0) +
-          this->data[5][4] * _m2(4, 0) +
-          this->data[5][5] * _m2(5, 0),
-
-          this->data[5][0] * _m2(0, 1) +
-          this->data[5][1] * _m2(1, 1) +
-          this->data[5][2] * _m2(2, 1) +
-          this->data[5][3] * _m2(3, 1) +
-          this->data[5][4] * _m2(4, 1) +
-          this->data[5][5] * _m2(5, 1),
-
-          this->data[5][0] * _m2(0, 2) +
-          this->data[5][1] * _m2(1, 2) +
-          this->data[5][2] * _m2(2, 2) +
-          this->data[5][3] * _m2(3, 2) +
-          this->data[5][4] * _m2(4, 2) +
-          this->data[5][5] * _m2(5, 2),
-
-          this->data[5][0] * _m2(0, 3) +
-          this->data[5][1] * _m2(1, 3) +
-          this->data[5][2] * _m2(2, 3) +
-          this->data[5][3] * _m2(3, 3) +
-          this->data[5][4] * _m2(4, 3) +
-          this->data[5][5] * _m2(5, 3),
-
-          this->data[5][0] * _m2(0, 4) +
-          this->data[5][1] * _m2(1, 4) +
-          this->data[5][2] * _m2(2, 4) +
-          this->data[5][3] * _m2(3, 4) +
-          this->data[5][4] * _m2(4, 4) +
-          this->data[5][5] * _m2(5, 4),
-
-          this->data[5][0] * _m2(0, 5) +
-          this->data[5][1] * _m2(1, 5) +
-          this->data[5][2] * _m2(2, 5) +
-          this->data[5][3] * _m2(3, 5) +
-          this->data[5][4] * _m2(4, 5) +
-          this->data[5][5] * _m2(5, 5));
+            el(0, 0), el(0, 1), el(0, 2), el(0, 3), el(0, 4), el(0, 5),
+            el(1, 0), el(1, 1), el(1, 2), el(1, 3), el(1, 4), el(1, 5),
+            el(2, 0), el(2, 1), el(2, 2), el(2, 3), el(2, 4), el(2, 5),
+            el(3, 0), el(3, 1), el(3, 2), el(3, 3), el(3, 4), el(3, 5),
+            el(4, 0), el(4, 1), el(4, 2), el(4, 3), el(4, 4), el(4, 5),
+            el(5, 0), el(5, 1), el(5, 2), el(5, 3), el(5, 4), el(5, 5));
       }
 
      /// \brief Get the value at the specified row, column index
      /// \param[in] _col The column index. Index values are clamped to a
-     /// range of [0, 3].
+     /// range of [0, 5].
      /// \param[in] _row the row index. Index values are clamped to a
-     /// range of [0, 3].
+     /// range of [0, 5].
      /// \return The value at the specified index
      public: inline const T &operator()(const size_t _row,
                  const size_t _col) const
@@ -568,12 +330,12 @@ namespace ignition
                          clamp(_col, IGN_ZERO_SIZE_T, IGN_FIVE_SIZE_T)];
      }
 
-     /// \brief Get a mutable version the value at the specified row,
+     /// \brief Get a mutable version of the value at the specified row,
      /// column index
      /// \param[in] _row the row index. Index values are clamped to a
-     /// range of [0, 3].
+     /// range of [0, 5].
      /// \param[in] _col The column index. Index values are clamped to a
-     /// range of [0, 3].
+     /// range of [0, 5].
      /// \return The value at the specified index
      public: inline T &operator()(const size_t _row, const size_t _col)
      {
@@ -582,7 +344,7 @@ namespace ignition
      }
 
      /// \brief Get one of the four 3x3 submatrices that compose this matrix.
-     /// These submatrices are formed by dividing the 6x6 matrix in 4 parts and
+     /// These submatrices are formed by dividing the 6x6 matrix in 4 parts that
      /// do not overlap with each other.
      /// \param[in] _corner Which corner to retrieve.
      /// \return A new matrix containing the values of the submatrix.
@@ -607,6 +369,32 @@ namespace ignition
                this->data[row + 2][col + 0],
                this->data[row + 2][col + 1],
                this->data[row + 2][col + 2]};
+     }
+
+     /// \brief Set one of the four 3x3 submatrices that compose this matrix.
+     /// These submatrices are formed by dividing the 6x6 matrix in 4 parts that
+     /// do not overlap with each other.
+     /// \param[in] _corner Which corner to set.
+     /// \param[in] The matrix to set.
+     public: void SetSubmatrix(Matrix6Corner _corner, const Matrix3<T> &_mat)
+     {
+       size_t row = 0;
+       size_t col = 0;
+       if (_corner == BOTTOM_LEFT || _corner == BOTTOM_RIGHT)
+       {
+         row = 3;
+       }
+       if (_corner == TOP_RIGHT || _corner == BOTTOM_RIGHT)
+       {
+         col = 3;
+       }
+       for (size_t r = 0; r < 3; ++r)
+       {
+         for (size_t c = 0; c < 3; ++c)
+         {
+           this->data[row + r][col + c] = _mat(r, c);
+         }
+       }
      }
 
       /// \brief Equality test with tolerance.
@@ -655,7 +443,7 @@ namespace ignition
       }
 
       /// \brief Equality operator
-      /// \param[in] _m Matrix3 to test
+      /// \param[in] _m Matrix6 to test
       /// \return true if the 2 matrices are equal (using the tolerance 1e-6),
       ///  false otherwise
       public: bool operator==(const Matrix6<T> &_m) const

@@ -307,3 +307,37 @@ TEST(Matrix6dTest, Submatrix)
       33, 34, 35));
 }
 
+/////////////////////////////////////////////////
+TEST(Matrix6dTest, SetSubmatrix)
+{
+  Matrix6i mat;
+
+  mat.SetSubmatrix(Matrix6i::TOP_LEFT, Matrix3i(
+      0, 1, 2,
+      6, 7, 8,
+      12, 13, 14));
+
+  mat.SetSubmatrix(Matrix6i::TOP_RIGHT, Matrix3i(
+      3, 4, 5,
+      9, 10, 11,
+      15, 16, 17));
+
+  mat.SetSubmatrix(Matrix6i::BOTTOM_LEFT, Matrix3i(
+      18, 19, 20,
+      24, 25, 26,
+      30, 31, 32));
+
+  mat.SetSubmatrix(Matrix6i::BOTTOM_RIGHT, Matrix3i(
+      21, 22, 23,
+      27, 28, 29,
+      33, 34, 35));
+
+  EXPECT_EQ(mat, Matrix6i(
+      0, 1, 2, 3, 4, 5,
+      6, 7, 8, 9, 10, 11,
+      12, 13, 14, 15, 16, 17,
+      18, 19, 20, 21, 22, 23,
+      24, 25, 26, 27, 28, 29,
+      30, 31, 32, 33, 34, 35));
+}
+

@@ -199,5 +199,36 @@ class TestMatrix6(unittest.TestCase):
             27, 28, 29,
             33, 34, 35));
 
+    def test_set_submatrix(self):
+        mat = Matrix6d()
+
+        mat.set_submatrix(Matrix6dCorner.TOP_LEFT, Matrix3d(
+            0, 1, 2,
+            6, 7, 8,
+            12, 13, 14));
+
+        mat.set_submatrix(Matrix6dCorner.TOP_RIGHT, Matrix3d(
+            3, 4, 5,
+            9, 10, 11,
+            15, 16, 17));
+
+        mat.set_submatrix(Matrix6dCorner.BOTTOM_LEFT, Matrix3d(
+            18, 19, 20,
+            24, 25, 26,
+            30, 31, 32));
+
+        mat.set_submatrix(Matrix6dCorner.BOTTOM_RIGHT, Matrix3d(
+            21, 22, 23,
+            27, 28, 29,
+            33, 34, 35));
+
+        self.assertAlmostEqual(mat, Matrix6d(
+            0, 1, 2, 3, 4, 5,
+            6, 7, 8, 9, 10, 11,
+            12, 13, 14, 15, 16, 17,
+            18, 19, 20, 21, 22, 23,
+            24, 25, 26, 27, 28, 29,
+            30, 31, 32, 33, 34, 35));
+
 if __name__ == '__main__':
     unittest.main()
