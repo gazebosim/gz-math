@@ -375,7 +375,7 @@ namespace ignition
      /// These submatrices are formed by dividing the 6x6 matrix in 4 parts that
      /// do not overlap with each other.
      /// \param[in] _corner Which corner to set.
-     /// \param[in] The matrix to set.
+     /// \param[in] _mat The matrix to set.
      public: void SetSubmatrix(Matrix6Corner _corner, const Matrix3<T> &_mat)
      {
        size_t row = 0;
