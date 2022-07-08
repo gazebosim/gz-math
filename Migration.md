@@ -11,12 +11,22 @@ release will remove the deprecated code.
 
   1. Removed the Quaternion integer template `Quaternioni`.
 
+  1. The project name has been changed to use the `gz-` prefix, you **must** use the `gz` prefix!
+    * This also means that any generated code that use the project name (e.g. CMake variables, in-source macros) would have to be migrated.
+    * Some non-exhaustive examples of this include:
+      * `GZ_<PROJECT>_<VISIBLE/HIDDEN>`
+      * CMake `-config` files
+      * Paths that depend on the project name
 
 ### Deprecations
 
 1. **Angle.hh**
     + All mutator functions that lacked a `Set` prefix have been deprecated
     and replaced by version with a `Set` prefix.
+
+1. **SphericalCoordinates.hh**
+    + ***Deprecation:*** public: static double Distance(const Angle&, const Angle&, const Angle&, const Angle&)
+    + ***Replacement:*** public: static double DistanceWGS84(const Angle&, const Angle&, const Angle&, const Angle&)
 
 1. **Matrix3.hh**
     + ***Deprecation:*** public: void Axes(const Vector3<T> &, const Vector3<T> &, const Vector3<T> &)
@@ -149,9 +159,9 @@ release will remove the deprecated code.
 
 ### Added dependencies
 
-1. **ignition-cmake**
-    + Ignition-math now has a build dependency on ignition-cmake, which
-      allows cmake scripts to be shared across all the ignition packages.
+1. **gz-cmake**
+    + gz-math now has a build dependency on gz-cmake, which
+      allows cmake scripts to be shared across all the Gazebo packages.
 
 ### Modifications
 
