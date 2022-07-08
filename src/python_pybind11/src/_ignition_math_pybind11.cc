@@ -35,6 +35,7 @@
 #include "Material.hh"
 #include "Matrix3.hh"
 #include "Matrix4.hh"
+#include "Matrix6.hh"
 #include "MovingWindowFilter.hh"
 #include "OrientedBox.hh"
 #include "PID.hh"
@@ -141,6 +142,8 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathMatrix3(m, "Matrix3");
 
   ignition::math::python::defineMathMatrix4(m, "Matrix4");
+
+  ignition::math::python::defineMathMatrix6(m, "Matrix6");
 
   ignition::math::python::defineMathTriangle(m, "Triangle");
 

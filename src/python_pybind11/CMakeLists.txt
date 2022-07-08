@@ -27,6 +27,7 @@ pybind11_add_module(math SHARED
   src/Material.cc
   src/Matrix3.cc
   src/Matrix4.cc
+  src/Matrix6.cc
   src/MovingWindowFilter.cc
   src/PID.cc
   src/Pose3.cc
