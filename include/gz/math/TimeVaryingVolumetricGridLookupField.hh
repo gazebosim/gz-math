@@ -19,8 +19,11 @@
 #define GZ_MATH_TIME_VARYING_VOLUMETRIC_GRID_LOOKUP_FIELD_HH_
 #include <gz/math/VolumetricGridLookupField.hh>
 #include <gz/math/detail/InterpolationPoint.hh>
+
 #include <map>
 #include <optional>
+#include <utility>
+#include <vector>
 
 namespace gz
 {
@@ -58,7 +61,8 @@ namespace gz
       public: template<typename X>
       X EstimateQuadrilinear(
         const S &_session,
-        const std::pair<InterpolationPoint4D<T, V>, InterpolationPoint4D<T, V>> &_points,
+        const std::pair<InterpolationPoint4D<T, V>,
+          InterpolationPoint4D<T, V>> &_points,
         const std::vector<X>& values1,
         const std::vector<X>& values2
       )
@@ -90,7 +94,7 @@ namespace gz
       }
 
       public: InMemorySession<T, V> CreateSession() {
-        InMemorySession<T,V> sess;
+        InMemorySession<T, V> sess;
         sess.iter = this->gridFields.begin();
         return sess;
       }
@@ -157,7 +161,8 @@ namespace gz
       public: template<typename X>
       X EstimateQuadrilinear(
         const InMemorySession<T, V> &_session,
-        const std::pair<InterpolationPoint4D<T, V>, InterpolationPoint4D<T, V>> &_interpolators,
+        const std::pair<InterpolationPoint4D<T, V>,
+          InterpolationPoint4D<T, V>> &_interpolators,
         const std::vector<X> &_values1,
         const std::vector<X> &_values2,
         const Vector3<X> &_position,
