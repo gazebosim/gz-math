@@ -15,12 +15,12 @@
 # This example will only work if the Ruby interface library was compiled and
 # installed.
 #
-# Modify the RUBYLIB environment variable to include the ignition math
+# Modify the RUBYLIB environment variable to include the Gazebo math
 # library install path. For example, if you install to /user:
 #
 # $ export RUBYLIB=/usr/lib/ruby:$RUBYLIB
 #
-require 'ignition/math'
+require 'gz/math'
 
 v1 = Gz::Math::Vector3d.new(0, 0, 0)
 printf("v =: %f %f %f\n", v1.X(), v1.Y(), v1.Z())

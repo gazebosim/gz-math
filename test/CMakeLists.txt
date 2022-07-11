@@ -6,7 +6,7 @@ include_directories (
 )
 
 #============================================================================
-# Do a fake install of ign-math in order to test the examples.
+# Do a fake install of gz-math in order to test the examples.
 #============================================================================
 # install to FAKE_INSTALL_PREFIX defined in root CMakeLists.txt
 

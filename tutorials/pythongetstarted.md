@@ -25,12 +25,12 @@ if __name__ == "__main__":
   main()
 ```
 
-The easiest way to include Gazebo Math is through `import ignition.math`.
+The easiest way to include Gazebo Math is through `import gz.math`.
 
 At this point your main file should look like
 
 ```python
-import ignition.math
+import gz.math
 
 def main():
   pass
@@ -40,13 +40,13 @@ if __name__ == "__main__":
 ```
 
 Now let's create two 3D points with arbitrary values. We will use the
-`ignition.math.Vector3` class to represent these points. Gazebo Math provides
+`gz.math.Vector3` class to represent these points. Gazebo Math provides
 some `Vector3` types which are: `Vector3d` (Vector3 using doubles), `Vector3f` (Vector3 using floats)
 and `Vector3i` (Vector3 using integers). The result of this addition will be a
 main file similar to the following.
 
 ```python
-from ignition.math import Vector3d
+from gz.math import Vector3d
 
 def main():
   point1 = Vector3d(1, 3, 5)
@@ -57,10 +57,10 @@ if __name__ == "__main__":
 ```
 
 Finally, we can compute the distance between `point1` and `point2` using the
-`ignition.math.Vector3.distance()` function and output the distance value.
+`gz.math.Vector3.distance()` function and output the distance value.
 
 ```python
-from ignition.math import Vector3d
+from gz.math import Vector3d
 
 def main():
   point1 = Vector3d(1, 3, 5)

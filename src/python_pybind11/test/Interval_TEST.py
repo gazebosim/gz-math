@@ -14,7 +14,7 @@
 
 import math
 import unittest
-from ignition.math import Intervald
+from gz.math import Intervald
 
 
 class TestInterval(unittest.TestCase):

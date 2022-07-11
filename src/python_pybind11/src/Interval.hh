@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__INTERVAL_HH_
-#define IGNITION_MATH_PYTHON__INTERVAL_HH_
+#ifndef GZ_MATH_PYTHON__INTERVAL_HH_
+#define GZ_MATH_PYTHON__INTERVAL_HH_
 
 #include <string>
 #include <sstream>
@@ -115,4 +115,4 @@ void defineMathInterval(py::module &m, const std::string &typestr);
 }  // namespace math
 }  // namespace gz
 
-#endif  // IGNITION_MATH_PYTHON__INTERVAL_HH_
+#endif  // GZ_MATH_PYTHON__INTERVAL_HH_

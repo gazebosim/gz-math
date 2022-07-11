@@ -13,9 +13,9 @@
 # limitations under the License.
 
 import unittest
-from ignition.math import Quaterniond
-from ignition.math import RotationSpline
-from ignition.math import Vector3d
+from gz.math import Quaterniond
+from gz.math import RotationSpline
+from gz.math import Vector3d
 
 
 class TestRotationSpline(unittest.TestCase):

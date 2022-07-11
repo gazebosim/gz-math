@@ -59,9 +59,9 @@ Please refer to the [examples directory](https://github.com/gazebosim/gz-math/ra
 Refer to the following table for information about important directories and files in this repository.
 
 ```
-ign-math
+gz-math
 ├── examples                 Example programs.
-├── include/ignition/math    Header files.
+├── include/gz/math    Header files.
 ├── src                      Source files and unit tests.
 │   └── graph                Source files for the graph classes.
 │   └── python               SWIG Python interfaces.
