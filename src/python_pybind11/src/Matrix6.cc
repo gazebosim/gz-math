@@ -19,7 +19,7 @@
 
 #include "Matrix6.hh"
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -54,4 +54,4 @@ void defineMathMatrix6(py::module &_m, const std::string &_typestr)
 
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz

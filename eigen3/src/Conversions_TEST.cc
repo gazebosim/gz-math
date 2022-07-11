@@ -149,8 +149,8 @@ TEST(EigenConversions, ConvertMatrix3)
 TEST(EigenConversions, ConvertMatrix6)
 {
   {
-    ignition::math::Matrix6d iMat, iMat2;
-    auto eMat = ignition::math::eigen3::convert(iMat);
+    gz::math::Matrix6d iMat, iMat2;
+    auto eMat = gz::math::eigen3::convert(iMat);
     for (std::size_t i = 0; i < 6; ++i)
     {
       for (std::size_t j = 0; j < 6; ++j)
@@ -158,20 +158,20 @@ TEST(EigenConversions, ConvertMatrix6)
         EXPECT_DOUBLE_EQ(0.0, eMat(i, j));
       }
     }
-    iMat2 = ignition::math::eigen3::convert(eMat);
+    iMat2 = gz::math::eigen3::convert(eMat);
     EXPECT_EQ(iMat, iMat2);
   }
 
   {
-    ignition::math::Matrix6d iMat(
+    gz::math::Matrix6d iMat(
         0.0, 1.0, 2.0, 3.0, 4.0, 5.0,
         6.0, 7.0, 8.0, 9.0, 10.0, 11.0,
         12.0, 13.0, 14.0, 15.0, 16.0, 17.0,
         18.0, 19.0, 20.0, 21.0, 22.0, 23.0,
         24.0, 25.0, 26.0, 27.0, 28.0, 29.0,
         30.0, 31.0, 32.0, 33.0, 34.0, 35.0);
-    ignition::math::Matrix6d iMat2;
-    auto eMat = ignition::math::eigen3::convert(iMat);
+    gz::math::Matrix6d iMat2;
+    auto eMat = gz::math::eigen3::convert(iMat);
     for (std::size_t i = 0; i < 6; ++i)
     {
       for (std::size_t j = 0; j < 6; ++j)
@@ -179,7 +179,7 @@ TEST(EigenConversions, ConvertMatrix6)
         EXPECT_DOUBLE_EQ(iMat(i, j), eMat(i, j));
       }
     }
-    iMat2 = ignition::math::eigen3::convert(eMat);
+    iMat2 = gz::math::eigen3::convert(eMat);
     EXPECT_EQ(iMat, iMat2);
   }
 }

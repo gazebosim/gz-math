@@ -18,17 +18,18 @@
 #ifndef GZ_MATH_PYTHON__MATRIX6_HH_
 #define GZ_MATH_PYTHON__MATRIX6_HH_
 
+#include <sstream>
 #include <string>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 
-#include <ignition/math/Matrix6.hh>
+#include <gz/math/Matrix6.hh>
 
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -98,6 +99,6 @@ void helpDefineMathMatrix6(py::module &_m, const std::string &_typestr)
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
 #endif  // GZ_MATH_PYTHON__MATRIX6_HH_
