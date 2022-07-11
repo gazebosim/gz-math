@@ -27,6 +27,7 @@
 #include "GaussMarkovProcess.hh"
 #include "Helpers.hh"
 #include "Inertial.hh"
+#include "Interval.hh"
 #include "Kmeans.hh"
 #include "Line2.hh"
 #include "Line3.hh"
@@ -131,6 +132,8 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathBox<float>(m, "Boxf");
 
   ignition::math::python::defineMathVector4(m, "Vector4");
+
+  ignition::math::python::defineMathInterval(m, "Interval");
 
   ignition::math::python::defineMathLine2(m, "Line2");
 
