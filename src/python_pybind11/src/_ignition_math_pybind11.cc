@@ -27,6 +27,7 @@
 #include "GaussMarkovProcess.hh"
 #include "Helpers.hh"
 #include "Inertial.hh"
+#include "Interval.hh"
 #include "Kmeans.hh"
 #include "Line2.hh"
 #include "Line3.hh"
@@ -34,6 +35,7 @@
 #include "Material.hh"
 #include "Matrix3.hh"
 #include "Matrix4.hh"
+#include "Matrix6.hh"
 #include "MovingWindowFilter.hh"
 #include "OrientedBox.hh"
 #include "PID.hh"
@@ -131,6 +133,8 @@ PYBIND11_MODULE(math, m)
 
   gz::math::python::defineMathVector4(m, "Vector4");
 
+  gz::math::python::defineMathInterval(m, "Interval");
+
   gz::math::python::defineMathLine2(m, "Line2");
 
   gz::math::python::defineMathLine3(m, "Line3");
@@ -138,6 +142,8 @@ PYBIND11_MODULE(math, m)
   gz::math::python::defineMathMatrix3(m, "Matrix3");
 
   gz::math::python::defineMathMatrix4(m, "Matrix4");
+
+  gz::math::python::defineMathMatrix6(m, "Matrix6");
 
   gz::math::python::defineMathTriangle(m, "Triangle");
 
