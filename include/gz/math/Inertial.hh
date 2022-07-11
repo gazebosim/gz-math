@@ -19,6 +19,8 @@
 
 #include <gz/math/config.hh>
 #include "gz/math/MassMatrix3.hh"
+#include "gz/math/Matrix3.hh"
+#include "gz/math/Matrix6.hh"
 #include "gz/math/Pose3.hh"
 
 namespace gz
@@ -60,6 +62,23 @@ namespace gz
       public: Inertial(const MassMatrix3<T> &_massMatrix,
                        const Pose3<T> &_pose)
       : massMatrix(_massMatrix), pose(_pose)
+      {}
+
+      /// \brief Constructs an inertial object from the mass matrix for a body
+      /// B, about its center of mass Bcm, and expressed in a frame that we'll
+      /// call the "inertial" frame Bi, i.e. the frame in which the components
+      /// of the mass matrix are specified (see this class's documentation for
+      /// details). The pose object specifies the pose X_FBi of the inertial
+      /// frame Bi in the frame F of this inertial object
+      /// (see class's documentation). The added mass matrix is also expressed
+      /// in frame Bi.
+      /// \param[in] _massMatrix Mass and inertia matrix.
+      /// \param[in] _pose Pose of center of mass reference frame.
+      /// \param[in] _addedMass Coefficients for fluid added mass.
+      public: Inertial(const MassMatrix3<T> &_massMatrix,
+                       const Pose3<T> &_pose,
+                       const Matrix6<T> &_addedMass)
+      : massMatrix(_massMatrix), pose(_pose), addedMass(_addedMass)
       {}
 
       /// \brief Copy constructor.
@@ -112,6 +131,27 @@ namespace gz
         return this->pose;
       }
 
+      /// \brief Set the matrix representing the inertia of the fluid that is
+      /// dislocated when the body moves. Added mass should be zero if the
+      /// density of the surrounding fluid is negligible with respect to the
+      /// body's density.
+      ///
+      /// \param[in] _m New Matrix6 object, which must be a symmetric matrix.
+      /// \return True if the Matrix6 is symmetric.
+      /// \sa SpatialMatrix
+      public: bool SetFluidAddedMass(const Matrix6<T> &_m)
+      {
+        this->addedMass = _m;
+        return this->addedMass == this->addedMass.Transposed();
+      }
+
+      /// \brief Get the fluid added mass matrix.
+      /// \return The added mass matrix.
+      public: const Matrix6<T> &FluidAddedMass() const
+      {
+        return this->addedMass;
+      }
+
       /// \brief Get the moment of inertia matrix computer about the body's
       /// center of mass and expressed in this Inertial object’s frame F.
       /// \return The inertia matrix computed about the body’s center of
@@ -121,6 +161,51 @@ namespace gz
       {
         auto R = Matrix3<T>(this->pose.Rot());
         return R * this->massMatrix.Moi() * R.Transposed();
+      }
+
+      /// \brief Spatial mass matrix for body B. It does not include fluid
+      /// added mass.
+      /// The matrix is arranged as follows:
+      ///
+      /// | m          0          0          0           m * Pz    -m * Py |
+      /// | 0          m          0          -m * Pz    0           m * Px |
+      /// | 0          0          m           m * Py    -m * Px    0       |
+      /// | 0          -m * Pz     m * Py    Ixx        Ixy        Ixz     |
+      /// |  m * Pz    0          -m * Px    Ixy        Iyy        Iyz     |
+      /// | -m * Py     m* Px     0          Ixz        Iyz        Izz     |
+      ///
+      /// \return The body's 6x6 inertial matrix.
+      /// \sa SpatialMatrix
+      public: Matrix6<T> BodyMatrix() const
+      {
+        Matrix6<T> result;
+
+        result.SetSubmatrix(Matrix6<T>::TOP_LEFT,
+            Matrix3<T>::Identity * this->massMatrix.Mass());
+
+        result.SetSubmatrix(Matrix6<T>::BOTTOM_RIGHT, this->massMatrix.Moi());
+
+        auto x = this->pose.Pos().X();
+        auto y = this->pose.Pos().Y();
+        auto z = this->pose.Pos().Z();
+        auto skew = Matrix3<T>(
+            0, -z, y,
+            z, 0, -x,
+            -y, x, 0) * this->massMatrix.Mass();
+        result.SetSubmatrix(Matrix6<T>::BOTTOM_LEFT, skew);
+        result.SetSubmatrix(Matrix6<T>::TOP_RIGHT, skew.Transposed());
+
+        return result;
+      }
+
+      /// \brief Spatial mass matrix, which includes the body's inertia, as well
+      /// as the inertia of the fluid that is dislocated when the body moves.
+      /// \return The spatial mass matrix.
+      /// \sa BodyMatrix
+      /// \sa FluidAddedMass
+      public: Matrix6<T> SpatialMatrix() const
+      {
+        return this->BodyMatrix() + this->addedMass;
       }
 
       /// \brief Set the inertial pose rotation without affecting the
@@ -328,6 +413,9 @@ namespace gz
       /// \brief Pose offset of center of mass reference frame relative
       /// to a base frame.
       private: Pose3<T> pose;
+
+      /// \brief Fluid added mass.
+      private: Matrix6<T> addedMass;
     };
 
     typedef Inertial<double> Inertiald;
