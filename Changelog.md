@@ -417,7 +417,7 @@ instead.
 1. Added functions to convert between time_point and secNsec
     * [Pull request 150](https://github.com/gazebosim/gz-math/pull/150)
 
-1. Fix IGNITION_MATH_XXX_VERSION
+1. Fix GZ_MATH_XXX_VERSION
     * [Pull request 151](https://github.com/gazebosim/gz-math/pull/151)
 
 1. Add Max and Min function to Vector2.hh

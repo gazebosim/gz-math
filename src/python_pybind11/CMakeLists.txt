@@ -8,7 +8,7 @@ endif()
 message(STATUS "Building pybind11 interfaces")
 # Split from main extension and converted to pybind11
 pybind11_add_module(math SHARED
-  src/_ignition_math_pybind11.cc
+  src/_gz_math_pybind11.cc
   src/Angle.cc
   src/AxisAlignedBox.cc
   src/Capsule.cc
@@ -81,17 +81,17 @@ if(USE_SYSTEM_PATHS_FOR_PYTHON_INSTALLATION)
   endif()
 
   if(USE_DIST_PACKAGES_FOR_PYTHON)
-    string(REPLACE "site-packages" "dist-packages" IGN_PYTHON_INSTALL_PATH ${Python3_SITEARCH})
+    string(REPLACE "site-packages" "dist-packages" GZ_PYTHON_INSTALL_PATH ${Python3_SITEARCH})
   else()
     # custom cmake command is returning dist-packages
-    string(REPLACE "dist-packages" "site-packages" IGN_PYTHON_INSTALL_PATH ${Python3_SITEARCH})
+    string(REPLACE "dist-packages" "site-packages" GZ_PYTHON_INSTALL_PATH ${Python3_SITEARCH})
   endif()
 else()
   # If not a system installation, respect local paths
-  set(IGN_PYTHON_INSTALL_PATH ${IGN_LIB_INSTALL_DIR}/python)
+  set(GZ_PYTHON_INSTALL_PATH ${GZ_LIB_INSTALL_DIR}/python)
 endif()
 
-set(IGN_PYTHON_INSTALL_PATH "${IGN_PYTHON_INSTALL_PATH}/ignition")
+set(GZ_PYTHON_INSTALL_PATH "${GZ_PYTHON_INSTALL_PATH}/gz")
 
 # Set the build location and install location for a CPython extension
 function(configure_build_install_location _library_name)
@@ -103,7 +103,7 @@ function(configure_build_install_location _library_name)
 
   # Install library for actual use
   install(TARGETS ${_library_name}
-    DESTINATION "${IGN_PYTHON_INSTALL_PATH}/"
+    DESTINATION "${GZ_PYTHON_INSTALL_PATH}/"
   )
 endfunction()
 

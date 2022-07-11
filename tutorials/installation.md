@@ -26,7 +26,7 @@ wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
 
 Install Gazebo Math:
 ```
-sudo apt install libignition-math<#>-dev
+sudo apt install libgz-math<#>-dev
 ```
 
 Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
@@ -42,7 +42,7 @@ On macOS, add OSRF packages:
 
 Install Gazebo Math:
   ```
-  brew install ignition-math<#>
+  brew install gz-math<#>
   ```
 
 Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
@@ -61,7 +61,7 @@ conda activate gz-ws
 
 Install:
 ```
-conda install libignition-math<#> --channel conda-forge
+conda install libgz-math<#> --channel conda-forge
 ```
 
 Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
@@ -188,13 +188,13 @@ The optional Eigen component of Gazebo Math requires:
 
   You can view available versions and their dependencies:
   ```
-  conda search libignition-math* --channel conda-forge --info
+  conda search libgz-math* --channel conda-forge --info
   ```
-  See the [Conda release repository](https://github.com/conda-forge/libignition-math4-feedstock) for more information.
+  See the [Conda release repository](https://github.com/conda-forge/libgz-math4-feedstock) for more information.
 
   Install dependencies, replacing `<#>` with the desired version:
   ```
-  conda install libignition-cmake<#> --channel conda-forge
+  conda install libgz-cmake<#> --channel conda-forge
   ```
 
 3. Navigate to where you would like to build the library, and clone the repository.

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import unittest
-from ignition.math import Temperature
+from gz.math import Temperature
 
 
 class TestTemperature(unittest.TestCase):

@@ -18,7 +18,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 gz_configure_project(
-  REPLACE_IGNITION_INCLUDE_PATH gz/math
+  REPLACE_GZ_INCLUDE_PATH gz/math
   VERSION_SUFFIX pre1)
 
 #============================================================================
@@ -58,7 +58,7 @@ gz_find_package(
 # Include swig
 find_package(SWIG QUIET)
 if (NOT SWIG_FOUND)
-  IGN_BUILD_WARNING("Swig is missing: Language interfaces are disabled.")
+  GZ_BUILD_WARNING("Swig is missing: Language interfaces are disabled.")
   message (STATUS "Searching for swig - not found.")
 else()
   message (STATUS "Searching for swig - found version ${SWIG_VERSION}.")
@@ -70,7 +70,7 @@ if (SWIG_FOUND)
   # Include ruby
   find_package(Ruby 1.9 QUIET)
   if (NOT RUBY_FOUND)
-    IGN_BUILD_WARNING("Ruby is missing: Install ruby-dev to enable ruby interfaces.")
+    GZ_BUILD_WARNING("Ruby is missing: Install ruby-dev to enable ruby interfaces.")
     message (STATUS "Searching for Ruby - not found.")
   else()
     message (STATUS "Searching for Ruby - found version ${RUBY_VERSION}.")
@@ -79,10 +79,10 @@ endif()
 
 ########################################
 # Python bindings
-include(IgnPython)
+include(GzPython)
 find_package(PythonLibs QUIET)
 if (NOT PYTHONLIBS_FOUND)
-  IGN_BUILD_WARNING("Python is missing: Python interfaces are disabled.")
+  GZ_BUILD_WARNING("Python is missing: Python interfaces are disabled.")
   message (STATUS "Searching for Python - not found.")
 else()
   message (STATUS "Searching for Python - found version ${PYTHONLIBS_VERSION_STRING}.")
@@ -94,7 +94,7 @@ else()
   if (${pybind11_FOUND})
     message (STATUS "Searching for pybind11 - found version ${pybind11_VERSION}.")
   else()
-    IGN_BUILD_WARNING("pybind11 is missing: Python interfaces are disabled.")
+    GZ_BUILD_WARNING("pybind11 is missing: Python interfaces are disabled.")
     message (STATUS "Searching for pybind11 - not found.")
   endif()
 endif()
