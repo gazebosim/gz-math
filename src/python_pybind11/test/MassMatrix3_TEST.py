@@ -16,12 +16,12 @@ import sys
 import unittest
 import math
 
-from ignition.math import sort3
-from ignition.math import MassMatrix3d
-from ignition.math import Material
-from ignition.math import Vector3d
-from ignition.math import Matrix3d
-from ignition.math import Quaterniond
+from gz.math import sort3
+from gz.math import MassMatrix3d
+from gz.math import Material
+from gz.math import Vector3d
+from gz.math import Matrix3d
+from gz.math import Quaterniond
 
 GZ_PI = 3.14159265358979323846
 GZ_PI_2 = 1.57079632679489661923

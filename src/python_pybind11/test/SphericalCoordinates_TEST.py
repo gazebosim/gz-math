@@ -14,8 +14,8 @@
 
 import unittest
 
-import ignition
-from ignition.math import Angle, SphericalCoordinates, Vector3d
+import gz
+from gz.math import Angle, SphericalCoordinates, Vector3d
 import math
 
 class TestSphericalCoordinates(unittest.TestCase):

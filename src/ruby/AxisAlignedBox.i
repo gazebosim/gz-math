@@ -41,7 +41,7 @@
   PyTuple_SET_ITEM($result, 1, PyFloat_FromDouble(std::get<1>(tuplecpp)));
 
   gz::math::Vector3<double> vector3 = std::get<2>(tuplecpp);
-  PyObject *pyobject =  SWIG_NewPointerObj((new gz::math::Vector3< double >(static_cast< const gz::math::Vector3< double >& >(vector3))), SWIGTYPE_p_ignition__math__Vector3T_double_t, SWIG_POINTER_OWN |  0 );
+  PyObject *pyobject =  SWIG_NewPointerObj((new gz::math::Vector3< double >(static_cast< const gz::math::Vector3< double >& >(vector3))), SWIGTYPE_p_gz__math__Vector3T_double_t, SWIG_POINTER_OWN |  0 );
   PyTuple_SET_ITEM(resultobj, 2, pyobject);
 }
 
