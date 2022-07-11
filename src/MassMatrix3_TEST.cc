@@ -293,6 +293,13 @@ TEST(MassMatrix3dTest, PrincipalMoments)
     EXPECT_EQ(m.PrincipalMoments(), Ieigen);
     EXPECT_TRUE(m.IsPositive());
     EXPECT_FALSE(m.IsValid());
+    // Ratio between largest diagonal and non-diagonal elements is 0.5
+    // With relative tolerance of 0.49, the matrix is clearly non-diagonal,
+    // so expect PrincipalMoments to return the sorted eigenvectors.
+    EXPECT_EQ(m.PrincipalMoments(0.49), Ieigen);
+    // With relative tolerance of 0.51, the matrix appears to be diagonal,
+    // so expect PrincipalMoments to return the diagonal elements.
+    EXPECT_EQ(m.PrincipalMoments(0.51), Ixxyyzz);
   }
 
   // Non-trivial off-diagonal product moments
@@ -305,6 +312,13 @@ TEST(MassMatrix3dTest, PrincipalMoments)
     EXPECT_EQ(m.PrincipalMoments(), Ieigen);
     EXPECT_TRUE(m.IsPositive());
     EXPECT_TRUE(m.IsValid());
+    // Ratio between largest diagonal and non-diagonal elements is 0.25
+    // With relative tolerance of 0.24, the matrix is clearly non-diagonal,
+    // so expect PrincipalMoments to return the sorted eigenvectors.
+    EXPECT_EQ(m.PrincipalMoments(0.24), Ieigen);
+    // With relative tolerance of 0.26, the matrix appears to be diagonal,
+    // so expect PrincipalMoments to return the diagonal elements.
+    EXPECT_EQ(m.PrincipalMoments(0.26), Ixxyyzz);
   }
 
   // Degenerate matrix with eigenvalue of 0
@@ -345,6 +359,13 @@ TEST(MassMatrix3dTest, PrincipalMoments)
     // the accuracy is approximately 2e-2
     EXPECT_TRUE(m.PrincipalMoments().Equal(Ieigen, 2.5e-2));
     EXPECT_FALSE(m.PrincipalMoments().Equal(Ieigen, 1.5e-2));
+    // Ratio between largest diagonal and non-diagonal elements is 1e5
+    // With relative tolerance of 1.1e5, the matrix appears to be diagonal,
+    // so expect PrincipalMoments to return the diagonal elements.
+    EXPECT_EQ(m.PrincipalMoments(1.1e-5), Ixxyyzz);
+    // With relative tolerance of 0.9e5, the matrix is clearly non-diagonal,
+    // so expect PrincipalMoments to return the sorted eigenvectors.
+    EXPECT_TRUE(m.PrincipalMoments(0.9e-5).Equal(Ieigen, 2.5e-2));
     // the default tolerance for == is 1e-6
     // so this should resolve as not equal
     EXPECT_NE(m.PrincipalMoments(), Ieigen);
@@ -365,6 +386,17 @@ TEST(MassMatrix3dTest, PrincipalAxesOffsetIdentity)
   EXPECT_TRUE(m.SetOffDiagonalMoments(math::Vector3d::Zero));
   EXPECT_TRUE(m.IsValid());
   EXPECT_EQ(m.PrincipalAxesOffset(), math::Quaterniond::Identity);
+
+  // Non-diagonal matrices may have identity axes offset depending on the
+  // tolerance.
+  m.SetDiagonalMoments(10 * math::Vector3d::One);
+  m.SetOffDiagonalMoments(math::Vector3d::One);
+  EXPECT_TRUE(m.IsValid());
+  // relative tolerance is large enough that it looks like a diagonal matrix
+  // so expect identity
+  EXPECT_EQ(m.PrincipalAxesOffset(0.11), math::Quaterniond::Identity);
+  // relative tolerance is small enough that it should not return identity
+  EXPECT_NE(m.PrincipalAxesOffset(0.09), math::Quaterniond::Identity);
 }
 
 /////////////////////////////////////////////////
@@ -574,6 +606,9 @@ TEST(MassMatrix3dTest, PrincipalAxesOffsetNoRepeat)
   VerifyNondiagonalMomentsAndAxes(math::Vector3d(3, 4, 6),
     math::Vector3d(3.0, 5.0, 5.0),
     math::Vector3d(0, 0, 1));
+  VerifyNondiagonalMomentsAndAxes(math::Vector3d(3000, 4999, 5001),
+    math::Vector3d(3000.0, 5000.0, 5000.0),
+    math::Vector3d(0, 0, 1));
   // Non-diagonal inertia matrix with f1 = 0
   VerifyNondiagonalMomentsAndAxes(math::Vector3d(3, 4, 6),
     math::Vector3d(3.0, 5.0, 5.0),
@@ -741,7 +776,8 @@ TEST(MassMatrix3dTest, EquivalentBox)
     EXPECT_EQ(m, m2);
   }
 
-  // box 1x4x9 rotated by 90 degrees around Z
+  // box 9x4x1 rotated by 90 degrees around Z
+  // equivalent to 4x9x1 after rotation
   {
     const double mass = 12.0;
     const math::Vector3d ixxyyzz(82, 17, 97);
@@ -751,13 +787,15 @@ TEST(MassMatrix3dTest, EquivalentBox)
     EXPECT_TRUE(m.EquivalentBox(size, rot, -1e-6));
     EXPECT_EQ(size, math::Vector3d(9, 4, 1));
     EXPECT_EQ(rot, math::Quaterniond(0, 0, GZ_PI/2));
+    // equivalent to 4x9x1 after rotation
+    EXPECT_EQ((rot * size).Abs(), math::Vector3d(4, 9, 1));
 
     math::MassMatrix3d m2;
     EXPECT_TRUE(m2.SetFromBox(mass, size, rot));
     EXPECT_EQ(m, m2);
   }
 
-  // box 1x4x9 rotated by 45 degrees around Z
+  // box 9x4x1 rotated by 45 degrees around Z
   {
     const double mass = 12.0;
     const math::Vector3d ixxyyzz(49.5, 49.5, 97);

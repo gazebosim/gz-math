@@ -19,6 +19,7 @@ pybind11_add_module(math SHARED
   src/Frustum.cc
   src/GaussMarkovProcess.cc
   src/Helpers.cc
+  src/Interval.cc
   src/Kmeans.cc
   src/Line2.cc
   src/Line3.cc
@@ -26,6 +27,7 @@ pybind11_add_module(math SHARED
   src/Material.cc
   src/Matrix3.cc
   src/Matrix4.cc
+  src/Matrix6.cc
   src/MovingWindowFilter.cc
   src/PID.cc
   src/Pose3.cc
@@ -123,6 +125,7 @@ if (BUILD_TESTING)
     GaussMarkovProcess_TEST
     Helpers_TEST
     Inertial_TEST
+    Interval_TEST
     Kmeans_TEST
     Line2_TEST
     Line3_TEST
@@ -154,9 +157,25 @@ if (BUILD_TESTING)
     Vector4_TEST
   )
 
+  execute_process(COMMAND "${Python3_EXECUTABLE}" -m pytest --version
+    OUTPUT_VARIABLE PYTEST_output
+    ERROR_VARIABLE  PYTEST_error
+    RESULT_VARIABLE PYTEST_result)
+  if(${PYTEST_result} EQUAL 0)
+    set(pytest_FOUND TRUE)
+  else()
+    message("")
+    message(WARNING "Pytest package not available: ${PYTEST_error}")
+  endif()
+
   foreach (test ${python_tests})
-    add_test(NAME ${test}.py COMMAND
-      "${PYTHON_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/src/python_pybind11/test/${test}.py")
+    if (pytest_FOUND)
+      add_test(NAME ${test}.py COMMAND
+        "${Python3_EXECUTABLE}" -m pytest "${CMAKE_SOURCE_DIR}/src/python_pybind11/test/${test}.py" --junitxml "${CMAKE_BINARY_DIR}/test_results/${test}.xml")
+    else()
+      add_test(NAME ${test}.py COMMAND
+        "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/src/python_pybind11/test/${test}.py")
+    endif()
 
     set(_env_vars)
     list(APPEND _env_vars "PYTHONPATH=${FAKE_INSTALL_PREFIX}/lib/python/")

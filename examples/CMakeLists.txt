@@ -9,6 +9,9 @@ set(GZ_MATH_VER ${gz-math7_VERSION_MAJOR})
 add_executable(additively_separable_scalar_field3_example additively_separable_scalar_field3_example.cc)
 target_link_libraries(additively_separable_scalar_field3_example gz-math${GZ_MATH_VER}::gz-math${GZ_MATH_VER})
 
+add_executable(additively_separable_scalar_field3_example additively_separable_scalar_field3_example.cc)
+target_link_libraries(additively_separable_scalar_field3_example ignition-math${IGN_MATH_VER}::ignition-math${IGN_MATH_VER})
+
 add_executable(angle_example angle_example.cc)
 target_link_libraries(angle_example gz-math${GZ_MATH_VER}::gz-math${GZ_MATH_VER})
 
