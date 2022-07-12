@@ -258,7 +258,8 @@ namespace gz
       public: bool operator==(const Inertial<T> &_inertial) const
       {
         return (this->pose == _inertial.Pose()) &&
-               (this->massMatrix == _inertial.MassMatrix());
+               (this->massMatrix == _inertial.MassMatrix()) &&
+               (this->addedMass == _inertial.FluidAddedMass());
       }
 
       /// \brief Inequality test operator
