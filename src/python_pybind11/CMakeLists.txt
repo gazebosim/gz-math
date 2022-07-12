@@ -30,6 +30,7 @@ pybind11_add_module(math SHARED
   src/Matrix6.cc
   src/MovingWindowFilter.cc
   src/PID.cc
+  src/Polynomial3.cc
   src/Pose3.cc
   src/Quaternion.cc
   src/Rand.cc
@@ -124,6 +125,7 @@ if (BUILD_TESTING)
     OrientedBox_TEST
     PID_TEST
     Plane_TEST
+    Polynomial3_TEST
     Pose3_TEST
     Quaternion_TEST
     Rand_TEST

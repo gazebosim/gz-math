@@ -40,6 +40,7 @@
 #include "OrientedBox.hh"
 #include "PID.hh"
 #include "Plane.hh"
+#include "Polynomial3.hh"
 #include "Pose3.hh"
 #include "Quaternion.hh"
 #include "Rand.hh"
@@ -134,6 +135,8 @@ PYBIND11_MODULE(math, m)
   ignition::math::python::defineMathVector4(m, "Vector4");
 
   ignition::math::python::defineMathInterval(m, "Interval");
+
+  ignition::math::python::defineMathPolynomial3(m, "Polynomial3");
 
   ignition::math::python::defineMathLine2(m, "Line2");
 
