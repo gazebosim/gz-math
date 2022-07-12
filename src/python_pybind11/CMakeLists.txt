@@ -105,6 +105,26 @@ function(configure_build_install_location _library_name)
   install(TARGETS ${_library_name}
     DESTINATION "${GZ_PYTHON_INSTALL_PATH}/"
   )
+
+  # TODO(CH3): Deprecated. Remove on tock.
+  # Install Python library symlinks
+  if(${GZ_PYTHON_INSTALL_PATH} MATCHES "gz$")
+    string(REGEX REPLACE "gz$" "ignition" IGN_PYTHON_INSTALL_PATH ${GZ_PYTHON_INSTALL_PATH})
+    if (WIN32)  # Windows requires copy instead of symlink
+      install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E copy \
+          ${GZ_PYTHON_INSTALL_PATH}\/${_library_name} \
+          ${PROJECT_BINARY_DIR}\/${_library_name})")
+    else()
+      install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \
+          ${GZ_PYTHON_INSTALL_PATH}\/${_library_name} \
+          ${PROJECT_BINARY_DIR}\/${_library_name})")
+    endif()
+
+    install(FILES ${PROJECT_BINARY_DIR}\/${_library_name}
+      DESTINATION "${IGN_PYTHON_INSTALL_PATH}/"
+    )
+  endif()
+
 endfunction()
 
 configure_build_install_location(math)
