@@ -67,9 +67,9 @@ namespace gz
         return matrix;
       }
 
-      /// \brief Convert from ignition::math::Matrix6d to
+      /// \brief Convert from gz::math::Matrix6d to
       /// Eigen::Matrix<Precision, 6, 6>.
-      /// \param[in] _m ignition::math::Matrix6d to convert.
+      /// \param[in] _m gz::math::Matrix6d to convert.
       /// \return The equivalent Eigen::Matrix<Precision, 6, 6>.
       /// \tparam Precision Precision such as int, double or float.
       template<typename Precision>
@@ -158,9 +158,9 @@ namespace gz
       }
 
       /// \brief Convert Eigen::Matrix<Precision, 6, 6> to
-      /// ignition::math::Matrix6d.
+      /// gz::math::Matrix6d.
       /// \param[in] _m Eigen::Matrix<Precision, 6, 6> to convert.
-      /// \return The equivalent ignition::math::Matrix6d.
+      /// \return The equivalent gz::math::Matrix6d.
       /// \tparam Precision Precision such as int, double or float.
       template<typename Precision>
       inline

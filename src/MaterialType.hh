@@ -37,7 +37,7 @@ struct MaterialData
 
 // The mapping of material type to name and density values.
 // If you modify this map, make sure to also modify the MaterialType enum in
-// include/ignition/math/MaterialTypes.hh. The compiler will also complain if
+// include/gz/math/MaterialTypes.hh. The compiler will also complain if
 // you forget to change the std::array<..., N> compile-time size constant.
 constexpr std::array<std::pair<MaterialType, MaterialData>, 13> kMaterialData =
 {{
