@@ -42,7 +42,7 @@ TEST(Inertiald_Test, Constructor)
   EXPECT_EQ(inertial.Pose(), math::Pose3d::Zero);
   EXPECT_EQ(inertial.MassMatrix(), math::MassMatrix3d());
   EXPECT_EQ(inertial.Moi(), math::Matrix3d::Zero);
-  EXPECT_EQ(inertial.FluidAddedMass(), math::Matrix6d::Zero);
+  EXPECT_FALSE(inertial.FluidAddedMass().has_value());
   EXPECT_EQ(inertial.BodyMatrix(), math::Matrix6d::Zero);
   EXPECT_EQ(inertial.SpatialMatrix(), math::Matrix6d::Zero);
   EXPECT_EQ(inertial.BodyMatrix(), inertial.SpatialMatrix());
@@ -789,6 +789,7 @@ TEST(Inertiald_Test, FluidAddedMass)
       0.6, 1.1, 1.5, 1.8, 2.0, 2.1};
 
   math::Inertiald inertial(massMatrix, com, addedMass);
+  EXPECT_TRUE(inertial.FluidAddedMass().has_value());
   EXPECT_EQ(addedMass, inertial.FluidAddedMass());
 
   auto spatialMatrix = inertial.SpatialMatrix();

@@ -17,6 +17,8 @@
 #ifndef GZ_MATH_INERTIAL_HH_
 #define GZ_MATH_INERTIAL_HH_
 
+#include <optional>
+
 #include <gz/math/config.hh>
 #include "gz/math/MassMatrix3.hh"
 #include "gz/math/Matrix3.hh"
@@ -142,12 +144,13 @@ namespace gz
       public: bool SetFluidAddedMass(const Matrix6<T> &_m)
       {
         this->addedMass = _m;
-        return this->addedMass == this->addedMass.Transposed();
+        return this->addedMass.value() == this->addedMass.value().Transposed();
       }
 
       /// \brief Get the fluid added mass matrix.
-      /// \return The added mass matrix.
-      public: const Matrix6<T> &FluidAddedMass() const
+      /// \return The added mass matrix. It will be nullpot of the added mass
+      /// was never set.
+      public: std::optional< Matrix6<T> > FluidAddedMass() const
       {
         return this->addedMass;
       }
@@ -205,7 +208,8 @@ namespace gz
       /// \sa FluidAddedMass
       public: Matrix6<T> SpatialMatrix() const
       {
-        return this->BodyMatrix() + this->addedMass;
+        return this->addedMass.has_value() ?
+            this->BodyMatrix() + this->addedMass.value() : this->BodyMatrix();
       }
 
       /// \brief Set the inertial pose rotation without affecting the
@@ -416,7 +420,7 @@ namespace gz
       private: Pose3<T> pose;
 
       /// \brief Fluid added mass.
-      private: Matrix6<T> addedMass;
+      private: std::optional<Matrix6<T>> addedMass;
     };
 
     typedef Inertial<double> Inertiald;
