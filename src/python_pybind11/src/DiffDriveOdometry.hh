@@ -32,7 +32,7 @@ namespace math
 {
 namespace python
 {
-/// Define a py:: wrapper for an gz::math::DiffDriveOdometry
+/// Define a py:: wrapper for a gz::math::DiffDriveOdometry
 /**
  * \param[in] module a py:: module to add the definition to
  */
