@@ -34,6 +34,7 @@ pybind11_add_module(math SHARED
   src/Pose3.cc
   src/Quaternion.cc
   src/Rand.cc
+  src/Region3.cc
   src/RollingMean.cc
   src/RotationSpline.cc
   src/SemanticVersion.cc
@@ -129,6 +130,7 @@ if (BUILD_TESTING)
     Pose3_TEST
     Quaternion_TEST
     Rand_TEST
+    Region3_TEST
     RollingMean_TEST
     RotationSpline_TEST
     SemanticVersion_TEST
