@@ -35,7 +35,7 @@ namespace math
 {
 namespace python
 {
-/// Help define a pybind11 wrapper for an gz::math::Interval
+/// Help define a pybind11 wrapper for a gz::math::Interval
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -104,7 +104,7 @@ void helpDefineMathInterval(py::module &m, const std::string &typestr)
     .def("__repr__", toString);
 }
 
-/// Define a pybind11 wrapper for an gz::math::Interval
+/// Define a pybind11 wrapper for a gz::math::Interval
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
