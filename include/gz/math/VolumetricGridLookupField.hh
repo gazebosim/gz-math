@@ -32,7 +32,7 @@ namespace gz
   {
     // Inline bracket to help doxygen filtering.
     inline namespace GZ_MATH_VERSION_NAMESPACE {
-      template<typename T>
+      template<typename T, typename I=std::size_t>
       /// \brief Lookup table for a volumetric dataset. This class is used to
       /// lookup indices for a large dataset that's organized in a grid. This
       /// class is not meant to be used with non-grid like data sets. The grid
@@ -47,7 +47,7 @@ namespace gz
         private: AxisIndex<T> y_indices_by_lon;
 
         private: std::vector<
-          std::vector<std::vector<std::optional<std::size_t>>>> index_table;
+          std::vector<std::vector<std::optional<I>>>> index_table;
 
         /// \brief Constructor
         /// \param[in] _cloud The cloud of points to use to construct the grid.

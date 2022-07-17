@@ -44,47 +44,40 @@ TEST(TimeVaryingVolumetricLookupFieldTest, TestConstruction)
   {
     // Get data at T=0
     auto session = timeVaryingField.CreateSession();
-    auto points = timeVaryingField.LookUp(session, 0, Vector3d{0.5, 0.5, 0.5});
+    auto points = timeVaryingField.LookUp(session, Vector3d{0.5, 0.5, 0.5});
     auto res = timeVaryingField.EstimateQuadrilinear<double>(
       session,
       points,
       valuesTime0,
       valuesTime1,
-      Vector3d{0.5, 0.5, 0.5},
-      0, -1);
+      Vector3d{0.5, 0.5, 0.5}, -1);
     ASSERT_EQ(res, 0);
 
     // Step session
     auto next_session = timeVaryingField.StepTo(session, 0.5);
 
     ASSERT_TRUE(next_session.has_value());
-    // Since there is no in between session the iterators should be DE SAME
-    ASSERT_EQ(next_session->iter, session.iter);
-    points = timeVaryingField.LookUp(session, 0.5, Vector3d{0.5, 0.5, 0.5});
+
+    points = timeVaryingField.LookUp(session, Vector3d{0.5, 0.5, 0.5});
     res = timeVaryingField.EstimateQuadrilinear<double>(
       session,
       points,
       valuesTime0,
       valuesTime1,
-      Vector3d{0.5, 0.5, 0.5},
-      0.5, -1);
+      Vector3d{0.5, 0.5, 0.5}, -1);
     ASSERT_EQ(res, 0.5);
 
     // Step session
     next_session = timeVaryingField.StepTo(next_session.value(), 1);
-
     ASSERT_TRUE(next_session.has_value());
-    // Since there is no in between session the iterators should be different
-    ASSERT_NE(next_session->iter, session.iter);
 
-    points = timeVaryingField.LookUp(session, 1, Vector3d{0.5, 0.5, 0.5});
+    points = timeVaryingField.LookUp(session, Vector3d{0.5, 0.5, 0.5});
     res = timeVaryingField.EstimateQuadrilinear<double>(
       session,
       points,
       valuesTime0,
       valuesTime1,
-      Vector3d{0.5, 0.5, 0.5},
-      1, -1);
+      Vector3d{0.5, 0.5, 0.5}, -1);
     ASSERT_EQ(res, 1);
   }
 }
