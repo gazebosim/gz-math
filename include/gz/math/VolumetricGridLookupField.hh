@@ -143,6 +143,53 @@ namespace gz
           return interpolators;
         }
 
+        /// \brief Constructor
+        /// \param[in] _cloud The cloud of points to use to construct the grid.
+        /// \param[in] _indices A series of indices these points correspond to.
+        public: VolumetricGridLookupField(
+          const std::vector<Vector3<T>> &_cloud,
+          const std::vector<I> &_indices)
+        {
+          assert(_indices.size() == _cloud.size());
+          // NOTE: This part of the code assumes an exact grid of points.
+          // The grid may be distorted or the stride between different points
+          // may not be the same, but fundamentally the data is structured still
+          // forms a grid-like structure. It keeps track of the axis indices for
+          // each point in the grid.
+          for(auto pt : _cloud)
+          {
+            x_indices_by_lat.AddIndexIfNotFound(pt.X());
+            y_indices_by_lon.AddIndexIfNotFound(pt.Y());
+            z_indices_by_depth.AddIndexIfNotFound(pt.Z());
+          }
+
+          int num_x = x_indices_by_lat.GetNumUniqueIndices();
+          int num_y = y_indices_by_lon.GetNumUniqueIndices();
+          int num_z = z_indices_by_depth.GetNumUniqueIndices();
+
+          index_table.resize(num_z);
+          for(int i = 0; i < num_z; ++i)
+          {
+            index_table[i].resize(num_y);
+            for(int j = 0; j < num_y; ++j)
+            {
+              index_table[i][j].resize(num_x);
+            }
+          }
+
+          for(std::size_t i = 0; i < _cloud.size(); ++i)
+          {
+            const auto &pt = _cloud[i];
+            const std::size_t x_index =
+              x_indices_by_lat.GetIndex(pt.X()).value();
+            const std::size_t y_index =
+              y_indices_by_lon.GetIndex(pt.Y()).value();
+            const std::size_t z_index =
+              z_indices_by_depth.GetIndex(pt.Z()).value();
+            index_table[z_index][y_index][x_index] = _indices[i];
+          }
+        }
+
         /// \brief Estimates the values for a grid given a list of values to
         /// interpolate. This method uses Trilinear interpolation.
         /// \param[in] _pt The point to estimate for.

@@ -46,17 +46,23 @@ namespace gz
         const T& time, const VolumetricGridLookupField<V> &_field) {}
 
       /// \brief Creates a session for querying
-      public: S CreateSession() {}
+      public: S CreateSession() const {}
 
-      public: S CreateSession(const T &_time) {}
+      /// \brief Creates a session startingg at time T
+      /// \param
+      public: S CreateSession(const T &_time) const {}
 
+      /// \brief Update session to new time. Returns new session pointer if
+      /// more is available. Otherwise returns nullopt if we have run out of
+      /// time.
       public: std::optional<S> StepTo(const S &_session, const T &_time) {}
 
+      /// \brief Looks up interpolators at a given time step. Use the session
+      /// to set the time step.
       public: std::pair<InterpolationPoint4D<T, V>, InterpolationPoint4D<T, V>>
       LookUp(const S &_session,
-        const T &_time,
         const Vector3<V> &_point,
-        const Vector3<V> &_tol) {}
+        const Vector3<V> &_tol) const {}
 
       public: template<typename X>
       X EstimateQuadrilinear(
@@ -65,19 +71,25 @@ namespace gz
           InterpolationPoint4D<T, V>> &_points,
         const std::vector<X>& values1,
         const std::vector<X>& values2
-      )
+      ) const
       {
       }
     };
     /// \brief An in-memory session. Loads the whole dataset in memory and
     /// performs queries.
     template<typename T, typename V>
-    struct InMemorySession
+    class InMemorySession
     {
       /// \brief Iterator which holds pointer to current state
       /// TODO(arjo): Use friend to make visible only to InMemorySession
       /// specialization
-      typename std::map<T, VolumetricGridLookupField<V>>::iterator iter;
+      typename std::map<T, VolumetricGridLookupField<V>>::const_iterator iter;
+
+      /// \brief Time of last query
+      T time;
+
+      friend class
+        TimeVaryingVolumetricGridLookupField<T, V, InMemorySession<T, V>>;
     };
 
     /// \brief Specialized version of `TimeVaryingVolumetricGridLookupField`
@@ -93,20 +105,22 @@ namespace gz
         this->gridFields.emplace(_time, _field);
       }
 
-      public: InMemorySession<T, V> CreateSession() {
+      public: InMemorySession<T, V> CreateSession() const {
         InMemorySession<T, V> sess;
         sess.iter = this->gridFields.begin();
+        sess.time = T(0);
         return sess;
       }
 
-      public: InMemorySession<T, V> CreateSession(const T &_time) {
+      public: InMemorySession<T, V> CreateSession(const T &_time) const {
         InMemorySession<T, V> sess;
         sess.iter = this->gridFields.lower_bound(_time);
+        sess.time = _time;
         return sess;
       }
 
       public: std::optional<InMemorySession<T, V>> StepTo(
-        const InMemorySession<T, V> &_session, const T &_time) {
+        const InMemorySession<T, V> &_session, const T &_time) const {
         if (_session.iter == gridFields.end())
         {
           return std::nullopt;
@@ -124,6 +138,7 @@ namespace gz
           && nextTime->first <= _time)
         {
           newSess.iter = nextTime;
+          newSess.time = _time;
           nextTime = std::next(nextTime);
         }
         return newSess;
@@ -131,9 +146,8 @@ namespace gz
 
       public: std::pair<InterpolationPoint4D<T, V>, InterpolationPoint4D<T, V>>
         LookUp(const InMemorySession<T, V> &_session,
-          const T &_time,
           const Vector3<V> &_point,
-          const Vector3<V> &_tol = Vector3<V>{0.5, 0.5, 0.5}) {
+          const Vector3<V> &_tol = Vector3<V>{0.5, 0.5, 0.5}) const {
 
         std::pair<InterpolationPoint4D<T, V>, InterpolationPoint4D<T, V>> res;
 
@@ -166,10 +180,10 @@ namespace gz
         const std::vector<X> &_values1,
         const std::vector<X> &_values2,
         const Vector3<X> &_position,
-        const T &_time,
         const X &_default = X(0)
-      )
+      ) const
       {
+        auto time = _session.time;
         if (_interpolators.first.timeSlice.size() == 0
          && _interpolators.second.timeSlice.size() == 0)
           return _default;
@@ -208,7 +222,7 @@ namespace gz
         InterpolationPoint1D<T>
           pt1{_session.iter->first, 0}, pt2{next->first, 1};
         std::vector<X> times{res1.value_or(_default), res2.value_or(_default)};
-        return LinearInterpolate(pt1, pt2, times, _time);
+        return LinearInterpolate(pt1, pt2, times, time);
       }
       private: std::map<T, VolumetricGridLookupField<V>> gridFields;
     };
