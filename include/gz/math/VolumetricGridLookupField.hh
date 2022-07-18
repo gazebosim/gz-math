@@ -32,7 +32,7 @@ namespace gz
   {
     // Inline bracket to help doxygen filtering.
     inline namespace GZ_MATH_VERSION_NAMESPACE {
-      template<typename T, typename I=std::size_t>
+      template<typename T, typename I = std::size_t>
       /// \brief Lookup table for a volumetric dataset. This class is used to
       /// lookup indices for a large dataset that's organized in a grid. This
       /// class is not meant to be used with non-grid like data sets. The grid

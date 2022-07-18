@@ -20,6 +20,11 @@
 
 #include <gz/math/TimeVaryingVolumetricGridLookupField.hh>
 #include <gz/math/Vector3.hh>
+
+#include <map>
+#include <utility>
+#include <vector>
+
 namespace gz
 {
 namespace math
@@ -27,19 +32,12 @@ namespace math
 template<typename T, typename V, typename S>
 class TimeVaryingVolumetricGrid
 {
-  public: S CreateSession() const
-  {
-  }
+  public: S CreateSession() const;
 
-  public: std::optional<S> StepTo(const S &_session, const T &_time) const
-  {
+  public: std::optional<S> StepTo(const S &_session, const T &_time) const;
 
-  }
-
-  public: std::optional<V> LookUp(const S &_session, const Vector3d &_pos) const
-  {
-
-  }
+  public: std::optional<V> LookUp(const S &_session, const Vector3d &_pos)
+    const;
 };
 
 template<typename T, typename V>
@@ -57,7 +55,7 @@ class TimeVaryingVolumetricGrid<T, V, InMemorySession<T, double>>
   }
 
   public: std::optional<V>
-    LookUp(const InMemorySession<T, double> &_session, const Vector3d &_pos) 
+    LookUp(const InMemorySession<T, double> &_session, const Vector3d &_pos)
     const
   {
     auto points = indices.LookUp(_session, _pos);
@@ -70,8 +68,9 @@ class TimeVaryingVolumetricGrid<T, V, InMemorySession<T, double>>
     return result;
   }
 
-  std::vector<V> values;
-  TimeVaryingVolumetricGridLookupField<T, V, InMemorySession<T,double>> indices;
+  private: std::vector<V> values;
+  private: TimeVaryingVolumetricGridLookupField
+    <T, V, InMemorySession<T, double>> indices;
   template<typename U, typename S>
   friend class InMemoryTimeVaryingVolumetricGridFactory;
 };
@@ -86,14 +85,14 @@ class InMemoryTimeVaryingVolumetricGridFactory
   }
 
   public:
-  TimeVaryingVolumetricGrid<T, V, InMemorySession<T,double>> Build() const
+  TimeVaryingVolumetricGrid<T, V, InMemorySession<T, double>> Build() const
   {
-    TimeVaryingVolumetricGrid<T, V, InMemorySession<T,double>> grid;
-    for (auto &[time, pts]: _points)
+    TimeVaryingVolumetricGrid<T, V, InMemorySession<T, double>> grid;
+    for (auto &[time, pts] : _points)
     {
       std::vector<Vector3d> cloud;
       std::vector<std::size_t> indices;
-      for (auto &[pt, val]: pts)
+      for (auto &[pt, val] : pts)
       {
         grid.values.push_back(val);
         cloud.push_back(pt);

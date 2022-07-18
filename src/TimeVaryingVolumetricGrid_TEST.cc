@@ -31,7 +31,7 @@ TEST(TimeVaryingVolumetricGridTest, TestConstruction)
       {
         for (double z = 0; z < 1; z+=0.5)
         {
-          gridFactory.AddPoint(t, Vector3d{x,y,z}, t);
+          gridFactory.AddPoint(t, Vector3d{x, y, z}, t);
         }
       }
     }

@@ -38,31 +38,30 @@ namespace gz
     class TimeVaryingVolumetricGridLookupField
     {
       /// \brief Constructor
-      public: TimeVaryingVolumetricGridLookupField()
-      {}
+      public: TimeVaryingVolumetricGridLookupField();
 
       /// \brief Adds a volumetric grid field.
       public: void AddVolumetricGridField(
-        const T& time, const VolumetricGridLookupField<V> &_field) {}
+        const T& time, const VolumetricGridLookupField<V> &_field);
 
       /// \brief Creates a session for querying
-      public: S CreateSession() const {}
+      public: S CreateSession() const;
 
       /// \brief Creates a session startingg at time T
       /// \param
-      public: S CreateSession(const T &_time) const {}
+      public: S CreateSession(const T &_time) const;
 
       /// \brief Update session to new time. Returns new session pointer if
       /// more is available. Otherwise returns nullopt if we have run out of
       /// time.
-      public: std::optional<S> StepTo(const S &_session, const T &_time) {}
+      public: std::optional<S> StepTo(const S &_session, const T &_time);
 
       /// \brief Looks up interpolators at a given time step. Use the session
       /// to set the time step.
       public: std::pair<InterpolationPoint4D<T, V>, InterpolationPoint4D<T, V>>
       LookUp(const S &_session,
         const Vector3<V> &_point,
-        const Vector3<V> &_tol) const {}
+        const Vector3<V> &_tol) const;
 
       public: template<typename X>
       X EstimateQuadrilinear(
@@ -71,9 +70,7 @@ namespace gz
           InterpolationPoint4D<T, V>> &_points,
         const std::vector<X>& values1,
         const std::vector<X>& values2
-      ) const
-      {
-      }
+      ) const;
     };
     /// \brief An in-memory session. Loads the whole dataset in memory and
     /// performs queries.
