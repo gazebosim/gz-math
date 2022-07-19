@@ -148,9 +148,9 @@ namespace gz
       }
 
       /// \brief Get the fluid added mass matrix.
-      /// \return The added mass matrix. It will be nullpot of the added mass
+      /// \return The added mass matrix. It will be nullopt of the added mass
       /// was never set.
-      public: std::optional< Matrix6<T> > FluidAddedMass() const
+      public: const std::optional< Matrix6<T> > &FluidAddedMass() const
       {
         return this->addedMass;
       }
