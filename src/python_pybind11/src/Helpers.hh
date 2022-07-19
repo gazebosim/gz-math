@@ -28,7 +28,7 @@ namespace math
 {
 namespace python
 {
-/// Define a py::bind11 wrapper for an gz::math::Helpers
+/// Define a py::bind11 wrapper for a gz::math::Helpers
 /**
  * \param[in] module a py::bind11 module to add the definition to
  */
