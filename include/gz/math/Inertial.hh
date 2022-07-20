@@ -43,6 +43,9 @@ namespace gz
     /// specifying the pose X_FBi of the inertial frame Bi in the
     /// inertial object frame F.
     ///
+    /// Throughout this documentation, the terms "body", "object" and "link"
+    /// are used interchangeably.
+    ///
     /// For information about the X_FBi notation, see
     /// http://drake.mit.edu/doxygen_cxx/group__multibody__spatial__pose.html
     template<typename T>
@@ -72,8 +75,8 @@ namespace gz
       /// of the mass matrix are specified (see this class's documentation for
       /// details). The pose object specifies the pose X_FBi of the inertial
       /// frame Bi in the frame F of this inertial object
-      /// (see class's documentation). The added mass matrix is also expressed
-      /// in frame Bi.
+      /// (see class's documentation). The added mass matrix is expressed
+      /// in the link origin frame F.
       /// \param[in] _massMatrix Mass and inertia matrix.
       /// \param[in] _pose Pose of center of mass reference frame.
       /// \param[in] _addedMass Coefficients for fluid added mass.
@@ -148,7 +151,7 @@ namespace gz
       }
 
       /// \brief Get the fluid added mass matrix.
-      /// \return The added mass matrix. It will be nullopt of the added mass
+      /// \return The added mass matrix. It will be nullopt if the added mass
       /// was never set.
       public: const std::optional< Matrix6<T> > &FluidAddedMass() const
       {
@@ -167,7 +170,9 @@ namespace gz
       }
 
       /// \brief Spatial mass matrix for body B. It does not include fluid
-      /// added mass.
+      /// added mass. The matrix is expressed in the object's frame F, not to
+      /// be confused with the center of mass frame Bi.
+      ///
       /// The matrix is arranged as follows:
       ///
       /// | m          0          0          0           m * Pz    -m * Py |
@@ -186,7 +191,7 @@ namespace gz
         result.SetSubmatrix(Matrix6<T>::TOP_LEFT,
             Matrix3<T>::Identity * this->massMatrix.Mass());
 
-        result.SetSubmatrix(Matrix6<T>::BOTTOM_RIGHT, this->massMatrix.Moi());
+        result.SetSubmatrix(Matrix6<T>::BOTTOM_RIGHT, this->Moi());
 
         auto x = this->pose.Pos().X();
         auto y = this->pose.Pos().Y();
@@ -203,6 +208,8 @@ namespace gz
 
       /// \brief Spatial mass matrix, which includes the body's inertia, as well
       /// as the inertia of the fluid that is dislocated when the body moves.
+      /// The matrix is expressed in the object's frame F, not to be confused
+      /// with the center of mass frame Bi.
       /// \return The spatial mass matrix.
       /// \sa BodyMatrix
       /// \sa FluidAddedMass
