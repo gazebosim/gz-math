@@ -317,6 +317,34 @@ namespace ignition
             el(5, 0), el(5, 1), el(5, 2), el(5, 3), el(5, 4), el(5, 5));
       }
 
+      /// \brief Addition assignment operator. This matrix will
+      /// become equal to this + _m2.
+      /// \param[in] _m2 Incoming matrix.
+      /// \return This matrix + _m2.
+      public: Matrix6<T> operator+=(const Matrix6<T> &_m2)
+      {
+        (*this) = (*this) + _m2;
+        return *this;
+      }
+
+      /// \brief Addition operator
+      /// \param[in] _m2 Incoming matrix
+      /// \return This matrix + _m2
+      public: Matrix6<T> operator+(const Matrix6<T> &_m2) const
+      {
+        auto el = [&](size_t _row, size_t _col) -> T
+        {
+          return this->data[_row][_col] + _m2(_row, _col);
+        };
+        return Matrix6<T>(
+            el(0, 0), el(0, 1), el(0, 2), el(0, 3), el(0, 4), el(0, 5),
+            el(1, 0), el(1, 1), el(1, 2), el(1, 3), el(1, 4), el(1, 5),
+            el(2, 0), el(2, 1), el(2, 2), el(2, 3), el(2, 4), el(2, 5),
+            el(3, 0), el(3, 1), el(3, 2), el(3, 3), el(3, 4), el(3, 5),
+            el(4, 0), el(4, 1), el(4, 2), el(4, 3), el(4, 4), el(4, 5),
+            el(5, 0), el(5, 1), el(5, 2), el(5, 3), el(5, 4), el(5, 5));
+      }
+
      /// \brief Get the value at the specified row, column index
      /// \param[in] _col The column index. Index values are clamped to a
      /// range of [0, 5].

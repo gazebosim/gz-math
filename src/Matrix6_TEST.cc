@@ -106,7 +106,7 @@ TEST(Matrix6dTest, CoverageExtra)
 }
 
 /////////////////////////////////////////////////
-TEST(Matrix6dTest, Multiply4)
+TEST(Matrix6dTest, Multiply)
 {
   Matrix6d mat, mat1;
 
@@ -134,6 +134,36 @@ TEST(Matrix6dTest, Multiply4)
 
   auto mat4 = mat;
   mat4 *= mat1;
+  EXPECT_EQ(mat2, mat4);
+}
+
+/////////////////////////////////////////////////
+TEST(Matrix6dTest, Add)
+{
+  Matrix6d mat, mat1;
+
+  for (int i = 0; i < 6; ++i)
+  {
+    for (int j = 0; j < 6; ++j)
+    {
+      mat(i, j) = i - j;
+      mat1(j, i) = i + j;
+    }
+  }
+
+  Matrix6d mat3(
+      0, 0, 0, 0, 0, 0,
+      2, 2, 2, 2, 2, 2,
+      4, 4, 4, 4, 4, 4,
+      6, 6, 6, 6, 6, 6,
+      8, 8, 8, 8, 8, 8,
+      10, 10, 10, 10, 10, 10);
+
+  auto mat2 = mat + mat1;
+  EXPECT_EQ(mat2, mat3);
+
+  auto mat4 = mat;
+  mat4 += mat1;
   EXPECT_EQ(mat2, mat4);
 }
 
