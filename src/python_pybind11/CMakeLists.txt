@@ -122,6 +122,7 @@ if (BUILD_TESTING)
     Material_TEST
     Matrix3_TEST
     Matrix4_TEST
+    Matrix6_TEST
     MovingWindowFilter_TEST
     OrientedBox_TEST
     PID_TEST

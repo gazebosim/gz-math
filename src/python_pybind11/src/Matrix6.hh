@@ -68,6 +68,7 @@ void helpDefineMathMatrix6(py::module &_m, const std::string &_typestr)
                   T, T, T, T, T, T,
                   T, T, T, T, T, T>())
     .def(py::self * py::self)
+    .def(py::self + py::self)
     .def(py::self == py::self)
     .def(py::self != py::self)
     .def("__call__",
@@ -76,6 +77,9 @@ void helpDefineMathMatrix6(py::module &_m, const std::string &_typestr)
     .def("set",
          &Class::Set,
          "Set values")
+    .def("set_value",
+         &Class::SetValue,
+         "Set value in a specific row and col.")
     .def("equal",
          &Class::Equal,
          "Equality test operator")
