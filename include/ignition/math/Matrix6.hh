@@ -130,7 +130,7 @@ namespace ignition
       /// param[in] _col Col of the matrix
       /// param[in] _v Value to assign
       /// \return Tru if the value was setted, False otherwise
-      public: bool SetValue(unsigned _row, unsigned _col, T _v)
+      public: bool SetValue(size_t _row, size_t _col, T _v)
       {
         if (_row < MatrixSize && _col < MatrixSize)
         {

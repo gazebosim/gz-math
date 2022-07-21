@@ -380,9 +380,10 @@ TEST(Matrix6dTest, SetValue)
   {
     for (int j = 0; j < 6; ++j)
     {
-      mat.SetValue(i, j, i - j);
+      EXPECT_TRUE(mat.SetValue(i, j, i - j));
     }
   }
+  EXPECT_FALSE(mat.SetValue(100, 100, 100));
 
   EXPECT_EQ(mat, Matrix6i(
       0, -1, -2, -3, -4, -5,
