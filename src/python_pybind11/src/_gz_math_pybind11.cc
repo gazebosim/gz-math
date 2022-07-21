@@ -40,9 +40,11 @@
 #include "OrientedBox.hh"
 #include "PID.hh"
 #include "Plane.hh"
+#include "Polynomial3.hh"
 #include "Pose3.hh"
 #include "Quaternion.hh"
 #include "Rand.hh"
+#include "Region3.hh"
 #include "RollingMean.hh"
 #include "RotationSpline.hh"
 #include "SemanticVersion.hh"
@@ -134,6 +136,10 @@ PYBIND11_MODULE(math, m)
   gz::math::python::defineMathVector4(m, "Vector4");
 
   gz::math::python::defineMathInterval(m, "Interval");
+
+  gz::math::python::defineMathRegion3(m, "Region3");
+
+  gz::math::python::defineMathPolynomial3(m, "Polynomial3");
 
   gz::math::python::defineMathLine2(m, "Line2");
 
