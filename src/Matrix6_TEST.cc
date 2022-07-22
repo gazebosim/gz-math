@@ -371,3 +371,25 @@ TEST(Matrix6dTest, SetSubmatrix)
       30, 31, 32, 33, 34, 35));
 }
 
+/////////////////////////////////////////////////
+TEST(Matrix6dTest, SetValue)
+{
+  Matrix6i mat;
+
+  for (int i = 0; i < 6; ++i)
+  {
+    for (int j = 0; j < 6; ++j)
+    {
+      EXPECT_TRUE(mat.SetValue(i, j, i - j));
+    }
+  }
+  EXPECT_FALSE(mat.SetValue(100, 100, 100));
+
+  EXPECT_EQ(mat, Matrix6i(
+      0, -1, -2, -3, -4, -5,
+      1, 0, -1, -2, -3, -4,
+      2, 1, 0, -1, -2, -3,
+      3, 2, 1, 0, -1, -2,
+      4, 3, 2, 1, 0, -1,
+      5, 4, 3, 2, 1, 0));
+}

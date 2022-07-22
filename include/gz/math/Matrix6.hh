@@ -125,6 +125,21 @@ namespace gz
       {
       }
 
+      /// \brief Set a value in a specific row and col
+      /// param[in] _row Row of the matrix
+      /// param[in] _col Col of the matrix
+      /// param[in] _v Value to assign
+      /// \return Tru if the value was setted, False otherwise
+      public: bool SetValue(size_t _row, size_t _col, T _v)
+      {
+        if (_row < MatrixSize && _col < MatrixSize)
+        {
+          this->data[_row][_col] = _v;
+          return true;
+        }
+        return false;
+      }
+
       /// \brief Change the values
       /// \param[in] _v00 Row 0, Col 0 value
       /// \param[in] _v01 Row 0, Col 1 value
