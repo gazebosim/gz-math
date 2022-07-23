@@ -164,6 +164,10 @@ void defineMathHelpers(py::module &m)
    .def("parse_float",
         &ignition::math::parseFloat,
         "parse string into an float")
+   .def("is_time_string",
+        &ignition::math::isTimeString,
+        "An example time string is \"0 00:00:00.000\", which has the format "
+        "DAYS HOURS:MINUTES:SECONDS.MILLISECONDS")
    .def("ign_sphere_volume",
         &SphereVolume,
         "Compute sphere volume")
