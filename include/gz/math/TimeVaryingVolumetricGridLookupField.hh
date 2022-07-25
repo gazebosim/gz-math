@@ -48,7 +48,7 @@ namespace gz
       public: S CreateSession() const;
 
       /// \brief Creates a session startingg at time T
-      /// \param
+      /// \param _time The time to create the session at.
       public: S CreateSession(const T &_time) const;
 
       /// \brief Update session to new time. Returns new session pointer if
