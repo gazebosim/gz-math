@@ -17,18 +17,18 @@
 // Note: Originally cribbed from Ogre3d. Modified to implement Cardinal
 // spline and catmull-rom spline
 
-#include "ignition/math/Helpers.hh"
-#include "ignition/math/Vector4.hh"
-#include "ignition/math/Spline.hh"
+#include "gz/math/Helpers.hh"
+#include "gz/math/Vector4.hh"
+#include "gz/math/Spline.hh"
 
 #include "SplinePrivate.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 ///////////////////////////////////////////////////////////
 Spline::Spline()
-  : dataPtr(ignition::utils::MakeImpl<Implementation>())
+  : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
 }
 

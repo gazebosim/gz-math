@@ -16,9 +16,9 @@
 */
 #include <gtest/gtest.h>
 
-#include "ignition/math/SphericalCoordinates.hh"
+#include "gz/math/SphericalCoordinates.hh"
 
-using namespace ignition;
+using namespace gz;
 
 //////////////////////////////////////////////////
 // Test different constructors, default parameters
@@ -32,9 +32,9 @@ TEST(SphericalCoordinatesTest, Constructor)
   {
     math::SphericalCoordinates sc;
     EXPECT_EQ(sc.Surface(), st);
-    EXPECT_EQ(sc.LatitudeReference(), ignition::math::Angle());
-    EXPECT_EQ(sc.LongitudeReference(), ignition::math::Angle());
-    EXPECT_EQ(sc.HeadingOffset(), ignition::math::Angle());
+    EXPECT_EQ(sc.LatitudeReference(), gz::math::Angle());
+    EXPECT_EQ(sc.LongitudeReference(), gz::math::Angle());
+    EXPECT_EQ(sc.HeadingOffset(), gz::math::Angle());
     EXPECT_NEAR(sc.ElevationReference(), 0.0, 1e-6);
   }
 
@@ -42,15 +42,15 @@ TEST(SphericalCoordinatesTest, Constructor)
   {
     math::SphericalCoordinates sc(st);
     EXPECT_EQ(sc.Surface(), st);
-    EXPECT_EQ(sc.LatitudeReference(), ignition::math::Angle());
-    EXPECT_EQ(sc.LongitudeReference(), ignition::math::Angle());
-    EXPECT_EQ(sc.HeadingOffset(), ignition::math::Angle());
+    EXPECT_EQ(sc.LatitudeReference(), gz::math::Angle());
+    EXPECT_EQ(sc.LongitudeReference(), gz::math::Angle());
+    EXPECT_EQ(sc.HeadingOffset(), gz::math::Angle());
     EXPECT_NEAR(sc.ElevationReference(), 0.0, 1e-6);
   }
 
   // All arguments
   {
-    ignition::math::Angle lat(0.3), lon(-1.2), heading(0.5);
+    gz::math::Angle lat(0.3), lon(-1.2), heading(0.5);
     double elev = 354.1;
     math::SphericalCoordinates sc(st, lat, lon, elev, heading);
     EXPECT_EQ(sc.Surface(), st);
@@ -63,6 +63,11 @@ TEST(SphericalCoordinatesTest, Constructor)
     math::SphericalCoordinates sc2(sc);
     EXPECT_EQ(sc, sc2);
   }
+
+  // Bad surface type, this should throw an error
+  math::SphericalCoordinates invalidSC(
+      static_cast<math::SphericalCoordinates::SurfaceType>(3));
+  EXPECT_EQ(invalidSC.Surface(), 3);
 }
 
 //////////////////////////////////////////////////
@@ -80,7 +85,17 @@ TEST(SphericalCoordinatesTest, Convert)
 
   EXPECT_EQ("EARTH_WGS84", math::SphericalCoordinates::Convert(st));
   EXPECT_EQ("EARTH_WGS84", math::SphericalCoordinates::Convert(
-      static_cast<math::SphericalCoordinates::SurfaceType>(2)));
+      static_cast<math::SphericalCoordinates::SurfaceType>(3)));
+
+  // For the Moon surface type
+  st = math::SphericalCoordinates::MOON_SCS;
+  EXPECT_EQ(math::SphericalCoordinates::Convert("MOON_SCS"), st);
+  EXPECT_EQ("MOON_SCS", math::SphericalCoordinates::Convert(st));
+
+  // For the custom surface type
+  st = math::SphericalCoordinates::CUSTOM_SURFACE;
+  EXPECT_EQ(math::SphericalCoordinates::Convert("CUSTOM_SURFACE"), st);
+  EXPECT_EQ("CUSTOM_SURFACE", math::SphericalCoordinates::Convert(st));
 }
 
 //////////////////////////////////////////////////
@@ -94,13 +109,21 @@ TEST(SphericalCoordinatesTest, SetFunctions)
   // Default parameters
   math::SphericalCoordinates sc;
   EXPECT_EQ(sc.Surface(), st);
-  EXPECT_EQ(sc.LatitudeReference(), ignition::math::Angle());
-  EXPECT_EQ(sc.LongitudeReference(), ignition::math::Angle());
-  EXPECT_EQ(sc.HeadingOffset(), ignition::math::Angle());
+  EXPECT_EQ(sc.LatitudeReference(), gz::math::Angle());
+  EXPECT_EQ(sc.LongitudeReference(), gz::math::Angle());
+  EXPECT_EQ(sc.HeadingOffset(), gz::math::Angle());
   EXPECT_NEAR(sc.ElevationReference(), 0.0, 1e-6);
+  EXPECT_NEAR(sc.SurfaceRadius(),
+      6371000.0, 1e-3);
+  EXPECT_NEAR(sc.SurfaceAxisEquatorial(),
+      6378137.0, 1e-3);
+  EXPECT_NEAR(sc.SurfaceAxisPolar(),
+      6356752.314245, 1e-3);
+  EXPECT_NEAR(sc.SurfaceFlattening(),
+      1.0/298.257223563, 1e-5);
 
   {
-    ignition::math::Angle lat(0.3), lon(-1.2), heading(0.5);
+    gz::math::Angle lat(0.3), lon(-1.2), heading(0.5);
     double elev = 354.1;
     sc.SetSurface(st);
     sc.SetLatitudeReference(lat);
@@ -113,7 +136,71 @@ TEST(SphericalCoordinatesTest, SetFunctions)
     EXPECT_EQ(sc.LongitudeReference(), lon);
     EXPECT_EQ(sc.HeadingOffset(), heading);
     EXPECT_NEAR(sc.ElevationReference(), elev, 1e-6);
+    EXPECT_NEAR(sc.SurfaceRadius(),
+        6371000.0, 1e-3);
+    EXPECT_NEAR(sc.SurfaceAxisEquatorial(),
+        6378137.0, 1e-3);
+    EXPECT_NEAR(sc.SurfaceAxisPolar(),
+        6356752.314245, 1e-3);
+    EXPECT_NEAR(sc.SurfaceFlattening(),
+        1.0/298.257223563, 1e-5);
   }
+
+  // Moon surface type
+  st = math::SphericalCoordinates::MOON_SCS;
+  math::SphericalCoordinates moonSC(st);
+  moonSC.SetSurface(st);
+  EXPECT_EQ(moonSC.Surface(), st);
+  EXPECT_NEAR(moonSC.SurfaceRadius(),
+      1737400.0, 1e-3);
+  EXPECT_NEAR(moonSC.SurfaceAxisEquatorial(),
+      1738100.0, 1e-3);
+  EXPECT_NEAR(moonSC.SurfaceAxisPolar(),
+      1736000.0, 1e-3);
+  EXPECT_NEAR(moonSC.SurfaceFlattening(),
+      0.0012, 1e-5);
+}
+
+//////////////////////////////////////////////////
+/// Test invalid parameters for custom surface
+TEST(SphericalCoordinatesTest, InvalidParameters)
+{
+  // Earth's constants
+  double g_EarthWGS84AxisEquatorial = 6378137.0;
+  double g_EarthWGS84AxisPolar = 6356752.314245;
+  double g_EarthWGS84Flattening = 1.0/298.257223563;
+  double g_EarthRadius = 6371000.0;
+
+  // Create a custom surface with invalid parameters.
+  math::SphericalCoordinates scInvalid(
+      math::SphericalCoordinates::CUSTOM_SURFACE,
+      -1, -1);
+
+  // These should be rejected and default to Earth's
+  // parameters.
+  EXPECT_NEAR(scInvalid.SurfaceRadius(), g_EarthRadius,
+      1e-3);
+  EXPECT_NEAR(scInvalid.SurfaceAxisEquatorial(),
+      g_EarthWGS84AxisEquatorial, 1e-3);
+  EXPECT_NEAR(scInvalid.SurfaceAxisPolar(),
+      g_EarthWGS84AxisPolar, 1e-3);
+  EXPECT_NEAR(scInvalid.SurfaceFlattening(),
+      g_EarthWGS84Flattening, 1e-3);
+
+  // Create a custom surface with valid parameters.
+  math::SphericalCoordinates scValid(
+      math::SphericalCoordinates::CUSTOM_SURFACE,
+      100, 100);
+
+  // These should be accepted
+  EXPECT_NEAR(scValid.SurfaceRadius(), 100,
+      1e-3);
+  EXPECT_NEAR(scValid.SurfaceAxisEquatorial(),
+      100, 1e-3);
+  EXPECT_NEAR(scValid.SurfaceAxisPolar(),
+      100, 1e-3);
+  EXPECT_NEAR(scValid.SurfaceFlattening(),
+      0, 1e-3);
 }
 
 //////////////////////////////////////////////////
@@ -126,8 +213,8 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
 
   {
     // Parameters
-    ignition::math::Angle lat(0.3), lon(-1.2),
-      heading(ignition::math::Angle::HalfPi);
+    gz::math::Angle lat(0.3), lon(-1.2),
+      heading(gz::math::Angle::HalfPi);
     double elev = 354.1;
     math::SphericalCoordinates sc(st, lat, lon, elev, heading);
 
@@ -136,9 +223,9 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
     // Heading 90: X == North, Y == West , Z == Up
     {
       // local frame
-      ignition::math::Vector3d xyz;
+      gz::math::Vector3d xyz;
       // east, north, up
-      ignition::math::Vector3d enu;
+      gz::math::Vector3d enu;
 
       xyz.Set(1, 0, 0);
       enu = sc.GlobalFromLocalVelocity(xyz);
@@ -168,9 +255,9 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
     // Check SphericalFromLocal
     {
       // local frame
-      ignition::math::Vector3d xyz;
+      gz::math::Vector3d xyz;
       // spherical coordinates
-      ignition::math::Vector3d sph;
+      gz::math::Vector3d sph;
 
       // No offset
       xyz.Set(0, 0, 0);
@@ -193,7 +280,7 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
       // no change in longitude
       EXPECT_NEAR(sph.Z(), 3507.024791, 1e-6);
 
-      ignition::math::Vector3d xyz2 = sc.LocalFromSphericalPosition(sph);
+      gz::math::Vector3d xyz2 = sc.LocalFromSphericalPosition(sph);
       EXPECT_EQ(xyz, xyz2);
     }
 
@@ -203,11 +290,11 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
       // > gdaltransform -s_srs WGS84 -t_srs EPSG:4978
       // > latitude longitude altitude
       // > X Y Z
-      ignition::math::Vector3d tmp;
-      ignition::math::Vector3d osrf_s(37.3877349, -122.0651166, 32.0);
-      ignition::math::Vector3d osrf_e(
+      gz::math::Vector3d tmp;
+      gz::math::Vector3d osrf_s(37.3877349, -122.0651166, 32.0);
+      gz::math::Vector3d osrf_e(
           -2693701.91434394, -4299942.14687992, 3851691.0393571);
-      ignition::math::Vector3d goog_s(37.4216719, -122.0821853, 30.0);
+      gz::math::Vector3d goog_s(37.4216719, -122.0821853, 30.0);
 
       // Local tangent plane coordinates (ENU = GLOBAL) coordinates of
       // Google when OSRF is taken as the origin:
@@ -215,16 +302,16 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
       // +lat_0=37.3877349 +lon_0=-122.0651166 +k=1 +x_0=0 +y_0=0
       // > -122.0821853 37.4216719 (LON,LAT)
       // > -1510.88 3766.64 (EAST,NORTH)
-      ignition::math::Vector3d vec(-1510.88, 3766.64, -3.29);
+      gz::math::Vector3d vec(-1510.88, 3766.64, -3.29);
 
       // Convert degrees to radians
       osrf_s.X() *= 0.0174532925;
       osrf_s.Y() *= 0.0174532925;
 
       // Set the ORIGIN to be the Open Source Robotics Foundation
-      math::SphericalCoordinates sc2(st, ignition::math::Angle(osrf_s.X()),
-          ignition::math::Angle(osrf_s.Y()), osrf_s.Z(),
-          ignition::math::Angle::Zero);
+      math::SphericalCoordinates sc2(st, gz::math::Angle(osrf_s.X()),
+          gz::math::Angle(osrf_s.Y()), osrf_s.Z(),
+          gz::math::Angle::Zero);
 
       // Check that SPHERICAL -> ECEF works
       tmp = sc2.PositionTransform(osrf_s,
@@ -260,16 +347,16 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
 
   // Give no heading offset to confirm ENU frame
   {
-    ignition::math::Angle lat(0.3), lon(-1.2), heading(0.0);
+    gz::math::Angle lat(0.3), lon(-1.2), heading(0.0);
     double elev = 354.1;
     math::SphericalCoordinates sc(st, lat, lon, elev, heading);
 
     // Check GlobalFromLocal with no heading offset
     {
       // local frame
-      ignition::math::Vector3d xyz;
+      gz::math::Vector3d xyz;
       // east, north, up
-      ignition::math::Vector3d enu;
+      gz::math::Vector3d enu;
 
       xyz.Set(1, 0, 0);
       enu = sc.VelocityTransform(xyz,
@@ -306,22 +393,56 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
 // Test distance
 TEST(SphericalCoordinatesTest, Distance)
 {
-  ignition::math::Angle latA, longA, latB, longB;
+  gz::math::Angle latA, longA, latB, longB;
   latA.SetDegree(46.250944);
   longA.SetDegree(-122.249972);
   latB.SetDegree(46.124953);
   longB.SetDegree(-122.251683);
-  double d = math::SphericalCoordinates::Distance(latA, longA, latB, longB);
 
-  EXPECT_NEAR(14002, d, 20);
+  // Calculating distance using the static method.
+  double d1 = math::SphericalCoordinates::DistanceWGS84(
+      latA, longA, latB, longB);
+  EXPECT_NEAR(14002, d1, 20);
+
+  // Using the non static method. The default surface type is EARTH_WGS84.
+  auto earthSC = math::SphericalCoordinates();
+  double d2 = earthSC.DistanceBetweenPoints(latA, longA, latB, longB);
+  EXPECT_NEAR(d1, d2, 0.1);
+
+  earthSC = math::SphericalCoordinates(
+      math::SphericalCoordinates::SurfaceType::EARTH_WGS84);
+  double d3 = earthSC.DistanceBetweenPoints(latA, longA, latB, longB);
+  EXPECT_NEAR(d2, d3, 0.1);
+
+  // Setting the surface type as Moon.
+  auto moonSC = math::SphericalCoordinates(
+      math::SphericalCoordinates::SurfaceType::MOON_SCS);
+  double d4 = moonSC.DistanceBetweenPoints(latA, longA, latB, longB);
+  EXPECT_NEAR(3820, d4, 5);
+
+  // Using a custom surface.
+  // For custom surfaces, the surface properties need to be set.
+  // This one will throw an error.
+  auto invalidCustomSC = math::SphericalCoordinates(
+      math::SphericalCoordinates::CUSTOM_SURFACE);
+  // This one should be accepted.
+  auto customSC = math::SphericalCoordinates(
+      math::SphericalCoordinates::SurfaceType::CUSTOM_SURFACE,
+      6378137.0,
+      6356752.314245);
+
+  EXPECT_NEAR(customSC.DistanceBetweenPoints(latA, longA, latB, longB),
+      d1, 0.1);
 }
 
 //////////////////////////////////////////////////
 TEST(SphericalCoordinatesTest, BadSetSurface)
 {
   math::SphericalCoordinates sc;
-  sc.SetSurface(static_cast<math::SphericalCoordinates::SurfaceType>(2));
-  EXPECT_EQ(sc.Surface(), 2);
+  sc.SetSurface(static_cast<math::SphericalCoordinates::SurfaceType>(3),
+      10, 10);
+  sc.SetSurface(static_cast<math::SphericalCoordinates::SurfaceType>(3));
+  EXPECT_EQ(sc.Surface(), 3);
 }
 
 //////////////////////////////////////////////////
@@ -392,18 +513,18 @@ TEST(SphericalCoordinatesTest, EqualityOps)
   // Default surface type
   math::SphericalCoordinates::SurfaceType st =
     math::SphericalCoordinates::EARTH_WGS84;
-  ignition::math::Angle lat(0.3), lon(-1.2), heading(0.5);
+  gz::math::Angle lat(0.3), lon(-1.2), heading(0.5);
   double elev = 354.1;
   math::SphericalCoordinates sc1(st, lat, lon, elev, heading);
 
   math::SphericalCoordinates sc2(st, lat, lon, elev, heading);
   EXPECT_TRUE(sc1 == sc2);
   EXPECT_FALSE(sc1 != sc2);
-  math::SphericalCoordinates sc3(st, ignition::math::Angle::Zero, lon, elev,
+  math::SphericalCoordinates sc3(st, gz::math::Angle::Zero, lon, elev,
     heading);
   EXPECT_FALSE(sc1 == sc3);
   EXPECT_TRUE(sc1 != sc3);
-  math::SphericalCoordinates sc4(st, lat, ignition::math::Angle::Zero, elev,
+  math::SphericalCoordinates sc4(st, lat, gz::math::Angle::Zero, elev,
     heading);
   EXPECT_FALSE(sc1 == sc4);
   EXPECT_TRUE(sc1 != sc4);
@@ -411,7 +532,7 @@ TEST(SphericalCoordinatesTest, EqualityOps)
   EXPECT_FALSE(sc1 == sc5);
   EXPECT_TRUE(sc1 != sc5);
   math::SphericalCoordinates sc6(st, lat, lon, elev,
-    ignition::math::Angle::Zero);
+    gz::math::Angle::Zero);
   EXPECT_FALSE(sc1 == sc6);
   EXPECT_TRUE(sc1 != sc6);
 }
@@ -423,7 +544,7 @@ TEST(SphericalCoordinatesTest, AssignmentOp)
   // Default surface type
   math::SphericalCoordinates::SurfaceType st =
     math::SphericalCoordinates::EARTH_WGS84;
-  ignition::math::Angle lat(0.3), lon(-1.2), heading(0.5);
+  gz::math::Angle lat(0.3), lon(-1.2), heading(0.5);
   double elev = 354.1;
   math::SphericalCoordinates sc1(st, lat, lon, elev, heading);
 
@@ -436,8 +557,8 @@ TEST(SphericalCoordinatesTest, NoHeading)
 {
   // Default heading
   auto st = math::SphericalCoordinates::EARTH_WGS84;
-  math::Angle lat(IGN_DTOR(-22.9));
-  math::Angle lon(IGN_DTOR(-43.2));
+  math::Angle lat(GZ_DTOR(-22.9));
+  math::Angle lon(GZ_DTOR(-43.2));
   math::Angle heading(0.0);
   double elev = 0;
   math::SphericalCoordinates sc(st, lat, lon, elev, heading);
@@ -446,7 +567,7 @@ TEST(SphericalCoordinatesTest, NoHeading)
   auto latLonAlt = sc.SphericalFromLocalPosition({0, 0, 0});
   EXPECT_DOUBLE_EQ(lat.Degree(), latLonAlt.X());
   EXPECT_DOUBLE_EQ(lon.Degree(), latLonAlt.Y());
-  EXPECT_DOUBLE_EQ(elev, latLonAlt.Z());
+  EXPECT_NEAR(elev, latLonAlt.Z(), 1e-6);
 
   auto xyzOrigin = sc.LocalFromSphericalPosition(latLonAlt);
   EXPECT_EQ(math::Vector3d::Zero, xyzOrigin);
@@ -544,9 +665,9 @@ TEST(SphericalCoordinatesTest, WithHeading)
 {
   // Heading 90 deg: X == North, Y == West , Z == Up
   auto st = math::SphericalCoordinates::EARTH_WGS84;
-  math::Angle lat(IGN_DTOR(-22.9));
-  math::Angle lon(IGN_DTOR(-43.2));
-  math::Angle heading(IGN_DTOR(90.0));
+  math::Angle lat(GZ_DTOR(-22.9));
+  math::Angle lon(GZ_DTOR(-43.2));
+  math::Angle heading(GZ_DTOR(90.0));
   double elev = 0;
   math::SphericalCoordinates sc(st, lat, lon, elev, heading);
 
@@ -554,7 +675,7 @@ TEST(SphericalCoordinatesTest, WithHeading)
   auto latLonAlt = sc.SphericalFromLocalPosition({0, 0, 0});
   EXPECT_DOUBLE_EQ(lat.Degree(), latLonAlt.X());
   EXPECT_DOUBLE_EQ(lon.Degree(), latLonAlt.Y());
-  EXPECT_DOUBLE_EQ(elev, latLonAlt.Z());
+  EXPECT_NEAR(elev, latLonAlt.Z(), 1e-6);
 
   auto xyzOrigin = sc.LocalFromSphericalPosition(latLonAlt);
   EXPECT_EQ(math::Vector3d::Zero, xyzOrigin);
@@ -623,7 +744,7 @@ TEST(SphericalCoordinatesTest, WithHeading)
 TEST(SphericalCoordinatesTest, Inverse)
 {
   auto st = math::SphericalCoordinates::EARTH_WGS84;
-  ignition::math::Angle lat(0.3), lon(-1.2), heading(0.5);
+  gz::math::Angle lat(0.3), lon(-1.2), heading(0.5);
   double elev = 354.1;
   math::SphericalCoordinates sc(st, lat, lon, elev, heading);
 

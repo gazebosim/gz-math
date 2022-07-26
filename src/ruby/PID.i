@@ -16,13 +16,13 @@
 */
 %module pid 
 %{
-	#include <ignition/math/PID.hh>
+	#include <gz/math/PID.hh>
 %}
 
 %include "typemaps.i"
 %apply double *OUTPUT { double &_pe, double &_ie, double &_de };
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

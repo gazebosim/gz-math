@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__CYLINDER_HH_
-#define IGNITION_MATH_PYTHON__CYLINDER_HH_
+#ifndef GZ_MATH_PYTHON__CYLINDER_HH_
+#define GZ_MATH_PYTHON__CYLINDER_HH_
 
 #include <string>
 
@@ -24,18 +24,18 @@
 #include <pybind11/operators.h>
 #include <pybind11/stl.h>
 
-#include <ignition/math/Cylinder.hh>
+#include <gz/math/Cylinder.hh>
 
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an ignition::math::Cylinder
+/// Define a pybind11 wrapper for a gz::math::Cylinder
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -44,7 +44,7 @@ template<typename T>
 void defineMathCylinder(py::module &m, const std::string &typestr)
 {
 
-  using Class = ignition::math::Cylinder<T>;
+  using Class = gz::math::Cylinder<T>;
   std::string pyclass_name = typestr;
   py::class_<Class>(m,
                     pyclass_name.c_str(),
@@ -52,17 +52,17 @@ void defineMathCylinder(py::module &m, const std::string &typestr)
                     py::dynamic_attr())
     .def(py::init<>())
     .def(py::init<const T, const T,
-                  const ignition::math::Quaternion<T>&>(),
+                  const gz::math::Quaternion<T>&>(),
          py::arg("_length") = 0,
          py::arg("_radius") = 0,
-         py::arg("_rotOffset") = ignition::math::Quaternion<T>::Identity)
+         py::arg("_rotOffset") = gz::math::Quaternion<T>::Identity)
     .def(py::init<const T, const T,
-                  const ignition::math::Material&,
-                  const ignition::math::Quaternion<T>&>(),
+                  const gz::math::Material&,
+                  const gz::math::Quaternion<T>&>(),
          py::arg("_length") = 0,
          py::arg("_radius") = 0,
-         py::arg("_material") = ignition::math::Material(),
-         py::arg("_rotOffset") = ignition::math::Quaternion<T>::Identity)
+         py::arg("_material") = gz::math::Material(),
+         py::arg("_rotOffset") = gz::math::Quaternion<T>::Identity)
     .def(py::self == py::self)
     .def("radius",
          &Class::Radius,
@@ -84,7 +84,6 @@ void defineMathCylinder(py::module &m, const std::string &typestr)
          "Set the rotation offset.")
     .def("mat",
          &Class::Mat,
-         py::return_value_policy::reference,
          "Get the material associated with this box.")
     .def("set_mat",
          &Class::SetMat,
@@ -113,6 +112,6 @@ void defineMathCylinder(py::module &m, const std::string &typestr)
 
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
-#endif  // IGNITION_MATH_PYTHON__CYLINDER_HH_
+#endif  // GZ_MATH_PYTHON__CYLINDER_HH_

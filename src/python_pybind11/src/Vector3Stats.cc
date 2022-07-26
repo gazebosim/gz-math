@@ -17,13 +17,13 @@
 
 #include <string>
 
-#include <ignition/math/Vector3Stats.hh>
+#include <gz/math/Vector3Stats.hh>
 
 #include "Vector3Stats.hh"
 
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -31,7 +31,7 @@ namespace python
 {
 void defineMathVector3Stats(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::Vector3Stats;
+  using Class = gz::math::Vector3Stats;
   std::string pyclass_name = typestr;
   py::class_<Class>(m,
                     pyclass_name.c_str(),
@@ -52,19 +52,19 @@ void defineMathVector3Stats(py::module &m, const std::string &typestr)
          "Forget all previous data.")
     .def("x",
          py::overload_cast<>(&Class::X),
-         py::return_value_policy::reference,
+         py::return_value_policy::reference_internal,
          "Get statistics for x component of signal.")
     .def("y",
          py::overload_cast<>(&Class::Y),
-         py::return_value_policy::reference,
+         py::return_value_policy::reference_internal,
          "Get statistics for y component of signal.")
     .def("z",
          py::overload_cast<>(&Class::Z),
-         py::return_value_policy::reference,
+         py::return_value_policy::reference_internal,
          "Get statistics for z component of signal.")
     .def("mag",
          py::overload_cast<>(&Class::Mag),
-         py::return_value_policy::reference,
+         py::return_value_policy::reference_internal,
          "Get statistics for mag component of signal.")
     .def("__copy__", [](const Class &self) {
       return Class(self);
@@ -75,4 +75,4 @@ void defineMathVector3Stats(py::module &m, const std::string &typestr)
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz

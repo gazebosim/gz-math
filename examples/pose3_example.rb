@@ -15,22 +15,22 @@
 # This example will only work if the Ruby interface library was compiled and
 # installed.
 #
-# Modify the RUBYLIB environment variable to include the ignition math
+# Modify the RUBYLIB environment variable to include the Gazebo math
 # library install path. For example, if you install to /user:
 #
 # $ export RUBYLIB=/usr/lib/ruby:$RUBYLIB
 #
-require 'ignition/math'
+require 'gz/math'
 
 # Construct a default Pose3d.
-p = Ignition::Math::Pose3d.new
+p = Gz::Math::Pose3d.new
 printf("A default Pose3d has the following values\n" +
        "%f %f %f %f %f %f\n", p.Pos().X(), p.Pos().Y(), p.Pos().Z(),
        p.Rot().Euler().X(), p.Rot().Euler().Y(), p.Rot().Euler().Z())
 
 # Construct a pose at position 1, 2, 3 with a yaw of PI radians.
-p1 = Ignition::Math::Pose3d.new(1, 2, 3, 0, 0, Math::PI)
-printf("A pose3d(1, 2, 3, 0, 0, IGN_PI) has the following values\n" +
+p1 = Gz::Math::Pose3d.new(1, 2, 3, 0, 0, Math::PI)
+printf("A pose3d(1, 2, 3, 0, 0, GZ_PI) has the following values\n" +
        "%f %f %f %f %f %f\n", p1.Pos().X(), p1.Pos().Y(), p1.Pos().Z(),
        p1.Rot().Euler().X(), p1.Rot().Euler().Y(), p1.Rot().Euler().Z())
 

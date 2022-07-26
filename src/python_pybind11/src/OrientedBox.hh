@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__ORIENTEDBOX_HH_
-#define IGNITION_MATH_PYTHON__ORIENTEDBOX_HH_
+#ifndef GZ_MATH_PYTHON__ORIENTEDBOX_HH_
+#define GZ_MATH_PYTHON__ORIENTEDBOX_HH_
 
 #include <sstream>
 #include <string>
@@ -24,18 +24,18 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 
-#include <ignition/math/OrientedBox.hh>
+#include <gz/math/OrientedBox.hh>
 
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an ignition::math::OrientedBox
+/// Define a pybind11 wrapper for a gz::math::OrientedBox
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -44,7 +44,7 @@ template<typename T>
 void defineMathOrientedBox(py::module &m, const std::string &typestr)
 {
 
-  using Class = ignition::math::OrientedBox<T>;
+  using Class = gz::math::OrientedBox<T>;
   std::string pyclass_name = typestr;
   auto toString = [](const Class &si) {
     std::stringstream stream;
@@ -56,29 +56,28 @@ void defineMathOrientedBox(py::module &m, const std::string &typestr)
                     py::buffer_protocol(),
                     py::dynamic_attr())
     .def(py::init<>())
-    .def(py::init<const ignition::math::Vector3<T>&,
-                  const ignition::math::Pose3<T>&>())
-    .def(py::init<const ignition::math::Vector3<T>&,
-                  const ignition::math::Pose3<T>&,
-                  const ignition::math::Material&>())
-    .def(py::init<const ignition::math::Vector3<T>&>())
+    .def(py::init<const gz::math::Vector3<T>&,
+                  const gz::math::Pose3<T>&>())
+    .def(py::init<const gz::math::Vector3<T>&,
+                  const gz::math::Pose3<T>&,
+                  const gz::math::Material&>())
+    .def(py::init<const gz::math::Vector3<T>&>())
     .def(py::init<const Class&>())
-    .def(py::init<const ignition::math::Vector3<T>&,
-                  const ignition::math::Material&>())
+    .def(py::init<const gz::math::Vector3<T>&,
+                  const gz::math::Material&>())
     .def(py::self != py::self)
     .def(py::self == py::self)
     .def("pose",
-         py::overload_cast<const ignition::math::Pose3<T>&>(&Class::Pose),
+         py::overload_cast<const gz::math::Pose3<T>&>(&Class::Pose),
          "Set the box pose, which is the pose of its center.")
     .def("pose",
          py::overload_cast<>(&Class::Pose, py::const_),
-         py::return_value_policy::reference,
          "Get the box pose, which is the pose of its center.")
     .def("size",
          py::overload_cast<>(&Class::Size, py::const_),
          "Get the size of the OrientedBox.")
     .def("size",
-         py::overload_cast<const ignition::math::Vector3<T>&>
+         py::overload_cast<const gz::math::Vector3<T>&>
           (&Class::Size),
          "Set the size of the OrientedBox.")
     .def("x_length",
@@ -125,6 +124,6 @@ void defineMathOrientedBox(py::module &m, const std::string &typestr)
 
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
-#endif  // IGNITION_MATH_PYTHON__ORIENTEDBOX_HH_
+#endif  // GZ_MATH_PYTHON__ORIENTEDBOX_HH_

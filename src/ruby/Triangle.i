@@ -17,15 +17,15 @@
 
 %module triangle
 %{
-#include <ignition/math/config.hh>
-#include <ignition/math/Helpers.hh>
-#include <ignition/math/Line2.hh>
+#include <gz/math/config.hh>
+#include <gz/math/Helpers.hh>
+#include <gz/math/Line2.hh>
 #include <set>
-#include <ignition/math/Triangle.hh>
-#include <ignition/math/Vector2.hh>
+#include <gz/math/Triangle.hh>
+#include <gz/math/Vector2.hh>
 %}
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -54,7 +54,7 @@ namespace math
 
     %extend Triangle
     {
-      ignition::math::Vector2<T> __getitem__(const unsigned int i) const
+      gz::math::Vector2<T> __getitem__(const unsigned int i) const
       {
         return (*$self)[i];
       }

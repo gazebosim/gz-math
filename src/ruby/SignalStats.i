@@ -18,14 +18,14 @@
 %module signalStats
 
 %{
-#include <ignition/math/SignalStats.hh>
+#include <gz/math/SignalStats.hh>
 %}
 
 %include "std_string.i"
 %include "std_map.i"
 %template(map_string_double) std::map<std::string, double>;
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

@@ -19,10 +19,10 @@
 %{
 #include <chrono>
 #include <memory>
-#include <ignition/math/DiffDriveOdometry.hh>
-#include <ignition/math/Angle.hh>
-#include <ignition/math/Export.hh>
-#include <ignition/math/config.hh>
+#include <gz/math/DiffDriveOdometry.hh>
+#include <gz/math/Angle.hh>
+#include <gz/math/Export.hh>
+#include <gz/math/config.hh>
 %}
 
 %include "typemaps.i"
@@ -36,7 +36,7 @@ $1 = new std::chrono::steady_clock::time_point();
 *$1 += duration_cast<std::chrono::steady_clock::duration>(std::chrono::milliseconds(PyInt_AsLong($input)));
 %}
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

@@ -16,11 +16,11 @@
 */
 
 #include <gtest/gtest.h>
-#include "ignition/math/Material.hh"
-#include "ignition/math/MaterialType.hh"
-#include "ignition/math/Helpers.hh"
+#include "gz/math/Material.hh"
+#include "gz/math/MaterialType.hh"
+#include "gz/math/Helpers.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 /////////////////////////////////////////////////

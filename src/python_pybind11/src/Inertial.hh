@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__INERTIAL_HH_
-#define IGNITION_MATH_PYTHON__INERTIAL_HH_
+#ifndef GZ_MATH_PYTHON__INERTIAL_HH_
+#define GZ_MATH_PYTHON__INERTIAL_HH_
 
 #include <string>
 
@@ -24,18 +24,18 @@
 #include <pybind11/operators.h>
 #include <pybind11/stl.h>
 
-#include <ignition/math/Inertial.hh>
+#include <gz/math/Inertial.hh>
 
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an ignition::math::Inertial
+/// Define a pybind11 wrapper for a gz::math::Inertial
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -44,35 +44,35 @@ template<typename T>
 void defineMathInertial(py::module &m, const std::string &typestr)
 {
 
-  using Class = ignition::math::Inertial<T>;
+  using Class = gz::math::Inertial<T>;
   std::string pyclass_name = typestr;
   py::class_<Class>(m,
                     pyclass_name.c_str(),
                     py::buffer_protocol(),
                     py::dynamic_attr())
     .def(py::init<>())
-    .def(py::init<const ignition::math::MassMatrix3<T>&,
-                  const ignition::math::Pose3<T>&>())
+    .def(py::init<const gz::math::MassMatrix3<T>&,
+                  const gz::math::Pose3<T>&>())
     .def(py::init<const Class&>())
     .def(py::self == py::self)
     .def(py::self != py::self)
     .def(py::self += py::self)
     .def(py::self + py::self)
+    .def(py::self -= py::self)
+    .def(py::self - py::self)
     .def("set_mass_matrix",
          &Class::SetMassMatrix,
-         py::arg("_m") = ignition::math::MassMatrix3<T>(),
-         py::arg("_tolerance") = IGN_MASSMATRIX3_DEFAULT_TOLERANCE<T>,
+         py::arg("_m") = gz::math::MassMatrix3<T>(),
+         py::arg("_tolerance") = GZ_MASSMATRIX3_DEFAULT_TOLERANCE<T>,
          "Set the mass and inertia matrix.")
     .def("mass_matrix",
          &Class::MassMatrix,
-         py::return_value_policy::reference,
          "Get the mass and inertia matrix.")
     .def("set_pose",
          &Class::SetPose,
          "Set the pose of the center of mass reference frame.")
     .def("pose",
          &Class::Pose,
-         py::return_value_policy::reference,
          "Get the pose of the center of mass reference frame.")
     .def("moi",
          &Class::Moi,
@@ -84,9 +84,8 @@ void defineMathInertial(py::module &m, const std::string &typestr)
          "MOI in the base coordinate frame.")
     .def("set_mass_matrix_rotation",
          &Class::SetMassMatrixRotation,
-         py::arg("_q") = ignition::math::Quaternion<T>::Identity,
+         py::arg("_q") = gz::math::Quaternion<T>::Identity,
          py::arg("_tol") = 1e-6,
-         py::return_value_policy::reference,
          "Set the MassMatrix rotation (eigenvectors of inertia matrix) "
          "without affecting the MOI in the base coordinate frame.")
     .def("__copy__", [](const Class &self) {
@@ -99,6 +98,6 @@ void defineMathInertial(py::module &m, const std::string &typestr)
 
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
-#endif  // IGNITION_MATH_PYTHON__INERTIAL_HH_
+#endif  // GZ_MATH_PYTHON__INERTIAL_HH_

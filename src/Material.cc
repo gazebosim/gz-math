@@ -15,21 +15,21 @@
  *
 */
 
-#include "ignition/math/Material.hh"
+#include "gz/math/Material.hh"
 
 #include <algorithm>
 #include <memory>
 
-#include "ignition/math/Helpers.hh"
+#include "gz/math/Helpers.hh"
 
 // Placing the kMaterialData in a separate file for conveniece and clarity.
 #include "MaterialType.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 // Private data for the Material class
-class ignition::math::Material::Implementation
+class gz::math::Material::Implementation
 {
   /// \brief Set from a kMaterialData constant.
   public: void SetFrom(const std::pair<MaterialType, MaterialData>& _input)
@@ -52,7 +52,7 @@ class ignition::math::Material::Implementation
 
 ///////////////////////////////
 Material::Material()
-: dataPtr(ignition::utils::MakeImpl<Implementation>())
+: dataPtr(gz::utils::MakeImpl<Implementation>())
 {
 }
 

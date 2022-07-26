@@ -17,10 +17,10 @@
 
 #include <gtest/gtest.h>
 
-#include "ignition/math/Vector3.hh"
-#include "ignition/math/Spline.hh"
+#include "gz/math/Vector3.hh"
+#include "gz/math/Spline.hh"
 
-using namespace ignition;
+using namespace gz;
 
 /////////////////////////////////////////////////
 TEST(SplineTest, Spline)

@@ -21,12 +21,12 @@
 #include <cmath>
 #include <limits>
 
-#include "ignition/math/Rand.hh"
-#include "ignition/math/Vector3.hh"
-#include "ignition/math/Helpers.hh"
-#include <ignition/utils/SuppressWarning.hh>
+#include "gz/math/Rand.hh"
+#include "gz/math/Vector3.hh"
+#include "gz/math/Helpers.hh"
+#include <gz/utils/SuppressWarning.hh>
 
-using namespace ignition;
+using namespace gz;
 
 /////////////////////////////////////////////////
 // Test a few function in Helpers
@@ -425,16 +425,16 @@ TEST(HelpersTest, Sort)
 /////////////////////////////////////////////////
 TEST(HelpersTest, Volume)
 {
-  EXPECT_DOUBLE_EQ(IGN_SPHERE_VOLUME(1.0), 4.0*IGN_PI*std::pow(1, 3)/3.0);
-  EXPECT_DOUBLE_EQ(IGN_SPHERE_VOLUME(0.1), 4.0*IGN_PI*std::pow(.1, 3)/3.0);
-  EXPECT_DOUBLE_EQ(IGN_SPHERE_VOLUME(-1.1), 4.0*IGN_PI*std::pow(-1.1, 3)/3.0);
+  EXPECT_DOUBLE_EQ(GZ_SPHERE_VOLUME(1.0), 4.0*GZ_PI*std::pow(1, 3)/3.0);
+  EXPECT_DOUBLE_EQ(GZ_SPHERE_VOLUME(0.1), 4.0*GZ_PI*std::pow(.1, 3)/3.0);
+  EXPECT_DOUBLE_EQ(GZ_SPHERE_VOLUME(-1.1), 4.0*GZ_PI*std::pow(-1.1, 3)/3.0);
 
-  EXPECT_DOUBLE_EQ(IGN_CYLINDER_VOLUME(0.5, 2.0), 2 * IGN_PI * std::pow(.5, 2));
-  EXPECT_DOUBLE_EQ(IGN_CYLINDER_VOLUME(1, -1), -1 * IGN_PI * std::pow(1, 2));
+  EXPECT_DOUBLE_EQ(GZ_CYLINDER_VOLUME(0.5, 2.0), 2 * GZ_PI * std::pow(.5, 2));
+  EXPECT_DOUBLE_EQ(GZ_CYLINDER_VOLUME(1, -1), -1 * GZ_PI * std::pow(1, 2));
 
-  EXPECT_DOUBLE_EQ(IGN_BOX_VOLUME(1, 2, 3), 1 * 2 * 3);
-  EXPECT_DOUBLE_EQ(IGN_BOX_VOLUME(.1, .2, .3),
-                   IGN_BOX_VOLUME_V(math::Vector3d(0.1, 0.2, 0.3)));
+  EXPECT_DOUBLE_EQ(GZ_BOX_VOLUME(1, 2, 3), 1 * 2 * 3);
+  EXPECT_DOUBLE_EQ(GZ_BOX_VOLUME(.1, .2, .3),
+                   GZ_BOX_VOLUME_V(math::Vector3d(0.1, 0.2, 0.3)));
 }
 
 /////////////////////////////////////////////////
@@ -648,6 +648,7 @@ TEST(HelpersTest, stringToDuration)
   std::chrono::steady_clock::duration duration =
     std::chrono::steady_clock::duration::zero();
 
+  EXPECT_TRUE(math::isTimeString(time));
   EXPECT_EQ(resultTime, duration);
 
   time = "10 0";
@@ -655,6 +656,7 @@ TEST(HelpersTest, stringToDuration)
   duration = std::chrono::steady_clock::duration::zero();
   duration += std::chrono::hours(10 * 24);
 
+  EXPECT_TRUE(math::isTimeString(time));
   EXPECT_EQ(resultTime, duration);
 
   time = "7";
@@ -662,6 +664,7 @@ TEST(HelpersTest, stringToDuration)
   duration = std::chrono::steady_clock::duration::zero();
   duration += std::chrono::seconds(7);
 
+  EXPECT_TRUE(math::isTimeString(time));
   EXPECT_EQ(resultTime, duration);
 
   time = "7:10";
@@ -670,6 +673,7 @@ TEST(HelpersTest, stringToDuration)
   duration += std::chrono::minutes(7);
   duration += std::chrono::seconds(10);
 
+  EXPECT_TRUE(math::isTimeString(time));
   EXPECT_EQ(resultTime, duration);
 
   time = "17:10";
@@ -678,6 +682,7 @@ TEST(HelpersTest, stringToDuration)
   duration += std::chrono::minutes(17);
   duration += std::chrono::seconds(10);
 
+  EXPECT_TRUE(math::isTimeString(time));
   EXPECT_EQ(resultTime, duration);
 
   time = "7:10.4";
@@ -687,6 +692,7 @@ TEST(HelpersTest, stringToDuration)
   duration += std::chrono::seconds(10);
   duration += std::chrono::milliseconds(400);
 
+  EXPECT_TRUE(math::isTimeString(time));
   EXPECT_EQ(resultTime, duration);
 
   time = "7:10.45";
@@ -696,6 +702,7 @@ TEST(HelpersTest, stringToDuration)
   duration += std::chrono::seconds(10);
   duration += std::chrono::milliseconds(450);
 
+  EXPECT_TRUE(math::isTimeString(time));
   EXPECT_EQ(resultTime, duration);
 
   time = "7:10.456";
@@ -705,6 +712,7 @@ TEST(HelpersTest, stringToDuration)
   duration += std::chrono::seconds(10);
   duration += std::chrono::milliseconds(456);
 
+  EXPECT_TRUE(math::isTimeString(time));
   EXPECT_EQ(resultTime, duration);
 
   time = "2 23:18:25.902";
@@ -716,6 +724,7 @@ TEST(HelpersTest, stringToDuration)
   duration += std::chrono::seconds(25);
   duration += std::chrono::milliseconds(902);
 
+  EXPECT_TRUE(math::isTimeString(time));
   EXPECT_EQ(resultTime, duration);
 
   time = ".9";
@@ -723,41 +732,49 @@ TEST(HelpersTest, stringToDuration)
   duration = std::chrono::steady_clock::duration::zero();
   duration += std::chrono::milliseconds(900);
 
+  EXPECT_TRUE(math::isTimeString(time));
   EXPECT_EQ(resultTime, duration);
 
   time = "bad time";
   resultTime = math::stringToDuration(time);
 
+  EXPECT_FALSE(math::isTimeString(time));
   EXPECT_EQ(resultTime, std::chrono::steady_clock::duration::zero());
 
   time = "";
   resultTime = math::stringToDuration(time);
 
+  EXPECT_TRUE(math::isTimeString(time));
   EXPECT_EQ(resultTime, std::chrono::steady_clock::duration::zero());
 
   time = "60";
   resultTime = math::stringToDuration(time);
 
+  EXPECT_FALSE(math::isTimeString(time));
   EXPECT_EQ(resultTime, std::chrono::steady_clock::duration::zero());
 
   time = "60:12";
   resultTime = math::stringToDuration(time);
 
+  EXPECT_FALSE(math::isTimeString(time));
   EXPECT_EQ(resultTime, std::chrono::steady_clock::duration::zero());
 
   time = "12:12.9999";
   resultTime = math::stringToDuration(time);
 
+  EXPECT_FALSE(math::isTimeString(time));
   EXPECT_EQ(resultTime, std::chrono::steady_clock::duration::zero());
 
   time = "25:12:12.99";
   resultTime = math::stringToDuration(time);
 
+  EXPECT_FALSE(math::isTimeString(time));
   EXPECT_EQ(resultTime, std::chrono::steady_clock::duration::zero());
 
   time = "999999999999999 5:12:12.5";
   resultTime = math::stringToDuration(time);
 
+  EXPECT_FALSE(math::isTimeString(time));
   EXPECT_EQ(resultTime, std::chrono::steady_clock::duration::zero());
 }
 
@@ -967,29 +984,6 @@ TEST(HelpersTest, roundUpMultiple)
 TEST(HelpersTest, AppendToStream)
 {
   std::ostringstream out;
-
-  IGN_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
-  // Deprecated in ign-math7
-  math::appendToStream(out, 0.12345678, 3);
-  EXPECT_EQ(out.str(), "0.123");
-
-  out << " ";
-
-  math::appendToStream(out, 0.0f, 5);
-  EXPECT_EQ(out.str(), "0.123 0");
-
-  out << " ";
-
-  math::appendToStream(out, 456, 3);
-  EXPECT_EQ(out.str(), "0.123 0 456");
-
-  out << " ";
-
-  math::appendToStream(out, 0, 3);
-  EXPECT_EQ(out.str(), "0.123 0 456 0");
-
-  out.str("");
-  IGN_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
 
   math::appendToStream(out, 0.0f);
   EXPECT_EQ(out.str(), "0");

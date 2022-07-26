@@ -18,14 +18,14 @@
 #include <sstream>
 #include <string>
 
-#include <ignition/math/Angle.hh>
+#include <gz/math/Angle.hh>
 #include <pybind11/operators.h>
 
 #include "Angle.hh"
 
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -33,7 +33,7 @@ namespace python
 {
 void defineMathAngle(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::Angle;
+  using Class = gz::math::Angle;
   auto toString = [](const Class &si) {
     std::stringstream stream;
     stream << si;
@@ -80,9 +80,9 @@ void defineMathAngle(py::module &m, const std::string &typestr)
     .def(py::self > py::self)
     .def(py::self >= py::self)
     .def_readonly_static("ZERO", &Class::Zero, "math::Angle(0)")
-    .def_readonly_static("PI", &Class::Pi, "math::Angle(IGN_PI)")
-    .def_readonly_static("HALF_PI", &Class::HalfPi, "math::Angle(IGN_PI * 0.5)")
-    .def_readonly_static("TWO_PI", &Class::TwoPi, "math::Angle(IGN_PI * 2)")
+    .def_readonly_static("PI", &Class::Pi, "math::Angle(GZ_PI)")
+    .def_readonly_static("HALF_PI", &Class::HalfPi, "math::Angle(GZ_PI * 0.5)")
+    .def_readonly_static("TWO_PI", &Class::TwoPi, "math::Angle(GZ_PI * 2)")
     .def("__copy__", [](const Class &self) {
       return Class(self);
     })
@@ -94,4 +94,4 @@ void defineMathAngle(py::module &m, const std::string &typestr)
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz

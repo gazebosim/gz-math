@@ -17,22 +17,22 @@
 
 %module plane
 %{
-#include <ignition/math/Plane.hh>
-#include <ignition/math/AxisAlignedBox.hh>
-#include <ignition/math/Vector2.hh>
-#include <ignition/math/Vector3.hh>
-#include <ignition/math/config.hh>
-#include <ignition/math/Line2.hh>
-#include <ignition/math/Quaternion.hh>
+#include <gz/math/Plane.hh>
+#include <gz/math/AxisAlignedBox.hh>
+#include <gz/math/Vector2.hh>
+#include <gz/math/Vector3.hh>
+#include <gz/math/config.hh>
+#include <gz/math/Line2.hh>
+#include <gz/math/Quaternion.hh>
 #include <optional>
 %}
 
 %include "typemaps.i"
-%typemap(out) (std::optional< ignition::math::Vector3< double > >) %{
+%typemap(out) (std::optional< gz::math::Vector3< double > >) %{
   if((*(&result)).has_value()) {
     $result = SWIG_NewPointerObj(
-      (new ignition::math::Vector3< double >(static_cast< const ignition::math::Vector3< double >& >((*(&result)).value()))),
-      SWIGTYPE_p_ignition__math__Vector3T_double_t,
+      (new gz::math::Vector3< double >(static_cast< const gz::math::Vector3< double >& >((*(&result)).value()))),
+      SWIGTYPE_p_gz__math__Vector3T_double_t,
       SWIG_POINTER_OWN |  0 );
   } else {
     $result = Py_None;
@@ -41,7 +41,7 @@
 %}
 
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

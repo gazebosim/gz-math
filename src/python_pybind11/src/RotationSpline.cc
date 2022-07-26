@@ -16,9 +16,9 @@
 */
 #include <string>
 #include "RotationSpline.hh"
-#include <ignition/math/RotationSpline.hh>
+#include <gz/math/RotationSpline.hh>
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -26,7 +26,7 @@ namespace python
 {
 void defineMathRotationSpline(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::RotationSpline;
+  using Class = gz::math::RotationSpline;
   std::string pyclass_name = typestr;
   py::class_<Class>(m,
                     pyclass_name.c_str(),
@@ -38,7 +38,6 @@ void defineMathRotationSpline(py::module &m, const std::string &typestr)
        "Adds a control point to the end of the spline.")
    .def("point",
         &Class::Point,
-        py::return_value_policy::reference,
         "Gets the detail of one of the control points of the spline.")
    .def("point_count",
         &Class::PointCount,
@@ -69,4 +68,4 @@ void defineMathRotationSpline(py::module &m, const std::string &typestr)
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz

@@ -20,21 +20,21 @@
 #include <fstream>
 #include <string>
 
-#include "test_config.h"  // NOLINT(build/include)
+#include "test_config.hh"  // NOLINT(build/include)
 
 #ifdef _WIN32
-# define IGN_PATH_MAX _MAX_PATH
+# define GZ_PATH_MAX _MAX_PATH
 #elif defined(PATH_MAX)
-# define IGN_PATH_MAX PATH_MAX
+# define GZ_PATH_MAX PATH_MAX
 #elif defined(_XOPEN_PATH_MAX)
-# define IGN_PATH_MAX _XOPEN_PATH_MAX
+# define GZ_PATH_MAX _XOPEN_PATH_MAX
 #else
-# define IGN_PATH_MAX _POSIX_PATH_MAX
+# define GZ_PATH_MAX _POSIX_PATH_MAX
 #endif
 
 
 // Helper functions copied from
-// https://github.com/ignitionrobotics/ign-common/raw/ign-common3/src/Filesystem_TEST.cc
+// https://github.com/gazebosim/gz-common/raw/ign-common3/src/Filesystem_TEST.cc
 
 #ifndef _WIN32
 #include <dirent.h>  // NOLINT(build/include_order)
@@ -392,11 +392,4 @@ TEST(ExamplesBuild, Build)
   // Remove temp dir
   removeAll(tmpBuildDir);
 #endif
-}
-
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

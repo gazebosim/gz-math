@@ -17,10 +17,10 @@
 
 %module quaternion
 %{
-#include <ignition/math/Angle.hh>
-#include <ignition/math/config.hh>
-#include <ignition/math/Helpers.hh>
-#include <ignition/math/Vector3.hh>
+#include <gz/math/Angle.hh>
+#include <gz/math/config.hh>
+#include <gz/math/Helpers.hh>
+#include <gz/math/Vector3.hh>
 %}
 
 %include "std_string.i"
@@ -28,12 +28,12 @@
 %inline %{
   template<typename D>
   struct AxisAngleOutput {
-    ignition::math::Vector3<D> axis;
+    gz::math::Vector3<D> axis;
     D angle;
   };
 %}
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
@@ -123,7 +123,7 @@ namespace ignition
 
     %extend Quaternion{
         inline AxisAngleOutput<T> _axis_angle() {
-          ignition::math::Vector3<T> axis;
+          gz::math::Vector3<T> axis;
           T angle;
           (*$self).AxisAngle(axis, angle);
           AxisAngleOutput<T> output;

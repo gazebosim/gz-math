@@ -16,11 +16,10 @@
 */
 #include <gtest/gtest.h>
 #include <cmath>
-#include <iostream>
 
-#include "ignition/math/Cylinder.hh"
+#include "gz/math/Cylinder.hh"
 
-using namespace ignition;
+using namespace gz;
 
 /////////////////////////////////////////////////
 TEST(CylinderTest, Constructor)
@@ -106,7 +105,7 @@ TEST(CylinderTest, VolumeAndDensity)
 {
   double mass = 1.0;
   math::Cylinderd cylinder(1.0, 0.001);
-  double expectedVolume = (IGN_PI * std::pow(0.001, 2) * 1.0);
+  double expectedVolume = (GZ_PI * std::pow(0.001, 2) * 1.0);
   EXPECT_DOUBLE_EQ(expectedVolume, cylinder.Volume());
 
   double expectedDensity = mass / expectedVolume;

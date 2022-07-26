@@ -14,32 +14,32 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_PYTHON__DIFFDRIVEODOMETRY_HH_
-#define IGNITION_MATH_PYTHON__DIFFDRIVEODOMETRY_HH_
+#ifndef GZ_MATH_PYTHON__DIFFDRIVEODOMETRY_HH_
+#define GZ_MATH_PYTHON__DIFFDRIVEODOMETRY_HH_
 
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 #include <pybind11/chrono.h>
 #include <string>
 
-#include <ignition/math/DiffDriveOdometry.hh>
+#include <gz/math/DiffDriveOdometry.hh>
 
 namespace py = pybind11;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 namespace python
 {
-/// Define a py:: wrapper for an ignition::gazebo::DiffDriveOdometry
+/// Define a py:: wrapper for a gz::math::DiffDriveOdometry
 /**
  * \param[in] module a py:: module to add the definition to
  */
 void defineMathDiffDriveOdometry(
   py::module &m, const std::string &typestr);
 }  // namespace python
-}  // namespace gazebo
-}  // namespace ignition
+}  // namespace math
+}  // namespace gz
 
-#endif  // IGNITION_MATH_PYTHON__DIFFDRIVEODOMETRY_HH_
+#endif  // GZ_MATH_PYTHON__DIFFDRIVEODOMETRY_HH_

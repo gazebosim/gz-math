@@ -17,11 +17,10 @@
 
 #include <gtest/gtest.h>
 
-#include "ignition/math/GaussMarkovProcess.hh"
-#include "ignition/math/Helpers.hh"
-#include "ignition/math/Rand.hh"
+#include "gz/math/GaussMarkovProcess.hh"
+#include "gz/math/Rand.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 /////////////////////////////////////////////////

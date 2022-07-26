@@ -17,15 +17,15 @@
 
 %module vector3stats
 %{
-#include <ignition/math/Helpers.hh>
-#include <ignition/math/SignalStats.hh>
-#include <ignition/math/Vector3.hh>
-#include <ignition/math/Vector3Stats.hh>
+#include <gz/math/Helpers.hh>
+#include <gz/math/SignalStats.hh>
+#include <gz/math/Vector3.hh>
+#include <gz/math/Vector3Stats.hh>
 %}
 
 %include "std_string.i"
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

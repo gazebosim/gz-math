@@ -17,10 +17,10 @@
 
 #include <string>
 
-#include <ignition/math/Vector3.hh>
+#include <gz/math/Vector3.hh>
 #include "MovingWindowFilter.hh"
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -30,9 +30,9 @@ void defineMathMovingWindowFilter(py::module &m, const std::string &typestr)
 {
   helpDefineMathMovingWindowFilter<int>(m, typestr + "i");
   helpDefineMathMovingWindowFilter<double>(m, typestr + "d");
-  helpDefineMathMovingWindowFilter<ignition::math::Vector3d>(m, typestr + "v3");
+  helpDefineMathMovingWindowFilter<gz::math::Vector3d>(m, typestr + "v3");
 }
 
 }  // namespace python
-}  // namespace gazebo
-}  // namespace ignition
+}  // namespace math
+}  // namespace gz

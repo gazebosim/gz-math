@@ -15,19 +15,19 @@
  *
 */
 
-#include <ignition/math/Kmeans.hh>
+#include <gz/math/Kmeans.hh>
 
 #include <iostream>
 
-#include <ignition/math/Rand.hh>
+#include <gz/math/Rand.hh>
 #include "KmeansPrivate.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 //////////////////////////////////////////////////
 Kmeans::Kmeans(const std::vector<Vector3d> &_obs)
-: dataPtr(ignition::utils::MakeImpl<Implementation>())
+: dataPtr(gz::utils::MakeImpl<Implementation>())
 {
   this->Observations(_obs);
 }

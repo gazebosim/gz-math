@@ -18,11 +18,11 @@
 #include <pybind11/chrono.h>
 #include <string>
 
-#include <ignition/math/PID.hh>
+#include <gz/math/PID.hh>
 
 #include "PID.hh"
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -30,7 +30,7 @@ namespace python
 {
 void defineMathPID(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::PID;
+  using Class = gz::math::PID;
   std::string pyclass_name = typestr;
   py::class_<Class>(m,
                     pyclass_name.c_str(),
@@ -123,4 +123,4 @@ void defineMathPID(py::module &m, const std::string &typestr)
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz

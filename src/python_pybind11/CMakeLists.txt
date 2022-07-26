@@ -8,15 +8,18 @@ endif()
 message(STATUS "Building pybind11 interfaces")
 # Split from main extension and converted to pybind11
 pybind11_add_module(math SHARED
-  src/_ignition_math_pybind11.cc
+  src/_gz_math_pybind11.cc
   src/Angle.cc
   src/AxisAlignedBox.cc
+  src/Capsule.cc
   src/Color.cc
   src/DiffDriveOdometry.cc
+  src/Ellipsoid.cc
   src/Filter.cc
   src/Frustum.cc
   src/GaussMarkovProcess.cc
   src/Helpers.cc
+  src/Interval.cc
   src/Kmeans.cc
   src/Line2.cc
   src/Line3.cc
@@ -24,11 +27,14 @@ pybind11_add_module(math SHARED
   src/Material.cc
   src/Matrix3.cc
   src/Matrix4.cc
+  src/Matrix6.cc
   src/MovingWindowFilter.cc
   src/PID.cc
+  src/Polynomial3.cc
   src/Pose3.cc
   src/Quaternion.cc
   src/Rand.cc
+  src/Region3.cc
   src/RollingMean.cc
   src/RotationSpline.cc
   src/SemanticVersion.cc
@@ -49,6 +55,19 @@ target_link_libraries(math PRIVATE
   ${PROJECT_LIBRARY_TARGET_NAME}
 )
 
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  # Workaround for Clang and pybind11 on Focal
+  # https://github.com/pybind/pybind11/issues/1604
+  # Resolved by newer versions of pybind11
+  if(${pybind11_VERSION} VERSION_LESS "2.4.4")
+    target_compile_options(math PRIVATE -fsized-deallocation)
+  endif()
+
+  # Suppress warnings that clang misidentifies:
+  # https://github.com/pybind/pybind11/issues/1893
+  target_compile_options(math PRIVATE -Wno-self-assign-overloaded)
+endif()
+
 if(USE_SYSTEM_PATHS_FOR_PYTHON_INSTALLATION)
   if(${CMAKE_VERSION} VERSION_LESS "3.12.0")
     execute_process(
@@ -64,17 +83,17 @@ if(USE_SYSTEM_PATHS_FOR_PYTHON_INSTALLATION)
   endif()
 
   if(USE_DIST_PACKAGES_FOR_PYTHON)
-    string(REPLACE "site-packages" "dist-packages" IGN_PYTHON_INSTALL_PATH ${Python3_SITEARCH})
+    string(REPLACE "site-packages" "dist-packages" GZ_PYTHON_INSTALL_PATH ${Python3_SITEARCH})
   else()
     # custom cmake command is returning dist-packages
-    string(REPLACE "dist-packages" "site-packages" IGN_PYTHON_INSTALL_PATH ${Python3_SITEARCH})
+    string(REPLACE "dist-packages" "site-packages" GZ_PYTHON_INSTALL_PATH ${Python3_SITEARCH})
   endif()
 else()
   # If not a system installation, respect local paths
-  set(IGN_PYTHON_INSTALL_PATH ${IGN_LIB_INSTALL_DIR}/python)
+  set(GZ_PYTHON_INSTALL_PATH ${GZ_LIB_INSTALL_DIR}/python)
 endif()
 
-set(IGN_PYTHON_INSTALL_PATH "${IGN_PYTHON_INSTALL_PATH}/ignition")
+set(GZ_PYTHON_INSTALL_PATH "${GZ_PYTHON_INSTALL_PATH}/gz")
 
 # Set the build location and install location for a CPython extension
 function(configure_build_install_location _library_name)
@@ -86,8 +105,31 @@ function(configure_build_install_location _library_name)
 
   # Install library for actual use
   install(TARGETS ${_library_name}
-    DESTINATION "${IGN_PYTHON_INSTALL_PATH}/"
+    DESTINATION "${GZ_PYTHON_INSTALL_PATH}/"
   )
+
+  # TODO(CH3): Deprecated. Remove on tock.
+  # Install Python library symlinks
+  if(${GZ_PYTHON_INSTALL_PATH} MATCHES "gz$")
+    cmake_policy(SET CMP0087 NEW)  # Allow evaluation of generator expressions in install(CODE )
+    file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/ignition")
+
+    string(REGEX REPLACE "gz$" "ignition" IGN_PYTHON_INSTALL_PATH ${GZ_PYTHON_INSTALL_PATH})
+    if (WIN32)  # Windows requires copy instead of symlink
+      install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E copy \
+          ../gz/${GZ_PYTHON_INSTALL_PATH}\/$<TARGET_FILE_NAME:${_library_name}> \
+          ${PROJECT_BINARY_DIR}\/ignition/$<TARGET_FILE_NAME:${_library_name}>)")
+    else()
+      install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \
+          ../gz/$<TARGET_FILE_NAME:${_library_name}> \
+          ${PROJECT_BINARY_DIR}\/ignition/$<TARGET_FILE_NAME:${_library_name}>)")
+    endif()
+
+    install(FILES ${PROJECT_BINARY_DIR}\/ignition/$<TARGET_FILE_NAME:${_library_name}>
+      DESTINATION "${IGN_PYTHON_INSTALL_PATH}/"
+    )
+  endif()
+
 endfunction()
 
 configure_build_install_location(math)
@@ -98,14 +140,17 @@ if (BUILD_TESTING)
     Angle_TEST
     AxisAlignedBox_TEST
     Box_TEST
+    Capsule_TEST
     Color_TEST
     Cylinder_TEST
     DiffDriveOdometry_TEST
+    Ellipsoid_TEST
     Filter_TEST
     Frustum_TEST
     GaussMarkovProcess_TEST
     Helpers_TEST
     Inertial_TEST
+    Interval_TEST
     Kmeans_TEST
     Line2_TEST
     Line3_TEST
@@ -113,13 +158,16 @@ if (BUILD_TESTING)
     Material_TEST
     Matrix3_TEST
     Matrix4_TEST
+    Matrix6_TEST
     MovingWindowFilter_TEST
     OrientedBox_TEST
     PID_TEST
     Plane_TEST
+    Polynomial3_TEST
     Pose3_TEST
     Quaternion_TEST
     Rand_TEST
+    Region3_TEST
     RollingMean_TEST
     RotationSpline_TEST
     SemanticVersion_TEST
@@ -137,9 +185,25 @@ if (BUILD_TESTING)
     Vector4_TEST
   )
 
+  execute_process(COMMAND "${Python3_EXECUTABLE}" -m pytest --version
+    OUTPUT_VARIABLE PYTEST_output
+    ERROR_VARIABLE  PYTEST_error
+    RESULT_VARIABLE PYTEST_result)
+  if(${PYTEST_result} EQUAL 0)
+    set(pytest_FOUND TRUE)
+  else()
+    message("")
+    message(WARNING "Pytest package not available: ${PYTEST_error}")
+  endif()
+
   foreach (test ${python_tests})
-    add_test(NAME ${test}.py COMMAND
-      "${PYTHON_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/src/python_pybind11/test/${test}.py")
+    if (pytest_FOUND)
+      add_test(NAME ${test}.py COMMAND
+        "${Python3_EXECUTABLE}" -m pytest "${CMAKE_SOURCE_DIR}/src/python_pybind11/test/${test}.py" --junitxml "${CMAKE_BINARY_DIR}/test_results/${test}.xml")
+    else()
+      add_test(NAME ${test}.py COMMAND
+        "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/src/python_pybind11/test/${test}.py")
+    endif()
 
     set(_env_vars)
     list(APPEND _env_vars "PYTHONPATH=${FAKE_INSTALL_PREFIX}/lib/python/")

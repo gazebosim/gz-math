@@ -17,9 +17,9 @@
 
 #include <gtest/gtest.h>
 #include <vector>
-#include "ignition/math/Kmeans.hh"
+#include "gz/math/Kmeans.hh"
 
-using namespace ignition;
+using namespace gz;
 
 //////////////////////////////////////////////////
 TEST(KmeansTest, Kmeans)

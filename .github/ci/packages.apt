@@ -1,7 +1,9 @@
 libeigen3-dev
-libignition-cmake2-dev
-libignition-utils1-dev
+libgz-cmake3-dev
+libgz-utils2-dev
+libpython3-dev
 python3-distutils
 python3-pybind11
+python3-pytest
 ruby-dev
 swig

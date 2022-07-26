@@ -17,9 +17,9 @@
 
 #include <gtest/gtest.h>
 
-#include "ignition/math/SemanticVersion.hh"
+#include "gz/math/SemanticVersion.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 /////////////////////////////////////////////////
@@ -207,11 +207,3 @@ TEST(SemVerTest, Constructor)
   EXPECT_TRUE(a.Prerelease().empty());
   EXPECT_TRUE(a.Build().empty());
 }
-
-/////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}
-

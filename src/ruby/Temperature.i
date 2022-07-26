@@ -18,12 +18,12 @@
 %module temperature
 %{
 #include <sstream>
-#include <ignition/math/Temperature.hh>
+#include <gz/math/Temperature.hh>
 %}
 
 %include "std_string.i"
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

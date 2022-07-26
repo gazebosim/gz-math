@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__POSE3_HH_
-#define IGNITION_MATH_PYTHON__POSE3_HH_
+#ifndef GZ_MATH_PYTHON__POSE3_HH_
+#define GZ_MATH_PYTHON__POSE3_HH_
 
 #include <sstream>
 #include <string>
@@ -24,25 +24,25 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 
-#include <ignition/math/Pose3.hh>
+#include <gz/math/Pose3.hh>
 
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an ignition::math::Pose3
+/// Define a pybind11 wrapper for a gz::math::Pose3
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathPose3(py::module &m, const std::string &typestr);
 
-/// Help define a pybind11 wrapper for an ignition::math::Pose3
+/// Help define a pybind11 wrapper for a gz::math::Pose3
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -50,7 +50,7 @@ void defineMathPose3(py::module &m, const std::string &typestr);
 template<typename T>
 void helpDefineMathPose3(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::Pose3<T>;
+  using Class = gz::math::Pose3<T>;
   auto toString = [](const Class &si) {
     std::stringstream stream;
     stream << si;
@@ -62,8 +62,8 @@ void helpDefineMathPose3(py::module &m, const std::string &typestr)
                     py::buffer_protocol(),
                     py::dynamic_attr())
     .def(py::init<>())
-    .def(py::init<const ignition::math::Vector3<T>&,
-                  const ignition::math::Quaternion<T>&>())
+    .def(py::init<const gz::math::Vector3<T>&,
+                  const gz::math::Quaternion<T>&>())
     .def(py::init<T, T, T, T, T, T>())
     .def(py::init<T, T, T, T, T, T, T>())
     .def(py::init<const Class&>())
@@ -77,12 +77,12 @@ void helpDefineMathPose3(py::module &m, const std::string &typestr)
     .def(py::self * py::self)
     .def(py::self *= py::self)
     .def("set",
-         py::overload_cast<const ignition::math::Vector3<T>&,
-                           const ignition::math::Quaternion<T>&>(&Class::Set),
+         py::overload_cast<const gz::math::Vector3<T>&,
+                           const gz::math::Quaternion<T>&>(&Class::Set),
          "Set the pose from a Vector3 and a Quaternion<T>")
     .def("set",
-         py::overload_cast<const ignition::math::Vector3<T>&,
-                           const ignition::math::Vector3<T>&>(&Class::Set),
+         py::overload_cast<const gz::math::Vector3<T>&,
+                           const gz::math::Vector3<T>&>(&Class::Set),
          "Set the pose from  pos and rpy vectors")
     .def("set",
         py::overload_cast<T, T, T, T, T, T>(&Class::Set),
@@ -97,7 +97,7 @@ void helpDefineMathPose3(py::module &m, const std::string &typestr)
          &Class::Inverse,
          "Get the inverse of this pose")
     .def("coord_position_add",
-         py::overload_cast<const ignition::math::Vector3<T>&>(
+         py::overload_cast<const gz::math::Vector3<T>&>(
            &Class::CoordPositionAdd, py::const_),
          "Add one point to a vector: result = this + pos")
     .def("coord_position_add",
@@ -125,8 +125,8 @@ void helpDefineMathPose3(py::module &m, const std::string &typestr)
          &Class::Round,
          "Round all values to _precision decimal places")
     .def("pos",
-         py::overload_cast<>(&Class::Pos, py::const_),
-         py::return_value_policy::reference,
+         py::overload_cast<>(&Class::Pos),
+         py::return_value_policy::reference_internal,
          "Get the position.")
     .def("x", &Class::X, "Get the X value of the position")
     .def("y", &Class::Y, "Get the Y value of the position")
@@ -135,8 +135,8 @@ void helpDefineMathPose3(py::module &m, const std::string &typestr)
     .def("set_y", &Class::SetY, "Set the Y value of the position")
     .def("set_z", &Class::SetZ, "Set the Z value of the position")
     .def("rot",
-         py::overload_cast<>(&Class::Rot, py::const_),
-         py::return_value_policy::reference,
+         py::overload_cast<>(&Class::Rot),
+         py::return_value_policy::reference_internal,
          "Get the rotation.")
     .def("roll", &Class::Roll, "Get the Roll value of the position")
     .def("pitch", &Class::Pitch, "Get the Pitch value of the position")
@@ -152,7 +152,7 @@ void helpDefineMathPose3(py::module &m, const std::string &typestr)
     .def("__repr__", toString);
 }
 }  // namespace python
-}  // namespace gazebo
-}  // namespace ignition
+}  // namespace math
+}  // namespace gz
 
-#endif  // IGNITION_MATH_PYTHON__POSE3_HH_
+#endif  // GZ_MATH_PYTHON__POSE3_HH_

@@ -17,11 +17,11 @@
 
 #include <gtest/gtest.h>
 
-#include <ignition/math/Helpers.hh>
-#include <ignition/math/Pose3.hh>
-#include <ignition/utils/SuppressWarning.hh>
+#include <gz/math/Helpers.hh>
+#include <gz/math/Pose3.hh>
+#include <gz/utils/SuppressWarning.hh>
 
-using namespace ignition;
+using namespace gz;
 
 /////////////////////////////////////////////////
 TEST(PoseTest, Construction)
@@ -64,17 +64,17 @@ TEST(PoseTest, Pose)
     // B is the transform from P to Q specified in frame P
     // then, A * B is the transform from O to Q specified in frame O
     math::Pose3d A(math::Vector3d(1, 0, 0),
-                   math::Quaterniond(0, 0, IGN_PI/4.0));
+                   math::Quaterniond(0, 0, GZ_PI/4.0));
     math::Pose3d B(math::Vector3d(1, 0, 0),
-                   math::Quaterniond(0, 0, IGN_PI/2.0));
+                   math::Quaterniond(0, 0, GZ_PI/2.0));
     EXPECT_TRUE(math::equal((A * B).Pos().X(), 1.0 + 1.0/sqrt(2)));
     EXPECT_TRUE(math::equal((A * B).Pos().Y(),       1.0/sqrt(2)));
     EXPECT_TRUE(math::equal((A * B).Pos().Z(),               0.0));
     EXPECT_TRUE(math::equal((A * B).Rot().Euler().X(),  0.0));
     EXPECT_TRUE(math::equal((A * B).Rot().Euler().Y(),  0.0));
-    EXPECT_TRUE(math::equal((A * B).Rot().Euler().Z(), 3.0*IGN_PI/4.0));
+    EXPECT_TRUE(math::equal((A * B).Rot().Euler().Z(), 3.0*GZ_PI/4.0));
 
-    IGN_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+    GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
     // Coverage for + operator
     EXPECT_EQ(A * B, B + A);
     EXPECT_NE(A * B, A + B);
@@ -83,7 +83,7 @@ TEST(PoseTest, Pose)
     math::Pose3d C(B);
     C += A;
     EXPECT_EQ(C, A * B);
-    IGN_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+    GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
   }
   {
     // If:
@@ -91,22 +91,30 @@ TEST(PoseTest, Pose)
     // B is the transform from O to Q in frame O
     // then -A is transform from P to O specified in frame P
     math::Pose3d A(math::Vector3d(1, 0, 0),
-        math::Quaterniond(0, 0, IGN_PI/4.0));
-    EXPECT_TRUE(math::equal((math::Pose3d() - A).Pos().X(),      -1.0/sqrt(2)));
-    EXPECT_TRUE(math::equal((math::Pose3d() - A).Pos().Y(),       1.0/sqrt(2)));
-    EXPECT_TRUE(math::equal((math::Pose3d() - A).Pos().Z(),               0.0));
-    EXPECT_TRUE(math::equal((math::Pose3d() - A).Rot().Euler().X(),  0.0));
-    EXPECT_TRUE(math::equal((math::Pose3d() - A).Rot().Euler().Y(),  0.0));
-    EXPECT_TRUE(
-        math::equal((math::Pose3d() - A).Rot().Euler().Z(), -IGN_PI/4));
+        math::Quaterniond(0, 0, GZ_PI/4.0));
+    EXPECT_TRUE(math::equal(
+        (A.Inverse() * math::Pose3d()).Pos().X(),      -1.0/sqrt(2)));
+    EXPECT_TRUE(math::equal(
+        (A.Inverse() * math::Pose3d()).Pos().Y(),       1.0/sqrt(2)));
+    EXPECT_TRUE(math::equal(
+        (A.Inverse() * math::Pose3d()).Pos().Z(),               0.0));
+    EXPECT_TRUE(math::equal(
+        (A.Inverse() * math::Pose3d()).Rot().Euler().X(),  0.0));
+    EXPECT_TRUE(math::equal(
+        (A.Inverse() * math::Pose3d()).Rot().Euler().Y(),  0.0));
+    EXPECT_TRUE(math::equal(
+        (A.Inverse() * math::Pose3d()).Rot().Euler().Z(), -GZ_PI/4));
 
+    GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+    // Coverage for unitary - operator
     // test negation operator
     EXPECT_TRUE(math::equal((-A).Pos().X(),      -1.0/sqrt(2)));
     EXPECT_TRUE(math::equal((-A).Pos().Y(),       1.0/sqrt(2)));
     EXPECT_TRUE(math::equal((-A).Pos().Z(),               0.0));
     EXPECT_TRUE(math::equal((-A).Rot().Euler().X(),  0.0));
     EXPECT_TRUE(math::equal((-A).Rot().Euler().Y(),  0.0));
-    EXPECT_TRUE(math::equal((-A).Rot().Euler().Z(), -IGN_PI/4.0));
+    EXPECT_TRUE(math::equal((-A).Rot().Euler().Z(), -GZ_PI/4.0));
+    GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
   }
   {
     // If:
@@ -114,15 +122,25 @@ TEST(PoseTest, Pose)
     // B is the transform from O to Q in frame O
     // B - A is the transform from P to Q in frame P
     math::Pose3d A(math::Vector3d(1, 0, 0),
-        math::Quaterniond(0, 0, IGN_PI/4.0));
+        math::Quaterniond(0, 0, GZ_PI/4.0));
     math::Pose3d B(math::Vector3d(1, 1, 0),
-        math::Quaterniond(0, 0, IGN_PI/2.0));
-    EXPECT_TRUE(math::equal((B - A).Pos().X(),       1.0/sqrt(2)));
-    EXPECT_TRUE(math::equal((B - A).Pos().Y(),       1.0/sqrt(2)));
-    EXPECT_TRUE(math::equal((B - A).Pos().Z(),               0.0));
-    EXPECT_TRUE(math::equal((B - A).Rot().Euler().X(),  0.0));
-    EXPECT_TRUE(math::equal((B - A).Rot().Euler().Y(),  0.0));
-    EXPECT_TRUE(math::equal((B - A).Rot().Euler().Z(), IGN_PI/4.0));
+        math::Quaterniond(0, 0, GZ_PI/2.0));
+    EXPECT_TRUE(math::equal((A.Inverse() * B).Pos().X(),       1.0/sqrt(2)));
+    EXPECT_TRUE(math::equal((A.Inverse() * B).Pos().Y(),       1.0/sqrt(2)));
+    EXPECT_TRUE(math::equal((A.Inverse() * B).Pos().Z(),               0.0));
+    EXPECT_TRUE(math::equal((A.Inverse() * B).Rot().Euler().X(),  0.0));
+    EXPECT_TRUE(math::equal((A.Inverse() * B).Rot().Euler().Y(),  0.0));
+    EXPECT_TRUE(math::equal((A.Inverse() * B).Rot().Euler().Z(), GZ_PI/4.0));
+
+    GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+    // Coverage for - operator
+    EXPECT_EQ(A.Inverse() * B, B - A);
+
+    // Coverage for -= operator
+    math::Pose3d C(B);
+    C -= A;
+    EXPECT_EQ(C, A.Inverse() * B);
+    GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
   }
   {
     math::Pose3d pose;
@@ -155,7 +173,7 @@ TEST(PoseTest, Pose)
   EXPECT_TRUE(pose ==
       math::Pose3d(11.314, 16.0487, 15.2559, 1.49463, 0.184295, 2.13932));
 
-  pose -= math::Pose3d(pose);
+  pose = pose.Inverse() * pose;
   EXPECT_TRUE(pose ==
       math::Pose3d(0, 0, 0, 0, 0, 0));
 

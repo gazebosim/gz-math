@@ -17,10 +17,10 @@
 
 %module angle
 %{
-#include <ignition/math/Angle.hh>
+#include <gz/math/Angle.hh>
 %}
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

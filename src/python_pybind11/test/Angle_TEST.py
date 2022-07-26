@@ -14,7 +14,7 @@
 
 import unittest
 import math
-from ignition.math import Angle
+from gz.math import Angle
 
 
 class TestAngle(unittest.TestCase):

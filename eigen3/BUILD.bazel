@@ -1,17 +1,17 @@
 load(
-    "//ign_bazel:build_defs.bzl",
-    "IGNITION_ROOT",
-    "IGNITION_VISIBILITY",
+    "//gz_bazel:build_defs.bzl",
+    "GZ_ROOT",
+    "GZ_VISIBILITY",
 )
 
 package(
-    default_visibility = IGNITION_VISIBILITY,
+    default_visibility = GZ_VISIBILITY,
 )
 
 licenses(["notice"])
 
 public_headers = glob([
-    "include/ignition/math/eigen3/*.hh",
+    "include/gz/math/eigen3/*.hh",
 ])
 
 cc_library(
@@ -21,7 +21,7 @@ cc_library(
     includes = ["include"],
     deps = [
         "@eigen3",
-        IGNITION_ROOT + "ign_math",
+        GZ_ROOT + "gz_math",
     ],
 )
 

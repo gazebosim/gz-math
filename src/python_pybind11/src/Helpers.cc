@@ -15,14 +15,15 @@
  *
 */
 #include <tuple>
+#include <iostream>
 
 #include <pybind11/stl.h>
 
 #include "Helpers.hh"
-#include <ignition/math/Helpers.hh>
-#include <ignition/math/Vector3.hh>
+#include <gz/math/Helpers.hh>
+#include <gz/math/Vector3.hh>
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -37,7 +38,7 @@ class Helpers
 /// \return sphere volume
 float SphereVolume(const float _radius)
 {
-  return IGN_SPHERE_VOLUME(_radius);
+  return GZ_SPHERE_VOLUME(_radius);
 }
 
 /// \brief Compute cylinder volume
@@ -46,7 +47,7 @@ float SphereVolume(const float _radius)
 /// \return cylinder volume
 float CylinderVolume(const float _r, const float _l)
 {
-  return IGN_CYLINDER_VOLUME(_r, _l);
+  return GZ_CYLINDER_VOLUME(_r, _l);
 }
 
 /// \brief Compute box volume
@@ -56,15 +57,48 @@ float CylinderVolume(const float _r, const float _l)
 /// \return box volume
 float BoxVolume(const float _x, const float _y, const float _z)
 {
-  return IGN_BOX_VOLUME(_x, _y, _z);
+  return GZ_BOX_VOLUME(_x, _y, _z);
 }
 
 /// \brief Compute box volume from a vector
 /// \param[in] _v Vector3d that contains the box's dimensions.
 /// \return box volume from a vector
-float BoxVolumeV(const ignition::math::Vector3d &_v)
+float BoxVolumeV(const gz::math::Vector3d &_v)
 {
-  return IGN_BOX_VOLUME_V(_v);
+  return GZ_BOX_VOLUME_V(_v);
+}
+
+// TODO(CH3): Deprecated. Remove on tock.
+float SphereVolumeDeprecated(const float _radius)
+{
+  std::cerr << "ign_sphere_volume is deprecated. "
+            << "Please use gz_sphere_volume instead"
+            << std::endl;
+  return SphereVolume(_radius);
+}
+
+float CylinderVolumeDeprecated(const float _r, const float _l)
+{
+  std::cerr << "ign_cylinder_volume is deprecated. "
+            << "Please use gz_cylinder_volume instead"
+            << std::endl;
+  return CylinderVolume(_r, _l);
+}
+
+float BoxVolumeDeprecated(const float _x, const float _y, const float _z)
+{
+  std::cerr << "ign_box_volume is deprecated. "
+            << "Please use gz_box_volume instead"
+            << std::endl;
+  return BoxVolume(_x, _y, _z);
+}
+
+float BoxVolumeVDeprecated(const gz::math::Vector3d &_v)
+{
+  std::cerr << "ign_box_volume_v is deprecated. "
+            << "Please use gz_box_volume_v instead"
+            << std::endl;
+  return BoxVolumeV(_v);
 }
 
 /// \brief Sort two numbers, such that _a <= _b
@@ -92,55 +126,55 @@ void defineMathHelpers(py::module &m)
 {
   using Class = Helpers;
 
-  m.def("clamp", &ignition::math::clamp<float>, "Simple clamping function")
-   .def("clamp", &ignition::math::clamp<int>, "Simple clamping function")
+  m.def("clamp", &gz::math::clamp<float>, "Simple clamping function")
+   .def("clamp", &gz::math::clamp<int>, "Simple clamping function")
    .def("isnan",
-        py::overload_cast<float>(&ignition::math::isnan),
+        py::overload_cast<float>(&gz::math::isnan),
         "Check if a float is NaN")
    .def("fixnan",
-        py::overload_cast<float>(&ignition::math::fixnan),
+        py::overload_cast<float>(&gz::math::fixnan),
         "Fix a nan value.")
    .def("is_even",
-        py::overload_cast<int>(&ignition::math::isEven),
+        py::overload_cast<int>(&gz::math::isEven),
         "Check if parameter is even.")
    .def("is_odd",
-        py::overload_cast<int>(&ignition::math::isOdd),
+        py::overload_cast<int>(&gz::math::isOdd),
         "Check if parameter is odd.")
    .def("sgn",
-      &ignition::math::sgn<float>,
+      &gz::math::sgn<float>,
       "Returns 0 for zero values, -1 for negative values and +1 for positive"
       " values.")
    .def("signum",
-        &ignition::math::signum<float>,
+        &gz::math::signum<float>,
         "Returns 0 for zero values, -1 for negative values and "
         "+1 for positive values.")
-   .def("mean", &ignition::math::mean<float>, "Get mean of vector of values")
+   .def("mean", &gz::math::mean<float>, "Get mean of vector of values")
    .def("variance",
-        &ignition::math::variance<float>,
+        &gz::math::variance<float>,
         "Get variance of vector of values")
    .def("max",
-        &ignition::math::max<float>,
+        &gz::math::max<float>,
         "Get the maximum value of vector of values")
    .def("max",
-        &ignition::math::max<int>,
+        &gz::math::max<int>,
         "Get the maximum value of vector of values")
    .def("min",
-        &ignition::math::min<float>,
+        &gz::math::min<float>,
         "Get the minimum value of vector of values")
    .def("min",
-        &ignition::math::min<int>,
+        &gz::math::min<int>,
         "Get the minimum value of vector of values")
    .def("equal",
-        &ignition::math::equal<float>,
+        &gz::math::equal<float>,
         "check if two values are equal, within a tolerance")
    .def("less_or_near_equal",
-        &ignition::math::lessOrNearEqual<float>,
+        &gz::math::lessOrNearEqual<float>,
         "Inequality test, within a tolerance")
    .def("greater_or_near_equal",
-        &ignition::math::greaterOrNearEqual<float>,
+        &gz::math::greaterOrNearEqual<float>,
         "Inequality test, within a tolerance")
    .def("precision",
-        &ignition::math::precision<float>,
+        &gz::math::precision<float>,
         "Get value at a specified precision")
    .def("sort2",
         &Sort2,
@@ -149,47 +183,79 @@ void defineMathHelpers(py::module &m)
         &Sort3,
         "Sort three numbers, such that _a <= _b <= _c")
    .def("is_power_of_two",
-        &ignition::math::isPowerOfTwo,
+        &gz::math::isPowerOfTwo,
         "Is this a power of 2?")
    .def("round_up_power_of_two",
-        &ignition::math::roundUpPowerOfTwo,
+        &gz::math::roundUpPowerOfTwo,
         "Get the smallest power of two that is greater or equal to a given "
         "value")
    .def("round_up_multiple",
-        &ignition::math::roundUpMultiple,
+        &gz::math::roundUpMultiple,
         "Round a number up to the nearest multiple")
    .def("parse_int",
-        &ignition::math::parseInt,
+        &gz::math::parseInt,
         "parse string into an integer")
    .def("parse_float",
-        &ignition::math::parseFloat,
+        &gz::math::parseFloat,
         "parse string into an float")
-   .def("ign_sphere_volume",
+   .def("is_time_string",
+        &gz::math::isTimeString,
+        "An example time string is \"0 00:00:00.000\", which has the format "
+        "DAYS HOURS:MINUTES:SECONDS.MILLISECONDS")
+   .def("gz_sphere_volume",
         &SphereVolume,
         "Compute sphere volume")
-   .def("ign_cylinder_volume",
+   .def("gz_cylinder_volume",
         &CylinderVolume,
         "Compute cylinder volume")
-   .def("ign_box_volume",
+   .def("gz_box_volume",
         &BoxVolume,
         "Compute box volume")
-   .def("ign_box_volume_v",
+   .def("gz_box_volume_v",
         &BoxVolumeV,
-        "Compute box volume from vector");
+        "Compute box volume from vector")
+
+   // TODO(CH3): Deprecated. Remove on tock.
+   .def("ign_sphere_volume",
+        &SphereVolumeDeprecated,
+        "[Deprecated] Compute sphere volume")
+   .def("ign_cylinder_volume",
+        &CylinderVolumeDeprecated,
+        "[Deprecated] Compute cylinder volume")
+   .def("ign_box_volume",
+        &BoxVolumeDeprecated,
+        "[Deprecated] Compute box volume")
+   .def("ign_box_volume_v",
+        &BoxVolumeVDeprecated,
+        "[Deprecated] Compute box volume from vector");
+
    py::class_<Class>(m,
                     "Helpers",
                     py::buffer_protocol(),
                     py::dynamic_attr())
-  .def_readonly_static("IGNZEROSIZET", &IGN_ZERO_SIZE_T, "IGN_PI")
-  .def_readonly_static("IGN_ONE_SIZE_T", &IGN_ONE_SIZE_T)
-  .def_readonly_static("IGN_TWO_SIZE_T", &IGN_TWO_SIZE_T)
-  .def_readonly_static("IGN_THREE_SIZE_T", &IGN_THREE_SIZE_T)
-  .def_readonly_static("IGN_FOUR_SIZE_T", &IGN_FOUR_SIZE_T)
-  .def_readonly_static("IGN_FIVE_SIZE_T", &IGN_FIVE_SIZE_T)
-  .def_readonly_static("IGN_SIX_SIZE_T", &IGN_SIX_SIZE_T)
-  .def_readonly_static("IGN_SEVEN_SIZE_T", &IGN_SEVEN_SIZE_T)
-  .def_readonly_static("IGN_EIGHT_SIZE_T", &IGN_EIGHT_SIZE_T)
-  .def_readonly_static("IGN_NINE_SIZE_T", &IGN_NINE_SIZE_T)
+  .def_readonly_static("GZZEROSIZET", &GZ_ZERO_SIZE_T, "GZ_PI")
+  .def_readonly_static("GZ_ONE_SIZE_T", &GZ_ONE_SIZE_T)
+  .def_readonly_static("GZ_TWO_SIZE_T", &GZ_TWO_SIZE_T)
+  .def_readonly_static("GZ_THREE_SIZE_T", &GZ_THREE_SIZE_T)
+  .def_readonly_static("GZ_FOUR_SIZE_T", &GZ_FOUR_SIZE_T)
+  .def_readonly_static("GZ_FIVE_SIZE_T", &GZ_FIVE_SIZE_T)
+  .def_readonly_static("GZ_SIX_SIZE_T", &GZ_SIX_SIZE_T)
+  .def_readonly_static("GZ_SEVEN_SIZE_T", &GZ_SEVEN_SIZE_T)
+  .def_readonly_static("GZ_EIGHT_SIZE_T", &GZ_EIGHT_SIZE_T)
+  .def_readonly_static("GZ_NINE_SIZE_T", &GZ_NINE_SIZE_T)
+
+  // TODO(CH3): Deprecated. Remove on tock.
+  .def_readonly_static("IGNZEROSIZET", &GZ_ZERO_SIZE_T, "GZ_PI")
+  .def_readonly_static("IGN_ONE_SIZE_T", &GZ_ONE_SIZE_T)
+  .def_readonly_static("IGN_TWO_SIZE_T", &GZ_TWO_SIZE_T)
+  .def_readonly_static("IGN_THREE_SIZE_T", &GZ_THREE_SIZE_T)
+  .def_readonly_static("IGN_FOUR_SIZE_T", &GZ_FOUR_SIZE_T)
+  .def_readonly_static("IGN_FIVE_SIZE_T", &GZ_FIVE_SIZE_T)
+  .def_readonly_static("IGN_SIX_SIZE_T", &GZ_SIX_SIZE_T)
+  .def_readonly_static("IGN_SEVEN_SIZE_T", &GZ_SEVEN_SIZE_T)
+  .def_readonly_static("IGN_EIGHT_SIZE_T", &GZ_EIGHT_SIZE_T)
+  .def_readonly_static("IGN_NINE_SIZE_T", &GZ_NINE_SIZE_T)
+
   .def_readonly_static("MAX_D", &MAX_D)
   .def_readonly_static("MIN_D", &MIN_D)
   .def_readonly_static("LOW_D", &LOW_D)
@@ -227,5 +293,5 @@ void defineMathHelpers(py::module &m)
   .def_readonly_static("NAN_I", &NAN_I);
 }
 }  // namespace python
-}  // namespace gazebo
-}  // namespace ignition
+}  // namespace math
+}  // namespace gz

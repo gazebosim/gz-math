@@ -19,14 +19,14 @@
 #include <array>
 #include <utility>
 
-#include "ignition/math/Angle.hh"
-#include "ignition/math/AxisAlignedBox.hh"
-#include "ignition/math/Frustum.hh"
-#include "ignition/math/Matrix4.hh"
-#include "ignition/math/Plane.hh"
-#include "ignition/math/Pose3.hh"
+#include "gz/math/Angle.hh"
+#include "gz/math/AxisAlignedBox.hh"
+#include "gz/math/Frustum.hh"
+#include "gz/math/Matrix4.hh"
+#include "gz/math/Plane.hh"
+#include "gz/math/Pose3.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 /// \internal
@@ -45,7 +45,7 @@ class Frustum::Implementation
   /// The field of view is the angle between the frustum's vertex and the
   /// edges of the near or far plane.
   /// This value represents the horizontal angle.
-  public: math::Angle fov {IGN_DTOR(45)};
+  public: math::Angle fov {GZ_DTOR(45)};
 
   /// \brief Aspect ratio of the near and far planes. This is the
   // width divided by the height.
@@ -68,7 +68,7 @@ class Frustum::Implementation
 
 /////////////////////////////////////////////////
 Frustum::Frustum()
-  : dataPtr(ignition::utils::MakeImpl<Implementation>())
+  : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
 }
 

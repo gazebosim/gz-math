@@ -17,10 +17,10 @@
 #include <iostream>
 #include <string>
 
-#include "ignition/math/Matrix3.hh"
-#include "ignition/math/SphericalCoordinates.hh"
+#include "gz/math/Matrix3.hh"
+#include "gz/math/SphericalCoordinates.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 // Parameters for EARTH_WGS84 model
@@ -38,24 +38,43 @@ const double g_EarthWGS84Flattening = 1.0/298.257223563;
 // Radius of the Earth (meters).
 const double g_EarthRadius = 6371000.0;
 
+// Radius of the Moon (meters).
+// Source: https://lunar.gsfc.nasa.gov/library/451-SCI-000958.pdf
+const double g_MoonRadius = 1737400.0;
+
+// a: Equatorial radius of the Moon.
+// Source : https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html
+const double g_MoonAxisEquatorial = 1738100.0;
+
+// b: Polar radius of the Moon.
+// Source : https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html
+const double g_MoonAxisPolar = 1736000.0;
+
+// if: Unitless flattening parameter for the Moon.
+// Source : https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html
+const double g_MoonFlattening = 0.0012;
+
 // Private data for the SphericalCoordinates class.
-class ignition::math::SphericalCoordinates::Implementation
+class gz::math::SphericalCoordinates::Implementation
 {
   /// \brief Type of surface being used.
   public: SphericalCoordinates::SurfaceType surfaceType;
 
+  /// \brief Radius of the given SurfaceType.
+  public: double surfaceRadius = 0;
+
   /// \brief Latitude of reference point.
-  public: ignition::math::Angle latitudeReference;
+  public: gz::math::Angle latitudeReference;
 
   /// \brief Longitude of reference point.
-  public: ignition::math::Angle longitudeReference;
+  public: gz::math::Angle longitudeReference;
 
   /// \brief Elevation of reference point relative to sea level in meters.
   public: double elevationReference;
 
   /// \brief Heading offset, expressed as angle from East to
   ///        gazebo x-axis, or equivalently from North to gazebo y-axis.
-  public: ignition::math::Angle headingOffset;
+  public: gz::math::Angle headingOffset;
 
   /// \brief Semi-major axis ellipse parameter
   public: double ellA;
@@ -73,13 +92,13 @@ class ignition::math::SphericalCoordinates::Implementation
   public: double ellP;
 
   /// \brief Rotation matrix that moves ECEF to GLOBAL
-  public: ignition::math::Matrix3d rotECEFToGlobal;
+  public: gz::math::Matrix3d rotECEFToGlobal;
 
   /// \brief Rotation matrix that moves GLOBAL to ECEF
-  public: ignition::math::Matrix3d rotGlobalToECEF;
+  public: gz::math::Matrix3d rotGlobalToECEF;
 
   /// \brief Cache the ECEF position of the the origin
-  public: ignition::math::Vector3d origin;
+  public: gz::math::Vector3d origin;
 
   /// \brief Cache cosine head transform
   public: double cosHea;
@@ -94,6 +113,10 @@ SphericalCoordinates::SurfaceType SphericalCoordinates::Convert(
 {
   if ("EARTH_WGS84" == _str)
     return EARTH_WGS84;
+  else if ("MOON_SCS" == _str)
+    return MOON_SCS;
+  else if ("CUSTOM_SURFACE" == _str)
+    return CUSTOM_SURFACE;
 
   std::cerr << "SurfaceType string not recognized, "
     << "EARTH_WGS84 returned by default" << std::endl;
@@ -106,6 +129,10 @@ std::string SphericalCoordinates::Convert(
 {
   if (_type == EARTH_WGS84)
     return "EARTH_WGS84";
+  else if (_type == MOON_SCS)
+    return "MOON_SCS";
+  else if (_type == CUSTOM_SURFACE)
+    return "CUSTOM_SURFACE";
 
   std::cerr << "SurfaceType not recognized, "
     << "EARTH_WGS84 returned by default" << std::endl;
@@ -114,7 +141,7 @@ std::string SphericalCoordinates::Convert(
 
 //////////////////////////////////////////////////
 SphericalCoordinates::SphericalCoordinates()
-  : dataPtr(ignition::utils::MakeImpl<Implementation>())
+  : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
   this->SetSurface(EARTH_WGS84);
   this->SetElevationReference(0.0);
@@ -129,11 +156,25 @@ SphericalCoordinates::SphericalCoordinates(const SurfaceType _type)
 }
 
 //////////////////////////////////////////////////
+SphericalCoordinates::SphericalCoordinates(
+    const SurfaceType _type,
+    const double _axisEquatorial,
+    const double _axisPolar)
+  : SphericalCoordinates()
+{
+  // Set properties
+  this->SetSurface(_type, _axisEquatorial,
+      _axisPolar);
+
+  this->SetElevationReference(0.0);
+}
+
+//////////////////////////////////////////////////
 SphericalCoordinates::SphericalCoordinates(const SurfaceType _type,
-    const ignition::math::Angle &_latitude,
-    const ignition::math::Angle &_longitude,
+    const gz::math::Angle &_latitude,
+    const gz::math::Angle &_longitude,
     const double _elevation,
-    const ignition::math::Angle &_heading)
+    const gz::math::Angle &_heading)
   : SphericalCoordinates()
 {
   // Set the reference and calculate ellipse parameters
@@ -156,13 +197,13 @@ SphericalCoordinates::SurfaceType SphericalCoordinates::Surface() const
 }
 
 //////////////////////////////////////////////////
-ignition::math::Angle SphericalCoordinates::LatitudeReference() const
+gz::math::Angle SphericalCoordinates::LatitudeReference() const
 {
   return this->dataPtr->latitudeReference;
 }
 
 //////////////////////////////////////////////////
-ignition::math::Angle SphericalCoordinates::LongitudeReference() const
+gz::math::Angle SphericalCoordinates::LongitudeReference() const
 {
   return this->dataPtr->longitudeReference;
 }
@@ -174,7 +215,7 @@ double SphericalCoordinates::ElevationReference() const
 }
 
 //////////////////////////////////////////////////
-ignition::math::Angle SphericalCoordinates::HeadingOffset() const
+gz::math::Angle SphericalCoordinates::HeadingOffset() const
 {
   return this->dataPtr->headingOffset;
 }
@@ -208,6 +249,42 @@ void SphericalCoordinates::SetSurface(const SurfaceType &_type)
           std::pow(this->dataPtr->ellA, 2) / std::pow(this->dataPtr->ellB, 2) -
           1.0);
 
+      // Set the radius of the surface.
+      this->dataPtr->surfaceRadius = g_EarthRadius;
+
+      break;
+      }
+    case MOON_SCS:
+      {
+      // Set the semi-major axis
+      this->dataPtr->ellA = g_MoonAxisEquatorial;
+
+      // Set the semi-minor axis
+      this->dataPtr->ellB = g_MoonAxisPolar;
+
+      // Set the flattening parameter
+      this->dataPtr->ellF = g_MoonFlattening;
+
+      // Set the first eccentricity ellipse parameter
+      // https://en.wikipedia.org/wiki/Eccentricity_(mathematics)#Ellipses
+      this->dataPtr->ellE = sqrt(1.0 -
+          std::pow(this->dataPtr->ellB, 2) / std::pow(this->dataPtr->ellA, 2));
+
+      // Set the second eccentricity ellipse parameter
+      // https://en.wikipedia.org/wiki/Eccentricity_(mathematics)#Ellipses
+      this->dataPtr->ellP = sqrt(
+          std::pow(this->dataPtr->ellA, 2) / std::pow(this->dataPtr->ellB, 2) -
+          1.0);
+
+      // Set the radius of the surface.
+      this->dataPtr->surfaceRadius = g_MoonRadius;
+
+      break;
+      }
+    case CUSTOM_SURFACE:
+      {
+      std::cerr << "For custom surfaces, use SetSurface(type, radius,"
+        "axisEquatorial, axisPolar)" << std::endl;
       break;
       }
     default:
@@ -220,8 +297,55 @@ void SphericalCoordinates::SetSurface(const SurfaceType &_type)
 }
 
 //////////////////////////////////////////////////
+void SphericalCoordinates::SetSurface(
+    const SurfaceType &_type,
+    const double _axisEquatorial,
+    const double _axisPolar)
+{
+  if ((_type != EARTH_WGS84) &&
+      (_type != MOON_SCS) &&
+      (_type != CUSTOM_SURFACE))
+  {
+    std::cerr << "Unknown surface type["
+      << _type << "]\n";
+    return;
+  }
+
+  this->dataPtr->surfaceType = _type;
+
+  if ((_axisEquatorial > 0)
+      && (_axisPolar > 0)
+      && (_axisPolar <= _axisEquatorial))
+  {
+    this->dataPtr->ellA = _axisEquatorial;
+    this->dataPtr->ellB = _axisPolar;
+    this->dataPtr->ellF =
+      (_axisEquatorial - _axisPolar) / _axisEquatorial;
+    // Arithmetic mean radius
+    this->dataPtr->surfaceRadius =
+      (2 * _axisEquatorial + _axisPolar) / 3.0;
+  }
+  else
+  {
+    std::cerr << "Invalid parameters found, defaulting to "
+      "Earth's parameters" << std::endl;
+
+    this->dataPtr->ellA = g_EarthWGS84AxisEquatorial;
+    this->dataPtr->ellB = g_EarthWGS84AxisPolar;
+    this->dataPtr->ellF = g_EarthWGS84Flattening;
+    this->dataPtr->surfaceRadius = g_EarthRadius;
+  }
+
+  this->dataPtr->ellE = sqrt(1.0 -
+      std::pow(this->dataPtr->ellB, 2) / std::pow(this->dataPtr->ellA, 2));
+  this->dataPtr->ellP = sqrt(
+      std::pow(this->dataPtr->ellA, 2) / std::pow(this->dataPtr->ellB, 2) -
+      1.0);
+}
+
+//////////////////////////////////////////////////
 void SphericalCoordinates::SetLatitudeReference(
-    const ignition::math::Angle &_angle)
+    const gz::math::Angle &_angle)
 {
   this->dataPtr->latitudeReference = _angle;
   this->UpdateTransformationMatrix();
@@ -229,7 +353,7 @@ void SphericalCoordinates::SetLatitudeReference(
 
 //////////////////////////////////////////////////
 void SphericalCoordinates::SetLongitudeReference(
-    const ignition::math::Angle &_angle)
+    const gz::math::Angle &_angle)
 {
   this->dataPtr->longitudeReference = _angle;
   this->UpdateTransformationMatrix();
@@ -243,56 +367,56 @@ void SphericalCoordinates::SetElevationReference(const double _elevation)
 }
 
 //////////////////////////////////////////////////
-void SphericalCoordinates::SetHeadingOffset(const ignition::math::Angle &_angle)
+void SphericalCoordinates::SetHeadingOffset(const gz::math::Angle &_angle)
 {
   this->dataPtr->headingOffset.SetRadian(_angle.Radian());
   this->UpdateTransformationMatrix();
 }
 
 //////////////////////////////////////////////////
-ignition::math::Vector3d SphericalCoordinates::SphericalFromLocalPosition(
-    const ignition::math::Vector3d &_xyz) const
+gz::math::Vector3d SphericalCoordinates::SphericalFromLocalPosition(
+    const gz::math::Vector3d &_xyz) const
 {
-  ignition::math::Vector3d result =
+  gz::math::Vector3d result =
     this->PositionTransform(_xyz, LOCAL, SPHERICAL);
-  result.X(IGN_RTOD(result.X()));
-  result.Y(IGN_RTOD(result.Y()));
+  result.X(GZ_RTOD(result.X()));
+  result.Y(GZ_RTOD(result.Y()));
   return result;
 }
 
 //////////////////////////////////////////////////
-ignition::math::Vector3d SphericalCoordinates::LocalFromSphericalPosition(
-    const ignition::math::Vector3d &_xyz) const
+gz::math::Vector3d SphericalCoordinates::LocalFromSphericalPosition(
+    const gz::math::Vector3d &_xyz) const
 {
-  ignition::math::Vector3d result = _xyz;
-  result.X(IGN_DTOR(result.X()));
-  result.Y(IGN_DTOR(result.Y()));
+  gz::math::Vector3d result = _xyz;
+  result.X(GZ_DTOR(result.X()));
+  result.Y(GZ_DTOR(result.Y()));
   return this->PositionTransform(result, SPHERICAL, LOCAL);
 }
 
 //////////////////////////////////////////////////
-ignition::math::Vector3d SphericalCoordinates::GlobalFromLocalVelocity(
-    const ignition::math::Vector3d &_xyz) const
+gz::math::Vector3d SphericalCoordinates::GlobalFromLocalVelocity(
+    const gz::math::Vector3d &_xyz) const
 {
   return this->VelocityTransform(_xyz, LOCAL, GLOBAL);
 }
 
 //////////////////////////////////////////////////
-ignition::math::Vector3d SphericalCoordinates::LocalFromGlobalVelocity(
-    const ignition::math::Vector3d &_xyz) const
+gz::math::Vector3d SphericalCoordinates::LocalFromGlobalVelocity(
+    const gz::math::Vector3d &_xyz) const
 {
   return this->VelocityTransform(_xyz, GLOBAL, LOCAL);
 }
 
 //////////////////////////////////////////////////
 /// Based on Haversine formula (http://en.wikipedia.org/wiki/Haversine_formula).
-double SphericalCoordinates::Distance(const ignition::math::Angle &_latA,
-                                      const ignition::math::Angle &_lonA,
-                                      const ignition::math::Angle &_latB,
-                                      const ignition::math::Angle &_lonB)
+double SphericalCoordinates::DistanceWGS84(const gz::math::Angle &_latA,
+                                      const gz::math::Angle &_lonA,
+                                      const gz::math::Angle &_latB,
+                                      const gz::math::Angle &_lonB)
 {
-  ignition::math::Angle dLat = _latB - _latA;
-  ignition::math::Angle dLon = _lonB - _lonA;
+  gz::math::Angle dLat = _latB - _latA;
+  gz::math::Angle dLon = _lonB - _lonA;
 
   double a = sin(dLat.Radian() / 2) * sin(dLat.Radian() / 2) +
              sin(dLon.Radian() / 2) * sin(dLon.Radian() / 2) *
@@ -301,6 +425,64 @@ double SphericalCoordinates::Distance(const ignition::math::Angle &_latA,
   double c = 2 * atan2(sqrt(a), sqrt(1 - a));
   double d = g_EarthRadius * c;
   return d;
+}
+
+//////////////////////////////////////////////////
+/// Based on Haversine formula (http://en.wikipedia.org/wiki/Haversine_formula).
+double SphericalCoordinates::Distance(const gz::math::Angle &_latA,
+                                      const gz::math::Angle &_lonA,
+                                      const gz::math::Angle &_latB,
+                                      const gz::math::Angle &_lonB)
+{
+  // LCOV_EXCL_START
+  return gz::math::SphericalCoordinates::DistanceWGS84(
+      _latA, _lonA, _latB, _lonB);
+  // LCOV_EXCL_STOP
+}
+
+//////////////////////////////////////////////////
+/// Based on Haversine formula (http://en.wikipedia.org/wiki/Haversine_formula).
+/// This takes into account the surface type.
+double SphericalCoordinates::DistanceBetweenPoints(
+    const gz::math::Angle &_latA,
+    const gz::math::Angle &_lonA,
+    const gz::math::Angle &_latB,
+    const gz::math::Angle &_lonB)
+{
+  gz::math::Angle dLat = _latB - _latA;
+  gz::math::Angle dLon = _lonB - _lonA;
+
+  double a = sin(dLat.Radian() / 2) * sin(dLat.Radian() / 2) +
+             sin(dLon.Radian() / 2) * sin(dLon.Radian() / 2) *
+             cos(_latA.Radian()) * cos(_latB.Radian());
+
+  double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+  double d = this->dataPtr->surfaceRadius * c;
+  return d;
+}
+
+//////////////////////////////////////////////////
+double SphericalCoordinates::SurfaceRadius() const
+{
+  return this->dataPtr->surfaceRadius;
+}
+
+//////////////////////////////////////////////////
+double SphericalCoordinates::SurfaceAxisEquatorial() const
+{
+  return this->dataPtr->ellA;
+}
+
+//////////////////////////////////////////////////
+double SphericalCoordinates::SurfaceAxisPolar() const
+{
+  return this->dataPtr->ellB;
+}
+
+//////////////////////////////////////////////////
+double SphericalCoordinates::SurfaceFlattening() const
+{
+  return this->dataPtr->ellF;
 }
 
 //////////////////////////////////////////////////
@@ -315,7 +497,7 @@ void SphericalCoordinates::UpdateTransformationMatrix()
   // Create a rotation matrix that moves ECEF to GLOBAL
   // http://www.navipedia.net/index.php/
   // Transformations_between_ECEF_and_ENU_coordinates
-  this->dataPtr->rotECEFToGlobal = ignition::math::Matrix3d(
+  this->dataPtr->rotECEFToGlobal = gz::math::Matrix3d(
                       -sinLon,           cosLon,          0.0,
                       -cosLon * sinLat, -sinLon * sinLat, cosLat,
                        cosLon * cosLat,  sinLon * cosLat, sinLat);
@@ -323,7 +505,7 @@ void SphericalCoordinates::UpdateTransformationMatrix()
   // Create a rotation matrix that moves GLOBAL to ECEF
   // http://www.navipedia.net/index.php/
   // Transformations_between_ECEF_and_ENU_coordinates
-  this->dataPtr->rotGlobalToECEF = ignition::math::Matrix3d(
+  this->dataPtr->rotGlobalToECEF = gz::math::Matrix3d(
                       -sinLon, -cosLon * sinLat, cosLon * cosLat,
                        cosLon, -sinLon * sinLat, sinLon * cosLat,
                        0,      cosLat,           sinLat);
@@ -337,7 +519,7 @@ void SphericalCoordinates::UpdateTransformationMatrix()
   this->dataPtr->sinHea = sin(-this->dataPtr->headingOffset.Radian());
 
   // Cache the ECEF coordinate of the origin
-  this->dataPtr->origin = ignition::math::Vector3d(
+  this->dataPtr->origin = gz::math::Vector3d(
     this->dataPtr->latitudeReference.Radian(),
     this->dataPtr->longitudeReference.Radian(),
     this->dataPtr->elevationReference);
@@ -346,11 +528,11 @@ void SphericalCoordinates::UpdateTransformationMatrix()
 }
 
 /////////////////////////////////////////////////
-ignition::math::Vector3d SphericalCoordinates::PositionTransform(
-    const ignition::math::Vector3d &_pos,
+gz::math::Vector3d SphericalCoordinates::PositionTransform(
+    const gz::math::Vector3d &_pos,
     const CoordinateType &_in, const CoordinateType &_out) const
 {
-  ignition::math::Vector3d tmp = _pos;
+  gz::math::Vector3d tmp = _pos;
 
   // Cache trig results
   double cosLat = cos(_pos.X());
@@ -455,7 +637,7 @@ ignition::math::Vector3d SphericalCoordinates::PositionTransform(
     case LOCAL2:
       tmp = this->dataPtr->rotECEFToGlobal * (tmp - this->dataPtr->origin);
 
-      tmp = ignition::math::Vector3d(
+      tmp = gz::math::Vector3d(
           tmp.X() * this->dataPtr->cosHea - tmp.Y() * this->dataPtr->sinHea,
           tmp.X() * this->dataPtr->sinHea + tmp.Y() * this->dataPtr->cosHea,
           tmp.Z());
@@ -474,8 +656,8 @@ ignition::math::Vector3d SphericalCoordinates::PositionTransform(
 }
 
 //////////////////////////////////////////////////
-ignition::math::Vector3d SphericalCoordinates::VelocityTransform(
-    const ignition::math::Vector3d &_vel,
+gz::math::Vector3d SphericalCoordinates::VelocityTransform(
+    const gz::math::Vector3d &_vel,
     const CoordinateType &_in, const CoordinateType &_out) const
 {
   // Sanity check -- velocity should not be expressed in spherical coordinates
@@ -485,7 +667,7 @@ ignition::math::Vector3d SphericalCoordinates::VelocityTransform(
   }
 
   // Intermediate data type
-  ignition::math::Vector3d tmp = _vel;
+  gz::math::Vector3d tmp = _vel;
 
   // First, convert to an ECEF vector
   switch (_in)
@@ -534,7 +716,7 @@ ignition::math::Vector3d SphericalCoordinates::VelocityTransform(
     case LOCAL:
     case LOCAL2:
       tmp = this->dataPtr->rotECEFToGlobal * tmp;
-      tmp = ignition::math::Vector3d(
+      tmp = gz::math::Vector3d(
           tmp.X() * this->dataPtr->cosHea - tmp.Y() * this->dataPtr->sinHea,
           tmp.X() * this->dataPtr->sinHea + tmp.Y() * this->dataPtr->cosHea,
           tmp.Z());

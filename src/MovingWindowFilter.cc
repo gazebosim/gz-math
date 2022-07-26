@@ -15,14 +15,14 @@
  *
  */
 
-#include "ignition/math/MovingWindowFilter.hh"
-#include "ignition/math/Vector3.hh"
+#include "gz/math/MovingWindowFilter.hh"
+#include "gz/math/Vector3.hh"
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
-inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+inline namespace GZ_MATH_VERSION_NAMESPACE {
 
 //////////////////////////////////////////////////
 template<typename T>
@@ -110,8 +110,8 @@ T MovingWindowFilter<T>::Value() const
 
 //////////////////////////////////////////////////
 template<>
-ignition::math::Vector3i
-MovingWindowFilter<ignition::math::Vector3i>::Value() const
+gz::math::Vector3i
+MovingWindowFilter<gz::math::Vector3i>::Value() const
 {
   auto value = this->sum / this->samples;
   return value;
@@ -119,10 +119,10 @@ MovingWindowFilter<ignition::math::Vector3i>::Value() const
 
 //////////////////////////////////////////////////
 template<>
-ignition::math::Vector3f
-MovingWindowFilter<ignition::math::Vector3f>::Value() const
+gz::math::Vector3f
+MovingWindowFilter<gz::math::Vector3f>::Value() const
 {
-  ignition::math::Vector3f divisor;
+  gz::math::Vector3f divisor;
   divisor = static_cast<float>(this->samples);
   auto value = this->sum / divisor;
   return value;
@@ -130,8 +130,8 @@ MovingWindowFilter<ignition::math::Vector3f>::Value() const
 
 //////////////////////////////////////////////////
 template<>
-ignition::math::Vector3d
-MovingWindowFilter<ignition::math::Vector3d>::Value() const
+gz::math::Vector3d
+MovingWindowFilter<gz::math::Vector3d>::Value() const
 {
   auto value = this->sum / this->samples;
   return value;
@@ -140,10 +140,10 @@ MovingWindowFilter<ignition::math::Vector3d>::Value() const
 template class MovingWindowFilter<int>;
 template class MovingWindowFilter<float>;
 template class MovingWindowFilter<double>;
-template class MovingWindowFilter<ignition::math::Vector3i>;
-template class MovingWindowFilter<ignition::math::Vector3f>;
-template class MovingWindowFilter<ignition::math::Vector3d>;
+template class MovingWindowFilter<gz::math::Vector3i>;
+template class MovingWindowFilter<gz::math::Vector3f>;
+template class MovingWindowFilter<gz::math::Vector3d>;
 
 }
-}
-}
+}  // namespace math
+}  // namespace gz

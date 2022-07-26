@@ -19,10 +19,10 @@
 #include <iostream>
 #include <string>
 
-#include "ignition/math/graph/Edge.hh"
-#include "ignition/math/graph/Vertex.hh"
+#include "gz/math/graph/Edge.hh"
+#include "gz/math/graph/Vertex.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 using namespace graph;
 
@@ -35,7 +35,7 @@ class EdgeTestFixture : public testing::Test
 // The list of edges we want to test.
 using EdgeTypes = ::testing::Types<DirectedEdge<int>,
                                    UndirectedEdge<int>>;
-TYPED_TEST_CASE(EdgeTestFixture, EdgeTypes);
+TYPED_TEST_SUITE(EdgeTestFixture, EdgeTypes, );
 
 /////////////////////////////////////////////////
 TYPED_TEST(EdgeTestFixture, Accessors)

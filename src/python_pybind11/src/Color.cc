@@ -19,13 +19,13 @@
 #include <string>
 
 #include "Color.hh"
-#include <ignition/math/Color.hh>
+#include <gz/math/Color.hh>
 
 #include <pybind11/operators.h>
 
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -33,7 +33,7 @@ namespace python
 {
 void defineMathColor(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::Color;
+  using Class = gz::math::Color;
   auto toString = [](const Class &si) {
     std::stringstream stream;
     stream << si;
@@ -152,4 +152,4 @@ void defineMathColor(py::module &m, const std::string &typestr)
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz

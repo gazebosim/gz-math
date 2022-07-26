@@ -17,12 +17,12 @@
 
 %module materialtype
 %{
-#include <ignition/math/config.hh>
-#include <ignition/math/Export.hh>
-#include <ignition/math/MaterialType.hh>
+#include <gz/math/config.hh>
+#include <gz/math/Export.hh>
+#include <gz/math/MaterialType.hh>
 %}
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
