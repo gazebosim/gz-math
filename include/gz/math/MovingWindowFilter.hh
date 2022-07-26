@@ -39,10 +39,10 @@ namespace gz
     template< typename T>
     class GZ_MATH_VISIBLE MovingWindowFilter
     {
-      // \brief Constructor
+      /// \brief Constructor
       public: MovingWindowFilter(unsigned int _windowSize = 4);
 
-      // \brief Constructor
+      /// \brief Destructor
       public: virtual ~MovingWindowFilter() = default;
 
       /// \brief Update value of filter
