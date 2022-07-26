@@ -35,6 +35,53 @@ TEST(MovingWindowFilterTest, SetWindowSize)
 }
 
 /////////////////////////////////////////////////
+TEST(MovingWindowFilterTest, FilterIntegral)
+{
+  math::MovingWindowFilter<int> mwf;
+
+  mwf.SetWindowSize(2);
+  mwf.Update(1);
+  mwf.Update(1);
+  EXPECT_EQ(1, mwf.Value());
+
+  // Integer cast
+  mwf.Update(1);
+  mwf.Update(2);
+  EXPECT_EQ(1, mwf.Value());
+}
+
+/////////////////////////////////////////////////
+TEST(MovingWindowFilterTest, FilterIntegralVector)
+{
+  math::MovingWindowFilter<math::Vector3i> mwf;
+
+  mwf.SetWindowSize(2);
+  mwf.Update({1, 1, 1});
+  mwf.Update({1, 1, 1});
+  EXPECT_EQ(math::Vector3i(1, 1, 1), mwf.Value());
+
+  // Integer cast
+  mwf.Update({1, 1, 1});
+  mwf.Update({2, 2, 2});
+  EXPECT_EQ(math::Vector3i(1, 1, 1), mwf.Value());
+}
+
+/////////////////////////////////////////////////
+TEST(MovingWindowFilterTest, FilterFloatVector)
+{
+  math::MovingWindowFilter<math::Vector3f> mwf;
+
+  mwf.SetWindowSize(2);
+  mwf.Update({1, 1, 1});
+  mwf.Update({1, 1, 1});
+  EXPECT_EQ(math::Vector3f(1, 1, 1), mwf.Value());
+
+  mwf.Update({1, 1, 1});
+  mwf.Update({2, 2, 2});
+  EXPECT_EQ(math::Vector3f(1.5, 1.5, 1.5), mwf.Value());
+}
+
+/////////////////////////////////////////////////
 TEST(MovingWindowFilterTest, FilterSomething)
 {
   math::MovingWindowFilter<double> doubleMWF;
