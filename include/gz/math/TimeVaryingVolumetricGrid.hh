@@ -76,6 +76,10 @@ class TimeVaryingVolumetricGrid<T, V, InMemorySession<T, double>>
 };
 
 template<typename T, typename V>
+using InMemoryTimeVaryingVolumetricGrid =
+  TimeVaryingVolumetricGrid<T, V, InMemorySession<T, double>>;
+
+template<typename T, typename V>
 class InMemoryTimeVaryingVolumetricGridFactory
 {
   public: void AddPoint(
