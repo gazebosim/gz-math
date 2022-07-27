@@ -53,6 +53,31 @@ instead.
 
 ### Gazebo Math 6.x.x
 
+## Gazebo Math 6.11.0 (2022-05-11)
+
+1. MassMatrix3: fix bug in PrincipalAxesOffset tolerances
+    * [Pull request #424](https://github.com/gazebosim/gz-math/pull/424)
+
+1. Fix return policies for some member functions
+    * [Pull request #422](https://github.com/gazebosim/gz-math/pull/422)
+
+1. Added Ellipsoid Python interface
+    * [Pull request #404](https://github.com/gazebosim/gz-math/pull/404)
+
+1. Added Capsule Python interface
+    * [Pull request #403](https://github.com/gazebosim/gz-math/pull/403)
+
+1. Fixes for tests on i386: relax SphericalCoordinates and workaround for negative zero
+    * [Pull request #374](https://github.com/gazebosim/gz-math/pull/374)
+
+1. Added helper function to check if a string represents a time
+    * [Pull request #389](https://github.com/gazebosim/gz-math/pull/389)
+
+1. Reduce pybind11 compilation memory
+    * [Pull request #382](https://github.com/gazebosim/gz-math/pull/382)
+    * [Pull request #373](https://github.com/gazebosim/gz-math/pull/373)
+    * [Pull request #371](https://github.com/gazebosim/gz-math/pull/371)
+
 ## Gazebo Math 6.10.0 (2022-01-26)
 
 1. Use const instead of constexpr in Ellipsoid constructor
@@ -392,7 +417,7 @@ instead.
 1. Added functions to convert between time_point and secNsec
     * [Pull request 150](https://github.com/gazebosim/gz-math/pull/150)
 
-1. Fix IGNITION_MATH_XXX_VERSION
+1. Fix GZ_MATH_XXX_VERSION
     * [Pull request 151](https://github.com/gazebosim/gz-math/pull/151)
 
 1. Add Max and Min function to Vector2.hh

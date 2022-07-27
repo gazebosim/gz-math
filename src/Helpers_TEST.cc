@@ -985,29 +985,6 @@ TEST(HelpersTest, AppendToStream)
 {
   std::ostringstream out;
 
-  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
-  // Deprecated in gz-math7
-  math::appendToStream(out, 0.12345678, 3);
-  EXPECT_EQ(out.str(), "0.123");
-
-  out << " ";
-
-  math::appendToStream(out, 0.0f, 5);
-  EXPECT_EQ(out.str(), "0.123 0");
-
-  out << " ";
-
-  math::appendToStream(out, 456, 3);
-  EXPECT_EQ(out.str(), "0.123 0 456");
-
-  out << " ";
-
-  math::appendToStream(out, 0, 3);
-  EXPECT_EQ(out.str(), "0.123 0 456 0");
-
-  out.str("");
-  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
-
   math::appendToStream(out, 0.0f);
   EXPECT_EQ(out.str(), "0");
 

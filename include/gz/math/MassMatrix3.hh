@@ -535,9 +535,9 @@ namespace gz
       /// with MOI = R(q).Transpose() * L * R(q)
       public: Quaternion<T> PrincipalAxesOffset(const T _tol = 1e-6) const
       {
+        Vector3<T> moments = this->PrincipalMoments(_tol);
         // Compute tolerance relative to maximum value of inertia diagonal
         T tol = _tol * this->Ixxyyzz.Max();
-        Vector3<T> moments = this->PrincipalMoments(tol);
         if (moments.Equal(this->Ixxyyzz, tol) ||
             (math::equal<T>(moments[0], moments[1], std::abs(tol)) &&
              math::equal<T>(moments[0], moments[2], std::abs(tol))))

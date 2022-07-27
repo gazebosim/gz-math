@@ -13,8 +13,8 @@
 # limitations under the License.
 
 import unittest
-from ignition.math import Vector3d
-from ignition.math import Vector3Stats
+from gz.math import Vector3d
+from gz.math import Vector3Stats
 
 
 class TestVector3Stats(unittest.TestCase):

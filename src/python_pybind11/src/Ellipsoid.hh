@@ -36,7 +36,7 @@ namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an gz::math::Ellipsoid
+/// Define a pybind11 wrapper for a gz::math::Ellipsoid
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -89,7 +89,7 @@ void helpDefineMathEllipsoid(py::module &m, const std::string &typestr)
     }, "memo"_a);
 }
 
-/// Define a pybind11 wrapper for an gz::math::Ellipsoid
+/// Define a pybind11 wrapper for a gz::math::Ellipsoid
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python

@@ -15,10 +15,10 @@
 import math
 import unittest
 
-from ignition.math import (Helpers, gz_box_volume, gz_box_volume_v, gz_cylinder_volume,
+from gz.math import (Helpers, gz_box_volume, gz_box_volume_v, gz_cylinder_volume,
                            gz_sphere_volume, Vector3d, equal, fixnan,
                            greater_or_near_equal, is_even, is_odd, is_power_of_two, isnan,
-                           less_or_near_equal, max, mean, min,
+                           is_time_string, less_or_near_equal, max, mean, min,
                            parse_float, parse_int, precision, round_up_multiple,
                            round_up_power_of_two, signum, sort2, sort3, variance)
 
@@ -269,6 +269,55 @@ class TestHelpers(unittest.TestCase):
             gz_box_volume(.1, .2, .3),
             gz_box_volume_v(Vector3d(0.1, 0.2, 0.3)),
             6)
+
+    def test_is_time_string(self):
+        time = "0 00:00:00.000"
+        self.assertTrue(is_time_string(time))
+
+        time = "10 0"
+        self.assertTrue(is_time_string(time))
+
+        time = "7"
+        self.assertTrue(is_time_string(time))
+
+        time = "7:10"
+        self.assertTrue(is_time_string(time))
+
+        time = "17:10"
+        self.assertTrue(is_time_string(time))
+
+        time = "7:10.4"
+        self.assertTrue(is_time_string(time))
+
+        time = "7:10.45"
+        self.assertTrue(is_time_string(time))
+
+        time = "7:10.456"
+        self.assertTrue(is_time_string(time))
+
+        time = "2 23:18:25.902"
+        self.assertTrue(is_time_string(time))
+
+        time = ".9"
+        self.assertTrue(is_time_string(time))
+
+        time = "bad time"
+        self.assertFalse(is_time_string(time))
+
+        time = "60"
+        self.assertFalse(is_time_string(time))
+
+        time = "60:12"
+        self.assertFalse(is_time_string(time))
+
+        time = "12:12.9999"
+        self.assertFalse(is_time_string(time))
+
+        time = "25:12:12.99"
+        self.assertFalse(is_time_string(time))
+
+        time = "999999999999999 5:12:12.5"
+        self.assertFalse(is_time_string(time))
 
     def test_round_up_multiple(self):
         self.assertEqual(0, round_up_multiple(0, 0))

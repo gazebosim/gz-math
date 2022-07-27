@@ -35,7 +35,7 @@ namespace math
 {
 namespace python
 {
-/// Help define a pybind11 wrapper for an gz::math::Vector4
+/// Help define a pybind11 wrapper for a gz::math::Vector4
 /**
  * \param[in] module a pybind11 module to add the definition to
  */
@@ -147,7 +147,7 @@ void helpDefineMathVector4(py::module &m, const std::string &typestr)
     .def("__repr__", toString);
 }
 
-/// Define a pybind11 wrapper for an gz::math::Vector4
+/// Define a pybind11 wrapper for a gz::math::Vector4
 /**
  * \param[in] module a pybind11 module to add the definition to
  */

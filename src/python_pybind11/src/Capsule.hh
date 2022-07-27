@@ -35,7 +35,7 @@ namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an gz::math::Capsule
+/// Define a pybind11 wrapper for a gz::math::Capsule
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -93,7 +93,7 @@ void helpDefineMathCapsule(py::module &m, const std::string &typestr)
     }, "memo"_a);
 }
 
-/// Define a pybind11 wrapper for an gz::math::Line2
+/// Define a pybind11 wrapper for a gz::math::Line2
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python

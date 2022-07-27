@@ -29,7 +29,7 @@
   if((*(&result)).has_value()) {
     $result = SWIG_NewPointerObj(
       (new gz::math::Vector3< double >(static_cast< const gz::math::Vector3< double >& >((*(&result)).value()))),
-      SWIGTYPE_p_ignition__math__Vector3T_double_t,
+      SWIGTYPE_p_gz__math__Vector3T_double_t,
       SWIG_POINTER_OWN |  0 );
   } else {
     $result = Py_None;

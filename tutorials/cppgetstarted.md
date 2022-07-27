@@ -1,6 +1,6 @@
 \page cppgetstarted C++ Get Started
 
-Previous Tutorial: \ref install 
+Previous Tutorial: \ref install
 
 ## Overview
 
@@ -17,9 +17,9 @@ int main()
 }
 ```
 
-The easiest way to include Gazebo Math is through the `ignition/math.hh`
+The easiest way to include Gazebo Math is through the `gz/math.hh`
 header file. Alternatively, you can include only the header files you need.
-For this example, we'll take the short and easy approach. 
+For this example, we'll take the short and easy approach.
 
 At this point your main file should look like
 
@@ -70,6 +70,6 @@ int main()
 ## Bonus: Vector2 Example
 
 The following is an example program that uses Vector2 to perform some simple
-computation. 
+computation.
 
 \snippet examples/vector2_example.cc complete

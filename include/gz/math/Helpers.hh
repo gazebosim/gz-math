@@ -469,37 +469,6 @@ namespace gz
     /// \brief Append a number to a stream. Makes sure "-0" is returned as "0".
     /// \param[out] _out Output stream.
     /// \param[in] _number Number to append.
-    /// \param[in] _precision Precision for floating point numbers.
-    /// \deprecated Use appendToStream(std::ostream, T) instead.
-    template<typename T>
-    inline void GZ_DEPRECATED(7) appendToStream(
-        std::ostream &_out, T _number, int _precision)
-    {
-      if (std::fpclassify(_number) == FP_ZERO)
-      {
-        _out << 0;
-      }
-      else
-      {
-        _out << precision(_number, _precision);
-      }
-    }
-
-    /// \brief Append a number to a stream, specialized for int.
-    /// \param[out] _out Output stream.
-    /// \param[in] _number Number to append.
-    /// _precision Not used for int.
-    /// \deprecated Use appendToStream(std::ostream, int) instead.
-    template<>
-    inline void GZ_DEPRECATED(7) appendToStream(
-        std::ostream &_out, int _number, int)
-    {
-      _out << _number;
-    }
-
-    /// \brief Append a number to a stream. Makes sure "-0" is returned as "0".
-    /// \param[out] _out Output stream.
-    /// \param[in] _number Number to append.
     template<typename T>
     inline void appendToStream(std::ostream &_out, T _number)
     {
