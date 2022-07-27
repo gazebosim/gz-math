@@ -50,7 +50,7 @@ TEST(VolumetricGridLookupField, CheckInterpolationExact)
 
 TEST(VolumetricGridLookupField, CustomIndices)
 {
-  // Volumetric 
+  // Test custom index.
   std::vector<Vector3d> cloud;
   std::vector<std::size_t> indices;
   const double stride_x = 1, stride_y = 5, stride_z = 10;
