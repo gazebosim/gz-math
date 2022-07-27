@@ -682,6 +682,7 @@ TEST(Inertiald_Test, AdditionInvalid)
   }
 }
 
+/////////////////////////////////////////////////
 TEST(Inertiald_Test, SubtractionInvalid)
 {
   const double mass = 12.0;
@@ -740,10 +741,11 @@ TEST(Inertiald_Test, SubtractionInvalid)
   }
 }
 
+/////////////////////////////////////////////////
 TEST(Inertiald_Test, BodyMatrix)
 {
-  math::MassMatrix3d massMatrix(100, {1, 2, 3}, {4, 5, 6});
-  math::Pose3d com{7, 8, 9, 0, 0, 0};
+  math::MassMatrix3d massMatrix(100, {2.0, 3.0, 4.0}, {0.2, 0.3, 0.4});
+  math::Pose3d com{7, 8, 9, 0, 0, GZ_PI * 0.5};
 
   math::Inertiald inertial(massMatrix, com);
 
@@ -751,31 +753,45 @@ TEST(Inertiald_Test, BodyMatrix)
 
   EXPECT_EQ(bodyMatrix, inertial.SpatialMatrix());
 
+  // Mass diagonal
   EXPECT_EQ(math::Matrix3d(
       100,   0, 0,
       0,   100, 0,
       0,     0, 100),
       bodyMatrix.Submatrix(math::Matrix6d::TOP_LEFT));
 
+  // CoM translational offset
   EXPECT_EQ(math::Matrix3d(
       0,        100 * 9,  -100 * 8,
       -100 * 9, 0,        100 * 7,
       100 * 8,  -100 * 7, 0),
       bodyMatrix.Submatrix(math::Matrix6d::TOP_RIGHT));
 
+  // Transpose of TOP_RIGHT
   EXPECT_EQ(math::Matrix3d(
       0,        -100 * 9, 100 * 8,
       100 * 9,  0,        -100 * 7,
       -100 * 8, 100 * 7,  0),
       bodyMatrix.Submatrix(math::Matrix6d::BOTTOM_LEFT));
+  EXPECT_EQ(bodyMatrix.Submatrix(math::Matrix6d::BOTTOM_LEFT).Transposed(),
+      bodyMatrix.Submatrix(math::Matrix6d::TOP_RIGHT));
 
+  // Moments of inertia with CoM rotational offset
+  // 90 deg yaw:
+  // * xx <- -yy (but it ends up positive because it's in the diagonal)
+  // * xy <- -xy
+  // * xz <- -yz
+  // * yy <- xx
+  // * yz <- xz
+  // * zz <- zz
   EXPECT_EQ(math::Matrix3d(
-      1, 4, 5,
-      4, 2, 6,
-      5, 6, 3),
+      3.0, -0.2, -0.4,
+      -0.2, 2.0, 0.3,
+      -0.4, 0.3, 4.0),
       bodyMatrix.Submatrix(math::Matrix6d::BOTTOM_RIGHT));
 }
 
+/////////////////////////////////////////////////
 TEST(Inertiald_Test, FluidAddedMass)
 {
   math::MassMatrix3d massMatrix(100, {1, 2, 3}, {4, 5, 6});
