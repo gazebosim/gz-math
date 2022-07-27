@@ -1,4 +1,53 @@
-## Ignition Math 6.x
+## Gazebo Math 6.x
+
+## Gazebo Math 6.12.0 (2022-07-27)
+
+1. Added Helper function isTimeString to Python
+    * [Pull request #471](https://github.com/gazebosim/gz-math/pull/471)
+
+1. Ignition -> Gazebo
+    * [Pull request #467](https://github.com/gazebosim/gz-math/pull/467)
+    * [Pull request #468](https://github.com/gazebosim/gz-math/pull/468)
+    * [Pull request #474](https://github.com/gazebosim/gz-math/pull/474)
+
+1. Added `*.pyc` to `.gitignore`
+    * [Pull request #461](https://github.com/gazebosim/gz-math/pull/461)
+
+1. Alphabetize examples
+    * [Pull request #457](https://github.com/gazebosim/gz-math/pull/457)
+
+1. Add `PiecewiseScalarField3` class
+    * [Pull request #398](https://github.com/gazebosim/gz-math/pull/398)
+
+1. Add `AdditivelySeparableScalarField3` class
+    * [Pull request #397](https://github.com/gazebosim/gz-math/pull/397)
+
+1. Add `Polynomial3` class
+    * [Pull request #393](https://github.com/gazebosim/gz-math/pull/393)
+    * [Pull request #451](https://github.com/gazebosim/gz-math/pull/451)
+    * [Pull request #396](https://github.com/gazebosim/gz-math/pull/396)
+
+1. Add `Region3` class
+    * [Pull request #390](https://github.com/gazebosim/gz-math/pull/390)
+    * [Pull request #450](https://github.com/gazebosim/gz-math/pull/450)
+
+1. Add `Interval` class
+    * [Pull request #388](https://github.com/gazebosim/gz-math/pull/388)
+    * [Pull request #449](https://github.com/gazebosim/gz-math/pull/449)
+    * [Pull request #396](https://github.com/gazebosim/gz-math/pull/396)
+
+1. Add Matrix6 class
+    * [Pull request #455](https://github.com/gazebosim/gz-math/pull/455)
+    * [Pull request #469](https://github.com/gazebosim/gz-math/pull/469)
+
+1. Backport newest appendToStream functions
+    * [Pull request #453](https://github.com/gazebosim/gz-math/pull/453)
+
+1. Use pytest to generate junit xml files for python tests
+    * [Pull request #446](https://github.com/gazebosim/gz-math/pull/446)
+
+1. Add Aditya as codeowner
+    * [Pull request #443](https://github.com/gazebosim/gz-math/pull/443)
 
 ## Ignition Math 6.11.0 (2022-05-11)
 
