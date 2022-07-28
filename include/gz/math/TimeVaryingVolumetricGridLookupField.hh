@@ -54,15 +54,21 @@ namespace gz
       /// \brief Update session to new time. Returns new session pointer if
       /// more is available. Otherwise returns nullopt if we have run out of
       /// time.
+      /// \param _session - The session
+      /// \param _time - Time to step to.
       public: std::optional<S> StepTo(const S &_session, const T &_time);
 
       /// \brief Looks up interpolators at a given time step. Use the session
       /// to set the time step.
+      /// \param _session - The session
+      /// \param _point - The point to query
+      /// \param _tol - Tolerance
       public: std::pair<InterpolationPoint4D<T, V>, InterpolationPoint4D<T, V>>
       LookUp(const S &_session,
         const Vector3<V> &_point,
         const Vector3<V> &_tol) const;
 
+      /// \brief Uses quadrilinear interpolation to estimate
       public: template<typename X>
       X EstimateQuadrilinear(
         const S &_session,
@@ -80,10 +86,11 @@ namespace gz
       /// \brief Iterator which holds pointer to current state
       /// TODO(arjo): Use friend to make visible only to InMemorySession
       /// specialization
-      typename std::map<T, VolumetricGridLookupField<V>>::const_iterator iter;
+      private:
+        typename std::map<T, VolumetricGridLookupField<V>>::const_iterator iter;
 
       /// \brief Time of last query
-      T time;
+      public: T time;
 
       friend class
         TimeVaryingVolumetricGridLookupField<T, V, InMemorySession<T, V>>;
@@ -135,9 +142,9 @@ namespace gz
           && nextTime->first <= _time)
         {
           newSess.iter = nextTime;
-          newSess.time = _time;
           nextTime = std::next(nextTime);
         }
+        newSess.time = _time;
         return newSess;
       }
 
@@ -165,6 +172,10 @@ namespace gz
           res.second.timeSlice = nextTime->second.GetInterpolators(
             _point, _tol.X(), _tol.Y(), _tol.Z());
           res.second.time = nextTime->first;
+        }
+        else
+        {
+          res.second = res.first;
         }
         return res;
       }
