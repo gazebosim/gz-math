@@ -48,6 +48,29 @@ TEST(VolumetricGridLookupField, CheckInterpolationExact)
   }
 }
 
+TEST(VolumetricGridLookupField, CustomIndices)
+{
+  // Test custom index.
+  std::vector<Vector3d> cloud;
+  std::vector<std::size_t> indices;
+  const double stride_x = 1, stride_y = 5, stride_z = 10;
+  for(double x = 0; x < 300; x += stride_x)
+  {
+    for(double y = 0; y < 300; y += stride_y)
+    {
+      for(double z = 0; z < 300; z += stride_z)
+      {
+        cloud.emplace_back(x, y, z);
+      }
+    }
+  }
+  indices.resize(cloud.size(), 0);
+  VolumetricGridLookupField<double> scalarIndex(cloud, indices);
+  auto val = scalarIndex.GetInterpolators(cloud[0]);
+  ASSERT_EQ(val.size(), 1UL);
+  ASSERT_EQ(val[0].index, 0);
+}
+
 TEST(VolumetricGridLookupField, CheckInterpolationBoxEightPoints)
 {
   std::vector<Vector3d> cloud;

@@ -33,14 +33,14 @@ namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an gz::math::MassMatrix3
+/// Define a pybind11 wrapper for a gz::math::MassMatrix3
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathMassMatrix3(py::module &m, const std::string &typestr);
 
-/// Help define a pybind11 wrapper for an gz::math::MassMatrix3
+/// Help define a pybind11 wrapper for a gz::math::MassMatrix3
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python

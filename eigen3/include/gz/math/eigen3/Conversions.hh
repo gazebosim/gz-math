@@ -21,6 +21,7 @@
 #include <Eigen/Geometry>
 #include <gz/math/AxisAlignedBox.hh>
 #include <gz/math/Matrix3.hh>
+#include <gz/math/Matrix6.hh>
 #include <gz/math/Pose3.hh>
 #include <gz/math/Quaternion.hh>
 #include <gz/math/Vector3.hh>
@@ -58,6 +59,27 @@ namespace gz
         for (std::size_t i=0; i < 3; ++i)
         {
           for (std::size_t j=0; j < 3; ++j)
+          {
+            matrix(i, j) = _m(i, j);
+          }
+        }
+
+        return matrix;
+      }
+
+      /// \brief Convert from gz::math::Matrix6d to
+      /// Eigen::Matrix<Precision, 6, 6>.
+      /// \param[in] _m gz::math::Matrix6d to convert.
+      /// \return The equivalent Eigen::Matrix<Precision, 6, 6>.
+      /// \tparam Precision Precision such as int, double or float.
+      template<typename Precision>
+      inline
+      Eigen::Matrix<Precision, 6, 6> convert(const Matrix6<Precision> &_m)
+      {
+        Eigen::Matrix<Precision, 6, 6> matrix;
+        for (std::size_t i = 0; i < 6; ++i)
+        {
+          for (std::size_t j = 0; j < 6; ++j)
           {
             matrix(i, j) = _m(i, j);
           }
@@ -127,6 +149,27 @@ namespace gz
         for (std::size_t i=0; i < 3; ++i)
         {
           for (std::size_t j=0; j < 3; ++j)
+          {
+            matrix(i, j) = _m(i, j);
+          }
+        }
+
+        return matrix;
+      }
+
+      /// \brief Convert Eigen::Matrix<Precision, 6, 6> to
+      /// gz::math::Matrix6d.
+      /// \param[in] _m Eigen::Matrix<Precision, 6, 6> to convert.
+      /// \return The equivalent gz::math::Matrix6d.
+      /// \tparam Precision Precision such as int, double or float.
+      template<typename Precision>
+      inline
+      Matrix6<Precision> convert(const Eigen::Matrix<Precision, 6, 6> &_m)
+      {
+        Matrix6<Precision> matrix;
+        for (std::size_t i = 0; i < 6; ++i)
+        {
+          for (std::size_t j = 0; j < 6; ++j)
           {
             matrix(i, j) = _m(i, j);
           }

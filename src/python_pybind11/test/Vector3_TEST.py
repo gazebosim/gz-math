@@ -16,8 +16,8 @@ import copy
 import math
 import unittest
 
-from ignition.math import Vector3d
-from ignition.math import Vector3f
+from gz.math import Vector3d
+from gz.math import Vector3f
 
 
 class TestVector3(unittest.TestCase):
