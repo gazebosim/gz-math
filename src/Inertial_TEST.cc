@@ -778,9 +778,9 @@ TEST(Inertiald_Test, BodyMatrix)
 
   // Moments of inertia with CoM rotational offset
   // 90 deg yaw:
-  // * xx <- -yy (but it ends up positive because it's in the diagonal)
-  // * xy <- -xy
-  // * xz <- -yz
+  // * xx <- (-1)*(-1)*yy
+  // * xy <- (-1)*xy
+  // * xz <- (-1)*yz
   // * yy <- xx
   // * yz <- xz
   // * zz <- zz
