@@ -9,13 +9,12 @@
 
 Build | Status
 -- | --
-Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-math/branch/ign-math7/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-math)
-Ubuntu Focal  | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_math-ci-ign-math7-focal-amd64)](https://build.osrfoundation.org/job/ignition_math-ci-ign-math7-focal-amd64)
-Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_math-ci-ign-math7-homebrew-amd64)](https://build.osrfoundation.org/job/ignition_math-ci-ign-math7-homebrew-amd64)
-Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ign_math-ign-7-win)](https://build.osrfoundation.org/job/ign_math-ign-7-win)
+Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-math/branch/main/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-math/branch/main)
+Ubuntu Focal  | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_math-ci-main-focal-amd64)](https://build.osrfoundation.org/job/ignition_math-ci-main-focal-amd64)
+Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_math-ci-main-homebrew-amd64)](https://build.osrfoundation.org/job/ignition_math-ci-main-homebrew-amd64)
+Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ign_math-ci-win)](https://build.osrfoundation.org/job/ign_math-ci-win)
 
-Gazebo Math, a component of [Gazebo
-Sim](https://gazebosim.org), provides general purpose math
+Gazebo Math, a component of [Gazebo](https://gazebosim.org), provides general purpose math
 classes and functions designed for robotic applications.
 
 # Table of Contents
@@ -59,9 +58,9 @@ Please refer to the [examples directory](https://github.com/gazebosim/gz-math/ra
 Refer to the following table for information about important directories and files in this repository.
 
 ```
-ign-math
+gz-math
 ├── examples                 Example programs.
-├── include/ignition/math    Header files.
+├── include/gz/math    Header files.
 ├── src                      Source files and unit tests.
 │   └── graph                Source files for the graph classes.
 │   └── python               SWIG Python interfaces.
@@ -77,8 +76,8 @@ ign-math
 ```
 # Contributing
 
-Please see
-[CONTRIBUTING.md](https://github.com/gazebosim/gz-sim/blob/main/CONTRIBUTING.md).
+Please see the
+[contributing guide](https://gazebosim.org/docs/all/contributing).
 
 # Code of Conduct
 

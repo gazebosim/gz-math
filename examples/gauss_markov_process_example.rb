@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Modify the RUBYLIB environment variable to include the ignition math
+# Modify the RUBYLIB environment variable to include the Gazebo math
 # library install path. For example, if you install to /user:
 #
 # $ export RUBYLIB=/usr/lib/ruby:$RUBYLIB
@@ -25,7 +25,7 @@
 #
 # 2. Use gnuplot to create a plot:
 #     gnuplot -e 'set terminal jpeg; plot "plot.data" with lines' > out.jpg
-require 'ignition/math'
+require 'gz/math'
 
 # Create the process with:
 #   * Start value of 20.2

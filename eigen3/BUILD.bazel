@@ -1,11 +1,11 @@
 load(
     "//gz_bazel:build_defs.bzl",
-    "IGNITION_ROOT",
-    "IGNITION_VISIBILITY",
+    "GZ_ROOT",
+    "GZ_VISIBILITY",
 )
 
 package(
-    default_visibility = IGNITION_VISIBILITY,
+    default_visibility = GZ_VISIBILITY,
 )
 
 licenses(["notice"])
@@ -21,7 +21,7 @@ cc_library(
     includes = ["include"],
     deps = [
         "@eigen3",
-        IGNITION_ROOT + "gz_math",
+        GZ_ROOT + "gz_math",
     ],
 )
 

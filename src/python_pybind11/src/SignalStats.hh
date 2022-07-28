@@ -29,42 +29,42 @@ namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an gz::math::SignalStats
+/// Define a pybind11 wrapper for a gz::math::SignalStats
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathSignalStats(py::module &m, const std::string &typestr);
 
-/// Define a pybind11 wrapper for an gz::math::SignalStatistic
+/// Define a pybind11 wrapper for a gz::math::SignalStatistic
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathSignalStatistic(py::module &m, const std::string &typestr);
 
-/// Define a pybind11 wrapper for an gz::math::SignalMaximum
+/// Define a pybind11 wrapper for a gz::math::SignalMaximum
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathSignalMaximum(py::module &m, const std::string &typestr);
 
-/// Define a pybind11 wrapper for an gz::math::SignalMinimum
+/// Define a pybind11 wrapper for a gz::math::SignalMinimum
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathSignalMinimum(py::module &m, const std::string &typestr);
 
-/// Define a pybind11 wrapper for an gz::math::SignalVariance
+/// Define a pybind11 wrapper for a gz::math::SignalVariance
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathSignalVariance(py::module &m, const std::string &typestr);
 
-/// Define a pybind11 wrapper for an gz::math::SignalMaxAbsoluteValue
+/// Define a pybind11 wrapper for a gz::math::SignalMaxAbsoluteValue
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -72,14 +72,14 @@ void defineMathSignalVariance(py::module &m, const std::string &typestr);
 void defineMathSignalMaxAbsoluteValue(
   py::module &m, const std::string &typestr);
 
-/// Define a pybind11 wrapper for an gz::math::SignalRootMeanSquare
+/// Define a pybind11 wrapper for a gz::math::SignalRootMeanSquare
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathSignalRootMeanSquare(py::module &m, const std::string &typestr);
 
-/// Define a pybind11 wrapper for an gz::math::SignalMean
+/// Define a pybind11 wrapper for a gz::math::SignalMean
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
