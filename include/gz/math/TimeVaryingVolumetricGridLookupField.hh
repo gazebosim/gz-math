@@ -225,10 +225,12 @@ namespace gz
             _default);
         }
 
+        /// Got nothing to interpolate. Out of bounds.
         if (_interpolators[0].timeSlice.size() == 0
          && _interpolators[1].timeSlice.size() == 0)
-          return _default;
+          return std::nullopt;
 
+        /// Only one of the two time-slices has data. Use that slice to guess.
         auto next = std::next(_session.iter);
         if (_interpolators[0].timeSlice.size() == 0)
         {
@@ -247,6 +249,7 @@ namespace gz
           );
         }
 
+        /// Default case where both time-slices has interpolation
         auto res1 = _session.iter->second.EstimateValueUsingTrilinear(
           _position,
           _values1,
@@ -259,13 +262,13 @@ namespace gz
           _default
         );
 
-        InterpolationPoint1D<T>
-          pt1{_session.iter->first, 0}, pt2{next->first, 1};
-
         if (res1.has_value() || res2.has_value())
         {
+          InterpolationPoint1D<T>
+            pt1{_session.iter->first, 0}, pt2{next->first, 1};
           // If either has value interpolate using default value.
-          std::vector<X> times{res1.value_or(_default), res2.value_or(_default)};
+          std::vector<X> times{
+            res1.value_or(_default), res2.value_or(_default)};
           return LinearInterpolate(pt1, pt2, times, time);
         }
         // Return nullopt if we are out of range
