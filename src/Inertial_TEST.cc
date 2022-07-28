@@ -42,6 +42,10 @@ TEST(Inertiald_Test, Constructor)
   EXPECT_EQ(inertial.Pose(), math::Pose3d::Zero);
   EXPECT_EQ(inertial.MassMatrix(), math::MassMatrix3d());
   EXPECT_EQ(inertial.Moi(), math::Matrix3d::Zero);
+  EXPECT_FALSE(inertial.FluidAddedMass().has_value());
+  EXPECT_EQ(inertial.BodyMatrix(), math::Matrix6d::Zero);
+  EXPECT_EQ(inertial.SpatialMatrix(), math::Matrix6d::Zero);
+  EXPECT_EQ(inertial.BodyMatrix(), inertial.SpatialMatrix());
 }
 
 /////////////////////////////////////////////////
@@ -678,6 +682,7 @@ TEST(Inertiald_Test, AdditionInvalid)
   }
 }
 
+/////////////////////////////////////////////////
 TEST(Inertiald_Test, SubtractionInvalid)
 {
   const double mass = 12.0;
@@ -734,4 +739,140 @@ TEST(Inertiald_Test, SubtractionInvalid)
     EXPECT_TRUE((i1 - i2).MassMatrix().IsValid());
     EXPECT_TRUE((i2 - i1).MassMatrix().IsValid());
   }
+}
+
+/////////////////////////////////////////////////
+TEST(Inertiald_Test, BodyMatrix)
+{
+  math::MassMatrix3d massMatrix(100, {2.0, 3.0, 4.0}, {0.2, 0.3, 0.4});
+  math::Pose3d com{7, 8, 9, 0, 0, GZ_PI * 0.5};
+
+  math::Inertiald inertial(massMatrix, com);
+
+  auto bodyMatrix = inertial.BodyMatrix();
+
+  EXPECT_EQ(bodyMatrix, inertial.SpatialMatrix());
+
+  // Mass diagonal
+  EXPECT_EQ(math::Matrix3d(
+      100,   0, 0,
+      0,   100, 0,
+      0,     0, 100),
+      bodyMatrix.Submatrix(math::Matrix6d::TOP_LEFT));
+
+  // CoM translational offset
+  EXPECT_EQ(math::Matrix3d(
+      0,        100 * 9,  -100 * 8,
+      -100 * 9, 0,        100 * 7,
+      100 * 8,  -100 * 7, 0),
+      bodyMatrix.Submatrix(math::Matrix6d::TOP_RIGHT));
+
+  // Transpose of TOP_RIGHT
+  EXPECT_EQ(math::Matrix3d(
+      0,        -100 * 9, 100 * 8,
+      100 * 9,  0,        -100 * 7,
+      -100 * 8, 100 * 7,  0),
+      bodyMatrix.Submatrix(math::Matrix6d::BOTTOM_LEFT));
+  EXPECT_EQ(bodyMatrix.Submatrix(math::Matrix6d::BOTTOM_LEFT).Transposed(),
+      bodyMatrix.Submatrix(math::Matrix6d::TOP_RIGHT));
+
+  // Moments of inertia with CoM rotational offset
+  // 90 deg yaw:
+  // * xx <- (-1)*(-1)*yy
+  // * xy <- (-1)*xy
+  // * xz <- (-1)*yz
+  // * yy <- xx
+  // * yz <- xz
+  // * zz <- zz
+  EXPECT_EQ(math::Matrix3d(
+      3.0, -0.2, -0.4,
+      -0.2, 2.0, 0.3,
+      -0.4, 0.3, 4.0),
+      bodyMatrix.Submatrix(math::Matrix6d::BOTTOM_RIGHT));
+}
+
+/////////////////////////////////////////////////
+TEST(Inertiald_Test, FluidAddedMass)
+{
+  math::MassMatrix3d massMatrix(100, {1, 2, 3}, {4, 5, 6});
+  math::Pose3d com{7, 8, 9, 0, 0, 0};
+  math::Matrix6d addedMass{
+      0.1, 0.2, 0.3, 0.4, 0.5, 0.6,
+      0.2, 0.7, 0.8, 0.9, 1.0, 1.1,
+      0.3, 0.8, 1.2, 1.3, 1.4, 1.5,
+      0.4, 0.9, 1.3, 1.6, 1.7, 1.8,
+      0.5, 1.0, 1.4, 1.7, 1.9, 2.0,
+      0.6, 1.1, 1.5, 1.8, 2.0, 2.1};
+
+  math::Inertiald inertial(massMatrix, com, addedMass);
+  EXPECT_TRUE(inertial.FluidAddedMass().has_value());
+  EXPECT_EQ(addedMass, inertial.FluidAddedMass());
+
+  auto spatialMatrix = inertial.SpatialMatrix();
+
+  EXPECT_EQ(math::Matrix3d(
+      100 + 0.1, 0.2,       0.3,
+      0.2,       100 + 0.7, 0.8,
+      0.3,       0.8,       100 + 1.2),
+      spatialMatrix.Submatrix(math::Matrix6d::TOP_LEFT));
+
+  EXPECT_EQ(math::Matrix3d(
+      0.4,           0.5 + 100 * 9, 0.6 - 100 * 8,
+      0.9 - 100 * 9, 1.0,           1.1 + 100 * 7,
+      1.3 + 100 * 8, 1.4 - 100 * 7, 1.5),
+      spatialMatrix.Submatrix(math::Matrix6d::TOP_RIGHT));
+
+  EXPECT_EQ(math::Matrix3d(
+      0.4,           0.9 - 100 * 9, 1.3 + 100 * 8,
+      0.5 + 100 * 9, 1.0,           1.4 - 100 * 7,
+      0.6 - 100 * 8, 1.1 + 100 * 7, 1.5),
+      spatialMatrix.Submatrix(math::Matrix6d::BOTTOM_LEFT));
+
+  EXPECT_EQ(math::Matrix3d(
+      1.6 + 1, 1.7 + 4, 1.8 + 5,
+      1.7 + 4, 1.9 + 2, 2.0 + 6,
+      1.8 + 5, 2.0 + 6, 2.1 +3),
+      spatialMatrix.Submatrix(math::Matrix6d::BOTTOM_RIGHT));
+
+  // Set new added mass
+  math::Matrix6d notSymmetric;
+  notSymmetric(1, 2) = 100;
+  EXPECT_FALSE(inertial.SetFluidAddedMass(notSymmetric));
+
+  math::Matrix6d newAddedMass{
+      0.01, 0.02, 0.03, 0.04, 0.05, 0.06,
+      0.02, 0.07, 0.08, 0.09, 1.00, 1.01,
+      0.03, 0.08, 1.02, 1.03, 1.04, 1.05,
+      0.04, 0.09, 1.03, 1.06, 1.07, 1.08,
+      0.05, 1.00, 1.04, 1.07, 1.09, 2.00,
+      0.06, 1.01, 1.05, 1.08, 2.00, 2.01};
+  EXPECT_TRUE(inertial.SetFluidAddedMass(newAddedMass));
+  EXPECT_EQ(newAddedMass, inertial.FluidAddedMass());
+
+  auto newSpatialMatrix = inertial.SpatialMatrix();
+  EXPECT_NE(newSpatialMatrix, spatialMatrix);
+
+  EXPECT_EQ(math::Matrix3d(
+      100 + 0.01, 0.02,       0.03,
+      0.02,       100 + 0.07, 0.08,
+      0.03,       0.08,       100 + 1.02),
+      newSpatialMatrix.Submatrix(math::Matrix6d::TOP_LEFT));
+
+  EXPECT_EQ(math::Matrix3d(
+      0.04,           0.05 + 100 * 9, 0.06 - 100 * 8,
+      0.09 - 100 * 9, 1.00,           1.01 + 100 * 7,
+      1.03 + 100 * 8, 1.04 - 100 * 7, 1.05),
+      newSpatialMatrix.Submatrix(math::Matrix6d::TOP_RIGHT));
+
+  EXPECT_EQ(math::Matrix3d(
+      0.04,           0.09 - 100 * 9, 1.03 + 100 * 8,
+      0.05 + 100 * 9, 1.00,           1.04 - 100 * 7,
+      0.06 - 100 * 8, 1.01 + 100 * 7, 1.05),
+      newSpatialMatrix.Submatrix(math::Matrix6d::BOTTOM_LEFT));
+
+  EXPECT_EQ(math::Matrix3d(
+      1.06 + 1, 1.07 + 4, 1.08 + 5,
+      1.07 + 4, 1.09 + 2, 2.00 + 6,
+      1.08 + 5, 2.00 + 6, 2.01 +3),
+      newSpatialMatrix.Submatrix(math::Matrix6d::BOTTOM_RIGHT));
 }
