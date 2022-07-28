@@ -148,34 +148,32 @@ namespace gz
         return newSess;
       }
 
-      public: std::pair<InterpolationPoint4D<T, V>, InterpolationPoint4D<T, V>>
+      public: std::vector<InterpolationPoint4D<T, V>>
         LookUp(const InMemorySession<T, V> &_session,
           const Vector3<V> &_point,
           const Vector3<V> &_tol = Vector3<V>{0.5, 0.5, 0.5}) const {
 
-        std::pair<InterpolationPoint4D<T, V>, InterpolationPoint4D<T, V>> res;
+        std::vector<InterpolationPoint4D<T, V>> res;
 
         if (_session.iter == this->gridFields.end())
         {
-
           return res;
         }
 
-        auto nextTime = std::next(_session.iter);
-
-        res.first.timeSlice = _session.iter->second.GetInterpolators(
+        InterpolationPoint4D<T, V> slice1;
+        slice1.timeSlice = _session.iter->second.GetInterpolators(
             _point, _tol.X(), _tol.Y(), _tol.Z());
-        res.first.time = _session.iter->first;
+        slice1.time = _session.iter->first;
+        res.push_back(slice1);
 
+        auto nextTime = std::next(_session.iter);
         if (nextTime != this->gridFields.end())
         {
-          res.second.timeSlice = nextTime->second.GetInterpolators(
+          InterpolationPoint4D<T, V> slice2;
+          slice2.timeSlice = nextTime->second.GetInterpolators(
             _point, _tol.X(), _tol.Y(), _tol.Z());
-          res.second.time = nextTime->first;
-        }
-        else
-        {
-          res.second = res.first;
+          slice2.time = nextTime->first;
+          res.push_back(slice2);
         }
         return res;
       }
@@ -183,8 +181,7 @@ namespace gz
       public: template<typename X>
       X EstimateQuadrilinear(
         const InMemorySession<T, V> &_session,
-        const std::pair<InterpolationPoint4D<T, V>,
-          InterpolationPoint4D<T, V>> &_interpolators,
+        const std::vector<InterpolationPoint4D<T, V>> &_interpolators,
         const std::vector<X> &_values1,
         const std::vector<X> &_values2,
         const Vector3<X> &_position,
@@ -192,13 +189,23 @@ namespace gz
       ) const
       {
         auto time = _session.time;
-        if (_interpolators.first.timeSlice.size() == 0
-         && _interpolators.second.timeSlice.size() == 0)
+        if (_interpolators.size() == 0) return _default;
+        if (_interpolators.size() == 1)
+        {
+          // This happens we reach the end of time
+          return _session.iter->second.EstimateValueUsingTrilinear(
+            _position,
+            _values2,
+            _default
+          ).value_or(_default);
+        }
+
+        if (_interpolators[0].timeSlice.size() == 0
+         && _interpolators[1].timeSlice.size() == 0)
           return _default;
 
         auto next = std::next(_session.iter);
-        if (_interpolators.second.timeSlice.size() == 0
-        || next == this->gridFields.end())
+        if (_interpolators[0].timeSlice.size() == 0)
         {
           return _session.iter->second.EstimateValueUsingTrilinear(
             _position,
@@ -206,7 +213,7 @@ namespace gz
             _default
           ).value_or(_default);
         }
-        if (_interpolators.first.timeSlice.size() == 0)
+        if (_interpolators[1].timeSlice.size() == 0)
         {
           return next->second.EstimateValueUsingTrilinear(
             _position,

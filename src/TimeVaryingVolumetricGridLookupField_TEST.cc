@@ -45,6 +45,9 @@ TEST(TimeVaryingVolumetricLookupFieldTest, TestConstruction)
     // Get data at T=0
     auto session = timeVaryingField.CreateSession();
     auto points = timeVaryingField.LookUp(session, Vector3d{0.5, 0.5, 0.5});
+    ASSERT_EQ(points.size(), 2);
+    ASSERT_EQ(points[0].time, 0);
+    ASSERT_EQ(points[1].time, 1);
     auto res = timeVaryingField.EstimateQuadrilinear<double>(
       session,
       points,
@@ -61,8 +64,9 @@ TEST(TimeVaryingVolumetricLookupFieldTest, TestConstruction)
 
     points = timeVaryingField.LookUp(
       next_session.value(), Vector3d{0.5, 0.5, 0.5});
-    ASSERT_EQ(points.first.time, 0);
-    ASSERT_EQ(points.second.time, 1);
+    ASSERT_EQ(points.size(), 2);
+    ASSERT_EQ(points[0].time, 0);
+    ASSERT_EQ(points[1].time, 1);
 
     res = timeVaryingField.EstimateQuadrilinear<double>(
       next_session.value(),
@@ -79,15 +83,16 @@ TEST(TimeVaryingVolumetricLookupFieldTest, TestConstruction)
 
     points = timeVaryingField.LookUp(next_session.value(),
       Vector3d{0.5, 0.5, 0.5});
-    ASSERT_EQ(points.first.time, 1);
-    ASSERT_EQ(points.second.time, 1);
+    ASSERT_EQ(points[0].time, 1);
+    ASSERT_EQ(points.size(), 1);
+
     res = timeVaryingField.EstimateQuadrilinear<double>(
       next_session.value(),
       points,
       valuesTime0,
       valuesTime1,
       Vector3d{0.5, 0.5, 0.5}, -1);
-    //ASSERT_EQ(res, 1);
+    ASSERT_EQ(res, 1);
 
     next_session = timeVaryingField.StepTo(next_session.value(), 2);
     ASSERT_FALSE(next_session.has_value());
