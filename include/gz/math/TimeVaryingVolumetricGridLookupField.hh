@@ -63,7 +63,7 @@ namespace gz
       /// \param _session - The session
       /// \param _point - The point to query
       /// \param _tol - Tolerance
-      public: std::pair<InterpolationPoint4D<T, V>, InterpolationPoint4D<T, V>>
+      public: std::vector<InterpolationPoint4D<T, V>>
       LookUp(const S &_session,
         const Vector3<V> &_point,
         const Vector3<V> &_tol) const;
@@ -72,12 +72,12 @@ namespace gz
       public: template<typename X>
       X EstimateQuadrilinear(
         const S &_session,
-        const std::pair<InterpolationPoint4D<T, V>,
-          InterpolationPoint4D<T, V>> &_points,
+        const std::vector<InterpolationPoint4D<T, V>> &_points,
         const std::vector<X>& values1,
         const std::vector<X>& values2
       ) const;
     };
+
     /// \brief An in-memory session. Loads the whole dataset in memory and
     /// performs queries.
     template<typename T, typename V>
@@ -101,6 +101,7 @@ namespace gz
     template<typename T, typename V>
     class TimeVaryingVolumetricGridLookupField<T, V, InMemorySession<T, V>>
     {
+      /// \brief Default constructor
       public: TimeVaryingVolumetricGridLookupField()
       {}
 

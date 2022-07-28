@@ -29,33 +29,33 @@ namespace gz
 {
 namespace math
 {
-template<typename T, typename V, typename S>
+template<typename T, typename V, typename S, typename P>
 class TimeVaryingVolumetricGrid
 {
   public: S CreateSession() const;
 
   public: std::optional<S> StepTo(const S &_session, const T &_time) const;
 
-  public: std::optional<V> LookUp(const S &_session, const Vector3d &_pos)
+  public: std::optional<V> LookUp(const S &_session, const Vector3<P> &_pos)
     const;
 };
 
-template<typename T, typename V>
-class TimeVaryingVolumetricGrid<T, V, InMemorySession<T, double>>
+template<typename T, typename V, typename P>
+class TimeVaryingVolumetricGrid<T, V, InMemorySession<T, P>, P>
 {
   public: InMemorySession<T, V> CreateSession() const
   {
     return indices.CreateSession();
   }
 
-  public: std::optional<InMemorySession<T, double>>
+  public: std::optional<InMemorySession<T, P>>
     StepTo(const InMemorySession<T, double> &_session, const T &_time) const
   {
     return indices.StepTo(_session, _time);
   }
 
   public: std::optional<V>
-    LookUp(const InMemorySession<T, double> &_session, const Vector3d &_pos)
+    LookUp(const InMemorySession<T, P> &_session, const Vector3<P> &_pos)
     const
   {
     auto points = indices.LookUp(_session, _pos);
@@ -70,28 +70,28 @@ class TimeVaryingVolumetricGrid<T, V, InMemorySession<T, double>>
 
   private: std::vector<V> values;
   private: TimeVaryingVolumetricGridLookupField
-    <T, V, InMemorySession<T, double>> indices;
-  template<typename U, typename S>
+    <T, V, InMemorySession<T, P>> indices;
+  template<typename U, typename S, typename X>
   friend class InMemoryTimeVaryingVolumetricGridFactory;
 };
 
-template<typename T, typename V>
+template<typename T, typename V, typename P>
 using InMemoryTimeVaryingVolumetricGrid =
-  TimeVaryingVolumetricGrid<T, V, InMemorySession<T, double>>;
+  TimeVaryingVolumetricGrid<T, V, InMemorySession<T, P>, P>;
 
-template<typename T, typename V>
+template<typename T, typename V, typename P = double>
 class InMemoryTimeVaryingVolumetricGridFactory
 {
   public: void AddPoint(
-    const T &_time, const Vector3d &_position, const V &_value)
+    const T &_time, const Vector3<P> &_position, const V &_value)
   {
     _points[_time].emplace_back(_position, _value);
   }
 
   public:
-  TimeVaryingVolumetricGrid<T, V, InMemorySession<T, double>> Build() const
+  InMemoryTimeVaryingVolumetricGrid<T, V, P> Build() const
   {
-    TimeVaryingVolumetricGrid<T, V, InMemorySession<T, double>> grid;
+    InMemoryTimeVaryingVolumetricGrid<T, V, P> grid;
     for (auto &[time, pts] : _points)
     {
       std::vector<Vector3d> cloud;
