@@ -68,13 +68,23 @@ namespace gz
         const Vector3<V> &_point,
         const Vector3<V> &_tol) const;
 
-      /// \brief Uses quadrilinear interpolation to estimate
+      /// \brief Uses quadrilinear interpolation to estimate value of current
+      /// point. Returns nullopt if query is out of range.
+      /// \param _session - The session
+      /// \param _points - The interpolation points retrieved from `LookUp()`
+      /// \param _values1 - Value array at timestep 1.
+      /// \param _values2 - Value array at timestep 2.
+      /// \param _default - Value used if there is a hole in the data.
+      /// \returns The estimated value for the point. Nullopt if we are
+      /// outside the field. Default value if in the field but no value is
+      /// in the index.
       public: template<typename X>
-      X EstimateQuadrilinear(
+      std::optional<X> EstimateQuadrilinear(
         const S &_session,
         const std::vector<InterpolationPoint4D<T, V>> &_points,
         const std::vector<X>& values1,
-        const std::vector<X>& values2
+        const std::vector<X>& values2,
+        const X _default = X(0)
       ) const;
     };
 
@@ -105,11 +115,13 @@ namespace gz
       public: TimeVaryingVolumetricGridLookupField()
       {}
 
+      /// \brief Documentation inherited
       public: void AddVolumetricGridField(
         const T &_time, const VolumetricGridLookupField<V> &_field) {
         this->gridFields.emplace(_time, _field);
       }
 
+      /// \brief Documentation inherited
       public: InMemorySession<T, V> CreateSession() const {
         InMemorySession<T, V> sess;
         sess.iter = this->gridFields.begin();
@@ -117,6 +129,7 @@ namespace gz
         return sess;
       }
 
+      /// \brief Documentation inherited
       public: InMemorySession<T, V> CreateSession(const T &_time) const {
         InMemorySession<T, V> sess;
         sess.iter = this->gridFields.lower_bound(_time);
@@ -124,6 +137,7 @@ namespace gz
         return sess;
       }
 
+      /// \brief Documentation inherited
       public: std::optional<InMemorySession<T, V>> StepTo(
         const InMemorySession<T, V> &_session, const T &_time) const {
         if (_session.iter == gridFields.end())
@@ -149,6 +163,7 @@ namespace gz
         return newSess;
       }
 
+      /// \brief Documentation inherited
       public: std::vector<InterpolationPoint4D<T, V>>
         LookUp(const InMemorySession<T, V> &_session,
           const Vector3<V> &_point,
@@ -179,14 +194,24 @@ namespace gz
         return res;
       }
 
+      /// \brief Uses quadrilinear interpolation to estimate value of current
+      /// point. Returns nullopt if query is out of range.
+      /// \param _session - The session
+      /// \param _points - The interpolation points retrieved from `LookUp()`
+      /// \param _values1 - Value array at timestep 1.
+      /// \param _values2 - Value array at timestep 2.
+      /// \param _default - Value used if there is a hole in the data.
+      /// \returns The estimated value for the point. Nullopt if we are
+      /// outside the field. Default value if in the field but no value is
+      /// in the index.
       public: template<typename X>
-      X EstimateQuadrilinear(
+      std::optional<X> EstimateQuadrilinear(
         const InMemorySession<T, V> &_session,
         const std::vector<InterpolationPoint4D<T, V>> &_interpolators,
         const std::vector<X> &_values1,
         const std::vector<X> &_values2,
         const Vector3<X> &_position,
-        const X &_default = X(0)
+        const X _default = X(0)
       ) const
       {
         auto time = _session.time;
@@ -197,8 +222,7 @@ namespace gz
           return _session.iter->second.EstimateValueUsingTrilinear(
             _position,
             _values2,
-            _default
-          ).value_or(_default);
+            _default);
         }
 
         if (_interpolators[0].timeSlice.size() == 0
@@ -212,7 +236,7 @@ namespace gz
             _position,
             _values1,
             _default
-          ).value_or(_default);
+          );
         }
         if (_interpolators[1].timeSlice.size() == 0)
         {
@@ -220,7 +244,7 @@ namespace gz
             _position,
             _values2,
             _default
-          ).value_or(_default);
+          );
         }
 
         auto res1 = _session.iter->second.EstimateValueUsingTrilinear(
@@ -237,8 +261,15 @@ namespace gz
 
         InterpolationPoint1D<T>
           pt1{_session.iter->first, 0}, pt2{next->first, 1};
-        std::vector<X> times{res1.value_or(_default), res2.value_or(_default)};
-        return LinearInterpolate(pt1, pt2, times, time);
+
+        if (res1.has_value() || res2.has_value())
+        {
+          // If either has value interpolate using default value.
+          std::vector<X> times{res1.value_or(_default), res2.value_or(_default)};
+          return LinearInterpolate(pt1, pt2, times, time);
+        }
+        // Return nullopt if we are out of range
+        return std::nullopt;
       }
       private: std::map<T, VolumetricGridLookupField<V>> gridFields;
     };

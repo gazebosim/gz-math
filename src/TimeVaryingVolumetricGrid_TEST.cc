@@ -23,7 +23,7 @@ TEST(TimeVaryingVolumetricGridTest, TestConstruction)
 {
   InMemoryTimeVaryingVolumetricGridFactory<double, double> gridFactory;
 
-  for (double t = 0; t < 1; t+=0.2)
+  for (double t = 0; t <= 1; t+=0.2)
   {
     for (double x = 0; x < 1; x+=0.5)
     {
@@ -40,13 +40,26 @@ TEST(TimeVaryingVolumetricGridTest, TestConstruction)
   auto grid = gridFactory.Build();
   auto session = grid.CreateSession();
 
+  // Check stepping
   auto val = grid.LookUp(session, Vector3d{0.5, 0.5, 0.5});
   ASSERT_TRUE(val.has_value());
   ASSERT_EQ(val.value(), 0);
 
+  // Handle new sessions
   auto new_sess = grid.StepTo(session, 0.5);
   ASSERT_TRUE(new_sess.has_value());
   val = grid.LookUp(new_sess.value(), Vector3d{0.5, 0.5, 0.5});
   ASSERT_TRUE(val.has_value());
   ASSERT_EQ(val.value(), 0.5);
+
+  // Check boundary case
+  new_sess = grid.StepTo(new_sess.value(), 1);
+  ASSERT_TRUE(new_sess.has_value());
+  val = grid.LookUp(new_sess.value(), Vector3d{0.5, 0.5, 0.5});
+  ASSERT_TRUE(val.has_value());
+  ASSERT_EQ(val.value(), 1);
+
+  // Check out of bounds case
+  val = grid.LookUp(new_sess.value(), Vector3d{2.5, 2.5, 2.5});
+  ASSERT_FALSE(val.has_value());
 }
