@@ -82,8 +82,8 @@ namespace gz
       std::optional<X> EstimateQuadrilinear(
         const S &_session,
         const std::vector<InterpolationPoint4D<T, V>> &_points,
-        const std::vector<X>& values1,
-        const std::vector<X>& values2,
+        const std::vector<X> &_values1,
+        const std::vector<X> &_values2,
         const X _default = X(0)
       ) const;
     };
@@ -173,6 +173,7 @@ namespace gz
 
         if (_session.iter == this->gridFields.end())
         {
+          // Out of bounds
           return res;
         }
 
@@ -185,6 +186,7 @@ namespace gz
         auto nextTime = std::next(_session.iter);
         if (nextTime != this->gridFields.end())
         {
+          // Only add next item if field exists
           InterpolationPoint4D<T, V> slice2;
           slice2.timeSlice = nextTime->second.GetInterpolators(
             _point, _tol.X(), _tol.Y(), _tol.Z());
@@ -197,9 +199,11 @@ namespace gz
       /// \brief Uses quadrilinear interpolation to estimate value of current
       /// point. Returns nullopt if query is out of range.
       /// \param _session - The session
-      /// \param _points - The interpolation points retrieved from `LookUp()`
+      /// \param _interpolators - The interpolation points
+      /// retrieved from `LookUp()`
       /// \param _values1 - Value array at timestep 1.
       /// \param _values2 - Value array at timestep 2.
+      /// \param _position - The position to be queried.
       /// \param _default - Value used if there is a hole in the data.
       /// \returns The estimated value for the point. Nullopt if we are
       /// outside the field. Default value if in the field but no value is
