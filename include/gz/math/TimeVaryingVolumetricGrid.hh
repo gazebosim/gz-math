@@ -59,7 +59,6 @@ class TimeVaryingVolumetricGrid<T, V, InMemorySession<T, double>>
     const
   {
     auto points = indices.LookUp(_session, _pos);
-    std::cout << points.first.time << std::endl;
     V result = indices.EstimateQuadrilinear(
       _session,
       points,
