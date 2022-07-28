@@ -61,10 +61,10 @@ TEST(VolumetricGridLookupField, CustomIndices)
       for(double z = 0; z < 300; z += stride_z)
       {
         cloud.emplace_back(x, y, z);
-        indices.push_back(0);
       }
     }
   }
+  indices.resize(cloud.size(), 0);
   VolumetricGridLookupField<double> scalarIndex(cloud, indices);
   auto val = scalarIndex.GetInterpolators(cloud[0]);
   ASSERT_EQ(val.size(), 1UL);

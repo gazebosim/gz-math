@@ -153,8 +153,8 @@ namespace gz
           assert(_indices.size() == _cloud.size());
           // NOTE: This part of the code assumes an exact grid of points.
           // The grid may be distorted or the stride between different points
-          // may not be the same, but fundamentally the data is structured still
-          // forms a grid-like structure. It keeps track of the axis indices for
+          // may not be the same, but fundamentally the data is structured in
+          // a grid-like structure. It keeps track of the axis indices for
           // each point in the grid.
           for(auto pt : _cloud)
           {
