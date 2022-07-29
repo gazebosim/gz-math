@@ -94,7 +94,72 @@ TEST(TimeVaryingVolumetricLookupFieldTest, TestConstruction)
       Vector3d{0.5, 0.5, 0.5}, -1);
     ASSERT_EQ(res, 1);
 
+    // Out of time steps
     next_session = timeVaryingField.StepTo(next_session.value(), 2);
     ASSERT_FALSE(next_session.has_value());
+
+    // Create invalid session
+    auto invalid_session = timeVaryingField.CreateSession(500);
+    points = timeVaryingField.LookUp(
+      invalid_session, Vector3d{0.5, 0.5, 0.5});
+    ASSERT_EQ(points.size(), 0);
+    auto result = timeVaryingField.EstimateQuadrilinear<double>(
+      invalid_session,
+      points,
+      valuesTime0,
+      valuesTime1,
+      Vector3d{0.5, 0.5, 0.5}, -1);
+    ASSERT_FALSE(result.has_value());
+
+    // No query points
+    auto valid_session = timeVaryingField.CreateSession(0.5);
+    res = timeVaryingField.EstimateQuadrilinear<double>(
+      valid_session,
+      points,
+      valuesTime0,
+      valuesTime1,
+      Vector3d{0.5, 0.5, 0.5}, -1);
+    ASSERT_FALSE(res.has_value());
+
+    // Only upper half has valid query points, estimate using upper half
+    valid_session = timeVaryingField.CreateSession();
+    next_session = timeVaryingField.StepTo(valid_session, 0.5);
+    ASSERT_TRUE(next_session.has_value());
+    valid_session = next_session.value();
+    points = timeVaryingField.LookUp(
+      valid_session, Vector3d{0.5, 0.5, 0.5});
+    ASSERT_EQ(points.size(), 2);
+    points[0].timeSlice.clear();
+    res = timeVaryingField.EstimateQuadrilinear<double>(
+      valid_session,
+      points,
+      valuesTime0,
+      valuesTime1,
+      Vector3d{0.5, 0.5, 0.5}, -1);
+    ASSERT_EQ(res, 1);
+
+    // Only lower half has valid query points, estimate using upper half
+    points = timeVaryingField.LookUp(
+      valid_session, Vector3d{0.5, 0.5, 0.5});
+    ASSERT_EQ(points.size(), 2);
+    points[1].timeSlice.clear();
+    res = timeVaryingField.EstimateQuadrilinear<double>(
+      valid_session,
+      points,
+      valuesTime0,
+      valuesTime1,
+      Vector3d{0.5, 0.5, 0.5}, -1);
+    ASSERT_EQ(res, 0);
+
+    // Good case.
+    points = timeVaryingField.LookUp(
+      valid_session, Vector3d{0.5, 0.5, 0.5});
+    res = timeVaryingField.EstimateQuadrilinear<double>(
+      valid_session,
+      points,
+      valuesTime0,
+      valuesTime1,
+      Vector3d{0.5, 0.5, 0.5}, -1);
+    ASSERT_EQ(res, 0.5);
   }
 }

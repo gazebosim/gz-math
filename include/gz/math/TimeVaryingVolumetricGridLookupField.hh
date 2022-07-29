@@ -218,8 +218,14 @@ namespace gz
         const X _default = X(0)
       ) const
       {
+        if (_session.iter == this->gridFields.end())
+        {
+          // Out of bounds
+          return std::nullopt;
+        }
+
         auto time = _session.time;
-        if (_interpolators.size() == 0) return _default;
+        if (_interpolators.size() == 0) return std::nullopt;
         if (_interpolators.size() == 1)
         {
           // This happens we reach the end of time
@@ -236,7 +242,7 @@ namespace gz
 
         /// Only one of the two time-slices has data. Use that slice to guess.
         auto next = std::next(_session.iter);
-        if (_interpolators[0].timeSlice.size() == 0)
+        if (_interpolators[1].timeSlice.size() == 0)
         {
           return _session.iter->second.EstimateValueUsingTrilinear(
             _position,
@@ -244,7 +250,7 @@ namespace gz
             _default
           );
         }
-        if (_interpolators[1].timeSlice.size() == 0)
+        if (_interpolators[0].timeSlice.size() == 0)
         {
           return next->second.EstimateValueUsingTrilinear(
             _position,
