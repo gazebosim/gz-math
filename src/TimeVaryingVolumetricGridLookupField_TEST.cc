@@ -111,6 +111,9 @@ TEST(TimeVaryingVolumetricLookupFieldTest, TestConstruction)
       Vector3d{0.5, 0.5, 0.5}, -1);
     ASSERT_FALSE(result.has_value());
 
+    // Try stepping invalid session should return nullopt
+    ASSERT_FALSE(timeVaryingField.StepTo(invalid_session, 8000).has_value());
+
     // No query points
     auto valid_session = timeVaryingField.CreateSession(0.5);
     res = timeVaryingField.EstimateQuadrilinear<double>(
@@ -150,6 +153,31 @@ TEST(TimeVaryingVolumetricLookupFieldTest, TestConstruction)
       valuesTime1,
       Vector3d{0.5, 0.5, 0.5}, -1);
     ASSERT_EQ(res, 0);
+
+    // Both have no data
+    points = timeVaryingField.LookUp(
+      valid_session, Vector3d{0.5, 0.5, 0.5});
+    ASSERT_EQ(points.size(), 2);
+    points[0].timeSlice.clear();
+    points[1].timeSlice.clear();
+    res = timeVaryingField.EstimateQuadrilinear<double>(
+      valid_session,
+      points,
+      valuesTime0,
+      valuesTime1,
+      Vector3d{0.5, 0.5, 0.5}, -1);
+    ASSERT_FALSE(res.has_value());
+
+    // Out of spatial range.
+    points = timeVaryingField.LookUp(
+      valid_session, Vector3d{0.5, 0.5, 0.5});
+    res = timeVaryingField.EstimateQuadrilinear<double>(
+      valid_session,
+      points,
+      valuesTime0,
+      valuesTime1,
+      Vector3d{2.5, 2.5, 2.5}, -1);
+    ASSERT_FALSE(res.has_value());
 
     // Good case.
     points = timeVaryingField.LookUp(
