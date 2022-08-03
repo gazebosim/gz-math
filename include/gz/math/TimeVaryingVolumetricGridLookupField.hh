@@ -71,7 +71,8 @@ namespace gz
       /// \brief Uses quadrilinear interpolation to estimate value of current
       /// point. Returns nullopt if query is out of range.
       /// \param[in] _session - The session
-      /// \param[in] _points - The interpolation points retrieved from `LookUp()`
+      /// \param[in] _points - The interpolation points retrieved from
+      ///  `LookUp()`.
       /// \param[in] _values1 - Value array at timestep 1.
       /// \param[in] _values2 - Value array at timestep 2.
       /// \param[in] _default - Value used if there is a hole in the data.
