@@ -48,7 +48,7 @@ class TimeVaryingVolumetricGrid
   /// no more data return nullopt.
   public: std::optional<S> StepTo(const S &_session, const T &_time) const;
 
-  /// \brief Looks up a given point in time.
+  /// \brief Looks up a value at a given point in time.
   /// \param[in] _session - The session with the time stamp to be looked up.
   /// \param[in] _pos - The position of the point we want to query
   public: std::optional<V> LookUp(const S &_session, const Vector3<P> &_pos)
