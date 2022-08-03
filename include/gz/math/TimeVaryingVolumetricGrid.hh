@@ -42,15 +42,15 @@ class TimeVaryingVolumetricGrid
   public: S CreateSession() const;
 
   /// \brief Steps the session to a fixed time step
-  /// \param _session - The session to be stepped
-  /// \param _time - The time at which the session should be set.
-  /// Returns the session cursor if the step was successful. If there was
+  /// \param[in] _session - The session to be stepped
+  /// \param[in] _time - The time at which the session should be set.
+  /// \return the session cursor if the step was successful. If there was
   /// no more data return nullopt.
   public: std::optional<S> StepTo(const S &_session, const T &_time) const;
 
   /// \brief Looks up a given point in time.
-  /// \param _session - The session with the time stamp to be looked up.
-  /// \param _pos - The position of the point we want to query
+  /// \param[in] _session - The session with the time stamp to be looked up.
+  /// \param[in] _pos - The position of the point we want to query
   public: std::optional<V> LookUp(const S &_session, const Vector3<P> &_pos)
     const;
 };
@@ -76,12 +76,14 @@ class TimeVaryingVolumetricGrid<T, V, InMemorySession<T, P>, P>
 
   /// \brief Looks up a given point. If the point lies in between two time
   /// frames then it performs spatio-temporal linear interpolation.
-  /// Returns nullopt if the data is out of range.
+  /// \return nullopt if the data is out of range.
   public: std::optional<V>
-    LookUp(const InMemorySession<T, P> &_session, const Vector3<P> &_pos)
+    LookUp(const InMemorySession<T, P> &_session,
+      const Vector3<P> &_pos,
+      const Vector3<V> &_tol = Vector3<V>{1e-6, 1e-6, 1e-6})
     const
   {
-    auto points = indices.LookUp(_session, _pos);
+    auto points = indices.LookUp(_session, _pos, _tol);
     std::optional<V> result = indices.EstimateQuadrilinear(
       _session,
       points,
@@ -104,7 +106,7 @@ class TimeVaryingVolumetricGrid<T, V, InMemorySession<T, P>, P>
 
 /// \brief Alias for Specialization of TimeVaryingVolumetricGrid which loads
 /// the whole of the dataset into memory.
-template<typename T, typename V, typename P>
+template<typename T, typename V = T, typename P = T>
 using InMemoryTimeVaryingVolumetricGrid =
   TimeVaryingVolumetricGrid<T, V, InMemorySession<T, P>, P>;
 

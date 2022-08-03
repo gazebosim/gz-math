@@ -30,7 +30,7 @@ namespace gz
   namespace math
   {
     /// \brief Lookup table for a time-varying volumetric dataset.
-    /// This is an unimplimented template as the actual methods depend on the
+    /// This is an unimplemented template as the actual methods depend on the
     /// underlying structure. The key idea is that one uses a session `S` to
     /// hold a session token. This is so that we don't keep doing O(logn)
     /// lookups and instead step along the axis.
@@ -48,21 +48,21 @@ namespace gz
       public: S CreateSession() const;
 
       /// \brief Creates a session startingg at time T
-      /// \param _time The time to create the session at.
+      /// \param[in] _time The time to create the session at.
       public: S CreateSession(const T &_time) const;
 
       /// \brief Update session to new time. Returns new session pointer if
       /// more is available. Otherwise returns nullopt if we have run out of
       /// time.
-      /// \param _session - The session
-      /// \param _time - Time to step to.
+      /// \param[in] _session - The session
+      /// \param[in] _time - Time to step to.
       public: std::optional<S> StepTo(const S &_session, const T &_time);
 
       /// \brief Looks up interpolators at a given time step. Use the session
       /// to set the time step.
-      /// \param _session - The session
-      /// \param _point - The point to query
-      /// \param _tol - Tolerance
+      /// \param[in] _session - The session
+      /// \param[in] _point - The point to query
+      /// \param[in] _tol - Tolerance
       public: std::vector<InterpolationPoint4D<T, V>>
       LookUp(const S &_session,
         const Vector3<V> &_point,
@@ -70,11 +70,11 @@ namespace gz
 
       /// \brief Uses quadrilinear interpolation to estimate value of current
       /// point. Returns nullopt if query is out of range.
-      /// \param _session - The session
-      /// \param _points - The interpolation points retrieved from `LookUp()`
-      /// \param _values1 - Value array at timestep 1.
-      /// \param _values2 - Value array at timestep 2.
-      /// \param _default - Value used if there is a hole in the data.
+      /// \param[in] _session - The session
+      /// \param[in] _points - The interpolation points retrieved from `LookUp()`
+      /// \param[in] _values1 - Value array at timestep 1.
+      /// \param[in] _values2 - Value array at timestep 2.
+      /// \param[in] _default - Value used if there is a hole in the data.
       /// \returns The estimated value for the point. Nullopt if we are
       /// outside the field. Default value if in the field but no value is
       /// in the index.
@@ -167,7 +167,7 @@ namespace gz
       public: std::vector<InterpolationPoint4D<T, V>>
         LookUp(const InMemorySession<T, V> &_session,
           const Vector3<V> &_point,
-          const Vector3<V> &_tol = Vector3<V>{0.5, 0.5, 0.5}) const {
+          const Vector3<V> &_tol = Vector3<V>{1e-6, 1e-6, 1e-6}) const {
 
         std::vector<InterpolationPoint4D<T, V>> res;
 
@@ -198,13 +198,13 @@ namespace gz
 
       /// \brief Uses quadrilinear interpolation to estimate value of current
       /// point. Returns nullopt if query is out of range.
-      /// \param _session - The session
-      /// \param _interpolators - The interpolation points
+      /// \param[in] _session - The session
+      /// \param[in] _interpolators - The interpolation points
       /// retrieved from `LookUp()`
-      /// \param _values1 - Value array at timestep 1.
-      /// \param _values2 - Value array at timestep 2.
-      /// \param _position - The position to be queried.
-      /// \param _default - Value used if there is a hole in the data.
+      /// \param[in] _values1 - Value array at timestep 1.
+      /// \param[in] _values2 - Value array at timestep 2.
+      /// \param[in] _position - The position to be queried.
+      /// \param[in] _default - Value used if there is a hole in the data.
       /// \returns The estimated value for the point. Nullopt if we are
       /// outside the field. Default value if in the field but no value is
       /// in the index.
