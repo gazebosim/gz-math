@@ -19,7 +19,7 @@ exports_files(["LICENSE"])
 
 PROJECT_NAME = "gz-math"
 
-PROJECT_MAJOR = 7
+PROJECT_MAJOR = 8
 
 PROJECT_MINOR = 0
 
@@ -78,9 +78,9 @@ cc_library(
 
 # use shared library only when absolutely needd
 cc_binary(
-    name = "libgz-math7.so",
+    name = "libgz-math8.so",
     includes = ["include"],
-    linkopts = ["-Wl,-soname,libgz-math7.so"],
+    linkopts = ["-Wl,-soname,libgz-math8.so"],
     linkshared = True,
     deps = [
         ":gz_math",
