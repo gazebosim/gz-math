@@ -7,7 +7,7 @@ This tutorial explains how to use the `Color` class from Gazebo Math library.
 Go to `gz-math/examples` and use `cmake` to compile the code:
 
 ```{.sh}
-git clone https://github.com/gazebosim/gz-math/ -b ign-math7
+git clone https://github.com/gazebosim/gz-math/ -b main
 cd gz-math/examples
 mkdir build
 cd build

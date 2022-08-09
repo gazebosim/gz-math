@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 project(gz-math-examples)
 
 # Find the Gazebo Math library
-find_package(gz-math7 REQUIRED)
-set(GZ_MATH_VER ${gz-math7_VERSION_MAJOR})
+find_package(gz-math8 REQUIRED)
+set(GZ_MATH_VER ${gz-math8_VERSION_MAJOR})
 
 add_executable(additively_separable_scalar_field3_example additively_separable_scalar_field3_example.cc)
 target_link_libraries(additively_separable_scalar_field3_example gz-math${GZ_MATH_VER}::gz-math${GZ_MATH_VER})

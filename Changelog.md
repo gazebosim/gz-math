@@ -1,3 +1,7 @@
+## Gazebo Math 8.x
+
+### Gazebo Math 8.0.0 (202X-XX-XX)
+
 ## Gazebo Math 7.x
 
 ### Gazebo Math 7.x.x

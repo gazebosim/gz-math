@@ -51,7 +51,7 @@ See the [installation tutorial](https://gazebosim.org/api/math/6.8/install.html)
 
 # Usage
 
-Please refer to the [examples directory](https://github.com/gazebosim/gz-math/raw/ign-math7/examples/).
+Please refer to the [examples directory](https://github.com/gazebosim/gz-math/raw/main/examples/).
 
 # Folder Structure
 
