@@ -283,11 +283,11 @@ TEST(FrustumTest, FOV)
       // Pose
       Pose3d(0, 0, 0, 0, IGN_PI*0.5, 0));
 
-  EXPECT_EQ(frustum.FOV(), math::Angle(IGN_DTOR(45)));
+  EXPECT_EQ(frustum.FOV(), Angle(IGN_DTOR(45)));
 
   frustum.SetFOV(1.5707);
 
-  EXPECT_EQ(frustum.FOV(), math::Angle(1.5707));
+  EXPECT_EQ(frustum.FOV(), Angle(1.5707));
 }
 
 /////////////////////////////////////////////////
