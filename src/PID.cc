@@ -136,7 +136,7 @@ double PID::Update(const double _error,
                    const std::chrono::duration<double> &_dt)
 {
   if (_dt == std::chrono::duration<double>(0) ||
-      ignition::math::isnan(_error) || std::isinf(_error))
+      isnan(_error) || std::isinf(_error))
   {
     return 0.0;
   }
