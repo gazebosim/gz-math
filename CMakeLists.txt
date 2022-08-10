@@ -25,17 +25,26 @@ ign_configure_project(
 # Set project-specific options
 #============================================================================
 
-option(USE_SYSTEM_PATHS_FOR_RUBY_INSTALLATION
+option(SKIP_SWIG
+      "Skip generating ruby bindings via Swig"
+      OFF)
+
+option(SKIP_PYBIND11
+      "Skip generating Python bindings via pybind11"
+      OFF)
+
+include(CMakeDependentOption)
+cmake_dependent_option(USE_SYSTEM_PATHS_FOR_RUBY_INSTALLATION
       "Install ruby modules in standard system paths in the system"
-      OFF)
+      OFF "NOT SKIP_SWIG" OFF)
 
-option(USE_SYSTEM_PATHS_FOR_PYTHON_INSTALLATION
+cmake_dependent_option(USE_SYSTEM_PATHS_FOR_PYTHON_INSTALLATION
       "Install python modules in standard system paths in the system"
-      OFF)
+      OFF "NOT SKIP_PYBIND11" OFF)
 
-option(USE_DIST_PACKAGES_FOR_PYTHON
+cmake_dependent_option(USE_DIST_PACKAGES_FOR_PYTHON
       "Use dist-packages instead of site-package to install python modules"
-      OFF)
+      OFF "NOT SKIP_PYBIND11" OFF)
 
 #============================================================================
 # Search for project-specific dependencies
@@ -51,46 +60,54 @@ ign_find_package(
 
 ########################################
 # Include swig
-find_package(SWIG QUIET)
-if (NOT SWIG_FOUND)
-  IGN_BUILD_WARNING("Swig is missing: Language interfaces are disabled.")
-  message (STATUS "Searching for swig - not found.")
+if (SKIP_SWIG)
+  message(STATUS "SKIP_SWIG set - disabling SWIG Ruby support")
 else()
-  message (STATUS "Searching for swig - found version ${SWIG_VERSION}.")
-endif()
-
-# Include other languages if swig was found
-if (SWIG_FOUND)
-  ########################################
-  # Include ruby
-  find_package(Ruby 1.9 QUIET)
-  if (NOT RUBY_FOUND)
-    IGN_BUILD_WARNING("Ruby is missing: Install ruby-dev to enable ruby interface to ignition math.")
-    message (STATUS "Searching for Ruby - not found.")
+  find_package(SWIG QUIET)
+  if (NOT SWIG_FOUND)
+    IGN_BUILD_WARNING("Swig is missing: Language interfaces are disabled.")
+    message (STATUS "Searching for swig - not found.")
   else()
-    message (STATUS "Searching for Ruby - found version ${RUBY_VERSION}.")
+    message (STATUS "Searching for swig - found version ${SWIG_VERSION}.")
+  endif()
+
+  # Include other languages if swig was found
+  if (SWIG_FOUND)
+    ########################################
+    # Include ruby
+    find_package(Ruby 1.9 QUIET)
+    if (NOT RUBY_FOUND)
+      IGN_BUILD_WARNING("Ruby is missing: Install ruby-dev to enable ruby interface to ignition math.")
+      message (STATUS "Searching for Ruby - not found.")
+    else()
+      message (STATUS "Searching for Ruby - found version ${RUBY_VERSION}.")
+    endif()
   endif()
 endif()
 
 ########################################
 # Python bindings
-include(IgnPython)
-find_package(PythonLibs QUIET)
-if (NOT PYTHONLIBS_FOUND)
-  IGN_BUILD_WARNING("Python is missing: Python interfaces are disabled.")
-  message (STATUS "Searching for Python - not found.")
+if (SKIP_PYBIND11)
+  message(STATUS "SKIP_PYBIND11 set - disabling python bindings")
 else()
-  message (STATUS "Searching for Python - found version ${PYTHONLIBS_VERSION_STRING}.")
-
-  set(PYBIND11_PYTHON_VERSION 3)
-  find_package(Python3 QUIET COMPONENTS Interpreter Development)
-  find_package(pybind11 2.2 QUIET)
-
-  if (${pybind11_FOUND})
-    message (STATUS "Searching for pybind11 - found version ${pybind11_VERSION}.")
+  include(IgnPython)
+  find_package(PythonLibs QUIET)
+  if (NOT PYTHONLIBS_FOUND)
+    IGN_BUILD_WARNING("Python is missing: Python interfaces are disabled.")
+    message (STATUS "Searching for Python - not found.")
   else()
-    IGN_BUILD_WARNING("pybind11 is missing: Python interfaces are disabled.")
-    message (STATUS "Searching for pybind11 - not found.")
+    message (STATUS "Searching for Python - found version ${PYTHONLIBS_VERSION_STRING}.")
+
+    set(PYBIND11_PYTHON_VERSION 3)
+    find_package(Python3 QUIET COMPONENTS Interpreter Development)
+    find_package(pybind11 2.2 QUIET)
+
+    if (${pybind11_FOUND})
+      message (STATUS "Searching for pybind11 - found version ${pybind11_VERSION}.")
+    else()
+      IGN_BUILD_WARNING("pybind11 is missing: Python interfaces are disabled.")
+      message (STATUS "Searching for pybind11 - not found.")
+    endif()
   endif()
 endif()
 
