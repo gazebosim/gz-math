@@ -36,7 +36,7 @@ TEST(OrientedBoxTest, EmptyConstructorNew)
 
   EXPECT_TRUE(box->Size() == Vector3d::Zero);
   EXPECT_TRUE(box->Pose() == Pose3d::Zero);
-  EXPECT_EQ(math::Material(), box->Material());
+  EXPECT_EQ(Material(), box->Material());
 
   {
     delete box;
@@ -339,7 +339,7 @@ TEST(OrientedBoxTest, OperatorStreamOut)
 TEST(OrientedBoxTest, VolumeAndDensity)
 {
   double mass = 1.0;
-  math::OrientedBoxd box(Vector3d(1.0, 0.1, 10.4));
+  OrientedBoxd box(Vector3d(1.0, 0.1, 10.4));
   double expectedVolume = 1.0 * 0.1 * 10.4;
   EXPECT_DOUBLE_EQ(expectedVolume, box.Volume());
 
@@ -347,7 +347,7 @@ TEST(OrientedBoxTest, VolumeAndDensity)
   EXPECT_DOUBLE_EQ(expectedDensity, box.DensityFromMass(mass));
 
   // Bad density
-  math::OrientedBoxd box2;
+  OrientedBoxd box2;
   EXPECT_GT(0.0, box2.DensityFromMass(mass));
 }
 
@@ -358,15 +358,15 @@ TEST(OrientedBoxTest, Mass)
   double l = 2.0;
   double w = 0.1;
   double h = 34.12;
-  math::OrientedBoxd box(Vector3d(l, w, h));
+  OrientedBoxd box(Vector3d(l, w, h));
   box.SetDensityFromMass(mass);
 
-  math::MassMatrix3d massMat;
+  MassMatrix3d massMat;
   double ixx = (1.0/12.0) * mass * (w*w + h*h);
   double iyy = (1.0/12.0) * mass * (l*l + h*h);
   double izz = (1.0/12.0) * mass * (l*l + w*w);
 
-  math::MassMatrix3d expectedMassMat;
+  MassMatrix3d expectedMassMat;
   expectedMassMat.SetInertiaMatrix(ixx, iyy, izz, 0.0, 0.0, 0.0);
   expectedMassMat.SetMass(mass);
 

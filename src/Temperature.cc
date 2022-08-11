@@ -235,13 +235,13 @@ const Temperature &Temperature::operator/=(const Temperature &_temp)
 /////////////////////////////////////////////////
 bool Temperature::operator==(const Temperature &_temp) const
 {
-  return gz::math::equal(this->dataPtr->kelvin, _temp.Kelvin());
+  return equal(this->dataPtr->kelvin, _temp.Kelvin());
 }
 
 /////////////////////////////////////////////////
 bool Temperature::operator==(double _temp) const
 {
-  return gz::math::equal(this->dataPtr->kelvin, _temp);
+  return equal(this->dataPtr->kelvin, _temp);
 }
 
 /////////////////////////////////////////////////
