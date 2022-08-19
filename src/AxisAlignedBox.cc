@@ -15,13 +15,13 @@
  *
 */
 #include <cmath>
-#include <ignition/math/AxisAlignedBox.hh>
+#include <gz/math/AxisAlignedBox.hh>
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 // Private data for AxisAlignedBox class
-class ignition::math::AxisAlignedBoxPrivate
+class gz::math::AxisAlignedBoxPrivate
 {
   /// \brief Minimum corner of the box
   public: Vector3d min = Vector3d(MAX_D, MAX_D, MAX_D);

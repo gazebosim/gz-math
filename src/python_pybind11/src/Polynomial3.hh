@@ -15,16 +15,16 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__POLYNOMIAL3_HH_
-#define IGNITION_MATH_PYTHON__POLYNOMIAL3_HH_
+#ifndef GZ_MATH_PYTHON__POLYNOMIAL3_HH_
+#define GZ_MATH_PYTHON__POLYNOMIAL3_HH_
 
 #include <string>
 #include <sstream>
 
 #include <pybind11/pybind11.h>
 
-#include <ignition/math/Polynomial3.hh>
-#include <ignition/math/Vector4.hh>
+#include <gz/math/Polynomial3.hh>
+#include <gz/math/Vector4.hh>
 
 namespace py = pybind11;
 using namespace pybind11::literals;
@@ -35,7 +35,7 @@ namespace math
 {
 namespace python
 {
-/// Help define a pybind11 wrapper for an ignition::math::Polynomial3
+/// Help define a pybind11 wrapper for an gz::math::Polynomial3
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -43,7 +43,7 @@ namespace python
 template<typename T>
 void helpDefineMathPolynomial3(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::Polynomial3<T>;
+  using Class = gz::math::Polynomial3<T>;
   auto toString = [](const Class &si) {
     std::stringstream stream;
     stream << si;
@@ -97,7 +97,7 @@ void helpDefineMathPolynomial3(py::module &m, const std::string &typestr)
     .def("__repr__", toString);
 }
 
-/// Define a pybind11 wrapper for an ignition::math::Polynomial3
+/// Define a pybind11 wrapper for an gz::math::Polynomial3
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -108,4 +108,4 @@ void defineMathPolynomial3(py::module &m, const std::string &typestr);
 }  // namespace math
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__POLYNOMIAL3_HH_
+#endif  // GZ_MATH_PYTHON__POLYNOMIAL3_HH_

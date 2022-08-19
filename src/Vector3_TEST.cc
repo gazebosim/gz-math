@@ -20,10 +20,10 @@
 #include <numeric>
 #include <sstream>
 
-#include "ignition/math/Vector3.hh"
-#include "ignition/math/Helpers.hh"
+#include "gz/math/Vector3.hh"
+#include "gz/math/Helpers.hh"
 
-using namespace ignition;
+using namespace gz;
 
 /////////////////////////////////////////////////
 TEST(Vector3dTest, Construction)

@@ -17,7 +17,7 @@
 
 #include <string>
 
-#include <ignition/math/Angle.hh>
+#include <gz/math/Angle.hh>
 #include <pybind11/operators.h>
 
 #include "Angle.hh"
@@ -32,7 +32,7 @@ namespace python
 {
 void defineMathAngle(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::Angle;
+  using Class = gz::math::Angle;
   auto toString = [](const Class &si) {
     std::stringstream stream;
     stream << si;

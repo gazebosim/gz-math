@@ -14,21 +14,21 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_MASSMATRIX3_HH_
-#define IGNITION_MATH_MASSMATRIX3_HH_
+#ifndef GZ_MATH_MASSMATRIX3_HH_
+#define GZ_MATH_MASSMATRIX3_HH_
 
 #include <algorithm>
 #include <limits>
 #include <string>
 #include <vector>
 
-#include <ignition/math/config.hh>
-#include "ignition/math/Helpers.hh"
-#include "ignition/math/Material.hh"
-#include "ignition/math/Quaternion.hh"
-#include "ignition/math/Vector2.hh"
-#include "ignition/math/Vector3.hh"
-#include "ignition/math/Matrix3.hh"
+#include <gz/math/config.hh>
+#include "gz/math/Helpers.hh"
+#include "gz/math/Material.hh"
+#include "gz/math/Quaternion.hh"
+#include "gz/math/Vector2.hh"
+#include "gz/math/Vector3.hh"
+#include "gz/math/Matrix3.hh"
 
 namespace ignition
 {

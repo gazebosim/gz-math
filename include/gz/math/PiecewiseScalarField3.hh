@@ -14,8 +14,8 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_PIECEWISE_SCALAR_FIELD3_HH_
-#define IGNITION_MATH_PIECEWISE_SCALAR_FIELD3_HH_
+#ifndef GZ_MATH_PIECEWISE_SCALAR_FIELD3_HH_
+#define GZ_MATH_PIECEWISE_SCALAR_FIELD3_HH_
 
 #include <algorithm>
 #include <iostream>
@@ -23,9 +23,9 @@
 #include <utility>
 #include <vector>
 
-#include <ignition/math/Region3.hh>
-#include <ignition/math/Vector3.hh>
-#include <ignition/math/config.hh>
+#include <gz/math/Region3.hh>
+#include <gz/math/Vector3.hh>
+#include <gz/math/config.hh>
 
 namespace ignition
 {
@@ -187,7 +187,7 @@ namespace ignition
       /// \return the stream
       public: friend std::ostream &operator<<(
           std::ostream &_out,
-          const ignition::math::PiecewiseScalarField3<
+          const gz::math::PiecewiseScalarField3<
           ScalarField3T, ScalarT> &_field)
       {
         if (_field.pieces.empty())

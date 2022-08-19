@@ -15,3 +15,12 @@
 #cmakedefine IGNITION_MATH_BUILD_TYPE_PROFILE 1
 #cmakedefine IGNITION_MATH_BUILD_TYPE_DEBUG 1
 #cmakedefine IGNITION_MATH_BUILD_TYPE_RELEASE 1
+
+namespace ignition
+{
+}
+
+namespace gz
+{
+  using namespace ignition;
+}

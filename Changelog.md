@@ -516,7 +516,7 @@
 
 ### Ignition Math 6.1.0
 
-1. eigen3: add conversion functions for Eigen::AlignedBox3d <=> ignition::math::AxisAlignedBox
+1. eigen3: add conversion functions for Eigen::AlignedBox3d <=> gz::math::AxisAlignedBox
     * [BitBucket pull request 302](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/302)
 
 ### Ignition Math 6.0.0
@@ -547,7 +547,7 @@
     * [BitBucket pull request 301](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/301)
     * [Issue 60](https://github.com/ignitionrobotics/ign-math/issues/60)
 
-1. eigen3: add conversion functions for Eigen::AlignedBox3d <=> ignition::math::AxisAlignedBox
+1. eigen3: add conversion functions for Eigen::AlignedBox3d <=> gz::math::AxisAlignedBox
     * [BitBucket pull request 302](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/302)
 
 

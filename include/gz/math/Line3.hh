@@ -14,12 +14,12 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_LINE3_HH_
-#define IGNITION_MATH_LINE3_HH_
+#ifndef GZ_MATH_LINE3_HH_
+#define GZ_MATH_LINE3_HH_
 
 #include <algorithm>
-#include <ignition/math/Vector3.hh>
-#include <ignition/math/config.hh>
+#include <gz/math/Vector3.hh>
+#include <gz/math/config.hh>
 
 namespace ignition
 {

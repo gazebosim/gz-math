@@ -17,8 +17,8 @@
 
 #include <iostream>
 #include <sstream>
-#include <ignition/math/Matrix3.hh>
-#include <ignition/math/Quaternion.hh>
+#include <gz/math/Matrix3.hh>
+#include <gz/math/Quaternion.hh>
 
 // Copied from urdfdom
 static inline double strToDouble(const char *in)
@@ -70,8 +70,8 @@ int main(int argc, char **argv)
           IGN_RTOD(yaw));
 
 //![constructor]
-  ignition::math::Quaterniond q(roll, pitch, yaw);
-  ignition::math::Matrix3d m(q);
+  gz::math::Quaterniond q(roll, pitch, yaw);
+  gz::math::Matrix3d m(q);
 //![constructor]
 
   std::cout << "\nto Quaternion\n";

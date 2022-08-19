@@ -32,5 +32,5 @@ void defineMathMassMatrix3(py::module &m, const std::string &typestr)
 }
 
 }  // namespace python
-}  // namespace gazebo
+}  // namespace math
 }  // namespace ignition

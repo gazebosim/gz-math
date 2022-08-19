@@ -17,7 +17,7 @@
 
 %module semanticversion
 %{
-	#include <ignition/math/SemanticVersion.hh>
+	#include <gz/math/SemanticVersion.hh>
 %}
 
 %include "std_string.i"

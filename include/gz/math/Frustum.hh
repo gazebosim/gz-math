@@ -14,14 +14,14 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_FRUSTUM_HH_
-#define IGNITION_MATH_FRUSTUM_HH_
+#ifndef GZ_MATH_FRUSTUM_HH_
+#define GZ_MATH_FRUSTUM_HH_
 
-#include <ignition/math/Angle.hh>
-#include <ignition/math/AxisAlignedBox.hh>
-#include <ignition/math/Plane.hh>
-#include <ignition/math/Pose3.hh>
-#include <ignition/math/config.hh>
+#include <gz/math/Angle.hh>
+#include <gz/math/AxisAlignedBox.hh>
+#include <gz/math/Plane.hh>
+#include <gz/math/Pose3.hh>
+#include <gz/math/config.hh>
 
 namespace ignition
 {

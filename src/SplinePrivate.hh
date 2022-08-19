@@ -14,15 +14,15 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_SPLINEPRIVATE_HH_
-#define IGNITION_MATH_SPLINEPRIVATE_HH_
+#ifndef GZ_MATH_SPLINEPRIVATE_HH_
+#define GZ_MATH_SPLINEPRIVATE_HH_
 
 #include <algorithm>
 #include <vector>
-#include <ignition/math/Vector3.hh>
-#include <ignition/math/Vector4.hh>
-#include <ignition/math/Matrix4.hh>
-#include <ignition/math/config.hh>
+#include <gz/math/Vector3.hh>
+#include <gz/math/Vector4.hh>
+#include <gz/math/Matrix4.hh>
+#include <gz/math/config.hh>
 
 namespace ignition
 {

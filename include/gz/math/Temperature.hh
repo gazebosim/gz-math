@@ -14,14 +14,14 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_TEMPERATURE_HH_
-#define IGNITION_MATH_TEMPERATURE_HH_
+#ifndef GZ_MATH_TEMPERATURE_HH_
+#define GZ_MATH_TEMPERATURE_HH_
 
 #include <iostream>
 #include <memory>
 
-#include <ignition/math/config.hh>
-#include "ignition/math/Helpers.hh"
+#include <gz/math/config.hh>
+#include "gz/math/Helpers.hh"
 
 namespace ignition
 {
@@ -48,11 +48,11 @@ namespace ignition
     ///
     /// ### Convert from Kelvin to Celsius ###
     ///
-    ///     double celsius = ignition::math::Temperature::KelvinToCelsius(2.5);
+    ///     double celsius = gz::math::Temperature::KelvinToCelsius(2.5);
     ///
     /// ### Create and use a Temperature object ###
     ///
-    ///     ignition::math::Temperature temp(123.5);
+    ///     gz::math::Temperature temp(123.5);
     ///     std::cout << "Temperature in Kelvin = " << temp << std::endl;
     ///     std::cout << "Temperature in Celsius = "
     ///               << temp.Celsius() << std::endl;
@@ -60,7 +60,7 @@ namespace ignition
     ///     temp += 100.0;
     ///     std::cout << "Temperature + 100.0 = " << temp << "K" << std::endl;
     ///
-    ///     ignition::math::Temperature newTemp(temp);
+    ///     gz::math::Temperature newTemp(temp);
     ///     newTemp += temp + 23.5;
     ///     std::cout << "Copied the temp object and added 23.5K. newTemp = "
     ///               << newTemp.Fahrenheit() << "F" << std::endl;
@@ -378,7 +378,7 @@ namespace ignition
       /// \param[in] _temp Temperature to write to the stream
       /// \return the output stream
       public: friend std::ostream &operator<<(std::ostream &_out,
-                  const ignition::math::Temperature &_temp)
+                  const gz::math::Temperature &_temp)
               {
                 _out << _temp.Kelvin();
                 return _out;
@@ -390,7 +390,7 @@ namespace ignition
       /// temperature value is in Kelvin.
       /// \return the input stream
       public: friend std::istream &operator>>(std::istream &_in,
-                  ignition::math::Temperature &_temp)
+                  gz::math::Temperature &_temp)
               {
                 // Skip white spaces
                 _in.setf(std::ios_base::skipws);

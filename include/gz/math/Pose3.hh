@@ -14,12 +14,12 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_POSE_HH_
-#define IGNITION_MATH_POSE_HH_
+#ifndef GZ_MATH_POSE_HH_
+#define GZ_MATH_POSE_HH_
 
-#include <ignition/math/Quaternion.hh>
-#include <ignition/math/Vector3.hh>
-#include <ignition/math/config.hh>
+#include <gz/math/Quaternion.hh>
+#include <gz/math/Vector3.hh>
+#include <gz/math/config.hh>
 
 namespace ignition
 {
@@ -461,7 +461,7 @@ namespace ignition
       /// \param[in] _pose pose to output
       /// \return the stream
       public: friend std::ostream &operator<<(
-                  std::ostream &_out, const ignition::math::Pose3<T> &_pose)
+                  std::ostream &_out, const gz::math::Pose3<T> &_pose)
       {
         _out << _pose.Pos() << " " << _pose.Rot();
         return _out;
@@ -472,7 +472,7 @@ namespace ignition
       /// \param[in] _pose the pose
       /// \return the stream
       public: friend std::istream &operator>>(
-                  std::istream &_in, ignition::math::Pose3<T> &_pose)
+                  std::istream &_in, gz::math::Pose3<T> &_pose)
       {
         // Skip white spaces
         _in.setf(std::ios_base::skipws);

@@ -16,7 +16,7 @@
 */
 #include <string>
 #include "RollingMean.hh"
-#include <ignition/math/RollingMean.hh>
+#include <gz/math/RollingMean.hh>
 
 namespace ignition
 {
@@ -26,7 +26,7 @@ namespace python
 {
 void defineMathRollingMean(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::RollingMean;
+  using Class = gz::math::RollingMean;
   std::string pyclass_name = typestr;
   py::class_<Class>(m,
                     pyclass_name.c_str(),

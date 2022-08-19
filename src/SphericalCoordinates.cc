@@ -16,10 +16,10 @@
 */
 #include <string>
 
-#include "ignition/math/Matrix3.hh"
-#include "ignition/math/SphericalCoordinates.hh"
+#include "gz/math/Matrix3.hh"
+#include "gz/math/SphericalCoordinates.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 // Parameters for EARTH_WGS84 model
@@ -38,7 +38,7 @@ const double g_EarthWGS84Flattening = 1.0/298.257223563;
 const double g_EarthRadius = 6371000.0;
 
 // Private data for the SphericalCoordinates class.
-class ignition::math::SphericalCoordinatesPrivate
+class gz::math::SphericalCoordinatesPrivate
 {
   /// \brief Type of surface being used.
   public: SphericalCoordinates::SurfaceType surfaceType;

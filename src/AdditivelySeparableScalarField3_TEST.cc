@@ -18,10 +18,10 @@
 #include <functional>
 #include <ostream>
 
-#include "ignition/math/AdditivelySeparableScalarField3.hh"
-#include "ignition/math/Polynomial3.hh"
+#include "gz/math/AdditivelySeparableScalarField3.hh"
+#include "gz/math/Polynomial3.hh"
 
-using namespace ignition;
+using namespace gz;
 
 /////////////////////////////////////////////////
 TEST(AdditivelySeparableScalarField3Test, Evaluate)

@@ -15,15 +15,15 @@
  *
 */
 #include <cmath>
-#include "ignition/math/DiffDriveOdometry.hh"
-#include "ignition/math/RollingMean.hh"
+#include "gz/math/DiffDriveOdometry.hh"
+#include "gz/math/RollingMean.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 // The implementation was borrowed from: https://github.com/ros-controls/ros_controllers/blob/melodic-devel/diff_drive_controller/src/odometry.cpp
 
-class ignition::math::DiffDriveOdometryPrivate
+class gz::math::DiffDriveOdometryPrivate
 {
   /// \brief Integrates the velocities (linear and angular) using 2nd order
   /// Runge-Kutta.

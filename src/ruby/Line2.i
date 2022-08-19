@@ -17,9 +17,9 @@
 
 %module line2
 %{
-#include <ignition/math/Line2.hh>
-#include <ignition/math/Helpers.hh>
-#include <ignition/math/Vector2.hh>
+#include <gz/math/Line2.hh>
+#include <gz/math/Helpers.hh>
+#include <gz/math/Vector2.hh>
 %}
 
 %include "std_string.i"

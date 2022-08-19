@@ -17,10 +17,10 @@
 
 #include <gtest/gtest.h>
 
-#include "ignition/math/Triangle3.hh"
-#include "ignition/math/Helpers.hh"
+#include "gz/math/Triangle3.hh"
+#include "gz/math/Helpers.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 /////////////////////////////////////////////////

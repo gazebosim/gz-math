@@ -14,8 +14,8 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATERIAL_HH_
-#define IGNITION_MATERIAL_HH_
+#ifndef GZ_MATERIAL_HH_
+#define GZ_MATERIAL_HH_
 
 #include <map>
 #include <string>

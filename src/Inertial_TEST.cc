@@ -18,9 +18,9 @@
 #include <gtest/gtest.h>
 #include <cmath>
 
-#include "ignition/math/Inertial.hh"
+#include "gz/math/Inertial.hh"
 
-using namespace ignition;
+using namespace gz;
 
 /////////////////////////////////////////////////
 /// \brief Compare quaternions, but allow rotations of PI about any axis.

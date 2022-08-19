@@ -14,12 +14,12 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_INERTIAL_HH_
-#define IGNITION_MATH_INERTIAL_HH_
+#ifndef GZ_MATH_INERTIAL_HH_
+#define GZ_MATH_INERTIAL_HH_
 
-#include <ignition/math/config.hh>
-#include "ignition/math/MassMatrix3.hh"
-#include "ignition/math/Pose3.hh"
+#include <gz/math/config.hh>
+#include "gz/math/MassMatrix3.hh"
+#include "gz/math/Pose3.hh"
 
 namespace ignition
 {

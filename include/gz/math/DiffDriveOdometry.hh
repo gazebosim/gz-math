@@ -14,14 +14,14 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_DIFFDRIVEODOMETRY_HH_
-#define IGNITION_MATH_DIFFDRIVEODOMETRY_HH_
+#ifndef GZ_MATH_DIFFDRIVEODOMETRY_HH_
+#define GZ_MATH_DIFFDRIVEODOMETRY_HH_
 
 #include <chrono>
 #include <memory>
-#include <ignition/math/Angle.hh>
-#include <ignition/math/Export.hh>
-#include <ignition/math/config.hh>
+#include <gz/math/Angle.hh>
+#include <gz/math/Export.hh>
+#include <gz/math/config.hh>
 
 namespace ignition
 {
@@ -64,7 +64,7 @@ namespace ignition
     /// **Example Usage**
     ///
     /// \code{.cpp}
-    /// ignition::math::DiffDriveOdometry odom;
+    /// gz::math::DiffDriveOdometry odom;
     /// odom.SetWheelParams(2.0, 0.5, 0.5);
     /// odom.Init(std::chrono::steady_clock::now());
     ///

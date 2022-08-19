@@ -16,9 +16,9 @@
 */
 #include <gtest/gtest.h>
 
-#include "ignition/math/SphericalCoordinates.hh"
+#include "gz/math/SphericalCoordinates.hh"
 
-using namespace ignition;
+using namespace gz;
 
 //////////////////////////////////////////////////
 // Test different constructors, default parameters
