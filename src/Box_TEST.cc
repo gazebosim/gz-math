@@ -17,9 +17,9 @@
 #include <gtest/gtest.h>
 #include <cmath>
 
-#include "ignition/math/Box.hh"
+#include "gz/math/Box.hh"
 
-using namespace ignition;
+using namespace gz;
 
 /////////////////////////////////////////////////
 TEST(BoxTest, Constructor)

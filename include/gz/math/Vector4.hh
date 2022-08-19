@@ -14,16 +14,16 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_VECTOR4_HH_
-#define IGNITION_MATH_VECTOR4_HH_
+#ifndef GZ_MATH_VECTOR4_HH_
+#define GZ_MATH_VECTOR4_HH_
 
 #include <algorithm>
 #include <cmath>
 #include <limits>
 
-#include <ignition/math/Matrix4.hh>
-#include <ignition/math/Helpers.hh>
-#include <ignition/math/config.hh>
+#include <gz/math/Matrix4.hh>
+#include <gz/math/Helpers.hh>
+#include <gz/math/config.hh>
 
 namespace ignition
 {
@@ -705,7 +705,7 @@ namespace ignition
       /// \param[in] _pt Vector4 to output
       /// \return The stream
       public: friend std::ostream &operator<<(
-                  std::ostream &_out, const ignition::math::Vector4<T> &_pt)
+                  std::ostream &_out, const gz::math::Vector4<T> &_pt)
       {
         _out << _pt[0] << " " << _pt[1] << " " << _pt[2] << " " << _pt[3];
         return _out;
@@ -716,7 +716,7 @@ namespace ignition
       /// \param[in] _pt Vector4 to read values into
       /// \return the stream
       public: friend std::istream &operator>>(
-                  std::istream &_in, ignition::math::Vector4<T> &_pt)
+                  std::istream &_in, gz::math::Vector4<T> &_pt)
       {
         T x, y, z, w;
 

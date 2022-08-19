@@ -15,13 +15,13 @@
  *
 */
 
-#ifndef IGNITION_MATH_STOPWATCH_HH_
-#define IGNITION_MATH_STOPWATCH_HH_
+#ifndef GZ_MATH_STOPWATCH_HH_
+#define GZ_MATH_STOPWATCH_HH_
 
 #include <chrono>
 #include <memory>
-#include <ignition/math/Export.hh>
-#include <ignition/math/config.hh>
+#include <gz/math/Export.hh>
+#include <gz/math/config.hh>
 
 namespace ignition
 {
@@ -48,7 +48,7 @@ namespace ignition
     /// # Example usage
     ///
     /// ```{.cpp}
-    /// ignition::math::Stopwatch watch;
+    /// gz::math::Stopwatch watch;
     /// watch.Start();
     ///
     /// // do something...

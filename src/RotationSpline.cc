@@ -14,11 +14,11 @@
  * limitations under the License.
  *
 */
-#include "ignition/math/Quaternion.hh"
-#include "ignition/math/RotationSpline.hh"
+#include "gz/math/Quaternion.hh"
+#include "gz/math/RotationSpline.hh"
 #include "RotationSplinePrivate.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 /////////////////////////////////////////////////

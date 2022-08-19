@@ -14,12 +14,12 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_ELLIPSOID_HH_
-#define IGNITION_MATH_ELLIPSOID_HH_
+#ifndef GZ_MATH_ELLIPSOID_HH_
+#define GZ_MATH_ELLIPSOID_HH_
 
 #include <optional>
-#include "ignition/math/MassMatrix3.hh"
-#include "ignition/math/Material.hh"
+#include "gz/math/MassMatrix3.hh"
+#include "gz/math/Material.hh"
 
 namespace ignition
 {
@@ -129,6 +129,6 @@ namespace ignition
     }
   }
 }
-#include "ignition/math/detail/Ellipsoid.hh"
+#include "gz/math/detail/Ellipsoid.hh"
 
 #endif

@@ -17,10 +17,10 @@
 #include <gtest/gtest.h>
 #include <cmath>
 
-#include "ignition/math/Angle.hh"
-#include "ignition/math/OrientedBox.hh"
+#include "gz/math/Angle.hh"
+#include "gz/math/OrientedBox.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 auto g_tolerance = 1e-6;

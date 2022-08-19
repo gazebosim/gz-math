@@ -17,12 +17,12 @@
 
 #include <gtest/gtest.h>
 
-#include "ignition/math/Helpers.hh"
-#include "ignition/math/Vector3.hh"
-#include "ignition/math/Quaternion.hh"
-#include "ignition/math/RotationSpline.hh"
+#include "gz/math/Helpers.hh"
+#include "gz/math/Vector3.hh"
+#include "gz/math/Quaternion.hh"
+#include "gz/math/RotationSpline.hh"
 
-using namespace ignition;
+using namespace gz;
 
 /////////////////////////////////////////////////
 TEST(RotationSplineTest, RotationSpline)

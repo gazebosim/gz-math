@@ -14,14 +14,14 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_TRIANGLE3_HH_
-#define IGNITION_MATH_TRIANGLE3_HH_
+#ifndef GZ_MATH_TRIANGLE3_HH_
+#define GZ_MATH_TRIANGLE3_HH_
 
-#include <ignition/math/Helpers.hh>
-#include <ignition/math/Line3.hh>
-#include <ignition/math/Plane.hh>
-#include <ignition/math/Vector3.hh>
-#include <ignition/math/config.hh>
+#include <gz/math/Helpers.hh>
+#include <gz/math/Line3.hh>
+#include <gz/math/Plane.hh>
+#include <gz/math/Vector3.hh>
+#include <gz/math/config.hh>
 
 namespace ignition
 {

@@ -14,10 +14,10 @@
  * limitations under the License.
  *
 */
-#include "ignition/math/Helpers.hh"
-#include "ignition/math/Angle.hh"
+#include "gz/math/Helpers.hh"
+#include "gz/math/Angle.hh"
 
-using namespace ignition::math;
+using namespace gz::math;
 
 const Angle Angle::Zero = Angle(0);
 const Angle Angle::Pi = Angle(IGN_PI);

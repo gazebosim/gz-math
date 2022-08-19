@@ -14,8 +14,8 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_INTERVAL_HH_
-#define IGNITION_MATH_INTERVAL_HH_
+#ifndef GZ_MATH_INTERVAL_HH_
+#define GZ_MATH_INTERVAL_HH_
 
 #include <cmath>
 #include <limits>
@@ -23,7 +23,7 @@
 #include <type_traits>
 #include <utility>
 
-#include <ignition/math/config.hh>
+#include <gz/math/config.hh>
 
 namespace ignition
 {
@@ -264,7 +264,7 @@ namespace ignition
       /// \param _interval Interval to output
       /// \return the stream
       public: friend std::ostream &operator<<(
-        std::ostream &_out, const ignition::math::Interval<T> &_interval)
+        std::ostream &_out, const gz::math::Interval<T> &_interval)
       {
         return _out << (_interval.leftClosed ? "[" : "(")
                     << _interval.leftValue << ", " << _interval.rightValue

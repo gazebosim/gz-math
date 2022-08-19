@@ -14,15 +14,15 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_SEPARABLE_SCALAR_FIELD3_HH_
-#define IGNITION_MATH_SEPARABLE_SCALAR_FIELD3_HH_
+#ifndef GZ_MATH_SEPARABLE_SCALAR_FIELD3_HH_
+#define GZ_MATH_SEPARABLE_SCALAR_FIELD3_HH_
 
 #include <limits>
 #include <utility>
 
-#include <ignition/math/Region3.hh>
-#include <ignition/math/Vector3.hh>
-#include <ignition/math/config.hh>
+#include <gz/math/Region3.hh>
+#include <gz/math/Vector3.hh>
+#include <gz/math/config.hh>
 
 namespace ignition
 {
@@ -145,7 +145,7 @@ namespace ignition
       /// \return the stream
       public: friend std::ostream &operator<<(
           std::ostream &_out,
-          const ignition::math::AdditivelySeparableScalarField3<
+          const gz::math::AdditivelySeparableScalarField3<
           ScalarFunctionT, ScalarT> &_field)
       {
         using std::abs;  // enable ADL

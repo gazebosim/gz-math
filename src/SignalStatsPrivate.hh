@@ -14,12 +14,12 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_SIGNALSTATSPRIVATE_HH_
-#define IGNITION_MATH_SIGNALSTATSPRIVATE_HH_
+#ifndef GZ_MATH_SIGNALSTATSPRIVATE_HH_
+#define GZ_MATH_SIGNALSTATSPRIVATE_HH_
 
 #include <memory>
 #include <vector>
-#include <ignition/math/config.hh>
+#include <gz/math/config.hh>
 
 namespace ignition
 {

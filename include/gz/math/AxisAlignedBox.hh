@@ -14,17 +14,17 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_AXISALIGNEDBOX_HH_
-#define IGNITION_MATH_AXISALIGNEDBOX_HH_
+#ifndef GZ_MATH_AXISALIGNEDBOX_HH_
+#define GZ_MATH_AXISALIGNEDBOX_HH_
 
 #include <iostream>
 #include <tuple>
-#include <ignition/math/config.hh>
-#include <ignition/math/Helpers.hh>
-#include <ignition/math/Line3.hh>
-#include <ignition/math/MassMatrix3.hh>
-#include <ignition/math/Material.hh>
-#include <ignition/math/Vector3.hh>
+#include <gz/math/config.hh>
+#include <gz/math/Helpers.hh>
+#include <gz/math/Line3.hh>
+#include <gz/math/MassMatrix3.hh>
+#include <gz/math/Material.hh>
+#include <gz/math/Vector3.hh>
 
 namespace ignition
 {
@@ -147,7 +147,7 @@ namespace ignition
       /// \param[in] _b AxisAlignedBox to output to the stream
       /// \return The stream
       public: friend std::ostream &operator<<(std::ostream &_out,
-                  const ignition::math::AxisAlignedBox &_b)
+                  const gz::math::AxisAlignedBox &_b)
       {
         _out << "Min[" << _b.Min() << "] Max[" << _b.Max() << "]";
         return _out;
@@ -277,14 +277,14 @@ namespace ignition
       /// \brief Get the material associated with this box.
       /// \return The material assigned to this box.
       /// \deprecated Unimplemented
-      public: const ignition::math::Material IGN_DEPRECATED(6.0)
+      public: const gz::math::Material IGN_DEPRECATED(6.0)
         &Material() const;
 
       /// \brief Set the material associated with this box.
       /// \param[in] _mat The material assigned to this box
       /// \deprecated Unimplemented
       public: void IGN_DEPRECATED(6.0) SetMaterial(
-        const ignition::math::Material &_mat);
+        const gz::math::Material &_mat);
 
       /// \brief Get the mass matrix for this box. This function
       /// is only meaningful if the box's size and material

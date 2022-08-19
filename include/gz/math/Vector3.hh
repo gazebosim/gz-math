@@ -14,8 +14,8 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_VECTOR3_HH_
-#define IGNITION_MATH_VECTOR3_HH_
+#ifndef GZ_MATH_VECTOR3_HH_
+#define GZ_MATH_VECTOR3_HH_
 
 #include <algorithm>
 #include <cmath>
@@ -23,8 +23,8 @@
 #include <iostream>
 #include <limits>
 
-#include <ignition/math/Helpers.hh>
-#include <ignition/math/config.hh>
+#include <gz/math/Helpers.hh>
+#include <gz/math/config.hh>
 
 namespace ignition
 {
@@ -727,7 +727,7 @@ namespace ignition
       /// \param _pt Vector3 to output
       /// \return the stream
       public: friend std::ostream &operator<<(
-                  std::ostream &_out, const ignition::math::Vector3<T> &_pt)
+                  std::ostream &_out, const gz::math::Vector3<T> &_pt)
       {
         _out << precision(_pt[0], 6) << " " << precision(_pt[1], 6) << " "
           << precision(_pt[2], 6);
@@ -739,7 +739,7 @@ namespace ignition
       /// \param _pt vector3 to read values into
       /// \return the stream
       public: friend std::istream &operator>>(
-                  std::istream &_in, ignition::math::Vector3<T> &_pt)
+                  std::istream &_in, gz::math::Vector3<T> &_pt)
       {
         // Skip white spaces
         _in.setf(std::ios_base::skipws);

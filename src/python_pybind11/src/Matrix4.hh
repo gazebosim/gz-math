@@ -15,15 +15,15 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__MATRIX4_HH_
-#define IGNITION_MATH_PYTHON__MATRIX4_HH_
+#ifndef GZ_MATH_PYTHON__MATRIX4_HH_
+#define GZ_MATH_PYTHON__MATRIX4_HH_
 
 #include <string>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 
-#include <ignition/math/Matrix4.hh>
+#include <gz/math/Matrix4.hh>
 
 namespace py = pybind11;
 using namespace pybind11::literals;
@@ -34,14 +34,14 @@ namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an ignition::math::Matrix4
+/// Define a pybind11 wrapper for an gz::math::Matrix4
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathMatrix4(py::module &m, const std::string &typestr);
 
-/// Define a pybind11 wrapper for an ignition::math::Matrix4
+/// Define a pybind11 wrapper for an gz::math::Matrix4
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -49,7 +49,7 @@ void defineMathMatrix4(py::module &m, const std::string &typestr);
 template<typename T>
 void helpDefineMathMatrix4(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::Matrix4<T>;
+  using Class = gz::math::Matrix4<T>;
   auto toString = [](const Class &si) {
     std::stringstream stream;
     stream << si;
@@ -63,10 +63,10 @@ void helpDefineMathMatrix4(py::module &m, const std::string &typestr)
     .def(py::init<>())
     .def(py::init<const Class&>())
     .def(py::init<T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T>())
-    .def(py::init<const ignition::math::Quaternion<T>&>())
-    .def(py::init<const ignition::math::Pose3<T>&>())
+    .def(py::init<const gz::math::Quaternion<T>&>())
+    .def(py::init<const gz::math::Pose3<T>&>())
     .def(py::self * py::self)
-    .def(py::self * ignition::math::Vector3<T>())
+    .def(py::self * gz::math::Vector3<T>())
     .def(py::self == py::self)
     .def(py::self != py::self)
     .def("__call__",
@@ -79,7 +79,7 @@ void helpDefineMathMatrix4(py::module &m, const std::string &typestr)
          py::overload_cast<T, T, T>(&Class::SetTranslation),
          "Set the translational values [ (0, 3) (1, 3) (2, 3) ]")
     .def("set_translation",
-         py::overload_cast<const ignition::math::Vector3<T>&>(
+         py::overload_cast<const gz::math::Vector3<T>&>(
             &Class::SetTranslation),
          "Set the translational values [ (0, 3) (1, 3) (2, 3) ]")
     .def("translation",
@@ -110,7 +110,7 @@ void helpDefineMathMatrix4(py::module &m, const std::string &typestr)
          &Class::Pose,
          "Get the transformation as math::Pose")
     .def("scale",
-         py::overload_cast<const ignition::math::Vector3<T>&>(
+         py::overload_cast<const gz::math::Vector3<T>&>(
            &Class::Scale),
          "Get the scale values as a Vector3<T>")
     .def("scale",
@@ -120,8 +120,8 @@ void helpDefineMathMatrix4(py::module &m, const std::string &typestr)
         &Class::IsAffine,
          "Get the scale values as a Vector3<T>")
     .def("transform_affine",
-         py::overload_cast<const ignition::math::Vector3<T>&,
-                           ignition::math::Vector3<T>&>(
+         py::overload_cast<const gz::math::Vector3<T>&,
+                           gz::math::Vector3<T>&>(
                              &Class::TransformAffine, py::const_),
          "Perform an affine transformation")
     .def("equal",
@@ -129,9 +129,9 @@ void helpDefineMathMatrix4(py::module &m, const std::string &typestr)
          "Equality test operator")
     .def("look_at",
          &Class::LookAt,
-         // py::arg("_eye") = ignition::math::Vector3<T>::Zero,
-         py::arg("_target") = ignition::math::Vector3<T>::Zero,
-         py::arg("_up") = ignition::math::Vector3<T>::UnitZ,
+         // py::arg("_eye") = gz::math::Vector3<T>::Zero,
+         py::arg("_target") = gz::math::Vector3<T>::Zero,
+         py::arg("_up") = gz::math::Vector3<T>::UnitZ,
          "Get transform which translates to _eye and rotates the X axis "
          "so it faces the _target. The rotation is such that Z axis is in the"
          "_up direction, if possible. The coordinate system is right-handed")
@@ -147,7 +147,7 @@ void helpDefineMathMatrix4(py::module &m, const std::string &typestr)
     .def("__repr__", toString);
 }
 }  // namespace python
-}  // namespace gazebo
+}  // namespace math
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__MATRIX4_HH_
+#endif  // GZ_MATH_PYTHON__MATRIX4_HH_

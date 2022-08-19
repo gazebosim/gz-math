@@ -14,16 +14,16 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_MATRIX4_HH_
-#define IGNITION_MATH_MATRIX4_HH_
+#ifndef GZ_MATH_MATRIX4_HH_
+#define GZ_MATH_MATRIX4_HH_
 
 #include <algorithm>
 #include <utility>
-#include <ignition/math/Helpers.hh>
-#include <ignition/math/Matrix3.hh>
-#include <ignition/math/Vector3.hh>
-#include <ignition/math/Pose3.hh>
-#include <ignition/math/config.hh>
+#include <gz/math/Helpers.hh>
+#include <gz/math/Matrix3.hh>
+#include <gz/math/Vector3.hh>
+#include <gz/math/Pose3.hh>
+#include <gz/math/config.hh>
 
 namespace ignition
 {
@@ -804,7 +804,7 @@ namespace ignition
       /// \param _m Matrix to output
       /// \return the stream
       public: friend std::ostream &operator<<(
-                  std::ostream &_out, const ignition::math::Matrix4<T> &_m)
+                  std::ostream &_out, const gz::math::Matrix4<T> &_m)
       {
         _out << precision(_m(0, 0), 6) << " "
              << precision(_m(0, 1), 6) << " "
@@ -831,7 +831,7 @@ namespace ignition
       /// \param[out] _m Matrix4<T> to read values into
       /// \return the stream
       public: friend std::istream &operator>>(
-                  std::istream &_in, ignition::math::Matrix4<T> &_m)
+                  std::istream &_in, gz::math::Matrix4<T> &_m)
       {
         // Skip white spaces
         _in.setf(std::ios_base::skipws);

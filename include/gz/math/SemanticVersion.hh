@@ -15,13 +15,13 @@
  *
 */
 
-#ifndef IGNITION_MATH_SEMANTICVERSION_HH_
-#define IGNITION_MATH_SEMANTICVERSION_HH_
+#ifndef GZ_MATH_SEMANTICVERSION_HH_
+#define GZ_MATH_SEMANTICVERSION_HH_
 
 #include <memory>
 #include <string>
-#include <ignition/math/Helpers.hh>
-#include <ignition/math/config.hh>
+#include <gz/math/Helpers.hh>
+#include <gz/math/config.hh>
 
 namespace ignition
 {

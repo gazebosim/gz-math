@@ -17,9 +17,9 @@
 
 #include <sstream>
 
-#include "ignition/math/SemanticVersion.hh"
+#include "gz/math/SemanticVersion.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 namespace ignition

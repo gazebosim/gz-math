@@ -14,12 +14,12 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_ANGLE_HH_
-#define IGNITION_MATH_ANGLE_HH_
+#ifndef GZ_MATH_ANGLE_HH_
+#define GZ_MATH_ANGLE_HH_
 
 #include <iostream>
-#include <ignition/math/Helpers.hh>
-#include <ignition/math/config.hh>
+#include <gz/math/Helpers.hh>
+#include <gz/math/config.hh>
 
 /// \def IGN_RTOD(d)
 /// \brief Macro that converts radians to degrees
@@ -234,7 +234,7 @@ namespace ignition
       /// \param[in] _a Angle to output.
       /// \return The output stream.
       public: friend std::ostream &operator<<(std::ostream &_out,
-                                              const ignition::math::Angle &_a)
+                                              const gz::math::Angle &_a)
       {
         _out << _a.Radian();
         return _out;
@@ -245,7 +245,7 @@ namespace ignition
       /// \param[out] _a Angle to read value into.
       /// \return The input stream.
       public: friend std::istream &operator>>(std::istream &_in,
-                                              ignition::math::Angle &_a)
+                                              gz::math::Angle &_a)
       {
         // Skip white spaces
         _in.setf(std::ios_base::skipws);

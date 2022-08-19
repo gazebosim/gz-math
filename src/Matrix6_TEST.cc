@@ -17,9 +17,9 @@
 
 #include <gtest/gtest.h>
 
-#include "ignition/math/Matrix6.hh"
+#include "gz/math/Matrix6.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 /////////////////////////////////////////////////

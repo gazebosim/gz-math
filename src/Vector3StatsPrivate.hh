@@ -14,11 +14,11 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_VECTOR3STATSPRIVATE_HH_
-#define IGNITION_MATH_VECTOR3STATSPRIVATE_HH_
+#ifndef GZ_MATH_VECTOR3STATSPRIVATE_HH_
+#define GZ_MATH_VECTOR3STATSPRIVATE_HH_
 
-#include <ignition/math/SignalStats.hh>
-#include <ignition/math/config.hh>
+#include <gz/math/SignalStats.hh>
+#include <gz/math/config.hh>
 
 namespace ignition
 {

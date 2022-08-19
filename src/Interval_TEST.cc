@@ -17,9 +17,9 @@
 #include <gtest/gtest.h>
 #include <ostream>
 
-#include "ignition/math/Interval.hh"
+#include "gz/math/Interval.hh"
 
-using namespace ignition;
+using namespace gz;
 
 /////////////////////////////////////////////////
 TEST(IntervalTest, DefaultConstructor)

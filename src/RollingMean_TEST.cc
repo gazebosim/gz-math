@@ -17,10 +17,10 @@
 
 #include <gtest/gtest.h>
 
-#include "ignition/math/Helpers.hh"
-#include "ignition/math/RollingMean.hh"
+#include "gz/math/Helpers.hh"
+#include "gz/math/RollingMean.hh"
 
-using namespace ignition;
+using namespace gz;
 
 /////////////////////////////////////////////////
 TEST(RollingMeanTest, RollingMean)

@@ -15,14 +15,14 @@
  *
 */
 
-#include "ignition/math/Helpers.hh"
-#include "ignition/math/SpeedLimiter.hh"
+#include "gz/math/Helpers.hh"
+#include "gz/math/SpeedLimiter.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 /// \brief Private SpeedLimiter data class.
-class ignition::math::SpeedLimiterPrivate
+class gz::math::SpeedLimiterPrivate
 {
   /// \brief Minimum velocity limit.
   public: double minVelocity{-std::numeric_limits<double>::infinity()};

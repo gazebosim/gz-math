@@ -14,14 +14,14 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_QUATERNION_HH_
-#define IGNITION_MATH_QUATERNION_HH_
+#ifndef GZ_MATH_QUATERNION_HH_
+#define GZ_MATH_QUATERNION_HH_
 
-#include <ignition/math/Helpers.hh>
-#include <ignition/math/Angle.hh>
-#include <ignition/math/Vector3.hh>
-#include <ignition/math/Matrix3.hh>
-#include <ignition/math/config.hh>
+#include <gz/math/Helpers.hh>
+#include <gz/math/Angle.hh>
+#include <gz/math/Vector3.hh>
+#include <gz/math/Matrix3.hh>
+#include <gz/math/config.hh>
 
 namespace ignition
 {
@@ -1050,7 +1050,7 @@ namespace ignition
       /// \param[in] _q quaternion to output
       /// \return the stream
       public: friend std::ostream &operator<<(std::ostream &_out,
-                  const ignition::math::Quaternion<T> &_q)
+                  const gz::math::Quaternion<T> &_q)
       {
         Vector3<T> v(_q.Euler());
         _out << precision(v.X(), 6) << " " << precision(v.Y(), 6) << " "
@@ -1063,7 +1063,7 @@ namespace ignition
       /// \param[in] _q Quaternion<T> to read values into
       /// \return The istream
       public: friend std::istream &operator>>(std::istream &_in,
-          ignition::math::Quaternion<T> &_q)
+          gz::math::Quaternion<T> &_q)
       {
         Angle roll, pitch, yaw;
 

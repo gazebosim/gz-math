@@ -17,9 +17,9 @@
 #include <cmath>
 #include <algorithm>
 
-#include "ignition/math/Color.hh"
+#include "gz/math/Color.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 const Color Color::White = Color(1, 1, 1, 1);

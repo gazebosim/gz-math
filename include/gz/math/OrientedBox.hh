@@ -14,17 +14,17 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_ORIENTEDBOX_HH_
-#define IGNITION_MATH_ORIENTEDBOX_HH_
+#ifndef GZ_MATH_ORIENTEDBOX_HH_
+#define GZ_MATH_ORIENTEDBOX_HH_
 
 #include <iostream>
-#include <ignition/math/Helpers.hh>
-#include <ignition/math/MassMatrix3.hh>
-#include <ignition/math/Material.hh>
-#include <ignition/math/Matrix4.hh>
-#include <ignition/math/Pose3.hh>
-#include <ignition/math/Vector3.hh>
-#include <ignition/math/config.hh>
+#include <gz/math/Helpers.hh>
+#include <gz/math/MassMatrix3.hh>
+#include <gz/math/Material.hh>
+#include <gz/math/Matrix4.hh>
+#include <gz/math/Pose3.hh>
+#include <gz/math/Vector3.hh>
+#include <gz/math/config.hh>
 
 namespace ignition
 {
@@ -201,14 +201,14 @@ namespace ignition
 
       /// \brief Get the material associated with this box.
       /// \return The material assigned to this box.
-      public: const ignition::math::Material &Material() const
+      public: const gz::math::Material &Material() const
       {
         return this->material;
       }
 
       /// \brief Set the material associated with this box.
       /// \param[in] _mat The material assigned to this box.
-      public: void SetMaterial(const ignition::math::Material &_mat)
+      public: void SetMaterial(const gz::math::Material &_mat)
       {
         this->material = _mat;
       }
@@ -274,7 +274,7 @@ namespace ignition
       private: Pose3<T> pose;
 
       /// \brief The box's material.
-      private: ignition::math::Material material;
+      private: gz::math::Material material;
     };
 
     typedef OrientedBox<int> OrientedBoxi;

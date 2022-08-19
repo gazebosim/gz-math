@@ -18,9 +18,9 @@
 #define GZ_MATH_MATRIX6_HH_
 
 #include <utility>
-#include <ignition/math/config.hh>
-#include <ignition/math/Helpers.hh>
-#include <ignition/math/Matrix3.hh>
+#include <gz/math/config.hh>
+#include <gz/math/Helpers.hh>
+#include <gz/math/Matrix3.hh>
 
 namespace ignition
 {
@@ -507,7 +507,7 @@ namespace ignition
       /// \param _m Matrix to output
       /// \return the stream
       public: friend std::ostream &operator<<(
-                  std::ostream &_out, const ignition::math::Matrix6<T> &_m)
+                  std::ostream &_out, const gz::math::Matrix6<T> &_m)
       {
        for (auto i : {0, 1, 2, 3, 4, 5})
         {
@@ -528,7 +528,7 @@ namespace ignition
       /// \param[out] _m Matrix6<T> to read values into
       /// \return the stream
       public: friend std::istream &operator>>(
-                  std::istream &_in, ignition::math::Matrix6<T> &_m)
+                  std::istream &_in, gz::math::Matrix6<T> &_m)
       {
         // Skip white spaces
         _in.setf(std::ios_base::skipws);

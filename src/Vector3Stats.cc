@@ -14,10 +14,10 @@
  * limitations under the License.
  *
 */
-#include <ignition/math/Vector3Stats.hh>
+#include <gz/math/Vector3Stats.hh>
 #include "Vector3StatsPrivate.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 //////////////////////////////////////////////////

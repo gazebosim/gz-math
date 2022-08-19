@@ -14,17 +14,17 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_REGION3_HH_
-#define IGNITION_MATH_REGION3_HH_
+#ifndef GZ_MATH_REGION3_HH_
+#define GZ_MATH_REGION3_HH_
 
 #include <cmath>
 #include <limits>
 #include <ostream>
 #include <utility>
 
-#include <ignition/math/Interval.hh>
-#include <ignition/math/Vector3.hh>
-#include <ignition/math/config.hh>
+#include <gz/math/Interval.hh>
+#include <gz/math/Vector3.hh>
+#include <gz/math/config.hh>
 
 namespace ignition
 {
@@ -174,7 +174,7 @@ namespace ignition
       /// \param _r Region3 to output
       /// \return the stream
       public: friend std::ostream &operator<<(
-        std::ostream &_out, const ignition::math::Region3<T> &_r)
+        std::ostream &_out, const gz::math::Region3<T> &_r)
       {
         return _out <<_r.ix << " x " << _r.iy << " x " << _r.iz;
       }

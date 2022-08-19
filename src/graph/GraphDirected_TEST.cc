@@ -19,9 +19,9 @@
 #include <iostream>
 #include <string>
 
-#include "ignition/math/graph/Graph.hh"
+#include "gz/math/graph/Graph.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 using namespace graph;
 

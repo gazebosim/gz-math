@@ -17,9 +17,9 @@
 #include <gtest/gtest.h>
 #include <cmath>
 
-#include "ignition/math/AxisAlignedBox.hh"
+#include "gz/math/AxisAlignedBox.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 class myAxisAlignedBox : public AxisAlignedBox
