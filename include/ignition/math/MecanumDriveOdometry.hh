@@ -36,9 +36,9 @@ namespace ignition
     // Forward declarations.
     class MecanumDriveOdometryPrivate;
 
-    /** \class MecanumDriveOdometry MecanumDriveOdometry.hh \
-     * ignition/math/MecanumDriveOdometry.hh
-     **/
+    /// \class MecanumDriveOdometry MecanumDriveOdometry.hh \
+    /// ignition/math/MecanumDriveOdometry.hh
+    ///
     /// \brief Computes odometry values based on a set of kinematic
     /// properties and wheel speeds for a Mecanum-drive vehicle.
     ///
