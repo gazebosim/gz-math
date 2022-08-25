@@ -33,6 +33,11 @@ class ignition::math::MecanumDriveOdometryPrivate
   /// \param[in] _lateral Lateral velocity.
   /// \param[in] _angular Angular velocity.
   public: void IntegrateExact(double _linear, double _lateral, double _angular);
+  
+   /// \brief Integrates the poseusing second order Runge-Kuffa aproximation.
+  /// \param[in] _linear Linear velocity.
+  /// \param[in] _lateral Lateral velocity.
+  /// \param[in] _angular Angular velocity.
   public: void IntegrateRungeKutta2(double _linear, double _lateral, double _angular);
 
   /// \brief Current timestamp.
