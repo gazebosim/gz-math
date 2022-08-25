@@ -52,7 +52,6 @@ namespace ignition
     ///       O--->X(forward)
     ///
 
-
     class IGNITION_MATH_VISIBLE MecanumDriveOdometry
     {
       /// \brief Constructor.
