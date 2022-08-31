@@ -1,5 +1,16 @@
 ## Gazebo Math 6.x
 
+## Gazebo Math 6.12.1 (2022-08-31)
+
+1. Support migration
+    * [Pull request #483](https://github.com/gazebosim/gz-math/pull/483)
+
+1. Migrate headers
+    * [Pull request #483](https://github.com/gazebosim/gz-math/pull/483)
+
+1. Remove redundant namespace references
+    * [Pull request #479](https://github.com/gazebosim/gz-math/pull/479)
+
 ## Gazebo Math 6.12.0 (2022-07-27)
 
 1. Added Helper function isTimeString to Python
