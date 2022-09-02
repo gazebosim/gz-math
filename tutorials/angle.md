@@ -57,10 +57,23 @@ Use the method `Normalized` to bound the value between `-PI` and `PI`.
 
 ## Ruby example
 
-This example will only work if the Ruby interface library was compiled and installed. Modify the `RUBYLIB` environment variable to include the Gazebo Math library install path. For example, if you install to `/usr`:
+This example will only work if the Ruby interface library was compiled and installed. For example,
+on Ubuntu:
+
+```{.sh}
+sudo apt install ruby-gz-math<#>
+```
+
+Modify the `RUBYLIB` environment variable to include the Gazebo Math library install path. For example, if you install to `/usr`:
 
 ```{.sh}
 export RUBYLIB=/usr/lib/ruby:$RUBYLIB
+```
+
+Move to the examples folder:
+
+```{.sh}
+cd examples
 ```
 
 Execute the code:
