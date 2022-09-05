@@ -53,9 +53,9 @@ int main(int argc, char **argv)
     return -1;
   }
 
-  double roll = GZ_DTOR(strToDouble(argv[1]));
-  double pitch = GZ_DTOR(strToDouble(argv[2]));
-  double yaw = GZ_DTOR(strToDouble(argv[3]));
+  double roll = strToDouble(argv[1]);
+  double pitch = strToDouble(argv[2]);
+  double yaw = strToDouble(argv[3]);
 
   std::cout << "Converting Euler angles:\n";
   printf(" roll  % .6f radians\n"
