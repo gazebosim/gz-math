@@ -9,7 +9,7 @@ This tutorial explains how to use the `Vector` classes from Gazebo Math library.
 To compile the code, go to `gz-math/examples` and use `cmake`:
 
 ```{.sh}
-git clone https://github.com/gazebosim/gz-math/ -b main
+git clone https://github.com/gazebosim/gz-math/ -b gz-math7
 cd gz-math/examples
 mkdir build
 cd build
@@ -75,10 +75,23 @@ There are also many useful function such as finding the distance between two vec
 
 ## Ruby examples
 
-This example will only work if the Ruby interface library was compiled and installed. Modify the `RUBYLIB` environment variable to include the Gazebo Math library install path. For example, if you install to `/usr`:
+This example will only work if the Ruby interface library was compiled and installed. For example,
+on Ubuntu:
+
+```{.sh}
+sudo apt install ruby-gz-math<#>
+```
+
+Modify the `RUBYLIB` environment variable to include the Gazebo Math library install path. For example, if you install to `/usr`:
 
 ```{.sh}
 export RUBYLIB=/usr/lib/ruby:$RUBYLIB
+```
+
+Move to the examples folder:
+
+```{.sh}
+cd examples
 ```
 
 Execute the examples:
