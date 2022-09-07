@@ -7,7 +7,7 @@ endif()
 
 message(STATUS "Building pybind11 interfaces")
 # Split from main extension and converted to pybind11
-pybind11_add_module(math SHARED
+pybind11_add_module(math MODULE
   src/_gz_math_pybind11.cc
   src/Angle.cc
   src/AxisAlignedBox.cc
