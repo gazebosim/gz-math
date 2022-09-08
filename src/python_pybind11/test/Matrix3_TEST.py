@@ -118,6 +118,16 @@ class TestMatrix3(unittest.TestCase):
 
         self.assertEqual(str(matrix), "1 2 3 4 5 6 7 8 9")
 
+    def test_buffer(self):
+        elements = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0]
+        matrix = Matrix3d(*elements)
+
+        self.assertEqual(matrix(1,2), memoryview(matrix)[1,2])
+        self.assertTrue(memoryview(matrix).c_contiguous)
+        # Have to cast through bytes for some reason...
+        aslist = memoryview(matrix).cast('b', (3 * 3 * 8,)).cast('d', (3 * 3,)).tolist()
+        self.assertEqual(elements, aslist)
+
     def test_vector3_mul(self):
         matrix = Matrix3d(1, 2, 3, 4, 5, 6, 7, 8, 9)
 

@@ -375,6 +375,27 @@ class TestMatrix4(unittest.TestCase):
 
         self.assertEqual(str(matA), "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16")
 
+    def test_buffer(self):
+        matrix = Matrix4d(1, 2, 3, 4,
+                          5, 6, 7, 8,
+                          9, 10, 11, 12,
+                          13, 14, 15, 16)
+
+        self.assertEqual(matrix(2,3), memoryview(matrix)[2,3])
+
+    def test_buffer(self):
+        elements = [1.0, 2.0, 3.0, 4.0,
+                    5.0, 6.0, 7.0, 8.0,
+                    9.0, 10.0, 11.0, 12.0,
+                    13.0, 14.0, 15.0, 16.0]
+        matrix = Matrix4d(*elements)
+
+        self.assertEqual(matrix(2,3), memoryview(matrix)[2,3])
+        self.assertTrue(memoryview(matrix).c_contiguous)
+        # Have to cast through bytes for some reason...
+        aslist = memoryview(matrix).cast('b', (4 * 4 * 8,)).cast('d', (4 * 4,)).tolist()
+        self.assertEqual(elements, aslist)
+
     def test_not_equal(self):
         matrix1 = Matrix4d()
         matrix2 = Matrix4d()
