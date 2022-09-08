@@ -844,7 +844,7 @@ namespace gz
       }
 
       /// \brief The 4x4 matrix
-      private: T data[4][4];
+      T data[4][4];
     };
 
     namespace detail {

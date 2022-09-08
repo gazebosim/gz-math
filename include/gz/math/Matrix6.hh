@@ -553,7 +553,7 @@ namespace gz
       }
 
       /// \brief The 6x6 matrix
-      private: T data[MatrixSize][MatrixSize];
+      T data[MatrixSize][MatrixSize];
     };
 
     namespace detail {

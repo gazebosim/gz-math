@@ -636,7 +636,7 @@ namespace gz
       }
 
       /// \brief the 3x3 matrix
-      private: T data[3][3];
+      T data[3][3];
     };
 
     namespace detail {
