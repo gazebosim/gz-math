@@ -145,7 +145,18 @@ void helpDefineMathMatrix4(py::module &m, const std::string &typestr)
     .def_readonly_static("IDENTITY", &Class::Identity, "Identity matrix")
     .def_readonly_static("ZERO", &Class::Zero, "Zero matrix")
     .def("__str__", toString)
-    .def("__repr__", toString);
+    .def("__repr__", toString)
+    .def_buffer([](Class &self) -> py::buffer_info {
+      return py::buffer_info(
+          self.data,  // Pointer to buffer
+          sizeof(T),  // Size of one scalar
+          py::format_descriptor<T>::format(),
+          2,  // Number of dimensions
+          { 4, 4 },  // Buffer dimensions
+          // Strides (in bytes) for each dimension
+          { sizeof(T) * 4, sizeof(T) }
+      );
+    });
 }
 }  // namespace python
 }  // namespace math

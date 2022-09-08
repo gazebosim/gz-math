@@ -99,7 +99,18 @@ void helpDefineMathMatrix6(py::module &_m, const std::string &_typestr)
     .def_readonly_static("IDENTITY", &Class::Identity, "Identity matrix")
     .def_readonly_static("ZERO", &Class::Zero, "Zero matrix")
     .def("__str__", toString)
-    .def("__repr__", toString);
+    .def("__repr__", toString)
+    .def_buffer([](Class &self) -> py::buffer_info {
+      return py::buffer_info(
+          self.data,  // Pointer to buffer
+          sizeof(T),  // Size of one scalar
+          py::format_descriptor<T>::format(),
+          2,  // Number of dimensions
+          { 6, 6 },  // Buffer dimensions
+          // Strides (in bytes) for each dimension
+          { sizeof(T) * 6, sizeof(T) }
+      );
+    });
 }
 }  // namespace python
 }  // namespace math
