@@ -74,9 +74,6 @@ release will remove the deprecated code.
     + ***Deprecation:*** public: void W(T)
     + ***Replacement:*** public: void SetW(T)
 
-1. **Helpers.hh**
-    + **Deprecation:** template<typename T> inline void appendToStream(std::ostream, T, int)
-    + **Replacement:** template<typename T> inline void appendToStream(std::ostream, T)
 1. The `ignition` namespace is deprecated and will be removed in future versions.  Use `gz` instead.
 1. Header files under `ignition/...` are deprecated and will be removed in future versions.
    Use `gz/...` instead.
