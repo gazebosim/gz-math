@@ -44,7 +44,7 @@ int main(int argc, char **argv)
   if (argc != 4)
   {
     std::cerr << "Invalid usage\n\n"
-              << "Usage (angles specified in degrees):\n"
+              << "Usage (angles specified in radians):\n"
               << "  quaternion_from_euler "
               << "<float_roll> <float_pitch> <float_yaw>\n\n"
               << "Example\n"
