@@ -107,31 +107,9 @@ function(configure_build_install_location _library_name)
   install(TARGETS ${_library_name}
     DESTINATION "${GZ_PYTHON_INSTALL_PATH}/"
   )
-
-  # TODO(CH3): Deprecated. Remove on tock.
-  # Install Python library symlinks
-  if(${GZ_PYTHON_INSTALL_PATH} MATCHES "gz$")
-    cmake_policy(SET CMP0087 NEW)  # Allow evaluation of generator expressions in install(CODE )
-    file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/ignition")
-
-    string(REGEX REPLACE "gz$" "ignition" IGN_PYTHON_INSTALL_PATH ${GZ_PYTHON_INSTALL_PATH})
-    if (WIN32)  # Windows requires copy instead of symlink
-      install(TARGETS ${_library_name}
-        DESTINATION "${IGN_PYTHON_INSTALL_PATH}/"
-      )
-    else()
-      install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \
-          ../gz/$<TARGET_FILE_NAME:${_library_name}> \
-          ${PROJECT_BINARY_DIR}\/ignition/$<TARGET_FILE_NAME:${_library_name}>)")
-      install(FILES ${PROJECT_BINARY_DIR}\/ignition/$<TARGET_FILE_NAME:${_library_name}>
-        DESTINATION "${IGN_PYTHON_INSTALL_PATH}/"
-      )
-    endif()
-  endif()
-
 endfunction()
 
-configure_build_install_location(math)
+configure_build_install_location(math${PROJECT_VERSION_MAJOR})
 
 if (BUILD_TESTING)
   # Add the Python tests
