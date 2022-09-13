@@ -56,6 +56,9 @@ target_link_libraries(${BINDINGS_MODULE_NAME} PRIVATE
   ${PROJECT_LIBRARY_TARGET_NAME}
 )
 
+target_compile_definitions(${BINDINGS_MODULE_NAME} PRIVATE
+  BINDINGS_MODULE_NAME=${BINDINGS_MODULE_NAME})
+
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   # Workaround for Clang and pybind11 on Focal
   # https://github.com/pybind/pybind11/issues/1604
