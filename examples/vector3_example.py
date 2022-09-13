@@ -20,7 +20,7 @@
 #
 # $ export PYTHONPATH=/usr/lib/python:$PYTHONPATH
 #
-import gz.math
+import gz.math7
 
 v1 = gz.math.Vector3d(0, 0, 3)
 print("v =: {} {} {}\n".format(v1.x(), v1.y(), v1.z()))

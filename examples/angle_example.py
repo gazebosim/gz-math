@@ -21,7 +21,7 @@
 # $ export PYTHONPATH=/usr/lib/python:$PYTHONPATH
 #
 
-import gz.math
+import gz.math7
 
 print("PI in degrees = {}\n".format(gz.math.Angle.PI.degree()))
 

@@ -20,7 +20,7 @@
 #
 # $ export PYTHONPATH=/usr/lib/python:$PYTHONPATH
 #
-import gz.math
+import gz.math7
 
 va = gz.math.Vector2d(1, 2)
 vb = gz.math.Vector2d(3, 4)

@@ -13,8 +13,8 @@
 # limitations under the License.
 
 import unittest
-from gz.math import Kmeans
-from gz.math import Vector3d
+from gz.math7 import Kmeans
+from gz.math7 import Vector3d
 
 
 class TestKmeans(unittest.TestCase):

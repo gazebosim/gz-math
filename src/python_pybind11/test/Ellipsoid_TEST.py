@@ -15,7 +15,7 @@
 import unittest
 
 import gz
-from gz.math import Ellipsoidd, Material, MassMatrix3d, Vector3d
+from gz.math7 import Ellipsoidd, Material, MassMatrix3d, Vector3d
 
 import math
 

@@ -15,7 +15,7 @@
 import unittest
 
 import gz
-from gz.math import Boxd, MassMatrix3d, Material, Planed, Vector3d
+from gz.math7 import Boxd, MassMatrix3d, Material, Planed, Vector3d
 
 
 class TestBox(unittest.TestCase):

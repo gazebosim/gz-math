@@ -15,7 +15,7 @@
 import unittest
 
 import gz
-from gz.math import Capsuled, Material, MassMatrix3d
+from gz.math7 import Capsuled, Material, MassMatrix3d
 
 import math
 

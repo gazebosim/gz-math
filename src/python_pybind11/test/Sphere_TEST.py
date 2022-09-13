@@ -16,7 +16,7 @@ import math
 import unittest
 
 import gz
-from gz.math import MassMatrix3d, Material, Planed, Sphered, Vector2d, Vector3d
+from gz.math7 import MassMatrix3d, Material, Planed, Sphered, Vector2d, Vector3d
 
 
 class TestSphere(unittest.TestCase):

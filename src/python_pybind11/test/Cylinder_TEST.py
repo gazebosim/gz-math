@@ -16,7 +16,7 @@ import math
 import unittest
 
 import gz
-from gz.math import Cylinderd, MassMatrix3d, Material, Quaterniond
+from gz.math7 import Cylinderd, MassMatrix3d, Material, Quaterniond
 
 
 class TestCylinder(unittest.TestCase):
