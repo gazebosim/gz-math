@@ -37,7 +37,7 @@ you should use `ign-math<#>`.
 
 On macOS, add OSRF packages:
   ```
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   brew tap osrf/simulation
   ```
 
@@ -46,9 +46,8 @@ Install Gazebo Math:
   brew install gz-math<#>
   ```
 
-Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
-which version you need. From version 7 you should use `gz-math<#>` but for lower versions
-you should use `ign-math<#>`.
+Be sure to replace `<#>` with a number value, such as 6 or 7, depending on
+which version you need.
 
 ## Windows
 
