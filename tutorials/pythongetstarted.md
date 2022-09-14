@@ -76,6 +76,6 @@ if __name__ == "__main__":
 
 Running this program should result in the following output:
 
-```
+```{.bash}
 Distance from 1 3 5 to 2 4 6 is 1.7320508075688772
 ```
