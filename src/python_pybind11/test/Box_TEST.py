@@ -46,30 +46,30 @@ class TestBox(unittest.TestCase):
         self.assertEqual(box, box2)
 
         # Dimension and mat constructor
-        box = Boxd(1.0, 2.0, 5.0, Material(gz.math.MaterialType.WOOD))
+        box = Boxd(1.0, 2.0, 5.0, Material(gz.math7.MaterialType.WOOD))
         self.assertEqual(Vector3d(1.0, 2.0, 5.0), box.size())
-        self.assertEqual(Material(gz.math.MaterialType.WOOD), box.material())
+        self.assertEqual(Material(gz.math7.MaterialType.WOOD), box.material())
 
-        box2 = Boxd(1.0, 2.0, 5.0, Material(gz.math.MaterialType.WOOD))
+        box2 = Boxd(1.0, 2.0, 5.0, Material(gz.math7.MaterialType.WOOD))
         self.assertEqual(box, box2)
 
         # Vector Dimension and mat constructor
-        box = Boxd(Vector3d(2.2, 2.0, 10.0), Material(gz.math.MaterialType.WOOD))
+        box = Boxd(Vector3d(2.2, 2.0, 10.0), Material(gz.math7.MaterialType.WOOD))
         self.assertEqual(Vector3d(2.2, 2.0, 10.0), box.size())
-        self.assertEqual(Material(gz.math.MaterialType.WOOD), box.material())
+        self.assertEqual(Material(gz.math7.MaterialType.WOOD), box.material())
 
-        box2 = Boxd(Vector3d(2.2, 2.0, 10.0), Material(gz.math.MaterialType.WOOD))
+        box2 = Boxd(Vector3d(2.2, 2.0, 10.0), Material(gz.math7.MaterialType.WOOD))
         self.assertEqual(box, box2)
 
     def test_mutators(self):
         box = Boxd()
         box.set_size(100.1, 2.3, 5.6)
-        box.set_material(Material(gz.math.MaterialType.PINE))
+        box.set_material(Material(gz.math7.MaterialType.PINE))
 
         self.assertEqual(100.1, box.size().x())
         self.assertEqual(2.3, box.size().y())
         self.assertEqual(5.6, box.size().z())
-        self.assertEqual(Material(gz.math.MaterialType.PINE), box.material())
+        self.assertEqual(Material(gz.math7.MaterialType.PINE), box.material())
 
         box.set_size(Vector3d(3.4, 1.2, 0.5))
         self.assertEqual(3.4, box.size().x())
