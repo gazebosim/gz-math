@@ -16,7 +16,7 @@ import math
 import unittest
 
 import gz
-from gz.math import MassMatrix3d, Material, Planed, Sphered, Vector2d, Vector3d
+from gz.math7 import MassMatrix3d, Material, Planed, Sphered, Vector2d, Vector3d
 
 
 class TestSphere(unittest.TestCase):
@@ -39,28 +39,28 @@ class TestSphere(unittest.TestCase):
         self.assertEqual(sphere, sphere2)
 
         # Radius and mat
-        sphere = Sphered(1.0, Material(gz.math.MaterialType.WOOD))
+        sphere = Sphered(1.0, Material(gz.math7.MaterialType.WOOD))
         self.assertEqual(1.0, sphere.radius())
-        self.assertEqual(Material(gz.math.MaterialType.WOOD), sphere.material())
+        self.assertEqual(Material(gz.math7.MaterialType.WOOD), sphere.material())
 
-        sphere2 = Sphered(1.0, Material(gz.math.MaterialType.WOOD))
+        sphere2 = Sphered(1.0, Material(gz.math7.MaterialType.WOOD))
         self.assertEqual(sphere, sphere2)
 
     def test_comparison(self):
-        wood = Sphered(0.1, Material(gz.math.MaterialType.WOOD))
+        wood = Sphered(0.1, Material(gz.math7.MaterialType.WOOD))
 
         modified = wood
         self.assertEqual(wood, modified)
 
         modified.set_radius(1.0)
-        wood = Sphered(0.1, Material(gz.math.MaterialType.WOOD))
+        wood = Sphered(0.1, Material(gz.math7.MaterialType.WOOD))
         self.assertNotEqual(wood, modified)
 
         modified = wood
-        wood = Sphered(0.1, Material(gz.math.MaterialType.WOOD))
+        wood = Sphered(0.1, Material(gz.math7.MaterialType.WOOD))
         self.assertEqual(wood, modified)
 
-        modified.set_material(Material(gz.math.MaterialType.PINE))
+        modified.set_material(Material(gz.math7.MaterialType.PINE))
         self.assertNotEqual(wood, modified)
 
     def test_mutators(self):
@@ -69,10 +69,10 @@ class TestSphere(unittest.TestCase):
         self.assertEqual(Material(), sphere.material())
 
         sphere.set_radius(.123)
-        sphere.set_material(Material(gz.math.MaterialType.PINE))
+        sphere.set_material(Material(gz.math7.MaterialType.PINE))
 
         self.assertEqual(.123, sphere.radius())
-        self.assertEqual(Material(gz.math.MaterialType.PINE), sphere.material())
+        self.assertEqual(Material(gz.math7.MaterialType.PINE), sphere.material())
 
     def test_volume_and_density(self):
         mass = 1.0

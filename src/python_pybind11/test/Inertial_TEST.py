@@ -16,7 +16,7 @@ import copy
 import math
 import unittest
 
-from gz.math import Inertiald, Quaterniond, Pose3d, Matrix3d, MassMatrix3d, Vector3d
+from gz.math7 import Inertiald, Quaterniond, Pose3d, Matrix3d, MassMatrix3d, Vector3d
 
 
 class TestInertial(unittest.TestCase):

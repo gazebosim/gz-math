@@ -25,12 +25,12 @@ if __name__ == "__main__":
   main()
 ```
 
-The easiest way to include Gazebo Math is through `import gz.math`.
+The easiest way to include Gazebo Math is through `import gz.math7`.
 
 At this point your main file should look like
 
 ```python
-import gz.math
+import gz.math7
 
 def main():
   pass
@@ -46,7 +46,7 @@ and `Vector3i` (Vector3 using integers). The result of this addition will be a
 main file similar to the following.
 
 ```python
-from gz.math import Vector3d
+from gz.math7 import Vector3d
 
 def main():
   point1 = Vector3d(1, 3, 5)
@@ -60,7 +60,7 @@ Finally, we can compute the distance between `point1` and `point2` using the
 `gz.math.Vector3.distance()` function and output the distance value.
 
 ```python
-from gz.math import Vector3d
+from gz.math7 import Vector3d
 
 def main():
   point1 = Vector3d(1, 3, 5)
@@ -72,4 +72,10 @@ def main():
 
 if __name__ == "__main__":
   main()
+```
+
+Running this program should result in the following output:
+
+```{.bash}
+Distance from 1 3 5 to 2 4 6 is 1.7320508075688772
 ```

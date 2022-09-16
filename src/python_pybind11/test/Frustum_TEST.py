@@ -15,7 +15,7 @@
 import math
 import unittest
 
-from gz.math import Angle, AxisAlignedBox, Frustum, FrustumPlane, Planed, Pose3d, Vector3d
+from gz.math7 import Angle, AxisAlignedBox, Frustum, FrustumPlane, Planed, Pose3d, Vector3d
 
 
 class TestFrustrum(unittest.TestCase):
