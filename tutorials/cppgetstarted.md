@@ -71,14 +71,14 @@ To compile this code on UNIX with pkg-config, use the following command:
 
 ```{.bash}
 c++ $(pkg-config --cflags gz-math7) main.cpp -o main
-~~~
+```
 
 The program can then be run as:
 
 ```{.bash}
 $ ./main
 Distance from 1 3 5 to 2 4 6 is 1.73205
-~~~
+```
 
 ## Bonus: Vector2 Example
 
