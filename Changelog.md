@@ -22,32 +22,32 @@
     * [BitBucket pull request 339](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/339)
 
 1. Prevent -0 with out stream operator
-    * [Pull request 206](https://github.com/gazebosim/gz-math/pull/206)
+    * [Pull request #206](https://github.com/gazebosim/gz-math/pull/206)
 
 1. Use <ostream> and <istream> narrower includes, not <iostream>
-    * [Pull request 287](https://github.com/gazebosim/gz-math/pull/287)
+    * [Pull request #287](https://github.com/gazebosim/gz-math/pull/287)
 
 1. Evict large function definitions from the Helpers.hh header file.
-    * [Pull request 288](https://github.com/gazebosim/gz-math/pull/288)
+    * [Pull request #288](https://github.com/gazebosim/gz-math/pull/288)
 
 1. Defer regex construction to avoid static initialization.
-    * [Pull request 289](https://github.com/gazebosim/gz-math/pull/289)
+    * [Pull request #289](https://github.com/gazebosim/gz-math/pull/289)
 
 1. Defer Material::Predefined construction to avoid static initialization.
-    * [Pull request 290](https://github.com/gazebosim/gz-math/pull/290)
+    * [Pull request #290](https://github.com/gazebosim/gz-math/pull/290)
 
 1. Resolve cppcheck errors by adding explicit constructors and consts.
-    * [Pull request 291](https://github.com/gazebosim/gz-math/pull/291)
+    * [Pull request #291](https://github.com/gazebosim/gz-math/pull/291)
 
 1. Remove virtual from destructors of copyable classes.
-    * [Pull request 293](https://github.com/gazebosim/gz-math/pull/293)
+    * [Pull request #293](https://github.com/gazebosim/gz-math/pull/293)
 
 1. Use constexpr for simple static constants.
-    * [Pull request 283](https://github.com/gazebosim/gz-math/pull/283)
+    * [Pull request #283](https://github.com/gazebosim/gz-math/pull/283)
 
 1. Deprecated `appendToStream(std::ostream, T, int)`. Use `appendToStream(std::ostream, T)`
 instead.
-    * [Pull request 376](https://github.com/gazebosim/gz-math/pull/376)
+    * [Pull request #376](https://github.com/gazebosim/gz-math/pull/376)
 
 ## Gazebo Math 6.x
 
