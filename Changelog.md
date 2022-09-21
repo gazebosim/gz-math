@@ -11,43 +11,192 @@
     * [BitBucket pull request 319](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/319)
 
 1. Updates per issue [#101](https://github.com/gazebosim/gz-math/issues/101).
+    * Helpers: [BitBucket pull request 330](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/330),
+      [BitBucket pull request 323](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/323)
     * Matrix3: [BitBucket pull request 328](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/328)
     * Pose: [BitBucket pull request 329](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/329)
-    * Quaternion: [BitBucket pull request 327](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/327)
+    * Quaternion: [BitBucket pull request 327](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/327),
+      [BitBucket pull request 338](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/338)
 
 1. Removed deprecations.
+    * [Pull request #377](https://github.com/gazebosim/gz-math/pull/377)
+    * [Pull request #344](https://github.com/gazebosim/gz-math/pull/344)
+    * [BitBucket pull request 322](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/322)
     * [BitBucket pull request 320](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/320)
 
 1. Updated Temperature class documentation, script interface, and added examples.
     * [BitBucket pull request 339](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/339)
 
 1. Prevent -0 with out stream operator
-    * [Pull request 206](https://github.com/gazebosim/gz-math/pull/206)
+    * [Pull request #206](https://github.com/gazebosim/gz-math/pull/206)
 
-1. Use <ostream> and <istream> narrower includes, not <iostream>
-    * [Pull request 287](https://github.com/gazebosim/gz-math/pull/287)
+1. Use `<ostream>` and `<istream>` narrower includes, not `<iostream>`
+    * [Pull request #287](https://github.com/gazebosim/gz-math/pull/287)
 
 1. Evict large function definitions from the Helpers.hh header file.
-    * [Pull request 288](https://github.com/gazebosim/gz-math/pull/288)
+    * [Pull request #288](https://github.com/gazebosim/gz-math/pull/288)
 
 1. Defer regex construction to avoid static initialization.
-    * [Pull request 289](https://github.com/gazebosim/gz-math/pull/289)
+    * [Pull request #289](https://github.com/gazebosim/gz-math/pull/289)
 
 1. Defer Material::Predefined construction to avoid static initialization.
-    * [Pull request 290](https://github.com/gazebosim/gz-math/pull/290)
+    * [Pull request #290](https://github.com/gazebosim/gz-math/pull/290)
 
 1. Resolve cppcheck errors by adding explicit constructors and consts.
-    * [Pull request 291](https://github.com/gazebosim/gz-math/pull/291)
+    * [Pull request #291](https://github.com/gazebosim/gz-math/pull/291)
 
 1. Remove virtual from destructors of copyable classes.
-    * [Pull request 293](https://github.com/gazebosim/gz-math/pull/293)
+    * [Pull request #293](https://github.com/gazebosim/gz-math/pull/293)
 
 1. Use constexpr for simple static constants.
-    * [Pull request 283](https://github.com/gazebosim/gz-math/pull/283)
+    * [Pull request #283](https://github.com/gazebosim/gz-math/pull/283)
 
-1. Deprecated `appendToStream(std::ostream, T, int)`. Use `appendToStream(std::ostream, T)`
-instead.
-    * [Pull request 376](https://github.com/gazebosim/gz-math/pull/376)
+1. Fix output stream operator
+    * [Pull request #376](https://github.com/gazebosim/gz-math/pull/376)
+    * [Pull request #454](https://github.com/gazebosim/gz-math/pull/454)
+    * [Pull request #499](https://github.com/gazebosim/gz-math/pull/499)
+
+1. Tutorial updates
+    * [Pull request #505](https://github.com/gazebosim/gz-math/pull/505)
+    * [Pull request #502](https://github.com/gazebosim/gz-math/pull/502)
+    * [Pull request #501](https://github.com/gazebosim/gz-math/pull/501)
+    * [Pull request #500](https://github.com/gazebosim/gz-math/pull/500)
+    * [Pull request #496](https://github.com/gazebosim/gz-math/pull/496)
+    * [Pull request #495](https://github.com/gazebosim/gz-math/pull/495)
+    * [Pull request #493](https://github.com/gazebosim/gz-math/pull/493)
+    * [Pull request #492](https://github.com/gazebosim/gz-math/pull/492)
+    * [Pull request #147](https://github.com/gazebosim/gz-math/pull/147)
+    * [BitBucket pull request 341](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/341)
+
+1. Fixed quaternion from euler example
+    * [Pull request #494](https://github.com/gazebosim/gz-math/pull/494)
+
+1. Rename the python library as gz.math7
+    * [Pull request #503](https://github.com/gazebosim/gz-math/pull/503)
+
+1. Add option to skip pybind11 and SWIG
+    * [Pull request #480](https://github.com/gazebosim/gz-math/pull/480)
+
+1. Python bindings
+    * [Pull request #497](https://github.com/gazebosim/gz-math/pull/497)
+    * [Pull request #488](https://github.com/gazebosim/gz-math/pull/488)
+    * [Pull request #400](https://github.com/gazebosim/gz-math/pull/400)
+    * [Pull request #380](https://github.com/gazebosim/gz-math/pull/380)
+    * [Pull request #379](https://github.com/gazebosim/gz-math/pull/379)
+    * [Pull request #280](https://github.com/gazebosim/gz-math/pull/280)
+
+1. Add a Time Interpolation API
+    * [Pull request #456](https://github.com/gazebosim/gz-math/pull/456)
+
+1. Add fluid added mass to inertial
+    * [Pull request #459](https://github.com/gazebosim/gz-math/pull/459)
+
+1. VolumetricGridLookupField: generalize index type, add constructor
+    * [Pull request #475](https://github.com/gazebosim/gz-math/pull/475)
+
+1. Drop unnecessary moving window filter pimpl
+    * [Pull request #294](https://github.com/gazebosim/gz-math/pull/294)
+
+1. Migrate ign -> gz
+    * [Pull request #466](https://github.com/gazebosim/gz-math/pull/466)
+    * [Pull request #463](https://github.com/gazebosim/gz-math/pull/463)
+    * [Pull request #462](https://github.com/gazebosim/gz-math/pull/462)
+    * [Pull request #445](https://github.com/gazebosim/gz-math/pull/445)
+    * [Pull request #441](https://github.com/gazebosim/gz-math/pull/441)
+    * [Pull request #437](https://github.com/gazebosim/gz-math/pull/437)
+    * [Pull request #430](https://github.com/gazebosim/gz-math/pull/430)
+    * [Pull request #427](https://github.com/gazebosim/gz-math/pull/427)
+    * [Pull request #420](https://github.com/gazebosim/gz-math/pull/420)
+    * [Pull request #419](https://github.com/gazebosim/gz-math/pull/419)
+    * [Pull request #413](https://github.com/gazebosim/gz-math/pull/413)
+
+1. Fix output stream operator
+    * [Pull request #376](https://github.com/gazebosim/gz-math/pull/376)
+    * [Pull request #454](https://github.com/gazebosim/gz-math/pull/454)
+    * [Pull request #499](https://github.com/gazebosim/gz-math/pull/499)
+
+1. Compute distance between points on a general celestial body
+    * [Pull request #434](https://github.com/gazebosim/gz-math/pull/434)
+    * [Pull request #452](https://github.com/gazebosim/gz-math/pull/452)
+
+1. Update GoogleTest to latest version
+    * [Pull request #435](https://github.com/gazebosim/gz-math/pull/435)
+
+1. Reduce compilation time
+    * [Pull request #433](https://github.com/gazebosim/gz-math/pull/433)
+
+1. Pose3: deprecate +, -, and -= operators
+    * [Pull request #381](https://github.com/gazebosim/gz-math/pull/381)
+    * [Pull request #438](https://github.com/gazebosim/gz-math/pull/438)
+
+1. Document `Pose::operator*()`
+    * [Pull request #170](https://github.com/gazebosim/gz-math/pull/170)
+
+1. Subtraction operator for Inertial class
+    * [Pull request #432](https://github.com/gazebosim/gz-math/pull/432)
+
+1. Add linear interpolation methods.
+    * [Pull request #412](https://github.com/gazebosim/gz-math/pull/412)
+
+1. Infrastructure
+    * [Pull request #440](https://github.com/gazebosim/gz-math/pull/440)
+    * [Pull request #418](https://github.com/gazebosim/gz-math/pull/418)
+    * [Pull request #414](https://github.com/gazebosim/gz-math/pull/414)
+    * [Pull request #410](https://github.com/gazebosim/gz-math/pull/410)
+    * [Pull request #409](https://github.com/gazebosim/gz-math/pull/409)
+    * [Pull request #386](https://github.com/gazebosim/gz-math/pull/386)
+    * [Pull request #364](https://github.com/gazebosim/gz-math/pull/364)
+    * [Pull request #296](https://github.com/gazebosim/gz-math/pull/296)
+    * [Pull request #149](https://github.com/gazebosim/gz-math/pull/149)
+    * [Pull request #118](https://github.com/gazebosim/gz-math/pull/118)
+    * [Pull request #113](https://github.com/gazebosim/gz-math/pull/113)
+    * [Pull request #111](https://github.com/gazebosim/gz-math/pull/111)
+
+1. Add PiecewiseScalarField3 class
+    * [Pull request #398](https://github.com/gazebosim/gz-math/pull/398)
+
+1. Add AdditivelySeparableScalarField3 class
+    * [Pull request #397](https://github.com/gazebosim/gz-math/pull/397)
+
+1. Add Polynomial3 class
+    * [Pull request #393](https://github.com/gazebosim/gz-math/pull/393)
+
+1. Add Interval and Region3 classes
+    * [Pull request #388](https://github.com/gazebosim/gz-math/pull/388)
+    * [Pull request #390](https://github.com/gazebosim/gz-math/pull/390)
+    * [Pull request #396](https://github.com/gazebosim/gz-math/pull/396)
+
+1. Add missing headers
+    * [Pull request #385](https://github.com/gazebosim/gz-math/pull/385)
+    * [Pull request #342](https://github.com/gazebosim/gz-math/pull/342)
+    * [Pull request #327](https://github.com/gazebosim/gz-math/pull/327)
+    * [Pull request #162](https://github.com/gazebosim/gz-math/pull/162)
+    * [Pull request #119](https://github.com/gazebosim/gz-math/pull/119)
+
+1. [math7] Tidy up unused variables
+    * [Pull request #372](https://github.com/gazebosim/gz-math/pull/372)
+
+1. Use ImplPtr from ign-utils where relevant
+    * [Pull request #299](https://github.com/gazebosim/gz-math/pull/299)
+
+1. Modified cmake target name for Ruby interfaces
+    * [Pull request #285](https://github.com/gazebosim/gz-math/pull/285)
+
+1. Make API / naming consistent for Frustum, Edge, Angle
+    * [Pull request #329](https://github.com/gazebosim/gz-math/pull/329)
+
+1. Reduce Stopwatch test sleep times
+    * [Pull request #326](https://github.com/gazebosim/gz-math/pull/326)
+
+1. Speed up Helpers::Pair test
+    * [Pull request #295](https://github.com/gazebosim/gz-math/pull/295)
+
+1. Make Vector2 API more consistent with Vector3
+    * [Pull request #130](https://github.com/gazebosim/gz-math/pull/130)
+    * [Issue #71](https://github.com/gazebosim/gz-math/issues/71)
+
+1. Clean up a few new GCC9 warnings
+    * [BitBucket pull request 336](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/336)
 
 ## Gazebo Math 6.x
 
