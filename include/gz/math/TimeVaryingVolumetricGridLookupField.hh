@@ -87,6 +87,10 @@ namespace gz
         const std::vector<X> &_values2,
         const X _default = X(0)
       ) const;
+
+      /// \brief Get the bounds of this grid field.
+      /// \return A pair of vectors.
+      public: std::pair<Vector3<V>, Vector3<V>> Bounds(const S &_session);
     };
 
     /// \brief An in-memory session. Loads the whole dataset in memory and
@@ -285,6 +289,22 @@ namespace gz
         // Return nullopt if we are out of range
         return std::nullopt;
       }
+
+      /// \brief Get the bounds of this grid field.
+      /// \return A pair of vectors. All zeros if session is invalid.
+      public: std::pair<Vector3<V>, Vector3<V>> Bounds(
+        const InMemorySession<T, V> &_session) const
+      {
+        if (_session.iter == this->gridFields.end())
+        {
+          // Out of bounds
+          return std::make_pair<Vector3<T>, Vector3<T>>(
+            Vector3<T>{0, 0, 0}, Vector3<T>{0, 0, 0}
+          );
+        }
+        return _session.iter->second.Bounds();
+      }
+
       private: std::map<T, VolumetricGridLookupField<V>> gridFields;
     };
   }

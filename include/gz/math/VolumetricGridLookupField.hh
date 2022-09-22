@@ -262,6 +262,23 @@ namespace gz
           }
         }
 
+        /// \brief Get the bounds of this grid field.
+        /// \return A pair of vectors.
+        public: std::pair<Vector3<T>, Vector3<T>> Bounds() const
+        {
+          return std::make_pair<Vector3<T>, Vector3<T>>(
+            Vector3<T>{
+              x_indices_by_lat.MinKey(),
+              y_indices_by_lon.MinKey(),
+              z_indices_by_depth.MinKey()
+            },
+            Vector3<T>{
+              x_indices_by_lat.MaxKey(),
+              y_indices_by_lon.MaxKey(),
+              z_indices_by_depth.MaxKey()
+            });
+        }
+
       };
     }
   }
