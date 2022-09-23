@@ -1012,7 +1012,7 @@ TEST(HelpersTest, AppendToStream)
   EXPECT_EQ(out.str(), "0 456 0 3.14159 3.141592654");
 
 // Skip end of test for arm64
-#ifndef __arm__
+#if !defined __ARM_ARCH
   out << " "
       << std::setprecision(std::numeric_limits<long double>::digits10 + 1);
 
@@ -1032,6 +1032,6 @@ TEST(HelpersTest, AppendToStream)
 #else
   EXPECT_EQ(out.str(), "0 456 0 3.14159 3.141592654 3.141592653589793239 3.14");
 #endif
-//  ifndef __arm__
+//  ifndef __ARM_ARCH
 #endif
 }
