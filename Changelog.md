@@ -1,5 +1,10 @@
 ## Gazebo Math 7.x
 
+### Gazebo Math 7.0.2
+
+1. Update to disable tests failing on arm64
+    * [Pull request #512](https://github.com/gazebosim/gz-math/pull/512)
+
 ### Gazebo Math 7.0.1
 
 1. Disable tests failing on arm64
