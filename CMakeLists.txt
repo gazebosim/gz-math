@@ -148,8 +148,5 @@ if (BUILD_TESTING)
   gz_build_examples(
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/examples
     BINARY_DIR ${PROJECT_BINARY_DIR}/examples
-    DEPENDENCIES 
-      gz-cmake${GZ_CMAKE_VER} 
-      gz-utils${GZ_UTILS_VER} 
   )
 endif()
