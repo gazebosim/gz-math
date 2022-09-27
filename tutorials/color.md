@@ -7,7 +7,7 @@ This tutorial explains how to use the `Color` class from Gazebo Math library.
 Go to `gz-math/examples` and use `cmake` to compile the code:
 
 ```{.sh}
-git clone https://github.com/gazebosim/gz-math/ -b ign-math7
+git clone https://github.com/gazebosim/gz-math/ -b gz-math7
 cd gz-math/examples
 mkdir build
 cd build
@@ -55,4 +55,3 @@ You can also set or read a color in HSV.
 \snippet examples/color_example.cc Set value from HSV
 
 There are more functions in `Color`. Take a look at the [API](https://gazebosim.org/api/math/6.9/classignition_1_1math_1_1Color.html)
-

@@ -14,14 +14,14 @@
 
 import math
 import unittest
-from gz.math import Rand
-from gz.math import SignalMaxAbsoluteValue
-from gz.math import SignalMaximum
-from gz.math import SignalMean
-from gz.math import SignalMinimum
-from gz.math import SignalRootMeanSquare
-from gz.math import SignalStats
-from gz.math import SignalVariance
+from gz.math7 import Rand
+from gz.math7 import SignalMaxAbsoluteValue
+from gz.math7 import SignalMaximum
+from gz.math7 import SignalMean
+from gz.math7 import SignalMinimum
+from gz.math7 import SignalRootMeanSquare
+from gz.math7 import SignalStats
+from gz.math7 import SignalVariance
 
 
 class TestSignalStats(unittest.TestCase):

@@ -86,7 +86,7 @@ TEST(MovingWindowFilterTest, FilterSomething)
 {
   math::MovingWindowFilter<double> doubleMWF;
   math::MovingWindowFilter<double> doubleMWF2;
-  math::MovingWindowFilter<gz::math::Vector3d> vectorMWF;
+  math::MovingWindowFilter<math::Vector3d> vectorMWF;
 
   doubleMWF.SetWindowSize(10);
   doubleMWF2.SetWindowSize(2);
@@ -96,7 +96,7 @@ TEST(MovingWindowFilterTest, FilterSomething)
   {
     doubleMWF.Update(static_cast<double>(i));
     doubleMWF2.Update(static_cast<double>(i));
-    gz::math::Vector3d v(1.0*static_cast<double>(i),
+    math::Vector3d v(1.0*static_cast<double>(i),
         2.0*static_cast<double>(i),
         3.0*static_cast<double>(i));
     vectorMWF.Update(v);
@@ -108,9 +108,9 @@ TEST(MovingWindowFilterTest, FilterSomething)
   EXPECT_DOUBLE_EQ(doubleMWF.Value(), sum/10.0);
   EXPECT_DOUBLE_EQ(doubleMWF2.Value(), (18.0+19.0)/2.0);
 
-  gz::math::Vector3d vsum;
+  math::Vector3d vsum;
   for (unsigned int i = 0; i < 20; ++i)
-    vsum += gz::math::Vector3d(1.0*static_cast<double>(i),
+    vsum += math::Vector3d(1.0*static_cast<double>(i),
         2.0*static_cast<double>(i),
         3.0*static_cast<double>(i));
   EXPECT_EQ(vectorMWF.Value(), vsum / 20.0);

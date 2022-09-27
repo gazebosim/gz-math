@@ -6,8 +6,9 @@ if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 message(STATUS "Building pybind11 interfaces")
+set(BINDINGS_MODULE_NAME "math${PROJECT_VERSION_MAJOR}")
 # Split from main extension and converted to pybind11
-pybind11_add_module(math SHARED
+pybind11_add_module(${BINDINGS_MODULE_NAME} MODULE
   src/_gz_math_pybind11.cc
   src/Angle.cc
   src/AxisAlignedBox.cc
@@ -51,21 +52,24 @@ pybind11_add_module(math SHARED
   src/Vector3Stats.cc
 )
 
-target_link_libraries(math PRIVATE
+target_link_libraries(${BINDINGS_MODULE_NAME} PRIVATE
   ${PROJECT_LIBRARY_TARGET_NAME}
 )
+
+target_compile_definitions(${BINDINGS_MODULE_NAME} PRIVATE
+  BINDINGS_MODULE_NAME=${BINDINGS_MODULE_NAME})
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   # Workaround for Clang and pybind11 on Focal
   # https://github.com/pybind/pybind11/issues/1604
   # Resolved by newer versions of pybind11
   if(${pybind11_VERSION} VERSION_LESS "2.4.4")
-    target_compile_options(math PRIVATE -fsized-deallocation)
+    target_compile_options(${BINDINGS_MODULE_NAME} PRIVATE -fsized-deallocation)
   endif()
 
   # Suppress warnings that clang misidentifies:
   # https://github.com/pybind/pybind11/issues/1893
-  target_compile_options(math PRIVATE -Wno-self-assign-overloaded)
+  target_compile_options(${BINDINGS_MODULE_NAME} PRIVATE -Wno-self-assign-overloaded)
 endif()
 
 if(USE_SYSTEM_PATHS_FOR_PYTHON_INSTALLATION)
@@ -107,32 +111,9 @@ function(configure_build_install_location _library_name)
   install(TARGETS ${_library_name}
     DESTINATION "${GZ_PYTHON_INSTALL_PATH}/"
   )
-
-  # TODO(CH3): Deprecated. Remove on tock.
-  # Install Python library symlinks
-  if(${GZ_PYTHON_INSTALL_PATH} MATCHES "gz$")
-    cmake_policy(SET CMP0087 NEW)  # Allow evaluation of generator expressions in install(CODE )
-    file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/ignition")
-
-    string(REGEX REPLACE "gz$" "ignition" IGN_PYTHON_INSTALL_PATH ${GZ_PYTHON_INSTALL_PATH})
-    if (WIN32)  # Windows requires copy instead of symlink
-      install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E copy \
-          ../gz/${GZ_PYTHON_INSTALL_PATH}\/$<TARGET_FILE_NAME:${_library_name}> \
-          ${PROJECT_BINARY_DIR}\/ignition/$<TARGET_FILE_NAME:${_library_name}>)")
-    else()
-      install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \
-          ../gz/$<TARGET_FILE_NAME:${_library_name}> \
-          ${PROJECT_BINARY_DIR}\/ignition/$<TARGET_FILE_NAME:${_library_name}>)")
-    endif()
-
-    install(FILES ${PROJECT_BINARY_DIR}\/ignition/$<TARGET_FILE_NAME:${_library_name}>
-      DESTINATION "${IGN_PYTHON_INSTALL_PATH}/"
-    )
-  endif()
-
 endfunction()
 
-configure_build_install_location(math)
+configure_build_install_location(${BINDINGS_MODULE_NAME})
 
 if (BUILD_TESTING)
   # Add the Python tests

@@ -7,7 +7,7 @@ Previous Tutorial: \ref install
 This tutorial describes how to get started using Gazebo Math with C++.
 
 We will run through an example that determines the distance between two
-points in 3D space. Start by creating a bare-bones main file using the
+points in 3D space. Start by creating a bare-bones `main.cpp` file using the
 editor of your choice.
 
 ```{.cpp}
@@ -65,6 +65,19 @@ int main()
     distance << std::endl;
   return 0;
 }
+```
+
+To compile this code on UNIX with pkg-config, use the following command:
+
+```{.bash}
+c++ $(pkg-config --cflags gz-math7) main.cpp -o main
+```
+
+The program can then be run as:
+
+```{.bash}
+$ ./main
+Distance from 1 3 5 to 2 4 6 is 1.73205
 ```
 
 ## Bonus: Vector2 Example
