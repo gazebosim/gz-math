@@ -18,8 +18,9 @@
 #ifndef GZ_MATH_VOLUMETRIC_GRID_LOOKUP_FIELD_HH_
 #define GZ_MATH_VOLUMETRIC_GRID_LOOKUP_FIELD_HH_
 
-#include <vector>
 #include <optional>
+#include <utility>
+#include <vector>
 
 #include <gz/math/Vector3.hh>
 #include <gz/math/detail/InterpolationPoint.hh>
@@ -266,7 +267,7 @@ namespace gz
         /// \return A pair of vectors.
         public: std::pair<Vector3<T>, Vector3<T>> Bounds() const
         {
-          return std::make_pair<Vector3<T>, Vector3<T>>(
+          return std::pair<Vector3<T>, Vector3<T>>(
             Vector3<T>{
               x_indices_by_lat.MinKey(),
               y_indices_by_lon.MinKey(),
