@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-from gz.math import Kmeans, Vector3d
+from gz.math7 import Kmeans, Vector3d
 
 # Create some observations.
 obs = list([])

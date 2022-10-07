@@ -30,13 +30,14 @@ sudo apt install libgz-math<#>-dev
 ```
 
 Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
-which version you need.
+which version you need. From version 7 you should use `gz-math<#>` but for lower versions
+you should use `ign-math<#>`.
 
 ### macOS
 
 On macOS, add OSRF packages:
   ```
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   brew tap osrf/simulation
   ```
 
@@ -45,7 +46,7 @@ Install Gazebo Math:
   brew install gz-math<#>
   ```
 
-Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
+Be sure to replace `<#>` with a number value, such as 6 or 7, depending on
 which version you need.
 
 ## Windows
@@ -65,7 +66,8 @@ conda install libgz-math<#> --channel conda-forge
 ```
 
 Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
-which version you need.
+which version you need. From version 7 you should use `gz-math<#>` but for lower versions
+you should use `ign-math<#>`.
 
 # Source Installation
 
@@ -127,10 +129,11 @@ The optional Eigen component of Gazebo Math requires:
 
 3. Clone the repository
   ```
-  git clone https://github.com/gazebosim/gz-math -b ign-math<#>
+  git clone https://github.com/gazebosim/gz-math -b gz-math<#>
   ```
   Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
-  which version you need.
+  which version you need. From version 7 you should use `gz-math<#>` but for lower versions
+  you should use `ign-math<#>`.
 
 4. Configure and build
   ```
@@ -150,17 +153,19 @@ The optional Eigen component of Gazebo Math requires:
 
 1. Clone the repository
   ```
-  git clone https://github.com/gazebosim/gz-math -b ign-math<#>
+  git clone https://github.com/gazebosim/gz-math -b gz-math<#>
   ```
   Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
-  which version you need.
+  which version you need. From version 7 you should use `gz-math<#>` but for lower versions
+  you should use `ign-math<#>`.
 
 2. Install dependencies
   ```
   brew install --only-dependencies gz-math<#>
   ```
   Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
-  which version you need.
+  which version you need. From version 7 you should use `gz-math<#>` but for lower versions
+  you should use `ign-math<#>`.
 
 3. Configure and build
   ```
@@ -190,6 +195,7 @@ The optional Eigen component of Gazebo Math requires:
   ```
   conda search libgz-math* --channel conda-forge --info
   ```
+  From version 7 you should use `gz-math<#>` but for lower versions you should use `ign-math<#>`.
   See the [Conda release repository](https://github.com/conda-forge/libignition-math4-feedstock) for more information.
 
   Install dependencies, replacing `<#>` with the desired version:
@@ -199,9 +205,11 @@ The optional Eigen component of Gazebo Math requires:
 
 3. Navigate to where you would like to build the library, and clone the repository.
   ```
-  # Optionally, append `-b ign-math#` (replace # with a number) to check out a specific version
+  # Optionally, append `-b gz-math#` (replace # with a number) to check out a specific version
   git clone https://github.com/gazebosim/gz-math.git
   ```
+  From version 7 you should use `gz-math<#>` but for lower versions
+  you should use `ign-math<#>`.
 
 4. Configure and build
   ```
