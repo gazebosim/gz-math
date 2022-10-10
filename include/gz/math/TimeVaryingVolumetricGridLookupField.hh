@@ -298,7 +298,7 @@ namespace gz
         if (_session.iter == this->gridFields.end())
         {
           // Out of bounds
-          return std::make_pair<Vector3<T>, Vector3<T>>(
+          return std::pair<Vector3<T>, Vector3<T>>(
             Vector3<T>{0, 0, 0}, Vector3<T>{0, 0, 0}
           );
         }

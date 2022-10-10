@@ -19,6 +19,8 @@ release will remove the deprecated code.
       * CMake `-config` files
       * Paths that depend on the project name
 
+  1. Python library imports such `import ignition.math` and `from ignition import math` should be replaced with `import gz.math7` and `from gz import math7`. Note the change from `ignition` to `gz` and the addition of the major version number as a suffix to the package name.
+
 ### Deprecations
 
 1. **Angle.hh**
@@ -74,9 +76,6 @@ release will remove the deprecated code.
     + ***Deprecation:*** public: void W(T)
     + ***Replacement:*** public: void SetW(T)
 
-1. **Helpers.hh**
-    + **Deprecation:** template<typename T> inline void appendToStream(std::ostream, T, int)
-    + **Replacement:** template<typename T> inline void appendToStream(std::ostream, T)
 1. The `ignition` namespace is deprecated and will be removed in future versions.  Use `gz` instead.
 1. Header files under `ignition/...` are deprecated and will be removed in future versions.
    Use `gz/...` instead.
@@ -92,7 +91,6 @@ release will remove the deprecated code.
    1. `IGN_MASSMATRIX3_DEFAULT_TOLERANCE`
 1. All `IGN_*_SIZE_T` variables are deprecated and will be removed in future versions.
     Please use `GZ_*_SIZE_T` instead.
-1. Python library `ignition` namespaces should be replaced with `gz`.
 
 
 ### Modifications

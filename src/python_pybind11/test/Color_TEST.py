@@ -14,8 +14,8 @@
 
 import math
 import unittest
-from gz.math import Color
-from gz.math import Vector3f
+from gz.math7 import Color
+from gz.math7 import Vector3f
 
 
 class TestColor(unittest.TestCase):
