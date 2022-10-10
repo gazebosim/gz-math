@@ -186,11 +186,11 @@ TEST(VolumetricGridLookupField, AxisIndexTest)
 {
   AxisIndex<double> axis;
   EXPECT_EQ(axis.MinKey(), 0.0);
-  EXPECT_EQ(axis.MaxKey(), 0.0);  
+  EXPECT_EQ(axis.MaxKey(), 0.0);
   axis.AddIndexIfNotFound(300);
   axis.AddIndexIfNotFound(300);
   EXPECT_EQ(axis.MinKey(), 300.0);
-  EXPECT_EQ(axis.MaxKey(), 300.0);  
+  EXPECT_EQ(axis.MaxKey(), 300.0);
   EXPECT_EQ(axis.GetNumUniqueIndices(), 1UL);
   EXPECT_EQ(axis.GetIndex(300).value(), 0UL);
   EXPECT_EQ(axis.GetIndex(200).has_value(), false);
