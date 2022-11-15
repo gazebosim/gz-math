@@ -18,8 +18,9 @@
 #ifndef GZ_MATH_VOLUMETRIC_GRID_LOOKUP_FIELD_HH_
 #define GZ_MATH_VOLUMETRIC_GRID_LOOKUP_FIELD_HH_
 
-#include <vector>
 #include <optional>
+#include <utility>
+#include <vector>
 
 #include <gz/math/Vector3.hh>
 #include <gz/math/detail/InterpolationPoint.hh>
@@ -260,6 +261,23 @@ namespace gz
             // should never get here
             return std::nullopt;
           }
+        }
+
+        /// \brief Get the bounds of this grid field.
+        /// \return A pair of vectors.
+        public: std::pair<Vector3<T>, Vector3<T>> Bounds() const
+        {
+          return std::pair<Vector3<T>, Vector3<T>>(
+            Vector3<T>{
+              x_indices_by_lat.MinKey(),
+              y_indices_by_lon.MinKey(),
+              z_indices_by_depth.MinKey()
+            },
+            Vector3<T>{
+              x_indices_by_lat.MaxKey(),
+              y_indices_by_lon.MaxKey(),
+              z_indices_by_depth.MaxKey()
+            });
         }
 
       };

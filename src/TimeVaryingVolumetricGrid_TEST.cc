@@ -63,3 +63,55 @@ TEST(TimeVaryingVolumetricGridTest, TestConstruction)
   val = grid.LookUp(new_sess.value(), Vector3d{2.5, 2.5, 2.5});
   ASSERT_FALSE(val.has_value());
 }
+
+/////////////////////////////////////////////////
+TEST(TimeVaryingVolumetricGridTest, TestBounds)
+{
+  InMemoryTimeVaryingVolumetricGridFactory<double, double> gridFactory;
+
+  for (double t = 0; t <= 1; t+=0.2)
+  {
+    for (double x = -1; x <= 1; x+=0.5)
+    {
+      for (double y = -1; y <= 1; y+=0.5)
+      {
+        for (double z = -1; z <= 1; z+=0.5)
+        {
+          gridFactory.AddPoint(t, Vector3d{x, y, z}, t);
+        }
+      }
+    }
+  }
+
+  auto grid = gridFactory.Build();
+  auto session = grid.CreateSession();
+
+  auto [min, max] = grid.Bounds(session);
+
+  ASSERT_NEAR(min.X(), -1.0, 1e-6);
+  ASSERT_NEAR(min.Y(), -1.0, 1e-6);
+  ASSERT_NEAR(min.Z(), -1.0, 1e-6);
+
+  ASSERT_NEAR(max.X(), 1.0, 1e-6);
+  ASSERT_NEAR(max.Y(), 1.0, 1e-6);
+  ASSERT_NEAR(max.Z(), 1.0, 1e-6);
+}
+
+/////////////////////////////////////////////////
+TEST(TimeVaryingVolumetricGridTest, TestEmptyGrid)
+{
+  InMemoryTimeVaryingVolumetricGridFactory<double, double> gridFactory;
+
+  auto grid = gridFactory.Build();
+  auto session = grid.CreateSession();
+
+  auto [min, max] = grid.Bounds(session);
+
+  ASSERT_NEAR(min.X(), 0, 1e-6);
+  ASSERT_NEAR(min.Y(), 0, 1e-6);
+  ASSERT_NEAR(min.Z(), 0, 1e-6);
+
+  ASSERT_NEAR(max.X(), 0, 1e-6);
+  ASSERT_NEAR(max.Y(), 0, 1e-6);
+  ASSERT_NEAR(max.Z(), 0, 1e-6);
+}
