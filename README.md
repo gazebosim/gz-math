@@ -9,9 +9,9 @@
 
 Build | Status
 -- | --
-Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-math/branch/main/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-math/branch/main)
-Ubuntu Focal  | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_math-ci-main-focal-amd64)](https://build.osrfoundation.org/job/ignition_math-ci-main-focal-amd64)
-Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_math-ci-main-homebrew-amd64)](https://build.osrfoundation.org/job/ignition_math-ci-main-homebrew-amd64)
+Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-math/branch/gz-math7/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-math/branch/gz-math7)
+Ubuntu Focal  | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_math-ci-gz-math7-focal-amd64)](https://build.osrfoundation.org/job/ignition_math-ci-gz-math7-focal-amd64)
+Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_math-ci-gz-math7-homebrew-amd64)](https://build.osrfoundation.org/job/ignition_math-ci-gz-math7-homebrew-amd64)
 Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ign_math-ci-win)](https://build.osrfoundation.org/job/ign_math-ci-win)
 
 Gazebo Math, a component of [Gazebo](https://gazebosim.org), provides general purpose math

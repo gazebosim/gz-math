@@ -13,10 +13,10 @@
 # limitations under the License.
 
 import unittest
-from gz.math import MovingWindowFilterd
-from gz.math import MovingWindowFilteri
-from gz.math import MovingWindowFilterv3
-from gz.math import Vector3d
+from gz.math7 import MovingWindowFilterd
+from gz.math7 import MovingWindowFilteri
+from gz.math7 import MovingWindowFilterv3
+from gz.math7 import Vector3d
 
 
 class TestFilter(unittest.TestCase):
