@@ -23,7 +23,7 @@
 import datetime
 import math
 
-from gz.math import Angle, DiffDriveOdometry
+from gz.math8 import Angle, DiffDriveOdometry
 
 odom = DiffDriveOdometry()
 

@@ -22,7 +22,7 @@
 # 2. Use gnuplot to create a plot:
 #     gnuplot -c rand_view_normal.gp > normal.jpg
 #     gnuplot -c rand_view_uniform.gp > uniform.jpg
-from gz.math import Rand
+from gz.math8 import Rand
 import sys
 
 if (len(sys.argv) < 2):

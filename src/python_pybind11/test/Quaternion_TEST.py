@@ -14,11 +14,11 @@
 
 import math
 import unittest
-from gz.math import Matrix3d
-from gz.math import Matrix4d
-from gz.math import Quaterniond
-from gz.math import Quaternionf
-from gz.math import Vector3d
+from gz.math8 import Matrix3d
+from gz.math8 import Matrix4d
+from gz.math8 import Quaterniond
+from gz.math8 import Quaternionf
+from gz.math8 import Vector3d
 
 
 class TestQuaternion(unittest.TestCase):

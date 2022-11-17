@@ -14,7 +14,7 @@
 
 import math
 import unittest
-from gz.math import Helpers, Intervald, Polynomial3d, Vector4d, isnan
+from gz.math8 import Helpers, Intervald, Polynomial3d, Vector4d, isnan
 
 
 class TestInterval(unittest.TestCase):

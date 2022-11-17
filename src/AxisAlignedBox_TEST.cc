@@ -598,6 +598,6 @@ TEST(AxisAlignedBoxTest, Volume)
   AxisAlignedBox box;
   EXPECT_DOUBLE_EQ(0.0, box.Volume());
 
-  AxisAlignedBox box2(math::Vector3d(-1, -2, -3), math::Vector3d(1, 2, 3));
+  AxisAlignedBox box2(Vector3d(-1, -2, -3), Vector3d(1, 2, 3));
   EXPECT_DOUBLE_EQ(48.0, box2.Volume());
 }

@@ -16,12 +16,12 @@ import sys
 import unittest
 import math
 
-from gz.math import sort3
-from gz.math import MassMatrix3d
-from gz.math import Material
-from gz.math import Vector3d
-from gz.math import Matrix3d
-from gz.math import Quaterniond
+from gz.math8 import sort3
+from gz.math8 import MassMatrix3d
+from gz.math8 import Material
+from gz.math8 import Vector3d
+from gz.math8 import Matrix3d
+from gz.math8 import Quaterniond
 
 GZ_PI = 3.14159265358979323846
 GZ_PI_2 = 1.57079632679489661923

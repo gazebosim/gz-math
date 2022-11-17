@@ -15,7 +15,7 @@
 import math
 import unittest
 
-from gz.math import OrientedBoxd, MassMatrix3d, Material, Pose3d, Vector3d
+from gz.math8 import OrientedBoxd, MassMatrix3d, Material, Pose3d, Vector3d
 
 g_tolerance = 1e-6
 

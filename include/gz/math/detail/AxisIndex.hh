@@ -45,6 +45,30 @@ namespace gz
         /// \brief Number of indices
         private: int numIndices{0};
 
+        /// \brief Minimum key
+        /// \return the minimum key or zero if the axis is empty.
+        public: T MinKey() const
+        {
+          auto key = axisIndex.begin();
+          if (key == axisIndex.end())
+          {
+            return T(0);
+          }
+          return key->first;
+        }
+
+        /// \brief Maximum key
+        /// \return the maximum key or zero if the axis is empty.
+        public: T MaxKey() const
+        {
+          auto key = axisIndex.rbegin();
+          if (key == axisIndex.rend())
+          {
+            return T(0);
+          }
+          return key->first;
+        }
+
         /// \brief Register the existance of a measurement at _value.
         /// \param[in] _value The position of the measurement.
         public: void AddIndexIfNotFound(T _value)

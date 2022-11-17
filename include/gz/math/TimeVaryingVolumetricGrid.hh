@@ -53,6 +53,10 @@ class TimeVaryingVolumetricGrid
   /// \param[in] _pos - The position of the point we want to query
   public: std::optional<V> LookUp(const S &_session, const Vector3<P> &_pos)
     const;
+
+  /// \brief Get the bounds of this grid field at given time.
+  /// \return A pair of vectors. All zeros if session is invalid.
+  public: std::pair<Vector3<V>, Vector3<V>> Bounds(const S &_session) const;
 };
 
 /// \brief Specialization of TimeVaryingVolumetricGrid which loads the whole of
@@ -91,6 +95,14 @@ class TimeVaryingVolumetricGrid<T, V, InMemorySession<T, P>, P>
       values,
       _pos);
     return result;
+  }
+
+  /// \brief Get the bounds of this grid field at given time.
+  /// \return A pair of vectors. All zeros if session is invalid.
+  public: std::pair<Vector3<V>, Vector3<V>> Bounds(
+    const InMemorySession<T, P> &_session) const
+  {
+    return indices.Bounds(_session);
   }
 
   /// Buffer for values being stored

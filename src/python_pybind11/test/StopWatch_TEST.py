@@ -16,7 +16,7 @@ import time
 import unittest
 from datetime import datetime, timedelta
 
-from gz.math import Stopwatch
+from gz.math8 import Stopwatch
 
 
 class TestBox(unittest.TestCase):

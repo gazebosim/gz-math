@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import unittest
-from gz.math import Temperature
+from gz.math8 import Temperature
 
 
 class TestTemperature(unittest.TestCase):

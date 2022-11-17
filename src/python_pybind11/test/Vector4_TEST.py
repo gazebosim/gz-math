@@ -16,8 +16,8 @@ import copy
 import math
 import unittest
 
-from gz.math import Vector4d
-from gz.math import Vector4f
+from gz.math8 import Vector4d
+from gz.math8 import Vector4f
 
 
 class TestVector4(unittest.TestCase):
