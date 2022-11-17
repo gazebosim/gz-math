@@ -15,7 +15,7 @@
 import math
 import unittest
 
-from gz.math7 import AxisAlignedBox, Helpers, Line3d, Vector3d
+from gz.math8 import AxisAlignedBox, Helpers, Line3d, Vector3d
 
 
 class TestAxisAlignedBox(unittest.TestCase):

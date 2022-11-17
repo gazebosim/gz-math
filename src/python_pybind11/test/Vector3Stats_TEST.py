@@ -13,8 +13,8 @@
 # limitations under the License.
 
 import unittest
-from gz.math7 import Vector3d
-from gz.math7 import Vector3Stats
+from gz.math8 import Vector3d
+from gz.math8 import Vector3Stats
 
 
 class TestVector3Stats(unittest.TestCase):

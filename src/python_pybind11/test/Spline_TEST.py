@@ -14,8 +14,8 @@
 
 import math
 import unittest
-from gz.math7 import Spline
-from gz.math7 import Vector3d
+from gz.math8 import Spline
+from gz.math8 import Vector3d
 
 
 class TestSpline(unittest.TestCase):

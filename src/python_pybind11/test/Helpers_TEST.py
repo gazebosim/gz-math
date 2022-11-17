@@ -15,7 +15,7 @@
 import math
 import unittest
 
-from gz.math7 import (Helpers, gz_box_volume, gz_box_volume_v, gz_cylinder_volume,
+from gz.math8 import (Helpers, gz_box_volume, gz_box_volume_v, gz_cylinder_volume,
                            gz_sphere_volume, Vector3d, equal, fixnan,
                            greater_or_near_equal, is_even, is_odd, is_power_of_two, isnan,
                            is_time_string, less_or_near_equal, max, mean, min,

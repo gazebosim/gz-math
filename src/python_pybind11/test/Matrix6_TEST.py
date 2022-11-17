@@ -14,7 +14,7 @@
 
 import math
 import unittest
-from gz.math7 import Matrix3d, Matrix6d, Matrix6dCorner
+from gz.math8 import Matrix3d, Matrix6d, Matrix6dCorner
 
 
 class TestMatrix6(unittest.TestCase):

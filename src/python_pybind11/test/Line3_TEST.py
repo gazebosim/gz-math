@@ -14,8 +14,8 @@
 
 import math
 import unittest
-from gz.math7 import Line3d
-from gz.math7 import Vector3d
+from gz.math8 import Line3d
+from gz.math8 import Vector3d
 
 
 class TestLine3d(unittest.TestCase):

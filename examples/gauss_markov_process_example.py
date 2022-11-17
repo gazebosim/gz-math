@@ -26,7 +26,7 @@
 # 2. Use gnuplot to create a plot:
 #     gnuplot -e 'set terminal jpeg; plot "plot.data" with lines' > out.jpg
 import datetime
-from gz.math7 import GaussMarkovProcess
+from gz.math8 import GaussMarkovProcess
 
 # Create the process with:
 #   * Start value of 20.2

@@ -14,7 +14,7 @@
 
 import unittest
 
-from gz.math7 import AxisAlignedBox, Planed, PlaneSide, Vector2d, Vector3d
+from gz.math8 import AxisAlignedBox, Planed, PlaneSide, Vector2d, Vector3d
 
 
 class TestPlane(unittest.TestCase):
