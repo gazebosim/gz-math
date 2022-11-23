@@ -14,10 +14,10 @@
  * limitations under the License.
  *
 */
-#include "ignition/math/Temperature.hh"
+#include "gz/math/Temperature.hh"
 
 /// \brief Private data for the Temperature class.
-class ignition::math::TemperaturePrivate
+class gz::math::TemperaturePrivate
 {
   /// \brief Default constructor
   public: TemperaturePrivate() : kelvin(0.0) {}
@@ -30,7 +30,7 @@ class ignition::math::TemperaturePrivate
   public: double kelvin;
 };
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 /////////////////////////////////////////////////

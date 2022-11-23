@@ -17,12 +17,12 @@
 
 #include <gtest/gtest.h>
 
-#include "ignition/math/Pose3.hh"
-#include "ignition/math/Quaternion.hh"
-#include "ignition/math/Matrix4.hh"
-#include "ignition/math/Vector3.hh"
+#include "gz/math/Pose3.hh"
+#include "gz/math/Quaternion.hh"
+#include "gz/math/Matrix4.hh"
+#include "gz/math/Vector3.hh"
 
-using namespace ignition;
+using namespace gz;
 
 /////////////////////////////////////////////////
 TEST(Matrix4dTest, Construct)

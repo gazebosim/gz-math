@@ -21,7 +21,7 @@
 
 #include "StopWatch.hh"
 
-#include <ignition/math/Stopwatch.hh>
+#include <gz/math/Stopwatch.hh>
 
 namespace ignition
 {
@@ -31,7 +31,7 @@ namespace python
 {
 void defineMathStopwatch(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::Stopwatch;
+  using Class = gz::math::Stopwatch;
   std::string pyclass_name = typestr;
   py::class_<Class>(m,
                     pyclass_name.c_str(),

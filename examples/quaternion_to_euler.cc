@@ -17,9 +17,9 @@
 
 #include <iostream>
 #include <sstream>
-#include <ignition/math/Angle.hh>
-#include <ignition/math/Matrix3.hh>
-#include <ignition/math/Quaternion.hh>
+#include <gz/math/Angle.hh>
+#include <gz/math/Matrix3.hh>
+#include <gz/math/Quaternion.hh>
 
 // Copied from urdfdom
 static inline double strToDouble(const char *in)
@@ -65,7 +65,7 @@ int main(int argc, char **argv)
             << "\n  Y " << y
             << "\n  Z " << z
             << std::endl;
-  ignition::math::Quaterniond q(w, x, y, z);
+  gz::math::Quaterniond q(w, x, y, z);
   q.Normalize();
   std::cout << "to"
             << "\n  W " << q.W()
@@ -74,9 +74,9 @@ int main(int argc, char **argv)
             << "\n  Z " << q.Z()
             << std::endl;
 
-  ignition::math::Matrix3d m(q);
+  gz::math::Matrix3d m(q);
 //![constructor]
-  ignition::math::Vector3d euler(q.Euler());
+  gz::math::Vector3d euler(q.Euler());
 //![constructor]
 
   std::cout << "\nConverting to Euler angles\n";

@@ -14,10 +14,10 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_DETAIL_BOX_HH_
-#define IGNITION_MATH_DETAIL_BOX_HH_
+#ifndef GZ_MATH_DETAIL_BOX_HH_
+#define GZ_MATH_DETAIL_BOX_HH_
 
-#include "ignition/math/Triangle3.hh"
+#include "gz/math/Triangle3.hh"
 
 #include <algorithm>
 #include <set>
@@ -40,7 +40,7 @@ Box<T>::Box(T _length, T _width, T _height)
 //////////////////////////////////////////////////
 template<typename T>
 Box<T>::Box(T _length, T _width, T _height,
-    const ignition::math::Material &_mat)
+    const gz::math::Material &_mat)
 {
   this->size.X(_length);
   this->size.Y(_width);
@@ -57,7 +57,7 @@ Box<T>::Box(const Vector3<T> &_size)
 
 //////////////////////////////////////////////////
 template<typename T>
-Box<T>::Box(const Vector3<T> &_size, const ignition::math::Material &_mat)
+Box<T>::Box(const Vector3<T> &_size, const gz::math::Material &_mat)
 {
   this->size = _size;
   this->material = _mat;
@@ -88,14 +88,14 @@ void Box<T>::SetSize(const math::Vector3<T> &_size)
 
 //////////////////////////////////////////////////
 template<typename T>
-const ignition::math::Material &Box<T>::Material() const
+const gz::math::Material &Box<T>::Material() const
 {
   return this->material;
 }
 
 //////////////////////////////////////////////////
 template<typename T>
-void Box<T>::SetMaterial(const ignition::math::Material &_mat)
+void Box<T>::SetMaterial(const gz::math::Material &_mat)
 {
   this->material = _mat;
 }

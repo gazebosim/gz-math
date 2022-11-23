@@ -15,12 +15,12 @@
  *
 */
 #include <chrono>
-#include "ignition/math/Stopwatch.hh"
+#include "gz/math/Stopwatch.hh"
 
-using namespace ignition::math;
+using namespace gz::math;
 
 // Private data class
-class ignition::math::StopwatchPrivate
+class gz::math::StopwatchPrivate
 {
   /// \brief Default constructor.
   public: StopwatchPrivate() = default;

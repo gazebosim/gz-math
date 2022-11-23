@@ -18,10 +18,10 @@
 #include <gtest/gtest.h>
 #include <cmath>
 
-#include "ignition/math/Helpers.hh"
-#include "ignition/math/Vector2.hh"
+#include "gz/math/Helpers.hh"
+#include "gz/math/Vector2.hh"
 
-using namespace ignition;
+using namespace gz;
 
 /////////////////////////////////////////////////
 TEST(Vector2Test, Construction)

@@ -16,12 +16,12 @@
 */
 #include <cmath>
 
-#include "ignition/math/AxisAlignedBox.hh"
-#include "ignition/math/Frustum.hh"
-#include "ignition/math/Matrix4.hh"
+#include "gz/math/AxisAlignedBox.hh"
+#include "gz/math/Frustum.hh"
+#include "gz/math/Matrix4.hh"
 #include "FrustumPrivate.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 /////////////////////////////////////////////////

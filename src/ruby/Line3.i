@@ -17,9 +17,9 @@
 
 %module line3
 %{
-#include <ignition/math/Line3.hh>
-#include <ignition/math/Helpers.hh>
-#include <ignition/math/Vector3.hh>
+#include <gz/math/Line3.hh>
+#include <gz/math/Helpers.hh>
+#include <gz/math/Vector3.hh>
 %}
 
 %include "std_string.i"

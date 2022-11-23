@@ -17,7 +17,7 @@
 
 #include <string>
 
-#include <ignition/math/Temperature.hh>
+#include <gz/math/Temperature.hh>
 
 #include "Temperature.hh"
 #include <pybind11/operators.h>
@@ -32,7 +32,7 @@ namespace python
 {
 void defineMathTemperature(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::Temperature;
+  using Class = gz::math::Temperature;
   std::string pyclass_name = typestr;
   auto toString = [](const Class &si) {
     std::stringstream stream;

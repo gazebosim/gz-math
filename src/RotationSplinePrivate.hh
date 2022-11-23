@@ -14,12 +14,12 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_MATH_ROTATIONSPLINEPRIVATE_HH_
-#define IGNITION_MATH_ROTATIONSPLINEPRIVATE_HH_
+#ifndef GZ_MATH_ROTATIONSPLINEPRIVATE_HH_
+#define GZ_MATH_ROTATIONSPLINEPRIVATE_HH_
 
 #include <vector>
-#include <ignition/math/config.hh>
-#include "ignition/math/Quaternion.hh"
+#include <gz/math/config.hh>
+#include "gz/math/Quaternion.hh"
 
 namespace ignition
 {

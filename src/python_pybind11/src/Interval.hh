@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__INTERVAL_HH_
-#define IGNITION_MATH_PYTHON__INTERVAL_HH_
+#ifndef GZ_MATH_PYTHON__INTERVAL_HH_
+#define GZ_MATH_PYTHON__INTERVAL_HH_
 
 #include <string>
 #include <sstream>
@@ -24,7 +24,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 
-#include <ignition/math/Interval.hh>
+#include <gz/math/Interval.hh>
 
 namespace py = pybind11;
 using namespace pybind11::literals;
@@ -35,7 +35,7 @@ namespace math
 {
 namespace python
 {
-/// Help define a pybind11 wrapper for an ignition::math::Interval
+/// Help define a pybind11 wrapper for an gz::math::Interval
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -43,7 +43,7 @@ namespace python
 template<typename T>
 void helpDefineMathInterval(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::Interval<T>;
+  using Class = gz::math::Interval<T>;
   auto toString = [](const Class &si) {
     std::stringstream stream;
     stream << si;
@@ -104,7 +104,7 @@ void helpDefineMathInterval(py::module &m, const std::string &typestr)
     .def("__repr__", toString);
 }
 
-/// Define a pybind11 wrapper for an ignition::math::Interval
+/// Define a pybind11 wrapper for an gz::math::Interval
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -115,4 +115,4 @@ void defineMathInterval(py::module &m, const std::string &typestr);
 }  // namespace math
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__INTERVAL_HH_
+#endif  // GZ_MATH_PYTHON__INTERVAL_HH_

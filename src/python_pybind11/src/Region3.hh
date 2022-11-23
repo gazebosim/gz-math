@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_MATH_PYTHON__REGION3_HH_
-#define IGNITION_MATH_PYTHON__REGION3_HH_
+#ifndef GZ_MATH_PYTHON__REGION3_HH_
+#define GZ_MATH_PYTHON__REGION3_HH_
 
 #include <string>
 #include <sstream>
@@ -24,8 +24,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 
-#include <ignition/math/Region3.hh>
-#include <ignition/math/Vector3.hh>
+#include <gz/math/Region3.hh>
+#include <gz/math/Vector3.hh>
 
 namespace py = pybind11;
 using namespace pybind11::literals;
@@ -36,7 +36,7 @@ namespace math
 {
 namespace python
 {
-/// Help define a pybind11 wrapper for an ignition::math::Region3
+/// Help define a pybind11 wrapper for an gz::math::Region3
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -44,7 +44,7 @@ namespace python
 template<typename T>
 void helpDefineMathRegion3(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::Region3<T>;
+  using Class = gz::math::Region3<T>;
   auto toString = [](const Class &si) {
     std::stringstream stream;
     stream << si;
@@ -96,7 +96,7 @@ void helpDefineMathRegion3(py::module &m, const std::string &typestr)
     .def("__repr__", toString);
 }
 
-/// Define a pybind11 wrapper for an ignition::math::Region3
+/// Define a pybind11 wrapper for an gz::math::Region3
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -107,4 +107,4 @@ void defineMathRegion3(py::module &m, const std::string &typestr);
 }  // namespace math
 }  // namespace ignition
 
-#endif  // IGNITION_MATH_PYTHON__REGION3_HH_
+#endif  // GZ_MATH_PYTHON__REGION3_HH_
