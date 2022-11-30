@@ -21,8 +21,8 @@
 
 #include "AxisAlignedBox.hh"
 
-#include <ignition/math/AxisAlignedBox.hh>
-#include <ignition/math/Vector3.hh>
+#include <gz/math/AxisAlignedBox.hh>
+#include <gz/math/Vector3.hh>
 
 using namespace pybind11::literals;
 
@@ -34,7 +34,7 @@ namespace python
 {
 void defineMathAxisAlignedBox(py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::AxisAlignedBox;
+  using Class = gz::math::AxisAlignedBox;
   auto toString = [](const Class &si) {
     std::stringstream stream;
     stream << si;
@@ -49,8 +49,8 @@ void defineMathAxisAlignedBox(py::module &m, const std::string &typestr)
     .def(py::init<const Class&>())
     .def(py::init<double, double, double,
                   double, double, double>())
-    .def(py::init<const ignition::math::Vector3d&,
-                  const ignition::math::Vector3d>())
+    .def(py::init<const gz::math::Vector3d&,
+                  const gz::math::Vector3d>())
     .def("x_length",
          &Class::XLength,
          "Get the length along the x dimension")
@@ -74,8 +74,8 @@ void defineMathAxisAlignedBox(py::module &m, const std::string &typestr)
          "Get the volume of the box in m^3.")
     .def(py::self + py::self)
     .def(py::self += py::self)
-    .def(py::self + ignition::math::Vector3d())
-    .def(py::self - ignition::math::Vector3d())
+    .def(py::self + gz::math::Vector3d())
+    .def(py::self - gz::math::Vector3d())
     .def(py::self == py::self)
     .def(py::self != py::self)
     .def("min",

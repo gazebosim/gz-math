@@ -14,10 +14,10 @@
  * limitations under the License.
  *
 */
-#include "ignition/math/Temperature.hh"
+#include "gz/math/Temperature.hh"
 
 /// \brief Private data for the Temperature class.
-class ignition::math::TemperaturePrivate
+class gz::math::TemperaturePrivate
 {
   /// \brief Default constructor
   public: TemperaturePrivate() : kelvin(0.0) {}
@@ -30,7 +30,7 @@ class ignition::math::TemperaturePrivate
   public: double kelvin;
 };
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 /////////////////////////////////////////////////
@@ -303,13 +303,13 @@ const Temperature &Temperature::operator/=(const Temperature &_temp)
 /////////////////////////////////////////////////
 bool Temperature::operator==(const Temperature &_temp) const
 {
-  return ignition::math::equal(this->dataPtr->kelvin, _temp.Kelvin());
+  return equal(this->dataPtr->kelvin, _temp.Kelvin());
 }
 
 /////////////////////////////////////////////////
 bool Temperature::operator==(const double _temp) const
 {
-  return ignition::math::equal(this->dataPtr->kelvin, _temp);
+  return equal(this->dataPtr->kelvin, _temp);
 }
 
 /////////////////////////////////////////////////

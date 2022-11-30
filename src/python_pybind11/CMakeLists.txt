@@ -22,6 +22,7 @@ pybind11_add_module(math SHARED
   src/Frustum.cc
   src/GaussMarkovProcess.cc
   src/Helpers.cc
+  src/Interval.cc
   src/Kmeans.cc
   src/Line2.cc
   src/Line3.cc
@@ -29,11 +30,14 @@ pybind11_add_module(math SHARED
   src/Material.cc
   src/Matrix3.cc
   src/Matrix4.cc
+  src/Matrix6.cc
   src/MovingWindowFilter.cc
   src/PID.cc
+  src/Polynomial3.cc
   src/Pose3.cc
   src/Quaternion.cc
   src/Rand.cc
+  src/Region3.cc
   src/RollingMean.cc
   src/RotationSpline.cc
   src/SemanticVersion.cc
@@ -111,6 +115,7 @@ if (BUILD_TESTING)
     GaussMarkovProcess_TEST
     Helpers_TEST
     Inertial_TEST
+    Interval_TEST
     Kmeans_TEST
     Line2_TEST
     Line3_TEST
@@ -118,13 +123,16 @@ if (BUILD_TESTING)
     Material_TEST
     Matrix3_TEST
     Matrix4_TEST
+    Matrix6_TEST
     MovingWindowFilter_TEST
     OrientedBox_TEST
     PID_TEST
     Plane_TEST
+    Polynomial3_TEST
     Pose3_TEST
     Quaternion_TEST
     Rand_TEST
+    Region3_TEST
     RollingMean_TEST
     RotationSpline_TEST
     SemanticVersion_TEST

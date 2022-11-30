@@ -17,10 +17,10 @@
 
 #include <gtest/gtest.h>
 
-#include "ignition/math/Helpers.hh"
-#include "ignition/math/Pose3.hh"
+#include "gz/math/Helpers.hh"
+#include "gz/math/Pose3.hh"
 
-using namespace ignition;
+using namespace gz;
 
 /////////////////////////////////////////////////
 TEST(PoseTest, Construction)

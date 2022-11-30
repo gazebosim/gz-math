@@ -14,11 +14,11 @@
  * limitations under the License.
  *
 */
-#include "ignition/math/Quaternion.hh"
-#include "ignition/math/RotationSpline.hh"
+#include "gz/math/Quaternion.hh"
+#include "gz/math/RotationSpline.hh"
 #include "RotationSplinePrivate.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 /////////////////////////////////////////////////
@@ -72,9 +72,9 @@ Quaterniond RotationSpline::Interpolate(const unsigned int _fromIndex,
   }
 
   // Fast special cases
-  if (math::equal(_t, 0.0))
+  if (equal(_t, 0.0))
     return this->dataPtr->points[_fromIndex];
-  else if (math::equal(_t, 1.0))
+  else if (equal(_t, 1.0))
     return this->dataPtr->points[_fromIndex + 1];
 
   // double interpolation

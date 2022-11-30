@@ -18,12 +18,12 @@
 #include <numeric>
 #include <limits>
 #include <deque>
-#include "ignition/math/RollingMean.hh"
+#include "gz/math/RollingMean.hh"
 
-using namespace ignition::math;
+using namespace gz::math;
 
 /// \brief Private data
-class ignition::math::RollingMeanPrivate
+class gz::math::RollingMeanPrivate
 {
   /// \brief The window size
   public: size_t windowSize{10};

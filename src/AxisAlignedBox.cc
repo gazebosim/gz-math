@@ -15,13 +15,13 @@
  *
 */
 #include <cmath>
-#include <ignition/math/AxisAlignedBox.hh>
+#include <gz/math/AxisAlignedBox.hh>
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 // Private data for AxisAlignedBox class
-class ignition::math::AxisAlignedBoxPrivate
+class gz::math::AxisAlignedBoxPrivate
 {
   /// \brief Minimum corner of the box
   public: Vector3d min = Vector3d(MAX_D, MAX_D, MAX_D);
@@ -44,8 +44,8 @@ AxisAlignedBox::AxisAlignedBox(double _vec1X, double _vec1Y, double _vec1Z,
   this->dataPtr->min.Set(_vec1X, _vec1Y, _vec1Z);
   this->dataPtr->max.Set(_vec2X, _vec2Y, _vec2Z);
 
-  this->dataPtr->min.Min(math::Vector3d(_vec2X, _vec2Y, _vec2Z));
-  this->dataPtr->max.Max(math::Vector3d(_vec1X, _vec1Y, _vec1Z));
+  this->dataPtr->min.Min(Vector3d(_vec2X, _vec2Y, _vec2Z));
+  this->dataPtr->max.Max(Vector3d(_vec1X, _vec1Y, _vec1Z));
 }
 
 //////////////////////////////////////////////////
@@ -93,15 +93,15 @@ double AxisAlignedBox::ZLength() const
 }
 
 //////////////////////////////////////////////////
-math::Vector3d AxisAlignedBox::Size() const
+Vector3d AxisAlignedBox::Size() const
 {
-  return math::Vector3d(this->XLength(),
+  return Vector3d(this->XLength(),
                         this->YLength(),
                         this->ZLength());
 }
 
 //////////////////////////////////////////////////
-math::Vector3d AxisAlignedBox::Center() const
+Vector3d AxisAlignedBox::Center() const
 {
   return 0.5 * this->dataPtr->min + 0.5 * this->dataPtr->max;
 }

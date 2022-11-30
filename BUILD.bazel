@@ -43,7 +43,7 @@ ign_export_header(
 
 public_headers_no_gen = glob([
     "include/ignition/math/*.hh",
-    "include/ignition/math/detail/*.hh",
+    "include/gz/math/detail/*.hh",
     "include/ignition/math/graph/*.hh",
 ])
 

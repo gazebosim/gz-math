@@ -15,13 +15,13 @@
  *
 */
 
-#include "ignition/math/Material.hh"
-#include "ignition/math/Helpers.hh"
+#include "gz/math/Material.hh"
+#include "gz/math/Helpers.hh"
 
 // Placing the kMaterialData in a separate file for conveniece and clarity.
 #include "MaterialType.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 // Initialize the static map of Material objects based on the kMaterialData.
@@ -40,7 +40,7 @@ static const std::map<MaterialType, Material> kMaterials = []()
 }();
 
 // Private data for the Material class
-class ignition::math::MaterialPrivate
+class gz::math::MaterialPrivate
 {
   /// \brief The material type.
   public: MaterialType type = MaterialType::UNKNOWN_MATERIAL;

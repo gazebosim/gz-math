@@ -1,4 +1,61 @@
-## Ignition Math 6.x
+## Gazebo Math 6.x
+
+## Gazebo Math 6.13.0 (2022-08-31)
+
+1. Support migration and migrate headers
+    * [Pull request #483](https://github.com/gazebosim/gz-math/pull/483)
+
+1. Remove redundant namespace references
+    * [Pull request #479](https://github.com/gazebosim/gz-math/pull/479)
+
+## Gazebo Math 6.12.0 (2022-07-27)
+
+1. Added Helper function isTimeString to Python
+    * [Pull request #471](https://github.com/gazebosim/gz-math/pull/471)
+
+1. Ignition -> Gazebo
+    * [Pull request #467](https://github.com/gazebosim/gz-math/pull/467)
+    * [Pull request #468](https://github.com/gazebosim/gz-math/pull/468)
+    * [Pull request #474](https://github.com/gazebosim/gz-math/pull/474)
+
+1. Added `*.pyc` to `.gitignore`
+    * [Pull request #461](https://github.com/gazebosim/gz-math/pull/461)
+
+1. Alphabetize examples
+    * [Pull request #457](https://github.com/gazebosim/gz-math/pull/457)
+
+1. Add `PiecewiseScalarField3` class
+    * [Pull request #398](https://github.com/gazebosim/gz-math/pull/398)
+
+1. Add `AdditivelySeparableScalarField3` class
+    * [Pull request #397](https://github.com/gazebosim/gz-math/pull/397)
+
+1. Add `Polynomial3` class
+    * [Pull request #393](https://github.com/gazebosim/gz-math/pull/393)
+    * [Pull request #451](https://github.com/gazebosim/gz-math/pull/451)
+    * [Pull request #396](https://github.com/gazebosim/gz-math/pull/396)
+
+1. Add `Region3` class
+    * [Pull request #390](https://github.com/gazebosim/gz-math/pull/390)
+    * [Pull request #450](https://github.com/gazebosim/gz-math/pull/450)
+
+1. Add `Interval` class
+    * [Pull request #388](https://github.com/gazebosim/gz-math/pull/388)
+    * [Pull request #449](https://github.com/gazebosim/gz-math/pull/449)
+    * [Pull request #396](https://github.com/gazebosim/gz-math/pull/396)
+
+1. Add Matrix6 class
+    * [Pull request #455](https://github.com/gazebosim/gz-math/pull/455)
+    * [Pull request #469](https://github.com/gazebosim/gz-math/pull/469)
+
+1. Backport newest appendToStream functions
+    * [Pull request #453](https://github.com/gazebosim/gz-math/pull/453)
+
+1. Use pytest to generate junit xml files for python tests
+    * [Pull request #446](https://github.com/gazebosim/gz-math/pull/446)
+
+1. Add Aditya as codeowner
+    * [Pull request #443](https://github.com/gazebosim/gz-math/pull/443)
 
 ## Ignition Math 6.11.0 (2022-05-11)
 
@@ -467,7 +524,7 @@
 
 ### Ignition Math 6.1.0
 
-1. eigen3: add conversion functions for Eigen::AlignedBox3d <=> ignition::math::AxisAlignedBox
+1. eigen3: add conversion functions for Eigen::AlignedBox3d <=> gz::math::AxisAlignedBox
     * [BitBucket pull request 302](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/302)
 
 ### Ignition Math 6.0.0
@@ -498,7 +555,7 @@
     * [BitBucket pull request 301](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/301)
     * [Issue 60](https://github.com/ignitionrobotics/ign-math/issues/60)
 
-1. eigen3: add conversion functions for Eigen::AlignedBox3d <=> ignition::math::AxisAlignedBox
+1. eigen3: add conversion functions for Eigen::AlignedBox3d <=> gz::math::AxisAlignedBox
     * [BitBucket pull request 302](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/302)
 
 

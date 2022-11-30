@@ -22,7 +22,7 @@
 #include <pybind11/operators.h>
 #include <pybind11/chrono.h>
 
-#include <ignition/math/GaussMarkovProcess.hh>
+#include <gz/math/GaussMarkovProcess.hh>
 
 #include "GaussMarkovProcess.hh"
 
@@ -37,7 +37,7 @@ namespace python
 void defineMathGaussMarkovProcess(
   py::module &m, const std::string &typestr)
 {
-  using Class = ignition::math::GaussMarkovProcess;
+  using Class = gz::math::GaussMarkovProcess;
   std::string pyclass_name = typestr;
   py::class_<Class>(m,
                     pyclass_name.c_str(),

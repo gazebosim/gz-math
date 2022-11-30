@@ -15,13 +15,13 @@
  *
 */
 
-#include <ignition/math/GaussMarkovProcess.hh>
-#include <ignition/math/Rand.hh>
+#include <gz/math/GaussMarkovProcess.hh>
+#include <gz/math/Rand.hh>
 
-using namespace ignition::math;
+using namespace gz::math;
 
 //////////////////////////////////////////////////
-class ignition::math::GaussMarkovProcessPrivate
+class gz::math::GaussMarkovProcessPrivate
 {
   /// \brief Current process value.
   public: double value{0};

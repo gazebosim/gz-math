@@ -3,20 +3,23 @@ cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
 #============================================================================
 # Initialize the project
 #============================================================================
-project(ignition-math6 VERSION 6.11.0)
+project(ignition-math6 VERSION 6.13.0)
 
 #============================================================================
 # Find ignition-cmake
 #============================================================================
 # If you get an error at this line, you need to install ignition-cmake
-find_package(ignition-cmake2 2.8.0 REQUIRED)
+find_package(ignition-cmake2 2.13.0 REQUIRED)
 
 #============================================================================
 # Configure the project
 #============================================================================
 set (c++standard 17)
 set (CMAKE_CXX_STANDARD 17)
-ign_configure_project(VERSION_SUFFIX)
+ign_configure_project(
+  REPLACE_IGNITION_INCLUDE_PATH gz/math
+  VERSION_SUFFIX
+)
 
 #============================================================================
 # Set project-specific options
