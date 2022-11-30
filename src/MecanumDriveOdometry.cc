@@ -33,12 +33,13 @@ class ignition::math::MecanumDriveOdometryPrivate
   /// \param[in] _lateral Lateral velocity.
   /// \param[in] _angular Angular velocity.
   public: void IntegrateExact(double _linear, double _lateral, double _angular);
-  
-   /// \brief Integrates the poseusing second order Runge-Kuffa aproximation.
+
+  /// \brief Integrates the pose using second order Runge-Kuffa aproximation.
   /// \param[in] _linear Linear velocity.
   /// \param[in] _lateral Lateral velocity.
   /// \param[in] _angular Angular velocity.
-  public: void IntegrateRungeKutta2(double _linear, double _lateral, double _angular);
+  public: void IntegrateRungeKutta2(double _linear, double _lateral,
+    double _angular);
 
   /// \brief Current timestamp.
   public: clock::time_point lastUpdateTime;
@@ -141,18 +142,23 @@ bool MecanumDriveOdometry::Initialized() const
 }
 
 //////////////////////////////////////////////////
-bool MecanumDriveOdometry::Update(const Angle &_frontLeftPos, const Angle &_frontRightPos, const Angle &_backLeftPos, const Angle &_backRightPos,
-                      const clock::time_point &_time)
+bool MecanumDriveOdometry::Update(const Angle &_frontLeftPos,
+  const Angle &_frontRightPos, const Angle &_backLeftPos,
+  const Angle &_backRightPos, const clock::time_point &_time)
 {
   // Compute x, y and heading using velocity
   const std::chrono::duration<double> dt =
     _time - this->dataPtr->lastUpdateTime;
 
   // Get current wheel joint positions:
-  const double frontLeftWheelCurPos = *_frontLeftPos * this->dataPtr->leftWheelRadius;
-  const double frontRightWheelCurPos = *_frontRightPos * this->dataPtr->rightWheelRadius;
-  const double backLeftWheelCurPos = *_backLeftPos * this->dataPtr->leftWheelRadius;
-  const double backRightWheelCurPos = *_backRightPos * this->dataPtr->rightWheelRadius;
+  const double frontLeftWheelCurPos =
+    *_frontLeftPos * this->dataPtr->leftWheelRadius;
+  const double frontRightWheelCurPos =
+    *_frontRightPos * this->dataPtr->rightWheelRadius;
+  const double backLeftWheelCurPos =
+    *_backLeftPos * this->dataPtr->leftWheelRadius;
+  const double backRightWheelCurPos =
+    *_backRightPos * this->dataPtr->rightWheelRadius;
 
   // Estimate velocity of wheels using old and current position:
   const double frontLeftWheelEstVel = frontLeftWheelCurPos -
@@ -173,13 +179,18 @@ bool MecanumDriveOdometry::Update(const Angle &_frontLeftPos, const Angle &_fron
   this->dataPtr->backLeftWheelOldPos = backLeftWheelCurPos;
   this->dataPtr->backRightWheelOldPos = backRightWheelCurPos;
 
-  // constant used in computing target velocities (TODO: support different wheel radius)
-  const double angularConst = (1 / (4 * (0.5 * (this->dataPtr->wheelSeparation + this->dataPtr->wheelBase))));
+  // constant used in computing target velocities
+  // TODO(danilogsch): support different wheel radius
+  const double angularConst =
+    (1/(4*(0.5*(this->dataPtr->wheelSeparation + this->dataPtr->wheelBase))));
 
   // Compute linear and angular diff
-  const double linear = (frontLeftWheelEstVel + frontRightWheelEstVel + backLeftWheelEstVel + backRightWheelEstVel) * 0.25;
-  const double lateral = (-frontLeftWheelEstVel + frontRightWheelEstVel + backLeftWheelEstVel - backRightWheelEstVel) * 0.25;
-  const double angular = (-frontLeftWheelEstVel + frontRightWheelEstVel - backLeftWheelEstVel + backRightWheelEstVel) * angularConst;
+  const double linear = (frontLeftWheelEstVel + frontRightWheelEstVel
+    + backLeftWheelEstVel + backRightWheelEstVel) * 0.25;
+  const double lateral = (-frontLeftWheelEstVel + frontRightWheelEstVel
+    + backLeftWheelEstVel - backRightWheelEstVel) * 0.25;
+  const double angular = (-frontLeftWheelEstVel + frontRightWheelEstVel
+    - backLeftWheelEstVel + backRightWheelEstVel) * angularConst;
 
   this->dataPtr->IntegrateExact(linear, lateral, angular);
 
@@ -203,8 +214,8 @@ bool MecanumDriveOdometry::Update(const Angle &_frontLeftPos, const Angle &_fron
 }
 
 //////////////////////////////////////////////////
-void MecanumDriveOdometry::SetWheelParams(double _wheelSeparation, double _wheelBase,
-    double _leftWheelRadius, double _rightWheelRadius)
+void MecanumDriveOdometry::SetWheelParams(double _wheelSeparation,
+  double _wheelBase, double _leftWheelRadius, double _rightWheelRadius)
 {
   this->dataPtr->wheelSeparation = _wheelSeparation;
   this->dataPtr->wheelBase = _wheelBase;
@@ -269,7 +280,8 @@ void MecanumDriveOdometryPrivate::IntegrateRungeKutta2(
 }
 
 //////////////////////////////////////////////////
-void MecanumDriveOdometryPrivate::IntegrateExact(double _linear, double _lateral, double _angular)
+void MecanumDriveOdometryPrivate::IntegrateExact(double _linear,
+  double _lateral, double _angular)
 {
   if (std::fabs(_angular) < 1e-6)
   {
@@ -282,8 +294,9 @@ void MecanumDriveOdometryPrivate::IntegrateExact(double _linear, double _lateral
     const double ratio = _linear / _angular;
     const double ratio2 = _lateral / _angular;
     this->heading += _angular;
-    // TODO: Double-check the following equations (based on DiffDriveOdometry):
-    this->x += (ratio * (std::sin(*this->heading) - std::sin(headingOld))) - (-ratio2 * (std::cos(*this->heading) - std::cos(headingOld)));
-    this->y += (-ratio * (std::cos(*this->heading) - std::cos(headingOld))) + (ratio2 * (std::sin(*this->heading) - std::sin(headingOld)));
+    this->x += (ratio * (std::sin(*this->heading) - std::sin(headingOld)))
+      - (-ratio2 * (std::cos(*this->heading) - std::cos(headingOld)));
+    this->y += (-ratio * (std::cos(*this->heading) - std::cos(headingOld)))
+      + (ratio2 * (std::sin(*this->heading) - std::sin(headingOld)));
   }
 }
