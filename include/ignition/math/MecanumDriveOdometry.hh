@@ -78,7 +78,8 @@ namespace ignition
       /// \param[in] _backRightPos Right wheel postion in radians.
       /// \param[in] _time Current time point.
       /// \return True if the odometry is actually updated.
-      public: bool Update(const Angle &_frontLeftPos, const Angle &_frontRightPos, const Angle &_backLeftPos, const Angle &_backRightPos,
+      public: bool Update(const Angle &_frontLeftPos, const Angle &_frontRightPos, 
+                          const Angle &_backLeftPos, const Angle &_backRightPos,
                           const clock::time_point &_time);
 
       /// \brief Get the heading.
