@@ -43,6 +43,7 @@ template<typename T>
 void helpDefineMathVector3(py::module &m, const std::string &typestr)
 {
   using Class = gz::math::Vector3<T>;
+  const int vec_size = 3;
   auto toString = [](const Class &si) {
     std::stringstream stream;
     stream << si;
@@ -159,10 +160,24 @@ void helpDefineMathVector3(py::module &m, const std::string &typestr)
     .def("__deepcopy__", [](const Class &self, py::dict) {
       return Class(self);
     }, "memo"_a)
-    .def("__getitem__",
-         py::overload_cast<const std::size_t>(&Class::operator[], py::const_))
-    .def("__setitem__",
-         [](Class* vec, unsigned index, T val) { (*vec)[index] = val; })
+    .def("__getitem__", [](const Class &self, unsigned index) {
+        if (index >= vec_size) throw py::index_error("Invalid index");
+        return self[index];
+      })
+    .def("__setitem__", [](Class* vec, unsigned index, T val) {
+        if (index >= vec_size) throw py::index_error("Invalid index");
+        (*vec)[index] = val;
+      })
+    .def_buffer([](Class &self) -> py::buffer_info {
+        return py::buffer_info(
+            self.Data(),
+            sizeof(T),
+            py::format_descriptor<T>::format(),
+            1,
+            { vec_size },
+            { sizeof(T) }
+        );
+    })
     .def("__str__", toString)
     .def("__repr__", toString);
 }
