@@ -141,6 +141,22 @@ double PID::Update(const double _error,
     return 0.0;
   }
 
+  // Pass in the derivative error
+  return this->Update(_error, (_error - this->pErrLast) / _dt.count(), _dt);
+}
+
+/////////////////////////////////////////////////
+double PID::Update(const double _error,
+                   double _errorRate,
+                   const std::chrono::duration<double> &_dt)
+{
+  if (_dt == std::chrono::duration<double>(0) ||
+      isnan(_error) || std::isinf(_error) ||
+      isnan(_errorRate) || std::isinf(_errorRate))
+  {
+    return 0.0;
+  }
+
   double pTerm, dTerm;
   this->pErr = _error;
 
@@ -156,12 +172,9 @@ double PID::Update(const double _error,
   if (this->iMax >= this->iMin)
     this->iErr = clamp(this->iErr, this->iMin, this->iMax);
 
-  // Calculate the derivative error
-  if (_dt != std::chrono::duration<double>(0))
-  {
-    this->dErr = (this->pErr - this->pErrLast) / _dt.count();
-    this->pErrLast = this->pErr;
-  }
+  // Use the provided error rate
+  this->dErr = _errorRate;
+  this->pErrLast = this->pErr;
 
   // Calculate derivative contribution to command
   dTerm = this->dGain * this->dErr;
