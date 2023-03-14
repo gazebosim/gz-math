@@ -159,6 +159,21 @@ namespace ignition
 
       /// \brief Update the Pid loop with nonuniform time step size.
       /// \param[in] _error  Error since last call (p_state - p_target).
+      /// \param[in] _errorRate Estimate of error rate, that can be used
+      /// when a smoother estimate is available than the finite difference
+      /// used by Update(const double _error,
+      /// const std::chrono::duration<double> &_dt)
+      /// \param[in] _dt Change in time since last update call.
+      /// Normally, this is called at every time step,
+      /// The return value is an updated command to be passed
+      /// to the object being controlled.
+      /// \return the command value
+      public: double Update(const double _error,
+                            double _errorRate,
+                            const std::chrono::duration<double> &_dt);
+
+      /// \brief Update the Pid loop with nonuniform time step size.
+      /// \param[in] _error  Error since last call (p_state - p_target).
       /// \param[in] _dt Change in time since last update call.
       /// Normally, this is called at every time step,
       /// The return value is an updated command to be passed
