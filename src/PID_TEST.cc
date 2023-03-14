@@ -178,6 +178,9 @@ TEST(PidTest, Update)
   pid.SetIMin(0.0);
   result = pid.Update(5.0, 1.0, std::chrono::duration<double>(10.0));
   EXPECT_DOUBLE_EQ(result, -5.5);
+
+  result = pid.Update(5.0, 1.0, std::chrono::duration<double>(0.0));
+  EXPECT_DOUBLE_EQ(result, 0);
 }
 
 /////////////////////////////////////////////////
