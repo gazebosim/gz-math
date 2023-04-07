@@ -27,9 +27,14 @@ option(SKIP_SWIG
       "Skip generating ruby bindings via Swig"
       OFF)
 
+set(skip_pybind11_default_value OFF)
+if (MSVC)
+  set(skip_pybind11_default_value ON)
+endif()
+
 option(SKIP_PYBIND11
       "Skip generating Python bindings via pybind11"
-      OFF)
+      ${skip_pybind11_default_value})
 
 include(CMakeDependentOption)
 cmake_dependent_option(USE_SYSTEM_PATHS_FOR_RUBY_INSTALLATION
