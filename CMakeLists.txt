@@ -147,7 +147,7 @@ gz_create_docs(
   TUTORIALS_MAINPAGE_MD "${CMAKE_BINARY_DIR}/tutorials.md")
 
 #============================================================================
-# Build examples 
+# Build examples
 #============================================================================
 if (BUILD_TESTING)
   gz_build_examples(
