@@ -74,6 +74,14 @@ TEST(Color, Color)
   EXPECT_FLOAT_EQ(0.0f, clr0.B());
   EXPECT_FLOAT_EQ(1.0f, clr0.A());
   EXPECT_EQ(clr0.AsRGBA(), 255u);
+
+  auto clrcpy = math::Color(clr0);
+  EXPECT_FLOAT_EQ(0.0f, clrcpy.R());
+  EXPECT_FLOAT_EQ(0.0f, clrcpy.G());
+  EXPECT_FLOAT_EQ(0.0f, clrcpy.B());
+  EXPECT_FLOAT_EQ(1.0f, clrcpy.A());
+  EXPECT_EQ(clrcpy.AsRGBA(), 255u);
+
   clr0.A(0.0);
   EXPECT_EQ(clr0.AsRGBA(), 0u);
 
@@ -256,6 +264,12 @@ TEST(Color, Color)
   EXPECT_TRUE(math::equal(0.1f, clr.G()));
   EXPECT_TRUE(math::equal(0.2f, clr.B()));
   EXPECT_TRUE(math::equal(0.3f, clr.A()));
+
+  clrcpy = math::Color(clr);
+  EXPECT_TRUE(math::equal(0.25f, clrcpy.R()));
+  EXPECT_TRUE(math::equal(0.1f, clrcpy.G()));
+  EXPECT_TRUE(math::equal(0.2f, clrcpy.B()));
+  EXPECT_TRUE(math::equal(0.3f, clrcpy.A()));
 }
 
 
