@@ -102,7 +102,13 @@ void defineMathPID(py::module &m, const std::string &typestr)
         &Class::CmdOffset,
         "Get the offset value for the command.")
    .def("update",
-        &Class::Update,
+        py::overload_cast<const double, double,
+        const std::chrono::duration<double> &>(&Class::Update),
+        "Update the Pid loop with nonuniform time step size, and custom error "
+        "rate.")
+   .def("update",
+        py::overload_cast<const double,
+        const std::chrono::duration<double> &>(&Class::Update),
         "Update the Pid loop with nonuniform time step size.")
    .def("set_cmd",
         &Class::SetCmd,
