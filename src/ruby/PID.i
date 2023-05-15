@@ -83,6 +83,11 @@ namespace gz
       double Update(const double error, const double dt) {
         return (*$self).Update(error, std::chrono::duration<double>(dt));
       }
+      double Update(const double error, double errorRate, const double dt) {
+        return (*$self).Update(error, errorRate,
+            std::chrono::duration<double>(dt));
+      }
+
     }
   }
 }

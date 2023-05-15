@@ -47,7 +47,7 @@ Math types.
 
 # Install
 
-See the [installation tutorial](https://gazebosim.org/api/math/6.8/install.html).
+See the [installation tutorial](https://gazebosim.org/api/math/7/install.html).
 
 # Usage
 

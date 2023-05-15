@@ -115,6 +115,13 @@ TEST(MaterialTest, Accessors)
   }
 
   {
+    Material mat("wood");
+    EXPECT_FALSE(mat.Name().empty());
+    mat.SetName("MyWood");
+    EXPECT_EQ("MyWood", mat.Name());
+  }
+
+  {
     Material material;
     material.SetToNearestDensity(19300.0);
     EXPECT_EQ(MaterialType::TUNGSTEN, material.Type());
