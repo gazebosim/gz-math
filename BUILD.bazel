@@ -1,11 +1,15 @@
 load(
-    "//gz_bazel:build_defs.bzl",
+    "@gz//bazel/skylark:build_defs.bzl",
     "GZ_FEATURES",
+    "GZ_ROOT",
     "GZ_VISIBILITY",
-    "cmake_configure_file",
-    "generate_include_header",
-    "gz_config_header",
+    "gz_configure_header",
     "gz_export_header",
+    "gz_include_header",
+)
+load(
+    "@gz//bazel/lint:lint.bzl",
+    "add_lint_tests",
 )
 
 package(
@@ -13,25 +17,15 @@ package(
     features = GZ_FEATURES,
 )
 
-licenses(["notice"])
+licenses(["notice"])  # Apache-2.0
 
 exports_files(["LICENSE"])
 
-PROJECT_NAME = "gz-math"
-
-PROJECT_MAJOR = 8
-
-PROJECT_MINOR = 0
-
-PROJECT_PATCH = 0
-
-# Generates config.hh based on the version numbers in CMake code.
-gz_config_header(
+gz_configure_header(
     name = "config",
     src = "include/gz/math/config.hh.in",
     cmakelists = ["CMakeLists.txt"],
-    project_name = PROJECT_NAME,
-    project_version = (PROJECT_MAJOR, PROJECT_MINOR, PROJECT_PATCH),
+    package = "math",
 )
 
 gz_export_header(
@@ -54,7 +48,7 @@ sources = glob(
     exclude = ["src/*_TEST.cc"],
 )
 
-generate_include_header(
+gz_include_header(
     name = "mathhh_genrule",
     out = "include/gz/math.hh",
     hdrs = public_headers_no_gen + [
@@ -70,20 +64,19 @@ public_headers = public_headers_no_gen + [
 ]
 
 cc_library(
-    name = "gz_math",
+    name = "math",
     srcs = sources + private_headers,
     hdrs = public_headers,
     includes = ["include"],
+    deps = [
+        GZ_ROOT + "utils",
+    ],
 )
 
-# use shared library only when absolutely needd
-cc_binary(
-    name = "libgz-math8.so",
-    includes = ["include"],
-    linkopts = ["-Wl,-soname,libgz-math8.so"],
-    linkshared = True,
-    deps = [
-        ":gz_math",
+test_sources = glob(
+    [
+        "src/*_TEST.cc",
+        "src/graph/*_TEST.cc",
     ],
 )
 
@@ -91,13 +84,10 @@ cc_binary(
     name = src.replace("/", "_").replace(".cc", "").replace("src_", ""),
     srcs = [src],
     deps = [
-        ":gz_math",
+        ":math",
         "@gtest",
         "@gtest//:gtest_main",
     ],
-) for src in glob(
-    [
-        "src/*_TEST.cc",
-        "src/graph/*_TEST.cc",
-    ],
-)]
+) for src in test_sources]
+
+add_lint_tests()
