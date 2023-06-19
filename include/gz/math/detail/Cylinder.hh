@@ -118,6 +118,24 @@ bool Cylinder<T>::MassMatrix(MassMatrix3d &_massMat) const
 
 //////////////////////////////////////////////////
 template<typename T>
+std::optional < MassMatrix3<T> > Cylinder<T>::MassMatrix() const
+{
+  gz::math::MassMatrix3<T> _massMat;
+
+  if(!_massMat.SetFromCylinderZ(
+      this->material, this->length,
+      this->radius, this->rotOffset))
+  {
+    return std::nullopt;
+  }
+  else
+  {
+    return std::make_optional(_massMat);
+  }
+}
+
+//////////////////////////////////////////////////
+template<typename T>
 T Cylinder<T>::Volume() const
 {
   return GZ_PI * std::pow(this->radius, 2) *

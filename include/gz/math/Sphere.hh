@@ -77,6 +77,13 @@ namespace gz
       /// could be due to an invalid radius (<=0) or density (<=0).
       public: bool MassMatrix(MassMatrix3d &_massMat) const;
 
+      /// \brief Get the mass matrix for this sphere. This function
+      /// is only meaningful if the sphere's radius and material have been set.
+      /// \return The computed mass matrix if parameters are valid
+      /// (radius > 0) and (density > 0). Otherwise
+      /// std::nullopt is returned.
+      public: std::optional< MassMatrix3<Precision> > MassMatrix() const;
+
       /// \brief Check if this sphere is equal to the provided sphere.
       /// Radius and material properties will be checked.
       public: bool operator==(const Sphere &_sphere) const;

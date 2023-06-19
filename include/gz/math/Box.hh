@@ -189,6 +189,14 @@ namespace gz
       /// could be due to an invalid size (<=0) or density (<=0).
       public: bool MassMatrix(MassMatrix3<Precision> &_massMat) const;
 
+      /// \brief Get the mass matrix for this box. This function
+      /// is only meaningful if the box's size and material
+      /// have been set.
+      /// \return The computed mass matrix if parameters are valid
+      /// (radius > 0), (length > 0), and (density > 0). Otherwise
+      /// std::nullopt is returned.
+      public: std::optional< MassMatrix3<Precision> > MassMatrix() const;
+
       /// \brief Get intersection between a plane and the box's edges.
       /// Edges contained on the plane are ignored.
       /// \param[in] _plane The plane against which we are testing intersection.

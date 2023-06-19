@@ -90,6 +90,23 @@ bool Sphere<T>::MassMatrix(MassMatrix3d &_massMat) const
 
 //////////////////////////////////////////////////
 template<typename T>
+std::optional < MassMatrix3<T> > Sphere<T>::MassMatrix() const
+{
+  gz::math::MassMatrix3<T> _massMat;
+
+  if(!_massMat.SetFromSphere(this->material, this->radius))
+  {
+    return std::nullopt;
+  }
+  else
+  {
+    return std::make_optional(_massMat);
+  }
+}
+
+
+//////////////////////////////////////////////////
+template<typename T>
 T Sphere<T>::Volume() const
 {
   return (4.0/3.0) * GZ_PI * std::pow(this->radius, 3);

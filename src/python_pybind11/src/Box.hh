@@ -105,11 +105,11 @@ void defineMathBox(py::module &m, const std::string &typestr)
     .def("set_density_from_mass",
          &Class::SetDensityFromMass,
          "Set the density of this box based on a mass value.")
-    .def("mass_matrix",
-         &Class::MassMatrix,
-         "Get the mass matrix for this box. This function "
-         "is only meaningful if the box's size and material "
-         "have been set.")
+//     .def("mass_matrix",
+//          &Class::MassMatrix,
+//          "Get the mass matrix for this box. This function "
+//          "is only meaningful if the box's size and material "
+//          "have been set.")
     .def("intersections",
          [](const Class &self, const Plane<T> &_plane)
          {

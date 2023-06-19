@@ -115,6 +115,14 @@ namespace gz
       /// (<=0).
       public: bool MassMatrix(MassMatrix3d &_massMat) const;
 
+      /// \brief Get the mass matrix for this cylinder. This function
+      /// is only meaningful if the cylinder's radius, length, and material
+      /// have been set. Optionally, set the rotational offset.
+      /// \return The computed mass matrix if parameters are valid
+      /// (radius > 0), (length > 0) and (density > 0). Otherwise
+      /// std::nullopt is returned.
+      public: std::optional< MassMatrix3<Precision> > MassMatrix() const;
+
       /// \brief Check if this cylinder is equal to the provided cylinder.
       /// Radius, length, and material properties will be checked.
       public: bool operator==(const Cylinder &_cylinder) const;
