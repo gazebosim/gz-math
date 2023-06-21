@@ -17,6 +17,7 @@
 #ifndef GZ_MATH_CYLINDER_HH_
 #define GZ_MATH_CYLINDER_HH_
 
+#include <optional>
 #include "gz/math/MassMatrix3.hh"
 #include "gz/math/Material.hh"
 #include "gz/math/Quaternion.hh"

@@ -17,6 +17,7 @@
 #ifndef GZ_MATH_BOX_HH_
 #define GZ_MATH_BOX_HH_
 
+#include <optional>
 #include <gz/math/config.hh>
 #include <gz/math/MassMatrix3.hh>
 #include <gz/math/Material.hh>
