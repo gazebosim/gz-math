@@ -57,9 +57,6 @@ namespace gz
       /// velocity mean
       public: explicit MecanumDriveOdometry(size_t _windowSize = 10);
 
-      /// \brief Destructor.
-      public: ~MecanumDriveOdometry();
-
       /// \brief Initialize the odometry
       /// \param[in] _time Current time.
       public: void Init(const clock::time_point &_time);

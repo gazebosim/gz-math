@@ -60,7 +60,6 @@ TEST(MecanumDriveOdometryTest, MecanumDriveOdometry)
   // straight line.
   EXPECT_NEAR(0.0, *odom.AngularVelocity(), 1e-3);
 
-
   // Sleep again, then update the odometry with the new wheel position.
   auto time2 = time1 + std::chrono::milliseconds(100);
   odom.Update(GZ_DTOR(2.0), GZ_DTOR(2.0),GZ_DTOR(2.0), GZ_DTOR(2.0), time2);
@@ -73,7 +72,6 @@ TEST(MecanumDriveOdometryTest, MecanumDriveOdometry)
   // straight line.
   EXPECT_NEAR(0.0, *odom.AngularVelocity(), 1e-3);
 
-
   // Initialize again, and odom values should be reset.
   startTime = std::chrono::steady_clock::now();
   odom.Init(startTime);
@@ -82,7 +80,6 @@ TEST(MecanumDriveOdometryTest, MecanumDriveOdometry)
   EXPECT_DOUBLE_EQ(0.0, odom.Y());
   EXPECT_DOUBLE_EQ(0.0, odom.LinearVelocity());
   EXPECT_DOUBLE_EQ(0.0, *odom.AngularVelocity());
-
 
   // Sleep again, this time move 2 degrees in 100ms.
   time1 = startTime + std::chrono::milliseconds(100);
@@ -96,7 +93,6 @@ TEST(MecanumDriveOdometryTest, MecanumDriveOdometry)
   // straight line.
   EXPECT_NEAR(0.0, *odom.AngularVelocity(), 1e-3);
 
-
   // Sleep again, this time move 2 degrees in 100ms.
   odom.Init(startTime);
   time1 = startTime + std::chrono::milliseconds(100);
@@ -109,6 +105,5 @@ TEST(MecanumDriveOdometryTest, MecanumDriveOdometry)
   // Angular velocity should be zero since the "robot" is traveling in a
   // straight line.
   EXPECT_NEAR(0.0, *odom.AngularVelocity(), 1e-3);
-
 
 }

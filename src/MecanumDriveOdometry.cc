@@ -109,11 +109,6 @@ MecanumDriveOdometry::MecanumDriveOdometry(size_t _windowSize)
 }
 
 //////////////////////////////////////////////////
-MecanumDriveOdometry::~MecanumDriveOdometry()
-{
-}
-
-//////////////////////////////////////////////////
 void MecanumDriveOdometry::Init(const clock::time_point &_time)
 {
   // Reset accumulators and timestamp.
