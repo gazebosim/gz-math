@@ -19,6 +19,7 @@
 
 #include "gz/math/Triangle3.hh"
 
+#include <optional>
 #include <algorithm>
 #include <set>
 #include <utility>

@@ -16,6 +16,9 @@
 */
 #ifndef GZ_MATH_DETAIL_CYLINDER_HH_
 #define GZ_MATH_DETAIL_CYLINDER_HH_
+
+#include <optional>
+
 namespace gz
 {
 namespace math

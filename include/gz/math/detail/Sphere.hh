@@ -17,6 +17,7 @@
 #ifndef GZ_MATH_DETAIL_SPHERE_HH_
 #define GZ_MATH_DETAIL_SPHERE_HH_
 
+#include <optional>
 #include "gz/math/Sphere.hh"
 
 namespace gz
