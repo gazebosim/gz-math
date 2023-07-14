@@ -17,6 +17,7 @@
 #ifndef GZ_MATH_SPHERE_HH_
 #define GZ_MATH_SPHERE_HH_
 
+#include <optional>
 #include "gz/math/MassMatrix3.hh"
 #include "gz/math/Material.hh"
 #include "gz/math/Quaternion.hh"
@@ -76,6 +77,13 @@ namespace gz
       /// \return False if computation of the mass matrix failed, which
       /// could be due to an invalid radius (<=0) or density (<=0).
       public: bool MassMatrix(MassMatrix3d &_massMat) const;
+
+      /// \brief Get the mass matrix for this sphere. This function
+      /// is only meaningful if the sphere's radius and material have been set.
+      /// \return The computed mass matrix if parameters are valid
+      /// (radius > 0) and (density > 0). Otherwise
+      /// std::nullopt is returned.
+      public: std::optional< MassMatrix3<Precision> > MassMatrix() const;
 
       /// \brief Check if this sphere is equal to the provided sphere.
       /// Radius and material properties will be checked.

@@ -136,4 +136,10 @@ TEST(CylinderTest, Mass)
   cylinder.MassMatrix(massMat);
   EXPECT_EQ(expectedMassMat, massMat);
   EXPECT_DOUBLE_EQ(expectedMassMat.Mass(), massMat.Mass());
+
+  auto massMatOpt = cylinder.MassMatrix();
+  ASSERT_NE(std::nullopt, massMatOpt);
+  EXPECT_EQ(expectedMassMat, *massMatOpt);
+  EXPECT_EQ(expectedMassMat.DiagonalMoments(), massMatOpt->DiagonalMoments());
+  EXPECT_DOUBLE_EQ(expectedMassMat.Mass(), massMatOpt->Mass());
 }
