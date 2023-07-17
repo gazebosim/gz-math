@@ -108,6 +108,7 @@ function(configure_build_install_location _library_name)
     RUNTIME_OUTPUT_DIRECTORY $<1:${CMAKE_CURRENT_BINARY_DIR}/test/gz>)
 
   # Touch an init file to mark this directory as a usable python module
+  file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/test/gz/)
   file(TOUCH ${CMAKE_CURRENT_BINARY_DIR}/test/gz/__init__.py)
 
   # Install library for actual use
