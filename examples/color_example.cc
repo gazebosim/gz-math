@@ -18,18 +18,17 @@
 #include <iostream>
 #include <gz/math/Color.hh>
 
-int main(int argc, char **argv) 
+int main(int /*argc*/, char **/*argv*/)
 {
 
 //! [Create a color]
-  gz::math::Color a = gz::math::Color(0.3, 0.4, 0.5);
+  gz::math::Color a = gz::math::Color(0.3f, 0.4f, 0.5f);
 //! [Create a color]
   // The channel order is R, G, B, A and the default alpha value of a should be 1.0
   std::cout << "The alpha value of a should be 1: " << a.A() << std::endl;
-  
-  
+
 //! [Set a new color value]
-  a.gz::math::Color::Set(0.6, 0.7, 0.8, 1.0);
+  a.gz::math::Color::Set(0.6f, 0.7f, 0.8f, 1.0f);
 //! [Set a new color value]
   std::cout << "The RGBA value of a: " << a << std::endl;
 
@@ -41,8 +40,8 @@ int main(int argc, char **argv)
 
 //! [Math operator]
   std::cout << "Check if a is Blue: " << (a == gz::math::Color::Blue) << std::endl;
-  std::cout << "The RGB value of a should be (0, 0, 1): " << a[0] << ", " 
-                                                          << a[1] << ", " 
+  std::cout << "The RGB value of a should be (0, 0, 1): " << a[0] << ", "
+                                                          << a[1] << ", "
                                                           << a[2] << std::endl;
 //! [Math operator]
 
