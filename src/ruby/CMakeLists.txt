@@ -82,10 +82,10 @@ if (RUBY_FOUND)
 
   # Add the ruby tests
   set(_env_vars)
-  list(APPEND _env_vars "LD_LIBRARY_PATH=${FAKE_INSTALL_PREFIX}/lib:$ENV{LD_LIBRARY_PATH}")
+  list(APPEND _env_vars "LD_LIBRARY_PATH=${CMAKE_BINARY_DIR}/lib:$ENV{LD_LIBRARY_PATH}")
   foreach (test ${ruby_tests})
     add_test(NAME ${test}.rb COMMAND
-      ruby -I${FAKE_INSTALL_PREFIX}/lib/ruby/gz ${CMAKE_SOURCE_DIR}/src/ruby/${test}.rb
+      ruby -I${CMAKE_BINARY_DIR}/lib ${CMAKE_SOURCE_DIR}/src/ruby/${test}.rb
          --gtest_output=xml:${CMAKE_BINARY_DIR}/test_results/${test}rb.xml)
     set_tests_properties(${test}.rb PROPERTIES
       ENVIRONMENT "${_env_vars}")
