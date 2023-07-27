@@ -37,12 +37,6 @@
 #define GZ_SQRT2 1.41421356237309504880
 #endif
 
-// TODO(CH3): Deprecated. Remove on tock.
-#define IGN_PI GZ_PI
-#define IGN_PI_2 GZ_PI_2
-#define IGN_PI_4 GZ_PI_4
-#define IGN_SQRT2 GZ_SQRT2
-
 // The uppercase functions in the pythoncode block are defined with `#define` in cpp
 // but in python this may generate some issues. A workaround is to create a Python function.
 // With sort functions the issue is with the referenced arguments of a templated function,
@@ -61,22 +55,6 @@ def gz_box_volume(_x, _y, _z):
 
 def gz_box_volume_v(_v):
   return (_v.x() *_v.y() * _v.z())
-
-# TODO(CH3): Deprecated. Remove on tock.
-def ign_sphere_volume(_radius):
-   return gz_sphere_volume(_radius)
-
-# TODO(CH3): Deprecated. Remove on tock.
-def ign_cylinder_volume(_r, _l):
-  return gz_cylinder_volume(_r, _l)
-
-# TODO(CH3): Deprecated. Remove on tock.
-def ign_box_volume(_x, _y, _z):
-  return gz_box_volume(_x, _y, _z)
-
-# TODO(CH3): Deprecated. Remove on tock.
-def ign_box_volume_v(_v):
-  return gz_box_volume_v(_v)
 
 def sort2(_a, _b):
     def swap(s1, s2):
@@ -202,18 +180,6 @@ namespace gz
     static const size_t GZ_EIGHT_SIZE_T = 8u;
 
     static const size_t GZ_NINE_SIZE_T  = 9u;
-
-    // TODO(CH3): Deprecated. Remove on tock.
-    constexpr auto GZ_DEPRECATED(7) IGN_ZERO_SIZE_T  = &GZ_ZERO_SIZE_T;
-    constexpr auto GZ_DEPRECATED(7) IGN_ONE_SIZE_T   = &GZ_ONE_SIZE_T;
-    constexpr auto GZ_DEPRECATED(7) IGN_TWO_SIZE_T   = &GZ_TWO_SIZE_T;
-    constexpr auto GZ_DEPRECATED(7) IGN_THREE_SIZE_T = &GZ_THREE_SIZE_T;
-    constexpr auto GZ_DEPRECATED(7) IGN_FOUR_SIZE_T  = &GZ_FOUR_SIZE_T;
-    constexpr auto GZ_DEPRECATED(7) IGN_FIVE_SIZE_T  = &GZ_FIVE_SIZE_T;
-    constexpr auto GZ_DEPRECATED(7) IGN_SIX_SIZE_T   = &GZ_SIX_SIZE_T;
-    constexpr auto GZ_DEPRECATED(7) IGN_SEVEN_SIZE_T = &GZ_SEVEN_SIZE_T;
-    constexpr auto GZ_DEPRECATED(7) IGN_EIGHT_SIZE_T = &GZ_EIGHT_SIZE_T;
-    constexpr auto GZ_DEPRECATED(7) IGN_NINE_SIZE_T  = &GZ_NINE_SIZE_T;
 
     static const double MAX_D = std::numeric_limits<double>::max();
 
