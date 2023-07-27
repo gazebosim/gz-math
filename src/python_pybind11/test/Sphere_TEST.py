@@ -108,6 +108,11 @@ class TestSphere(unittest.TestCase):
         self.assertEqual(expectedMassMat, massMat)
         self.assertEqual(expectedMassMat.mass(), massMat.mass())
 
+        massMat2 = sphere.mass_matrix()
+        self.assertEqual(expectedMassMat, massMat2)
+        self.assertEqual(expectedMassMat.diagonal_moments(), massMat2.diagonal_moments())
+        self.assertEqual(expectedMassMat.mass(), massMat2.mass())
+
     def test_volume_below(self):
 
         r = 2

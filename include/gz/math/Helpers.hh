@@ -353,7 +353,7 @@ namespace gz
       T sum = 0;
       for (unsigned int i = 0; i < _values.size(); ++i)
         sum += _values[i];
-      return sum / _values.size();
+      return sum / static_cast<T>(_values.size());
     }
 
     /// \brief Get the variance of a vector of values.
@@ -367,7 +367,7 @@ namespace gz
       T sum = 0;
       for (unsigned int i = 0; i < _values.size(); ++i)
         sum += (_values[i] - avg) * (_values[i] - avg);
-      return sum / _values.size();
+      return sum / static_cast<T>(_values.size());
     }
 
     /// \brief Get the maximum value of vector of values.
