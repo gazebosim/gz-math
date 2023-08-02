@@ -239,13 +239,13 @@ namespace gz
         return this->size;
       }
 
-      /// \brief Get the plane offset
+      /// \brief Get the plane normal
       public: inline const Vector3<T> &Normal() const
       {
         return this->normal;
       }
 
-      /// \brief Get the plane offset
+      /// \brief Get the plane normal
       public: inline Vector3<T> &Normal()
       {
         return this->normal;
