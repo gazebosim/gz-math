@@ -68,39 +68,6 @@ float BoxVolumeV(const gz::math::Vector3d &_v)
   return GZ_BOX_VOLUME_V(_v);
 }
 
-// TODO(CH3): Deprecated. Remove on tock.
-float SphereVolumeDeprecated(const float _radius)
-{
-  std::cerr << "ign_sphere_volume is deprecated. "
-            << "Please use gz_sphere_volume instead"
-            << std::endl;
-  return SphereVolume(_radius);
-}
-
-float CylinderVolumeDeprecated(const float _r, const float _l)
-{
-  std::cerr << "ign_cylinder_volume is deprecated. "
-            << "Please use gz_cylinder_volume instead"
-            << std::endl;
-  return CylinderVolume(_r, _l);
-}
-
-float BoxVolumeDeprecated(const float _x, const float _y, const float _z)
-{
-  std::cerr << "ign_box_volume is deprecated. "
-            << "Please use gz_box_volume instead"
-            << std::endl;
-  return BoxVolume(_x, _y, _z);
-}
-
-float BoxVolumeVDeprecated(const gz::math::Vector3d &_v)
-{
-  std::cerr << "ign_box_volume_v is deprecated. "
-            << "Please use gz_box_volume_v instead"
-            << std::endl;
-  return BoxVolumeV(_v);
-}
-
 /// \brief Sort two numbers, such that _a <= _b
 /// \param[out] _a the first number
 /// \param[out] _b the second number
@@ -213,21 +180,7 @@ void defineMathHelpers(py::module &m)
         "Compute box volume")
    .def("gz_box_volume_v",
         &BoxVolumeV,
-        "Compute box volume from vector")
-
-   // TODO(CH3): Deprecated. Remove on tock.
-   .def("ign_sphere_volume",
-        &SphereVolumeDeprecated,
-        "[Deprecated] Compute sphere volume")
-   .def("ign_cylinder_volume",
-        &CylinderVolumeDeprecated,
-        "[Deprecated] Compute cylinder volume")
-   .def("ign_box_volume",
-        &BoxVolumeDeprecated,
-        "[Deprecated] Compute box volume")
-   .def("ign_box_volume_v",
-        &BoxVolumeVDeprecated,
-        "[Deprecated] Compute box volume from vector");
+        "Compute box volume from vector");
 
    py::class_<Class>(m,
                     "Helpers",
@@ -243,19 +196,6 @@ void defineMathHelpers(py::module &m)
   .def_readonly_static("GZ_SEVEN_SIZE_T", &GZ_SEVEN_SIZE_T)
   .def_readonly_static("GZ_EIGHT_SIZE_T", &GZ_EIGHT_SIZE_T)
   .def_readonly_static("GZ_NINE_SIZE_T", &GZ_NINE_SIZE_T)
-
-  // TODO(CH3): Deprecated. Remove on tock.
-  .def_readonly_static("IGNZEROSIZET", &GZ_ZERO_SIZE_T, "GZ_PI")
-  .def_readonly_static("IGN_ONE_SIZE_T", &GZ_ONE_SIZE_T)
-  .def_readonly_static("IGN_TWO_SIZE_T", &GZ_TWO_SIZE_T)
-  .def_readonly_static("IGN_THREE_SIZE_T", &GZ_THREE_SIZE_T)
-  .def_readonly_static("IGN_FOUR_SIZE_T", &GZ_FOUR_SIZE_T)
-  .def_readonly_static("IGN_FIVE_SIZE_T", &GZ_FIVE_SIZE_T)
-  .def_readonly_static("IGN_SIX_SIZE_T", &GZ_SIX_SIZE_T)
-  .def_readonly_static("IGN_SEVEN_SIZE_T", &GZ_SEVEN_SIZE_T)
-  .def_readonly_static("IGN_EIGHT_SIZE_T", &GZ_EIGHT_SIZE_T)
-  .def_readonly_static("IGN_NINE_SIZE_T", &GZ_NINE_SIZE_T)
-
   .def_readonly_static("MAX_D", &MAX_D)
   .def_readonly_static("MIN_D", &MIN_D)
   .def_readonly_static("LOW_D", &LOW_D)

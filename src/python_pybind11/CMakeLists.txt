@@ -104,8 +104,12 @@ function(configure_build_install_location _library_name)
   # Install into test folder in build space for unit tests to import
   set_target_properties(${_library_name} PROPERTIES
     # Use generator expression to avoid prepending a build type specific directory on Windows
-    LIBRARY_OUTPUT_DIRECTORY $<1:${CMAKE_CURRENT_BINARY_DIR}/test>
-    RUNTIME_OUTPUT_DIRECTORY $<1:${CMAKE_CURRENT_BINARY_DIR}/test>)
+    LIBRARY_OUTPUT_DIRECTORY $<1:${CMAKE_CURRENT_BINARY_DIR}/test/gz>
+    RUNTIME_OUTPUT_DIRECTORY $<1:${CMAKE_CURRENT_BINARY_DIR}/test/gz>)
+
+  # Touch an init file to mark this directory as a usable python module
+  file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/test/gz/)
+  file(TOUCH ${CMAKE_CURRENT_BINARY_DIR}/test/gz/__init__.py)
 
   # Install library for actual use
   install(TARGETS ${_library_name}
@@ -187,8 +191,8 @@ if (BUILD_TESTING)
     endif()
 
     set(_env_vars)
-    list(APPEND _env_vars "PYTHONPATH=${FAKE_INSTALL_PREFIX}/lib/python/")
-    list(APPEND _env_vars "LD_LIBRARY_PATH=${FAKE_INSTALL_PREFIX}/lib:$ENV{LD_LIBRARY_PATH}")
+    list(APPEND _env_vars "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/test")
+    list(APPEND _env_vars "LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/test:$ENV{LD_LIBRARY_PATH}")
     set_tests_properties(${test}.py PROPERTIES
       ENVIRONMENT "${_env_vars}")
   endforeach()

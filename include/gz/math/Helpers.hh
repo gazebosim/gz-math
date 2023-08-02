@@ -36,10 +36,6 @@
 template <typename T>
 constexpr T GZ_MASSMATRIX3_DEFAULT_TOLERANCE = T(10);
 
-// TODO(CH3): Deprecated. Remove on tock.
-template <typename T>
-constexpr T IGN_MASSMATRIX3_DEFAULT_TOLERANCE = T(10);
-
 /// \brief Define GZ_PI, GZ_PI_2, and GZ_PI_4.
 /// This was put here for Windows support.
 #ifdef M_PI
@@ -119,18 +115,6 @@ namespace gz
 
     /// \brief size_t type with a value of 9
     static const size_t GZ_NINE_SIZE_T  = 9u;
-
-    // TODO(CH3): Deprecated. Remove on tock.
-    constexpr auto GZ_DEPRECATED(7) IGN_ZERO_SIZE_T  = &GZ_ZERO_SIZE_T;
-    constexpr auto GZ_DEPRECATED(7) IGN_ONE_SIZE_T   = &GZ_ONE_SIZE_T;
-    constexpr auto GZ_DEPRECATED(7) IGN_TWO_SIZE_T   = &GZ_TWO_SIZE_T;
-    constexpr auto GZ_DEPRECATED(7) IGN_THREE_SIZE_T = &GZ_THREE_SIZE_T;
-    constexpr auto GZ_DEPRECATED(7) IGN_FOUR_SIZE_T  = &GZ_FOUR_SIZE_T;
-    constexpr auto GZ_DEPRECATED(7) IGN_FIVE_SIZE_T  = &GZ_FIVE_SIZE_T;
-    constexpr auto GZ_DEPRECATED(7) IGN_SIX_SIZE_T   = &GZ_SIX_SIZE_T;
-    constexpr auto GZ_DEPRECATED(7) IGN_SEVEN_SIZE_T = &GZ_SEVEN_SIZE_T;
-    constexpr auto GZ_DEPRECATED(7) IGN_EIGHT_SIZE_T = &GZ_EIGHT_SIZE_T;
-    constexpr auto GZ_DEPRECATED(7) IGN_NINE_SIZE_T  = &GZ_NINE_SIZE_T;
 
     /// \brief Double maximum value. This value will be similar to 1.79769e+308
     static const double MAX_D = std::numeric_limits<double>::max();
@@ -353,7 +337,7 @@ namespace gz
       T sum = 0;
       for (unsigned int i = 0; i < _values.size(); ++i)
         sum += _values[i];
-      return sum / _values.size();
+      return sum / static_cast<T>(_values.size());
     }
 
     /// \brief Get the variance of a vector of values.
@@ -367,7 +351,7 @@ namespace gz
       T sum = 0;
       for (unsigned int i = 0; i < _values.size(); ++i)
         sum += (_values[i] - avg) * (_values[i] - avg);
-      return sum / _values.size();
+      return sum / static_cast<T>(_values.size());
     }
 
     /// \brief Get the maximum value of vector of values.

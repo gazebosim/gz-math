@@ -4,22 +4,54 @@
 
 ## Gazebo Math 7.x
 
-### Gazebo Math 7.1.0
+### Gazebo Math 7.2.0 (2023-06-14)
+
+1. Add tests to increase test coverage
+    * [Pull request #533](https://github.com/gazebosim/gz-math/pull/533)
+
+1. Forward ports
+    * [Pull request #530](https://github.com/gazebosim/gz-math/pull/530)
+    * [Pull request #526](https://github.com/gazebosim/gz-math/pull/526)
+    * [Pull request #522](https://github.com/gazebosim/gz-math/pull/522)
+    * [Pull request #520](https://github.com/gazebosim/gz-math/pull/520)
+
+1. Disable pybind11 on windows by default
+    * [Pull request #529](https://github.com/gazebosim/gz-math/pull/529)
+
+1. Add option to skip pybind11 and SWIG
+    * [Pull request #480](https://github.com/gazebosim/gz-math/pull/480)
+
+1. Custom PID error rate
+    * [Pull request #525](https://github.com/gazebosim/gz-math/pull/525)
+
+1. Garden bazel support
+    * [Pull request #523](https://github.com/gazebosim/gz-math/pull/523)
+
+1. Rename COPYING to LICENSE
+    * [Pull request #521](https://github.com/gazebosim/gz-math/pull/521)
+
+1. Infrastructure
+    * [Pull request #519](https://github.com/gazebosim/gz-math/pull/519)
+
+1. Fix link of installation tutorial to point to 7.1 version
+    * [Pull request #518](https://github.com/gazebosim/gz-math/pull/518)
+
+### Gazebo Math 7.1.0 (2022-11-15)
 
 1. Adds bounds retrieval for TimeVarying grid class.
     * [Pull request #508](https://github.com/gazebosim/gz-math/pull/508)
 
-### Gazebo Math 7.0.2
+### Gazebo Math 7.0.2 (2022-09-26)
 
 1. Update to disable tests failing on arm64
     * [Pull request #512](https://github.com/gazebosim/gz-math/pull/512)
 
-### Gazebo Math 7.0.1
+### Gazebo Math 7.0.1 (2022-09-23)
 
 1. Disable tests failing on arm64
     * [Pull request #510](https://github.com/gazebosim/gz-math/pull/510)
 
-### Gazebo Math 7.0.0
+### Gazebo Math 7.0.0 (2022-09-22)
 
 1. Deprecated `Angle::Degree(double)` and `Angle::Radian(double)`. Use `Angle::SetDegree(double)` and `Angle::SetRadian(double)` instead.
     * [BitBucket pull request 326](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/326)

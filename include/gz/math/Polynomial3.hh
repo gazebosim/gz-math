@@ -229,7 +229,7 @@ namespace gz
           using std::abs;  // enable ADL
           const T magnitude = abs(this->coeffs[i]);
           const bool sign = this->coeffs[i] < T(0);
-          const int exponent = 3 - i;
+          const int exponent = 3 - static_cast<int>(i);
           if (magnitude >= epsilon)
           {
             if (streamStarted)
