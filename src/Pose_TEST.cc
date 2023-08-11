@@ -181,10 +181,10 @@ TEST(PoseTest, ConstPose)
 /////////////////////////////////////////////////
 TEST(PoseTest, OperatorStreamOut)
 {
-  math::Pose3d p(0.1, 1.2, 2.3, 0.0, 0.1, 1.0);
+  math::Pose3d p(0.1, 1.2, 2.3, 0.2, 0.1, 1.0);
   std::ostringstream stream;
   stream << p;
-  EXPECT_EQ(stream.str(), "0.1 1.2 2.3 0 0.1 1");
+  EXPECT_EQ(stream.str(), "0.1 1.2 2.3 0.2 0.1 1");
 }
 
 /////////////////////////////////////////////////
