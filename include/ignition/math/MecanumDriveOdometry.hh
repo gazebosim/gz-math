@@ -27,9 +27,6 @@ namespace ignition
 {
   namespace math
   {
-    // Use a steady clock
-    using clock = std::chrono::steady_clock;
-
     // Inline bracket to help doxygen filtering.
     inline namespace IGNITION_MATH_VERSION_NAMESPACE {
     //
@@ -54,6 +51,9 @@ namespace ignition
 
     class IGNITION_MATH_VISIBLE MecanumDriveOdometry
     {
+      // Use a steady clock
+      public: using clock = std::chrono::steady_clock;
+
       /// \brief Constructor.
       /// \param[in] _windowSize Rolling window size used to compute the
       /// velocity mean
@@ -78,9 +78,10 @@ namespace ignition
       /// \param[in] _backRightPos Right wheel postion in radians.
       /// \param[in] _time Current time point.
       /// \return True if the odometry is actually updated.
-      public: bool Update(const Angle &_frontLeftPos, const Angle &_frontRightPos, 
-                          const Angle &_backLeftPos, const Angle &_backRightPos,
-                          const clock::time_point &_time);
+      public: bool Update(
+        const Angle &_frontLeftPos, const Angle &_frontRightPos,
+        const Angle &_backLeftPos, const Angle &_backRightPos,
+        const clock::time_point &_time);
 
       /// \brief Get the heading.
       /// \return The heading in radians.
@@ -130,8 +131,7 @@ namespace ignition
 #pragma warning(pop)
 #endif
     };
-    }
-  }
-}
-
-#endif
+    }  // namespace IGNITION_MATH_VERSION_NAMESPACE
+  }  // namespace math
+}  // namespace ignition
+#endif  // IGNITION_MATH_MECANUMDRIVEODOMETRY_HH_
