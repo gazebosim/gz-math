@@ -10,6 +10,7 @@ project(gz-math7 VERSION 7.2.0)
 #============================================================================
 # If you get an error at this line, you need to install gz-cmake
 find_package(gz-cmake3 REQUIRED)
+set(GZ_CMAKE_VER ${gz-cmake3_VERSION_MAJOR})
 
 #============================================================================
 # Configure the project
@@ -144,3 +145,13 @@ configure_file(${CMAKE_SOURCE_DIR}/tutorials.md.in ${CMAKE_BINARY_DIR}/tutorials
 gz_create_docs(
   API_MAINPAGE_MD "${CMAKE_BINARY_DIR}/api.md"
   TUTORIALS_MAINPAGE_MD "${CMAKE_BINARY_DIR}/tutorials.md")
+
+#============================================================================
+# Build examples
+#============================================================================
+if (BUILD_TESTING)
+  gz_build_examples(
+    SOURCE_DIR ${PROJECT_SOURCE_DIR}/examples
+    BINARY_DIR ${PROJECT_BINARY_DIR}/examples
+  )
+endif()
