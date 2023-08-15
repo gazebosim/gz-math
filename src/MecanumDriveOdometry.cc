@@ -15,10 +15,10 @@
  *
 */
 #include <cmath>
-#include "ignition/math/MecanumDriveOdometry.hh"
-#include "ignition/math/RollingMean.hh"
+#include "gz/math/MecanumDriveOdometry.hh"
+#include "gz/math/RollingMean.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace math;
 
 // The implementation was borrowed from: https://github.com/ros-controls/ros_controllers/blob/melodic-devel/diff_drive_controller/src/odometry.cpp
@@ -26,7 +26,7 @@ using namespace math;
 // https://robohub.org/drive-kinematics-skid-steer-and-mecanum-ros-twist-included
 // https://research.ijcaonline.org/volume113/number3/pxc3901586.pdf
 
-class ignition::math::MecanumDriveOdometryPrivate
+class gz::math::MecanumDriveOdometryPrivate
 {
   /// \brief Integrates the pose.
   /// \param[in] _linear Linear velocity.
@@ -42,7 +42,7 @@ class ignition::math::MecanumDriveOdometryPrivate
     double _angular);
 
   /// \brief Current timestamp.
-  public: clock::time_point lastUpdateTime;
+  public: MecanumDriveOdometry::clock::time_point lastUpdateTime;
 
   /// \brief Current x position in meters.
   public: double x{0.0};
