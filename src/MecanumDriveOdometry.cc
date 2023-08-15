@@ -87,13 +87,13 @@ class gz::math::MecanumDriveOdometry::Implementation
   public: double backRightWheelOldPos{0.0};
 
   /// \brief Rolling mean accumulators for the linear velocity
-  public: RollingMean linearMean;
+  public: RollingMean linearMean {10};
 
   /// \brief Rolling mean accumulators for the lateral velocity
-  public: RollingMean lateralMean;
+  public: RollingMean lateralMean {10};
 
   /// \brief Rolling mean accumulators for the angular velocity
-  public: RollingMean angularMean;
+  public: RollingMean angularMean {10};
 
   /// \brief Initialized flag.
   public: bool initialized{false};

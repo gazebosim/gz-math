@@ -28,9 +28,6 @@ namespace gz
 {
   namespace math
   {
-    // Use a steady clock
-    using clock = std::chrono::steady_clock;
-
     // Inline bracket to help doxygen filtering.
     inline namespace GZ_MATH_VERSION_NAMESPACE {
 
@@ -49,9 +46,11 @@ namespace gz
     ///       |
     ///       O--->X(forward)
     ///
-
     class GZ_MATH_VISIBLE MecanumDriveOdometry
     {
+      // Use a steady clock
+      public: using clock = std::chrono::steady_clock;
+
       /// \brief Constructor.
       /// \param[in] _windowSize Rolling window size used to compute the
       /// velocity mean
@@ -73,7 +72,7 @@ namespace gz
       /// \param[in] _backRightPos Right wheel postion in radians.
       /// \param[in] _time Current time point.
       /// \return True if the odometry is actually updated.
-      public: bool Update(const Angle &_frontLeftPos, const Angle &_frontRightPos, 
+      public: bool Update(const Angle &_frontLeftPos, const Angle &_frontRightPos,
                           const Angle &_backLeftPos, const Angle &_backRightPos,
                           const clock::time_point &_time);
 
@@ -115,8 +114,8 @@ namespace gz
 
       GZ_UTILS_IMPL_PTR(dataPtr)
     };
-    }
-  }
-}
+    }  // namespace GZ_MATH_VERSION_NAMESPACE
+  }  // namespace math
+}  // namespace gz
 
-#endif
+#endif  // GZ_MATH_MECANUMDRIVEODOMETRY_HH_
