@@ -268,6 +268,30 @@ const Angle &MecanumDriveOdometry::AngularVelocity() const
 }
 
 //////////////////////////////////////////////////
+double MecanumDriveOdometry::WheelSeparation() const
+{
+  return this->dataPtr->wheelSeparation;
+}
+
+//////////////////////////////////////////////////
+double MecanumDriveOdometry::WheelBase() const
+{
+  return this->dataPtr->wheelBase;
+}
+
+//////////////////////////////////////////////////
+double MecanumDriveOdometry::LeftWheelRadius() const
+{
+  return this->dataPtr->leftWheelRadius;
+}
+
+//////////////////////////////////////////////////
+double MecanumDriveOdometry::RightWheelRadius() const
+{
+  return this->dataPtr->rightWheelRadius;
+}
+
+//////////////////////////////////////////////////
 void MecanumDriveOdometryPrivate::IntegrateRungeKutta2(
     double _linear, double _lateral, double _angular)
 {

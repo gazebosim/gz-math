@@ -38,6 +38,9 @@ namespace ignition
     /// \brief Computes odometry values based on a set of kinematic
     /// properties and wheel speeds for a Mecanum-drive vehicle.
     ///
+    /// Note: when computing velocity the math currently assumes that
+    /// all wheels have a radius of 1.0.
+    ///
     /// A vehicle with a heading of zero degrees has a local
     /// reference frame according to the diagram below.
     ///
@@ -111,10 +114,26 @@ namespace ignition
       /// \param[in] _rightWheelRadius Radius of the right wheel.
       public: void SetWheelParams(double _wheelSeparation, double _wheelBase,
                       double _leftWheelRadius, double _rightWheelRadius);
-
       /// \brief Set the velocity rolling window size.
       /// \param[in] _size The Velocity rolling window size.
       public: void SetVelocityRollingWindowSize(size_t _size);
+
+      /// \brief Get the wheel separation
+      /// \return Distance between left and right wheels in meters.
+      public: double WheelSeparation() const;
+
+      /// \brief Get the wheel base
+      /// \return Distance between front and back wheels in meters.
+      public: double WheelBase() const;
+
+      /// \brief Get the left wheel radius
+      /// \return Left wheel radius in meters.
+      public: double LeftWheelRadius() const;
+
+      /// \brief Get the rightwheel radius
+      /// \return Right wheel radius in meters.
+      public: double RightWheelRadius() const;
+
 
 #ifdef _WIN32
 // Disable warning C4251 which is triggered by
