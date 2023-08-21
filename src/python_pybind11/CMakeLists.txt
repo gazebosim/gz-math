@@ -150,7 +150,6 @@ if (BUILD_TESTING)
     Vector4_TEST
   )
 
-  message ( "Python ${Python3_EXECUTABLE}")
   execute_process(COMMAND "${Python3_EXECUTABLE}" -m pytest --version
     OUTPUT_VARIABLE PYTEST_output
     ERROR_VARIABLE  PYTEST_error
