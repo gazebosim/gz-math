@@ -121,7 +121,7 @@ else()
     message (STATUS "Searching for Python3 - found version ${Python3_VERSION}.")
 
     set(PYBIND11_PYTHON_VERSION 3)
-    find_package(pybind11 2.0 QUIET)
+    find_package(pybind11 2.2 QUIET)
 
     if (${pybind11_FOUND})
       message (STATUS "Searching for pybind11 - found version ${pybind11_VERSION}.")
