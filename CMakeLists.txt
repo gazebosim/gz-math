@@ -99,6 +99,7 @@ else()
   # the code below can be removed; e.g. pybind needs Interpreter and Development components
   # see https://pybind11.readthedocs.io/en/stable/cmake/index.html#new-findpython-mode
   if(${CMAKE_VERSION} VERSION_LESS "3.12.0")
+    set(IGN_PYTHON_VERSION "3")
     find_package(PythonInterp ${IGN_PYTHON_VERSION} QUIET)
     if(PYTHONINTERP_FOUND)
       set(Python3_FOUND ${PYTHONINTERP_FOUND})
@@ -120,7 +121,7 @@ else()
     message (STATUS "Searching for Python3 - found version ${Python3_VERSION}.")
 
     set(PYBIND11_PYTHON_VERSION 3)
-    find_package(pybind11 2.2 QUIET)
+    find_package(pybind11 2.0 QUIET)
 
     if (${pybind11_FOUND})
       message (STATUS "Searching for pybind11 - found version ${pybind11_VERSION}.")
