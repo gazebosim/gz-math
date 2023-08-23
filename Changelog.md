@@ -245,6 +245,21 @@
 
 ## Gazebo Math 6.x
 
+## Gazebo Math 6.14.0 (2023-04-14)
+
+1. Disable pybind11 on windows by default
+    * [Pull request #529](https://github.com/gazebosim/gz-math/pull/529)
+
+1. Add option to skip pybind11 and SWIG
+    * [Pull request #480](https://github.com/gazebosim/gz-math/pull/480)
+
+1. Custom PID error rate
+    * [Pull request #525](https://github.com/gazebosim/gz-math/pull/525)
+
+1. Infrastructure
+    * [Pull request #521](https://github.com/gazebosim/gz-math/pull/521)
+    * [Pull request #519](https://github.com/gazebosim/gz-math/pull/519)
+
 ## Gazebo Math 6.13.0 (2022-08-31)
 
 1. Support migration and migrate headers
