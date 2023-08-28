@@ -40,6 +40,9 @@ TEST(TimeVaryingVolumetricGridTest, TestConstruction)
   auto grid = gridFactory.Build();
   auto session = grid.CreateSession();
 
+  // Check validity
+  ASSERT_TRUE(grid.IsValid(session));
+
   // Check stepping
   auto val = grid.LookUp(session, Vector3d{0.5, 0.5, 0.5});
   ASSERT_TRUE(val.has_value());
@@ -114,4 +117,8 @@ TEST(TimeVaryingVolumetricGridTest, TestEmptyGrid)
   ASSERT_NEAR(max.X(), 0, 1e-6);
   ASSERT_NEAR(max.Y(), 0, 1e-6);
   ASSERT_NEAR(max.Z(), 0, 1e-6);
+
+  auto invalid_session = grid.CreateSession(500);
+  // Check validity
+  ASSERT_FALSE(grid.IsValid(session));
 }

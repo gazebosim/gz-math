@@ -41,6 +41,14 @@ class TimeVaryingVolumetricGrid
   /// \brief Creates a session. Call this before querying the interface.
   public: S CreateSession() const;
 
+  /// \brief Creates a session at a given time.
+  /// Call this before querying the interface.
+  /// \param[in] _time - The time at which to create the session.
+  public: S CreateSession(const T &_time) const;
+
+  /// \brief Returns true if a session is valid. False if invalid,
+  public: bool IsValid(const S &_session) const;
+
   /// \brief Steps the session to a fixed time step
   /// \param[in] _session - The session to be stepped
   /// \param[in] _time - The time at which the session should be set.
@@ -54,7 +62,7 @@ class TimeVaryingVolumetricGrid
   public: std::optional<V> LookUp(const S &_session, const Vector3<P> &_pos)
     const;
 
-  /// \brief Get the bounds of this grid field at given time.
+  /// \brief Get the spatial bounds of this grid field at given time.
   /// \return A pair of vectors. All zeros if session is invalid.
   public: std::pair<Vector3<V>, Vector3<V>> Bounds(const S &_session) const;
 };
@@ -69,6 +77,18 @@ class TimeVaryingVolumetricGrid<T, V, InMemorySession<T, P>, P>
   public: InMemorySession<T, V> CreateSession() const
   {
     return indices.CreateSession();
+  }
+
+  /// \brief Documentation Inherited
+  public: InMemorySession<T, V> CreateSession(const T &_time) const
+  {
+    return indices.CreateSession(_time);
+  }
+
+  /// \brief Documentation Inherited
+  public: bool IsValid(const InMemorySession<T, P> &_session) const
+  {  
+    return indices.IsValid(_session);
   }
 
   /// \brief Documentation Inherited
