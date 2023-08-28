@@ -120,5 +120,5 @@ TEST(TimeVaryingVolumetricGridTest, TestEmptyGrid)
 
   auto invalid_session = grid.CreateSession(500);
   // Check validity
-  ASSERT_FALSE(grid.IsValid(session));
+  ASSERT_FALSE(grid.IsValid(invalid_session));
 }
