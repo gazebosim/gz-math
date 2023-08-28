@@ -87,7 +87,7 @@ class TimeVaryingVolumetricGrid<T, V, InMemorySession<T, P>, P>
 
   /// \brief Documentation Inherited
   public: bool IsValid(const InMemorySession<T, P> &_session) const
-  {  
+  {
     return indices.IsValid(_session);
   }
 

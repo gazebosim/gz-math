@@ -143,7 +143,7 @@ namespace gz
       }
 
       /// \brief In memory session
-      public: bool IsValid(const InMemorySession<T,V> &_session) const {
+      public: bool IsValid(const InMemorySession<T, V> &_session) const {
         return this->gridFields.end() != _session.iter;
       }
 
