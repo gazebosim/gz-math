@@ -170,11 +170,6 @@ namespace gz
           nextTime = std::next(nextTime);
         }
         newSess.time = _time;
-
-        /*if (nextTime == this->gridFields.end())
-        {
-          return std::nullopt;
-        }*/
         return newSess;
       }
 
