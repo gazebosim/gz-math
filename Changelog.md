@@ -1,5 +1,30 @@
 ## Gazebo Math 7.x
 
+### Gazebo Math 7.3.0 (2023-08-29)
+
+1. Adds a validity check for Sessions created using the `TimeVaryingVolumetricGrid`
+    * [Pull request #551](https://github.com/gazebosim/gz-math/pull/551)
+
+1. Fixes for testing in non standard architectures
+    * [Pull request #546](https://github.com/gazebosim/gz-math/pull/546)
+
+1. MecanumDriveOdometry to handle odometry estimation of Mecanum wheeled models
+    * [Pull request #486](https://github.com/gazebosim/gz-math/pull/486)
+
+1. Fix documentation on Plane.hh
+    * [Pull request #544](https://github.com/gazebosim/gz-math/pull/544)
+
+1. Infrastructure
+    * [Pull request #543](https://github.com/gazebosim/gz-math/pull/543)
+    * [Pull request #547](https://github.com/gazebosim/gz-math/pull/547)
+    * [Pull request #545](https://github.com/gazebosim/gz-math/pull/545)
+
+1. Build examples from CMake rather than executable
+    * [Pull request #482](https://github.com/gazebosim/gz-math/pull/482)
+
+1. Added `std::optional MassMatrix()` functions for Box, Cylinder & Sphere
+    * [Pull request #538](https://github.com/gazebosim/gz-math/pull/538)
+
 ### Gazebo Math 7.2.0 (2023-06-14)
 
 1. Add tests to increase test coverage
