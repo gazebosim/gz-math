@@ -1,6 +1,6 @@
 ## Gazebo Math 7.x
 
-### Gazebo Math 7.2.0 (2023-08-29)
+### Gazebo Math 7.3.0 (2023-08-29)
 
 1. Adds a validity check for Sessions created using the `TimeVaryingVolumetricGrid`
     * [Pull request #551](https://github.com/gazebosim/gz-math/pull/551)
