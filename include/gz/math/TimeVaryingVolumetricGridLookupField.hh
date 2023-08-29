@@ -142,6 +142,11 @@ namespace gz
         return sess;
       }
 
+      /// \brief In memory session
+      public: bool IsValid(const InMemorySession<T, V> &_session) const {
+        return this->gridFields.end() != _session.iter;
+      }
+
       /// \brief Documentation inherited
       public: std::optional<InMemorySession<T, V>> StepTo(
         const InMemorySession<T, V> &_session, const T &_time) const {
