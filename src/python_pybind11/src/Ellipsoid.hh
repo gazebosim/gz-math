@@ -30,13 +30,13 @@
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an gz::math::Ellipsoid
+/// Define a pybind11 wrapper for a gz::math::Ellipsoid
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -89,7 +89,7 @@ void helpDefineMathEllipsoid(py::module &m, const std::string &typestr)
     }, "memo"_a);
 }
 
-/// Define a pybind11 wrapper for an gz::math::Ellipsoid
+/// Define a pybind11 wrapper for a gz::math::Ellipsoid
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -98,6 +98,6 @@ void defineMathEllipsoid(py::module &m, const std::string &typestr);
 
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
 #endif  // GZ_MATH_PYTHON__BOX_HH_

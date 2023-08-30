@@ -15,6 +15,7 @@
  *
 */
 
+#include <sstream>
 #include <string>
 
 #include "Color.hh"
@@ -24,7 +25,7 @@
 
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -147,8 +148,8 @@ void defineMathColor(py::module &m, const std::string &typestr)
      return Class(self);
    }, "memo"_a)
    .def("__getitem__",
-        (&Class::operator[]));
+        py::overload_cast<const unsigned int>(&Class::operator[]));
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz

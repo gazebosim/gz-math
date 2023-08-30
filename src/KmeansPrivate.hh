@@ -22,15 +22,15 @@
 #include <gz/math/Helpers.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE
+    inline namespace GZ_MATH_VERSION_NAMESPACE
     {
     /// \internal
     /// \brief Private data for Kmeans class
-    class KmeansPrivate
+    class Kmeans::Implementation
     {
       /// \brief Observations.
       public: std::vector<Vector3d> obs;

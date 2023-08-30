@@ -17,18 +17,22 @@
 #ifndef GZ_MATH_INERTIAL_HH_
 #define GZ_MATH_INERTIAL_HH_
 
+#include <optional>
+
 #include <gz/math/config.hh>
 #include "gz/math/MassMatrix3.hh"
+#include "gz/math/Matrix3.hh"
+#include "gz/math/Matrix6.hh"
 #include "gz/math/Pose3.hh"
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
-    /// \class Inertial Inertial.hh ignition/math/Inertial.hh
+    /// \class Inertial Inertial.hh gz/math/Inertial.hh
     /// \brief The Inertial object provides a representation for the mass and
     /// inertia matrix of a body B. The components of the inertia matrix are
     /// expressed in what we call the "inertial" frame Bi of the body, i.e.
@@ -38,6 +42,9 @@ namespace ignition
     /// allows users to specify a frame F for these inertial properties by
     /// specifying the pose X_FBi of the inertial frame Bi in the
     /// inertial object frame F.
+    ///
+    /// Throughout this documentation, the terms "body", "object" and "link"
+    /// are used interchangeably.
     ///
     /// For information about the X_FBi notation, see
     /// http://drake.mit.edu/doxygen_cxx/group__multibody__spatial__pose.html
@@ -62,14 +69,29 @@ namespace ignition
       : massMatrix(_massMatrix), pose(_pose)
       {}
 
-      /// \brief Copy constructor.
-      /// \param[in] _inertial Inertial element to copy
-      public: Inertial(const Inertial<T> &_inertial)
-      : massMatrix(_inertial.MassMatrix()), pose(_inertial.Pose())
+      /// \brief Constructs an inertial object from the mass matrix for a body
+      /// B, about its center of mass Bcm, and expressed in a frame that we'll
+      /// call the "inertial" frame Bi, i.e. the frame in which the components
+      /// of the mass matrix are specified (see this class's documentation for
+      /// details). The pose object specifies the pose X_FBi of the inertial
+      /// frame Bi in the frame F of this inertial object
+      /// (see class's documentation). The added mass matrix is expressed
+      /// in the link origin frame F.
+      /// \param[in] _massMatrix Mass and inertia matrix.
+      /// \param[in] _pose Pose of center of mass reference frame.
+      /// \param[in] _addedMass Coefficients for fluid added mass.
+      public: Inertial(const MassMatrix3<T> &_massMatrix,
+                       const Pose3<T> &_pose,
+                       const Matrix6<T> &_addedMass)
+      : massMatrix(_massMatrix), pose(_pose), addedMass(_addedMass)
       {}
 
+      /// \brief Copy constructor.
+      /// \param[in] _inertial Inertial element to copy
+      public: Inertial(const Inertial<T> &_inertial) = default;
+
       /// \brief Destructor.
-      public: virtual ~Inertial() {}
+      public: ~Inertial() = default;
 
       /// \brief Set the mass and inertia matrix.
       ///
@@ -82,7 +104,7 @@ namespace ignition
       ///
       /// \return True if the MassMatrix3 is valid.
       public: bool SetMassMatrix(const MassMatrix3<T> &_m,
-                  const T _tolerance = IGN_MASSMATRIX3_DEFAULT_TOLERANCE<T>)
+                  const T _tolerance = GZ_MASSMATRIX3_DEFAULT_TOLERANCE<T>)
       {
         this->massMatrix = _m;
         return this->massMatrix.IsValid(_tolerance);
@@ -114,11 +136,26 @@ namespace ignition
         return this->pose;
       }
 
-      /// \copydoc Moi() const
-      /// \deprecated See Matrix3<T> Moi() const
-      public: Matrix3<T> IGN_DEPRECATED(5.0) MOI() const
+      /// \brief Set the matrix representing the inertia of the fluid that is
+      /// dislocated when the body moves. Added mass should be zero if the
+      /// density of the surrounding fluid is negligible with respect to the
+      /// body's density.
+      ///
+      /// \param[in] _m New Matrix6 object, which must be a symmetric matrix.
+      /// \return True if the Matrix6 is symmetric.
+      /// \sa SpatialMatrix
+      public: bool SetFluidAddedMass(const Matrix6<T> &_m)
       {
-        return this->Moi();
+        this->addedMass = _m;
+        return this->addedMass.value() == this->addedMass.value().Transposed();
+      }
+
+      /// \brief Get the fluid added mass matrix.
+      /// \return The added mass matrix. It will be nullopt if the added mass
+      /// was never set.
+      public: const std::optional< Matrix6<T> > &FluidAddedMass() const
+      {
+        return this->addedMass;
       }
 
       /// \brief Get the moment of inertia matrix computer about the body's
@@ -130,6 +167,56 @@ namespace ignition
       {
         auto R = Matrix3<T>(this->pose.Rot());
         return R * this->massMatrix.Moi() * R.Transposed();
+      }
+
+      /// \brief Spatial mass matrix for body B. It does not include fluid
+      /// added mass. The matrix is expressed in the object's frame F, not to
+      /// be confused with the center of mass frame Bi.
+      ///
+      /// The matrix is arranged as follows:
+      ///
+      /// | m          0          0          0           m * Pz    -m * Py |
+      /// | 0          m          0          -m * Pz    0           m * Px |
+      /// | 0          0          m           m * Py    -m * Px    0       |
+      /// | 0          -m * Pz     m * Py    Ixx        Ixy        Ixz     |
+      /// |  m * Pz    0          -m * Px    Ixy        Iyy        Iyz     |
+      /// | -m * Py     m* Px     0          Ixz        Iyz        Izz     |
+      ///
+      /// \return The body's 6x6 inertial matrix.
+      /// \sa SpatialMatrix
+      public: Matrix6<T> BodyMatrix() const
+      {
+        Matrix6<T> result;
+
+        result.SetSubmatrix(Matrix6<T>::TOP_LEFT,
+            Matrix3<T>::Identity * this->massMatrix.Mass());
+
+        result.SetSubmatrix(Matrix6<T>::BOTTOM_RIGHT, this->Moi());
+
+        auto x = this->pose.Pos().X();
+        auto y = this->pose.Pos().Y();
+        auto z = this->pose.Pos().Z();
+        auto skew = Matrix3<T>(
+            0, -z, y,
+            z, 0, -x,
+            -y, x, 0) * this->massMatrix.Mass();
+        result.SetSubmatrix(Matrix6<T>::BOTTOM_LEFT, skew);
+        result.SetSubmatrix(Matrix6<T>::TOP_RIGHT, skew.Transposed());
+
+        return result;
+      }
+
+      /// \brief Spatial mass matrix, which includes the body's inertia, as well
+      /// as the inertia of the fluid that is dislocated when the body moves.
+      /// The matrix is expressed in the object's frame F, not to be confused
+      /// with the center of mass frame Bi.
+      /// \return The spatial mass matrix.
+      /// \sa BodyMatrix
+      /// \sa FluidAddedMass
+      public: Matrix6<T> SpatialMatrix() const
+      {
+        return this->addedMass.has_value() ?
+            this->BodyMatrix() + this->addedMass.value() : this->BodyMatrix();
       }
 
       /// \brief Set the inertial pose rotation without affecting the
@@ -173,13 +260,7 @@ namespace ignition
       /// \brief Equal operator.
       /// \param[in] _inertial Inertial to copy.
       /// \return Reference to this object.
-      public: Inertial &operator=(const Inertial<T> &_inertial)
-      {
-        this->massMatrix = _inertial.MassMatrix();
-        this->pose = _inertial.Pose();
-
-        return *this;
-      }
+      public: Inertial &operator=(const Inertial<T> &_inertial) = default;
 
       /// \brief Equality comparison operator.
       /// \param[in] _inertial Inertial to copy.
@@ -188,7 +269,8 @@ namespace ignition
       public: bool operator==(const Inertial<T> &_inertial) const
       {
         return (this->pose == _inertial.Pose()) &&
-               (this->massMatrix == _inertial.MassMatrix());
+               (this->massMatrix == _inertial.MassMatrix()) &&
+               (this->addedMass == _inertial.FluidAddedMass());
       }
 
       /// \brief Inequality test operator
@@ -257,6 +339,65 @@ namespace ignition
         return *this;
       }
 
+      /// \brief Subtracts inertial properties from current object.
+      /// The mass, center of mass location, and inertia matrix are updated
+      /// as long as the remaining mass is positive.
+      /// \param[in] _inertial Inertial to subtract.
+      /// \return Reference to this object.
+     public: Inertial<T> &operator-=(const Inertial<T> &_inertial)
+      {
+        T m = this->massMatrix.Mass();
+        T m2 = _inertial.MassMatrix().Mass();
+
+        // Remaining mass
+        T m1 = m - m2;
+
+        // Only continue if remaining mass is positive
+        if (m1 <= 0)
+        {
+          return *this;
+        }
+
+        auto com = this->Pose().Pos();
+        auto com2 = _inertial.Pose().Pos();
+        // Remaining center of mass location in base frame
+        auto com1 = (m*com - m2*com2)/m1;
+
+        // Components of new moment of inertia matrix
+        Vector3<T> ixxyyzz;
+        Vector3<T> ixyxzyz;
+
+        // First subtract matrices in base frame
+        {
+          auto moi = this->Moi() - _inertial.Moi();
+          ixxyyzz = Vector3<T>(moi(0, 0), moi(1, 1), moi(2, 2));
+          ixyxzyz = Vector3<T>(moi(0, 1), moi(0, 2), moi(1, 2));
+        }
+        // Then account for parallel axis theorem
+        {
+          auto dc = com1 - com;
+          ixxyyzz.X() -= m1 * (std::pow(dc[1], 2) + std::pow(dc[2], 2));
+          ixxyyzz.Y() -= m1 * (std::pow(dc[2], 2) + std::pow(dc[0], 2));
+          ixxyyzz.Z() -= m1 * (std::pow(dc[0], 2) + std::pow(dc[1], 2));
+          ixyxzyz.X() += m1 * dc[0] * dc[1];
+          ixyxzyz.Y() += m1 * dc[0] * dc[2];
+          ixyxzyz.Z() += m1 * dc[1] * dc[2];
+        }
+        {
+          auto dc = com2 - com;
+          ixxyyzz.X() -= m2 * (std::pow(dc[1], 2) + std::pow(dc[2], 2));
+          ixxyyzz.Y() -= m2 * (std::pow(dc[2], 2) + std::pow(dc[0], 2));
+          ixxyyzz.Z() -= m2 * (std::pow(dc[0], 2) + std::pow(dc[1], 2));
+          ixyxzyz.X() += m2 * dc[0] * dc[1];
+          ixyxzyz.Y() += m2 * dc[0] * dc[2];
+          ixyxzyz.Z() += m2 * dc[1] * dc[2];
+        }
+        this->massMatrix = MassMatrix3<T>(m1, ixxyyzz, ixyxzyz);
+        this->pose = Pose3<T>(com1, Quaternion<T>::Identity);
+
+        return *this;
+      }
+
       /// \brief Adds inertial properties to current object.
       /// The mass, center of mass location, and inertia matrix are updated
       /// as long as the total mass is positive.
@@ -267,6 +408,16 @@ namespace ignition
         return Inertial<T>(*this) += _inertial;
       }
 
+      /// \brief Subtracts inertial properties from current object.
+      /// The mass, center of mass location, and inertia matrix are updated
+      /// as long as the remaining mass is positive.
+      /// \param[in] _inertial Inertial to subtract.
+      /// \return Reference to this object.
+      public: const Inertial<T> operator-(const Inertial<T> &_inertial) const
+      {
+        return Inertial<T>(*this) -= _inertial;
+      }
+
       /// \brief Mass and inertia matrix of the object expressed in the
       /// center of mass reference frame.
       private: MassMatrix3<T> massMatrix;
@@ -274,6 +425,9 @@ namespace ignition
       /// \brief Pose offset of center of mass reference frame relative
       /// to a base frame.
       private: Pose3<T> pose;
+
+      /// \brief Fluid added mass.
+      private: std::optional<Matrix6<T>> addedMass;
     };
 
     typedef Inertial<double> Inertiald;

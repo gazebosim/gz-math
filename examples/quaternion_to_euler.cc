@@ -49,7 +49,7 @@ int main(int argc, char **argv)
               << "  quaternion_to_euler "
               << "<float_w> <float_x> <float_y> <float_z>\n\n"
               << "Example\n"
-              << "  quaternion_from_euler 0.5 0.5 0.5 0.5"
+              << "  quaternion_to_euler 0.5 0.5 0.5 0.5"
               << std::endl;
     return -1;
   }
@@ -87,9 +87,9 @@ int main(int argc, char **argv)
   printf(" roll  % .6f degrees\n"
          " pitch % .6f degrees\n"
          " yaw   % .6f degrees\n",
-          IGN_RTOD(euler.X()),
-          IGN_RTOD(euler.Y()),
-          IGN_RTOD(euler.Z()));
+          GZ_RTOD(euler.X()),
+          GZ_RTOD(euler.Y()),
+          GZ_RTOD(euler.Z()));
 
   std::cout << "\nto Rotation matrix\n";
   printf("   % .6f  % .6f  % .6f\n"

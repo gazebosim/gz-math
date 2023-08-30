@@ -22,14 +22,14 @@
 #include <gz/math/Helpers.hh>
 #include <gz/math/Matrix3.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
-    /// \class Matrix6 Matrix6.hh ignition/math/Matrix6.hh
+    /// \class Matrix6 Matrix6.hh gz/math/Matrix6.hh
     /// \brief A 6x6 matrix class
     template<typename T>
     class Matrix6
@@ -369,8 +369,8 @@ namespace ignition
      public: inline const T &operator()(const size_t _row,
                  const size_t _col) const
      {
-       return this->data[clamp(_row, IGN_ZERO_SIZE_T, IGN_FIVE_SIZE_T)][
-                         clamp(_col, IGN_ZERO_SIZE_T, IGN_FIVE_SIZE_T)];
+       return this->data[clamp(_row, GZ_ZERO_SIZE_T, GZ_FIVE_SIZE_T)][
+                         clamp(_col, GZ_ZERO_SIZE_T, GZ_FIVE_SIZE_T)];
      }
 
      /// \brief Get a mutable version of the value at the specified row,
@@ -382,8 +382,8 @@ namespace ignition
      /// \return The value at the specified index
      public: inline T &operator()(const size_t _row, const size_t _col)
      {
-       return this->data[clamp(_row, IGN_ZERO_SIZE_T, IGN_FIVE_SIZE_T)]
-                        [clamp(_col, IGN_ZERO_SIZE_T, IGN_FIVE_SIZE_T)];
+       return this->data[clamp(_row, GZ_ZERO_SIZE_T, GZ_FIVE_SIZE_T)]
+                        [clamp(_col, GZ_ZERO_SIZE_T, GZ_FIVE_SIZE_T)];
      }
 
      /// \brief Get one of the four 3x3 submatrices that compose this matrix.

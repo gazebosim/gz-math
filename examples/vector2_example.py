@@ -15,16 +15,16 @@
 # This example will only work if the Python interface library was compiled and
 # installed.
 #
-# Modify the PYTHONPATH environment variable to include the ignition math
+# Modify the PYTHONPATH environment variable to include the gz math
 # library install path. For example, if you install to /user:
 #
 # $ export PYTHONPATH=/usr/lib/python:$PYTHONPATH
 #
-import ignition.math
+import gz.math7
 
-va = ignition.math.Vector2d(1, 2)
-vb = ignition.math.Vector2d(3, 4)
-vc = ignition.math.Vector2d(vb)
+va = gz.math7.Vector2d(1, 2)
+vb = gz.math7.Vector2d(3, 4)
+vc = gz.math7.Vector2d(vb)
 
 print("va = {} {}\n".format(va.x(), va.y()))
 print("vb = {} {}\n".format(vb.x(), vb.y()))

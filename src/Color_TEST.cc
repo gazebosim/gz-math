@@ -74,6 +74,14 @@ TEST(Color, Color)
   EXPECT_FLOAT_EQ(0.0f, clr0.B());
   EXPECT_FLOAT_EQ(1.0f, clr0.A());
   EXPECT_EQ(clr0.AsRGBA(), 255u);
+
+  auto clrcpy = math::Color(clr0);
+  EXPECT_FLOAT_EQ(0.0f, clrcpy.R());
+  EXPECT_FLOAT_EQ(0.0f, clrcpy.G());
+  EXPECT_FLOAT_EQ(0.0f, clrcpy.B());
+  EXPECT_FLOAT_EQ(1.0f, clrcpy.A());
+  EXPECT_EQ(clrcpy.AsRGBA(), 255u);
+
   clr0.A(0.0);
   EXPECT_EQ(clr0.AsRGBA(), 0u);
 
@@ -256,6 +264,12 @@ TEST(Color, Color)
   EXPECT_TRUE(math::equal(0.1f, clr.G()));
   EXPECT_TRUE(math::equal(0.2f, clr.B()));
   EXPECT_TRUE(math::equal(0.3f, clr.A()));
+
+  clrcpy = math::Color(clr);
+  EXPECT_TRUE(math::equal(0.25f, clrcpy.R()));
+  EXPECT_TRUE(math::equal(0.1f, clrcpy.G()));
+  EXPECT_TRUE(math::equal(0.2f, clrcpy.B()));
+  EXPECT_TRUE(math::equal(0.3f, clrcpy.A()));
 }
 
 
@@ -330,10 +344,22 @@ TEST(Color, ConstAndSet)
 /////////////////////////////////////////////////
 TEST(Color, OperatorStreamOut)
 {
-  math::Color c(0.1f, 0.2f, 0.3f, 0.5f);
+  math::Color c(0.1111f, 0.2222f, 0.3333f, 0.5555f);
   std::ostringstream stream;
   stream << c;
-  EXPECT_EQ(stream.str(), "0.1 0.2 0.3 0.5");
+  EXPECT_EQ(stream.str(), "0.1111 0.2222 0.3333 0.5555");
+
+  stream.str("");
+  stream << std::setprecision(2) << c;
+  EXPECT_EQ(stream.str(), "0.11 0.22 0.33 0.56");
+
+  stream.str("");
+  stream << std::setprecision(3) << c;
+  EXPECT_EQ(stream.str(), "0.111 0.222 0.333 0.555");
+
+  stream.str("");
+  stream << std::setprecision(1) << std::fixed << c;
+  EXPECT_EQ(stream.str(), "0.1 0.2 0.3 0.6");
 }
 
 /////////////////////////////////////////////////
@@ -406,11 +432,4 @@ TEST(Color, HSV)
   EXPECT_NEAR(clr.G(), 0.3f, 1e-3);
   EXPECT_NEAR(clr.B(), 0.3f, 1e-3);
   EXPECT_NEAR(clr.A(), 1.0, 1e-3);
-}
-
-/////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

@@ -23,19 +23,19 @@
 #include <gz/math/Helpers.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /// \brief Forward declare private data class.
     class SignalStatisticPrivate;
 
-    /// \class SignalStatistic SignalStats.hh ignition/math/SignalStats.hh
+    /// \class SignalStatistic SignalStats.hh gz/math/SignalStats.hh
     /// \brief Statistical properties of a discrete time scalar signal.
-    class IGNITION_MATH_VISIBLE SignalStatistic
+    class GZ_MATH_VISIBLE SignalStatistic
     {
       /// \brief Constructor
       public: SignalStatistic();
@@ -79,9 +79,9 @@ namespace ignition
 #endif
     };
 
-    /// \class SignalMaximum SignalStats.hh ignition/math/SignalStats.hh
+    /// \class SignalMaximum SignalStats.hh gz/math/SignalStats.hh
     /// \brief Computing the maximum value of a discretely sampled signal.
-    class IGNITION_MATH_VISIBLE SignalMaximum : public SignalStatistic
+    class GZ_MATH_VISIBLE SignalMaximum : public SignalStatistic
     {
       // Documentation inherited.
       public: virtual double Value() const override;
@@ -94,9 +94,9 @@ namespace ignition
       public: virtual void InsertData(const double _data) override;
     };
 
-    /// \class SignalMean SignalStats.hh ignition/math/SignalStats.hh
+    /// \class SignalMean SignalStats.hh gz/math/SignalStats.hh
     /// \brief Computing the mean value of a discretely sampled signal.
-    class IGNITION_MATH_VISIBLE SignalMean : public SignalStatistic
+    class GZ_MATH_VISIBLE SignalMean : public SignalStatistic
     {
       // Documentation inherited.
       public: virtual double Value() const override;
@@ -109,9 +109,9 @@ namespace ignition
       public: virtual void InsertData(const double _data) override;
     };
 
-    /// \class SignalMinimum SignalStats.hh ignition/math/SignalStats.hh
+    /// \class SignalMinimum SignalStats.hh gz/math/SignalStats.hh
     /// \brief Computing the minimum value of a discretely sampled signal.
-    class IGNITION_MATH_VISIBLE SignalMinimum : public SignalStatistic
+    class GZ_MATH_VISIBLE SignalMinimum : public SignalStatistic
     {
       // Documentation inherited.
       public: virtual double Value() const override;
@@ -124,10 +124,10 @@ namespace ignition
       public: virtual void InsertData(const double _data) override;
     };
 
-    /// \class SignalRootMeanSquare SignalStats.hh ignition/math/SignalStats.hh
+    /// \class SignalRootMeanSquare SignalStats.hh gz/math/SignalStats.hh
     /// \brief Computing the square root of the mean squared value
     /// of a discretely sampled signal.
-    class IGNITION_MATH_VISIBLE SignalRootMeanSquare : public SignalStatistic
+    class GZ_MATH_VISIBLE SignalRootMeanSquare : public SignalStatistic
     {
       // Documentation inherited.
       public: virtual double Value() const override;
@@ -141,11 +141,11 @@ namespace ignition
     };
 
     /// \class SignalMaxAbsoluteValue SignalStats.hh
-    /// ignition/math/SignalStats.hh
+    /// gz/math/SignalStats.hh
     /// \brief Computing the maximum of the absolute value
     /// of a discretely sampled signal.
     /// Also known as the maximum norm, infinity norm, or supremum norm.
-    class IGNITION_MATH_VISIBLE SignalMaxAbsoluteValue : public SignalStatistic
+    class GZ_MATH_VISIBLE SignalMaxAbsoluteValue : public SignalStatistic
     {
       // Documentation inherited.
       public: virtual double Value() const override;
@@ -158,10 +158,10 @@ namespace ignition
       public: virtual void InsertData(const double _data) override;
     };
 
-    /// \class SignalVariance SignalStats.hh ignition/math/SignalStats.hh
+    /// \class SignalVariance SignalStats.hh gz/math/SignalStats.hh
     /// \brief Computing the incremental variance
     /// of a discretely sampled signal.
-    class IGNITION_MATH_VISIBLE SignalVariance : public SignalStatistic
+    class GZ_MATH_VISIBLE SignalVariance : public SignalStatistic
     {
       // Documentation inherited.
       public: virtual double Value() const override;
@@ -177,9 +177,9 @@ namespace ignition
     /// \brief Forward declare private data class.
     class SignalStatsPrivate;
 
-    /// \class SignalStats SignalStats.hh ignition/math/SignalStats.hh
+    /// \class SignalStats SignalStats.hh gz/math/SignalStats.hh
     /// \brief Collection of statistics for a scalar signal.
-    class IGNITION_MATH_VISIBLE SignalStats
+    class GZ_MATH_VISIBLE SignalStats
     {
       /// \brief Constructor
       public: SignalStats();
@@ -252,4 +252,3 @@ namespace ignition
   }
 }
 #endif
-

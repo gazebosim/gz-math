@@ -15,7 +15,6 @@
  *
 */
 #include <gtest/gtest.h>
-#include <cmath>
 
 #include "gz/math/Angle.hh"
 #include "gz/math/OrientedBox.hh"
@@ -71,9 +70,9 @@ TEST(OrientedBoxTest, NegativeSizeConstructor)
 /////////////////////////////////////////////////
 TEST(OrientedBoxTest, SizePoseConstructor)
 {
-  OrientedBoxi box(Vector3i(1, 2, 3), Pose3i(-1, -2, -3, 0, 1, 2));
-  EXPECT_EQ(box.Size(), Vector3i(1, 2, 3));
-  EXPECT_EQ(box.Pose(), Pose3i(-1, -2, -3, 0, 1, 2));
+  OrientedBoxf box(Vector3f(1, 2, 3), Pose3f(-1, -2, -3, 0, 1, 2));
+  EXPECT_EQ(box.Size(), Vector3f(1, 2, 3));
+  EXPECT_EQ(box.Pose(), Pose3f(-1, -2, -3, 0, 1, 2));
 }
 
 /////////////////////////////////////////////////
@@ -257,7 +256,7 @@ TEST(OrientedBoxTest, ContainsOrientedPosition)
 TEST(OrientedBoxTest, ContainsOrientedRotation)
 {
   // Rotate PI/2 about +x: swap Z and Y
-  OrientedBoxd box(Vector3d(1, 2, 3), Pose3d(0, 0, 0, IGN_PI*0.5, 0, 0));
+  OrientedBoxd box(Vector3d(1, 2, 3), Pose3d(0, 0, 0, GZ_PI*0.5, 0, 0));
 
   // Doesn't contain non-rotated vertices
   EXPECT_FALSE(box.Contains(Vector3d(-0.5, -1.0, -1.5)));

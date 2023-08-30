@@ -28,7 +28,7 @@
 
 namespace py = pybind11;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -66,12 +66,12 @@ public:
         PYBIND11_OVERLOAD_PURE(
             const T&,     // Return type (ret_type)
             Filter<T>,    // Parent class (cname)
-            Value         // Name of function in C++ (must match Python name)
+            Value,         // Name of function in C++ (must match Python name)
         );
     }
 };
 
-/// Help define a pybind11 wrapper for an gz::math::Filter
+/// Help define a pybind11 wrapper for a gz::math::Filter
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -97,7 +97,7 @@ void helpDefineMathFilter(py::module &m, const std::string &typestr)
          "Get the output of the filter.");
 }
 
-/// Define a pybind11 wrapper for an gz::math::Filter
+/// Define a pybind11 wrapper for a gz::math::Filter
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -123,7 +123,7 @@ public:
   }
 };
 
-/// Help define a pybind11 wrapper for an gz::math::OnePole
+/// Help define a pybind11 wrapper for a gz::math::OnePole
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -153,21 +153,21 @@ void helpDefineMathOnePole(py::module &m, const std::string &typestr)
          "Update the filter's output.");
 }
 
-/// Define a pybind11 wrapper for an gz::math::OnePole
+/// Define a pybind11 wrapper for a gz::math::OnePole
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathOnePole(py::module &m, const std::string &typestr);
 
-/// Define a pybind11 wrapper for an gz::math::OnePoleQuaterion
+/// Define a pybind11 wrapper for a gz::math::OnePoleQuaterion
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathOnePoleQuaternion(py::module &m, const std::string &typestr);
 
-/// Define a pybind11 wrapper for an gz::math::OnePoleVector3
+/// Define a pybind11 wrapper for a gz::math::OnePoleVector3
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -213,7 +213,7 @@ public:
   }
 };
 
-/// Help define a pybind11 wrapper for an gz::math::BiQuad
+/// Help define a pybind11 wrapper for a gz::math::BiQuad
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -246,14 +246,14 @@ void helpDefineMathBiQuad(py::module &m, const std::string &typestr)
          "Update the filter's output.");
 }
 
-/// Define a pybind11 wrapper for an gz::math::BiQuad
+/// Define a pybind11 wrapper for a gz::math::BiQuad
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathBiQuad(py::module &m, const std::string &typestr);
 
-/// Define a pybind11 wrapper for an gz::math::BiQuadVector3
+/// Define a pybind11 wrapper for a gz::math::BiQuadVector3
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -262,6 +262,6 @@ void defineMathBiQuadVector3(py::module &m, const std::string &typestr);
 
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
 #endif  // GZ_MATH_PYTHON__FILTER_HH_

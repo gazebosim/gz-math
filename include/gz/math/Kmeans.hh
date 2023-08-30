@@ -22,29 +22,25 @@
 #include <gz/math/Helpers.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+#include <gz/utils/ImplPtr.hh>
+
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
-    //
-    // Forward declare private data
-    class KmeansPrivate;
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
 
     /// \class Kmeans Kmeans.hh math/gzmath.hh
     /// \brief K-Means clustering algorithm. Given a set of observations,
     /// k-means partitions the observations into k sets so as to minimize the
     /// within-cluster sum of squares.
     /// Description based on http://en.wikipedia.org/wiki/K-means_clustering.
-    class IGNITION_MATH_VISIBLE Kmeans
+    class GZ_MATH_VISIBLE Kmeans
     {
       /// \brief constructor
       /// \param[in] _obs Set of observations to cluster.
       public: explicit Kmeans(const std::vector<Vector3d> &_obs);
-
-      /// \brief Destructor.
-      public: virtual ~Kmeans();
 
       /// \brief Get the observations to cluster.
       /// \return The vector of observations.
@@ -80,8 +76,7 @@ namespace ignition
       /// \return The index of the closest centroid to the point _p.
       private: unsigned int ClosestCentroid(const Vector3d &_p) const;
 
-      /// \brief Private data pointer
-      private: KmeansPrivate *dataPtr;
+      GZ_UTILS_IMPL_PTR(dataPtr)
     };
     }
   }

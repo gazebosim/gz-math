@@ -20,22 +20,23 @@
 #include <chrono>
 #include <gz/math/Helpers.hh>
 #include <gz/math/config.hh>
+#include <gz/utils/ImplPtr.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
-    /// \class PID PID.hh ignition/math/PID.hh
+    /// \class PID PID.hh gz/math/PID.hh
     /// \brief Generic PID controller class.
     /// Generic proportional-integral-derivative controller class that
     /// keeps track of PID-error states and control inputs given
     /// the state of a system and a user specified target state.
     /// It includes a user-adjustable command offset term (feed-forward).
     // cppcheck-suppress class_X_Y
-    class IGNITION_MATH_VISIBLE PID
+    class GZ_MATH_VISIBLE PID
     {
       /// \brief Constructor, zeros out Pid values when created and
       /// initialize Pid-gains and integral term limits:[iMax:iMin]-[I1:I2].
@@ -62,9 +63,6 @@ namespace ignition
                   const double _cmdMax = -1.0,
                   const double _cmdMin = 0.0,
                   const double _cmdOffset = 0.0);
-
-      /// \brief Destructor
-      public: ~PID() = default;
 
       /// \brief Initialize PID-gains and integral term
       ///        limits:[iMax:iMin]-[I1:I2].
@@ -196,52 +194,11 @@ namespace ignition
       /// \param[in] _de  The derivative error.
       public: void Errors(double &_pe, double &_ie, double &_de) const;
 
-      /// \brief Assignment operator
-      /// \param[in] _p a reference to a PID to assign values from
-      /// \return reference to this instance
-      public: PID &operator=(const PID &_p);
-
       /// \brief Reset the errors and command.
       public: void Reset();
 
-      /// \brief Error at a previous step.
-      private: double pErrLast = 0.0;
-
-      /// \brief Current error.
-      private: double pErr = 0.0;
-
-      /// \brief Integral of gain times error.
-      private: double iErr = 0.0;
-
-      /// \brief Derivative error.
-      private: double dErr = 0.0;
-
-      /// \brief Gain for proportional control.
-      private: double pGain;
-
-      /// \brief Gain for integral control.
-      private: double iGain = 0.0;
-
-      /// \brief Gain for derivative control.
-      private: double dGain = 0.0;
-
-      /// \brief Maximum clamping value for integral term.
-      private: double iMax = -1.0;
-
-      /// \brief Minim clamping value for integral term.
-      private: double iMin = 0.0;
-
-      /// \brief Command value.
-      private: double cmd = 0.0;
-
-      /// \brief Max command clamping value.
-      private: double cmdMax = -1.0;
-
-      /// \brief Min command clamping value.
-      private: double cmdMin = 0.0;
-
-      /// \brief Command offset.
-      private: double cmdOffset = 0.0;
+      /// \brief Pointer to private data.
+      GZ_UTILS_IMPL_PTR(dataPtr)
     };
     }
   }

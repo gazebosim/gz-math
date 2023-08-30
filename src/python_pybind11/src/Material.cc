@@ -25,7 +25,7 @@
 #include <pybind11/operators.h>
 #include <pybind11/stl_bind.h>
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -103,4 +103,4 @@ void defineMathMaterial(py::module &m, const std::string &typestr)
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz

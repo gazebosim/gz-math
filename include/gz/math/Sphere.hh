@@ -17,12 +17,13 @@
 #ifndef GZ_MATH_SPHERE_HH_
 #define GZ_MATH_SPHERE_HH_
 
+#include <optional>
 #include "gz/math/MassMatrix3.hh"
 #include "gz/math/Material.hh"
 #include "gz/math/Quaternion.hh"
 #include "gz/math/Plane.hh"
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
@@ -30,9 +31,9 @@ namespace ignition
     class SpherePrivate;
 
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
-    /// \class Sphere Sphere.hh ignition/math/Sphere.hh
+    /// \class Sphere Sphere.hh gz/math/Sphere.hh
     /// \brief A representation of a sphere.
     ///
     /// The sphere class supports defining a sphere with a radius and
@@ -52,9 +53,6 @@ namespace ignition
       /// \param[in] _radius Radius of the sphere.
       /// \param[in] _mat Material property for the sphere.
       public: Sphere(const Precision _radius, const Material &_mat);
-
-      /// \brief Destructor
-      public: ~Sphere() = default;
 
       /// \brief Get the radius in meters.
       /// \return The radius of the sphere in meters.
@@ -79,6 +77,13 @@ namespace ignition
       /// \return False if computation of the mass matrix failed, which
       /// could be due to an invalid radius (<=0) or density (<=0).
       public: bool MassMatrix(MassMatrix3d &_massMat) const;
+
+      /// \brief Get the mass matrix for this sphere. This function
+      /// is only meaningful if the sphere's radius and material have been set.
+      /// \return The computed mass matrix if parameters are valid
+      /// (radius > 0) and (density > 0). Otherwise
+      /// std::nullopt is returned.
+      public: std::optional< MassMatrix3<Precision> > MassMatrix() const;
 
       /// \brief Check if this sphere is equal to the provided sphere.
       /// Radius and material properties will be checked.

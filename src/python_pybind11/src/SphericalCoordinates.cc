@@ -20,7 +20,7 @@
 #include <gz/math/Angle.hh>
 #include <gz/math/SphericalCoordinates.hh>
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -42,6 +42,8 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
     .def(py::init<const Class::SurfaceType, const gz::math::Angle &,
                   const gz::math::Angle &, const double,
                   const gz::math::Angle &>())
+    .def(py::init<const Class::SurfaceType, const double,
+                  const double>())
     .def(py::self != py::self)
     .def(py::self == py::self)
     .def("spherical_from_local_position",
@@ -57,8 +59,15 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
     .def("convert",
          py::overload_cast<Class::SurfaceType>(&Class::Convert),
          "Convert a SurfaceType to a string.")
-    .def("distance",
-         &Class::Distance,
+    .def("distance_WGS84",
+         &Class::DistanceWGS84,
+         "Get the distance between two points expressed in geographic "
+         "latitude and longitude. It assumes that both points are at sea level."
+         " Example: _latA = 38.0016667 and _lonA = -123.0016667) represents "
+         "the point with latitude 38d 0'6.00\"N and longitude 123d 0'6.00\"W."
+         " This function assumes the surface is EARTH_WGS84.")
+    .def("distance_between_points",
+         &Class::DistanceBetweenPoints,
          "Get the distance between two points expressed in geographic "
          "latitude and longitude. It assumes that both points are at sea level."
          " Example: _latA = 38.0016667 and _lonA = -123.0016667) represents "
@@ -66,6 +75,18 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
     .def("surface",
          &Class::Surface,
          "Get SurfaceType currently in use.")
+    .def("surface_radius",
+         &Class::SurfaceRadius,
+         "Get the radius of the surface.")
+    .def("surface_axis_equatorial",
+         &Class::SurfaceAxisEquatorial,
+         "Get the major of the surface.")
+    .def("surface_axis_polar",
+         &Class::SurfaceAxisPolar,
+         "Get the minor axis of the surface.")
+    .def("surface_flattening",
+         &Class::SurfaceFlattening,
+         "Get the flattening parameter of the surface.")
     .def("latitude_reference",
          &Class::LatitudeReference,
          "Get reference geodetic latitude.")
@@ -81,7 +102,12 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
          "angle from East to x-axis, or equivalently "
          "from North to y-axis.")
     .def("set_surface",
-         &Class::SetSurface,
+         py::overload_cast<const Class::SurfaceType&>(&Class::SetSurface),
+         "Set SurfaceType for planetary surface model.")
+    .def("set_surface",
+         py::overload_cast<const Class::SurfaceType&,
+         const double, const double
+         >(&Class::SetSurface),
          "Set SurfaceType for planetary surface model.")
     .def("set_latitude_reference",
          &Class::SetLatitudeReference,
@@ -125,8 +151,10 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
        .export_values();
    py::enum_<Class::SurfaceType>(sphericalCoordinates, "SurfaceType")
        .value("EARTH_WGS84", Class::SurfaceType::EARTH_WGS84)
+       .value("MOON_SCS", Class::SurfaceType::MOON_SCS)
+       .value("CUSTOM_SURFACE", Class::SurfaceType::CUSTOM_SURFACE)
        .export_values();
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz

@@ -14,10 +14,10 @@
 
 import math
 import unittest
-from ignition.math import Matrix4d
-from ignition.math import Pose3d
-from ignition.math import Quaterniond
-from ignition.math import Vector3d
+from gz.math7 import Matrix4d
+from gz.math7 import Pose3d
+from gz.math7 import Quaterniond
+from gz.math7 import Vector3d
 
 
 class TestMatrix4(unittest.TestCase):

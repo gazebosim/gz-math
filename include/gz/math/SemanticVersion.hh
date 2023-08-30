@@ -18,27 +18,24 @@
 #ifndef GZ_MATH_SEMANTICVERSION_HH_
 #define GZ_MATH_SEMANTICVERSION_HH_
 
-#include <memory>
+#include <iosfwd>
 #include <string>
 #include <gz/math/Helpers.hh>
 #include <gz/math/config.hh>
+#include <gz/utils/ImplPtr.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
-    //
-    // Forward declare private data class
-    class SemanticVersionPrivate;
-
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     /// \class SemanticVersion SemanticVersion.hh
-    ///        ignition/math/SemanticVersion.hh
+    ///        gz/math/SemanticVersion.hh
     /// \brief Version comparison class based on Semantic Versioning 2.0.0
     /// http://semver.org/
     /// Compares versions and converts versions from string.
-    class IGNITION_MATH_VISIBLE SemanticVersion
+    class GZ_MATH_VISIBLE SemanticVersion
     {
       /// \brief Default constructor. Use the Parse function to populate
       /// an instance with version information.
@@ -48,29 +45,17 @@ namespace ignition
       /// \param[in] _v the string version. ex: "0.3.2"
       public: explicit SemanticVersion(const std::string &_v);
 
-      /// \brief Copy constructor
-      /// \param[in] _copy the other version
-      public: SemanticVersion(const SemanticVersion &_copy);
-
-      /// \brief Assignment operator
-      /// \param[in] _other The version to assign from.
-      /// \return The reference to this instance
-      public: SemanticVersion &operator=(const SemanticVersion &_other);
-
       /// \brief Constructor
       /// \param[in] _major The major number
       /// \param[in] _minor The minor number
       /// \param[in] _patch The patch number
       /// \param[in] _prerelease The prerelease string
       /// \param[in] _build The build metadata string
-      public: SemanticVersion(const unsigned int _major,
-                              const unsigned int _minor = 0,
-                              const unsigned int _patch = 0,
-                              const std::string &_prerelease = "",
-                              const std::string &_build = "");
-
-      /// \brief Destructor
-      public: ~SemanticVersion();
+      public: explicit SemanticVersion(const unsigned int _major,
+                                       const unsigned int _minor = 0,
+                                       const unsigned int _patch = 0,
+                                       const std::string &_prerelease = "",
+                                       const std::string &_build = "");
 
       /// \brief Parse a version string and set the major, minor, patch
       /// numbers, and prerelease and build strings.
@@ -146,17 +131,7 @@ namespace ignition
         return _out;
       }
 
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::unique_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
-      /// \brief Pointer to private data
-      private: std::unique_ptr<SemanticVersionPrivate> dataPtr;
-#ifdef _WIN32
-#pragma warning(pop)
-#endif
+      GZ_UTILS_IMPL_PTR(dataPtr)
     };
     }
   }

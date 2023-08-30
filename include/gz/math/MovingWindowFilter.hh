@@ -19,64 +19,31 @@
 
 #include <memory>
 #include <vector>
-#include "gz/math/Export.hh"
 
-namespace ignition
+#include <gz/math/config.hh>
+#include <gz/math/Export.hh>
+#include <gz/math/Vector3.hh>
+
+#include <gz/utils/SuppressWarning.hh>
+
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
-    //
-
-    /// \cond
-    /// \brief Private data members for MovingWindowFilter class.
-    /// This must be in the header due to templatization.
-    template< typename T>
-    class MovingWindowFilterPrivate
-    {
-      // \brief Constructor
-      public: MovingWindowFilterPrivate();
-
-      /// \brief For moving window smoothed value
-      public: unsigned int valWindowSize = 4;
-
-      /// \brief buffer history of raw values
-      public: std::vector<T> valHistory;
-
-      /// \brief iterator pointing to current value in buffer
-      public: typename std::vector<T>::iterator valIter;
-
-      /// \brief keep track of running sum
-      public: T sum;
-
-      /// \brief keep track of number of elements
-      public: unsigned int samples = 0;
-    };
-
-    //////////////////////////////////////////////////
-    template<typename T>
-    MovingWindowFilterPrivate<T>::MovingWindowFilterPrivate()
-    {
-      /// \TODO FIXME hardcoded initial value for now
-      this->valHistory.resize(this->valWindowSize);
-      this->valIter = this->valHistory.begin();
-      this->sum = T();
-    }
-    /// \endcond
-
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     /// \brief Base class for MovingWindowFilter. This replaces the
-    /// version of MovingWindowFilter in the Ignition Common library.
+    /// version of MovingWindowFilter in the Gazebo Common library.
     ///
     /// The default window size is 4.
     template< typename T>
-    class MovingWindowFilter
+    class GZ_MATH_VISIBLE MovingWindowFilter
     {
       /// \brief Constructor
-      public: MovingWindowFilter();
+      public: MovingWindowFilter(unsigned int _windowSize = 4);
 
       /// \brief Destructor
-      public: virtual ~MovingWindowFilter();
+      public: virtual ~MovingWindowFilter() = default;
 
       /// \brief Update value of filter
       /// \param[in] _val new raw value
@@ -98,93 +65,31 @@ namespace ignition
       /// \return Latest filtered value
       public: T Value() const;
 
-      /// \brief Data pointer.
-      private: std::unique_ptr<MovingWindowFilterPrivate<T>> dataPtr;
+      /// \brief For moving window smoothed value
+      public: unsigned int valWindowSize = 4;
+
+      /// \brief keep track of number of elements
+      public: unsigned int samples = 0;
+
+      GZ_UTILS_WARN_IGNORE__DLL_INTERFACE_MISSING
+      /// \brief buffer history of raw values
+      public: std::vector<T> valHistory;
+
+      /// \brief iterator pointing to current value in buffer
+      public: typename std::vector<T>::iterator valIter;
+
+      /// \brief keep track of running sum
+      public: T sum;
+      GZ_UTILS_WARN_RESUME__DLL_INTERFACE_MISSING
     };
 
-    //////////////////////////////////////////////////
-    template<typename T>
-    MovingWindowFilter<T>::MovingWindowFilter()
-    : dataPtr(new MovingWindowFilterPrivate<T>())
-    {
-    }
-
-    //////////////////////////////////////////////////
-    template<typename T>
-    MovingWindowFilter<T>::~MovingWindowFilter()
-    {
-      this->dataPtr->valHistory.clear();
-    }
-
-    //////////////////////////////////////////////////
-    template<typename T>
-    void MovingWindowFilter<T>::Update(const T _val)
-    {
-      // update sum and sample size with incoming _val
-
-      // keep running sum
-      this->dataPtr->sum += _val;
-
-      // shift pointer, wrap around if end has been reached.
-      ++this->dataPtr->valIter;
-      if (this->dataPtr->valIter == this->dataPtr->valHistory.end())
-      {
-        // reset iterator to beginning of queue
-        this->dataPtr->valIter = this->dataPtr->valHistory.begin();
-      }
-
-      // increment sample size
-      ++this->dataPtr->samples;
-
-      if (this->dataPtr->samples > this->dataPtr->valWindowSize)
-      {
-        // subtract old value if buffer already filled
-        this->dataPtr->sum -= (*this->dataPtr->valIter);
-        // put new value into queue
-        (*this->dataPtr->valIter) = _val;
-        // reduce sample size
-        --this->dataPtr->samples;
-      }
-      else
-      {
-        // put new value into queue
-        (*this->dataPtr->valIter) = _val;
-      }
-    }
-
-    //////////////////////////////////////////////////
-    template<typename T>
-    void MovingWindowFilter<T>::SetWindowSize(const unsigned int _n)
-    {
-      this->dataPtr->valWindowSize = _n;
-      this->dataPtr->valHistory.clear();
-      this->dataPtr->valHistory.resize(this->dataPtr->valWindowSize);
-      this->dataPtr->valIter = this->dataPtr->valHistory.begin();
-      this->dataPtr->sum = T();
-      this->dataPtr->samples = 0;
-    }
-
-    //////////////////////////////////////////////////
-    template<typename T>
-    unsigned int MovingWindowFilter<T>::WindowSize() const
-    {
-      return this->dataPtr->valWindowSize;
-    }
-
-    //////////////////////////////////////////////////
-    template<typename T>
-    bool MovingWindowFilter<T>::WindowFilled() const
-    {
-      return this->dataPtr->samples == this->dataPtr->valWindowSize;
-    }
-
-    //////////////////////////////////////////////////
-    template<typename T>
-    T MovingWindowFilter<T>::Value() const
-    {
-      return this->dataPtr->sum / static_cast<double>(this->dataPtr->samples);
-    }
-    }
+    using MovingWindowFilteri = MovingWindowFilter<int>;
+    using MovingWindowFilterf = MovingWindowFilter<float>;
+    using MovingWindowFilterd = MovingWindowFilter<double>;
+    using MovingWindowFilterVector3i = MovingWindowFilter<Vector3i>;
+    using MovingWindowFilterVector3f = MovingWindowFilter<Vector3f>;
+    using MovingWindowFilterVector3d = MovingWindowFilter<Vector3d>;
   }
-}
+  }  // namespace math
+}  // namespace gz
 #endif

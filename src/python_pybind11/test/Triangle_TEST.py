@@ -14,9 +14,9 @@
 
 import math
 import unittest
-from ignition.math import Line2d
-from ignition.math import Triangled
-from ignition.math import Vector2d
+from gz.math7 import Line2d
+from gz.math7 import Triangled
+from gz.math7 import Vector2d
 
 
 class TestTriangle(unittest.TestCase):

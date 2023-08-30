@@ -17,9 +17,10 @@
 #ifndef GZ_MATH_DETAIL_SPHERE_HH_
 #define GZ_MATH_DETAIL_SPHERE_HH_
 
+#include <optional>
 #include "gz/math/Sphere.hh"
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -90,9 +91,26 @@ bool Sphere<T>::MassMatrix(MassMatrix3d &_massMat) const
 
 //////////////////////////////////////////////////
 template<typename T>
+std::optional < MassMatrix3<T> > Sphere<T>::MassMatrix() const
+{
+  gz::math::MassMatrix3<T> _massMat;
+
+  if(!_massMat.SetFromSphere(this->material, this->radius))
+  {
+    return std::nullopt;
+  }
+  else
+  {
+    return std::make_optional(_massMat);
+  }
+}
+
+
+//////////////////////////////////////////////////
+template<typename T>
 T Sphere<T>::Volume() const
 {
-  return (4.0/3.0) * IGN_PI * std::pow(this->radius, 3);
+  return (4.0/3.0) * GZ_PI * std::pow(this->radius, 3);
 }
 
 //////////////////////////////////////////////////
@@ -115,7 +133,7 @@ T Sphere<T>::VolumeBelow(const Plane<T> &_plane) const
   }
 
   auto h = r - dist;
-  return IGN_PI * h * h * (3 * r - h) / 3;
+  return GZ_PI * h * h * (3 * r - h) / 3;
 }
 
 //////////////////////////////////////////////////

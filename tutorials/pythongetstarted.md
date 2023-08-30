@@ -4,9 +4,9 @@ Previous Tutorial: \ref cppgetstarted
 
 ## Overview
 
-This tutorial describes how to get started using Ignition Math with Python.
+This tutorial describes how to get started using Gazebo Math with Python.
 
-**NOTE**: If you have compiled Ignition Math from source, you should export
+**NOTE**: If you have compiled Gazebo Math from source, you should export
 your `PYTHONPATH`.
 
 ```bash
@@ -25,12 +25,12 @@ if __name__ == "__main__":
   main()
 ```
 
-The easiest way to include Ignition Math is through `import ignition.math`.
+The easiest way to include Gazebo Math is through `import gz.math7`.
 
 At this point your main file should look like
 
 ```python
-import ignition.math
+import gz.math7
 
 def main():
   pass
@@ -40,13 +40,13 @@ if __name__ == "__main__":
 ```
 
 Now let's create two 3D points with arbitrary values. We will use the
-`ignition.math.Vector3` class to represent these points. Ignition Math provides
+`gz.math.Vector3` class to represent these points. Gazebo Math provides
 some `Vector3` types which are: `Vector3d` (Vector3 using doubles), `Vector3f` (Vector3 using floats)
 and `Vector3i` (Vector3 using integers). The result of this addition will be a
 main file similar to the following.
 
 ```python
-from ignition.math import Vector3d
+from gz.math7 import Vector3d
 
 def main():
   point1 = Vector3d(1, 3, 5)
@@ -57,10 +57,10 @@ if __name__ == "__main__":
 ```
 
 Finally, we can compute the distance between `point1` and `point2` using the
-`ignition.math.Vector3.distance()` function and output the distance value.
+`gz.math.Vector3.distance()` function and output the distance value.
 
 ```python
-from ignition.math import Vector3d
+from gz.math7 import Vector3d
 
 def main():
   point1 = Vector3d(1, 3, 5)
@@ -72,4 +72,10 @@ def main():
 
 if __name__ == "__main__":
   main()
+```
+
+Running this program should result in the following output:
+
+```{.bash}
+Distance from 1 3 5 to 2 4 6 is 1.7320508075688772
 ```

@@ -17,6 +17,7 @@
 
 %module Color
 %{
+#include <sstream>
 #include <gz/math/Color.hh>
 #include <gz/math/config.hh>
 #include <gz/math/Helpers.hh>
@@ -25,7 +26,7 @@
 
 %include "std_string.i"
 
-namespace ignition
+namespace gz
 {
   namespace math
   {

@@ -1,8 +1,8 @@
 \page tutorials Tutorials
 
-Welcome to the Ignition @GZ_DESIGNATION_CAP@ tutorials. These tutorials
+Welcome to the Gazebo @GZ_DESIGNATION_CAP@ tutorials. These tutorials
 will guide you through the process of understanding the capabilities of the
-Ignition @GZ_DESIGNATION_CAP@ library and how to use the library effectively.
+Gazebo @GZ_DESIGNATION_CAP@ library and how to use the library effectively.
 
 
 **The tutorials**
@@ -10,10 +10,10 @@ Ignition @GZ_DESIGNATION_CAP@ library and how to use the library effectively.
 1. \subpage install "Installation"
 2. \subpage cppgetstarted "C++ Get Started"
 3. \subpage pythongetstarted "Python Get Started"
-4. \subpage vector "Vector example"
-5. \subpage angle "Angle example"
-6. \subpage triangle "Triangle example"
-7. \subpage rotation "Rotation example"
+4. \subpage example_vector2 "Vector example"
+5. \subpage example_angle "Angle example"
+6. \subpage example_triangle "Triangle example"
+7. \subpage rotation_example "Rotation example"
 8. \subpage color "Color example"
 
 ## License

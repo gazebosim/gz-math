@@ -11,9 +11,11 @@ jobs:
         uses: actions/checkout@v3
       - name: Compile and test
         id: ci
-        uses: ignition-tooling/action-ignition-ci@focal
+        uses: gazebo-tooling/action-gz-ci@focal
         with:
           codecov-enabled: true
+          cppcheck-enabled: true
+          cpplint-enabled: true
           doxygen-enabled: true
   jammy-ci:
     runs-on: ubuntu-latest
@@ -23,4 +25,4 @@ jobs:
         uses: actions/checkout@v3
       - name: Compile and test
         id: ci
-        uses: ignition-tooling/action-ignition-ci@jammy
+        uses: gazebo-tooling/action-gz-ci@jammy

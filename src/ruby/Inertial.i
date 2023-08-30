@@ -23,7 +23,7 @@
 #include "gz/math/Pose3.hh"
 %}
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
@@ -35,12 +35,12 @@ namespace ignition
       public: Inertial(const MassMatrix3<T> &_massMatrix,
                        const Pose3<T> &_pose);
 
-      public: Inertial(const Inertial<T> &_inertial);
+      public: Inertial(const Inertial<T> &_inertial) = default;
 
-      public: virtual ~Inertial();
+      public: ~Inertial() = default;
 
       public: bool SetMassMatrix(const MassMatrix3<T> &_m,
-                  const T _tolerance = IGN_MASSMATRIX3_DEFAULT_TOLERANCE<T>);
+                  const T _tolerance = GZ_MASSMATRIX3_DEFAULT_TOLERANCE<T>);
 
       public: const MassMatrix3<T> &MassMatrix() const;
 
@@ -61,7 +61,11 @@ namespace ignition
 
       public: Inertial<T> &operator+=(const Inertial<T> &_inertial);
 
+      public: Inertial<T> &operator-=(const Inertial<T> &_inertial);
+
       public: const Inertial<T> operator+(const Inertial<T> &_inertial) const;
+
+      public: const Inertial<T> operator-(const Inertial<T> &_inertial) const;
     };
     %template(Inertiald) Inertial<double>;
 

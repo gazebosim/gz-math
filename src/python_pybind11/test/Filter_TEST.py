@@ -13,13 +13,13 @@
 # limitations under the License.
 
 import unittest
-from ignition.math import BiQuadd
-from ignition.math import BiQuadVector3
-from ignition.math import OnePoled
-from ignition.math import OnePoleQuaternion
-from ignition.math import OnePoleVector3
-from ignition.math import Quaterniond
-from ignition.math import Vector3d
+from gz.math7 import BiQuadd
+from gz.math7 import BiQuadVector3
+from gz.math7 import OnePoled
+from gz.math7 import OnePoleQuaternion
+from gz.math7 import OnePoleVector3
+from gz.math7 import Quaterniond
+from gz.math7 import Vector3d
 
 
 class TestFilter(unittest.TestCase):

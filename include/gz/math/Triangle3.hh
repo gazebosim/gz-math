@@ -23,14 +23,14 @@
 #include <gz/math/Vector3.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
-    /// \class Triangle3 Triangle3.hh ignition/math/Triangle3.hh
+    /// \class Triangle3 Triangle3.hh gz/math/Triangle3.hh
     /// \brief A 3-dimensional triangle and related functions.
     template<typename T>
     class Triangle3
@@ -265,7 +265,7 @@ namespace ignition
       /// \return The triangle point at _index.
       public: Vector3<T> operator[](const size_t _index) const
       {
-        return this->pts[clamp(_index, IGN_ZERO_SIZE_T, IGN_TWO_SIZE_T)];
+        return this->pts[clamp(_index, GZ_ZERO_SIZE_T, GZ_TWO_SIZE_T)];
       }
 
       /// The points of the triangle

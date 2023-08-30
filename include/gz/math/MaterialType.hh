@@ -14,18 +14,18 @@
  * limitations under the License.
  *
 */
-#ifndef GZ_MATH_MATERIALTYPES_HH_
-#define GZ_MATH_MATERIALTYPES_HH_
+#ifndef GZ_MATH_MATERIALTYPE_HH_
+#define GZ_MATH_MATERIALTYPE_HH_
 
 #include <gz/math/Export.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /// \enum MaterialType
     /// \brief This enum lists the supported material types. A value can be

@@ -23,7 +23,7 @@
 using namespace gz::math;
 
 /// \brief Private data
-class gz::math::RollingMeanPrivate
+class gz::math::RollingMean::Implementation
 {
   /// \brief The window size
   public: size_t windowSize{10};
@@ -34,15 +34,10 @@ class gz::math::RollingMeanPrivate
 
 //////////////////////////////////////////////////
 RollingMean::RollingMean(size_t _windowSize)
-  : dataPtr(new RollingMeanPrivate)
+  : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
   if (_windowSize > 0)
     this->dataPtr->windowSize = _windowSize;
-}
-
-//////////////////////////////////////////////////
-RollingMean::~RollingMean()
-{
 }
 
 //////////////////////////////////////////////////

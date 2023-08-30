@@ -25,7 +25,7 @@
 #include <gz/math/config.hh>
 %}
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
@@ -55,41 +55,39 @@ namespace ignition
 
       public: Frustum();
 
-      public: Frustum(const double _near,
-                  const double _far,
-                  const ignition::math::Angle &_fov,
-                  const double _aspectRatio,
-                  const ignition::math::Pose3<double> &_pose = ignition::math::Pose3<double>::Zero);
+      public: Frustum(double _near,
+                  double _far,
+                  const gz::math::Angle &_fov,
+                  double _aspectRatio,
+                  const gz::math::Pose3<double> &_pose = gz::math::Pose3<double>::Zero);
 
       public: Frustum(const Frustum &_p);
 
-      public: virtual ~Frustum();
-
       public: double Near() const;
 
-      public: void SetNear(const double _near);
+      public: void SetNear(double _near);
 
       public: double Far() const;
 
-      public: void SetFar(const double _far);
+      public: void SetFar(double _far);
 
-      public: ignition::math::Angle FOV() const;
+      public: gz::math::Angle FOV() const;
 
-      public: void SetFOV(const ignition::math::Angle &_fov);
+      public: void SetFOV(const gz::math::Angle &_fov);
 
       public: double AspectRatio() const;
 
-      public: void SetAspectRatio(const double _aspectRatio);
+      public: void SetAspectRatio(double _aspectRatio);
 
-      public: ignition::math::Plane<double> Plane(const FrustumPlane _plane) const;
+      public: gz::math::Plane<double> Plane(const FrustumPlane _plane) const;
 
-      public: bool Contains(const ignition::math::AxisAlignedBox &_b) const;
+      public: bool Contains(const gz::math::AxisAlignedBox &_b) const;
 
-      public: bool Contains(const ignition::math::Vector3<double> &_p) const;
+      public: bool Contains(const gz::math::Vector3<double> &_p) const;
 
-      public: ignition::math::Pose3<double> Pose() const;
+      public: gz::math::Pose3<double> Pose() const;
 
-      public: void SetPose(const ignition::math::Pose3<double> &_pose);
+      public: void SetPose(const gz::math::Pose3<double> &_pose);
     };
   }
 }

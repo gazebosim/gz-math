@@ -22,13 +22,13 @@
 using namespace gz;
 using namespace math;
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE
+    inline namespace GZ_MATH_VERSION_NAMESPACE
     {
-    class SemanticVersionPrivate
+    class SemanticVersion::Implementation
     {
       /// \brief Major revision (incompatible api changes)
       public: unsigned int maj = 0;
@@ -55,13 +55,13 @@ namespace ignition
 
 /////////////////////////////////////////////////
 SemanticVersion::SemanticVersion()
-: dataPtr(new SemanticVersionPrivate())
+: dataPtr(gz::utils::MakeImpl<Implementation>())
 {
 }
 
 /////////////////////////////////////////////////
 SemanticVersion::SemanticVersion(const std::string &_versionStr)
-: dataPtr(new SemanticVersionPrivate())
+: SemanticVersion()
 {
   this->Parse(_versionStr);
 }
@@ -72,32 +72,13 @@ SemanticVersion::SemanticVersion(const unsigned int _major,
   const unsigned int _patch,
   const std::string &_prerelease,
   const std::string &_build)
-: dataPtr(new SemanticVersionPrivate())
+: SemanticVersion()
 {
   this->dataPtr->maj = _major;
   this->dataPtr->min = _minor;
   this->dataPtr->patch = _patch;
   this->dataPtr->prerelease = _prerelease;
   this->dataPtr->build = _build;
-}
-
-/////////////////////////////////////////////////
-SemanticVersion::SemanticVersion(const SemanticVersion  &_copy)
-: dataPtr(new SemanticVersionPrivate())
-{
-  *this->dataPtr = *_copy.dataPtr;
-}
-
-/////////////////////////////////////////////////
-SemanticVersion& SemanticVersion::operator=(const SemanticVersion &_other)
-{
-  *this->dataPtr = *_other.dataPtr;
-  return *this;
-}
-
-/////////////////////////////////////////////////
-SemanticVersion::~SemanticVersion()
-{
 }
 
 /////////////////////////////////////////////////

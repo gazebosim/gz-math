@@ -20,20 +20,20 @@
 // uint64_t
 #include <cstdint>
 #include <functional>
-#include <iostream>
 #include <map>
+#include <ostream>
 #include <string>
 #include <utility>
 
 #include <gz/math/config.hh>
 #include <gz/math/Helpers.hh>
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 // Inline bracket to help doxygen filtering.
-inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+inline namespace GZ_MATH_VERSION_NAMESPACE {
 namespace graph
 {
   /// \typedef VertexId.
@@ -60,6 +60,7 @@ namespace graph
     /// \param[in] _name Non-unique vertex name.
     /// \param[in] _data User information.
     /// \param[in] _id Optional unique id.
+    // cppcheck-suppress noExplicitConstructor
     public: Vertex(const std::string &_name,
                    const V &_data = V(),
                    const VertexId _id = kNullId)

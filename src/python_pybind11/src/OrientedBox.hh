@@ -18,6 +18,7 @@
 #ifndef GZ_MATH_PYTHON__ORIENTEDBOX_HH_
 #define GZ_MATH_PYTHON__ORIENTEDBOX_HH_
 
+#include <sstream>
 #include <string>
 
 #include <pybind11/pybind11.h>
@@ -28,13 +29,13 @@
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an gz::math::OrientedBox
+/// Define a pybind11 wrapper for a gz::math::OrientedBox
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -67,7 +68,7 @@ void defineMathOrientedBox(py::module &m, const std::string &typestr)
     .def(py::self != py::self)
     .def(py::self == py::self)
     .def("pose",
-         py::overload_cast<gz::math::Pose3<T>&>(&Class::Pose),
+         py::overload_cast<const gz::math::Pose3<T>&>(&Class::Pose),
          "Set the box pose, which is the pose of its center.")
     .def("pose",
          py::overload_cast<>(&Class::Pose, py::const_),
@@ -76,7 +77,7 @@ void defineMathOrientedBox(py::module &m, const std::string &typestr)
          py::overload_cast<>(&Class::Size, py::const_),
          "Get the size of the OrientedBox.")
     .def("size",
-         py::overload_cast<gz::math::Vector3<T>&>
+         py::overload_cast<const gz::math::Vector3<T>&>
           (&Class::Size),
          "Set the size of the OrientedBox.")
     .def("x_length",
@@ -123,6 +124,6 @@ void defineMathOrientedBox(py::module &m, const std::string &typestr)
 
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
 #endif  // GZ_MATH_PYTHON__ORIENTEDBOX_HH_

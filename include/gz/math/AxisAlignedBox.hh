@@ -17,7 +17,7 @@
 #ifndef GZ_MATH_AXISALIGNEDBOX_HH_
 #define GZ_MATH_AXISALIGNEDBOX_HH_
 
-#include <iostream>
+#include <ostream>
 #include <tuple>
 #include <gz/math/config.hh>
 #include <gz/math/Helpers.hh>
@@ -25,21 +25,18 @@
 #include <gz/math/MassMatrix3.hh>
 #include <gz/math/Material.hh>
 #include <gz/math/Vector3.hh>
+#include <gz/utils/ImplPtr.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
-    //
-    // Forward declaration of private data
-    class AxisAlignedBoxPrivate;
-
-    /// \class AxisAlignedBox AxisAlignedBox.hh ignition/math/AxisAlignedBox.hh
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
+    /// \class AxisAlignedBox AxisAlignedBox.hh gz/math/AxisAlignedBox.hh
     /// \brief Mathematical representation of a box that is aligned along
     /// an X,Y,Z axis.
-    class IGNITION_MATH_VISIBLE AxisAlignedBox
+    class GZ_MATH_VISIBLE AxisAlignedBox
     {
       /// \brief Default constructor. This constructor will set the box's
       /// minimum and maximum corners to the highest (max) and lowest
@@ -66,13 +63,6 @@ namespace ignition
       public: AxisAlignedBox(double _vec1X, double _vec1Y, double _vec1Z,
                   double _vec2X, double _vec2Y, double _vec2Z);
 
-      /// \brief Copy Constructor
-      /// \param[in]  _b AxisAlignedBox to copy
-      public: AxisAlignedBox(const AxisAlignedBox &_b);
-
-      /// \brief Destructor
-      public: virtual ~AxisAlignedBox();
-
       /// \brief Get the length along the x dimension
       /// \return Double value of the length in the x dimension
       public: double XLength() const;
@@ -96,11 +86,6 @@ namespace ignition
       /// \brief Merge a box with this box
       /// \param[in]  _box AxisAlignedBox to add to this box
       public: void Merge(const AxisAlignedBox &_box);
-
-      /// \brief Assignment operator. Set this box to the parameter
-      /// \param[in]  _b AxisAlignedBox to copy
-      /// \return The new box.
-      public: AxisAlignedBox &operator=(const AxisAlignedBox &_b);
 
       /// \brief Addition operator. result = this + _b
       /// \param[in] _b AxisAlignedBox to add
@@ -246,57 +231,6 @@ namespace ignition
       /// \return Volume of the box in m^3.
       public: double Volume() const;
 
-      /// \brief Compute the cylinder's density given a mass value. The
-      /// cylinder is assumed to be solid with uniform density. This
-      /// function requires the cylinder's radius and length to be set to
-      /// values greater than zero. The Material of the cylinder is ignored.
-      /// \param[in] _mass Mass of the cylinder, in kg. This value should be
-      /// greater than zero.
-      /// \return Density of the cylinder in kg/m^3. A negative value is
-      /// returned if radius, length or _mass is <= 0.
-      /// \deprecated Unimplemented
-      public: double IGN_DEPRECATED(6.0) DensityFromMass(
-        const double _mass) const;
-
-      /// \brief Set the density of this box based on a mass value.
-      /// Density is computed using
-      /// double DensityFromMass(const double _mass) const. The
-      /// box is assumed to be solid with uniform density. This
-      /// function requires the box's size to be set to
-      /// values greater than zero. The existing Material density value is
-      /// overwritten only if the return value from this true.
-      /// \param[in] _mass Mass of the box, in kg. This value should be
-      /// greater than zero.
-      /// \return True if the density was set. False is returned if the
-      /// box's size or the _mass value are <= 0.
-      /// \sa double DensityFromMass(const double _mass) const
-      /// \deprecated Unimplemented
-      public: bool IGN_DEPRECATED(6.0) SetDensityFromMass(
-        const double _mass);
-
-      /// \brief Get the material associated with this box.
-      /// \return The material assigned to this box.
-      /// \deprecated Unimplemented
-      public: const gz::math::Material IGN_DEPRECATED(6.0)
-        &Material() const;
-
-      /// \brief Set the material associated with this box.
-      /// \param[in] _mat The material assigned to this box
-      /// \deprecated Unimplemented
-      public: void IGN_DEPRECATED(6.0) SetMaterial(
-        const gz::math::Material &_mat);
-
-      /// \brief Get the mass matrix for this box. This function
-      /// is only meaningful if the box's size and material
-      /// have been set.
-      /// \param[out] _massMat The computed mass matrix will be stored
-      /// here.
-      /// \return False if computation of the mass matrix failed, which
-      /// could be due to an invalid size (<=0) or density (<=0).
-      /// \deprecated Unimplemented
-      public: bool IGN_DEPRECATED(6.0) MassMatrix(
-        MassMatrix3d &_massMat) const;
-
       /// \brief Clip a line to a dimension of the box.
       /// This is a helper function to Intersects
       /// \param[in] _d Dimension of the box(0, 1, or 2).
@@ -307,7 +241,7 @@ namespace ignition
                    double &_low, double &_high) const;
 
       /// \brief Private data pointer
-      private: AxisAlignedBoxPrivate *dataPtr;
+      GZ_UTILS_IMPL_PTR(dataPtr)
     };
     }
   }

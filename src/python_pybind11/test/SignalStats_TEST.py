@@ -14,14 +14,14 @@
 
 import math
 import unittest
-from ignition.math import Rand
-from ignition.math import SignalMaxAbsoluteValue
-from ignition.math import SignalMaximum
-from ignition.math import SignalMean
-from ignition.math import SignalMinimum
-from ignition.math import SignalRootMeanSquare
-from ignition.math import SignalStats
-from ignition.math import SignalVariance
+from gz.math7 import Rand
+from gz.math7 import SignalMaxAbsoluteValue
+from gz.math7 import SignalMaximum
+from gz.math7 import SignalMean
+from gz.math7 import SignalMinimum
+from gz.math7 import SignalRootMeanSquare
+from gz.math7 import SignalStats
+from gz.math7 import SignalVariance
 
 
 class TestSignalStats(unittest.TestCase):

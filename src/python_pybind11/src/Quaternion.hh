@@ -18,6 +18,7 @@
 #ifndef GZ_MATH_PYTHON__QUATERNION_HH_
 #define GZ_MATH_PYTHON__QUATERNION_HH_
 
+#include <sstream>
 #include <string>
 
 #include <pybind11/pybind11.h>
@@ -31,20 +32,20 @@
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an gz::math::Quaternion
+/// Define a pybind11 wrapper for a gz::math::Quaternion
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathQuaternion(py::module &m, const std::string &typestr);
 
-/// Help define a pybind11 wrapper for an gz::math::Quaternion
+/// Help define a pybind11 wrapper for a gz::math::Quaternion
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -101,22 +102,24 @@ void helpDefineMathQuaternion(py::module &m, const std::string &typestr)
     .def("normalized",
          &Class::Normalized,
          "Gets a normalized version of this quaternion")
-    .def("axis",
-         py::overload_cast<T, T, T, T>(&Class::Axis),
+    .def("set_from_axis_angle",
+         py::overload_cast<T, T, T, T>(&Class::SetFromAxisAngle),
          "Set the quaternion from an axis and angle")
-    .def("axis",
-         py::overload_cast<const gz::math::Vector3<T>&, T>(&Class::Axis),
+    .def("set_from_axis_angle",
+         py::overload_cast<const gz::math::Vector3<T>&, T>(
+         &Class::SetFromAxisAngle),
          "Set the quaternion from an axis and angle")
     .def("set",
          &Class::Set,
          "Set this quaternion from 4 floating numbers")
-    .def("euler",
-         py::overload_cast<const gz::math::Vector3<T>&>(&Class::Euler),
+    .def("set_from_euler",
+         py::overload_cast<const gz::math::Vector3<T>&>(
+         &Class::SetFromEuler),
          "Set the quaternion from Euler angles. The order of operations "
          "is roll, pitch, yaw around a fixed body frame axis "
          "(the original frame of the object before rotation is applied).")
-    .def("euler",
-         py::overload_cast<T, T, T>(&Class::Euler),
+    .def("set_from_euler",
+         py::overload_cast<T, T, T>(&Class::SetFromEuler),
          "Set the quaternion from Euler angles.")
     .def("euler",
          py::overload_cast<>(&Class::Euler, py::const_),
@@ -131,19 +134,19 @@ void helpDefineMathQuaternion(py::module &m, const std::string &typestr)
     .def("roll", &Class::Roll, "Get the Euler roll angle in radians")
     .def("pitch", &Class::Pitch, "Get the Euler pitch angle in radians")
     .def("yaw", &Class::Yaw, "Get the Euler yaw angle in radians")
-    .def("to_axis",
+    .def("axis_angle",
          [](const Class &self) {
             gz::math::Vector3<T> _axis;
             T _angle;
-            self.ToAxis(_axis, _angle);
+            self.AxisAngle(_axis, _angle);
             return std::make_tuple(_axis, _angle);
          },
          "Return rotation as axis and angle")
-    .def("matrix",
-         &Class::Matrix,
+    .def("set_from_matrix",
+         &Class::SetFromMatrix,
          "Set from a rotation matrix.")
-    .def("from_2_axes",
-         &Class::From2Axes,
+    .def("set_from_2_axes",
+         &Class::SetFrom2Axes,
          "Set this quaternion to represent rotation from "
          "vector _v1 to vector _v2, so that")
     .def("scale",
@@ -195,10 +198,10 @@ void helpDefineMathQuaternion(py::module &m, const std::string &typestr)
     .def("y", py::overload_cast<>(&Class::Y), "Get the y value.")
     .def("z", py::overload_cast<>(&Class::Z), "Get the z value.")
     .def("w", py::overload_cast<>(&Class::W), "Get the w value.")
-    .def("x", py::overload_cast<T>(&Class::X), "Set the x value.")
-    .def("y", py::overload_cast<T>(&Class::Y), "Set the y value.")
-    .def("z", py::overload_cast<T>(&Class::Z), "Set the z value.")
-    .def("w", py::overload_cast<T>(&Class::W), "Set the w value.")
+    .def("set_x", py::overload_cast<T>(&Class::SetX), "Set the x value.")
+    .def("set_y", py::overload_cast<T>(&Class::SetY), "Set the y value.")
+    .def("set_z", py::overload_cast<T>(&Class::SetZ), "Set the z value.")
+    .def("set_w", py::overload_cast<T>(&Class::SetW), "Set the w value.")
     .def("__copy__", [](const Class &self) {
       return Class(self);
     })
@@ -212,6 +215,6 @@ void helpDefineMathQuaternion(py::module &m, const std::string &typestr)
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
 #endif  // GZ_MATH_PYTHON__QUATERNION_HH_

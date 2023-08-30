@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import unittest
-from ignition.math import SemanticVersion
+from gz.math7 import SemanticVersion
 
 
 class TestSemanticVersion(unittest.TestCase):

@@ -50,6 +50,10 @@ TEST(TemperatureTest, Constructor)
   EXPECT_FALSE(temp >= temp2);
   EXPECT_FALSE(temp >= 0.1);
   EXPECT_TRUE(temp >= 0.0);
+
+  Temperature temp4(std::move(temp2));
+  EXPECT_NEAR(temp4.Kelvin(), 1.1, 1e-6);
+  EXPECT_NEAR(temp4.Celsius(), -272.05, 1e-6);
 }
 
 /////////////////////////////////////////////////
@@ -94,7 +98,6 @@ TEST(TemperatureTest, Operators)
   EXPECT_NEAR(temp(), 30, 1e-6);
 
   Temperature temp2 = temp;
-  // cppcheck-suppress knownConditionTrueFalse
   EXPECT_TRUE(temp == temp2);
 
   EXPECT_NEAR((temp + temp2).Kelvin(), 60, 1e-6);
@@ -143,6 +146,11 @@ TEST(TemperatureTest, Operators)
   temp3 = temp;
   EXPECT_TRUE(temp3 == temp);
   EXPECT_TRUE(temp3 == temp2);
+
+  Temperature temp4(12.3);
+  EXPECT_FALSE(temp == temp4);
+  temp = std::move(temp4);
+  EXPECT_NEAR(12.3, temp.Kelvin(), 1e-6);
 }
 
 /////////////////////////////////////////////////
@@ -179,11 +187,4 @@ TEST(TemperatureTest, Negative)
 
   Temperature temp5 = 2.0 / temp3;
   EXPECT_NEAR(temp5.Kelvin(), 2.0, 1e-6);
-}
-
-/////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

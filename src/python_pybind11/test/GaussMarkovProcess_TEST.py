@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import unittest
-from ignition.math import GaussMarkovProcess
+from gz.math7 import GaussMarkovProcess
 
 
 class TestGaussMarkovProcess(unittest.TestCase):

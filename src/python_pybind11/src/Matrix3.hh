@@ -18,6 +18,7 @@
 #ifndef GZ_MATH_PYTHON__MATRIX3_HH_
 #define GZ_MATH_PYTHON__MATRIX3_HH_
 
+#include <sstream>
 #include <string>
 
 #include <pybind11/pybind11.h>
@@ -28,20 +29,20 @@
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an gz::math::Matrix3
+/// Define a pybind11 wrapper for a gz::math::Matrix3
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathMatrix3(py::module &m, const std::string &typestr);
 
-/// Help define a pybind11 wrapper for an gz::math::Matrix3
+/// Help define a pybind11 wrapper for a gz::math::Matrix3
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -80,20 +81,23 @@ void helpDefineMathMatrix3(py::module &m, const std::string &typestr)
          py::return_value_policy::reference_internal)
     // .def(py::self *= py::self)
     .def("set",
-         &Class::Set,
+         py::overload_cast<size_t, size_t, T>(&Class::Set),
+         "Set a single value")
+    .def("set",
+         py::overload_cast<T, T, T, T, T, T, T, T, T>(&Class::Set),
          "Set values")
-    .def("axes",
-         &Class::Axes,
+    .def("set_axes",
+         &Class::SetAxes,
          "Set the matrix from three axis (1 per column)")
-    .def("axis",
-        &Class::Axis,
+    .def("set_from_axis_angle",
+        &Class::SetFromAxisAngle,
         "Set the matrix from an axis and angle")
-    .def("from_2_axes",
-         &Class::From2Axes,
+    .def("set_from_2_axes",
+         &Class::SetFrom2Axes,
          "Set the matrix to represent rotation from "
          "vector _v1 to vector _v2, so that")
-    .def("col",
-         &Class::Col,
+    .def("set_col",
+         &Class::SetCol,
          "Set a column.")
     .def("equal",
          &Class::Equal,
@@ -123,6 +127,6 @@ void helpDefineMathMatrix3(py::module &m, const std::string &typestr)
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
 #endif  // GZ_MATH_PYTHON__MATRIX3_HH_

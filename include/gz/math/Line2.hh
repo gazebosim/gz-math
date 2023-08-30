@@ -21,14 +21,14 @@
 #include <gz/math/Vector2.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
-    /// \class Line2 Line2.hh ignition/math/Line2.hh
+    /// \class Line2 Line2.hh gz/math/Line2.hh
     /// \brief A two dimensional line segment. The line is defined by a
     /// start and end point.
     template<typename T>
@@ -293,7 +293,7 @@ namespace ignition
       /// is clamped to the range [0, 1]
       public: math::Vector2<T> operator[](size_t _index) const
       {
-        return this->pts[clamp(_index, IGN_ZERO_SIZE_T, IGN_ONE_SIZE_T)];
+        return this->pts[clamp(_index, GZ_ZERO_SIZE_T, GZ_ONE_SIZE_T)];
       }
 
       /// \brief Stream extraction operator

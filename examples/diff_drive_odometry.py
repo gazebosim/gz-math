@@ -15,7 +15,7 @@
 # This example will only work if the Python interface library was compiled and
 # installed.
 #
-# Modify the PYTHONPATH environment variable to include the ignition math
+# Modify the PYTHONPATH environment variable to include the gz math
 # library install path. For example, if you install to /usr:
 #
 # $ export PYTHONPATH=/usr/lib/python:$PYTHONPATH
@@ -23,7 +23,7 @@
 import datetime
 import math
 
-from ignition.math import Angle, DiffDriveOdometry
+from gz.math7 import Angle, DiffDriveOdometry
 
 odom = DiffDriveOdometry()
 

@@ -17,36 +17,37 @@
 #ifndef GZ_MATH_ANGLE_HH_
 #define GZ_MATH_ANGLE_HH_
 
-#include <iostream>
+#include <istream>
+#include <ostream>
 #include <gz/math/Helpers.hh>
 #include <gz/math/config.hh>
 
-/// \def IGN_RTOD(d)
+/// \def GZ_RTOD(d)
 /// \brief Macro that converts radians to degrees
 /// \param[in] r radians
 /// \return degrees
-#define IGN_RTOD(r) ((r) * 180 / IGN_PI)
+#define GZ_RTOD(r) ((r) * 180 / GZ_PI)
 
-/// \def IGN_DTOR(d)
+/// \def GZ_DTOR(d)
 /// \brief Converts degrees to radians
 /// \param[in] d degrees
 /// \return radians
-#define IGN_DTOR(d) ((d) * IGN_PI / 180)
+#define GZ_DTOR(d) ((d) * GZ_PI / 180)
 
-/// \def IGN_NORMALIZE(a)
+/// \def GZ_NORMALIZE(a)
 /// \brief Macro that normalizes an angle in the range -Pi to Pi
 /// \param[in] a angle
 /// \return the angle, in range
-#define IGN_NORMALIZE(a) (atan2(sin(a), cos(a)))
+#define GZ_NORMALIZE(a) (atan2(sin(a), cos(a)))
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
-    /// \class Angle Angle.hh ignition/math/Angle.hh
+    /// \class Angle Angle.hh gz/math/Angle.hh
     /// \brief The Angle class is used to simplify and clarify the use of
     /// radians and degrees measurements. A default constructed Angle instance
     /// has a value of zero radians/degrees.
@@ -58,27 +59,27 @@ namespace ignition
     /// ## Example
     ///
     /// \snippet examples/angle_example.cc complete
-    class IGNITION_MATH_VISIBLE Angle
+    class GZ_MATH_VISIBLE Angle
     {
       /// \brief An angle with a value of zero.
       /// Equivalent to math::Angle(0).
-      public: static const Angle Zero;
+      public: static const Angle &Zero;
 
       /// \brief An angle with a value of Pi.
-      /// Equivalent to math::Angle(IGN_PI).
-      public: static const Angle Pi;
+      /// Equivalent to math::Angle(GZ_PI).
+      public: static const Angle &Pi;
 
       /// \brief An angle with a value of Pi * 0.5.
-      /// Equivalent to math::Angle(IGN_PI * 0.5).
-      public: static const Angle HalfPi;
+      /// Equivalent to math::Angle(GZ_PI * 0.5).
+      public: static const Angle &HalfPi;
 
       /// \brief An angle with a value of Pi * 2.
-      /// Equivalent to math::Angle(IGN_PI * 2).
-      public: static const Angle TwoPi;
+      /// Equivalent to math::Angle(GZ_PI * 2).
+      public: static const Angle &TwoPi;
 
       /// \brief Default constructor that initializes an Angle to zero
       /// radians/degrees.
-      public: Angle();
+      public: Angle() = default;
 
       /// \brief Conversion constructor that initializes an Angle to the
       /// specified radians. This constructor supports implicit conversion
@@ -90,32 +91,15 @@ namespace ignition
       //
       /// \param[in] _radian The radians used to initialize this Angle.
       // cppcheck-suppress noExplicitConstructor
-      public: Angle(const double _radian);
-
-      /// \brief Copy constructor that initializes this Angle to the value
-      /// contained in the _angle parameter.
-      /// \param[in] _angle Angle to copy
-      public: Angle(const Angle &_angle);
-
-      /// \brief Move constructor
-      /// \param[in] _angle Angle to move
-      public: Angle(Angle &&_angle) noexcept;
-
-      /// \brief Destructor
-      public: virtual ~Angle();
-
-      /// \brief Copy assignment operator
-      /// \param[in] _angle Angle to copy
-      public: Angle& operator=(const Angle &_angle);
-
-      /// \brief Move assignment operator
-      /// \param[in] _angle Angle to move
-      public: Angle& operator=(Angle &&_angle) noexcept;
+      public: constexpr Angle(double _radian)
+      : value(_radian)
+      {
+      }
 
       /// \brief Set the value from an angle in radians.
       /// \param[in] _radian Radian value.
-      /// \sa SetRadian(double)
-      public: void Radian(double _radian);
+      /// \deprecated Use void SetRadian(double)
+      public: void GZ_DEPRECATED(7) Radian(double _radian);
 
       /// \brief Set the value from an angle in radians.
       /// \param[in] _radian Radian value.
@@ -123,8 +107,8 @@ namespace ignition
 
       /// \brief Set the value from an angle in degrees
       /// \param[in] _degree Degree value
-      /// \sa SetDegree(double)
-      public: void Degree(double _degree);
+      /// \deprecated Use void SetDegree(double)
+      public: void GZ_DEPRECATED(7) Degree(double _degree);
 
       /// \brief Set the value from an angle in degrees
       /// \param[in] _degree Degree value
@@ -253,7 +237,7 @@ namespace ignition
         return _in;
       }
 
-      /// The angle in radians
+      /// The angle in radians, with a default value of zero.
       private: double value{0};
     };
     }

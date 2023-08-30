@@ -19,11 +19,11 @@
 
 #include "SplinePrivate.hh"
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
-inline namespace IGNITION_MATH_VERSION_NAMESPACE
+inline namespace GZ_MATH_VERSION_NAMESPACE
 {
 ///////////////////////////////////////////////////////////
 Vector4d PolynomialPowers(const unsigned int _order,
@@ -72,15 +72,6 @@ void ComputeCubicBernsteinHermiteCoeff(const ControlPoint &_startPoint,
 
   // Compute coefficients
   _coeffs = bmatrix * cmatrix;
-}
-
-///////////////////////////////////////////////////////////
-IntervalCubicSpline::IntervalCubicSpline()
-    : startPoint({Vector3d::Zero, Vector3d::Zero}),
-      endPoint({Vector3d::Zero, Vector3d::Zero}),
-      coeffs(Matrix4d::Zero),
-      arcLength(0.0)
-{
 }
 
 ///////////////////////////////////////////////////////////

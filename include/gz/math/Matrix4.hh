@@ -25,23 +25,23 @@
 #include <gz/math/Pose3.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
-    /// \class Matrix4 Matrix4.hh ignition/math/Matrix4.hh
+    /// \class Matrix4 Matrix4.hh gz/math/Matrix4.hh
     /// \brief A 4x4 matrix class
     template<typename T>
     class Matrix4
     {
       /// \brief Identity matrix
-      public: static const Matrix4<T> Identity;
+      public: static const Matrix4<T> &Identity;
 
       /// \brief Zero matrix
-      public: static const Matrix4<T> Zero;
+      public: static const Matrix4<T> &Zero;
 
       /// \brief Constructor
       public: Matrix4()
@@ -51,10 +51,7 @@ namespace ignition
 
       /// \brief Copy constructor
       /// \param _m Matrix to copy
-      public: Matrix4(const Matrix4<T> &_m)
-      {
-        memcpy(this->data, _m.data, sizeof(this->data[0][0])*16);
-      }
+      public: Matrix4(const Matrix4<T> &_m) = default;
 
       /// \brief Constructor
       /// \param[in] _v00 Row 0, Col 0 value
@@ -73,15 +70,15 @@ namespace ignition
       /// \param[in] _v31 Row 3, Col 1 value
       /// \param[in] _v32 Row 3, Col 2 value
       /// \param[in] _v33 Row 3, Col 3 value
-      public: Matrix4(T _v00, T _v01, T _v02, T _v03,
-                      T _v10, T _v11, T _v12, T _v13,
-                      T _v20, T _v21, T _v22, T _v23,
-                      T _v30, T _v31, T _v32, T _v33)
+      public: constexpr Matrix4(T _v00, T _v01, T _v02, T _v03,
+                                T _v10, T _v11, T _v12, T _v13,
+                                T _v20, T _v21, T _v22, T _v23,
+                                T _v30, T _v31, T _v32, T _v33)
+      : data{{_v00, _v01, _v02, _v03},
+             {_v10, _v11, _v12, _v13},
+             {_v20, _v21, _v22, _v23},
+             {_v30, _v31, _v32, _v33}}
       {
-        this->Set(_v00, _v01, _v02, _v03,
-                  _v10, _v11, _v12, _v13,
-                  _v20, _v21, _v22, _v23,
-                  _v30, _v31, _v32, _v33);
       }
 
       /// \brief Construct Matrix4 from a quaternion.
@@ -116,7 +113,7 @@ namespace ignition
       }
 
       /// \brief Destructor
-      public: virtual ~Matrix4() {}
+      public: ~Matrix4() = default;
 
       /// \brief Change the values
       /// \param[in] _v00 Row 0, Col 0 value
@@ -186,33 +183,11 @@ namespace ignition
 
       /// \brief Set the translational values [ (0, 3) (1, 3) (2, 3) ]
       /// \param[in] _t Values to set
-      /// \deprecated Use SetTranslation instead
-      public: void
-              IGN_DEPRECATED(4)
-              Translate(const Vector3<T> &_t)
-      {
-        this->SetTranslation(_t);
-      }
-
-      /// \brief Set the translational values [ (0, 3) (1, 3) (2, 3) ]
-      /// \param[in] _t Values to set
       public: void SetTranslation(const Vector3<T> &_t)
       {
         this->data[0][3] = _t.X();
         this->data[1][3] = _t.Y();
         this->data[2][3] = _t.Z();
-      }
-
-      /// \brief Set the translational values [ (0, 3) (1, 3) (2, 3) ]
-      /// \param[in] _x X translation value.
-      /// \param[in] _y Y translation value.
-      /// \param[in] _z Z translation value.
-      /// \deprecated Use SetTranslation instead
-      public: void
-              IGN_DEPRECATED(4)
-              Translate(T _x, T _y, T _z)
-      {
-        this->SetTranslation(_x, _y, _z);
       }
 
       /// \brief Set the translational values [ (0, 3) (1, 3) (2, 3) ]
@@ -246,17 +221,17 @@ namespace ignition
       {
         Quaternion<T> q;
         /// algorithm from Ogre::Quaternion<T> source, which in turn is based on
-        /// Ken Shoemake's article "Quaternion<T> Calculus and Fast Animation".
+        /// Ken Shoemake's article "Quaternion Calculus and Fast Animation".
         T trace = this->data[0][0] + this->data[1][1] + this->data[2][2];
         T root;
         if (trace > 0)
         {
           root = sqrt(trace + 1.0);
-          q.W(root / 2.0);
+          q.SetW(root / 2.0);
           root = 1.0 / (2.0 * root);
-          q.X((this->data[2][1] - this->data[1][2]) * root);
-          q.Y((this->data[0][2] - this->data[2][0]) * root);
-          q.Z((this->data[1][0] - this->data[0][1]) * root);
+          q.SetX((this->data[2][1] - this->data[1][2]) * root);
+          q.SetY((this->data[0][2] - this->data[2][0]) * root);
+          q.SetZ((this->data[1][0] - this->data[0][1]) * root);
         }
         else
         {
@@ -281,26 +256,26 @@ namespace ignition
           switch (i)
           {
             default:
-            case 0: q.X(a); break;
-            case 1: q.Y(a); break;
-            case 2: q.Z(a); break;
+            case 0: q.SetX(a); break;
+            case 1: q.SetY(a); break;
+            case 2: q.SetZ(a); break;
           };
           switch (j)
           {
             default:
-            case 0: q.X(b); break;
-            case 1: q.Y(b); break;
-            case 2: q.Z(b); break;
+            case 0: q.SetX(b); break;
+            case 1: q.SetY(b); break;
+            case 2: q.SetZ(b); break;
           };
           switch (k)
           {
             default:
-            case 0: q.X(c); break;
-            case 1: q.Y(c); break;
-            case 2: q.Z(c); break;
+            case 0: q.SetX(c); break;
+            case 1: q.SetY(c); break;
+            case 2: q.SetZ(c); break;
           };
 
-          q.W((this->data[k][j] - this->data[j][k]) * root);
+          q.SetW((this->data[k][j] - this->data[j][k]) * root);
         }
 
         return q;
@@ -330,15 +305,15 @@ namespace ignition
 
           if (m31 < 0.0)
           {
-            euler.Y(IGN_PI / 2.0);
-            euler2.Y(IGN_PI / 2.0);
+            euler.Y(GZ_PI / 2.0);
+            euler2.Y(GZ_PI / 2.0);
             euler.X(atan2(m12, m13));
             euler2.X(atan2(m12, m13));
           }
           else
           {
-            euler.Y(-IGN_PI / 2.0);
-            euler2.Y(-IGN_PI / 2.0);
+            euler.Y(-GZ_PI / 2.0);
+            euler2.Y(-GZ_PI / 2.0);
             euler.X(atan2(-m12, -m13));
             euler2.X(atan2(-m12, -m13));
           }
@@ -346,7 +321,7 @@ namespace ignition
         else
         {
           euler.Y(-asin(m31));
-          euler2.Y(IGN_PI - euler.Y());
+          euler2.Y(GZ_PI - euler.Y());
 
           euler.X(atan2(m32 / cos(euler.Y()), m33 / cos(euler.Y())));
           euler2.X(atan2(m32 / cos(euler2.Y()), m33 / cos(euler2.Y())));
@@ -398,31 +373,6 @@ namespace ignition
           equal(this->data[3][1], static_cast<T>(0)) &&
           equal(this->data[3][2], static_cast<T>(0)) &&
           equal(this->data[3][3], static_cast<T>(1));
-      }
-
-      /// \brief Perform an affine transformation
-      /// \param[in] _v Vector3 value for the transformation
-      /// \return The result of the transformation. A default constructed
-      /// Vector3<T> is returned if this matrix is not affine.
-      /// \deprecated Use bool TransformAffine(const Vector3<T> &_v,
-      /// Vector3<T> &_result) const;
-      public: Vector3<T>
-              IGN_DEPRECATED(3.0)
-              TransformAffine(const Vector3<T> &_v) const
-      {
-        if (this->IsAffine())
-        {
-          return Vector3<T>(this->data[0][0]*_v.X() + this->data[0][1]*_v.Y() +
-                            this->data[0][2]*_v.Z() + this->data[0][3],
-                            this->data[1][0]*_v.X() + this->data[1][1]*_v.Y() +
-                            this->data[1][2]*_v.Z() + this->data[1][3],
-                            this->data[2][0]*_v.X() + this->data[2][1]*_v.Y() +
-                            this->data[2][2]*_v.Z() + this->data[2][3]);
-        }
-        else
-        {
-          return Vector3<T>();
-        }
       }
 
       /// \brief Perform an affine transformation
@@ -594,11 +544,7 @@ namespace ignition
       /// \brief Equal operator. this = _mat
       /// \param _mat Incoming matrix
       /// \return itself
-      public: Matrix4<T> &operator=(const Matrix4<T> &_mat)
-      {
-        memcpy(this->data, _mat.data, sizeof(this->data[0][0])*16);
-        return *this;
-      }
+      public: Matrix4<T> &operator=(const Matrix4<T> &_mat) = default;
 
       /// \brief Equal operator for 3x3 matrix
       /// \param _mat Incoming matrix
@@ -740,8 +686,8 @@ namespace ignition
       public: inline const T &operator()(const size_t _row,
                   const size_t _col) const
       {
-        return this->data[clamp(_row, IGN_ZERO_SIZE_T, IGN_THREE_SIZE_T)][
-                          clamp(_col, IGN_ZERO_SIZE_T, IGN_THREE_SIZE_T)];
+        return this->data[clamp(_row, GZ_ZERO_SIZE_T, GZ_THREE_SIZE_T)][
+                          clamp(_col, GZ_ZERO_SIZE_T, GZ_THREE_SIZE_T)];
       }
 
       /// \brief Get a mutable version the value at the specified row,
@@ -753,8 +699,8 @@ namespace ignition
       /// \return The value at the specified index
       public: inline T &operator()(const size_t _row, const size_t _col)
       {
-        return this->data[clamp(_row, IGN_ZERO_SIZE_T, IGN_THREE_SIZE_T)]
-                         [clamp(_col, IGN_ZERO_SIZE_T, IGN_THREE_SIZE_T)];
+        return this->data[clamp(_row, GZ_ZERO_SIZE_T, GZ_THREE_SIZE_T)]
+                         [clamp(_col, GZ_ZERO_SIZE_T, GZ_THREE_SIZE_T)];
       }
 
       /// \brief Equality test with tolerance.
@@ -806,22 +752,16 @@ namespace ignition
       public: friend std::ostream &operator<<(
                   std::ostream &_out, const gz::math::Matrix4<T> &_m)
       {
-        _out << precision(_m(0, 0), 6) << " "
-             << precision(_m(0, 1), 6) << " "
-             << precision(_m(0, 2), 6) << " "
-             << precision(_m(0, 3), 6) << " "
-             << precision(_m(1, 0), 6) << " "
-             << precision(_m(1, 1), 6) << " "
-             << precision(_m(1, 2), 6) << " "
-             << precision(_m(1, 3), 6) << " "
-             << precision(_m(2, 0), 6) << " "
-             << precision(_m(2, 1), 6) << " "
-             << precision(_m(2, 2), 6) << " "
-             << precision(_m(2, 3), 6) << " "
-             << precision(_m(3, 0), 6) << " "
-             << precision(_m(3, 1), 6) << " "
-             << precision(_m(3, 2), 6) << " "
-             << precision(_m(3, 3), 6);
+        for (auto i : {0, 1, 2, 3})
+        {
+          for (auto j : {0, 1, 2, 3})
+          {
+            if (!(i == 0 && j == 0))
+              _out << " ";
+
+            appendToStream(_out, _m(i, j));
+          }
+        }
 
         return _out;
       }
@@ -907,19 +847,29 @@ namespace ignition
       private: T data[4][4];
     };
 
-    template<typename T>
-    const Matrix4<T> Matrix4<T>::Identity(
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
-        0, 0, 0, 1);
+    namespace detail {
+
+      template<typename T>
+      constexpr Matrix4<T> gMatrix4Identity(
+          1, 0, 0, 0,
+          0, 1, 0, 0,
+          0, 0, 1, 0,
+          0, 0, 0, 1);
+
+      template<typename T>
+      constexpr Matrix4<T> gMatrix4Zero(
+          0, 0, 0, 0,
+          0, 0, 0, 0,
+          0, 0, 0, 0,
+          0, 0, 0, 0);
+
+    }  // namespace detail
 
     template<typename T>
-    const Matrix4<T> Matrix4<T>::Zero(
-        0, 0, 0, 0,
-        0, 0, 0, 0,
-        0, 0, 0, 0,
-        0, 0, 0, 0);
+    const Matrix4<T> &Matrix4<T>::Identity = detail::gMatrix4Identity<T>;
+
+    template<typename T>
+    const Matrix4<T> &Matrix4<T>::Zero = detail::gMatrix4Zero<T>;
 
     typedef Matrix4<int> Matrix4i;
     typedef Matrix4<double> Matrix4d;

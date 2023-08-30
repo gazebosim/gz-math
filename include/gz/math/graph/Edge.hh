@@ -20,19 +20,19 @@
 // uint64_t
 #include <cstdint>
 #include <functional>
-#include <iostream>
 #include <map>
+#include <ostream>
 #include <set>
 
 #include <gz/math/config.hh>
 #include "gz/math/graph/Vertex.hh"
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 // Inline bracket to help doxygen filtering.
-inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+inline namespace GZ_MATH_VERSION_NAMESPACE {
 namespace graph
 {
   /// \typedef EdgeId.
@@ -47,6 +47,7 @@ namespace graph
     /// \param[in] _vertices The vertices of the edge.
     /// \param[in] _data The data stored in the edge.
     /// \param[in] _weight The weight (cost) of the edge.
+    // cppcheck-suppress noExplicitConstructor
     EdgeInitializer(const VertexId_P &_vertices,
                     const E &_data = E(),
                     const double _weight = 1)
@@ -129,7 +130,7 @@ namespace graph
 
     /// \brief Set the cost of the edge.
     /// \param[in] _newWeight The new cost.
-    public: void SetWeight(const double _newWeight)
+    public: void SetWeight(double _newWeight)
     {
       this->weight = _newWeight;
     }
@@ -213,7 +214,7 @@ namespace graph
     /// \param[in] _id Optional unique id.
     public: explicit UndirectedEdge(const VertexId_P &_vertices,
                                     const E &_data,
-                                    const double _weight,
+                                    double _weight,
                                     const EdgeId &_id = kNullId)
       : Edge<E>(_vertices, _data, _weight, _id)
     {
@@ -276,7 +277,7 @@ namespace graph
     /// \param[in] _id Optional unique id.
     public: explicit DirectedEdge(const VertexId_P &_vertices,
                                   const E &_data,
-                                  const double _weight,
+                                  double _weight,
                                   const EdgeId &_id = kNullId)
       : Edge<E>(_vertices, _data, _weight, _id)
     {

@@ -14,7 +14,7 @@
 
 import math
 import unittest
-from ignition.math import RollingMean
+from gz.math7 import RollingMean
 
 
 class TestRollingMean(unittest.TestCase):

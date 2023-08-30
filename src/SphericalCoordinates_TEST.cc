@@ -63,6 +63,11 @@ TEST(SphericalCoordinatesTest, Constructor)
     math::SphericalCoordinates sc2(sc);
     EXPECT_EQ(sc, sc2);
   }
+
+  // Bad surface type, this should throw an error
+  math::SphericalCoordinates invalidSC(
+      static_cast<math::SphericalCoordinates::SurfaceType>(3));
+  EXPECT_EQ(invalidSC.Surface(), 3);
 }
 
 //////////////////////////////////////////////////
@@ -80,7 +85,17 @@ TEST(SphericalCoordinatesTest, Convert)
 
   EXPECT_EQ("EARTH_WGS84", math::SphericalCoordinates::Convert(st));
   EXPECT_EQ("EARTH_WGS84", math::SphericalCoordinates::Convert(
-      static_cast<math::SphericalCoordinates::SurfaceType>(2)));
+      static_cast<math::SphericalCoordinates::SurfaceType>(3)));
+
+  // For the Moon surface type
+  st = math::SphericalCoordinates::MOON_SCS;
+  EXPECT_EQ(math::SphericalCoordinates::Convert("MOON_SCS"), st);
+  EXPECT_EQ("MOON_SCS", math::SphericalCoordinates::Convert(st));
+
+  // For the custom surface type
+  st = math::SphericalCoordinates::CUSTOM_SURFACE;
+  EXPECT_EQ(math::SphericalCoordinates::Convert("CUSTOM_SURFACE"), st);
+  EXPECT_EQ("CUSTOM_SURFACE", math::SphericalCoordinates::Convert(st));
 }
 
 //////////////////////////////////////////////////
@@ -98,6 +113,14 @@ TEST(SphericalCoordinatesTest, SetFunctions)
   EXPECT_EQ(sc.LongitudeReference(), math::Angle());
   EXPECT_EQ(sc.HeadingOffset(), math::Angle());
   EXPECT_NEAR(sc.ElevationReference(), 0.0, 1e-6);
+  EXPECT_NEAR(sc.SurfaceRadius(),
+      6371000.0, 1e-3);
+  EXPECT_NEAR(sc.SurfaceAxisEquatorial(),
+      6378137.0, 1e-3);
+  EXPECT_NEAR(sc.SurfaceAxisPolar(),
+      6356752.314245, 1e-3);
+  EXPECT_NEAR(sc.SurfaceFlattening(),
+      1.0/298.257223563, 1e-5);
 
   {
     math::Angle lat(0.3), lon(-1.2), heading(0.5);
@@ -113,7 +136,71 @@ TEST(SphericalCoordinatesTest, SetFunctions)
     EXPECT_EQ(sc.LongitudeReference(), lon);
     EXPECT_EQ(sc.HeadingOffset(), heading);
     EXPECT_NEAR(sc.ElevationReference(), elev, 1e-6);
+    EXPECT_NEAR(sc.SurfaceRadius(),
+        6371000.0, 1e-3);
+    EXPECT_NEAR(sc.SurfaceAxisEquatorial(),
+        6378137.0, 1e-3);
+    EXPECT_NEAR(sc.SurfaceAxisPolar(),
+        6356752.314245, 1e-3);
+    EXPECT_NEAR(sc.SurfaceFlattening(),
+        1.0/298.257223563, 1e-5);
   }
+
+  // Moon surface type
+  st = math::SphericalCoordinates::MOON_SCS;
+  math::SphericalCoordinates moonSC(st);
+  moonSC.SetSurface(st);
+  EXPECT_EQ(moonSC.Surface(), st);
+  EXPECT_NEAR(moonSC.SurfaceRadius(),
+      1737400.0, 1e-3);
+  EXPECT_NEAR(moonSC.SurfaceAxisEquatorial(),
+      1738100.0, 1e-3);
+  EXPECT_NEAR(moonSC.SurfaceAxisPolar(),
+      1736000.0, 1e-3);
+  EXPECT_NEAR(moonSC.SurfaceFlattening(),
+      0.0012, 1e-5);
+}
+
+//////////////////////////////////////////////////
+/// Test invalid parameters for custom surface
+TEST(SphericalCoordinatesTest, InvalidParameters)
+{
+  // Earth's constants
+  double g_EarthWGS84AxisEquatorial = 6378137.0;
+  double g_EarthWGS84AxisPolar = 6356752.314245;
+  double g_EarthWGS84Flattening = 1.0/298.257223563;
+  double g_EarthRadius = 6371000.0;
+
+  // Create a custom surface with invalid parameters.
+  math::SphericalCoordinates scInvalid(
+      math::SphericalCoordinates::CUSTOM_SURFACE,
+      -1, -1);
+
+  // These should be rejected and default to Earth's
+  // parameters.
+  EXPECT_NEAR(scInvalid.SurfaceRadius(), g_EarthRadius,
+      1e-3);
+  EXPECT_NEAR(scInvalid.SurfaceAxisEquatorial(),
+      g_EarthWGS84AxisEquatorial, 1e-3);
+  EXPECT_NEAR(scInvalid.SurfaceAxisPolar(),
+      g_EarthWGS84AxisPolar, 1e-3);
+  EXPECT_NEAR(scInvalid.SurfaceFlattening(),
+      g_EarthWGS84Flattening, 1e-3);
+
+  // Create a custom surface with valid parameters.
+  math::SphericalCoordinates scValid(
+      math::SphericalCoordinates::CUSTOM_SURFACE,
+      100, 100);
+
+  // These should be accepted
+  EXPECT_NEAR(scValid.SurfaceRadius(), 100,
+      1e-3);
+  EXPECT_NEAR(scValid.SurfaceAxisEquatorial(),
+      100, 1e-3);
+  EXPECT_NEAR(scValid.SurfaceAxisPolar(),
+      100, 1e-3);
+  EXPECT_NEAR(scValid.SurfaceFlattening(),
+      0, 1e-3);
 }
 
 //////////////////////////////////////////////////
@@ -208,8 +295,6 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
       math::Vector3d osrf_e(
           -2693701.91434394, -4299942.14687992, 3851691.0393571);
       math::Vector3d goog_s(37.4216719, -122.0821853, 30.0);
-      math::Vector3d goog_e(
-          -2693766.71906146, -4297199.59926038, 3854681.81878812);
 
       // Local tangent plane coordinates (ENU = GLOBAL) coordinates of
       // Google when OSRF is taken as the origin:
@@ -309,21 +394,55 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
 TEST(SphericalCoordinatesTest, Distance)
 {
   math::Angle latA, longA, latB, longB;
-  latA.Degree(46.250944);
-  longA.Degree(-122.249972);
-  latB.Degree(46.124953);
-  longB.Degree(-122.251683);
-  double d = math::SphericalCoordinates::Distance(latA, longA, latB, longB);
+  latA.SetDegree(46.250944);
+  longA.SetDegree(-122.249972);
+  latB.SetDegree(46.124953);
+  longB.SetDegree(-122.251683);
 
-  EXPECT_NEAR(14002, d, 20);
+  // Calculating distance using the static method.
+  double d1 = math::SphericalCoordinates::DistanceWGS84(
+      latA, longA, latB, longB);
+  EXPECT_NEAR(14002, d1, 20);
+
+  // Using the non static method. The default surface type is EARTH_WGS84.
+  auto earthSC = math::SphericalCoordinates();
+  double d2 = earthSC.DistanceBetweenPoints(latA, longA, latB, longB);
+  EXPECT_NEAR(d1, d2, 0.1);
+
+  earthSC = math::SphericalCoordinates(
+      math::SphericalCoordinates::SurfaceType::EARTH_WGS84);
+  double d3 = earthSC.DistanceBetweenPoints(latA, longA, latB, longB);
+  EXPECT_NEAR(d2, d3, 0.1);
+
+  // Setting the surface type as Moon.
+  auto moonSC = math::SphericalCoordinates(
+      math::SphericalCoordinates::SurfaceType::MOON_SCS);
+  double d4 = moonSC.DistanceBetweenPoints(latA, longA, latB, longB);
+  EXPECT_NEAR(3820, d4, 5);
+
+  // Using a custom surface.
+  // For custom surfaces, the surface properties need to be set.
+  // This one will throw an error.
+  auto invalidCustomSC = math::SphericalCoordinates(
+      math::SphericalCoordinates::CUSTOM_SURFACE);
+  // This one should be accepted.
+  auto customSC = math::SphericalCoordinates(
+      math::SphericalCoordinates::SurfaceType::CUSTOM_SURFACE,
+      6378137.0,
+      6356752.314245);
+
+  EXPECT_NEAR(customSC.DistanceBetweenPoints(latA, longA, latB, longB),
+      d1, 0.1);
 }
 
 //////////////////////////////////////////////////
 TEST(SphericalCoordinatesTest, BadSetSurface)
 {
   math::SphericalCoordinates sc;
-  sc.SetSurface(static_cast<math::SphericalCoordinates::SurfaceType>(2));
-  EXPECT_EQ(sc.Surface(), 2);
+  sc.SetSurface(static_cast<math::SphericalCoordinates::SurfaceType>(3),
+      10, 10);
+  sc.SetSurface(static_cast<math::SphericalCoordinates::SurfaceType>(3));
+  EXPECT_EQ(sc.Surface(), 3);
 }
 
 //////////////////////////////////////////////////
@@ -438,8 +557,8 @@ TEST(SphericalCoordinatesTest, NoHeading)
 {
   // Default heading
   auto st = math::SphericalCoordinates::EARTH_WGS84;
-  math::Angle lat(IGN_DTOR(-22.9));
-  math::Angle lon(IGN_DTOR(-43.2));
+  math::Angle lat(GZ_DTOR(-22.9));
+  math::Angle lon(GZ_DTOR(-43.2));
   math::Angle heading(0.0);
   double elev = 0;
   math::SphericalCoordinates sc(st, lat, lon, elev, heading);
@@ -546,9 +665,9 @@ TEST(SphericalCoordinatesTest, WithHeading)
 {
   // Heading 90 deg: X == North, Y == West , Z == Up
   auto st = math::SphericalCoordinates::EARTH_WGS84;
-  math::Angle lat(IGN_DTOR(-22.9));
-  math::Angle lon(IGN_DTOR(-43.2));
-  math::Angle heading(IGN_DTOR(90.0));
+  math::Angle lat(GZ_DTOR(-22.9));
+  math::Angle lon(GZ_DTOR(-43.2));
+  math::Angle heading(GZ_DTOR(90.0));
   double elev = 0;
   math::SphericalCoordinates sc(st, lat, lon, elev, heading);
 

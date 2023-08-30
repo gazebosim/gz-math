@@ -22,27 +22,24 @@
 #include <gz/math/Helpers.hh>
 #include <gz/math/Vector3.hh>
 #include <gz/math/config.hh>
+#include <gz/utils/ImplPtr.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     // Forward declare private classes
     class ControlPoint;
-    class SplinePrivate;
 
-    /// \class Spline Spline.hh ignition/math/Spline.hh
+    /// \class Spline Spline.hh gz/math/Spline.hh
     /// \brief Splines
-    class IGNITION_MATH_VISIBLE Spline
+    class GZ_MATH_VISIBLE Spline
     {
       /// \brief constructor
       public: Spline();
-
-      /// \brief destructor
-      public: ~Spline();
 
       /// \brief Sets the tension parameter.
       /// \remarks A value of 0 results in a Catmull-Rom
@@ -258,7 +255,7 @@ namespace ignition
 
       /// \internal
       /// \brief Private data pointer
-      private: SplinePrivate *dataPtr;
+      GZ_UTILS_IMPL_PTR(dataPtr)
     };
     }
   }

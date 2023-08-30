@@ -28,20 +28,20 @@
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an gz::math::Triangle
+/// Define a pybind11 wrapper for a gz::math::Triangle
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathTriangle(py::module &m, const std::string &typestr);
 
-/// Help define a pybind11 wrapper for an gz::math::Triangle
+/// Help define a pybind11 wrapper for a gz::math::Triangle
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -107,6 +107,6 @@ void helpDefineMathTriangle(py::module &m, const std::string &typestr)
 
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
 #endif  // GZ_MATH_PYTHON__TRIANGLE_HH_

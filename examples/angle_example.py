@@ -15,18 +15,18 @@
 # This example will only work if the Python interface library was compiled and
 # installed.
 #
-# Modify the PYTHONPATH environment variable to include the ignition math
+# Modify the PYTHONPATH environment variable to include the gz math
 # library install path. For example, if you install to /usr:
 #
 # $ export PYTHONPATH=/usr/lib/python:$PYTHONPATH
 #
 
-import ignition.math
+import gz.math7
 
-print("PI in degrees = {}\n".format(ignition.math.Angle.PI.degree()))
+print("PI in degrees = {}\n".format(gz.math7.Angle.PI.degree()))
 
-a1 = ignition.math.Angle(1.5707)
-a2 = ignition.math.Angle(0.7854)
+a1 = gz.math7.Angle(1.5707)
+a2 = gz.math7.Angle(0.7854)
 print("a1 = {} radians, {} degrees\n".format(a1.radian(), a1.degree()))
 print("a2 = {} radians, {} degrees\n".format(a2.radian(), a2.degree()))
 print("a1 * a2 = {} radians, {} degrees\n".format((a1 * a2).radian(),
@@ -36,7 +36,7 @@ print("a1 + a2 = {} radians, {} degrees\n".format((a1 + a2).radian(),
 print("a1 - a2 = {} radians, {} degrees\n".format((a1 - a2).radian(),
       (a1 - a2).degree()))
 
-a3 = ignition.math.Angle(15.707)
+a3 = gz.math7.Angle(15.707)
 print("a3 = {} radians, {} degrees\n".format(a3.radian(), a3.degree()))
 a3.normalize()
 print("a3.Normalize = {} radians, {} degrees\n".format(a3.radian(),

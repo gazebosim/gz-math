@@ -17,6 +17,7 @@
 
 %module line3
 %{
+#include <sstream>
 #include <gz/math/Line3.hh>
 #include <gz/math/Helpers.hh>
 #include <gz/math/Vector3.hh>
@@ -24,7 +25,7 @@
 
 %include "std_string.i"
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
@@ -70,7 +71,7 @@ namespace ignition
 
     %extend Line3
     {
-      ignition::math::Vector3<T> __getitem__(const unsigned int i) const
+      gz::math::Vector3<T> __getitem__(const unsigned int i) const
       {
         return (*$self)[i];
       }

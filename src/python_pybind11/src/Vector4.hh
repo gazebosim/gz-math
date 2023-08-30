@@ -18,6 +18,7 @@
 #ifndef GZ_MATH_PYTHON__VECTOR4_HH_
 #define GZ_MATH_PYTHON__VECTOR4_HH_
 
+#include <sstream>
 #include <string>
 
 #include <pybind11/pybind11.h>
@@ -28,13 +29,13 @@
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 namespace python
 {
-/// Help define a pybind11 wrapper for an gz::math::Vector4
+/// Help define a pybind11 wrapper for a gz::math::Vector4
 /**
  * \param[in] module a pybind11 module to add the definition to
  */
@@ -126,11 +127,12 @@ void helpDefineMathVector4(py::module &m, const std::string &typestr)
     .def("y", py::overload_cast<const T&>(&Class::Y), "Set the y value.")
     .def("z", py::overload_cast<const T&>(&Class::Z), "Set the z value.")
     .def("w", py::overload_cast<const T&>(&Class::W), "Set the w value.")
-    .def_readonly_static("ZERO", &Class::Zero, "math::Vector4(0, 0, 0, 0)")
-    .def_readonly_static("ONE", &Class::One, "math::Vector4(1, 1, 1, 1)")
-    .def_readonly_static("NAN",
-                         &Class::NaN,
-                         "math::Vector4(NaN, NaN, NaN, NaN)")
+    .def_readonly_static("ZERO", &Class::Zero, py::return_value_policy::copy,
+        "math::Vector4(0, 0, 0, 0)")
+    .def_readonly_static("ONE", &Class::One, py::return_value_policy::copy,
+        "math::Vector4(1, 1, 1, 1)")
+    .def_readonly_static("NAN", &Class::NaN, py::return_value_policy::copy,
+        "math::Vector4(NaN, NaN, NaN, NaN)")
     .def("__copy__", [](const Class &self) {
       return Class(self);
     })
@@ -145,13 +147,13 @@ void helpDefineMathVector4(py::module &m, const std::string &typestr)
     .def("__repr__", toString);
 }
 
-/// Define a pybind11 wrapper for an gz::math::Vector4
+/// Define a pybind11 wrapper for a gz::math::Vector4
 /**
  * \param[in] module a pybind11 module to add the definition to
  */
 void defineMathVector4(py::module &m, const std::string &typestr);
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
 #endif  // GZ_MATH_PYTHON__VECTOR4_HH_

@@ -15,64 +15,64 @@
 import sys
 import unittest
 
-import ignition.math
+import gz.math7
 
 
 class TestMaterial(unittest.TestCase):
 
     def test_init(self):
-        mats = ignition.math.Material.predefined()
+        mats = gz.math7.Material.predefined()
         self.assertTrue(len(mats))
 
         # Make sure that the number of elements in the MaterialType enum matches
         # the number of elements in the MaterialDensity::materials map.
-        self.assertEqual(ignition.math.MaterialType.UNKNOWN_MATERIAL,
-                         ignition.math.MaterialType(len(mats)))
+        self.assertEqual(gz.math7.MaterialType.UNKNOWN_MATERIAL,
+                         gz.math7.MaterialType(len(mats)))
 
         # Iterate over each element in the enum. Check the that enum value
         # matches the type value in the mats map.
-        for i in range(ignition.math.MaterialType.UNKNOWN_MATERIAL):
+        for i in range(gz.math7.MaterialType.UNKNOWN_MATERIAL):
             # Get the type of the material for MaterialType i.
-            self.assertEqual(ignition.math.MaterialType(i),
-                             mats[ignition.math.MaterialType(i)].type())
+            self.assertEqual(gz.math7.MaterialType(i),
+                             mats[gz.math7.MaterialType(i)].type())
 
             # The name should not be empty
-            self.assertTrue(mats[ignition.math.MaterialType(i)].name())
+            self.assertTrue(mats[gz.math7.MaterialType(i)].name())
 
             # The density should be less than the max double value and greater than
             # zero.
-            self.assertLess(mats[ignition.math.MaterialType(i)].density(), sys.float_info.max)
-            self.assertGreater(mats[ignition.math.MaterialType(i)].density(), 0.0)
+            self.assertLess(mats[gz.math7.MaterialType(i)].density(), sys.float_info.max)
+            self.assertGreater(mats[gz.math7.MaterialType(i)].density(), 0.0)
 
-        malicious = ignition.math.Material(ignition.math.MaterialType(42))
+        malicious = gz.math7.Material(gz.math7.MaterialType(42))
         self.assertEqual(-1.0, malicious.density())
         self.assertEqual('', malicious.name())
 
-        byDensity = ignition.math.Material(42.2)
+        byDensity = gz.math7.Material(42.2)
         self.assertEqual(42.2, byDensity.density())
-        self.assertEqual(ignition.math.MaterialType.UNKNOWN_MATERIAL, byDensity.type())
+        self.assertEqual(gz.math7.MaterialType.UNKNOWN_MATERIAL, byDensity.type())
 
     def test_comparison(self):
-        aluminum = ignition.math.Material(ignition.math.MaterialType.ALUMINUM)
+        aluminum = gz.math7.Material(gz.math7.MaterialType.ALUMINUM)
 
-        modified = ignition.math.Material(aluminum)
+        modified = gz.math7.Material(aluminum)
         self.assertEqual(modified, aluminum)
 
         modified.set_density(1234.0)
         self.assertNotEqual(modified, aluminum)
 
-        modified = ignition.math.Material(aluminum)
+        modified = gz.math7.Material(aluminum)
         self.assertEqual(modified, aluminum)
 
-        modified.set_type(ignition.math.MaterialType.PINE)
+        modified.set_type(gz.math7.MaterialType.PINE)
         self.assertNotEqual(modified, aluminum)
 
     def test_accessors(self):
 
-        mat = ignition.math.Material("Aluminum")
-        mat1 = ignition.math.Material("aluminum")
-        mat2 = ignition.math.Material(ignition.math.MaterialType.ALUMINUM)
-        mat3 = ignition.math.Material(mat2)
+        mat = gz.math7.Material("Aluminum")
+        mat1 = gz.math7.Material("aluminum")
+        mat2 = gz.math7.Material(gz.math7.MaterialType.ALUMINUM)
+        mat3 = gz.math7.Material(mat2)
 
         self.assertAlmostEqual(2700.0, mat.density())
         self.assertEqual(mat, mat1)
@@ -80,31 +80,31 @@ class TestMaterial(unittest.TestCase):
         self.assertEqual(mat2, mat3)
 
         # Test constructor
-        mat4 = ignition.math.Material(mat3)
+        mat4 = gz.math7.Material(mat3)
         self.assertEqual(mat2, mat4)
 
-        mat5 = ignition.math.Material(mat4)
+        mat5 = gz.math7.Material(mat4)
         self.assertEqual(mat2, mat5)
 
-        mat = ignition.math.Material("Notfoundium")
+        mat = gz.math7.Material("Notfoundium")
         self.assertGreater(0.0, mat.density())
-        self.assertEqual(ignition.math.MaterialType.UNKNOWN_MATERIAL,
+        self.assertEqual(gz.math7.MaterialType.UNKNOWN_MATERIAL,
                          mat.type())
         self.assertFalse(mat.name())
 
-        material = ignition.math.Material()
+        material = gz.math7.Material()
         material.set_to_nearest_density(19300.0)
-        self.assertEqual(ignition.math.MaterialType.TUNGSTEN, material.type())
+        self.assertEqual(gz.math7.MaterialType.TUNGSTEN, material.type())
         self.assertAlmostEqual(19300.0, material.density())
 
-        material = ignition.math.Material()
+        material = gz.math7.Material()
         material.set_to_nearest_density(1001001.001, 1e-3)
-        self.assertEqual(ignition.math.MaterialType.UNKNOWN_MATERIAL,
+        self.assertEqual(gz.math7.MaterialType.UNKNOWN_MATERIAL,
                          material.type())
         self.assertGreater(0.0, material.density())
-        material = ignition.math.Material()
+        material = gz.math7.Material()
         material.set_to_nearest_density(1001001.001)
-        self.assertEqual(ignition.math.MaterialType.TUNGSTEN, material.type())
+        self.assertEqual(gz.math7.MaterialType.TUNGSTEN, material.type())
         self.assertAlmostEqual(19300, material.density())
 
 

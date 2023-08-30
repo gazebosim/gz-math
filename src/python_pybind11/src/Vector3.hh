@@ -18,6 +18,7 @@
 #ifndef GZ_MATH_PYTHON__VECTOR3_HH_
 #define GZ_MATH_PYTHON__VECTOR3_HH_
 
+#include <sstream>
 #include <string>
 
 #include <pybind11/pybind11.h>
@@ -28,13 +29,13 @@
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 namespace python
 {
-/// Help define a pybind11 wrapper for an gz::math::Vector3
+/// Help define a pybind11 wrapper for a gz::math::Vector3
 /**
  * \param[in] module a pybind11 module to add the definition to
  */
@@ -140,12 +141,18 @@ void helpDefineMathVector3(py::module &m, const std::string &typestr)
     .def("x", py::overload_cast<const T&>(&Class::X), "Set the x value.")
     .def("y", py::overload_cast<const T&>(&Class::Y), "Set the y value.")
     .def("z", py::overload_cast<const T&>(&Class::Z), "Set the z value.")
-    .def_readonly_static("ZERO", &Class::Zero, "math::Vector3(0, 0, 0)")
-    .def_readonly_static("ONE", &Class::One, "math::Vector3(1, 1, 1)")
-    .def_readonly_static("UNIT_X", &Class::UnitX, "math::Vector3(1, 0, 0)")
-    .def_readonly_static("UNIT_Y", &Class::UnitY, "math::Vector3(0, 1, 0)")
-    .def_readonly_static("UNIT_Z", &Class::UnitZ, "math::Vector3(0, 0, 1)")
-    .def_readonly_static("NAN", &Class::NaN, "math::Vector3(NaN, NaN, NaN)")
+    .def_readonly_static("ZERO", &Class::Zero, py::return_value_policy::copy,
+        "math::Vector3(0, 0, 0)")
+    .def_readonly_static("ONE", &Class::One, py::return_value_policy::copy,
+        "math::Vector3(1, 1, 1)")
+    .def_readonly_static("UNIT_X", &Class::UnitX, py::return_value_policy::copy,
+        "math::Vector3(1, 0, 0)")
+    .def_readonly_static("UNIT_Y", &Class::UnitY, py::return_value_policy::copy,
+        "math::Vector3(0, 1, 0)")
+    .def_readonly_static("UNIT_Z", &Class::UnitZ, py::return_value_policy::copy,
+        "math::Vector3(0, 0, 1)")
+    .def_readonly_static("NAN", &Class::NaN, py::return_value_policy::copy,
+        "math::Vector3(NaN, NaN, NaN)")
     .def("__copy__", [](const Class &self) {
       return Class(self);
     })
@@ -160,13 +167,13 @@ void helpDefineMathVector3(py::module &m, const std::string &typestr)
     .def("__repr__", toString);
 }
 
-/// Define a pybind11 wrapper for an gz::math::Vector2
+/// Define a pybind11 wrapper for a gz::math::Vector2
 /**
  * \param[in] module a pybind11 module to add the definition to
  */
 void defineMathVector3(py::module &m, const std::string &typestr);
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
 #endif  // GZ_MATH_PYTHON__VECTOR3_HH_

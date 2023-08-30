@@ -29,12 +29,12 @@
 #include "gz/math/graph/Graph.hh"
 #include "gz/math/Helpers.hh"
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 // Inline bracket to help doxygen filtering.
-inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+inline namespace GZ_MATH_VERSION_NAMESPACE {
 namespace graph
 {
   /// \typedef CostInfo.
@@ -340,6 +340,7 @@ namespace graph
     // Add all vertices.
     for (auto const &vPair : _graph.Vertices())
     {
+      // cppcheck-suppress useStlAlgorithm
       vertices.push_back(vPair.second.get());
     }
 

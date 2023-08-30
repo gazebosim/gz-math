@@ -2,8 +2,8 @@
 
 Next Tutorial: \ref cppgetstarted
 
-These instructions are for installing only Ignition Math.
-If you're interested in using all the Ignition libraries, check out this [Ignition installation](https://ignitionrobotics.org/docs/latest/install).
+These instructions are for installing only Gazebo Math.
+If you're interested in using all the Gazebo libraries, check out this [Gazebo installation](https://gazebosim.org/docs/latest/install).
 
 We recommend following the Binary Installation instructions to get up and running as quickly and painlessly as possible.
 
@@ -24,28 +24,29 @@ Setup keys:
 wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
 ```
 
-Install Ignition Math:
+Install Gazebo Math:
 ```
-sudo apt install libignition-math<#>-dev
+sudo apt install libgz-math<#>-dev
 ```
 
 Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
-which version you need.
+which version you need. From version 7 you should use `gz-math<#>` but for lower versions
+you should use `ign-math<#>`.
 
 ### macOS
 
 On macOS, add OSRF packages:
   ```
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   brew tap osrf/simulation
   ```
 
-Install Ignition Math:
+Install Gazebo Math:
   ```
-  brew install ignition-math<#>
+  brew install gz-math<#>
   ```
 
-Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
+Be sure to replace `<#>` with a number value, such as 6 or 7, depending on
 which version you need.
 
 ## Windows
@@ -55,17 +56,18 @@ Miniconda suffices.
 
 Create if necessary, and activate a Conda environment:
 ```
-conda create -n ign-ws
-conda activate ign-ws
+conda create -n gz-ws
+conda activate gz-ws
 ```
 
 Install:
 ```
-conda install libignition-math<#> --channel conda-forge
+conda install libgz-math<#> --channel conda-forge
 ```
 
 Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
-which version you need.
+which version you need. From version 7 you should use `gz-math<#>` but for lower versions
+you should use `ign-math<#>`.
 
 # Source Installation
 
@@ -74,20 +76,20 @@ prerequisites followed by building from source.
 
 ## Prerequisites
 
-Ignition Math requires:
+Gazebo Math requires:
 
-* [Ignition CMake](https://ignitionrobotics.org/libs/cmake)
+* [Gazebo CMake](https://gazebosim.org/libs/cmake)
 
 ### Ubuntu Linux
 
-The optional Eigen component of Ignition Math requires:
+The optional Eigen component of Gazebo Math requires:
 
 * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page). Refer to the [Eigen Documentation](http://eigen.tuxfamily.org/index.php?title=Main_Page#Documentation) for installation instructions. On Ubuntu systems, `apt-get` can be used to install Eigen:
   ```
   sudo apt-get install libeigen3-dev
   ```
 
-The optional Ruby tests of Ignition Math require:
+The optional Ruby tests of Gazebo Math require:
 
 * [Ruby](https://www.ruby-lang.org/). Refer to the [Ruby Documentation](https://www.ruby-lang.org/downloads/) for installation instructions. On Ubuntu systems `apt-get` can be used to install Ubuntu Package `ruby-dev`:
   ```
@@ -101,9 +103,9 @@ The optional Ruby tests of Ignition Math require:
 
 ### Windows 10
 
-First, follow the [ign-cmake](https://github.com/ignitionrobotics/ign-cmake) tutorial for installing Conda, Visual Studio, CMake, and other prerequisites, and also for creating a Conda environment.
+First, follow the [gz-cmake](https://github.com/gazebosim/gz-cmake) tutorial for installing Conda, Visual Studio, CMake, and other prerequisites, and also for creating a Conda environment.
 
-The optional Eigen component of Ignition Math requires:
+The optional Eigen component of Gazebo Math requires:
 
 * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page). Refer to the [Eigen Documentation](http://eigen.tuxfamily.org/index.php?title=Main_Page#Documentation) for installation instructions. On Windows, we will use `conda` to install Eigen:
   ```
@@ -114,30 +116,35 @@ The optional Eigen component of Ignition Math requires:
 
 ### Ubuntu
 
-1. Clone the repository
+1. Install tools
   ```
-  git clone https://github.com/ignitionrobotics/ign-math -b ign-math<#>
+  sudo apt install -y build-essential cmake g++-8 git gnupg lsb-release wget
   ```
-  Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
-  which version you need.
 
 2. Install dependencies
   ```
-  export SYSTEM_VERSION=bionic
   sudo apt -y install \
-    $(sort -u $(find . -iname 'packages-'$SYSTEM_VERSION'.apt' -o -iname 'packages.apt') | tr '\n' ' ')
+    $(sort -u $(find . -iname 'packages-'`lsb_release -cs`'.apt' -o -iname 'packages.apt' | tr '\n' ' '))
   ```
 
-3. Configure and build
+3. Clone the repository
   ```
-  cd ign-math
+  git clone https://github.com/gazebosim/gz-math -b gz-math<#>
+  ```
+  Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
+  which version you need. From version 7 you should use `gz-math<#>` but for lower versions
+  you should use `ign-math<#>`.
+
+4. Configure and build
+  ```
+  cd gz-math
   mkdir build
   cd build
   cmake ..
   make
   ```
 
-4. Optionally, install
+5. Optionally, install
   ```
   sudo make install
   ```
@@ -146,21 +153,23 @@ The optional Eigen component of Ignition Math requires:
 
 1. Clone the repository
   ```
-  git clone https://github.com/ignitionrobotics/ign-math -b ign-math<#>
+  git clone https://github.com/gazebosim/gz-math -b gz-math<#>
   ```
   Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
-  which version you need.
+  which version you need. From version 7 you should use `gz-math<#>` but for lower versions
+  you should use `ign-math<#>`.
 
 2. Install dependencies
   ```
-  brew install --only-dependencies ignition-math<#>
+  brew install --only-dependencies gz-math<#>
   ```
   Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
-  which version you need.
+  which version you need. From version 7 you should use `gz-math<#>` but for lower versions
+  you should use `ign-math<#>`.
 
 3. Configure and build
   ```
-  cd ign-math
+  cd gz-math
   mkdir build
   cd build
   cmake ..
@@ -177,31 +186,34 @@ The optional Eigen component of Ignition Math requires:
 1. Navigate to `condabin` if necessary to use the `conda` command (i.e., if Conda is not in your `PATH` environment variable. You can find the location of `condabin` in Anaconda Prompt, `where conda`).
   Activate the Conda environment created in the prerequisites:
   ```
-  conda activate ign-ws
+  conda activate gz-ws
   ```
 
 2. Install dependencies
 
   You can view available versions and their dependencies:
   ```
-  conda search libignition-math* --channel conda-forge --info
+  conda search libgz-math* --channel conda-forge --info
   ```
+  From version 7 you should use `gz-math<#>` but for lower versions you should use `ign-math<#>`.
   See the [Conda release repository](https://github.com/conda-forge/libignition-math4-feedstock) for more information.
 
   Install dependencies, replacing `<#>` with the desired version:
   ```
-  conda install libignition-cmake<#> --channel conda-forge
+  conda install libgz-cmake<#> --channel conda-forge
   ```
 
 3. Navigate to where you would like to build the library, and clone the repository.
   ```
-  # Optionally, append `-b ign-math#` (replace # with a number) to check out a specific version
-  git clone https://github.com/ignitionrobotics/ign-math.git
+  # Optionally, append `-b gz-math#` (replace # with a number) to check out a specific version
+  git clone https://github.com/gazebosim/gz-math.git
   ```
+  From version 7 you should use `gz-math<#>` but for lower versions
+  you should use `ign-math<#>`.
 
 4. Configure and build
   ```
-  cd ign-math
+  cd gz-math
   mkdir build
   cd build
   cmake .. -DBUILD_TESTING=OFF  # Optionally, -DCMAKE_INSTALL_PREFIX=path\to\install
@@ -215,7 +227,7 @@ The optional Eigen component of Ignition Math requires:
 
 # Documentation
 
-API and tutorials can be found at [https://ignitionrobotics.org/libs/math](https://ignitionrobotics.org/libs/math).
+API and tutorials can be found at [https://gazebosim.org/libs/math](https://gazebosim.org/libs/math).
 
 You can also generate the documentation from a clone of this repository by following these steps.
 
@@ -226,12 +238,12 @@ You can also generate the documentation from a clone of this repository by follo
 
 2. Clone the repository
  ```
- git clone https://github.com/ignitionrobotics/ign-math
+ git clone https://github.com/gazebosim/gz-math
  ```
 
 3. Configure and build the documentation.
  ```
- cd ign-math; mkdir build; cd build; cmake ../; make doc
+ cd gz-math; mkdir build; cd build; cmake ../; make doc
  ```
 
 4. View the documentation by running the following command from the build directory.
@@ -243,7 +255,7 @@ You can also generate the documentation from a clone of this repository by follo
 
 Follow these steps to run tests and static code analysis in your clone of this repository.
 
-1. Follow the [source install instruction](https://ignitionrobotics.org/libs/math#source-install).
+1. Follow the [source install instruction](https://gazebosim.org/libs/math#source-install).
 
 2. Run tests.
  ```

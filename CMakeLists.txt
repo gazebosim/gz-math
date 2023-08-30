@@ -3,23 +3,22 @@ cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
 #============================================================================
 # Initialize the project
 #============================================================================
-project(ignition-math6 VERSION 6.14.0)
+project(gz-math7 VERSION 7.3.0)
 
 #============================================================================
-# Find ignition-cmake
+# Find gz-cmake
 #============================================================================
-# If you get an error at this line, you need to install ignition-cmake
-find_package(ignition-cmake2 2.13.0 REQUIRED)
+# If you get an error at this line, you need to install gz-cmake
+find_package(gz-cmake3 REQUIRED)
+set(GZ_CMAKE_VER ${gz-cmake3_VERSION_MAJOR})
 
 #============================================================================
 # Configure the project
 #============================================================================
-set (c++standard 17)
-set (CMAKE_CXX_STANDARD 17)
-ign_configure_project(
-  REPLACE_IGNITION_INCLUDE_PATH gz/math
-  VERSION_SUFFIX
-)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+gz_configure_project(VERSION_SUFFIX)
 
 #============================================================================
 # Set project-specific options
@@ -56,8 +55,13 @@ cmake_dependent_option(USE_DIST_PACKAGES_FOR_PYTHON
 #============================================================================
 
 #--------------------------------------
+# Find gz-utils
+gz_find_package(gz-utils2 REQUIRED)
+set(GZ_UTILS_VER ${gz-utils2_VERSION_MAJOR})
+
+#--------------------------------------
 # Find eigen3
-ign_find_package(
+gz_find_package(
   EIGEN3
   REQUIRED_BY eigen3
   PRETTY eigen3
@@ -70,7 +74,7 @@ if (SKIP_SWIG)
 else()
   find_package(SWIG QUIET)
   if (NOT SWIG_FOUND)
-    IGN_BUILD_WARNING("Swig is missing: Language interfaces are disabled.")
+    GZ_BUILD_WARNING("Swig is missing: Language interfaces are disabled.")
     message (STATUS "Searching for swig - not found.")
   else()
     message (STATUS "Searching for swig - found version ${SWIG_VERSION}.")
@@ -82,7 +86,7 @@ else()
     # Include ruby
     find_package(Ruby 1.9 QUIET)
     if (NOT RUBY_FOUND)
-      IGN_BUILD_WARNING("Ruby is missing: Install ruby-dev to enable ruby interface to ignition math.")
+      GZ_BUILD_WARNING("Ruby is missing: Install ruby-dev to enable ruby interfaces.")
       message (STATUS "Searching for Ruby - not found.")
     else()
       message (STATUS "Searching for Ruby - found version ${RUBY_VERSION}.")
@@ -95,10 +99,10 @@ endif()
 if (SKIP_PYBIND11)
   message(STATUS "SKIP_PYBIND11 set - disabling python bindings")
 else()
-  include(IgnPython)
+  include(GzPython)
   find_package(PythonLibs QUIET)
   if (NOT PYTHONLIBS_FOUND)
-    IGN_BUILD_WARNING("Python is missing: Python interfaces are disabled.")
+    GZ_BUILD_WARNING("Python is missing: Python interfaces are disabled.")
     message (STATUS "Searching for Python - not found.")
   else()
     message (STATUS "Searching for Python - found version ${PYTHONLIBS_VERSION_STRING}.")
@@ -110,7 +114,7 @@ else()
     if (${pybind11_FOUND})
       message (STATUS "Searching for pybind11 - found version ${pybind11_VERSION}.")
     else()
-      IGN_BUILD_WARNING("pybind11 is missing: Python interfaces are disabled.")
+      GZ_BUILD_WARNING("pybind11 is missing: Python interfaces are disabled.")
       message (STATUS "Searching for pybind11 - not found.")
     endif()
   endif()
@@ -123,14 +127,14 @@ set(FAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/fake/install")
 #============================================================================
 # Configure the build
 #============================================================================
-ign_configure_build(QUIT_IF_BUILD_ERRORS
+gz_configure_build(QUIT_IF_BUILD_ERRORS
   COMPONENTS eigen3)
 
 
 #============================================================================
 # Create package information
 #============================================================================
-ign_create_packages()
+gz_create_packages()
 
 #============================================================================
 # Configure documentation
@@ -138,6 +142,16 @@ ign_create_packages()
 configure_file(${CMAKE_SOURCE_DIR}/api.md.in ${CMAKE_BINARY_DIR}/api.md)
 configure_file(${CMAKE_SOURCE_DIR}/tutorials.md.in ${CMAKE_BINARY_DIR}/tutorials.md)
 
-ign_create_docs(
+gz_create_docs(
   API_MAINPAGE_MD "${CMAKE_BINARY_DIR}/api.md"
   TUTORIALS_MAINPAGE_MD "${CMAKE_BINARY_DIR}/tutorials.md")
+
+#============================================================================
+# Build examples
+#============================================================================
+if (BUILD_TESTING)
+  gz_build_examples(
+    SOURCE_DIR ${PROJECT_SOURCE_DIR}/examples
+    BINARY_DIR ${PROJECT_BINARY_DIR}/examples
+  )
+endif()

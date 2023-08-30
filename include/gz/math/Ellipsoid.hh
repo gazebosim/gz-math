@@ -21,14 +21,14 @@
 #include "gz/math/MassMatrix3.hh"
 #include "gz/math/Material.hh"
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
-    /// \class Ellipsoid Ellipsoid.hh ignition/math/Ellipsoid.hh
+    /// \class Ellipsoid Ellipsoid.hh gz/math/Ellipsoid.hh
     /// \brief A representation of a general ellipsoid.
     ///
     /// The ellipsoid class supports defining a ellipsoid with three radii and

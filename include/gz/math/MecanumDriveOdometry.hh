@@ -23,12 +23,12 @@
 #include <gz/math/Export.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     // Forward declarations.
     class MecanumDriveOdometryPrivate;
 
@@ -49,7 +49,7 @@ namespace ignition
     ///       |
     ///       |
     ///       O--->X(forward)
-    class IGNITION_MATH_VISIBLE MecanumDriveOdometry
+    class GZ_MATH_VISIBLE MecanumDriveOdometry
     {
       // Use a steady clock
       public: using clock = std::chrono::steady_clock;
@@ -147,7 +147,7 @@ namespace ignition
 #pragma warning(pop)
 #endif
     };
-    }  // namespace IGNITION_MATH_VERSION_NAMESPACE
+    }  // namespace GZ_MATH_VERSION_NAMESPACE
   }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 #endif  // GZ_MATH_MECANUMDRIVEODOMETRY_HH_

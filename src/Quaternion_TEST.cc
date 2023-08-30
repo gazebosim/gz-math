@@ -23,6 +23,7 @@
 #include "gz/math/Quaternion.hh"
 #include "gz/math/Matrix3.hh"
 #include "gz/math/Matrix4.hh"
+#include <gz/utils/SuppressWarning.hh>
 
 using namespace gz;
 
@@ -98,17 +99,40 @@ TEST(QuaternionTest, ConstructZero)
 TEST(QuaternionTest, ConstructEuler)
 {
   math::Quaterniond q(0, 1, 2);
-  EXPECT_TRUE(q == math::Quaterniond(math::Vector3d(0, 1, 2)));
+  EXPECT_TRUE(q.Equal(math::Quaterniond(math::Vector3d(0, 1, 2)), 1e-6));
+  math::Quaterniond q2(math::Vector3d(0, 1, 2));
+  EXPECT_TRUE(q == q2);
+  EXPECT_TRUE(q.Equal(q2, 1e-6));
+
+  q2.X() += 0.1;
+  EXPECT_FALSE(q.Equal(q2, 1e-6));
+  q2.X() -= 0.1;
+  EXPECT_TRUE(q.Equal(q2, 1e-6));
+
+  q2.Y() += 0.1;
+  EXPECT_FALSE(q.Equal(q2, 1e-6));
+  q2.Y() -= 0.1;
+  EXPECT_TRUE(q.Equal(q2, 1e-6));
+
+  q2.Z() += 0.1;
+  EXPECT_FALSE(q.Equal(q2, 1e-6));
+  q2.Z() -= 0.1;
+  EXPECT_TRUE(q.Equal(q2, 1e-6));
+
+  q2.W() += 0.1;
+  EXPECT_FALSE(q.Equal(q2, 1e-6));
+  q2.W() -= 0.1;
+  EXPECT_TRUE(q.Equal(q2, 1e-6));
 
   // Make sure that singularities are being handled properly.
   // There are an infinite number of equivalent Euler angle
   // representations when pitch = PI/2, so rather than comparing Euler
   // angles, we will compare quaternions.
-  for (double pitch : { -IGN_PI_2, IGN_PI_2 })
+  for (double pitch : { -GZ_PI_2, GZ_PI_2 })
   {
-    for (double roll = 0; roll < 2 * IGN_PI + 0.1; roll += IGN_PI_4)
+    for (double roll = 0; roll < 2 * GZ_PI + 0.1; roll += GZ_PI_4)
     {
-      for (double yaw = 0; yaw < 2 * IGN_PI + 0.1; yaw += IGN_PI_4)
+      for (double yaw = 0; yaw < 2 * GZ_PI + 0.1; yaw += GZ_PI_4)
       {
         math::Quaterniond q_orig(roll, pitch, yaw);
         math::Quaterniond q_derived(q_orig.Euler());
@@ -121,7 +145,7 @@ TEST(QuaternionTest, ConstructEuler)
 /////////////////////////////////////////////////
 TEST(QuaternionTest, ConstructAxisAngle)
 {
-  math::Quaterniond q1(math::Vector3d(0, 0, 1), IGN_PI);
+  math::Quaterniond q1(math::Vector3d(0, 0, 1), GZ_PI);
   EXPECT_TRUE(math::equal(q1.X(), 0.0));
   EXPECT_TRUE(math::equal(q1.Y(), 0.0));
   EXPECT_TRUE(math::equal(q1.Z(), 1.0));
@@ -145,12 +169,6 @@ TEST(QuaternionTest, Equal)
   math::Quaternionf q4(1.05f, 2.1f, 3.03f, 4.04f);
   EXPECT_TRUE(q3.Equal(q4, 0.2f));
   EXPECT_FALSE(q3.Equal(q4, 0.04f));
-
-  // ints
-  math::Quaternioni q5(3, 5, -1, 9);
-  math::Quaternioni q6(3, 6, 1, 12);
-  EXPECT_TRUE(q5.Equal(q6, 3));
-  EXPECT_FALSE(q5.Equal(q6, 2));
 }
 
 /////////////////////////////////////////////////
@@ -255,7 +273,7 @@ TEST(QuaternionTest, Integrate)
   // expect no change.
   {
     const math::Quaterniond q(0.5, 0.5, 0.5, 0.5);
-    const double fourPi = 4 * IGN_PI;
+    const double fourPi = 4 * GZ_PI;
     math::Quaterniond qX = q.Integrate(math::Vector3d::UnitX, fourPi);
     math::Quaterniond qY = q.Integrate(math::Vector3d::UnitY, fourPi);
     math::Quaterniond qZ = q.Integrate(math::Vector3d::UnitZ, fourPi);
@@ -268,35 +286,35 @@ TEST(QuaternionTest, Integrate)
 /////////////////////////////////////////////////
 TEST(QuaternionTest, MathLog)
 {
-  math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
+  math::Quaterniond q(GZ_PI*0.1, GZ_PI*0.5, GZ_PI);
 
   EXPECT_EQ(q.Log(), math::Quaterniond(0, -1.02593, 0.162491, 1.02593));
 
   math::Quaterniond q1 = q;
-  q1.W(2.0);
+  q1.SetW(2.0);
   EXPECT_EQ(q1.Log(), math::Quaterniond(0, -0.698401, 0.110616, 0.698401));
 }
 
 /////////////////////////////////////////////////
 TEST(QuaternionTest, MathExp)
 {
-  math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
+  math::Quaterniond q(GZ_PI*0.1, GZ_PI*0.5, GZ_PI);
 
   EXPECT_EQ(q.Exp(),
             math::Quaterniond(0.545456, -0.588972, 0.093284, 0.588972));
 
   math::Quaterniond q1 = q;
-  q1.X(0.000000001);
-  q1.Y(0.0);
-  q1.Z(0.0);
-  q1.W(0.0);
+  q1.SetX(0.000000001);
+  q1.SetY(0.0);
+  q1.SetZ(0.0);
+  q1.SetW(0.0);
   EXPECT_EQ(q1.Exp(), math::Quaterniond(1, 0, 0, 0));
 }
 
 /////////////////////////////////////////////////
 TEST(QuaternionTest, MathInvert)
 {
-  math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
+  math::Quaterniond q(GZ_PI*0.1, GZ_PI*0.5, GZ_PI);
 
   q.Invert();
   EXPECT_EQ(q, math::Quaterniond(0.110616, 0.698401, -0.110616, -0.698401));
@@ -305,19 +323,29 @@ TEST(QuaternionTest, MathInvert)
 /////////////////////////////////////////////////
 TEST(QuaternionTest, MathAxis)
 {
-  math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
+  math::Quaterniond q(GZ_PI*0.1, GZ_PI*0.5, GZ_PI);
 
-  q.Axis(0, 1, 0, IGN_PI);
+GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+  // Deprecated in gz-math7
+  q.Axis(0, 1, 0, GZ_PI);
   EXPECT_EQ(q, math::Quaterniond(6.12303e-17, 0, 1, 0));
 
-  q.Axis(math::Vector3d(1, 0, 0), IGN_PI);
+  // Deprecated in gz-math7
+  q.Axis(1, 0, 0, GZ_PI);
+  EXPECT_EQ(q, math::Quaterniond(0, 1, 0, 0));
+GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+
+  q.SetFromAxisAngle(0, 1, 0, GZ_PI);
+  EXPECT_EQ(q, math::Quaterniond(6.12303e-17, 0, 1, 0));
+
+  q.SetFromAxisAngle(math::Vector3d(1, 0, 0), GZ_PI);
   EXPECT_EQ(q, math::Quaterniond(0, 1, 0, 0));
 }
 
 /////////////////////////////////////////////////
 TEST(QuaternionTest, MathSet)
 {
-  math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
+  math::Quaterniond q(GZ_PI*0.1, GZ_PI*0.5, GZ_PI);
 
   q.Set(1, 2, 3, 4);
   EXPECT_TRUE(math::equal(q.W(), 1.0));
@@ -347,7 +375,7 @@ TEST(QuaternionTest, MathNormalize)
 /////////////////////////////////////////////////
 TEST(QuaternionTest, Math)
 {
-  math::Quaterniond q(IGN_PI*0.1, IGN_PI*0.5, IGN_PI);
+  math::Quaterniond q(GZ_PI*0.1, GZ_PI*0.5, GZ_PI);
   EXPECT_TRUE(q == math::Quaterniond(0.110616, -0.698401, 0.110616, 0.698401));
 
   q.Set(1, 2, 3, 4);
@@ -360,7 +388,7 @@ TEST(QuaternionTest, Math)
 
   math::Vector3d axis;
   double angle;
-  q.ToAxis(axis, angle);
+  q.AxisAngle(axis, angle);
   EXPECT_TRUE(axis == math::Vector3d(0.371391, 0.557086, 0.742781));
   EXPECT_TRUE(math::equal(angle, 2.77438, 1e-3));
 
@@ -405,29 +433,29 @@ TEST(QuaternionTest, Math)
   EXPECT_TRUE(math::equal(4.01, q.Z()));
   EXPECT_TRUE(math::equal(7.68, q.W()));
 
-  q.X(0.0);
-  q.Y(0.0);
-  q.Z(0.0);
-  q.W(0.0);
+  q.SetX(0.0);
+  q.SetY(0.0);
+  q.SetZ(0.0);
+  q.SetW(0.0);
   q.Normalize();
   EXPECT_TRUE(q == math::Quaterniond());
 
-  q.Axis(0, 0, 0, 0);
+  q.SetFromAxisAngle(0, 0, 0, 0);
   EXPECT_TRUE(q == math::Quaterniond());
 
   EXPECT_TRUE(math::Quaterniond::EulerToQuaternion(0.1, 0.2, 0.3) ==
       math::Quaterniond(0.983347, 0.0342708, 0.106021, 0.143572));
 
-  q.X(0.0);
-  q.Y(0.0);
-  q.Z(0.0);
-  q.W(0.0);
-  q.ToAxis(axis, angle);
+  q.SetX(0.0);
+  q.SetY(0.0);
+  q.SetZ(0.0);
+  q.SetW(0.0);
+  q.AxisAngle(axis, angle);
   EXPECT_TRUE(axis == math::Vector3d(1, 0, 0));
   EXPECT_TRUE(math::equal(angle, 0.0, 1e-3));
   {
     // simple 180 rotation about yaw, should result in x and y flipping signs
-    q = math::Quaterniond(0, 0, IGN_PI);
+    q = math::Quaterniond(0, 0, GZ_PI);
     math::Vector3d v = math::Vector3d(1, 2, 3);
     math::Vector3d r1 = q.RotateVector(v);
     math::Vector3d r2 = q.RotateVectorReverse(v);
@@ -442,7 +470,7 @@ TEST(QuaternionTest, Math)
   {
     // simple  90 rotation about yaw, should map x to y, y to -x
     // simple -90 rotation about yaw, should map x to -y, y to x
-    q = math::Quaterniond(0, 0, 0.5*IGN_PI);
+    q = math::Quaterniond(0, 0, 0.5*GZ_PI);
     math::Vector3d v = math::Vector3d(1, 2, 3);
     math::Vector3d r1 = q.RotateVector(v);
     math::Vector3d r2 = q.RotateVectorReverse(v);
@@ -463,7 +491,7 @@ TEST(QuaternionTest, Math)
   // Test RPY fixed-body-frame convention:
   // Rotate each unit vector in roll and pitch
   {
-    q = math::Quaterniond(IGN_PI/2.0, IGN_PI/2.0, 0);
+    q = math::Quaterniond(GZ_PI/2.0, GZ_PI/2.0, 0);
     math::Vector3d v1(1, 0, 0);
     math::Vector3d r1 = q.RotateVector(v1);
     // 90 degrees about X does nothing,
@@ -486,7 +514,7 @@ TEST(QuaternionTest, Math)
   {
     // now try a harder case (axis[1,2,3], rotation[0.3*pi])
     // verified with octave
-    q.Axis(math::Vector3d(1, 2, 3), 0.3*IGN_PI);
+    q.SetFromAxisAngle(math::Vector3d(1, 2, 3), 0.3*GZ_PI);
     std::cout << "[" << q.W() << ", " << q.X() << ", "
       << q.Y() << ", " << q.Z() << "]\n";
     std::cout << " x [" << q.Inverse().XAxis() << "]\n";
@@ -547,7 +575,7 @@ TEST(QuaternionTest, Math)
     math::Matrix3d matFromQuat(q);
 
     math::Quaterniond quatFromMat(matFromQuat);
-    math::Quaterniond quatFromMat2; quatFromMat2.Matrix(matFromQuat);
+    math::Quaterniond quatFromMat2; quatFromMat2.SetFromMatrix(matFromQuat);
 
     EXPECT_TRUE(q == quatFromMat);
     EXPECT_TRUE(q == quatFromMat2);
@@ -619,10 +647,10 @@ TEST(QuaternionTest, From2Axes)
   math::Vector3d v2(0.0, 1.0, 0.0);
 
   math::Quaterniond q1;
-  q1.From2Axes(v1, v2);
+  q1.SetFrom2Axes(v1, v2);
 
   math::Quaterniond q2;
-  q2.From2Axes(v2, v1);
+  q2.SetFrom2Axes(v2, v1);
 
   math::Quaterniond q1Correct(sqrt(2)/2, 0, 0, sqrt(2)/2);
   math::Quaterniond q2Correct(sqrt(2)/2, 0, 0, -sqrt(2)/2);
@@ -638,8 +666,8 @@ TEST(QuaternionTest, From2Axes)
   v1.Set(0.5, 0.5, 0);
   v2.Set(-0.5, 0.5, 0);
 
-  q1.From2Axes(v1, v2);
-  q2.From2Axes(v2, v1);
+  q1.SetFrom2Axes(v1, v2);
+  q2.SetFrom2Axes(v2, v1);
 
   EXPECT_NE(q1, q2);
   EXPECT_EQ(q1Correct, q1);
@@ -652,7 +680,7 @@ TEST(QuaternionTest, From2Axes)
 
   v1.Set(1, 0, 0);
   v2.Set(-1, 0, 0);
-  q1.From2Axes(v1, v2);
+  q1.SetFrom2Axes(v1, v2);
   q2 = q1 * q1;
   EXPECT_TRUE(math::equal(q2.W(), 1.0) || math::equal(q2.W(), -1.0));
   EXPECT_TRUE(math::equal(q2.X(), 0.0));
@@ -661,7 +689,7 @@ TEST(QuaternionTest, From2Axes)
 
   v1.Set(0, 1, 0);
   v2.Set(0, -1, 0);
-  q1.From2Axes(v1, v2);
+  q1.SetFrom2Axes(v1, v2);
   q2 = q1 * q1;
   EXPECT_TRUE(math::equal(q2.W(), 1.0) || math::equal(q2.W(), -1.0));
   EXPECT_TRUE(math::equal(q2.X(), 0.0));
@@ -670,7 +698,7 @@ TEST(QuaternionTest, From2Axes)
 
   v1.Set(0, 0, 1);
   v2.Set(0, 0, -1);
-  q1.From2Axes(v1, v2);
+  q1.SetFrom2Axes(v1, v2);
   q2 = q1 * q1;
   EXPECT_TRUE(math::equal(q2.W(), 1.0) || math::equal(q2.W(), -1.0));
   EXPECT_TRUE(math::equal(q2.X(), 0.0));
@@ -679,7 +707,7 @@ TEST(QuaternionTest, From2Axes)
 
   v1.Set(0, 1, 1);
   v2.Set(0, -1, -1);
-  q1.From2Axes(v1, v2);
+  q1.SetFrom2Axes(v1, v2);
   q2 = q1 * q1;
   EXPECT_TRUE(math::equal(q2.W(), 1.0) || math::equal(q2.W(), -1.0));
   EXPECT_TRUE(math::equal(q2.X(), 0.0));

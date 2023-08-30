@@ -18,6 +18,7 @@
 #ifndef GZ_MATH_PYTHON__VECTOR2_HH_
 #define GZ_MATH_PYTHON__VECTOR2_HH_
 
+#include <sstream>
 #include <string>
 
 #include <pybind11/pybind11.h>
@@ -28,13 +29,13 @@
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 namespace python
 {
-/// Help define a pybind11 wrapper for an gz::math::Vector2
+/// Help define a pybind11 wrapper for a gz::math::Vector2
 /**
  * \param[in] module a pybind11 module to add the definition to
  */
@@ -119,9 +120,12 @@ void helpDefineMathVector2(py::module &m, const std::string &typestr)
     .def("y", py::overload_cast<>(&Class::Y), "Get the y value.")
     .def("x", py::overload_cast<const T&>(&Class::X), "Set the x value.")
     .def("y", py::overload_cast<const T&>(&Class::Y), "Set the y value.")
-    .def_readonly_static("ZERO", &Class::Zero, "math::Vector2(0, 0)")
-    .def_readonly_static("ONE", &Class::One, "math::Vector2(1, 1)")
-    .def_readonly_static("NAN", &Class::NaN, "math::Vector3(NaN, NaN)")
+    .def_readonly_static("ZERO", &Class::Zero, py::return_value_policy::copy,
+        "math::Vector2(0, 0)")
+    .def_readonly_static("ONE", &Class::One, py::return_value_policy::copy,
+        "math::Vector2(1, 1)")
+    .def_readonly_static("NAN", &Class::NaN, py::return_value_policy::copy,
+        "math::Vector2(NaN, NaN)")
     .def("__copy__", [](const Class &self) {
       return Class(self);
     })
@@ -136,13 +140,13 @@ void helpDefineMathVector2(py::module &m, const std::string &typestr)
     .def("__repr__", toString);
 }
 
-/// Define a pybind11 wrapper for an gz::math::Vector2
+/// Define a pybind11 wrapper for a gz::math::Vector2
 /**
  * \param[in] module a pybind11 module to add the definition to
  */
 void defineMathVector2(py::module &m, const std::string &typestr);
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
 #endif  // GZ_MATH_PYTHON__VECTOR2_HH_

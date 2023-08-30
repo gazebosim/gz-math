@@ -19,21 +19,21 @@
 
 #include <algorithm>
 #include <cmath>
-#include <fstream>
-#include <iostream>
+#include <istream>
 #include <limits>
+#include <ostream>
 
 #include <gz/math/Helpers.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
-    /// \class Vector3 Vector3.hh ignition/math/Vector3.hh
+    /// \class Vector3 Vector3.hh gz/math/Vector3.hh
     /// \brief The Vector3 class represents the generic vector containing 3
     /// elements.  Since it's commonly used to keep coordinate system
     /// related information, its elements are labeled by x, y, z.
@@ -41,53 +41,44 @@ namespace ignition
     class Vector3
     {
       /// \brief math::Vector3(0, 0, 0)
-      public: static const Vector3 Zero;
+      public: static const Vector3 &Zero;
 
       /// \brief math::Vector3(1, 1, 1)
-      public: static const Vector3 One;
+      public: static const Vector3 &One;
 
       /// \brief math::Vector3(1, 0, 0)
-      public: static const Vector3 UnitX;
+      public: static const Vector3 &UnitX;
 
       /// \brief math::Vector3(0, 1, 0)
-      public: static const Vector3 UnitY;
+      public: static const Vector3 &UnitY;
 
       /// \brief math::Vector3(0, 0, 1)
-      public: static const Vector3 UnitZ;
+      public: static const Vector3 &UnitZ;
 
       /// \brief math::Vector3(NaN, NaN, NaN)
-      public: static const Vector3 NaN;
+      public: static const Vector3 &NaN;
 
       /// \brief Constructor
-      public: Vector3()
+      public: constexpr Vector3()
+      : data{0, 0, 0}
       {
-        this->data[0] = 0;
-        this->data[1] = 0;
-        this->data[2] = 0;
       }
 
       /// \brief Constructor
       /// \param[in] _x value along x
       /// \param[in] _y value along y
       /// \param[in] _z value along z
-      public: Vector3(const T &_x, const T &_y, const T &_z)
+      public: constexpr Vector3(const T &_x, const T &_y, const T &_z)
+      : data{_x, _y, _z}
       {
-        this->data[0] = _x;
-        this->data[1] = _y;
-        this->data[2] = _z;
       }
 
       /// \brief Copy constructor
       /// \param[in] _v a vector
-      public: Vector3(const Vector3<T> &_v)
-      {
-        this->data[0] = _v[0];
-        this->data[1] = _v[1];
-        this->data[2] = _v[2];
-      }
+      public: Vector3(const Vector3<T> &_v) = default;
 
       /// \brief Destructor
-      public: virtual ~Vector3() {}
+      public: ~Vector3() = default;
 
       /// \brief Return the sum of the values
       /// \return the sum
@@ -315,17 +306,28 @@ namespace ignition
         return std::min(std::min(this->data[0], this->data[1]), this->data[2]);
       }
 
+      /// \brief Get the number with the maximum absolute value in the vector
+      /// \return the element with maximum absolute value
+      public: T MaxAbs() const
+      {
+        T max = std::max(std::abs(this->data[0]), std::abs(this->data[1]));
+        max = std::max(max, std::abs(this->data[2]));
+        return max;
+      }
+
+      /// \brief Get the number with the maximum absolute value in the vector
+      /// \return the element with minimum absolute value
+      public: T MinAbs() const
+      {
+        T min = std::min(std::abs(this->data[0]), std::abs(this->data[1]));
+        min = std::min(min, std::abs(this->data[2]));
+        return min;
+      }
+
       /// \brief Assignment operator
       /// \param[in] _v a new value
       /// \return this
-      public: Vector3 &operator=(const Vector3<T> &_v)
-      {
-        this->data[0] = _v[0];
-        this->data[1] = _v[1];
-        this->data[2] = _v[2];
-
-        return *this;
-      }
+      public: Vector3 &operator=(const Vector3<T> &_v) = default;
 
       /// \brief Assignment operator
       /// \param[in] _v assigned to all elements
@@ -617,7 +619,7 @@ namespace ignition
       /// \return The value.
       public: T &operator[](const std::size_t _index)
       {
-        return this->data[clamp(_index, IGN_ZERO_SIZE_T, IGN_TWO_SIZE_T)];
+        return this->data[clamp(_index, GZ_ZERO_SIZE_T, GZ_TWO_SIZE_T)];
       }
 
       /// \brief Const-qualified array subscript operator
@@ -626,7 +628,7 @@ namespace ignition
       /// \return The value.
       public: T operator[](const std::size_t _index) const
       {
-        return this->data[clamp(_index, IGN_ZERO_SIZE_T, IGN_TWO_SIZE_T)];
+        return this->data[clamp(_index, GZ_ZERO_SIZE_T, GZ_TWO_SIZE_T)];
       }
 
       /// \brief Round all values to _precision decimal places
@@ -729,8 +731,14 @@ namespace ignition
       public: friend std::ostream &operator<<(
                   std::ostream &_out, const gz::math::Vector3<T> &_pt)
       {
-        _out << precision(_pt[0], 6) << " " << precision(_pt[1], 6) << " "
-          << precision(_pt[2], 6);
+        for (auto i : {0, 1, 2})
+        {
+          if (i > 0)
+            _out << " ";
+
+          appendToStream(_out, _pt[i]);
+        }
+
         return _out;
       }
 
@@ -756,15 +764,37 @@ namespace ignition
       private: T data[3];
     };
 
-    template<typename T> const Vector3<T> Vector3<T>::Zero(0, 0, 0);
-    template<typename T> const Vector3<T> Vector3<T>::One(1, 1, 1);
-    template<typename T> const Vector3<T> Vector3<T>::UnitX(1, 0, 0);
-    template<typename T> const Vector3<T> Vector3<T>::UnitY(0, 1, 0);
-    template<typename T> const Vector3<T> Vector3<T>::UnitZ(0, 0, 1);
-    template<typename T> const Vector3<T> Vector3<T>::NaN(
-        std::numeric_limits<T>::quiet_NaN(),
-        std::numeric_limits<T>::quiet_NaN(),
-        std::numeric_limits<T>::quiet_NaN());
+    namespace detail {
+
+      template<typename T>
+      constexpr Vector3<T> gVector3Zero(0, 0, 0);
+      template<typename T>
+      constexpr Vector3<T> gVector3One(1, 1, 1);
+      template<typename T>
+      constexpr Vector3<T> gVector3UnitX(1, 0, 0);
+      template<typename T>
+      constexpr Vector3<T> gVector3UnitY(0, 1, 0);
+      template<typename T>
+      constexpr Vector3<T> gVector3UnitZ(0, 0, 1);
+      template<typename T>
+      constexpr Vector3<T> gVector3NaN(
+          std::numeric_limits<T>::quiet_NaN(),
+          std::numeric_limits<T>::quiet_NaN(),
+          std::numeric_limits<T>::quiet_NaN());
+    }  // namespace detail
+
+    template<typename T>
+    const Vector3<T> &Vector3<T>::Zero = detail::gVector3Zero<T>;
+    template<typename T>
+    const Vector3<T> &Vector3<T>::One = detail::gVector3One<T>;
+    template<typename T>
+    const Vector3<T> &Vector3<T>::UnitX = detail::gVector3UnitX<T>;
+    template<typename T>
+    const Vector3<T> &Vector3<T>::UnitY = detail::gVector3UnitY<T>;
+    template<typename T>
+    const Vector3<T> &Vector3<T>::UnitZ = detail::gVector3UnitZ<T>;
+    template<typename T>
+    const Vector3<T> &Vector3<T>::NaN = detail::gVector3NaN<T>;
 
     typedef Vector3<int> Vector3i;
     typedef Vector3<double> Vector3d;

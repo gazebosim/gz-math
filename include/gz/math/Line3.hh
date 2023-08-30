@@ -21,14 +21,14 @@
 #include <gz/math/Vector3.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
-    /// \class Line3 Line3.hh ignition/math/Line3.hh
+    /// \class Line3 Line3.hh gz/math/Line3.hh
     /// \brief A three dimensional line segment. The line is defined by a
     /// start and end point.
     template<typename T>
@@ -39,11 +39,7 @@ namespace ignition
 
       /// \brief Copy constructor
       /// \param[in] _line a line object
-      public: Line3(const Line3<T> &_line)
-      {
-        this->pts[0] = _line[0];
-        this->pts[1] = _line[1];
-      }
+      public: Line3(const Line3<T> &_line) = default;
 
       /// \brief Constructor.
       /// \param[in] _ptA Start point of the line segment
@@ -386,7 +382,7 @@ namespace ignition
       /// parameter is clamped to the range [0, 1].
       public: math::Vector3<T> operator[](const size_t _index) const
       {
-        return this->pts[clamp(_index, IGN_ZERO_SIZE_T, IGN_ONE_SIZE_T)];
+        return this->pts[clamp(_index, GZ_ZERO_SIZE_T, GZ_ONE_SIZE_T)];
       }
 
       /// \brief Stream extraction operator
@@ -403,13 +399,7 @@ namespace ignition
       /// \brief Assignment operator
       /// \param[in] _line a new value
       /// \return this
-      public: Line3 &operator=(const Line3<T> &_line)
-      {
-        this->pts[0] = _line[0];
-        this->pts[1] = _line[1];
-
-        return *this;
-      }
+      public: Line3 &operator=(const Line3<T> &_line) = default;
 
       /// \brief Vector for storing the start and end points of the line
       private: math::Vector3<T> pts[2];

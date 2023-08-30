@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Open Source Robotics Foundation
+ * Copyright (C) 2012 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,3 +17,7 @@
 
 #include <gz/math/Angle.hh>
 #include <ignition/math/config.hh>
+
+#define IGN_RTOD(r) GZ_RTOD(r)
+#define IGN_DTOR(d) GZ_DTOR(d)
+#define IGN_NORMALIZE(a) GZ_NORMALIZE(a)

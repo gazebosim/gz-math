@@ -17,11 +17,10 @@
 
 #include <gtest/gtest.h>
 
-#include <numeric>
 #include <sstream>
 
-#include "gz/math/Vector3.hh"
 #include "gz/math/Helpers.hh"
+#include "gz/math/Vector3.hh"
 
 using namespace gz;
 
@@ -299,6 +298,28 @@ TEST(Vector3dTest, Min)
 }
 
 /////////////////////////////////////////////////
+TEST(Vector3dTest, MaxAbs)
+{
+  math::Vector3d vec1(0.1, 0.2, 0.05);
+  math::Vector3d vec2(-0.2, -0.1, -0.4);
+
+  EXPECT_DOUBLE_EQ(vec1.MaxAbs(), 0.2);
+
+  EXPECT_DOUBLE_EQ(vec2.MaxAbs(), 0.4);
+}
+
+/////////////////////////////////////////////////
+TEST(Vector3dTest, MinAbs)
+{
+  math::Vector3d vec1(0.1, 0.2, -0.05);
+  math::Vector3d vec2(-0.2, -0.1, -0.4);
+
+  EXPECT_DOUBLE_EQ(vec1.MinAbs(), 0.05);
+
+  EXPECT_DOUBLE_EQ(vec2.MinAbs(), 0.1);
+}
+
+/////////////////////////////////////////////////
 TEST(Vector3dTest, Add)
 {
   math::Vector3d vec1(0.1, 0.2, 0.4);
@@ -533,4 +554,25 @@ TEST(Vector3dTest, DistToLine)
     math::Vector3d point(0, 2, 0);
     EXPECT_DOUBLE_EQ(point.DistToLine(pointA, pointB), 0);
   }
+}
+
+/////////////////////////////////////////////////
+TEST(Vector3dTest, OperatorStreamOut)
+{
+  math::Vector3d v(0.1234, 1.234, 2.3456);
+  std::ostringstream stream;
+  stream << v;
+  EXPECT_EQ(stream.str(), "0.1234 1.234 2.3456");
+
+  stream.str("");
+  stream << std::setprecision(2) << v;
+  EXPECT_EQ(stream.str(), "0.12 1.2 2.3");
+
+  stream.str("");
+  stream << std::setprecision(3) << v;
+  EXPECT_EQ(stream.str(), "0.123 1.23 2.35");
+
+  stream.str("");
+  stream << std::setprecision(1) << std::fixed << v;
+  EXPECT_EQ(stream.str(), "0.1 1.2 2.3");
 }

@@ -100,14 +100,11 @@ TEST(MaterialTest, Accessors)
     // Test move constructor
     Material mat4(std::move(mat3));
     EXPECT_EQ(mat2, mat4);
-    Material defaultMat;
-    EXPECT_EQ(defaultMat, mat3);
 
     // Test move operator
     Material mat5;
     mat5 = std::move(mat4);
     EXPECT_EQ(mat2, mat5);
-    EXPECT_EQ(defaultMat, mat4);
   }
 
   {
@@ -115,6 +112,13 @@ TEST(MaterialTest, Accessors)
     EXPECT_GT(0.0, mat.Density());
     EXPECT_EQ(MaterialType::UNKNOWN_MATERIAL, mat.Type());
     EXPECT_TRUE(mat.Name().empty());
+  }
+
+  {
+    Material mat("wood");
+    EXPECT_FALSE(mat.Name().empty());
+    mat.SetName("MyWood");
+    EXPECT_EQ("MyWood", mat.Name());
   }
 
   {

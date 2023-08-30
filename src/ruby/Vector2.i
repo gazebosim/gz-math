@@ -26,17 +26,29 @@
 #include <gz/math/Vector2.hh>
 %}
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     template<typename T>
     class Vector2
     {
-      public: static const Vector2 Zero;
-      public: static const Vector2 One;
-      public: static const Vector2 NaN;
-
+      // Use %extend to override getters for static member variables so that
+      // copies of the variables are returned instead of references to the variables.
+      public: %extend {
+        static Vector2 Zero()
+        {
+          return gz::math::Vector2<T>::Zero;
+        }
+        static Vector2 One()
+        {
+          return gz::math::Vector2<T>::One;
+        }
+        static Vector2 NaN()
+        {
+          return gz::math::Vector2<T>::NaN;
+        }
+      }
       public: Vector2();
       public: Vector2(const T &_x, const T &_y);
       public: Vector2(const Vector2<T> &_v);

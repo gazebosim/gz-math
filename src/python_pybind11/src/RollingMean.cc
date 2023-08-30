@@ -18,7 +18,7 @@
 #include "RollingMean.hh"
 #include <gz/math/RollingMean.hh>
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -45,4 +45,4 @@ void defineMathRollingMean(py::module &m, const std::string &typestr)
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz

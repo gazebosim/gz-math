@@ -18,12 +18,12 @@
 #define GZ_MATH_DIFFDRIVEODOMETRY_HH_
 
 #include <chrono>
-#include <memory>
 #include <gz/math/Angle.hh>
 #include <gz/math/Export.hh>
 #include <gz/math/config.hh>
+#include <gz/utils/ImplPtr.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
@@ -31,13 +31,9 @@ namespace ignition
     using clock = std::chrono::steady_clock;
 
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
-    //
-    // Forward declarations.
-    class DiffDriveOdometryPrivate;
-
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     /** \class DiffDriveOdometry DiffDriveOdometry.hh \
-     * ignition/math/DiffDriveOdometry.hh
+     * gz/math/DiffDriveOdometry.hh
      **/
     /// \brief Computes odometry values based on a set of kinematic
     /// properties and wheel speeds for a diff-drive vehicle.
@@ -71,22 +67,19 @@ namespace ignition
     /// // ... Some time later
     ///
     /// // Both wheels have rotated the same amount
-    /// odom.Update(IGN_DTOR(2), IGN_DTOR(2), std::chrono::steady_clock::now());
+    /// odom.Update(GZ_DTOR(2), GZ_DTOR(2), std::chrono::steady_clock::now());
     ///
     /// // ... Some time later
     ///
     /// // The left wheel has rotated, the right wheel did not rotate
-    /// odom.Update(IGN_DTOR(4), IGN_DTOR(2), std::chrono::steady_clock::now());
+    /// odom.Update(GZ_DTOR(4), GZ_DTOR(2), std::chrono::steady_clock::now());
     /// \endcode
-    class IGNITION_MATH_VISIBLE DiffDriveOdometry
+    class GZ_MATH_VISIBLE DiffDriveOdometry
     {
       /// \brief Constructor.
       /// \param[in] _windowSize Rolling window size used to compute the
       /// velocity mean
       public: explicit DiffDriveOdometry(size_t _windowSize = 10);
-
-      /// \brief Destructor.
-      public: ~DiffDriveOdometry();
 
       /// \brief Initialize the odometry
       /// \param[in] _time Current time.
@@ -130,23 +123,15 @@ namespace ignition
       /// \param[in] _leftWheelRadius Radius of the left wheel.
       /// \param[in] _rightWheelRadius Radius of the right wheel.
       public: void SetWheelParams(double _wheelSeparation,
-                      double _leftWheelRadius, double _rightWheelRadius);
+                      double _leftWheelRadius,
+                      double _rightWheelRadius);
 
       /// \brief Set the velocity rolling window size.
       /// \param[in] _size The Velocity rolling window size.
       public: void SetVelocityRollingWindowSize(size_t _size);
 
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::unique_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
       /// \brief Private data pointer.
-      private: std::unique_ptr<DiffDriveOdometryPrivate> dataPtr;
-#ifdef _WIN32
-#pragma warning(pop)
-#endif
+      GZ_UTILS_IMPL_PTR(dataPtr)
     };
     }
   }

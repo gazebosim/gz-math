@@ -9,10 +9,10 @@
 
 Build | Status
 -- | --
-Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-math/branch/ign-math6/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-math/branch/ign-math6)
-Ubuntu Focal  | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_math-ci-ign-math6-focal-amd64)](https://build.osrfoundation.org/job/ignition_math-ci-ign-math6-focal-amd64)
-Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_math-ci-ign-math6-homebrew-amd64)](https://build.osrfoundation.org/job/ignition_math-ci-ign-math6-homebrew-amd64)
-Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ign_math-ign-6-win)](https://build.osrfoundation.org/job/ign_math-ign-6-win)
+Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-math/branch/gz-math7/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-math/branch/gz-math7)
+Ubuntu Focal  | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_math-ci-gz-math7-focal-amd64)](https://build.osrfoundation.org/job/ignition_math-ci-gz-math7-focal-amd64)
+Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_math-ci-gz-math7-homebrew-amd64)](https://build.osrfoundation.org/job/ignition_math-ci-gz-math7-homebrew-amd64)
+Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ign_math-ci-win)](https://build.osrfoundation.org/job/ign_math-ci-win)
 
 Gazebo Math, a component of [Gazebo](https://gazebosim.org), provides general purpose math
 classes and functions designed for robotic applications.
@@ -47,11 +47,11 @@ Math types.
 
 # Install
 
-See the [installation tutorial](https://gazebosim.org/api/math/6.8/install.html).
+See the [installation tutorial](https://gazebosim.org/api/math/7/install.html).
 
 # Usage
 
-Please refer to the [examples directory](https://github.com/gazebosim/gz-math/raw/ign-math6/examples/).
+Please refer to the [examples directory](https://github.com/gazebosim/gz-math/raw/ign-math7/examples/).
 
 # Folder Structure
 
@@ -60,7 +60,7 @@ Refer to the following table for information about important directories and fil
 ```
 gz-math
 ├── examples                 Example programs.
-├── include/ignition/math    Header files.
+├── include/gz/math    Header files.
 ├── src                      Source files and unit tests.
 │   └── graph                Source files for the graph classes.
 │   └── python               SWIG Python interfaces.

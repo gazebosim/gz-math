@@ -17,10 +17,10 @@
 
 #include <gtest/gtest.h>
 
-#include <cmath>
+#include <iosfwd>
 
-#include "gz/math/Helpers.hh"
 #include "gz/math/Angle.hh"
+#include "gz/math/Helpers.hh"
 
 using namespace gz;
 
@@ -31,13 +31,13 @@ TEST(AngleTest, Angle)
   EXPECT_TRUE(math::equal(0.0, angle1.Radian()));
 
   angle1.SetDegree(90.0);
-  EXPECT_TRUE(angle1 == IGN_PI_2);
-  angle1.Degree(180.0);
-  EXPECT_TRUE(angle1 == IGN_PI);
+  EXPECT_TRUE(angle1 == GZ_PI_2);
+  angle1.SetDegree(180.0);
+  EXPECT_TRUE(angle1 == GZ_PI);
 
-  EXPECT_FALSE(angle1 == IGN_PI + 0.1);
-  EXPECT_TRUE(angle1 == IGN_PI + 0.0001);
-  EXPECT_TRUE(angle1 == IGN_PI - 0.0001);
+  EXPECT_FALSE(angle1 == GZ_PI + 0.1);
+  EXPECT_TRUE(angle1 == GZ_PI + 0.0001);
+  EXPECT_TRUE(angle1 == GZ_PI - 0.0001);
   EXPECT_TRUE(math::Angle(0) == math::Angle(0));
   EXPECT_TRUE(math::Angle(0) == math::Angle(0.001));
 
@@ -47,15 +47,15 @@ TEST(AngleTest, Angle)
   math::Angle angle(0.5);
   EXPECT_TRUE(math::equal(0.5, angle.Radian()));
 
-  angle.SetRadian(IGN_PI_2);
-  EXPECT_TRUE(math::equal(IGN_RTOD(IGN_PI_2), angle.Degree()));
+  angle.SetRadian(GZ_PI_2);
+  EXPECT_TRUE(math::equal(GZ_RTOD(GZ_PI_2), angle.Degree()));
 
-  angle.Radian(IGN_PI);
-  EXPECT_TRUE(math::equal(IGN_RTOD(IGN_PI), angle.Degree()));
+  angle.SetRadian(GZ_PI);
+  EXPECT_TRUE(math::equal(GZ_RTOD(GZ_PI), angle.Degree()));
 
   math::Angle normalized = angle.Normalized();
   angle.Normalize();
-  EXPECT_TRUE(math::equal(IGN_RTOD(IGN_PI), angle.Degree()));
+  EXPECT_TRUE(math::equal(GZ_RTOD(GZ_PI), angle.Degree()));
   EXPECT_EQ(normalized, angle);
 
   angle = math::Angle(0.1) + math::Angle(0.2);

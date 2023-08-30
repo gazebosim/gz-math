@@ -24,16 +24,16 @@
 #include <gz/math/Vector3.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /** \class AdditivelySeparableScalarField3\
      * AdditivelySeparableScalarField3.hh\
-     * ignition/math/AdditivelySeparableScalarField3.hh
+     * gz/math/AdditivelySeparableScalarField3.hh
      */
     /// \brief The AdditivelySeparableScalarField3 class constructs
     /// a scalar field F in R^3 as a sum of scalar functions i.e.

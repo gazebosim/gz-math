@@ -19,58 +19,54 @@
 
 #include <algorithm>
 #include <cmath>
+#include <istream>
 #include <limits>
+#include <ostream>
 
 #include <gz/math/Helpers.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
-    /// \class Vector2 Vector2.hh ignition/math/Vector2.hh
+    /// \class Vector2 Vector2.hh gz/math/Vector2.hh
     /// \brief Two dimensional (x, y) vector.
     template<typename T>
     class Vector2
     {
       /// \brief math::Vector2(0, 0)
-      public: static const Vector2<T> Zero;
+      public: static const Vector2<T> &Zero;
 
       /// \brief math::Vector2(1, 1)
-      public: static const Vector2<T> One;
+      public: static const Vector2<T> &One;
 
       /// \brief math::Vector2(NaN, NaN, NaN)
-      public: static const Vector2 NaN;
+      public: static const Vector2 &NaN;
 
       /// \brief Default Constructor
-      public: Vector2()
+      public: constexpr Vector2()
+      : data{0, 0}
       {
-        this->data[0] = 0;
-        this->data[1] = 0;
       }
 
       /// \brief Constructor
       /// \param[in] _x value along x
       /// \param[in] _y value along y
-      public: Vector2(const T &_x, const T &_y)
+      public: constexpr Vector2(const T &_x, const T &_y)
+      : data{_x, _y}
       {
-        this->data[0] = _x;
-        this->data[1] = _y;
       }
 
       /// \brief Copy constructor
       /// \param[in] _v the value
-      public: Vector2(const Vector2<T> &_v)
-      {
-        this->data[0] = _v[0];
-        this->data[1] = _v[1];
-      }
+      public: Vector2(const Vector2<T> &_v) = default;
 
       /// \brief Destructor
-      public: virtual ~Vector2() {}
+      public: ~Vector2() = default;
 
       /// \brief Return the sum of the values
       /// \return the sum
@@ -228,13 +224,7 @@ namespace ignition
       /// \brief Assignment operator
       /// \param[in] _v a value for x and y element
       /// \return this
-      public: Vector2 &operator=(const Vector2 &_v)
-      {
-        this->data[0] = _v[0];
-        this->data[1] = _v[1];
-
-        return *this;
-      }
+      public: Vector2 &operator=(const Vector2 &_v) = default;
 
       /// \brief Assignment operator
       /// \param[in] _v the value for x and y element
@@ -483,7 +473,7 @@ namespace ignition
       /// The index is clamped to the range [0,1].
       public: T &operator[](const std::size_t _index)
       {
-        return this->data[clamp(_index, IGN_ZERO_SIZE_T, IGN_ONE_SIZE_T)];
+        return this->data[clamp(_index, GZ_ZERO_SIZE_T, GZ_ONE_SIZE_T)];
       }
 
       /// \brief Const-qualified array subscript operator
@@ -491,7 +481,7 @@ namespace ignition
       /// The index is clamped to the range [0,1].
       public: T operator[](const std::size_t _index) const
       {
-        return this->data[clamp(_index, IGN_ZERO_SIZE_T, IGN_ONE_SIZE_T)];
+        return this->data[clamp(_index, GZ_ZERO_SIZE_T, GZ_ONE_SIZE_T)];
       }
 
       /// \brief Return the x value.
@@ -537,13 +527,19 @@ namespace ignition
       }
 
       /// \brief Stream extraction operator
-      /// \param[in] _out output stream
+      /// \param[out] _out output stream
       /// \param[in] _pt Vector2 to output
       /// \return The stream
       public: friend std::ostream
       &operator<<(std::ostream &_out, const Vector2<T> &_pt)
       {
-        _out << _pt[0] << " " << _pt[1];
+        for (auto i : {0, 1})
+        {
+          if (i > 0)
+            _out << " ";
+
+          appendToStream(_out, _pt[i]);
+        }
         return _out;
       }
 
@@ -578,16 +574,29 @@ namespace ignition
       private: T data[2];
     };
 
-    template<typename T>
-    const Vector2<T> Vector2<T>::Zero(0, 0);
+    namespace detail {
+
+      template<typename T>
+      constexpr Vector2<T> gVector2Zero(0, 0);
+
+      template<typename T>
+      constexpr Vector2<T> gVector2One(1, 1);
+
+      template<typename T>
+      constexpr Vector2<T> gVector2NaN(
+          std::numeric_limits<T>::quiet_NaN(),
+          std::numeric_limits<T>::quiet_NaN());
+
+    }  // namespace detail
 
     template<typename T>
-    const Vector2<T> Vector2<T>::One(1, 1);
+    const Vector2<T> &Vector2<T>::Zero = detail::gVector2Zero<T>;
 
     template<typename T>
-    const Vector2<T> Vector2<T>::NaN(
-        std::numeric_limits<T>::quiet_NaN(),
-        std::numeric_limits<T>::quiet_NaN());
+    const Vector2<T> &Vector2<T>::One = detail::gVector2One<T>;
+
+    template<typename T>
+    const Vector2<T> &Vector2<T>::NaN = detail::gVector2NaN<T>;
 
     typedef Vector2<int> Vector2i;
     typedef Vector2<double> Vector2d;

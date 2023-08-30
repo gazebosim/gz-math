@@ -17,45 +17,46 @@
 #ifndef GZ_MATH_COLOR_HH_
 #define GZ_MATH_COLOR_HH_
 
-#include <iostream>
 #include <cctype>
+#include <istream>
+#include <ostream>
 
 #include <gz/math/Helpers.hh>
 #include <gz/math/Vector3.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
-    /// \class Color Color.hh ignition/math/Color.hh
+    /// \class Color Color.hh gz/math/Color.hh
     /// \brief Defines a color using a red (R), green (G), blue (B), and alpha
     /// (A) component. Each color component is in the range [0..1].
     ///
     /// ## Example
     ///
     /// \snippet examples/color_example.cc complete
-    class IGNITION_MATH_VISIBLE Color
+    class GZ_MATH_VISIBLE Color
     {
       /// \brief (1, 1, 1)
-      public: static const Color White;
+      public: static const Color &White;
       /// \brief (0, 0, 0)
-      public: static const Color Black;
+      public: static const Color &Black;
       /// \brief (1, 0, 0)
-      public: static const Color Red;
+      public: static const Color &Red;
       /// \brief (0, 1, 0)
-      public: static const Color Green;
+      public: static const Color &Green;
       /// \brief (0, 0, 1)
-      public: static const Color Blue;
+      public: static const Color &Blue;
       /// \brief (1, 1, 0)
-      public: static const Color Yellow;
+      public: static const Color &Yellow;
       /// \brief (1, 0, 1)
-      public: static const Color Magenta;
+      public: static const Color &Magenta;
       /// \brief (0, 1, 1)
-      public: static const Color Cyan;
+      public: static const Color &Cyan;
 
       /// \typedef RGBA
       /// \brief A RGBA packed value as an unsigned int
@@ -94,22 +95,26 @@ namespace ignition
       public: typedef unsigned int ABGR;
 
       /// \brief Constructor
-      public: Color();
+      public: Color() = default;
 
       /// \brief Constructor
       /// \param[in] _r Red value (range 0 to 1)
-      /// \param[in] _g Green value (range 0 to 1
-      /// \param[in] _b Blue value (range 0 to 1
+      /// \param[in] _g Green value (range 0 to 1)
+      /// \param[in] _b Blue value (range 0 to 1)
       /// \param[in] _a Alpha value (0=transparent, 1=opaque)
-      public: Color(const float _r, const float _g, const float _b,
-                  const float _a = 1.0);
+      public: constexpr Color(const float _r, const float _g, const float _b,
+                              const float _a = 1.0)
+      : r(_r), g(_g), b(_b), a(_a)
+      {
+        this->Clamp();
+      }
 
       /// \brief Copy Constructor
       /// \param[in] _clr Color to copy
-      public: Color(const Color &_clr);
+      public: Color(const Color &_clr) = default;
 
       /// \brief Destructor
-      public: virtual ~Color();
+      public: ~Color() = default;
 
       /// \brief Reset the color to default values to red=0, green=0,
       /// blue=0, alpha=1.
@@ -147,13 +152,21 @@ namespace ignition
       /// \brief Equal operator
       /// \param[in] _pt Color to copy
       /// \return Reference to this color
-      public: Color &operator=(const Color &_pt);
+      public: Color &operator=(const Color &_pt) = default;
 
       /// \brief Array index operator
-      /// \param[in] _index Color component index(0=red, 1=green, 2=blue)
+      /// \param[in] _index Color component index(0=red, 1=green, 2=blue,
+      /// 3=alpha)
       /// \return r, g, b, or a when _index is 0, 1, 2 or 3. A NAN_F value is
       /// returned if the _index is invalid
       public: float operator[](const unsigned int _index);
+
+      /// \brief Array index operator, const version
+      /// \param[in] _index Color component index(0=red, 1=green, 2=blue,
+      /// 3=alpha)
+      /// \return r, g, b, or a when _index is 0, 1, 2 or 3. A NAN_F value is
+      /// returned if the _index is invalid
+      public: float operator[](const unsigned int _index) const;
 
       /// \brief Get as uint32 RGBA packed value
       /// \return the color
@@ -258,16 +271,33 @@ namespace ignition
       public: bool operator!=(const Color &_pt) const;
 
       /// \brief Clamp the color values to valid ranges
-      private: void Clamp();
+      private: constexpr void Clamp()
+      {
+        // These comparisons are carefully written to handle NaNs correctly.
+        if (!(this->r >= 0)) { this->r = 0; }
+        if (!(this->g >= 0)) { this->g = 0; }
+        if (!(this->b >= 0)) { this->b = 0; }
+        if (!(this->a >= 0)) { this->a = 0; }
+        if (this->r > 1) { this->r = this->r/255.0f; }
+        if (this->g > 1) { this->g = this->g/255.0f; }
+        if (this->b > 1) { this->b = this->b/255.0f; }
+        if (this->a > 1) { this->a = 1; }
+      }
 
       /// \brief Stream insertion operator
       /// \param[in] _out the output stream
-      /// \param[in] _pt the color
+      /// \param[in] _color the color
       /// \return the output stream
       public: friend std::ostream &operator<<(std::ostream &_out,
-                                              const Color &_pt)
+                                              const Color &_color)
       {
-        _out << _pt.r << " " << _pt.g << " " << _pt.b << " " << _pt.a;
+        for (auto i : {0, 1, 2, 3})
+        {
+          if (i > 0)
+            _out << " ";
+
+          appendToStream(_out, _color[i]);
+        }
         return _out;
       }
 

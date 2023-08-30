@@ -17,25 +17,23 @@
 #ifndef GZ_MATH_SPHERICALCOORDINATES_HH_
 #define GZ_MATH_SPHERICALCOORDINATES_HH_
 
-#include <memory>
 #include <string>
 
 #include <gz/math/Angle.hh>
 #include <gz/math/Vector3.hh>
 #include <gz/math/Helpers.hh>
 #include <gz/math/config.hh>
+#include <gz/utils/ImplPtr.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
-    //
-    class SphericalCoordinatesPrivate;
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
 
     /// \brief Convert spherical coordinates for planetary surfaces.
-    class IGNITION_MATH_VISIBLE SphericalCoordinates
+    class GZ_MATH_VISIBLE SphericalCoordinates
     {
       /// \enum SurfaceType
       /// \brief Unique identifiers for planetary surface models.
@@ -43,7 +41,15 @@ namespace ignition
               {
                 /// \brief Model of reference ellipsoid for earth, based on
                 /// WGS 84 standard. see wikipedia: World_Geodetic_System
-                EARTH_WGS84 = 1
+                EARTH_WGS84 = 1,
+
+                /// \brief Model of the moon, based on the Selenographic
+                /// coordinate system, see wikipedia: Selenographic
+                /// Coordinate System.
+                MOON_SCS = 2,
+
+                /// \brief Custom surface type
+                CUSTOM_SURFACE = 10
               };
 
       /// \enum CoordinateType
@@ -75,6 +81,16 @@ namespace ignition
       /// \param[in] _type SurfaceType specification.
       public: explicit SphericalCoordinates(const SurfaceType _type);
 
+      /// \brief Constructor with surface type input and properties
+      /// input. To be used for CUSTOM_SURFACE.
+      /// \param[in] _type SurfaceType specification.
+      /// \param[in] _axisEquatorial Semi major axis of the surface.
+      /// \param[in] _axisPolar Semi minor axis of the surface.
+      public: SphericalCoordinates(
+            const SurfaceType _type,
+            const double _axisEquatorial,
+            const double _axisPolar);
+
       /// \brief Constructor with surface type, angle, and elevation inputs.
       /// \param[in] _type SurfaceType specification.
       /// \param[in] _latitude Reference latitude.
@@ -86,13 +102,6 @@ namespace ignition
                                    const gz::math::Angle &_longitude,
                                    const double _elevation,
                                    const gz::math::Angle &_heading);
-
-      /// \brief Copy constructor.
-      /// \param[in] _sc Spherical coordinates to copy.
-      public: SphericalCoordinates(const SphericalCoordinates &_sc);
-
-      /// \brief Destructor.
-      public: ~SphericalCoordinates();
 
       /// \brief Convert a Cartesian position vector to geodetic coordinates.
       /// This performs a `PositionTransform` from LOCAL to SPHERICAL.
@@ -144,14 +153,65 @@ namespace ignition
       /// \param[in] _latB Latitude of point B.
       /// \param[in] _lonB Longitude of point B.
       /// \return Distance in meters.
-      public: static double Distance(const gz::math::Angle &_latA,
+      /// \deprecated Use DistanceWGS84 instead.
+      public: GZ_DEPRECATED(7) static double Distance(
+                                     const gz::math::Angle &_latA,
                                      const gz::math::Angle &_lonA,
                                      const gz::math::Angle &_latB,
                                      const gz::math::Angle &_lonB);
 
+      /// \brief Get the distance between two points expressed in geographic
+      /// latitude and longitude. It assumes that both points are at sea level.
+      /// Example: _latA = 38.0016667 and _lonA = -123.0016667) represents
+      /// the point with latitude 38d 0'6.00"N and longitude 123d 0'6.00"W.
+      /// This method assumes that the surface model is EARTH_WGS84.
+      /// \param[in] _latA Latitude of point A.
+      /// \param[in] _lonA Longitude of point A.
+      /// \param[in] _latB Latitude of point B.
+      /// \param[in] _lonB Longitude of point B.
+      /// \return Distance in meters.
+      public: static double DistanceWGS84(
+                                     const gz::math::Angle &_latA,
+                                     const gz::math::Angle &_lonA,
+                                     const gz::math::Angle &_latB,
+                                     const gz::math::Angle &_lonB);
+
+      /// \brief Get the distance between two points expressed in geographic
+      /// latitude and longitude. It assumes that both points are at sea level.
+      /// Example: _latA = 38.0016667 and _lonA = -123.0016667) represents
+      /// the point with latitude 38d 0'6.00"N and longitude 123d 0'6.00"W.
+      /// This is different from the deprecated static Distance() method as it
+      /// takes into account the set surface's radius.
+      /// \param[in] _latA Latitude of point A.
+      /// \param[in] _lonA Longitude of point A.
+      /// \param[in] _latB Latitude of point B.
+      /// \param[in] _lonB Longitude of point B.
+      /// \return Distance in meters.
+      public: double DistanceBetweenPoints(
+                  const gz::math::Angle &_latA,
+                  const gz::math::Angle &_lonA,
+                  const gz::math::Angle &_latB,
+                  const gz::math::Angle &_lonB);
+
       /// \brief Get SurfaceType currently in use.
       /// \return Current SurfaceType value.
       public: SurfaceType Surface() const;
+
+      /// \brief Get the radius of the surface.
+      /// \return radius of the surface in use.
+      public: double SurfaceRadius() const;
+
+      /// \brief Get the major axis of the surface.
+      /// \return Equatorial axis of the surface in use.
+      public: double SurfaceAxisEquatorial() const;
+
+      /// \brief Get the minor axis of the surface.
+      /// \return Polar axis of the surface in use.
+      public: double SurfaceAxisPolar() const;
+
+      /// \brief Get the flattening of the surface.
+      /// \return Flattening parameter of the surface in use.
+      public: double SurfaceFlattening() const;
 
       /// \brief Get reference geodetic latitude.
       /// \return Reference geodetic latitude.
@@ -174,6 +234,16 @@ namespace ignition
       /// \brief Set SurfaceType for planetary surface model.
       /// \param[in] _type SurfaceType value.
       public: void SetSurface(const SurfaceType &_type);
+
+      /// \brief Set SurfaceType for planetary surface model with
+      /// custom ellipsoid properties.
+      /// \param[in] _type SurfaceType value.
+      /// \param[in] _axisEquatorial Equatorial axis of the surface.
+      /// \param[in] _axisPolar Polar axis of the surface.
+      public: void SetSurface(
+                  const SurfaceType &_type,
+                  const double _axisEquatorial,
+                  const double _axisPolar);
 
       /// \brief Set reference geodetic latitude.
       /// \param[in] _angle Reference geodetic latitude.
@@ -240,25 +310,8 @@ namespace ignition
       /// \return true if this != _sc
       public: bool operator!=(const SphericalCoordinates &_sc) const;
 
-      /// \brief Assignment operator
-      /// \param[in] _sc The spherical coordinates to copy from.
-      /// \return this
-      public: SphericalCoordinates &operator=(
-        const SphericalCoordinates &_sc);
-
-
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::unique_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
-      /// \internal
       /// \brief Pointer to the private data
-      private: std::unique_ptr<SphericalCoordinatesPrivate> dataPtr;
-#ifdef _WIN32
-#pragma warning(pop)
-#endif
+      GZ_UTILS_IMPL_PTR(dataPtr)
     };
     }
   }

@@ -14,8 +14,8 @@
 
 import unittest
 
-import ignition
-from ignition.math import Capsuled, Material, MassMatrix3d
+import gz
+from gz.math7 import Capsuled, Material, MassMatrix3d
 
 import math
 
@@ -41,14 +41,14 @@ class TestBox(unittest.TestCase):
 
         # Length, radius, mat
         capsule = Capsuled(1.0, 2.0,
-            Material(ignition.math.MaterialType.WOOD));
+            Material(gz.math7.MaterialType.WOOD));
         self.assertEqual(1.0, capsule.length());
         self.assertEqual(2.0, capsule.radius());
-        self.assertEqual(Material(ignition.math.MaterialType.WOOD),
+        self.assertEqual(Material(gz.math7.MaterialType.WOOD),
                          capsule.material());
 
         capsule2 = Capsuled(1.0, 2.0,
-            Material(ignition.math.MaterialType.WOOD));
+            Material(gz.math7.MaterialType.WOOD));
         self.assertEqual(capsule, capsule2);
 
 
@@ -60,11 +60,11 @@ class TestBox(unittest.TestCase):
 
         capsule.set_length(100.1);
         capsule.set_radius(.123);
-        capsule.set_material(Material(ignition.math.MaterialType.PINE));
+        capsule.set_material(Material(gz.math7.MaterialType.PINE));
 
         self.assertEqual(100.1, capsule.length());
         self.assertEqual(.123, capsule.radius());
-        self.assertEqual(Material(ignition.math.MaterialType.PINE),
+        self.assertEqual(Material(gz.math7.MaterialType.PINE),
                          capsule.material());
 
 

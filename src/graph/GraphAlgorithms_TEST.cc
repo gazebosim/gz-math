@@ -16,7 +16,6 @@
 */
 
 #include <gtest/gtest.h>
-#include <string>
 
 #include "gz/math/graph/Graph.hh"
 #include "gz/math/graph/GraphAlgorithms.hh"
@@ -34,7 +33,7 @@ class GraphTestFixture : public testing::Test
 // The list of graphs we want to test.
 using GraphTypes = ::testing::Types<DirectedGraph<int, double>,
                                     UndirectedGraph<int, double>>;
-TYPED_TEST_CASE(GraphTestFixture, GraphTypes);
+TYPED_TEST_SUITE(GraphTestFixture, GraphTypes, );
 
 /////////////////////////////////////////////////
 TYPED_TEST(GraphTestFixture, BreadthFirstSort)

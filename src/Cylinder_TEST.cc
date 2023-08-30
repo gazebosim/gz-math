@@ -16,7 +16,6 @@
 */
 #include <gtest/gtest.h>
 #include <cmath>
-#include <iostream>
 
 #include "gz/math/Cylinder.hh"
 
@@ -106,7 +105,7 @@ TEST(CylinderTest, VolumeAndDensity)
 {
   double mass = 1.0;
   math::Cylinderd cylinder(1.0, 0.001);
-  double expectedVolume = (IGN_PI * std::pow(0.001, 2) * 1.0);
+  double expectedVolume = (GZ_PI * std::pow(0.001, 2) * 1.0);
   EXPECT_DOUBLE_EQ(expectedVolume, cylinder.Volume());
 
   double expectedDensity = mass / expectedVolume;
@@ -137,4 +136,10 @@ TEST(CylinderTest, Mass)
   cylinder.MassMatrix(massMat);
   EXPECT_EQ(expectedMassMat, massMat);
   EXPECT_DOUBLE_EQ(expectedMassMat.Mass(), massMat.Mass());
+
+  auto massMatOpt = cylinder.MassMatrix();
+  ASSERT_NE(std::nullopt, massMatOpt);
+  EXPECT_EQ(expectedMassMat, *massMatOpt);
+  EXPECT_EQ(expectedMassMat.DiagonalMoments(), massMatOpt->DiagonalMoments());
+  EXPECT_DOUBLE_EQ(expectedMassMat.Mass(), massMatOpt->Mass());
 }

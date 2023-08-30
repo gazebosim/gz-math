@@ -17,6 +17,7 @@
 #ifndef GZ_MATH_BOX_HH_
 #define GZ_MATH_BOX_HH_
 
+#include <optional>
 #include <gz/math/config.hh>
 #include <gz/math/MassMatrix3.hh>
 #include <gz/math/Material.hh>
@@ -27,18 +28,18 @@
 
 #include <set>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     /// \brief This is the type used for deduplicating and returning the set of
     /// intersections.
     template<typename T>
     using IntersectionPoints = std::set<Vector3<T>, WellOrderedVectors<T>>;
 
-    /// \class Box Box.hh ignition/math/Box.hh
+    /// \class Box Box.hh gz/math/Box.hh
     /// \brief A representation of a box. All units are in meters.
     ///
     /// The box class supports defining a size and material properties.
@@ -90,9 +91,6 @@ namespace ignition
       /// \param[in] _mat Material property for the box.
       public: Box(const Vector3<Precision> &_size,
                   const gz::math::Material &_mat);
-
-      /// \brief Destructor.
-      public: virtual ~Box() = default;
 
       /// \brief Get the size of the box.
       /// \return Size of the box in meters.
@@ -191,6 +189,14 @@ namespace ignition
       /// \return False if computation of the mass matrix failed, which
       /// could be due to an invalid size (<=0) or density (<=0).
       public: bool MassMatrix(MassMatrix3<Precision> &_massMat) const;
+
+      /// \brief Get the mass matrix for this box. This function
+      /// is only meaningful if the box's size and material
+      /// have been set.
+      /// \return The computed mass matrix if parameters are valid
+      /// (radius > 0), (length > 0), and (density > 0). Otherwise
+      /// std::nullopt is returned.
+      public: std::optional< MassMatrix3<Precision> > MassMatrix() const;
 
       /// \brief Get intersection between a plane and the box's edges.
       /// Edges contained on the plane are ignored.

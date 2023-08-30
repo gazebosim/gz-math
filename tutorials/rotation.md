@@ -4,11 +4,11 @@ This example explains how to use quaternions and euler angles, and how to conver
 
 ## Compiling and running the code
 
-Go to `ign-math/examples` and use `cmake` to compile the code:
+Go to `gz-math/examples` and use `cmake` to compile the code:
 
 ```{.sh}
-git clone https://github.com/ignitionrobotics/ign-math/ -b ign-math6
-cd ign-math/examples
+git clone https://github.com/gazebosim/gz-math/ -b gz-math7
+cd gz-math/examples
 mkdir build
 cd build
 cmake ..

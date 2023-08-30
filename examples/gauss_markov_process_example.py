@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Modify the PYTHONPATH environment variable to include the ignition math
+# Modify the PYTHONPATH environment variable to include the gz math
 # library install path. For example, if you install to /usr:
 #
 # $ export PYTHONPATH=/usr/lib/python:$PYTHONPATH
@@ -26,7 +26,7 @@
 # 2. Use gnuplot to create a plot:
 #     gnuplot -e 'set terminal jpeg; plot "plot.data" with lines' > out.jpg
 import datetime
-from ignition.math import GaussMarkovProcess
+from gz.math7 import GaussMarkovProcess
 
 # Create the process with:
 #   * Start value of 20.2

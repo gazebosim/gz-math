@@ -93,5 +93,5 @@ int main(int argc, char **argv)
 //! [intersect]
 
   // There are more functions in Triangle. Take a look at the API;
-  // http://ignitionrobotics.org/libraries/ign_mat/api
+  // http://gazebosim.org/libraries/ign_mat/api
 }

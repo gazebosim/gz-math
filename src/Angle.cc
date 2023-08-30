@@ -19,37 +19,21 @@
 
 using namespace gz::math;
 
-const Angle Angle::Zero = Angle(0);
-const Angle Angle::Pi = Angle(IGN_PI);
-const Angle Angle::HalfPi = Angle(IGN_PI_2);
-const Angle Angle::TwoPi = Angle(IGN_PI * 2.0);
+namespace {
 
-//////////////////////////////////////////////////
-Angle::Angle()
-{
-  this->value = 0;
-}
+// Use constexpr storage for the Color constants, to avoid the C++ static
+// initialization order fiasco.
+constexpr Angle gZero(0);
+constexpr Angle gPi(GZ_PI);
+constexpr Angle gHalfPi(GZ_PI_2);
+constexpr Angle gTwoPi(GZ_PI * 2.0);
 
-//////////////////////////////////////////////////
-Angle::Angle(const double _radian)
-{
-  this->value = _radian;
-}
+}  // namespace
 
-//////////////////////////////////////////////////
-Angle::Angle(const Angle &_angle) = default;
-
-//////////////////////////////////////////////////
-Angle::Angle(Angle &&_angle) noexcept = default;
-
-//////////////////////////////////////////////////
-Angle::~Angle() = default;
-
-//////////////////////////////////////////////////
-Angle &Angle::operator=(const Angle &_angle) = default;
-
-//////////////////////////////////////////////////
-Angle &Angle::operator=(Angle &&_angle) noexcept = default;
+const Angle &Angle::Zero = gZero;
+const Angle &Angle::Pi = gPi;
+const Angle &Angle::HalfPi = gHalfPi;
+const Angle &Angle::TwoPi = gTwoPi;
 
 //////////////////////////////////////////////////
 void Angle::Radian(double _radian)
@@ -66,13 +50,13 @@ void Angle::SetRadian(double _radian)
 //////////////////////////////////////////////////
 void Angle::Degree(double _degree)
 {
-  this->value = _degree * IGN_PI / 180.0;
+  this->value = _degree * GZ_PI / 180.0;
 }
 
 //////////////////////////////////////////////////
 void Angle::SetDegree(double _degree)
 {
-  this->value = _degree * IGN_PI / 180.0;
+  this->value = _degree * GZ_PI / 180.0;
 }
 
 //////////////////////////////////////////////////
@@ -84,7 +68,7 @@ double Angle::Radian() const
 //////////////////////////////////////////////////
 double Angle::Degree() const
 {
-  return this->value * 180.0 / IGN_PI;
+  return this->value * 180.0 / GZ_PI;
 }
 
 //////////////////////////////////////////////////
@@ -100,91 +84,91 @@ Angle Angle::Normalized() const
 }
 
 //////////////////////////////////////////////////
-Angle Angle::operator-(const Angle &angle) const
+Angle Angle::operator-(const Angle &_angle) const
 {
-  return Angle(this->value - angle.value);
+  return Angle(this->value - _angle.value);
 }
 
 //////////////////////////////////////////////////
-Angle Angle::operator+(const Angle &angle) const
+Angle Angle::operator+(const Angle &_angle) const
 {
-  return Angle(this->value + angle.value);
+  return Angle(this->value + _angle.value);
 }
 
 //////////////////////////////////////////////////
-Angle Angle::operator*(const Angle &angle) const
+Angle Angle::operator*(const Angle &_angle) const
 {
-  return Angle(this->value * angle.value);
+  return Angle(this->value * _angle.value);
 }
 
 //////////////////////////////////////////////////
-Angle Angle::operator/(const Angle &angle) const
+Angle Angle::operator/(const Angle &_angle) const
 {
-  return Angle(this->value / angle.value);
+  return Angle(this->value / _angle.value);
 }
 
 //////////////////////////////////////////////////
-Angle Angle::operator-=(const Angle &angle)
+Angle Angle::operator-=(const Angle &_angle)
 {
-  this->value -= angle.value;
+  this->value -= _angle.value;
   return *this;
 }
 
 //////////////////////////////////////////////////
-Angle Angle::operator+=(const Angle &angle)
+Angle Angle::operator+=(const Angle &_angle)
 {
-  this->value += angle.value;
+  this->value += _angle.value;
   return *this;
 }
 
 //////////////////////////////////////////////////
-Angle Angle::operator*=(const Angle &angle)
+Angle Angle::operator*=(const Angle &_angle)
 {
-  this->value *= angle.value;
+  this->value *= _angle.value;
   return *this;
 }
 
 //////////////////////////////////////////////////
-Angle Angle::operator/=(const Angle &angle)
+Angle Angle::operator/=(const Angle &_angle)
 {
-  this->value /= angle.value;
+  this->value /= _angle.value;
   return *this;
 }
 
 //////////////////////////////////////////////////
-bool Angle::operator==(const Angle &angle) const
+bool Angle::operator==(const Angle &_angle) const
 {
-  return equal(this->value, angle.value, 0.001);
+  return equal(this->value, _angle.value, 0.001);
 }
 
 //////////////////////////////////////////////////
-bool Angle::operator!=(const Angle &angle) const
+bool Angle::operator!=(const Angle &_angle) const
 {
-  return !(*this == angle);
+  return !(*this == _angle);
 }
 
 //////////////////////////////////////////////////
-bool Angle::operator<(const Angle &angle) const
+bool Angle::operator<(const Angle &_angle) const
 {
-  return this->value < angle.value;
+  return this->value < _angle.value;
 }
 
 //////////////////////////////////////////////////
-bool Angle::operator<=(const Angle &angle) const
+bool Angle::operator<=(const Angle &_angle) const
 {
-  return this->value < angle.value || equal(this->value, angle.value);
+  return this->value < _angle.value || equal(this->value, _angle.value);
 }
 
 //////////////////////////////////////////////////
-bool Angle::operator>(const Angle &angle) const
+bool Angle::operator>(const Angle &_angle) const
 {
-  return this->value > angle.value;
+  return this->value > _angle.value;
 }
 
 //////////////////////////////////////////////////
-bool Angle::operator>=(const Angle &angle) const
+bool Angle::operator>=(const Angle &_angle) const
 {
-  return this->value > angle.value || equal(this->value, angle.value);
+  return this->value > _angle.value || equal(this->value, _angle.value);
 }
 
 //////////////////////////////////////////////////

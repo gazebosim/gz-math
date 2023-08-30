@@ -29,13 +29,13 @@
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an gz::math::Sphere
+/// Define a pybind11 wrapper for a gz::math::Sphere
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -83,11 +83,17 @@ void defineMathSphere(py::module &m, const std::string &typestr)
     .def("set_density_from_mass",
          &Class::SetDensityFromMass,
          "Set the density of this box based on a mass value.")
-    .def("mass_matrix",
-         &Class::MassMatrix,
-         "Get the mass matrix for this box. This function "
-         "is only meaningful if the box's size and material "
-         "have been set.")
+     .def("mass_matrix",
+          py::overload_cast<>(&Class::MassMatrix, py::const_),
+          "Get the mass matrix for this box. This function "
+          "is only meaningful if the box's size and material "
+          "have been set.")
+     .def("mass_matrix",
+          py::overload_cast<gz::math::MassMatrix3<T>&>
+          (&Class::MassMatrix, py::const_),
+          "Get the mass matrix for this box. This function "
+          "is only meaningful if the box's size and material "
+          "have been set.")
     .def("__copy__", [](const Class &self) {
       return Class(self);
     })
@@ -98,6 +104,6 @@ void defineMathSphere(py::module &m, const std::string &typestr)
 
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
 #endif  // GZ_MATH_PYTHON__SPHERE_HH_

@@ -22,7 +22,7 @@
 #include "gz/math/Helpers.hh"
 #include "gz/math/MecanumDriveOdometry.hh"
 
-using namespace ignition;
+using namespace gz;
 
 /////////////////////////////////////////////////
 TEST(MecanumDriveOdometryTest, MecanumDriveOdometry)
@@ -37,20 +37,20 @@ TEST(MecanumDriveOdometryTest, MecanumDriveOdometry)
 
   double wheelSeparation = 2.0;
   double wheelRadius = 0.5;
-  double wheelCircumference = 2 * IGN_PI * wheelRadius;
+  double wheelCircumference = 2 * GZ_PI * wheelRadius;
 
   // This is the linear distance traveled per degree of wheel rotation.
   double distPerDegree = wheelCircumference / 360.0;
 
   // Setup the wheel parameters, and initialize
-  odom.SetWheelParams(wheelSeparation, wheelRadius, wheelRadius,wheelRadius);
+  odom.SetWheelParams(wheelSeparation, wheelRadius, wheelRadius, wheelRadius);
   auto startTime = std::chrono::steady_clock::now();
   odom.Init(startTime);
 
   // Sleep for a little while, then update the odometry with the new wheel
   // position.
   auto time1 = startTime + std::chrono::milliseconds(100);
-  odom.Update(IGN_DTOR(1.0), IGN_DTOR(1.0), IGN_DTOR(1.0), IGN_DTOR(1.0), time1);
+  odom.Update(GZ_DTOR(1.0), GZ_DTOR(1.0), GZ_DTOR(1.0), GZ_DTOR(1.0), time1);
   EXPECT_DOUBLE_EQ(0.0, *odom.Heading());
   EXPECT_DOUBLE_EQ(distPerDegree, odom.X());
   EXPECT_DOUBLE_EQ(0.0, odom.Y());
@@ -62,7 +62,7 @@ TEST(MecanumDriveOdometryTest, MecanumDriveOdometry)
 
   // Sleep again, then update the odometry with the new wheel position.
   auto time2 = time1 + std::chrono::milliseconds(100);
-  odom.Update(IGN_DTOR(2.0), IGN_DTOR(2.0), IGN_DTOR(2.0), IGN_DTOR(2.0), time2);
+  odom.Update(GZ_DTOR(2.0), GZ_DTOR(2.0), GZ_DTOR(2.0), GZ_DTOR(2.0), time2);
   EXPECT_DOUBLE_EQ(0.0, *odom.Heading());
   EXPECT_NEAR(distPerDegree * 2.0, odom.X(), 3e-6);
   EXPECT_DOUBLE_EQ(0.0, odom.Y());
@@ -83,7 +83,7 @@ TEST(MecanumDriveOdometryTest, MecanumDriveOdometry)
 
   // Sleep again, this time move 2 degrees in 100ms.
   time1 = startTime + std::chrono::milliseconds(100);
-  odom.Update(IGN_DTOR(2.0), IGN_DTOR(2.0), IGN_DTOR(2.0), IGN_DTOR(2.0), time1);
+  odom.Update(GZ_DTOR(2.0), GZ_DTOR(2.0), GZ_DTOR(2.0), GZ_DTOR(2.0), time1);
   EXPECT_DOUBLE_EQ(0.0, *odom.Heading());
   EXPECT_NEAR(distPerDegree * 2.0, odom.X(), 3e-6);
   EXPECT_DOUBLE_EQ(0.0, odom.Y());
@@ -96,7 +96,7 @@ TEST(MecanumDriveOdometryTest, MecanumDriveOdometry)
   // Sleep again, this time move 2 degrees in 100ms.
   odom.Init(startTime);
   time1 = startTime + std::chrono::milliseconds(100);
-  odom.Update(IGN_DTOR(-2.0), IGN_DTOR(2.0), IGN_DTOR(2.0), IGN_DTOR(-2.0), time1);
+  odom.Update(GZ_DTOR(-2.0), GZ_DTOR(2.0), GZ_DTOR(2.0), GZ_DTOR(-2.0), time1);
   EXPECT_DOUBLE_EQ(0.0, *odom.Heading());
   EXPECT_NEAR(distPerDegree * 2.0, odom.Y(), 3e-6);
   // EXPECT_DOUBLE_EQ(0.0, odom.Y());

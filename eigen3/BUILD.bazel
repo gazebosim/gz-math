@@ -1,17 +1,15 @@
 load(
-    "//ign_bazel:build_defs.bzl",
-    "IGNITION_ROOT",
-    "IGNITION_VISIBILITY",
+    "@gz//bazel/skylark:build_defs.bzl",
+    "GZ_FEATURES",
+    "GZ_ROOT",
+    "GZ_VISIBILITY",
+    "gz_configure_header",
+    "gz_export_header",
+    "gz_include_header",
 )
-
-package(
-    default_visibility = IGNITION_VISIBILITY,
-)
-
-licenses(["notice"])
 
 public_headers = glob([
-    "include/ignition/math/eigen3/*.hh",
+    "include/gz/math/eigen3/*.hh",
 ])
 
 cc_library(
@@ -19,9 +17,16 @@ cc_library(
     srcs = public_headers,
     hdrs = public_headers,
     includes = ["include"],
+    visibility = GZ_VISIBILITY,
     deps = [
+        GZ_ROOT + "math",
         "@eigen3",
-        IGNITION_ROOT + "ign_math",
+    ],
+)
+
+test_sources = glob(
+    [
+        "src/*_TEST.cc",
     ],
 )
 
@@ -33,8 +38,4 @@ cc_library(
         "@gtest",
         "@gtest//:gtest_main",
     ],
-) for src in glob(
-    [
-        "src/*_TEST.cc",
-    ],
-)]
+) for src in test_sources]

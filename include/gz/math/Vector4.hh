@@ -25,31 +25,31 @@
 #include <gz/math/Helpers.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
-    /// \class Vector4 Vector4.hh ignition/math/Vector4.hh
+    /// \class Vector4 Vector4.hh gz/math/Vector4.hh
     /// \brief T Generic x, y, z, w vector
     template<typename T>
     class Vector4
     {
       /// \brief math::Vector4(0, 0, 0, 0)
-      public: static const Vector4<T> Zero;
+      public: static const Vector4<T> &Zero;
 
       /// \brief math::Vector4(1, 1, 1, 1)
-      public: static const Vector4<T> One;
+      public: static const Vector4<T> &One;
 
       /// \brief math::Vector4(NaN, NaN, NaN, NaN)
-      public: static const Vector4 NaN;
+      public: static const Vector4 &NaN;
 
       /// \brief Constructor
-      public: Vector4()
+      public: constexpr Vector4()
+      : data{0, 0, 0, 0}
       {
-        this->data[0] = this->data[1] = this->data[2] = this->data[3] = 0;
       }
 
       /// \brief Constructor with component values
@@ -57,26 +57,18 @@ namespace ignition
       /// \param[in] _y value along y axis
       /// \param[in] _z value along z axis
       /// \param[in] _w value along w axis
-      public: Vector4(const T &_x, const T &_y, const T &_z, const T &_w)
+      public: constexpr Vector4(const T &_x, const T &_y, const T &_z,
+                                const T &_w)
+      : data{_x, _y, _z, _w}
       {
-        this->data[0] = _x;
-        this->data[1] = _y;
-        this->data[2] = _z;
-        this->data[3] = _w;
       }
 
       /// \brief Copy constructor
       /// \param[in] _v vector
-      public: Vector4(const Vector4<T> &_v)
-      {
-        this->data[0] = _v[0];
-        this->data[1] = _v[1];
-        this->data[2] = _v[2];
-        this->data[3] = _v[3];
-      }
+      public: Vector4(const Vector4<T> &_v) = default;
 
       /// \brief Destructor
-      public: virtual ~Vector4() {}
+      public: ~Vector4() = default;
 
       /// \brief Calc distance to the given point
       /// \param[in] _pt the point
@@ -271,15 +263,7 @@ namespace ignition
       /// \brief Assignment operator
       /// \param[in] _v the vector
       /// \return a reference to this vector
-      public: Vector4<T> &operator=(const Vector4<T> &_v)
-      {
-        this->data[0] = _v[0];
-        this->data[1] = _v[1];
-        this->data[2] = _v[2];
-        this->data[3] = _v[3];
-
-        return *this;
-      }
+      public: Vector4<T> &operator=(const Vector4<T> &_v) = default;
 
       /// \brief Assignment operator
       /// \param[in] _value
@@ -594,7 +578,7 @@ namespace ignition
       /// \return The value.
       public: T &operator[](const std::size_t _index)
       {
-        return this->data[clamp(_index, IGN_ZERO_SIZE_T, IGN_THREE_SIZE_T)];
+        return this->data[clamp(_index, GZ_ZERO_SIZE_T, GZ_THREE_SIZE_T)];
       }
 
       /// \brief Const-qualified array subscript operator
@@ -603,7 +587,7 @@ namespace ignition
       /// \return The value.
       public: T operator[](const std::size_t _index) const
       {
-        return this->data[clamp(_index, IGN_ZERO_SIZE_T, IGN_THREE_SIZE_T)];
+        return this->data[clamp(_index, GZ_ZERO_SIZE_T, GZ_THREE_SIZE_T)];
       }
 
       /// \brief Return a mutable x value.
@@ -707,7 +691,13 @@ namespace ignition
       public: friend std::ostream &operator<<(
                   std::ostream &_out, const gz::math::Vector4<T> &_pt)
       {
-        _out << _pt[0] << " " << _pt[1] << " " << _pt[2] << " " << _pt[3];
+        for (auto i : {0, 1, 2, 3})
+        {
+          if (i > 0)
+            _out << " ";
+
+          appendToStream(_out, _pt[i]);
+        }
         return _out;
       }
 
@@ -734,17 +724,31 @@ namespace ignition
       private: T data[4];
     };
 
-    template<typename T>
-    const Vector4<T> Vector4<T>::Zero(0, 0, 0, 0);
+    namespace detail {
+
+      template<typename T>
+      constexpr Vector4<T> gVector4Zero(0, 0, 0, 0);
+
+      template<typename T>
+      constexpr Vector4<T> gVector4One(1, 1, 1, 1);
+
+      template<typename T>
+      constexpr Vector4<T> gVector4NaN(
+          std::numeric_limits<T>::quiet_NaN(),
+          std::numeric_limits<T>::quiet_NaN(),
+          std::numeric_limits<T>::quiet_NaN(),
+          std::numeric_limits<T>::quiet_NaN());
+
+    }  // namespace detail
 
     template<typename T>
-    const Vector4<T> Vector4<T>::One(1, 1, 1, 1);
+    const Vector4<T> &Vector4<T>::Zero = detail::gVector4Zero<T>;
 
-    template<typename T> const Vector4<T> Vector4<T>::NaN(
-        std::numeric_limits<T>::quiet_NaN(),
-        std::numeric_limits<T>::quiet_NaN(),
-        std::numeric_limits<T>::quiet_NaN(),
-        std::numeric_limits<T>::quiet_NaN());
+    template<typename T>
+    const Vector4<T> &Vector4<T>::One = detail::gVector4One<T>;
+
+    template<typename T>
+    const Vector4<T> &Vector4<T>::NaN = detail::gVector4NaN<T>;
 
     typedef Vector4<int> Vector4i;
     typedef Vector4<double> Vector4d;

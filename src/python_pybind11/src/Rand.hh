@@ -23,19 +23,19 @@
 
 namespace py = pybind11;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an gz::math::Rand
+/// Define a pybind11 wrapper for a gz::math::Rand
 /**
  * \param[in] module a pybind11 module to add the definition to
  */
 void defineMathRand(py::module &m, const std::string &typestr);
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
 #endif  // GZ_MATH_PYTHON__RAND_HH_

@@ -19,12 +19,13 @@
 
 #include "gz/math/Triangle3.hh"
 
+#include <optional>
 #include <algorithm>
 #include <set>
 #include <utility>
 #include <vector>
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -310,6 +311,21 @@ bool Box<T>::MassMatrix(MassMatrix3<T> &_massMat) const
   return _massMat.SetFromBox(this->material, this->size);
 }
 
+/////////////////////////////////////////////////
+template<typename T>
+std::optional< MassMatrix3<T> > Box<T>::MassMatrix() const
+{
+  gz::math::MassMatrix3<T> _massMat;
+
+  if(!_massMat.SetFromBox(this->material, this->size))
+  {
+    return std::nullopt;
+  }
+  else
+  {
+    return std::make_optional(_massMat);
+  }
+}
 
 //////////////////////////////////////////////////
 template<typename T>

@@ -14,8 +14,8 @@
 
 import unittest
 
-import ignition
-from ignition.math import Angle, SphericalCoordinates, Vector3d
+import gz
+from gz.math7 import Angle, SphericalCoordinates, Vector3d
 import math
 
 class TestSphericalCoordinates(unittest.TestCase):
@@ -67,6 +67,18 @@ class TestSphericalCoordinates(unittest.TestCase):
 
         self.assertEqual("EARTH_WGS84", SphericalCoordinates.convert(st))
 
+        # For Moon surface type
+        st = SphericalCoordinates.MOON_SCS
+        self.assertEqual(SphericalCoordinates.convert("MOON_SCS"), st)
+        self.assertEqual("MOON_SCS", SphericalCoordinates.convert(st))
+
+        # For custom surface type
+        st = SphericalCoordinates.CUSTOM_SURFACE
+        self.assertEqual(SphericalCoordinates.convert("CUSTOM_SURFACE"),
+                st)
+        self.assertEqual("CUSTOM_SURFACE",
+                SphericalCoordinates.convert(st))
+
     def test_set_functions(self):
         # Default surface type
         st = SphericalCoordinates.EARTH_WGS84
@@ -78,6 +90,13 @@ class TestSphericalCoordinates(unittest.TestCase):
         self.assertEqual(sc.longitude_reference(), Angle())
         self.assertEqual(sc.heading_offset(), Angle())
         self.assertAlmostEqual(sc.elevation_reference(), 0.0, delta=1e-6)
+        self.assertAlmostEqual(sc.surface_radius(), 6371000.0, delta=1e-3)
+        self.assertAlmostEqual(sc.surface_axis_equatorial(),
+                6378137.0, delta=1e-3)
+        self.assertAlmostEqual(sc.surface_axis_polar(),
+                6356752.314245, delta=1e-3)
+        self.assertAlmostEqual(sc.surface_flattening(),
+                1.0/298.257223563, delta=1e-5)
 
         lat = Angle(0.3)
         lon = Angle(-1.2)
@@ -94,6 +113,63 @@ class TestSphericalCoordinates(unittest.TestCase):
         self.assertEqual(sc.longitude_reference(), lon)
         self.assertEqual(sc.heading_offset(), heading)
         self.assertAlmostEqual(sc.elevation_reference(), elev, delta=1e-6)
+        self.assertAlmostEqual(sc.surface_radius(), 6371000.0, delta=1e-3)
+        self.assertAlmostEqual(sc.surface_axis_equatorial(),
+                6378137.0, delta=1e-3)
+        self.assertAlmostEqual(sc.surface_axis_polar(),
+                6356752.314245, delta=1e-3)
+        self.assertAlmostEqual(sc.surface_flattening(),
+                1.0/298.257223563, delta=1e-5)
+
+        # Moon surface type
+        st = SphericalCoordinates.MOON_SCS
+        sc = SphericalCoordinates(st)
+        sc.set_surface(st)
+        self.assertAlmostEqual(sc.surface_radius(), 1737400.0,
+                delta=1e-3)
+        self.assertAlmostEqual(sc.surface_axis_equatorial(),
+                1738100.0, delta=1e-3)
+        self.assertAlmostEqual(sc.surface_axis_polar(),
+                1736000.0, delta=1e-3)
+        self.assertAlmostEqual(sc.surface_flattening(),
+                0.0012, delta=1e-5)
+
+    def test_invalid_parameters(self):
+        # Earth's constants
+        g_EarthWGS84AxisEquatorial = 6378137.0;
+        g_EarthWGS84AxisPolar = 6356752.314245;
+        g_EarthWGS84Flattening = 1.0/298.257223563;
+        g_EarthRadius = 6371000.0;
+
+        # Create a custom surface with invalid parameters
+        sc_invalid = SphericalCoordinates(
+                SphericalCoordinates.CUSTOM_SURFACE,
+                -1, -1)
+
+        # These should be rejected and default to Earth's parameters
+        self.assertAlmostEqual(sc_invalid.surface_radius(),
+                g_EarthRadius, delta=1e-3)
+        self.assertAlmostEqual(sc_invalid.surface_axis_equatorial(),
+                g_EarthWGS84AxisEquatorial, delta=1e-3)
+        self.assertAlmostEqual(sc_invalid.surface_axis_polar(),
+                g_EarthWGS84AxisPolar, delta=1e-3)
+        self.assertAlmostEqual(sc_invalid.surface_flattening(),
+                g_EarthWGS84Flattening, delta=1e-3)
+
+        # Creating a custom surface with valid parameters
+        sc_valid = SphericalCoordinates(
+                SphericalCoordinates.CUSTOM_SURFACE,
+                100, 100)
+
+        # These should be accepted
+        self.assertAlmostEqual(sc_valid.surface_radius(),
+                100, delta=1e-3)
+        self.assertAlmostEqual(sc_valid.surface_axis_equatorial(),
+                100, delta=1e-3)
+        self.assertAlmostEqual(sc_valid.surface_axis_polar(),
+                100, delta=1e-3)
+        self.assertAlmostEqual(sc_valid.surface_flattening(),
+                0, delta=1e-3)
 
     def test_coordinate_transforms(self):
         # Default surface type
@@ -263,14 +339,42 @@ class TestSphericalCoordinates(unittest.TestCase):
         longA.set_degree(-122.249972)
         latB.set_degree(46.124953)
         longB.set_degree(-122.251683)
-        d = SphericalCoordinates.distance(latA, longA, latB, longB)
+        d1 = SphericalCoordinates.distance_WGS84(latA, longA, latB, longB)
 
-        self.assertAlmostEqual(14002, d, delta=20)
+        self.assertAlmostEqual(14002, d1, delta=20)
+
+        # Using the non static method. The default surface is EARTH_WGS84.
+        earth_sc = SphericalCoordinates()
+        d2 = earth_sc.distance_between_points(latA, longA, latB, longB)
+        self.assertAlmostEqual(d1, d2, delta=0.1)
+
+        earth_sc = SphericalCoordinates(SphericalCoordinates.EARTH_WGS84)
+        d3 = earth_sc.distance_between_points(latA, longA, latB, longB)
+        self.assertAlmostEqual(d2, d3, delta=0.1)
+
+        # Using the surface type as Moon.
+        moon_sc = SphericalCoordinates(SphericalCoordinates.MOON_SCS)
+        d4 = moon_sc.distance_between_points(latA, longA, latB, longB)
+        self.assertAlmostEqual(3820, d4, delta=5)
+
+        # Using a custom surface
+        # For custom surfaces, the surface properties need to be set.
+        # This line should throw an error.
+        invalid_custom_sc = SphericalCoordinates(
+                SphericalCoordinates.CUSTOM_SURFACE)
+        # This one should be accepted.
+        valid_custom_sc = SphericalCoordinates(
+            SphericalCoordinates.CUSTOM_SURFACE,
+            6378137.0,
+            6356752.314245);
+
+        self.assertAlmostEqual(valid_custom_sc.distance_between_points(latA, longA, latB, longB),
+                d1, delta=0.1)
 
     def test_bad_set_surface(self):
         sc = SphericalCoordinates()
-        sc.set_surface(SphericalCoordinates.SurfaceType(2))
-        self.assertEqual(sc.surface(), SphericalCoordinates.SurfaceType(2))
+        sc.set_surface(SphericalCoordinates.SurfaceType(3))
+        self.assertEqual(sc.surface(), SphericalCoordinates.SurfaceType(3))
 
     def test_transform(self):
         sc = SphericalCoordinates()

@@ -14,8 +14,8 @@
 
 import unittest
 
-import ignition
-from ignition.math import Boxd, MassMatrix3d, Material, Planed, Vector3d
+import gz
+from gz.math7 import Boxd, MassMatrix3d, Material, Planed, Vector3d
 
 
 class TestBox(unittest.TestCase):
@@ -46,30 +46,30 @@ class TestBox(unittest.TestCase):
         self.assertEqual(box, box2)
 
         # Dimension and mat constructor
-        box = Boxd(1.0, 2.0, 5.0, Material(ignition.math.MaterialType.WOOD))
+        box = Boxd(1.0, 2.0, 5.0, Material(gz.math7.MaterialType.WOOD))
         self.assertEqual(Vector3d(1.0, 2.0, 5.0), box.size())
-        self.assertEqual(Material(ignition.math.MaterialType.WOOD), box.material())
+        self.assertEqual(Material(gz.math7.MaterialType.WOOD), box.material())
 
-        box2 = Boxd(1.0, 2.0, 5.0, Material(ignition.math.MaterialType.WOOD))
+        box2 = Boxd(1.0, 2.0, 5.0, Material(gz.math7.MaterialType.WOOD))
         self.assertEqual(box, box2)
 
         # Vector Dimension and mat constructor
-        box = Boxd(Vector3d(2.2, 2.0, 10.0), Material(ignition.math.MaterialType.WOOD))
+        box = Boxd(Vector3d(2.2, 2.0, 10.0), Material(gz.math7.MaterialType.WOOD))
         self.assertEqual(Vector3d(2.2, 2.0, 10.0), box.size())
-        self.assertEqual(Material(ignition.math.MaterialType.WOOD), box.material())
+        self.assertEqual(Material(gz.math7.MaterialType.WOOD), box.material())
 
-        box2 = Boxd(Vector3d(2.2, 2.0, 10.0), Material(ignition.math.MaterialType.WOOD))
+        box2 = Boxd(Vector3d(2.2, 2.0, 10.0), Material(gz.math7.MaterialType.WOOD))
         self.assertEqual(box, box2)
 
     def test_mutators(self):
         box = Boxd()
         box.set_size(100.1, 2.3, 5.6)
-        box.set_material(Material(ignition.math.MaterialType.PINE))
+        box.set_material(Material(gz.math7.MaterialType.PINE))
 
         self.assertEqual(100.1, box.size().x())
         self.assertEqual(2.3, box.size().y())
         self.assertEqual(5.6, box.size().z())
-        self.assertEqual(Material(ignition.math.MaterialType.PINE), box.material())
+        self.assertEqual(Material(gz.math7.MaterialType.PINE), box.material())
 
         box.set_size(Vector3d(3.4, 1.2, 0.5))
         self.assertEqual(3.4, box.size().x())
@@ -400,6 +400,11 @@ class TestBox(unittest.TestCase):
         box.mass_matrix(massMat)
         self.assertEqual(expectedMassMat, massMat)
         self.assertEqual(expectedMassMat.mass(), massMat.mass())
+
+        massMat2 = box.mass_matrix()
+        self.assertEqual(expectedMassMat, massMat2)
+        self.assertEqual(expectedMassMat.diagonal_moments(), massMat2.diagonal_moments())
+        self.assertEqual(expectedMassMat.mass(), massMat2.mass())
 
 
 if __name__ == '__main__':

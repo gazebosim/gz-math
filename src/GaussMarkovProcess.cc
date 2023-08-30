@@ -21,7 +21,7 @@
 using namespace gz::math;
 
 //////////////////////////////////////////////////
-class gz::math::GaussMarkovProcessPrivate
+class gz::math::GaussMarkovProcess::Implementation
 {
   /// \brief Current process value.
   public: double value{0};
@@ -41,21 +41,16 @@ class gz::math::GaussMarkovProcessPrivate
 
 //////////////////////////////////////////////////
 GaussMarkovProcess::GaussMarkovProcess()
-  : dataPtr(new GaussMarkovProcessPrivate)
+  : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
 }
 
 //////////////////////////////////////////////////
 GaussMarkovProcess::GaussMarkovProcess(double _start, double _theta, double _mu,
     double _sigma)
-  : dataPtr(new GaussMarkovProcessPrivate)
+  : GaussMarkovProcess()
 {
   this->Set(_start, _theta, _mu, _sigma);
-}
-
-//////////////////////////////////////////////////
-GaussMarkovProcess::~GaussMarkovProcess()
-{
 }
 
 //////////////////////////////////////////////////

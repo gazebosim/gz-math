@@ -16,47 +16,80 @@
 */
 #include <cmath>
 
+#include <array>
+#include <utility>
+
+#include "gz/math/Angle.hh"
 #include "gz/math/AxisAlignedBox.hh"
 #include "gz/math/Frustum.hh"
 #include "gz/math/Matrix4.hh"
-#include "FrustumPrivate.hh"
+#include "gz/math/Plane.hh"
+#include "gz/math/Pose3.hh"
 
 using namespace gz;
 using namespace math;
 
+/// \internal
+/// \brief Private data for the Frustum class
+class Frustum::Implementation
+{
+  /// \brief Near distance
+  /// This is the distance from the frustum's vertex to the closest plane
+  public: double near {0};
+
+  /// \brief Far distance
+  /// This is the distance from the frustum's vertex to the farthest plane.
+  public: double far {1};
+
+  /// \brief Field of view
+  /// The field of view is the angle between the frustum's vertex and the
+  /// edges of the near or far plane.
+  /// This value represents the horizontal angle.
+  public: math::Angle fov {GZ_DTOR(45)};
+
+  /// \brief Aspect ratio of the near and far planes. This is the
+  // width divided by the height.
+  public: double aspectRatio {1};
+
+  /// \brief Pose of the frustum
+  /// Pose of the frustum, which is the vertex (top of the pyramid).
+  public: math::Pose3d pose {Pose3d::Zero};
+
+  /// \brief Each plane of the frustum.
+  /// \sa Frustum::FrustumPlane
+  public: std::array<Planed, 6> planes;
+
+  /// \brief Each corner of the frustum.
+  public: std::array<Vector3d, 8> points;
+
+  /// \brief each edge of the frustum.
+  public: std::array<std::pair<Vector3d, Vector3d>, 12> edges;
+};
+
 /////////////////////////////////////////////////
 Frustum::Frustum()
-  : dataPtr(new FrustumPrivate(0, 1, IGN_DTOR(45), 1, Pose3d::Zero))
+  : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
 }
 
 /////////////////////////////////////////////////
-Frustum::Frustum(const double _near,
-                 const double _far,
+Frustum::Frustum(double _near,
+                 double _far,
                  const Angle &_fov,
-                 const double _aspectRatio,
+                 double _aspectRatio,
                  const Pose3d &_pose)
-  : dataPtr(new FrustumPrivate(_near, _far, _fov, _aspectRatio, _pose))
+  : Frustum()
 {
+
+  this->dataPtr->near = _near;
+  this->dataPtr->far = _far;
+  this->dataPtr->fov = _fov;
+  this->dataPtr->aspectRatio = _aspectRatio;
+  this->dataPtr->pose = _pose;
+
   // Compute plane based on near distance, far distance, field of view,
   // aspect ratio, and pose
   this->ComputePlanes();
-}
-
-/////////////////////////////////////////////////
-Frustum::~Frustum()
-{
-  delete this->dataPtr;
-  this->dataPtr = NULL;
-}
-
-/////////////////////////////////////////////////
-Frustum::Frustum(const Frustum &_p)
-  : dataPtr(new FrustumPrivate(_p.Near(), _p.Far(), _p.FOV(),
-        _p.AspectRatio(), _p.Pose()))
-{
-  for (int i = 0; i < 6; ++i)
-    this->dataPtr->planes[i] = _p.dataPtr->planes[i];
 }
 
 /////////////////////////////////////////////////
@@ -156,6 +189,7 @@ bool Frustum::Contains(const Vector3d &_p) const
   // visible.
   for (auto const &plane : this->dataPtr->planes)
   {
+    // cppcheck-suppress useStlAlgorithm
     if (plane.Side(_p) == Planed::NEGATIVE_SIDE)
       return false;
   }
@@ -170,7 +204,7 @@ double Frustum::Near() const
 }
 
 /////////////////////////////////////////////////
-void Frustum::SetNear(const double _near)
+void Frustum::SetNear(double _near)
 {
   this->dataPtr->near = _near;
   this->ComputePlanes();
@@ -183,7 +217,7 @@ double Frustum::Far() const
 }
 
 /////////////////////////////////////////////////
-void Frustum::SetFar(const double _far)
+void Frustum::SetFar(double _far)
 {
   this->dataPtr->far = _far;
   this->ComputePlanes();
@@ -222,7 +256,7 @@ double Frustum::AspectRatio() const
 }
 
 /////////////////////////////////////////////////
-void Frustum::SetAspectRatio(const double _aspectRatio)
+void Frustum::SetAspectRatio(double _aspectRatio)
 {
   this->dataPtr->aspectRatio = _aspectRatio;
   this->ComputePlanes();
@@ -333,17 +367,4 @@ void Frustum::ComputePlanes()
 
   norm = Vector3d::Normal(nearBottomLeft, nearBottomRight, farBottomRight);
   this->dataPtr->planes[FRUSTUM_PLANE_BOTTOM].Set(norm, bottomCenter.Dot(norm));
-}
-
-//////////////////////////////////////////////////
-Frustum &Frustum::operator =(const Frustum &_f)
-{
-  this->dataPtr->near = _f.dataPtr->near;
-  this->dataPtr->far = _f.dataPtr->far;
-  this->dataPtr->fov = _f.dataPtr->fov;
-  this->dataPtr->aspectRatio = _f.dataPtr->aspectRatio;
-  this->dataPtr->pose = _f.dataPtr->pose;
-  this->ComputePlanes();
-
-  return *this;
 }

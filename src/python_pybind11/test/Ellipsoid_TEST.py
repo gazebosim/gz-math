@@ -14,8 +14,8 @@
 
 import unittest
 
-import ignition
-from ignition.math import Ellipsoidd, Material, MassMatrix3d, Vector3d
+import gz
+from gz.math7 import Ellipsoidd, Material, MassMatrix3d, Vector3d
 
 import math
 
@@ -40,7 +40,7 @@ class TestEllipsoid(unittest.TestCase):
 
         # Vector3 of radii and material
         expectedRadii = Vector3d(1.0, 2.0, 3.0)
-        expectedMaterial = Material(ignition.math.MaterialType.WOOD)
+        expectedMaterial = Material(gz.math7.MaterialType.WOOD)
         ellipsoid = Ellipsoidd(expectedRadii, expectedMaterial)
         self.assertEqual(expectedRadii, ellipsoid.radii())
         self.assertEqual(expectedMaterial, ellipsoid.material())
@@ -57,7 +57,7 @@ class TestEllipsoid(unittest.TestCase):
         expectedRadii = Vector3d(1.0, 2.0, 3.0)
         ellipsoid.set_radii(expectedRadii)
 
-        expectedMaterial = Material(ignition.math.MaterialType.PINE)
+        expectedMaterial = Material(gz.math7.MaterialType.PINE)
         ellipsoid.set_material(expectedMaterial)
 
         self.assertEqual(expectedRadii, ellipsoid.radii())

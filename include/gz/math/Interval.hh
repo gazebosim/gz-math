@@ -25,14 +25,14 @@
 
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
-    /// \class Interval Interval.hh ignition/math/Interval.hh
+    /// \class Interval Interval.hh gz/math/Interval.hh
     /// \brief The Interval class represents a range of real numbers.
     /// Intervals may be open (a, b), left-closed [a, b), right-closed
     /// (a, b], or fully closed [a, b].

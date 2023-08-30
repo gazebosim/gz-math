@@ -19,7 +19,7 @@
 
 #include "Vector4.hh"
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -34,4 +34,4 @@ void defineMathVector4(py::module &m, const std::string &typestr)
 
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz

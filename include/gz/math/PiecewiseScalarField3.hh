@@ -27,15 +27,15 @@
 #include <gz/math/Vector3.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
     /** \class PiecewiseScalarField3 PiecewiseScalarField3.hh\
-     * ignition/math/PiecewiseScalarField3.hh
+     * gz/math/PiecewiseScalarField3.hh
      */
     /// \brief The PiecewiseScalarField3 class constructs a scalar field F
     /// in R^3 as a union of scalar fields Pn, defined over regions Rn i.e.

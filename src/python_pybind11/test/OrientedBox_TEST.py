@@ -15,7 +15,7 @@
 import math
 import unittest
 
-from ignition.math import OrientedBoxd, MassMatrix3d, Material, Pose3d, Vector3d
+from gz.math7 import OrientedBoxd, MassMatrix3d, Material, Pose3d, Vector3d
 
 g_tolerance = 1e-6
 

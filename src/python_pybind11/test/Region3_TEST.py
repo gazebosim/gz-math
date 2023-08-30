@@ -14,7 +14,7 @@
 
 import unittest
 
-from ignition.math import Intervald, Region3d, Vector3d
+from gz.math7 import Intervald, Region3d, Vector3d
 
 
 class TestRegion3(unittest.TestCase):

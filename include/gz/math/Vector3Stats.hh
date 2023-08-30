@@ -22,26 +22,20 @@
 #include <gz/math/SignalStats.hh>
 #include <gz/math/Vector3.hh>
 #include <gz/math/config.hh>
+#include <gz/utils/ImplPtr.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
-    //
-    /// \brief Forward declare private data class.
-    class Vector3StatsPrivate;
-
-    /// \class Vector3Stats Vector3Stats.hh ignition/math/Vector3Stats.hh
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
+    /// \class Vector3Stats Vector3Stats.hh gz/math/Vector3Stats.hh
     /// \brief Collection of statistics for a Vector3 signal.
-    class IGNITION_MATH_VISIBLE Vector3Stats
+    class GZ_MATH_VISIBLE Vector3Stats
     {
       /// \brief Constructor
       public: Vector3Stats();
-
-      /// \brief Destructor
-      public: ~Vector3Stats();
 
       /// \brief Add a new sample to the statistical measures.
       /// \param[in] _data New signal data point.
@@ -103,7 +97,7 @@ namespace ignition
       public: SignalStats &Mag();
 
       /// \brief Pointer to private data.
-      protected: Vector3StatsPrivate *dataPtr;
+      GZ_UTILS_IMPL_PTR(dataPtr)
     };
     }
   }

@@ -14,7 +14,7 @@
 
 import math
 import unittest
-from ignition.math import Helpers, Intervald, Polynomial3d, Vector4d, isnan
+from gz.math7 import Helpers, Intervald, Polynomial3d, Vector4d, isnan
 
 
 class TestInterval(unittest.TestCase):

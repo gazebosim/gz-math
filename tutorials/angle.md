@@ -1,16 +1,16 @@
 \page angle Angle example
 
-This tutorial explains how to use the `Angle` class from Ignition Math library.
+This tutorial explains how to use the `Angle` class from Gazebo Math library.
 
 ## C++ example
 
 ### Compile the code
 
-Go to `ign-math/examples` and use `cmake` to compile the code:
+Go to `gz-math/examples` and use `cmake` to compile the code:
 
 ```{.sh}
-git clone https://github.com/ignitionrobotics/ign-math/ -b ign-math6
-cd ign-math/examples
+git clone https://github.com/gazebosim/gz-math/ -b gz-math7
+cd gz-math/examples
 mkdir build
 cd build
 cmake ..
@@ -57,10 +57,23 @@ Use the method `Normalized` to bound the value between `-PI` and `PI`.
 
 ## Ruby example
 
-This example will only work if the Ruby interface library was compiled and installed. Modify the `RUBYLIB` environment variable to include the Ignition Math library install path. For example, if you install to `/usr`:
+This example will only work if the Ruby interface library was compiled and installed. For example,
+on Ubuntu:
+
+```{.sh}
+sudo apt install ruby-gz-math<#>
+```
+
+Modify the `RUBYLIB` environment variable to include the Gazebo Math library install path. For example, if you install to `/usr`:
 
 ```{.sh}
 export RUBYLIB=/usr/lib/ruby:$RUBYLIB
+```
+
+Move to the examples folder:
+
+```{.sh}
+cd examples
 ```
 
 Execute the code:
@@ -74,14 +87,14 @@ ruby angle_example.rb
 There are some predefined values:
 
 ```{.rb}
-printf("PI in degrees = %f\n", Ignition::Math::Angle.Pi.Degree)
+printf("PI in degrees = %f\n", Gz::Math::Angle.Pi.Degree)
 ```
 
 Create new objects:
 
 ```{.rb}
-a1 = Ignition::Math::Angle.new(1.5707)
-a2 = Ignition::Math::Angle.new(0.7854)
+a1 = Gz::Math::Angle.new(1.5707)
+a2 = Gz::Math::Angle.new(0.7854)
 ```
 
 Use the values in radians or degrees:
@@ -102,7 +115,7 @@ printf("a1 - a2 = %f radians, %f degrees\n", (a1 - a2).Radian, (a1 - a2).Degree)
 Normalize the value between `-PI` and `PI`.
 
 ```{.rb}
-a3 = Ignition::Math::Angle.new(15.707)
+a3 = Gz::Math::Angle.new(15.707)
 printf("a3 = %f radians, %f degrees\n", a3.Radian, a3.Degree)
 a3.Normalize
 printf("a3.Normalize = %f radians, %f degrees\n", a3.Radian, a3.Degree)

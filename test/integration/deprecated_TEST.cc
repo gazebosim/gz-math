@@ -16,7 +16,11 @@
 */
 
 #include <gtest/gtest.h>
+
+#define SUPPRESS_IGNITION_HEADER_DEPRECATION
+
 #include <ignition/math/Angle.hh>
+#include <ignition/utils/SuppressWarning.hh>
 
 /////////////////////////////////////////////////
 // Make sure the ignition namespace still works
@@ -25,3 +29,5 @@ TEST(Deprecated, IgnitionNamespace)
   ignition::math::Angle angle;
   (void) angle;
 }
+
+#undef SUPPRESS_IGNITION_HEADER_DEPRECATION

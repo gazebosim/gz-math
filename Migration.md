@@ -5,18 +5,111 @@ Deprecated code produces compile-time warnings. These warning serve as
 notification to users that their code should be upgraded. The next major
 release will remove the deprecated code.
 
-## Ignition Math 6.9.2 to 6.10.0
+## Gazebo Math 6.X to 7.X
+
+### Breaking Changes
+
+  1. Removed the Quaternion integer template `Quaternioni`.
+
+  1. The project name has been changed to use the `gz-` prefix, you **must** use the `gz` prefix!
+
+    * This also means that any generated code that use the project name (e.g. CMake variables, in-source macros) would have to be migrated.
+    * Some non-exhaustive examples of this include:
+      * `GZ_<PROJECT>_<VISIBLE/HIDDEN>`
+      * CMake `-config` files
+      * Paths that depend on the project name
+
+  1. Python library imports such `import ignition.math` and `from ignition import math` should be replaced with `import gz.math7` and `from gz import math7`. Note the change from `ignition` to `gz` and the addition of the major version number as a suffix to the package name.
+
+### Deprecations
+
+1. **Angle.hh**
+    + All mutator functions that lacked a `Set` prefix have been deprecated
+    and replaced by version with a `Set` prefix.
+
+1. **SphericalCoordinates.hh**
+    + ***Deprecation:*** public: static double Distance(const Angle&, const Angle&, const Angle&, const Angle&)
+    + ***Replacement:*** public: static double DistanceWGS84(const Angle&, const Angle&, const Angle&, const Angle&)
+
+1. **Matrix3.hh**
+    + ***Deprecation:*** public: void Axes(const Vector3<T> &, const Vector3<T> &, const Vector3<T> &)
+    + ***Replacement:*** public: void SetAxes(const Vector3<T> &, const Vector3<T> &, const Vector3<T> &)
+
+    + ***Deprecation:*** public: void Axis(const Vector3<T> &, T)
+    + ***Replacement:*** public: void SetFromAxisAngle(const Vector3<T> &, T)
+    + ***Deprecation:*** public: void From2Axes(const Vector3<T> &, const Vector3<T> &)
+    + ***Replacement:*** public: void SetFrom2Axes(const Vector3<T> &, const Vector3<T> &)
+    + ***Deprecation:*** public: void Col(unsigned int, const Vector3<T> &)
+    + ***Replacement:*** public: void SetCol(unsigned int, const Vector3<T> &)
+
+1. **Pose3.hh**
+    + The addition operators `+` and `+=` are deprecated in favor of multiplication
+      operators `*` and `*=`, though the order of operands is reversed
+      (A + B = B * A).
+    + The unitary negation operator `-` is deprecated in favor of the
+      `Inverse()` method.
+    + The subtraction operators `-` and `-=` are deprecated in favor of multiplication
+      by an inverse, though the order of operands is reversed
+      (A - B = B.Inverse() * A).
+
+1. **Quaternion.hh**
+    + ***Deprecation:*** public: void Axis(T, T, T, T)
+    + ***Replacement:*** public: void SetFromAxisAngle(T, T, T, T)
+    + ***Deprecation:*** public: void Axis(const Vector3<T>&, T)
+    + ***Replacement:*** public: void SetFromAxisAngle(const Vector3<T>&, T)
+    + ***Deprecation:*** public: void Euler(const Vector3<T> &)
+    + ***Replacement:*** public: void SetFromEuler(const Vector3<T> &)
+    + ***Deprecation:*** public: void Euler(T, T, T)
+    + ***Replacement:*** public: void SetFromEuler(T, T, T)
+    + ***Deprecation:*** public: void ToAxis(Vector3<T> &, T &) const
+    + ***Replacement:*** public: void void AxisAngle(Vector3<T> &, T &) const
+    + ***Deprecation:*** public: void Matrix(const Matrix3<T> &)
+    + ***Replacement:*** public: void SetFromMatrix(const Matrix3<T> &)
+    + ***Deprecation:*** public: void From2Axes(const Vector3<T> &, const Vector3<T> &)
+    + ***Replacement:*** public: void SetFrom2Axes(const Vector3<T> &, const Vector3<T> &)
+    + ***Deprecation:*** public: void X(T)
+    + ***Replacement:*** public: void SetX(T)
+    + ***Deprecation:*** public: void Y(T)
+    + ***Replacement:*** public: void SetY(T)
+    + ***Deprecation:*** public: void Z(T)
+    + ***Replacement:*** public: void SetZ(T)
+    + ***Deprecation:*** public: void W(T)
+    + ***Replacement:*** public: void SetW(T)
+
+1. The `ignition` namespace is deprecated and will be removed in future versions.  Use `gz` instead.
+1. Header files under `ignition/...` are deprecated and will be removed in future versions.
+   Use `gz/...` instead.
+1. The following `IGN_` prefixed macros are deprecated and will be removed in future versions.
+   Additionally, they will only be available when including the corresponding `ignition/...` header.
+   Use the `GZ_` prefix instead.
+   1. `IGN_RTOD`, `IGN_DTOR`
+   1. `IGN_NORMALIZE`
+   1. `IGN_PI`, `IGN_PI_2`, `IGN_PI_4`
+   1. `IGN_SQRT2`
+   1. `IGN_FP_VOLATILE`
+   1. `IGN_SPHERE_VOLUME`, `IGN_CYLINDER_VOLUME`, `IGN_BOX_VOLUME`, `IGN_BOX_VOLUME_V`
+   1. `IGN_MASSMATRIX3_DEFAULT_TOLERANCE`
+1. All `IGN_*_SIZE_T` variables are deprecated and will be removed in future versions.
+    Please use `GZ_*_SIZE_T` instead.
+
+
+### Modifications
+
+1. The out stream operator is guaranteed to return always plain 0 and not to
+   return -0, 0.0 or other instances of zero value.
+
+## Gazebo Math 6.9.2 to 6.10.0
 
 1. **Color::HSV()**: A bug related to the hue output of this function was fixed.
 
-## Ignition Math 6.8 to 6.9
+## Gazebo Math 6.8 to 6.9
 
 1. **SphericalCoordinates**: A bug related to the LOCAL frame was fixed. To
    preserve behaviour, the `LOCAL` frame was left with the bug, and a new
    `LOCAL2` frame was introduced, which can be used to get the correct
    calculations.
-   
-## Ignition Math 4.X to 5.X
+
+## Gazebo Math 4.X to 5.X
 
 ### Additions
 
@@ -62,13 +155,13 @@ release will remove the deprecated code.
 1. **Inertial.hh**
     + The MOI functions have been renamed to Moi.
 
-## Ignition Math 3.X to 4.X
+## Gazebo Math 3.X to 4.X
 
 ### Added dependencies
 
-1. **ignition-cmake**
-    + Ignition-math now has a build dependency on ignition-cmake, which
-      allows cmake scripts to be shared across all the ignition packages.
+1. **gz-cmake**
+    + gz-math now has a build dependency on gz-cmake, which
+      allows cmake scripts to be shared across all the Gazebo packages.
 
 ### Modifications
 
@@ -99,7 +192,7 @@ release will remove the deprecated code.
     + ***Deprecation:*** public: void Translate(T _x, T _y, T _z)
     + ***Replacement:*** public: void SetTranslation(T _x, T _y, T _z)
 
-## Ignition Math 2.X to 3.X
+## Gazebo Math 2.X to 3.X
 
 ### Modifications
 
@@ -119,98 +212,97 @@ release will remove the deprecated code.
 
 1. **Helpers.hh**
     + ***Deprecation:*** IGN_DBL_MAX
-    + ***Replacement:*** ignition::math::MAX_D
+    + ***Replacement:*** gz::math::MAX_D
 
     + ***Deprecation:*** IGN_DBL_MIN
-    + ***Replacement:*** ignition::math::MIN_D
+    + ***Replacement:*** gz::math::MIN_D
 
     + ***Deprecation:*** IGN_DBL_LOW
-    + ***Replacement:*** ignition::math::LOW_D
+    + ***Replacement:*** gz::math::LOW_D
 
     + ***Deprecation:*** IGN_DBL_INF
-    + ***Replacement:*** ignition::math::INF_D
+    + ***Replacement:*** gz::math::INF_D
 
     + ***Deprecation:*** IGN_FLT_MAX
-    + ***Replacement:*** ignition::math::MAX_F
+    + ***Replacement:*** gz::math::MAX_F
 
     + ***Deprecation:*** IGN_FLT_MIN
-    + ***Replacement:*** ignition::math::MIN_F
+    + ***Replacement:*** gz::math::MIN_F
 
     + ***Deprecation:*** IGN_FLT_LOW
-    + ***Replacement:*** ignition::math::LOW_F
+    + ***Replacement:*** gz::math::LOW_F
 
     + ***Deprecation:*** IGN_FLT_INF
-    + ***Replacement:*** ignition::math::INF_F
+    + ***Replacement:*** gz::math::INF_F
 
     + ***Deprecation:*** IGN_UI16_MAX
-    + ***Replacement:*** ignition::math::MAX_UI16
+    + ***Replacement:*** gz::math::MAX_UI16
 
     + ***Deprecation:*** IGN_UI16_MIN
-    + ***Replacement:*** ignition::math::MIN_UI16
+    + ***Replacement:*** gz::math::MIN_UI16
 
     + ***Deprecation:*** IGN_UI16_LOW
-    + ***Replacement:*** ignition::math::LOW_UI16
+    + ***Replacement:*** gz::math::LOW_UI16
 
     + ***Deprecation:*** IGN_UI16_INF
-    + ***Replacement:*** ignition::math::INF_UI16
+    + ***Replacement:*** gz::math::INF_UI16
 
     + ***Deprecation:*** IGN_I16_MAX
-    + ***Replacement:*** ignition::math::MAX_I16
+    + ***Replacement:*** gz::math::MAX_I16
 
     + ***Deprecation:*** IGN_I16_MIN
-    + ***Replacement:*** ignition::math::MIN_I16
+    + ***Replacement:*** gz::math::MIN_I16
 
     + ***Deprecation:*** IGN_I16_LOW
-    + ***Replacement:*** ignition::math::LOW_I16
+    + ***Replacement:*** gz::math::LOW_I16
 
     + ***Deprecation:*** IGN_I16_INF
-    + ***Replacement:*** ignition::math::INF_I16
+    + ***Replacement:*** gz::math::INF_I16
 
     + ***Deprecation:*** IGN_UI32_MAX
-    + ***Replacement:*** ignition::math::MAX_UI32
+    + ***Replacement:*** gz::math::MAX_UI32
 
     + ***Deprecation:*** IGN_UI32_MIN
-    + ***Replacement:*** ignition::math::MIN_UI32
+    + ***Replacement:*** gz::math::MIN_UI32
 
     + ***Deprecation:*** IGN_UI32_LOW
-    + ***Replacement:*** ignition::math::LOW_UI32
+    + ***Replacement:*** gz::math::LOW_UI32
 
     + ***Deprecation:*** IGN_UI32_INF
-    + ***Replacement:*** ignition::math::INF_UI32
+    + ***Replacement:*** gz::math::INF_UI32
 
     + ***Deprecation:*** IGN_I32_MAX
-    + ***Replacement:*** ignition::math::MAX_I32
+    + ***Replacement:*** gz::math::MAX_I32
 
     + ***Deprecation:*** IGN_I32_MIN
-    + ***Replacement:*** ignition::math::MIN_I32
+    + ***Replacement:*** gz::math::MIN_I32
 
     + ***Deprecation:*** IGN_I32_LOW
-    + ***Replacement:*** ignition::math::LOW_I32
+    + ***Replacement:*** gz::math::LOW_I32
 
     + ***Deprecation:*** IGN_I32_INF
-    + ***Replacement:*** ignition::math::INF_I32
+    + ***Replacement:*** gz::math::INF_I32
 
     + ***Deprecation:*** IGN_UI64_MAX
-    + ***Replacement:*** ignition::math::MAX_UI64
+    + ***Replacement:*** gz::math::MAX_UI64
 
     + ***Deprecation:*** IGN_UI64_MIN
-    + ***Replacement:*** ignition::math::MIN_UI64
+    + ***Replacement:*** gz::math::MIN_UI64
 
     + ***Deprecation:*** IGN_UI64_LOW
-    + ***Replacement:*** ignition::math::LOW_UI64
+    + ***Replacement:*** gz::math::LOW_UI64
 
     + ***Deprecation:*** IGN_UI64_INF
-    + ***Replacement:*** ignition::math::INF_UI64
+    + ***Replacement:*** gz::math::INF_UI64
 
     + ***Deprecation:*** IGN_I64_MAX
-    + ***Replacement:*** ignition::math::MAX_I64
+    + ***Replacement:*** gz::math::MAX_I64
 
     + ***Deprecation:*** IGN_I64_MIN
-    + ***Replacement:*** ignition::math::MIN_I64
+    + ***Replacement:*** gz::math::MIN_I64
 
     + ***Deprecation:*** IGN_I64_LOW
-    + ***Replacement:*** ignition::math::LOW_I64
+    + ***Replacement:*** gz::math::LOW_I64
 
     + ***Deprecation:*** IGN_I64_INF
-    + ***Replacement:*** ignition::math::INF_I64
-
+    + ***Replacement:*** gz::math::INF_I64

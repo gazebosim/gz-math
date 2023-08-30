@@ -22,7 +22,7 @@
 #include "SignalStats.hh"
 #include <gz/math/SignalStats.hh>
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
@@ -436,7 +436,7 @@ public:
             std::string,                      // Return type (ret_type)
             gz::math::SignalStatistic,  // Parent class (cname)
             // Name of function in C++ (must match Python name) (fn)
-            ShortName
+            ShortName,
         );
     }
     // Trampoline (need one for each virtual function)
@@ -548,4 +548,4 @@ void defineMathSignalMaxAbsoluteValue(py::module &m, const std::string &typestr)
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz

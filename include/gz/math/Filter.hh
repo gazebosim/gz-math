@@ -22,14 +22,14 @@
 #include <gz/math/Quaternion.hh>
 #include <gz/math/config.hh>
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
     // Inline bracket to help doxygen filtering.
-    inline namespace IGNITION_MATH_VERSION_NAMESPACE {
+    inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
-    /// \class Filter Filter.hh ignition/math/Filter.hh
+    /// \class Filter Filter.hh gz/math/Filter.hh
     /// \brief Filter base class
     template <class T>
     class Filter
@@ -60,7 +60,7 @@ namespace ignition
       protected: T y0{};
     };
 
-    /// \class OnePole Filter.hh ignition/math/Filter.hh
+    /// \class OnePole Filter.hh gz/math/Filter.hh
     /// \brief A one-pole DSP filter.
     /// \sa http://www.earlevel.com/main/2012/12/15/a-one-pole-filter/
     template <class T>
@@ -80,7 +80,7 @@ namespace ignition
       // Documentation Inherited.
       public: virtual void Fc(double _fc, double _fs) override
       {
-        b1 = exp(-2.0 * IGN_PI * _fc / _fs);
+        b1 = exp(-2.0 * GZ_PI * _fc / _fs);
         a0 = 1.0 - b1;
       }
 
@@ -100,7 +100,7 @@ namespace ignition
       protected: double b1 = 0;
     };
 
-    /// \class OnePoleQuaternion Filter.hh ignition/math/Filter.hh
+    /// \class OnePoleQuaternion Filter.hh gz/math/Filter.hh
     /// \brief One-pole quaternion filter.
     class OnePoleQuaternion : public OnePole<math::Quaterniond>
     {
@@ -130,7 +130,7 @@ namespace ignition
       }
     };
 
-    /// \class OnePoleVector3 Filter.hh ignition/math/Filter.hh
+    /// \class OnePoleVector3 Filter.hh gz/math/Filter.hh
     /// \brief One-pole vector3 filter.
     class OnePoleVector3 : public OnePole<math::Vector3d>
     {
@@ -150,7 +150,7 @@ namespace ignition
       }
     };
 
-    /// \class BiQuad Filter.hh ignition/math/Filter.hh
+    /// \class BiQuad Filter.hh gz/math/Filter.hh
     /// \brief Bi-quad filter base class.
     /// \sa http://www.earlevel.com/main/2003/03/02/the-bilinear-z-transform/
     template <class T>
@@ -179,7 +179,7 @@ namespace ignition
       /// \param[in] _q Q coefficient.
       public: void Fc(double _fc, double _fs, double _q)
       {
-        double k = tan(IGN_PI * _fc / _fs);
+        double k = tan(GZ_PI * _fc / _fs);
         double kQuadDenom = k * k + k / _q + 1.0;
         this->a0 = k * k/ kQuadDenom;
         this->a1 = 2 * this->a0;
@@ -226,7 +226,7 @@ namespace ignition
       protected: T x1{}, x2{}, y1{}, y2{};
     };
 
-    /// \class BiQuadVector3 Filter.hh ignition/math/Filter.hh
+    /// \class BiQuadVector3 Filter.hh gz/math/Filter.hh
     /// \brief BiQuad vector3 filter
     class BiQuadVector3 : public BiQuad<math::Vector3d>
     {

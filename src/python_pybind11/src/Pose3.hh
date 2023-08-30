@@ -18,6 +18,7 @@
 #ifndef GZ_MATH_PYTHON__POSE3_HH_
 #define GZ_MATH_PYTHON__POSE3_HH_
 
+#include <sstream>
 #include <string>
 
 #include <pybind11/pybind11.h>
@@ -28,20 +29,20 @@
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace ignition
+namespace gz
 {
 namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an gz::math::Pose3
+/// Define a pybind11 wrapper for a gz::math::Pose3
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
 void defineMathPose3(py::module &m, const std::string &typestr);
 
-/// Help define a pybind11 wrapper for an gz::math::Pose3
+/// Help define a pybind11 wrapper for a gz::math::Pose3
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
@@ -152,6 +153,6 @@ void helpDefineMathPose3(py::module &m, const std::string &typestr)
 }
 }  // namespace python
 }  // namespace math
-}  // namespace ignition
+}  // namespace gz
 
 #endif  // GZ_MATH_PYTHON__POSE3_HH_

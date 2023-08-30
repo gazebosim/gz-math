@@ -17,12 +17,13 @@
 
 %module semanticversion
 %{
+  #include <sstream>
 	#include <gz/math/SemanticVersion.hh>
 %}
 
 %include "std_string.i"
 
-namespace ignition
+namespace gz
 {
   namespace math
   {
