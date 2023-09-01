@@ -1,5 +1,16 @@
 ## Gazebo Math 6.x
 
+## Gazebo Math 6.15.0 (2023-09-01)
+
+1. Fixes for testing in non standard architectures
+    * [Pull request #546](https://github.com/gazebosim/gz-math/pull/546)
+
+1. MecanumDriveOdometry to handle odometry estimation of Mecanum wheeled models
+    * [Pull request #486](https://github.com/gazebosim/gz-math/pull/486)
+
+1. Infrastructure
+    * [Pull request #547](https://github.com/gazebosim/gz-math/pull/547)
+
 ## Gazebo Math 6.14.0 (2023-04-14)
 
 1. Disable pybind11 on windows by default
