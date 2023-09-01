@@ -51,7 +51,7 @@ See the [installation tutorial](https://gazebosim.org/api/math/7/install.html).
 
 # Usage
 
-Please refer to the [examples directory](https://github.com/gazebosim/gz-math/raw/ign-math7/examples/).
+Please refer to the [examples directory](https://github.com/gazebosim/gz-math/raw/gz-math7/examples/).
 
 # Folder Structure
 
@@ -60,7 +60,7 @@ Refer to the following table for information about important directories and fil
 ```
 gz-math
 ├── examples                 Example programs.
-├── include/gz/math    Header files.
+├── include/gz/math          Header files.
 ├── src                      Source files and unit tests.
 │   └── graph                Source files for the graph classes.
 │   └── python               SWIG Python interfaces.
