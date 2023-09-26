@@ -54,4 +54,4 @@ You can also set or read a color in HSV.
 
 \snippet examples/color_example.cc Set value from HSV
 
-There are more functions in `Color`. Take a look at the [API](https://gazebosim.org/api/math/6.9/classignition_1_1math_1_1Color.html)
+There are more functions in `Color`. Take a look at the [API](https://gazebosim.org/api/math/7/classgz_1_1math_1_1Color.html)

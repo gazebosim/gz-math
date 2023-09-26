@@ -32,7 +32,7 @@ int main()
 }
 ```
 
-Now let's create to 3D points with arbitrary values. We will use the
+Now let's create two 3D points with arbitrary values. We will use the
 gz::math::Vector3 class to represent these points. Gazebo Math provides a handy
 gz::math::Vector3d type which is a typedef of `Vector3<double>`. The result of this
 addition will be a main file similar to the following.
