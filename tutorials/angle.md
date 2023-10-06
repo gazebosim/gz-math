@@ -9,7 +9,7 @@ This tutorial explains how to use the `Angle` class from Gazebo Math library.
 Go to `gz-math/examples` and use `cmake` to compile the code:
 
 ```{.sh}
-git clone https://github.com/gazebosim/gz-math/ -b gz-math7
+git clone https://github.com/gazebosim/gz-math/ -b gz-math8
 cd gz-math/examples
 mkdir build
 cd build
