@@ -70,7 +70,7 @@ int main()
 To compile this code on UNIX with pkg-config, use the following command:
 
 ```{.bash}
-c++ $(pkg-config --cflags gz-math7) main.cpp -o main
+c++ $(pkg-config --cflags gz-math8) main.cpp -o main
 ```
 
 The program can then be run as:

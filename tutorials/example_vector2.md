@@ -9,7 +9,7 @@ This tutorial explains how to use the `Vector2` class from Gazebo Math library.
 To compile the code, go to `gz-math/examples` and use `cmake`:
 
 ```{.sh}
-git clone https://github.com/gazebosim/gz-math/ -b gz-math7
+git clone https://github.com/gazebosim/gz-math/ -b gz-math8
 cd gz-math/examples
 mkdir build
 cd build

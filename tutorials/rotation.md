@@ -7,7 +7,7 @@ This example explains how to use quaternions and euler angles, and how to conver
 Go to `gz-math/examples` and use `cmake` to compile the code:
 
 ```{.sh}
-git clone https://github.com/gazebosim/gz-math/ -b gz-math7
+git clone https://github.com/gazebosim/gz-math/ -b gz-math8
 cd gz-math/examples
 mkdir build
 cd build
