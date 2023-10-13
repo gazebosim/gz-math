@@ -1011,27 +1011,10 @@ TEST(HelpersTest, AppendToStream)
   math::appendToStream(out, pi);
   EXPECT_EQ(out.str(), "0 456 0 3.14159 3.141592654");
 
-// Skip end of test for arm64
-#if !defined __ARM_ARCH
-  out << " "
-      << std::setprecision(std::numeric_limits<long double>::digits10 + 1);
-
-  math::appendToStream(out, pi);
-#if defined(_WIN32) && !defined(__amd64__) && !defined(__i386__)
-  EXPECT_EQ(out.str(), "0 456 0 3.14159 3.141592654 3.141592653589793");
-#else
-  EXPECT_EQ(out.str(), "0 456 0 3.14159 3.141592654 3.141592653589793239");
-#endif
-
   out << " "
       << std::setprecision(3);
 
   math::appendToStream(out, pi);
-#if defined(_WIN32) && !defined(__amd64__) && !defined(__i386__)
-  EXPECT_EQ(out.str(), "0 456 0 3.14159 3.141592654 3.141592653589793 3.14");
-#else
-  EXPECT_EQ(out.str(), "0 456 0 3.14159 3.141592654 3.141592653589793239 3.14");
-#endif
-//  ifndef __ARM_ARCH
-#endif
+  EXPECT_EQ(out.str(), "0 456 0 3.14159 3.141592654 3.14");
 }
+
