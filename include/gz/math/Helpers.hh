@@ -951,7 +951,10 @@ namespace ignition
         dayString.erase(dayString.length() - 1);
         try
         {
-          std::stoi(dayString);
+          // We are only checking if it sucessfully parses,
+          // and are not concerned with the actual value.
+          auto day = std::stoi(dayString);
+          (void) day;
         }
         catch (const std::out_of_range &)
         {
