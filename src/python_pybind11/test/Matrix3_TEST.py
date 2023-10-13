@@ -307,7 +307,9 @@ class TestMatrix3(unittest.TestCase):
         q = Quaterniond(math.pi/2.0, math.pi/2.0, 0)
         matFromQuat = Matrix3d(q)
         quatFromMat = Quaterniond(matFromQuat)
-        self.assertTrue(q == quatFromMat)
+        # We check both cases as quaternion double-cover the rotation matrix
+        # space, see https://github.com/gazebosim/gz-math/issues/416#issuecomment-1741741183
+        self.assertTrue(q == quatFromMat or q == -quatFromMat)
 
         # test the cases where matrix trace is negative
         # (requires special handling)
