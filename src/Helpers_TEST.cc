@@ -1017,3 +1017,4 @@ TEST(HelpersTest, AppendToStream)
   math::appendToStream(out, pi);
   EXPECT_EQ(out.str(), "0 456 0 3.14159 3.141592654 3.14");
 }
+
