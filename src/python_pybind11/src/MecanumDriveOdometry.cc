@@ -33,8 +33,7 @@ void defineMathMecanumDriveOdometry(py::module &m, const std::string &typestr)
   std::string pyclass_name = typestr;
   py::class_<Class>(m,
                     pyclass_name.c_str(),
-                    py::buffer_protocol(),
-                    py::dynamic_attr())
+                    py::buffer_protocol())
   .def(py::init<size_t>(), py::arg("_windowSize") = 10)
   .def("init", &Class::Init, "Initialize the odometry")
   .def("initialized", &Class::Initialized, "Get whether Init has been called.")
