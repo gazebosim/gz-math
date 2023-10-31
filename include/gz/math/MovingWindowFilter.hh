@@ -90,6 +90,17 @@ namespace gz
     using MovingWindowFilterVector3f = MovingWindowFilter<Vector3f>;
     using MovingWindowFilterVector3d = MovingWindowFilter<Vector3d>;
   }
+
+
+/// The template explicit instanciations that does not use fundamental types
+/// (like Vector*) needs to be placed in this header file.
+template class GZ_MATH_VISIBLE MovingWindowFilter<int>;
+template class GZ_MATH_VISIBLE MovingWindowFilter<float>;
+template class GZ_MATH_VISIBLE MovingWindowFilter<double>;
+template class GZ_MATH_VISIBLE MovingWindowFilter<gz::math::Vector3i>;
+template class GZ_MATH_VISIBLE MovingWindowFilter<gz::math::Vector3f>;
+template class GZ_MATH_VISIBLE MovingWindowFilter<gz::math::Vector3d>;
+
   }  // namespace math
 }  // namespace gz
 #endif

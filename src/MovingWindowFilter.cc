@@ -137,13 +137,6 @@ MovingWindowFilter<gz::math::Vector3d>::Value() const
   return value;
 }
 
-template class MovingWindowFilter<int>;
-template class MovingWindowFilter<float>;
-template class MovingWindowFilter<double>;
-template class MovingWindowFilter<gz::math::Vector3i>;
-template class MovingWindowFilter<gz::math::Vector3f>;
-template class MovingWindowFilter<gz::math::Vector3d>;
-
 }
 }  // namespace math
 }  // namespace gz
