@@ -92,7 +92,7 @@ namespace gz
   }
 
 
-/// The template explicit instanciations that does not use fundamental types
+/// The template explicit instantiations that does not use fundamental types
 /// (like Vector*) needs to be placed in this header file.
 template class GZ_MATH_VISIBLE MovingWindowFilter<int>;
 template class GZ_MATH_VISIBLE MovingWindowFilter<float>;
