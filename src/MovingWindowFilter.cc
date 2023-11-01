@@ -15,6 +15,7 @@
  *
  */
 
+#include "gz/math/Export.hh"
 #include "gz/math/MovingWindowFilter.hh"
 #include "gz/math/Vector3.hh"
 
@@ -136,6 +137,13 @@ MovingWindowFilter<gz::math::Vector3d>::Value() const
   auto value = this->sum / this->samples;
   return value;
 }
+
+ template class MovingWindowFilter<int>;
+ template class MovingWindowFilter<float>;
+ template class MovingWindowFilter<double>;
+ template class GZ_MATH_VISIBLE MovingWindowFilter<gz::math::Vector3i>;
+ template class GZ_MATH_VISIBLE MovingWindowFilter<gz::math::Vector3f>;
+ template class GZ_MATH_VISIBLE MovingWindowFilter<gz::math::Vector3d>;
 
 }
 }  // namespace math
