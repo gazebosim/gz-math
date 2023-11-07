@@ -203,7 +203,6 @@ namespace gz
       return T(value);
     }
   }
-
   }  // namespace math
 }  // namespace gz
 #endif
