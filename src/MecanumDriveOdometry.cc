@@ -18,15 +18,18 @@
 #include "gz/math/MecanumDriveOdometry.hh"
 #include "gz/math/RollingMean.hh"
 
-using namespace gz;
-using namespace math;
-
 // The implementation was borrowed from: https://github.com/ros-controls/ros_controllers/blob/melodic-devel/diff_drive_controller/src/odometry.cpp
 // And these calculations are based on the following references:
 // https://robohub.org/drive-kinematics-skid-steer-and-mecanum-ros-twist-included
 // https://research.ijcaonline.org/volume113/number3/pxc3901586.pdf
 
-class gz::math::MecanumDriveOdometryPrivate
+namespace gz
+{
+namespace math
+{
+inline namespace GZ_MATH_VERSION_NAMESPACE
+{
+class MecanumDriveOdometryPrivate
 {
   /// \brief Integrates the pose.
   /// \param[in] _linear Linear velocity.
@@ -51,7 +54,7 @@ class gz::math::MecanumDriveOdometryPrivate
   public: double y{0.0};
 
   /// \brief Current heading in radians.
-  public: Angle heading;
+  public: gz::math::Angle heading;
 
   /// \brief Current linear velocity in meter/second.
   public: double linearVel{0.0};
@@ -60,7 +63,7 @@ class gz::math::MecanumDriveOdometryPrivate
   public: double lateralVel{0.0};
 
   /// \brief Current angular velocity in radians/second.
-  public: Angle angularVel;
+  public: gz::math::Angle angularVel;
 
   /// \brief Left wheel radius in meters.
   public: double leftWheelRadius{0.0};
@@ -87,17 +90,23 @@ class gz::math::MecanumDriveOdometryPrivate
   public: double backRightWheelOldPos{0.0};
 
   /// \brief Rolling mean accumulators for the linear velocity
-  public: RollingMean linearMean;
+  public: gz::math::RollingMean linearMean;
 
   /// \brief Rolling mean accumulators for the lateral velocity
-  public: RollingMean lateralMean;
+  public: gz::math::RollingMean lateralMean;
 
   /// \brief Rolling mean accumulators for the angular velocity
-  public: RollingMean angularMean;
+  public: gz::math::RollingMean angularMean;
 
   /// \brief Initialized flag.
   public: bool initialized{false};
 };
+}
+}
+}
+
+using namespace gz;
+using namespace math;
 
 //////////////////////////////////////////////////
 MecanumDriveOdometry::MecanumDriveOdometry(size_t _windowSize)
