@@ -29,8 +29,17 @@ namespace math
 {
 inline namespace GZ_MATH_VERSION_NAMESPACE
 {
-class MecanumDriveOdometryPrivate
+class MecanumDriveOdometry::Implementation
 {
+  /// \brief Constructor.
+  /// \param[in] _windowSize Rolling window size used to compute the
+  /// velocity mean.
+  public: explicit Implementation(size_t _windowSize)
+    : linearMean(_windowSize), lateralMean(_windowSize),
+      angularMean(_windowSize)
+  {
+  }
+
   /// \brief Integrates the pose.
   /// \param[in] _linear Linear velocity.
   /// \param[in] _lateral Lateral velocity.
@@ -110,15 +119,7 @@ using namespace math;
 
 //////////////////////////////////////////////////
 MecanumDriveOdometry::MecanumDriveOdometry(size_t _windowSize)
-  : dataPtr(new MecanumDriveOdometryPrivate)
-{
-  this->dataPtr->linearMean.SetWindowSize(_windowSize);
-  this->dataPtr->lateralMean.SetWindowSize(_windowSize);
-  this->dataPtr->angularMean.SetWindowSize(_windowSize);
-}
-
-//////////////////////////////////////////////////
-MecanumDriveOdometry::~MecanumDriveOdometry()
+  : dataPtr(gz::utils::MakeImpl<Implementation>(_windowSize))
 {
 }
 
@@ -301,7 +302,7 @@ double MecanumDriveOdometry::RightWheelRadius() const
 }
 
 //////////////////////////////////////////////////
-void MecanumDriveOdometryPrivate::IntegrateRungeKutta2(
+void MecanumDriveOdometry::Implementation::IntegrateRungeKutta2(
     double _linear, double _lateral, double _angular)
 {
   const double direction = *this->heading + _angular * 0.5;
@@ -313,7 +314,7 @@ void MecanumDriveOdometryPrivate::IntegrateRungeKutta2(
 }
 
 //////////////////////////////////////////////////
-void MecanumDriveOdometryPrivate::IntegrateExact(double _linear,
+void MecanumDriveOdometry::Implementation::IntegrateExact(double _linear,
   double _lateral, double _angular)
 {
   if (std::fabs(_angular) < 1e-6)
