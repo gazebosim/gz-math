@@ -18,11 +18,13 @@
 #include "gz/math/Helpers.hh"
 #include "gz/math/SpeedLimiter.hh"
 
-using namespace gz;
-using namespace math;
-
-/// \brief Private SpeedLimiter data class.
-class gz::math::SpeedLimiterPrivate
+namespace gz
+{
+namespace math
+{
+inline namespace GZ_MATH_VERSION_NAMESPACE
+{
+class SpeedLimiter::Implementation
 {
   /// \brief Minimum velocity limit.
   public: double minVelocity{-std::numeric_limits<double>::infinity()};
@@ -42,15 +44,18 @@ class gz::math::SpeedLimiterPrivate
   /// \brief Maximum jerk limit.
   public: double maxJerk{std::numeric_limits<double>::infinity()};
 };
+}
+}
+}
+
+using namespace gz;
+using namespace math;
 
 //////////////////////////////////////////////////
 SpeedLimiter::SpeedLimiter()
-  : dataPtr(std::make_unique<SpeedLimiterPrivate>())
+  : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
 }
-
-//////////////////////////////////////////////////
-SpeedLimiter::~SpeedLimiter() = default;
 
 //////////////////////////////////////////////////
 void SpeedLimiter::SetMinVelocity(double _lim)

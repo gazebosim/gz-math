@@ -19,9 +19,9 @@
 #define GZ_MATH_SYSTEMS_SPEEDLIMITER_HH_
 
 #include <chrono>
-#include <memory>
 #include <gz/math/config.hh>
 #include "gz/math/Helpers.hh"
+#include <gz/utils/ImplPtr.hh>
 
 namespace gz
 {
@@ -29,18 +29,13 @@ namespace math
 {
 // Inline bracket to help doxygen filtering.
 inline namespace GZ_MATH_VERSION_NAMESPACE {
-  // Forward declaration.
-  class SpeedLimiterPrivate;
-
+  //
   /// \brief Class to limit velocity, acceleration and jerk.
   class GZ_MATH_VISIBLE SpeedLimiter
   {
     /// \brief Constructor.
     /// There are no limits by default.
     public: SpeedLimiter();
-
-    /// \brief Destructor.
-    public: ~SpeedLimiter();
 
     /// \brief Set minimum velocity limit in m/s, usually <= 0.
     /// \param[in] _lim Minimum velocity.
@@ -130,17 +125,7 @@ inline namespace GZ_MATH_VERSION_NAMESPACE {
         double _prevPrevVel,
         std::chrono::steady_clock::duration _dt) const;
 
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::unique_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
-    /// \brief Private data pointer.
-    private: std::unique_ptr<SpeedLimiterPrivate> dataPtr;
-#ifdef _WIN32
-#pragma warning(pop)
-#endif
+    GZ_UTILS_IMPL_PTR(dataPtr)
   };
   }
 }
