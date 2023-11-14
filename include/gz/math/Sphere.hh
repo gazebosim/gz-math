@@ -27,9 +27,6 @@ namespace gz
 {
   namespace math
   {
-    // Foward declarations
-    class SpherePrivate;
-
     // Inline bracket to help doxygen filtering.
     inline namespace GZ_MATH_VERSION_NAMESPACE {
     //

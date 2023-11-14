@@ -26,9 +26,6 @@ namespace gz
 {
   namespace math
   {
-    // Foward declarations
-    class CylinderPrivate;
-
     // Inline bracket to help doxygen filtering.
     inline namespace GZ_MATH_VERSION_NAMESPACE {
     //
