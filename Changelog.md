@@ -4,6 +4,31 @@
 
 ## Gazebo Math 7.x
 
+### Gazebo Math 7.3.0 (2023-08-29)
+
+1. Adds a validity check for Sessions created using the `TimeVaryingVolumetricGrid`
+    * [Pull request #551](https://github.com/gazebosim/gz-math/pull/551)
+
+1. Fixes for testing in non standard architectures
+    * [Pull request #546](https://github.com/gazebosim/gz-math/pull/546)
+
+1. MecanumDriveOdometry to handle odometry estimation of Mecanum wheeled models
+    * [Pull request #486](https://github.com/gazebosim/gz-math/pull/486)
+
+1. Fix documentation on Plane.hh
+    * [Pull request #544](https://github.com/gazebosim/gz-math/pull/544)
+
+1. Infrastructure
+    * [Pull request #543](https://github.com/gazebosim/gz-math/pull/543)
+    * [Pull request #547](https://github.com/gazebosim/gz-math/pull/547)
+    * [Pull request #545](https://github.com/gazebosim/gz-math/pull/545)
+
+1. Build examples from CMake rather than executable
+    * [Pull request #482](https://github.com/gazebosim/gz-math/pull/482)
+
+1. Added `std::optional MassMatrix()` functions for Box, Cylinder & Sphere
+    * [Pull request #538](https://github.com/gazebosim/gz-math/pull/538)
+
 ### Gazebo Math 7.2.0 (2023-06-14)
 
 1. Add tests to increase test coverage
@@ -248,6 +273,21 @@
     * [BitBucket pull request 336](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/336)
 
 ## Gazebo Math 6.x
+
+## Gazebo Math 6.14.0 (2023-04-14)
+
+1. Disable pybind11 on windows by default
+    * [Pull request #529](https://github.com/gazebosim/gz-math/pull/529)
+
+1. Add option to skip pybind11 and SWIG
+    * [Pull request #480](https://github.com/gazebosim/gz-math/pull/480)
+
+1. Custom PID error rate
+    * [Pull request #525](https://github.com/gazebosim/gz-math/pull/525)
+
+1. Infrastructure
+    * [Pull request #521](https://github.com/gazebosim/gz-math/pull/521)
+    * [Pull request #519](https://github.com/gazebosim/gz-math/pull/519)
 
 ## Gazebo Math 6.13.0 (2022-08-31)
 
