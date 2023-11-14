@@ -22,6 +22,7 @@
 #include <string>
 #include <gz/math/Helpers.hh>
 #include <gz/math/config.hh>
+#include <gz/utils/ImplPtr.hh>
 
 namespace gz
 {
@@ -174,9 +175,6 @@ namespace gz
       public: virtual void InsertData(const double _data) override;
     };
 
-    /// \brief Forward declare private data class.
-    class SignalStatsPrivate;
-
     /// \class SignalStats SignalStats.hh gz/math/SignalStats.hh
     /// \brief Collection of statistics for a scalar signal.
     class GZ_MATH_VISIBLE SignalStats
@@ -236,17 +234,7 @@ namespace gz
       /// \return this
       public: SignalStats &operator=(const SignalStats &_s);
 
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::unique_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
-      /// \brief Pointer to private data.
-      private: std::unique_ptr<SignalStatsPrivate> dataPtr;
-#ifdef _WIN32
-#pragma warning(pop)
-#endif
+      GZ_UTILS_IMPL_PTR(dataPtr)
     };
     }
   }

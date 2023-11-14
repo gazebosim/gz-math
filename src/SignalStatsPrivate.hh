@@ -61,19 +61,10 @@ namespace gz
     typedef std::vector<SignalStatisticPtr> SignalStatistic_V;
 
     /// \brief Private data class for the SignalStats class.
-    class SignalStatsPrivate
+    class SignalStats::Implementation
     {
       /// \brief Vector of `SignalStatistic`s.
       public: SignalStatistic_V stats;
-
-      /// \brief Clone the SignalStatsPrivate object. Used for implementing
-      /// copy semantics.
-      public: std::unique_ptr<SignalStatsPrivate> Clone() const
-      {
-        std::unique_ptr<SignalStatsPrivate> dataPtr(
-            new SignalStatsPrivate(*this));
-        return dataPtr;
-      }
     };
     }
   }

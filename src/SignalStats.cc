@@ -206,18 +206,7 @@ void SignalVariance::InsertData(const double _data)
 
 //////////////////////////////////////////////////
 SignalStats::SignalStats()
-  : dataPtr(new SignalStatsPrivate)
-{
-}
-
-//////////////////////////////////////////////////
-SignalStats::~SignalStats()
-{
-}
-
-//////////////////////////////////////////////////
-SignalStats::SignalStats(const SignalStats &_ss)
-  : dataPtr(_ss.dataPtr->Clone())
+  : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
 }
 
@@ -349,11 +338,4 @@ void SignalStats::Reset()
   {
     statistic->Reset();
   }
-}
-
-//////////////////////////////////////////////////
-SignalStats &SignalStats::operator=(const SignalStats &_s)
-{
-  this->dataPtr = _s.dataPtr->Clone();
-  return *this;
 }
