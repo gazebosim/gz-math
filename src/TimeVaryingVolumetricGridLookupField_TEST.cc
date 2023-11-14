@@ -44,6 +44,10 @@ TEST(TimeVaryingVolumetricLookupFieldTest, TestConstruction)
   {
     // Get data at T=0
     auto session = timeVaryingField.CreateSession();
+
+    // Check session validity
+    ASSERT_TRUE(timeVaryingField.IsValid(session));
+
     auto points = timeVaryingField.LookUp(session, Vector3d{0.5, 0.5, 0.5});
     ASSERT_EQ(points.size(), 2);
     ASSERT_EQ(points[0].time, 0);
@@ -100,6 +104,10 @@ TEST(TimeVaryingVolumetricLookupFieldTest, TestConstruction)
 
     // Create invalid session
     auto invalid_session = timeVaryingField.CreateSession(500);
+
+    // Check session validity
+    ASSERT_FALSE(timeVaryingField.IsValid(invalid_session));
+
     points = timeVaryingField.LookUp(
       invalid_session, Vector3d{0.5, 0.5, 0.5});
     ASSERT_EQ(points.size(), 0);
