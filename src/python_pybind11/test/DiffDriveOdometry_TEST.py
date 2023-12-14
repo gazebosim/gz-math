@@ -14,6 +14,7 @@
 
 import datetime
 import math
+import time
 import unittest
 
 from ignition.math import Angle, DiffDriveOdometry
@@ -38,7 +39,7 @@ class TestDiffDriveOdometry(unittest.TestCase):
 
         # Setup the wheel parameters, and initialize
         odom.set_wheel_params(wheelSeparation, wheelRadius, wheelRadius)
-        startTime = datetime.datetime.now()
+        startTime = datetime.timedelta(time.monotonic())
         odom.init(datetime.timedelta())
 
         # Sleep for a little while, then update the odometry with the new wheel
@@ -71,7 +72,7 @@ class TestDiffDriveOdometry(unittest.TestCase):
         self.assertAlmostEqual(0.0, odom.angular_velocity().radian(), delta=1e-3)
 
         # Initialize again, and odom values should be reset.
-        startTime = datetime.datetime.now()
+        startTime = datetime.timedelta(time.monotonic())
         odom.init(datetime.timedelta())
         self.assertEqual(0.0, odom.heading().radian())
         self.assertEqual(0.0, odom.x())
