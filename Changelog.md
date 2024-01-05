@@ -1,5 +1,16 @@
 ## Gazebo Math 6.x
 
+## Gazebo Math 6.15.1 (2024-01-05)
+
+1. Replace CMake Python variables with new ones from FindPython3 module
+    * [Pull request #402](https://github.com/gazebosim/gz-math/pull/402)
+
+1. Suppress warnings on MSVC
+    * [Pull request #564](https://github.com/gazebosim/gz-math/pull/564)
+
+1. Infrastructure
+    * [Pull request #569](https://github.com/gazebosim/gz-math/pull/569)
+
 ## Gazebo Math 6.15.0 (2023-09-01)
 
 1. Fixes for testing in non standard architectures
