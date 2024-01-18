@@ -1,8 +1,11 @@
-if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
-  # pybind11 logic for setting up a debug build when both a debug and release
-  # python interpreter are present in the system seems to be pretty much broken.
-  # This works around the issue.
-  set(PYTHON_LIBRARIES "${PYTHON_DEBUG_LIBRARIES}")
+if(${CMAKE_VERSION} VERSION_LESS "3.12.0")
+  # TODO: remove once the minimum CMake version is increased
+  if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+    # pybind11 logic for setting up a debug build when both a debug and release
+    # python interpreter are present in the system seems to be pretty much broken.
+    # This works around the issue.
+    set(PYTHON_LIBRARIES "${PYTHON_DEBUG_LIBRARIES}")
+  endif()
 endif()
 
 message(STATUS "Building pybind11 interfaces")
@@ -73,17 +76,15 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 endif()
 
 if(USE_SYSTEM_PATHS_FOR_PYTHON_INSTALLATION)
+  # Get install variable from Python3 module
   if(${CMAKE_VERSION} VERSION_LESS "3.12.0")
+    # Python3_SITEARCH is available via FindPython3 from 3.12 on, workaround if needed
     execute_process(
-      COMMAND "${PYTHON_EXECUTABLE}" -c "if True:
+      COMMAND "${Python3_EXECUTABLE}" -c "if True:
   from distutils import sysconfig as sc
   print(sc.get_python_lib(plat_specific=True))"
       OUTPUT_VARIABLE Python3_SITEARCH
       OUTPUT_STRIP_TRAILING_WHITESPACE)
-  else()
-    # Get install variable from Python3 module
-    # Python3_SITEARCH is available from 3.12 on, workaround if needed:
-    find_package(Python3 COMPONENTS Interpreter)
   endif()
 
   if(USE_DIST_PACKAGES_FOR_PYTHON)
