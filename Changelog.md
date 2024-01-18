@@ -270,6 +270,28 @@
 
 ## Gazebo Math 6.x
 
+## Gazebo Math 6.15.1 (2024-01-05)
+
+1. Replace CMake Python variables with new ones from FindPython3 module
+    * [Pull request #402](https://github.com/gazebosim/gz-math/pull/402)
+
+1. Suppress warnings on MSVC
+    * [Pull request #564](https://github.com/gazebosim/gz-math/pull/564)
+
+1. Infrastructure
+    * [Pull request #569](https://github.com/gazebosim/gz-math/pull/569)
+
+## Gazebo Math 6.15.0 (2023-09-01)
+
+1. Fixes for testing in non standard architectures
+    * [Pull request #546](https://github.com/gazebosim/gz-math/pull/546)
+
+1. MecanumDriveOdometry to handle odometry estimation of Mecanum wheeled models
+    * [Pull request #486](https://github.com/gazebosim/gz-math/pull/486)
+
+1. Infrastructure
+    * [Pull request #547](https://github.com/gazebosim/gz-math/pull/547)
+
 ## Gazebo Math 6.14.0 (2023-04-14)
 
 1. Disable pybind11 on windows by default
