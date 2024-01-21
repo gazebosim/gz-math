@@ -386,6 +386,15 @@ namespace gz
                         [clamp(_col, GZ_ZERO_SIZE_T, GZ_FIVE_SIZE_T)];
      }
 
+      /// \brief Underlying data pointer
+      /// \remarks This method is intended for python bindings (numpy).
+      /// \remarks It's preferable not to rely on it.
+      /// \return The pointer to the underlying data.
+      public: T* Data()
+      {
+        return this->data[0];
+      }
+
      /// \brief Get one of the four 3x3 submatrices that compose this matrix.
      /// These submatrices are formed by dividing the 6x6 matrix in 4 parts that
      /// do not overlap with each other.

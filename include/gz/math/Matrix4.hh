@@ -703,6 +703,16 @@ namespace gz
                          [clamp(_col, GZ_ZERO_SIZE_T, GZ_THREE_SIZE_T)];
       }
 
+      /// \brief Underlying data pointer
+      /// \remarks This method is intended for python bindings (numpy).
+      /// \remarks It's preferable not to rely on it.
+      /// \return The pointer to the underlying data.
+      public: T* Data()
+      {
+        return this->data[0];
+      }
+
+
       /// \brief Equality test with tolerance.
       /// \param[in] _m the matrix to compare to
       /// \param[in] _tol equality tolerance.

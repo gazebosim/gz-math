@@ -651,6 +651,15 @@ namespace gz
                equal<T>(this->data[2], _v[2]);
       }
 
+      /// \brief Underlying data pointer
+      /// \remarks This method is intended for python bindings (numpy).
+      /// \remarks It's preferable not to rely on it.
+      /// \return The pointer to the underlying data.
+      public: T* Data()
+      {
+        return this->data;
+      }
+
       /// \brief Get the x value.
       /// \return The x component of the vector
       public: inline T X() const

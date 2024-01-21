@@ -518,6 +518,15 @@ namespace gz
                          [clamp(_col, GZ_ZERO_SIZE_T, GZ_TWO_SIZE_T)];
       }
 
+      /// \brief Underlying data pointer
+      /// \remarks This method is intended for python bindings (numpy).
+      /// \remarks It's preferable not to rely on it.
+      /// \return The pointer to the underlying data.
+      public: T* Data()
+      {
+        return this->data[0];
+      }
+
       /// \brief Return the determinant of the matrix.
       /// \return Determinant of this matrix.
       public: T Determinant() const
