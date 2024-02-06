@@ -16,6 +16,7 @@
 */
 #include "gz/math/Quaternion.hh"
 #include "gz/math/RotationSpline.hh"
+#include "cmath"
 
 using namespace gz;
 using namespace math;
@@ -88,11 +89,21 @@ Quaterniond RotationSpline::Interpolate(const unsigned int _fromIndex,
   // Use squad using tangents we've already set up
   Quaterniond &p = this->dataPtr->points[_fromIndex];
   Quaterniond &q = this->dataPtr->points[_fromIndex+1];
-  //Quaterniond &a = this->dataPtr->tangents[_fromIndex];
-  //Quaterniond &b = this->dataPtr->tangents[_fromIndex+1];
-
+  Quaterniond &a = this->dataPtr->tangents[_fromIndex];
+  Quaterniond &b = this->dataPtr->tangents[_fromIndex+1];
+  
+  //See difference in distance and orientation 
+  double dist2 = pow(p.X()-q.X(),2)+pow(p.Y()-q.Y(),2)+pow(p.Z()-q.Z(),2);
+  double diffw = abs(p.W()-q.W());
   // NB interpolate to nearest rotation
-  return Quaterniond::Slerp(_t, p, q, _useShortestPath);
+  if ((dist2>64) || (diffw>1.57))
+  {
+    return Quaterniond::Squad(_t, p, a, b, q, _useShortestPath);
+  }
+  else 
+  {
+    return Quaterniond::Slerp(_t, p, q, _useShortestPath);
+  }
 }
 
 /////////////////////////////////////////////////
