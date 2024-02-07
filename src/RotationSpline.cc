@@ -21,6 +21,7 @@
 using namespace gz;
 using namespace math;
 
+using namespace std;
 /// \internal
 /// \brief Private data for RotationSpline
 class RotationSpline::Implementation
@@ -92,17 +93,21 @@ Quaterniond RotationSpline::Interpolate(const unsigned int _fromIndex,
   Quaterniond &a = this->dataPtr->tangents[_fromIndex];
   Quaterniond &b = this->dataPtr->tangents[_fromIndex+1];
   
-  //See difference in distance and orientation 
-  double dist2 = pow(p.X()-q.X(),2)+pow(p.Y()-q.Y(),2)+pow(p.Z()-q.Z(),2);
-  double diffw = abs(p.W()-q.W());
+  Vector3d peu(p.Euler());
+  Vector3d qeu(q.Euler());
+  
+  double diffX = abs(peu.X()-qeu.X());
+  double diffY = abs(peu.Y()-qeu.Y());
+  double diffZ = abs(peu.Z()-qeu.Z());
+  
   // NB interpolate to nearest rotation
-  if ((dist2>64) || (diffw>1.57))
+  if ((diffX<0.16) || (diffY<0.16) || (diffZ<0.16))
   {
-    return Quaterniond::Squad(_t, p, a, b, q, _useShortestPath);
+    return Quaterniond::Slerp(_t, p, q, _useShortestPath);
   }
   else 
   {
-    return Quaterniond::Slerp(_t, p, q, _useShortestPath);
+    return Quaterniond::Squad(_t, p, a, b, q, _useShortestPath);
   }
 }
 
