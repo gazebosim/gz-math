@@ -41,7 +41,7 @@ class TestMecanumDriveOdometry(unittest.TestCase):
         # Setup the wheel parameters, and initialize
         odom.set_wheel_params(wheelSeparation, wheelRadius, wheelRadius,wheelRadius)
         startTime = datetime.timedelta(time.monotonic())
-        odom.init(datetime.timedelta())
+        odom.init(startTime)
 
         # Sleep for a little while, then update the odometry with the new wheel
         # position.
@@ -50,7 +50,7 @@ class TestMecanumDriveOdometry(unittest.TestCase):
                     Angle(math.radians(1.0)),
                     Angle(math.radians(1.0)),
                     Angle(math.radians(1.0)),
-                    time1 - startTime)
+                    time1)
         self.assertAlmostEqual(0.0, odom.heading().radian())
         self.assertAlmostEqual(distPerDegree, odom.x())
         self.assertAlmostEqual(0.0, odom.y())
@@ -66,7 +66,7 @@ class TestMecanumDriveOdometry(unittest.TestCase):
                     Angle(math.radians(2.0)),
                     Angle(math.radians(2.0)),
                     Angle(math.radians(2.0)),
-                    time2 - startTime)
+                    time2)
         self.assertAlmostEqual(0.0, odom.heading().radian())
         self.assertAlmostEqual(distPerDegree * 2.0, odom.x(), delta=3e-6)
         self.assertAlmostEqual(0.0, odom.y())
@@ -78,7 +78,7 @@ class TestMecanumDriveOdometry(unittest.TestCase):
 
         # Initialize again, and odom values should be reset.
         startTime = datetime.timedelta(time.monotonic())
-        odom.init(datetime.timedelta())
+        odom.init(startTime)
         self.assertAlmostEqual(0.0, odom.heading().radian())
         self.assertAlmostEqual(0.0, odom.x())
         self.assertAlmostEqual(0.0, odom.y())
@@ -91,7 +91,7 @@ class TestMecanumDriveOdometry(unittest.TestCase):
                     Angle(math.radians(2.0)),
                     Angle(math.radians(2.0)),
                     Angle(math.radians(2.0)),
-                    time1 - startTime)
+                    time1)
         self.assertAlmostEqual(0.0, odom.heading().radian())
         self.assertAlmostEqual(distPerDegree * 2.0, odom.x(), delta=3e-6)
         self.assertAlmostEqual(0.0, odom.y())
@@ -102,13 +102,13 @@ class TestMecanumDriveOdometry(unittest.TestCase):
         self.assertAlmostEqual(0.0, odom.angular_velocity().radian(), delta=1e-3)
 
         # Sleep again, this time move 2 degrees in 100ms.
-        odom.init(datetime.timedelta())
+        odom.init(startTime)
         time1 = startTime + datetime.timedelta(milliseconds=100)
         odom.update(Angle(math.radians(-2.0)),
                     Angle(math.radians(2.0)),
                     Angle(math.radians(2.0)),
                     Angle(math.radians(-2.0)),
-                    time1 - startTime)
+                    time1)
         self.assertAlmostEqual(0.0, odom.heading().radian())
         self.assertAlmostEqual(distPerDegree * 2.0, odom.y(), delta=3e-6)
         # self.assertAlmostEqual(0.0, odom.y())
