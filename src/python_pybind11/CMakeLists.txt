@@ -31,6 +31,7 @@ pybind11_add_module(math SHARED
   src/Matrix3.cc
   src/Matrix4.cc
   src/Matrix6.cc
+  src/MecanumDriveOdometry.cc
   src/MovingWindowFilter.cc
   src/PID.cc
   src/Polynomial3.cc
@@ -124,6 +125,7 @@ if (BUILD_TESTING)
     Matrix3_TEST
     Matrix4_TEST
     Matrix6_TEST
+    MecanumDriveOdometry_TEST
     MovingWindowFilter_TEST
     OrientedBox_TEST
     PID_TEST
