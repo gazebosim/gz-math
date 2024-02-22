@@ -423,7 +423,7 @@ namespace graph
     /// \return A map of edges, where keys are Ids and values are
     /// references to the edges. An empty map is returned when the provided
     /// vertex does not exist, or when there are no outgoing edges.
-    public: const EdgeRef_M<EdgeType> IncidentsFrom(const VertexId &_vertex)
+    public: EdgeRef_M<EdgeType> IncidentsFrom(const VertexId &_vertex)
       const
     {
       EdgeRef_M<EdgeType> res;
@@ -448,7 +448,7 @@ namespace graph
     /// \return A map of edges, where keys are Ids and values are
     /// references to the edges. An empty map is returned when the provided
     /// vertex does not exist, or when there are no outgoing edges.
-    public: const EdgeRef_M<EdgeType> IncidentsFrom(
+    public: EdgeRef_M<EdgeType> IncidentsFrom(
                 const Vertex<V> &_vertex) const
     {
       return this->IncidentsFrom(_vertex.Id());
@@ -459,7 +459,7 @@ namespace graph
     /// \return A map of edges, where keys are Ids and values are
     /// references to the edges. An empty map is returned when the provided
     /// vertex does not exist, or when there are no incoming edges.
-    public: const EdgeRef_M<EdgeType> IncidentsTo(
+    public: EdgeRef_M<EdgeType> IncidentsTo(
                 const VertexId &_vertex) const
     {
       EdgeRef_M<EdgeType> res;
@@ -484,7 +484,7 @@ namespace graph
     /// \return A map of edges, where keys are Ids and values are
     /// references to the edges. An empty map is returned when the provided
     /// vertex does not exist, or when there are no incoming edges.
-    public: const EdgeRef_M<EdgeType> IncidentsTo(const Vertex<V> &_vertex)
+    public: EdgeRef_M<EdgeType> IncidentsTo(const Vertex<V> &_vertex)
       const
     {
       return this->IncidentsTo(_vertex.Id());
@@ -673,6 +673,19 @@ namespace graph
     /// \return A reference to the edge with Id = _id or NullEdge if
     /// not found.
     public: const EdgeType &EdgeFromId(const EdgeId &_id) const
+    {
+      auto iter = this->edges.find(_id);
+      if (iter == this->edges.end())
+        return EdgeType::NullEdge;
+
+      return iter->second;
+    }
+
+    /// \brief Get a mutable reference to an edge using its Id.
+    /// \param[in] _id The Id of the edge.
+    /// \return A mutable reference to the edge with Id = _id or NullEdge if
+    /// not found.
+    public: EdgeType &EdgeFromId(const EdgeId &_id)
     {
       auto iter = this->edges.find(_id);
       if (iter == this->edges.end())
