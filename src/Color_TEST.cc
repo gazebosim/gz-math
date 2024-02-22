@@ -433,3 +433,25 @@ TEST(Color, HSV)
   EXPECT_NEAR(clr.B(), 0.3f, 1e-3);
   EXPECT_NEAR(clr.A(), 1.0, 1e-3);
 }
+// Added a unit test below :
+TEST(Color, OperatorIndex){
+  // Test the operator[] implimentation
+  math::Color clr;
+  clr[0]=o.1f;
+  clr[1]=o.2f;
+  clr[2]=o.3f;
+  clr[3]=o.4f;
+
+  EXPECT_FLOAT_EQ(clr[0], 0.1f);
+  EXPECT_FLOAT_EQ(clr[1], 0.2f);
+  EXPECT_FLOAT_EQ(clr[2], 0.3f);
+  EXPECT_FLOAT_EQ(clr[3], 0.4f);
+
+  // Test modifying through the const operator[]
+  const math::Color constClr = clr;
+  EXPECT_FLOAT_EQ(constClr[0], 0.1f);
+  EXPECT_FLOAT_EQ(constClr[1], 0.2f);
+  EXPECT_FLOAT_EQ(constClr[2], 0.3f);
+  EXPECT_FLOAT_EQ(constClr[3], 0.4f);
+
+}

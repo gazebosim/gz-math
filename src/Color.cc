@@ -187,7 +187,7 @@ void Color::SetFromYUV(const float _y, const float _u, const float _v)
 }
 
 //////////////////////////////////////////////////
-float Color::operator[](const unsigned int _index)
+float &Color::operator[](const unsigned int _index)
 {
   return (*static_cast<const Color *>(this))[_index];
 }
