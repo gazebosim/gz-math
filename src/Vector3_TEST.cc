@@ -576,3 +576,19 @@ TEST(Vector3dTest, OperatorStreamOut)
   stream << std::setprecision(1) << std::fixed << v;
   EXPECT_EQ(stream.str(), "0.1 1.2 2.3");
 }
+
+TEST(Vector3dTest, OperatorLessThan) {
+    math::Vector3d vec1(1.0, 2.0, 3.0);
+    math::Vector3d vec2(1.0, 2.0, 4.0);
+
+    // Test the less than operator
+    EXPECT_TRUE(vec1 < vec2);
+    EXPECT_FALSE(vec2 < vec1);
+    EXPECT_FALSE(vec1 < vec1);
+
+    // Additional test for asymmetric behavior
+    math::Vector3d vec3(1.0, 2.0, 2.0);
+    math::Vector3d vec4(1.0, 2.0, 4.0);
+    EXPECT_TRUE(vec3 < vec4);
+    EXPECT_FALSE(vec4 < vec3);
+}
