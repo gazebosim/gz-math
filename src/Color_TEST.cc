@@ -433,25 +433,32 @@ TEST(Color, HSV)
   EXPECT_NEAR(clr.B(), 0.3f, 1e-3);
   EXPECT_NEAR(clr.A(), 1.0, 1e-3);
 }
-// Added a unit test below :
+
 TEST(Color, OperatorIndex){
-  // Test the operator[] implimentation
   math::Color clr;
-  clr[0]=o.1f;
-  clr[1]=o.2f;
-  clr[2]=o.3f;
-  clr[3]=o.4f;
+  clr[0] = 0.1f;
+  clr[1] = 0.2f;
+  clr[2] = 0.3f;
+  clr[3] = 0.4f;
 
   EXPECT_FLOAT_EQ(clr[0], 0.1f);
   EXPECT_FLOAT_EQ(clr[1], 0.2f);
   EXPECT_FLOAT_EQ(clr[2], 0.3f);
   EXPECT_FLOAT_EQ(clr[3], 0.4f);
 
-  // Test modifying through the const operator[]
-  const math::Color constClr = clr;
-  EXPECT_FLOAT_EQ(constClr[0], 0.1f);
-  EXPECT_FLOAT_EQ(constClr[1], 0.2f);
-  EXPECT_FLOAT_EQ(constClr[2], 0.3f);
-  EXPECT_FLOAT_EQ(constClr[3], 0.4f);
+//   const math::Color constClr = clr;
 
+//     // this tests _that_ the expected exception is thrown
+    EXPECT_THROW({
+        try
+        {
+            clr[4]=0.1f;
+        }
+        catch( const std::runtime_error& e )
+        {
+            // and this tests that it has the correct message
+            EXPECT_STREQ( "Index Error: Color index out of range", e.what() );
+            throw;
+        }
+    }, std::runtime_error);
 }

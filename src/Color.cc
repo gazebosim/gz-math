@@ -16,6 +16,7 @@
  */
 #include <cmath>
 #include <algorithm>
+#include<iostream>
 
 #include "gz/math/Color.hh"
 
@@ -187,13 +188,28 @@ void Color::SetFromYUV(const float _y, const float _u, const float _v)
 }
 
 //////////////////////////////////////////////////
-const float &Color::operator[](const unsigned int _index)
+float& Color::operator[](const unsigned int _index)
 {
-  return (*static_cast<const Color *>(this))[_index];
+  switch (_index)
+  {
+    case 0:
+      return this->r;
+    case 1:
+      return this->g;
+    case 2:
+      return this->b;
+    case 3:
+      return this->a;
+    default:
+      break;
+  }
+
+  std::cerr << "Trying to read index " << _index << " of Color"<<std::endl;
+  throw std::runtime_error("Index Error: Color index out of range");
 }
 
 //////////////////////////////////////////////////
-float Color::operator[](const unsigned int _index) const
+const float& Color::operator[](const unsigned int _index) const
 {
   switch (_index)
   {
