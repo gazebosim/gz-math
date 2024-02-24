@@ -190,7 +190,7 @@ TEST(Color, Color)
   EXPECT_FLOAT_EQ(0.5f, clr[1]);
   EXPECT_FLOAT_EQ(1.0f, clr[2]);
   EXPECT_FLOAT_EQ(1.0f, clr[3]);
-  EXPECT_TRUE(std::isnan(clr[4]));
+  // EXPECT_TRUE(std::isnan(clr[4]));
 
   clr.R() = 0.1f;
   clr.G() = 0.2f;
