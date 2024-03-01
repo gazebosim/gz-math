@@ -423,7 +423,7 @@ namespace graph
     /// \return A map of edges, where keys are Ids and values are
     /// references to the edges. An empty map is returned when the provided
     /// vertex does not exist, or when there are no outgoing edges.
-    public: EdgeRef_M<EdgeType> IncidentsFrom(const VertexId &_vertex)
+    public: const EdgeRef_M<EdgeType> IncidentsFrom(const VertexId &_vertex)
       const
     {
       EdgeRef_M<EdgeType> res;
@@ -448,7 +448,7 @@ namespace graph
     /// \return A map of edges, where keys are Ids and values are
     /// references to the edges. An empty map is returned when the provided
     /// vertex does not exist, or when there are no outgoing edges.
-    public: EdgeRef_M<EdgeType> IncidentsFrom(
+    public: const EdgeRef_M<EdgeType> IncidentsFrom(
                 const Vertex<V> &_vertex) const
     {
       return this->IncidentsFrom(_vertex.Id());
@@ -459,7 +459,7 @@ namespace graph
     /// \return A map of edges, where keys are Ids and values are
     /// references to the edges. An empty map is returned when the provided
     /// vertex does not exist, or when there are no incoming edges.
-    public: EdgeRef_M<EdgeType> IncidentsTo(
+    public: const EdgeRef_M<EdgeType> IncidentsTo(
                 const VertexId &_vertex) const
     {
       EdgeRef_M<EdgeType> res;
@@ -484,7 +484,7 @@ namespace graph
     /// \return A map of edges, where keys are Ids and values are
     /// references to the edges. An empty map is returned when the provided
     /// vertex does not exist, or when there are no incoming edges.
-    public: EdgeRef_M<EdgeType> IncidentsTo(const Vertex<V> &_vertex)
+    public: const EdgeRef_M<EdgeType> IncidentsTo(const Vertex<V> &_vertex)
       const
     {
       return this->IncidentsTo(_vertex.Id());
