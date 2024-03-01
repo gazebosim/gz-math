@@ -204,7 +204,7 @@ float& Color::operator[](const unsigned int _index)
       break;
   }
 
-  std::cerr << "Trying to read index " << _index << " of Color"<<std::endl;
+  std::cerr << "Trying to read index " << _index << " of Color" << std::endl;
   throw std::runtime_error("Index Error: Color index out of range");
 }
 

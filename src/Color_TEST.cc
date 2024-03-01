@@ -452,7 +452,7 @@ TEST(Color, OperatorIndex){
     EXPECT_THROW({
         try
         {
-            clr[4]=0.1f;
+            clr[4] = 0.1f;
         }
         catch( const std::runtime_error& e )
         {
