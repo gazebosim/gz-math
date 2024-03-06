@@ -190,7 +190,7 @@ TEST(Color, Color)
   EXPECT_FLOAT_EQ(0.5f, clr[1]);
   EXPECT_FLOAT_EQ(1.0f, clr[2]);
   EXPECT_FLOAT_EQ(1.0f, clr[3]);
-  // EXPECT_TRUE(std::isnan(clr[4]));
+  EXPECT_TRUE(std::isnan(clr[4]));
 
   clr.R() = 0.1f;
   clr.G() = 0.2f;
@@ -445,20 +445,7 @@ TEST(Color, OperatorIndex){
   EXPECT_FLOAT_EQ(clr[1], 0.2f);
   EXPECT_FLOAT_EQ(clr[2], 0.3f);
   EXPECT_FLOAT_EQ(clr[3], 0.4f);
-
-//   const math::Color constClr = clr;
-
-//     // this tests _that_ the expected exception is thrown
-    EXPECT_THROW({
-        try
-        {
-            clr[4] = 0.1f;
-        }
-        catch( const std::runtime_error& e )
-        {
-            // and this tests that it has the correct message
-            EXPECT_STREQ( "Index Error: Color index out of range", e.what() );
-            throw;
-        }
-    }, std::runtime_error);
+  EXPECT_TRUE(std::isnan(clr[4]));
 }
+
+

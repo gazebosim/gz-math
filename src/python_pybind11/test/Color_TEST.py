@@ -176,7 +176,7 @@ class TestColor(unittest.TestCase):
         self.assertAlmostEqual(0.5, clr[1])
         self.assertAlmostEqual(1.0, clr[2])
         self.assertAlmostEqual(1.0, clr[3])
-        # self.assertTrue(math.isnan(clr[4]))
+        self.assertTrue(math.isnan(clr[4]))
 
         clr.set(0.1, 0.2, 0.3, 0.4)
         clr = clr + 0.2
