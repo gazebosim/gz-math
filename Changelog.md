@@ -1,5 +1,46 @@
 ## Gazebo Math 7.x
 
+### Gazebo Math 7.4.0 (2024-03-14)
+
+1. Added MecanumDriveOdometry Python wrapper
+    * [Pull request #549](https://github.com/gazebosim/gz-math/pull/549)
+
+1. Update CI badges in README
+    * [Pull request #571](https://github.com/gazebosim/gz-math/pull/571)
+
+1. Infrastructure
+    * [Pull request #569](https://github.com/gazebosim/gz-math/pull/569)
+
+1. Suppress warnings on MSVC
+    * [Pull request #564](https://github.com/gazebosim/gz-math/pull/564)
+
+1. Remove the use of numeric_limits in appendToStream test
+    * [Pull request #553](https://github.com/gazebosim/gz-math/pull/553)
+
+1. Replace CMake Python variables with new ones from FindPython3 module
+    * [Pull request #402](https://github.com/gazebosim/gz-math/pull/402)
+
+1. Fix `Matrix3_TEST.py` on Windows with conda-forge dependencies
+    * [Pull request #561](https://github.com/gazebosim/gz-math/pull/561)
+
+1. Fix small typo cppgetstarted.md
+    * [Pull request #560](https://github.com/gazebosim/gz-math/pull/560)
+
+1. Update Ubuntu Binary installation since apt-key is deprecated
+    * [Pull request #559](https://github.com/gazebosim/gz-math/pull/559)
+
+1. Update file tree in README to point out pybind11
+    * [Pull request #558](https://github.com/gazebosim/gz-math/pull/558)
+
+1. Update tutorial/color.md
+    * [Pull request #557](https://github.com/gazebosim/gz-math/pull/557)
+
+1. ign->gz in README.md
+    * [Pull request #556](https://github.com/gazebosim/gz-math/pull/556)
+
+1. Update example_triangle.md
+    * [Pull request #555](https://github.com/gazebosim/gz-math/pull/555)
+
 ### Gazebo Math 7.3.0 (2023-08-29)
 
 1. Adds a validity check for Sessions created using the `TimeVaryingVolumetricGrid`
