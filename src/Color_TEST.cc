@@ -433,3 +433,19 @@ TEST(Color, HSV)
   EXPECT_NEAR(clr.B(), 0.3f, 1e-3);
   EXPECT_NEAR(clr.A(), 1.0, 1e-3);
 }
+
+TEST(Color, OperatorIndex){
+  math::Color clr;
+  clr[0] = 0.1f;
+  clr[1] = 0.2f;
+  clr[2] = 0.3f;
+  clr[3] = 0.4f;
+
+  EXPECT_FLOAT_EQ(clr[0], 0.1f);
+  EXPECT_FLOAT_EQ(clr[1], 0.2f);
+  EXPECT_FLOAT_EQ(clr[2], 0.3f);
+  EXPECT_FLOAT_EQ(clr[3], 0.4f);
+  EXPECT_TRUE(std::isnan(clr[4]));
+}
+
+

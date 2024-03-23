@@ -16,6 +16,7 @@
  */
 #include <cmath>
 #include <algorithm>
+#include<iostream>
 
 #include "gz/math/Color.hh"
 
@@ -187,13 +188,13 @@ void Color::SetFromYUV(const float _y, const float _u, const float _v)
 }
 
 //////////////////////////////////////////////////
-float Color::operator[](const unsigned int _index)
+float& Color::operator[](const unsigned int _index)
 {
-  return (*static_cast<const Color *>(this))[_index];
+  return (*static_cast<Color *>(this))[_index];
 }
 
 //////////////////////////////////////////////////
-float Color::operator[](const unsigned int _index) const
+const float& Color::operator[](const unsigned int _index) const
 {
   switch (_index)
   {
