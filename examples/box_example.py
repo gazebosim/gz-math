@@ -26,25 +26,25 @@ box = Boxd()
 plane = Planed(Vector3d(0, 0, 1), 0.5)
 
 size = box.size()
-print("Default box size:\nLength: {} Width: {} Height: {}\n".format(size[0], size[1], size[2]))
+print("Default box size:\nLength: {} Width: {} Height: {}".format(size[0], size[1], size[2]))
 
 # Set new size for the box
 box.set_size(4.0, 4.0, 3.0)
 size = box.size()
-print("Updated box size:\nLength: {} Width: {} Height: {}\n".format(size[0], size[1], size[2]))
+print("Updated box size:\nLength: {} Width: {} Height: {}".format(size[0], size[1], size[2]))
 
 # Set the material for the box
-print("Default box material: {}\n".format(box.material().name()))
+print("Default box material: {}".format(box.material().name()))
 wood = Material(MaterialType.WOOD)
 box.set_material(wood)
-print("Updated box material: {}\n".format(box.material().name()))
+print("Updated box material: {}".format(box.material().name()))
 
 # Output the volume of the box
-print("Volume: {}\n".format(box.volume()))
+print("Volume: {}".format(box.volume()))
 
 # Output the mass matrix of the box
 mass_matrix = box.mass_matrix().moi()
-print("\nInertial matrix:")
+print("Inertial matrix:")
 for i in range(3):
     for j in range(3):
         print(mass_matrix(i, j), end=" ")
@@ -52,17 +52,17 @@ for i in range(3):
 
 # Intersection edges of plane in box
 intersection_points = box.intersections(plane)
-print("\nIntersection points:")
+print("Intersection points:")
 for point in intersection_points:
     print("x: {} y: {} z: {}".format(point[0], point[1], point[2]))
 
 # Vertices of the box below the plane
 vertices_below = box.vertices_below(plane)
-print("\nVertices Below:")
+print("Vertices Below:")
 for point in vertices_below:
     print("x: {} y: {} z: {}".format(point[0], point[1], point[2]))
 
 # Center of volume below the plane
 cov = box.center_of_volume_below(plane)
-print("\nCenter of volume below:")
+print("Center of volume below:")
 print("x: {} y: {} z: {}".format(cov[0], cov[1], cov[2]))
