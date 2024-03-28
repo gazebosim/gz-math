@@ -92,20 +92,20 @@ Quaterniond RotationSpline::Interpolate(const unsigned int _fromIndex,
   Quaterniond &q = this->dataPtr->points[_fromIndex+1];
   Quaterniond &a = this->dataPtr->tangents[_fromIndex];
   Quaterniond &b = this->dataPtr->tangents[_fromIndex+1];
-  
+
   Vector3d peu(p.Euler());
   Vector3d qeu(q.Euler());
-  
+
   double diffX = abs(peu.X()-qeu.X());
   double diffY = abs(peu.Y()-qeu.Y());
   double diffZ = abs(peu.Z()-qeu.Z());
-  
+
   // NB interpolate to nearest rotation
-  if ((diffX<0.16) || (diffY<0.16) || (diffZ<0.16))
+  if ((diffX < 0.16) || (diffY < 0.16) || (diffZ < 0.16))
   {
     return Quaterniond::Slerp(_t, p, q, _useShortestPath);
   }
-  else 
+  else
   {
     return Quaterniond::Squad(_t, p, a, b, q, _useShortestPath);
   }
