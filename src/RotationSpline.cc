@@ -90,8 +90,6 @@ Quaterniond RotationSpline::Interpolate(const unsigned int _fromIndex,
   // Use squad using tangents we've already set up
   Quaterniond &p = this->dataPtr->points[_fromIndex];
   Quaterniond &q = this->dataPtr->points[_fromIndex+1];
-  Quaterniond &a = this->dataPtr->tangents[_fromIndex];
-  Quaterniond &b = this->dataPtr->tangents[_fromIndex+1];
 
   Vector3d peu(p.Euler());
   Vector3d qeu(q.Euler());
@@ -107,6 +105,8 @@ Quaterniond RotationSpline::Interpolate(const unsigned int _fromIndex,
   }
   else
   {
+    Quaterniond &a = this->dataPtr->tangents[_fromIndex];
+    Quaterniond &b = this->dataPtr->tangents[_fromIndex+1];
     return Quaterniond::Squad(_t, p, a, b, q, _useShortestPath);
   }
 }
