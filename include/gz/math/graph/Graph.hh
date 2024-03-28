@@ -681,6 +681,19 @@ namespace graph
       return iter->second;
     }
 
+    /// \brief Get a mutable reference to an edge using its Id.
+    /// \param[in] _id The Id of the edge.
+    /// \return A mutable reference to the edge with Id = _id or NullEdge if
+    /// not found.
+    public: EdgeType &EdgeFromId(const EdgeId &_id)
+    {
+      auto iter = this->edges.find(_id);
+      if (iter == this->edges.end())
+        return EdgeType::NullEdge;
+
+      return iter->second;
+    }
+
     /// \brief Stream insertion operator. The output uses DOT graph
     /// description language.
     /// \param[out] _out The output stream.
