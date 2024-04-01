@@ -1,21 +1,28 @@
 load(
     "@gz//bazel/skylark:build_defs.bzl",
-    "GZ_FEATURES",
     "GZ_ROOT",
     "GZ_VISIBILITY",
-    "gz_configure_header",
-    "gz_export_header",
     "gz_include_header",
 )
+
+package(default_applicable_licenses = [GZ_ROOT + "math:license"])
 
 public_headers = glob([
     "include/gz/math/eigen3/*.hh",
 ])
 
+gz_include_header(
+    name = "eigen3_hh_genrule",
+    out = "include/gz/math/eigen3.hh",
+    hdrs = public_headers,
+)
+
 cc_library(
     name = "eigen3",
     srcs = public_headers,
-    hdrs = public_headers,
+    hdrs = public_headers + [
+        "include/gz/math/eigen3.hh",
+    ],
     includes = ["include"],
     visibility = GZ_VISIBILITY,
     deps = [
