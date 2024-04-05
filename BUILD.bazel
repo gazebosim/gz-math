@@ -13,7 +13,7 @@ load(
 )
 load(
     "@rules_license//rules:license.bzl",
-    "license"
+    "license",
 )
 
 package(
@@ -23,8 +23,8 @@ package(
 )
 
 license(
-  name = "license",
-  package_name = "gz-math",
+    name = "license",
+    package_name = "gz-math",
 )
 
 licenses(["notice"])
