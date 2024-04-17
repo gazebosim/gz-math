@@ -368,6 +368,8 @@ TEST(UndirectedGraphTest, AddEdge)
   auto edge = graph.EdgeFromId(e2.Id());
   EXPECT_DOUBLE_EQ(5.0, edge.Data());
   EXPECT_DOUBLE_EQ(6.0, edge.Weight());
+  edge.Data() = 7.0;
+  EXPECT_DOUBLE_EQ(7.0, edge.Data());
 
   // Check that the edges point to the right vertices.
   EXPECT_EQ(0u, e0.Vertices().first);
