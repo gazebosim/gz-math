@@ -99,16 +99,14 @@ endif()
 if (SKIP_PYBIND11)
   message(STATUS "SKIP_PYBIND11 set - disabling python bindings")
 else()
-  include(GzPython)
-  find_package(PythonLibs QUIET)
-  if (NOT PYTHONLIBS_FOUND)
-    GZ_BUILD_WARNING("Python is missing: Python interfaces are disabled.")
-    message (STATUS "Searching for Python - not found.")
+  find_package(Python3 REQUIRED
+    COMPONENTS Interpreter
+    OPTIONAL_COMPONENTS Development
+  )
+  if (NOT Python3_Development_FOUND)
+    GZ_BUILD_WARNING("Python development libraries are missing: Python interfaces are disabled.")
   else()
-    message (STATUS "Searching for Python - found version ${PYTHONLIBS_VERSION_STRING}.")
-
     set(PYBIND11_PYTHON_VERSION 3)
-    find_package(Python3 QUIET COMPONENTS Interpreter Development)
     find_package(pybind11 2.2 QUIET)
 
     if (${pybind11_FOUND})
