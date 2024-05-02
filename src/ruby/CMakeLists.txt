@@ -44,11 +44,7 @@ if (RUBY_FOUND)
 
   # Create the ruby library
   set(CMAKE_SWIG_OUTDIR "${CMAKE_BINARY_DIR}/lib/ruby")
-  if(CMAKE_VERSION VERSION_GREATER 3.8.0)
-    SWIG_ADD_LIBRARY(${SWIG_RB_LIB} LANGUAGE ruby SOURCES ruby.i ${swig_i_files})
-  else()
-    SWIG_ADD_MODULE(${SWIG_RB_LIB} ruby ruby.i ${swig_i_files})
-  endif()
+  SWIG_ADD_LIBRARY(${SWIG_RB_LIB} LANGUAGE ruby SOURCES ruby.i ${swig_i_files})
 
   # Suppress warnings on SWIG-generated files
   target_compile_options(${SWIG_RB_LIB} PRIVATE
