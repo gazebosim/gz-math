@@ -19,6 +19,7 @@
 #include "Box.hh"
 #include "Capsule.hh"
 #include "Color.hh"
+#include "Cone.hh"
 #include "Cylinder.hh"
 #include "DiffDriveOdometry.hh"
 #include "Ellipsoid.hh"
@@ -164,6 +165,8 @@ PYBIND11_MODULE(BINDINGS_MODULE_NAME, m)
   gz::math::python::defineMathMassMatrix3(m, "MassMatrix3");
 
   gz::math::python::defineMathSphere<double>(m, "Sphered");
+
+  gz::math::python::defineMathCone<double>(m, "Coned");
 
   gz::math::python::defineMathCylinder<double>(m, "Cylinderd");
 

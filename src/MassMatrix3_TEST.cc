@@ -832,6 +832,57 @@ TEST(MassMatrix3dTest, EquivalentBox)
 }
 
 /////////////////////////////////////////////////
+TEST(MassMatrix3dTest, SetFromConeZ)
+{
+  const math::Quaterniond q0 = math::Quaterniond::Identity;
+
+  // Default mass matrix with non-positive inertia
+  {
+    math::MassMatrix3d m;
+
+    // input is all zeros, so SetFromConeZ should fail
+    EXPECT_FALSE(m.SetFromConeZ(0, 0, 0, q0));
+    EXPECT_FALSE(m.SetFromConeZ(0, 0, q0));
+
+    // even if some parameters are valid, none should be set if they
+    // are not all valid
+    EXPECT_FALSE(m.SetFromConeZ(1, 0, 0, q0));
+    EXPECT_FALSE(m.SetFromConeZ(1, 1, 0, q0));
+    EXPECT_FALSE(m.SetFromConeZ(1, 0, 1, q0));
+    EXPECT_DOUBLE_EQ(m.Mass(), 0.0);
+  }
+
+  // unit cone with mass 1.0
+  {
+    const double mass = 1.0;
+    const double length = 1.0;
+    const double radius = 0.5;
+    math::MassMatrix3d m;
+    EXPECT_TRUE(m.SetFromConeZ(mass, length, radius, q0));
+
+    double ixx = (3.0 / 80.0) * mass * (4.0 * std::pow(radius, 2) +
+                  std::pow(length, 2));
+    double iyy = ixx;
+    double izz = (3.0 / 10.0) * mass * std::pow(radius, 2);
+    const math::Vector3d ixxyyzz(ixx, iyy, izz);
+    EXPECT_EQ(m.DiagonalMoments(), ixxyyzz);
+    EXPECT_EQ(m.OffDiagonalMoments(), math::Vector3d::Zero);
+
+    double density = mass / (GZ_PI * radius * radius * length);
+    math::Material mat(density);
+    EXPECT_DOUBLE_EQ(density, mat.Density());
+    math::MassMatrix3d m1;
+    EXPECT_FALSE(m1.SetFromConeZ(math::Material(0), length, radius));
+    EXPECT_TRUE(m1.SetFromConeZ(mat, length, radius));
+    EXPECT_EQ(m, m1);
+
+    // double the length and radius
+    EXPECT_TRUE(m.SetFromConeZ(mass, 2*length, 2*radius, q0));
+    EXPECT_EQ(m.DiagonalMoments(), 4*ixxyyzz);
+  }
+}
+
+/////////////////////////////////////////////////
 TEST(MassMatrix3dTest, SetFromCylinderZ)
 {
   const math::Quaterniond q0 = math::Quaterniond::Identity;
