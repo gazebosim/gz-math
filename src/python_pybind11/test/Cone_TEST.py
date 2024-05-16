@@ -18,7 +18,7 @@ import math
 import unittest
 
 import gz
-from gz.math7 import Coned, MassMatrix3d, Material, Quaterniond
+from gz.math8 import Coned, MassMatrix3d, Material, Quaterniond
 
 
 class TestCone(unittest.TestCase):
@@ -56,14 +56,14 @@ class TestCone(unittest.TestCase):
         self.assertEqual(cone, cone2)
 
         # Length, radius, mat and rot constructor
-        cone = Coned(1.0, 2.0, Material(gz.math7.MaterialType.WOOD),
+        cone = Coned(1.0, 2.0, Material(gz.math8.MaterialType.WOOD),
                              Quaterniond(0.1, 0.2, 0.3))
         self.assertEqual(1.0, cone.length())
         self.assertEqual(2.0, cone.radius())
         self.assertEqual(Quaterniond(0.1, 0.2, 0.3), cone.rotational_offset())
-        self.assertEqual(Material(gz.math7.MaterialType.WOOD), cone.mat())
+        self.assertEqual(Material(gz.math8.MaterialType.WOOD), cone.mat())
 
-        cone2 = Coned(1.0, 2.0, Material(gz.math7.MaterialType.WOOD),
+        cone2 = Coned(1.0, 2.0, Material(gz.math8.MaterialType.WOOD),
                               Quaterniond(0.1, 0.2, 0.3))
         self.assertEqual(cone, cone2)
 
@@ -77,12 +77,12 @@ class TestCone(unittest.TestCase):
         cone.set_length(100.1)
         cone.set_radius(.123)
         cone.set_rotational_offset(Quaterniond(1.2, 2.3, 3.4))
-        cone.set_mat(Material(gz.math7.MaterialType.PINE))
+        cone.set_mat(Material(gz.math8.MaterialType.PINE))
 
         self.assertEqual(100.1, cone.length())
         self.assertEqual(.123, cone.radius())
         self.assertEqual(Quaterniond(1.2, 2.3, 3.4), cone.rotational_offset())
-        self.assertEqual(Material(gz.math7.MaterialType.PINE), cone.mat())
+        self.assertEqual(Material(gz.math8.MaterialType.PINE), cone.mat())
 
     def test_volume_and_density(self):
         mass = 1.0
