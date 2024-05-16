@@ -57,8 +57,8 @@ namespace gz
       /// \param[in] _radius Radius of the cone.
       /// \param[in] _rotOffset Rotational offset of the cone.
       public: Cone(const Precision _length, const Precision _radius,
-                  const Quaternion<Precision> &_rotOffset =
-                  Quaternion<Precision>::Identity);
+                   const Quaternion<Precision> &_rotOffset =
+                   Quaternion<Precision>::Identity);
 
       /// \brief Construct a cone with a length, radius, material and
       /// optionally a rotational offset.
@@ -67,9 +67,9 @@ namespace gz
       /// \param[in] _mat Material property for the cone.
       /// \param[in] _rotOffset Rotational offset of the cone.
       public: Cone(const Precision _length, const Precision _radius,
-                  const Material &_mat,
-                  const Quaternion<Precision> &_rotOffset =
-                  Quaternion<Precision>::Identity);
+                   const Material &_mat,
+                   const Quaternion<Precision> &_rotOffset =
+                   Quaternion<Precision>::Identity);
 
       /// \brief Get the radius in meters.
       /// \return The radius of the cone in meters.
@@ -95,7 +95,7 @@ namespace gz
       public: Quaternion<Precision> RotationalOffset() const;
 
       /// \brief Set the rotation offset.
-      /// \param[in] _rotOffset
+      /// \param[in] _rotOffset rotational offset quaternion.
       /// See Quaternion<Precision> RotationalOffset() for details on the
       /// rotational offset.
       /// \sa Quaternion<Precision> RotationalOffset() const

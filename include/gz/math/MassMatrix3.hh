@@ -18,6 +18,7 @@
 #define GZ_MATH_MASSMATRIX3_HH_
 
 #include <algorithm>
+#include <cmath>
 #include <limits>
 #include <string>
 #include <vector>
@@ -939,9 +940,9 @@ namespace gz
       /// \param[in] _rot Rotational offset of equivalent cone.
       /// \return True if inertial properties were set successfully.
       public: bool SetFromConeZ(const Material &_mat,
-                                    const T _length,
-                                    const T _radius,
-                            const Quaternion<T> &_rot = Quaternion<T>::Identity)
+                                const T _length,
+                                const T _radius,
+                                const Quaternion<T> &_rot = Quaternion<T>::Identity)
       {
         // Check that density, _radius and _length are strictly positive
         // and that quaternion is valid
@@ -963,9 +964,9 @@ namespace gz
       /// \param[in] _rot Rotational offset of equivalent cone.
       /// \return True if inertial properties were set successfully.
       public: bool SetFromConeZ(const T _mass,
-                                    const T _length,
-                                    const T _radius,
-                            const Quaternion<T> &_rot = Quaternion<T>::Identity)
+                                const T _length,
+                                const T _radius,
+                                const Quaternion<T> &_rot = Quaternion<T>::Identity)
       {
         // Check that _mass, _radius and _length are strictly positive
         // and that quaternion is valid
@@ -985,8 +986,8 @@ namespace gz
       /// \param[in] _rot Rotational offset of equivalent cone.
       /// \return True if inertial properties were set successfully.
       public: bool SetFromConeZ(const T _length,
-                                    const T _radius,
-                                    const Quaternion<T> &_rot)
+                                const T _radius,
+                                const Quaternion<T> &_rot)
       {
         // Check that _mass and _size are strictly positive
         // and that quaternion is valid
