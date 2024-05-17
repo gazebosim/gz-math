@@ -942,7 +942,8 @@ namespace gz
       public: bool SetFromConeZ(const Material &_mat,
                                 const T _length,
                                 const T _radius,
-                                const Quaternion<T> &_rot = Quaternion<T>::Identity)
+                                const Quaternion<T> &_rot =
+                                Quaternion<T>::Identity)
       {
         // Check that density, _radius and _length are strictly positive
         // and that quaternion is valid
@@ -966,7 +967,8 @@ namespace gz
       public: bool SetFromConeZ(const T _mass,
                                 const T _length,
                                 const T _radius,
-                                const Quaternion<T> &_rot = Quaternion<T>::Identity)
+                                const Quaternion<T> &_rot =
+                                Quaternion<T>::Identity)
       {
         // Check that _mass, _radius and _length are strictly positive
         // and that quaternion is valid
