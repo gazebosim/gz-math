@@ -868,7 +868,7 @@ TEST(MassMatrix3dTest, SetFromConeZ)
     EXPECT_EQ(m.DiagonalMoments(), ixxyyzz);
     EXPECT_EQ(m.OffDiagonalMoments(), math::Vector3d::Zero);
 
-    double density = mass / (GZ_PI * radius * radius * length);
+    double density = mass / (GZ_PI * radius * radius * length / 3.0);
     math::Material mat(density);
     EXPECT_DOUBLE_EQ(density, mat.Density());
     math::MassMatrix3d m1;
