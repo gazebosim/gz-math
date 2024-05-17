@@ -144,7 +144,7 @@ template<typename T>
 T Cone<T>::Volume() const
 {
   return GZ_PI * std::pow(this->radius, 2) *
-         this->length;
+         this->length / 3.0;
 }
 
 //////////////////////////////////////////////////

@@ -87,7 +87,7 @@ class TestCone(unittest.TestCase):
     def test_volume_and_density(self):
         mass = 1.0
         cone = Coned(1.0, 0.001)
-        expectedVolume = (math.pi * math.pow(0.001, 2) * 1.0)
+        expectedVolume = (math.pi * math.pow(0.001, 2) * 1.0 / 3.0)
         self.assertEqual(expectedVolume, cone.volume())
 
         expectedDensity = mass / expectedVolume

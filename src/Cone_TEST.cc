@@ -107,7 +107,7 @@ TEST(ConeTest, VolumeAndDensity)
 {
   double mass = 1.0;
   math::Coned cone(1.0, 0.001);
-  double expectedVolume = (GZ_PI * std::pow(0.001, 2) * 1.0);
+  double expectedVolume = (GZ_PI * std::pow(0.001, 2) * 1.0 / 3.0);
   EXPECT_DOUBLE_EQ(expectedVolume, cone.Volume());
 
   double expectedDensity = mass / expectedVolume;

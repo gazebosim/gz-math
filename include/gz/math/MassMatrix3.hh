@@ -952,7 +952,7 @@ namespace gz
         {
           return false;
         }
-        T volume = GZ_PI * _radius * _radius * _length;
+        T volume = GZ_PI * _radius * _radius * _length / 3.0;
         return this->SetFromConeZ(_mat.Density() * volume,
                                       _length, _radius, _rot);
       }
