@@ -34,6 +34,7 @@ constexpr T GZ_MASSMATRIX3_DEFAULT_TOLERANCE = T(10);
 #define GZ_SQRT2 1.41421356237309504880
 
 #define GZ_SPHERE_VOLUME(_radius) (4.0 * GZ_PI * std::pow(_radius, 3)/3.0)
+#define GZ_CONE_VOLUME(_r, _l) (_l * GZ_PI * std::pow(_r, 2) / 3.0)
 #define GZ_CYLINDER_VOLUME(_r, _l) (_l * GZ_PI * std::pow(_r, 2))
 #define GZ_BOX_VOLUME(_x, _y, _z) (_x *_y * _z)
 #define GZ_BOX_VOLUME_V(_v) (_v.X() *_v.Y() * _v.Z())

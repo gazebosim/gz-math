@@ -118,6 +118,7 @@ if (BUILD_TESTING)
     Box_TEST
     Capsule_TEST
     Color_TEST
+    Cone_TEST
     Cylinder_TEST
     DiffDriveOdometry_TEST
     Ellipsoid_TEST

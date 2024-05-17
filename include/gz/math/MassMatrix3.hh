@@ -18,6 +18,7 @@
 #define GZ_MATH_MASSMATRIX3_HH_
 
 #include <algorithm>
+#include <cmath>
 #include <limits>
 #include <string>
 #include <vector>
@@ -926,6 +927,85 @@ namespace gz
         L(0, 0) = this->mass / 12.0 * (y2 + z2);
         L(1, 1) = this->mass / 12.0 * (z2 + x2);
         L(2, 2) = this->mass / 12.0 * (x2 + y2);
+        Matrix3<T> R(_rot);
+        return this->SetMoi(R * L * R.Transposed());
+      }
+
+      /// \brief Set inertial properties based on a Material and equivalent
+      /// cone aligned with Z axis.
+      /// \param[in] _mat Material that specifies a density. Uniform density
+      /// is used.
+      /// \param[in] _length Length of cone along Z axis.
+      /// \param[in] _radius Radius of cone.
+      /// \param[in] _rot Rotational offset of equivalent cone.
+      /// \return True if inertial properties were set successfully.
+      public: bool SetFromConeZ(const Material &_mat,
+                                const T _length,
+                                const T _radius,
+                                const Quaternion<T> &_rot =
+                                Quaternion<T>::Identity)
+      {
+        // Check that density, _radius and _length are strictly positive
+        // and that quaternion is valid
+        if (_mat.Density() <= 0 || _length <= 0 || _radius <= 0 ||
+            _rot == Quaternion<T>::Zero)
+        {
+          return false;
+        }
+        T volume = GZ_PI * _radius * _radius * _length / 3.0;
+        return this->SetFromConeZ(_mat.Density() * volume,
+                                      _length, _radius, _rot);
+      }
+
+      /// \brief Set inertial properties based on mass and equivalent cone
+      /// aligned with Z axis.
+      /// \param[in] _mass Mass to set.
+      /// \param[in] _length Length of cone along Z axis.
+      /// \param[in] _radius Radius of cone.
+      /// \param[in] _rot Rotational offset of equivalent cone.
+      /// \return True if inertial properties were set successfully.
+      public: bool SetFromConeZ(const T _mass,
+                                const T _length,
+                                const T _radius,
+                                const Quaternion<T> &_rot =
+                                Quaternion<T>::Identity)
+      {
+        // Check that _mass, _radius and _length are strictly positive
+        // and that quaternion is valid
+        if (_mass <= 0 || _length <= 0 || _radius <= 0 ||
+            _rot == Quaternion<T>::Zero)
+        {
+          return false;
+        }
+        this->SetMass(_mass);
+        return this->SetFromConeZ(_length, _radius, _rot);
+      }
+
+      /// \brief Set inertial properties based on equivalent cone
+      /// aligned with Z axis using the current mass value.
+      /// \param[in] _length Length of cone along Z axis.
+      /// \param[in] _radius Radius of cone.
+      /// \param[in] _rot Rotational offset of equivalent cone.
+      /// \return True if inertial properties were set successfully.
+      public: bool SetFromConeZ(const T _length,
+                                const T _radius,
+                                const Quaternion<T> &_rot)
+      {
+        // Check that _mass and _size are strictly positive
+        // and that quaternion is valid
+        if (this->Mass() <= 0 || _length <= 0 || _radius <= 0 ||
+            _rot == Quaternion<T>::Zero)
+        {
+          return false;
+        }
+
+        // Diagonal matrix L with principal moments
+        T radius2 = std::pow(_radius, 2);
+        Matrix3<T> L;
+        L(0, 0) = 3.0 * this->mass * (4.0 * radius2 +
+                  std::pow(_length, 2)) / 80.0;
+        L(1, 1) = L(0, 0);
+        L(2, 2) = 3.0 * this->mass * radius2 / 10.0;
         Matrix3<T> R(_rot);
         return this->SetMoi(R * L * R.Transposed());
       }
