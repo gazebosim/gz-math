@@ -73,9 +73,10 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 endif()
 
 if(USE_SYSTEM_PATHS_FOR_PYTHON_INSTALLATION)
-  # Get install variable from Python3 module
-  # Python3_SITEARCH is available from 3.12 on, workaround if needed:
-  find_package(Python3 COMPONENTS Interpreter)
+  if(NOT Python3_SITEARCH)
+    # Get install variable from Python3 module
+    find_package(Python3 COMPONENTS Interpreter)
+  endif()
 
   if(USE_DIST_PACKAGES_FOR_PYTHON)
     string(REPLACE "site-packages" "dist-packages" GZ_PYTHON_INSTALL_PATH ${Python3_SITEARCH})
