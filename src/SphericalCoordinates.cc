@@ -548,18 +548,8 @@ Vector3d SphericalCoordinates::PositionTransform(
   // Convert whatever arrives to a more flexible ECEF coordinate
   switch (_in)
   {
-    // East, North, Up (ENU), note no break at end of case
+    // East, North, Up (ENU)
     case LOCAL:
-      {
-        tmp.X(-_pos.X() * this->dataPtr->cosHea + _pos.Y() *
-            this->dataPtr->sinHea);
-        tmp.Y(-_pos.X() * this->dataPtr->sinHea - _pos.Y() *
-            this->dataPtr->cosHea);
-        tmp = this->dataPtr->origin + this->dataPtr->rotGlobalToECEF * tmp;
-        break;
-      }
-
-    case LOCAL2:
       {
         tmp.X(_pos.X() * this->dataPtr->cosHea + _pos.Y() *
             this->dataPtr->sinHea);
@@ -634,7 +624,6 @@ Vector3d SphericalCoordinates::PositionTransform(
 
     // Convert from ECEF TO LOCAL
     case LOCAL:
-    case LOCAL2:
       tmp = this->dataPtr->rotECEFToGlobal * (tmp - this->dataPtr->origin);
 
       tmp = Vector3d(
@@ -674,13 +663,6 @@ Vector3d SphericalCoordinates::VelocityTransform(
   {
     // ENU
     case LOCAL:
-      tmp.X(-_vel.X() * this->dataPtr->cosHea + _vel.Y() *
-            this->dataPtr->sinHea);
-      tmp.Y(-_vel.X() * this->dataPtr->sinHea - _vel.Y() *
-            this->dataPtr->cosHea);
-      tmp = this->dataPtr->rotGlobalToECEF * tmp;
-      break;
-    case LOCAL2:
       tmp.X(_vel.X() * this->dataPtr->cosHea + _vel.Y() *
             this->dataPtr->sinHea);
       tmp.Y(-_vel.X() * this->dataPtr->sinHea + _vel.Y() *
@@ -714,7 +696,6 @@ Vector3d SphericalCoordinates::VelocityTransform(
 
     // Convert from ECEF to local
     case LOCAL:
-    case LOCAL2:
       tmp = this->dataPtr->rotECEFToGlobal * tmp;
       tmp = Vector3d(
           tmp.X() * this->dataPtr->cosHea - tmp.Y() * this->dataPtr->sinHea,

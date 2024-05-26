@@ -311,22 +311,22 @@ class TestSphericalCoordinates(unittest.TestCase):
         enu = Vector3d()
 
         xyz.set(1, 0, 0)
-        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL2, SphericalCoordinates.GLOBAL)
+        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL, SphericalCoordinates.GLOBAL)
         self.assertEqual(xyz, enu)
         self.assertEqual(xyz, sc.local_from_global_velocity(enu))
 
         xyz.set(0, 1, 0)
-        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL2, SphericalCoordinates.GLOBAL)
+        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL, SphericalCoordinates.GLOBAL)
         self.assertEqual(xyz, enu)
         self.assertEqual(xyz, sc.local_from_global_velocity(enu))
 
         xyz.set(1, -1, 0)
-        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL2, SphericalCoordinates.GLOBAL)
+        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL, SphericalCoordinates.GLOBAL)
         self.assertEqual(xyz, enu)
         self.assertEqual(xyz, sc.local_from_global_velocity(enu))
 
         xyz.set(2243.52334, 556.35, 435.6553)
-        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL2, SphericalCoordinates.GLOBAL)
+        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL, SphericalCoordinates.GLOBAL)
         self.assertEqual(xyz, enu)
         self.assertEqual(xyz, sc.local_from_global_velocity(enu))
 
@@ -541,17 +541,13 @@ class TestSphericalCoordinates(unittest.TestCase):
             local = sc.local_from_global_velocity(global_var)
             self.assertEqual(global_var, local)
 
-            # This function is broken for horizontal velocities
             global_var = sc.global_from_local_velocity(local)
-            if abs(global_var.z()) < 0.1:
-                self.assertNotEqual(global_var, local)
-            else:
-                self.assertEqual(global_var, local)
+            self.assertEqual(global_var, local)
 
-            # Directly call fixed version
+            # Directly call velocity_transform
             global_var = sc.velocity_transform(
                 local,
-                SphericalCoordinates.LOCAL2,
+                SphericalCoordinates.LOCAL,
                 SphericalCoordinates.GLOBAL)
             self.assertEqual(global_var, local)
 
@@ -619,7 +615,7 @@ class TestSphericalCoordinates(unittest.TestCase):
             # Directly call fixed version
             globalRes = sc.velocity_transform(
                 local,
-                SphericalCoordinates.LOCAL2,
+                SphericalCoordinates.LOCAL,
                 SphericalCoordinates.GLOBAL)
             self.assertEqual(global_var, globalRes)
 
@@ -631,42 +627,42 @@ class TestSphericalCoordinates(unittest.TestCase):
         elev = 354.1
         sc = SphericalCoordinates(st, lat, lon, elev, heading)
 
-        # GLOBAL <-> LOCAL2
+        # GLOBAL <-> LOCAL
         in_vector = Vector3d(1, 2, -4)
         out = sc.velocity_transform(
             in_vector,
-            SphericalCoordinates.LOCAL2,
+            SphericalCoordinates.LOCAL,
             SphericalCoordinates.GLOBAL)
         self.assertNotEqual(in_vector, out)
         reverse = sc.velocity_transform(
             out,
             SphericalCoordinates.GLOBAL,
-            SphericalCoordinates.LOCAL2)
+            SphericalCoordinates.LOCAL)
         self.assertEqual(in_vector, reverse)
 
         in_vector = Vector3d(1, 2, -4)
         out = sc.position_transform(
             in_vector,
-            SphericalCoordinates.LOCAL2,
+            SphericalCoordinates.LOCAL,
             SphericalCoordinates.GLOBAL)
         self.assertNotEqual(in_vector, out)
         reverse = sc.position_transform(
             out,
             SphericalCoordinates.GLOBAL,
-            SphericalCoordinates.LOCAL2)
+            SphericalCoordinates.LOCAL)
         self.assertEqual(in_vector, reverse)
 
-        # SPHERICAL <-> LOCAL2
+        # SPHERICAL <-> LOCAL
         in_vector = Vector3d(1, 2, -4)
         out = sc.position_transform(
             in_vector,
-            SphericalCoordinates.LOCAL2,
+            SphericalCoordinates.LOCAL,
             SphericalCoordinates.SPHERICAL)
         self.assertNotEqual(in_vector, out)
         reverse = sc.position_transform(
             out,
             SphericalCoordinates.SPHERICAL,
-            SphericalCoordinates.LOCAL2)
+            SphericalCoordinates.LOCAL)
         self.assertEqual(in_vector, reverse)
 
 

@@ -66,12 +66,7 @@ namespace gz
                 GLOBAL = 3,
 
                 /// \brief Heading-adjusted tangent plane (X, Y, Z)
-                /// This has kept a bug for backwards compatibility, use
-                /// LOCAL2 for the correct behaviour.
-                LOCAL = 4,
-
-                /// \brief Heading-adjusted tangent plane (X, Y, Z)
-                LOCAL2 = 5
+                LOCAL = 4
               };
 
       /// \brief Constructor.
@@ -106,12 +101,6 @@ namespace gz
       /// \brief Convert a Cartesian position vector to geodetic coordinates.
       /// This performs a `PositionTransform` from LOCAL to SPHERICAL.
       ///
-      /// There's a known bug with this computation that can't be fixed on
-      /// version 6 to avoid behaviour changes. Directly call
-      /// `PositionTransform(_xyz, LOCAL2, SPHERICAL)` for correct results.
-      /// Note that `PositionTransform` returns spherical coordinates in
-      /// radians.
-      ///
       /// \param[in] _xyz Cartesian position vector in the heading-adjusted
       /// world frame.
       /// \return Cooordinates: geodetic latitude (deg), longitude (deg),
@@ -122,10 +111,6 @@ namespace gz
       /// \brief Convert a Cartesian velocity vector in the local frame
       ///        to a global Cartesian frame with components East, North, Up.
       /// This is a wrapper around `VelocityTransform(_xyz, LOCAL, GLOBAL)`
-      ///
-      /// There's a known bug with this computation that can't be fixed on
-      /// version 6 to avoid behaviour changes. Directly call
-      /// `VelocityTransform(_xyz, LOCAL2, GLOBAL)` for correct results.
       ///
       /// \param[in] _xyz Cartesian velocity vector in the heading-adjusted
       /// world frame.

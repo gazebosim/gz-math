@@ -51,12 +51,7 @@ namespace gz
                 GLOBAL = 3,
 
                 /// \brief Heading-adjusted tangent plane (X, Y, Z)
-                /// This has kept a bug for backwards compatibility, use
-                /// LOCAL2 for the correct behaviour.
-                LOCAL = 4,
-
-                /// \brief Heading-adjusted tangent plane (X, Y, Z)
-                LOCAL2 = 5
+                LOCAL = 4
               };
 
       public: SphericalCoordinates();

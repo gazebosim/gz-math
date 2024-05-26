@@ -360,28 +360,28 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
 
       xyz.Set(1, 0, 0);
       enu = sc.VelocityTransform(xyz,
-        math::SphericalCoordinates::LOCAL2,
+        math::SphericalCoordinates::LOCAL,
         math::SphericalCoordinates::GLOBAL);
       EXPECT_EQ(xyz, enu);
       EXPECT_EQ(xyz, sc.LocalFromGlobalVelocity(enu));
 
       xyz.Set(0, 1, 0);
       enu = sc.VelocityTransform(xyz,
-        math::SphericalCoordinates::LOCAL2,
+        math::SphericalCoordinates::LOCAL,
         math::SphericalCoordinates::GLOBAL);
       EXPECT_EQ(xyz, enu);
       EXPECT_EQ(xyz, sc.LocalFromGlobalVelocity(enu));
 
       xyz.Set(1, -1, 0);
       enu = sc.VelocityTransform(xyz,
-        math::SphericalCoordinates::LOCAL2,
+        math::SphericalCoordinates::LOCAL,
         math::SphericalCoordinates::GLOBAL);
       EXPECT_EQ(xyz, enu);
       EXPECT_EQ(xyz, sc.LocalFromGlobalVelocity(enu));
 
       xyz.Set(2243.52334, 556.35, 435.6553);
       enu = sc.VelocityTransform(xyz,
-        math::SphericalCoordinates::LOCAL2,
+        math::SphericalCoordinates::LOCAL,
         math::SphericalCoordinates::GLOBAL);
       EXPECT_EQ(xyz, enu);
       EXPECT_EQ(xyz, sc.LocalFromGlobalVelocity(enu));
@@ -641,20 +641,12 @@ TEST(SphericalCoordinatesTest, NoHeading)
     auto local = sc.LocalFromGlobalVelocity(global);
     EXPECT_EQ(global, local);
 
-    // This function is broken for horizontal velocities
     global = sc.GlobalFromLocalVelocity(local);
-    if (abs(global.Z()) < 0.1)
-    {
-      EXPECT_NE(global, local);
-    }
-    else
-    {
-      EXPECT_EQ(global, local);
-    }
+    EXPECT_EQ(global, local);
 
-    // Directly call fixed version
+    // Directly call VelocityTransform
     global = sc.VelocityTransform(local,
-        math::SphericalCoordinates::LOCAL2,
+        math::SphericalCoordinates::LOCAL,
         math::SphericalCoordinates::GLOBAL);
     EXPECT_EQ(global, local);
   }
@@ -734,7 +726,7 @@ TEST(SphericalCoordinatesTest, WithHeading)
 
     // Directly call fixed version
     auto globalRes = sc.VelocityTransform(local,
-        math::SphericalCoordinates::LOCAL2,
+        math::SphericalCoordinates::LOCAL,
         math::SphericalCoordinates::GLOBAL);
     EXPECT_EQ(global, globalRes);
   }
@@ -748,41 +740,41 @@ TEST(SphericalCoordinatesTest, Inverse)
   double elev = 354.1;
   math::SphericalCoordinates sc(st, lat, lon, elev, heading);
 
-  // GLOBAL <-> LOCAL2
+  // GLOBAL <-> LOCAL
   {
     math::Vector3d in(1, 2, -4);
     auto out = sc.VelocityTransform(in,
-        math::SphericalCoordinates::LOCAL2,
+        math::SphericalCoordinates::LOCAL,
         math::SphericalCoordinates::GLOBAL);
     EXPECT_NE(in, out);
     auto reverse = sc.VelocityTransform(out,
         math::SphericalCoordinates::GLOBAL,
-        math::SphericalCoordinates::LOCAL2);
+        math::SphericalCoordinates::LOCAL);
     EXPECT_EQ(in, reverse);
   }
 
   {
     math::Vector3d in(1, 2, -4);
     auto out = sc.PositionTransform(in,
-        math::SphericalCoordinates::LOCAL2,
+        math::SphericalCoordinates::LOCAL,
         math::SphericalCoordinates::GLOBAL);
     EXPECT_NE(in, out);
     auto reverse = sc.PositionTransform(out,
         math::SphericalCoordinates::GLOBAL,
-        math::SphericalCoordinates::LOCAL2);
+        math::SphericalCoordinates::LOCAL);
     EXPECT_EQ(in, reverse);
   }
 
-  // SPHERICAL <-> LOCAL2
+  // SPHERICAL <-> LOCAL
   {
     math::Vector3d in(1, 2, -4);
     auto out = sc.PositionTransform(in,
-        math::SphericalCoordinates::LOCAL2,
+        math::SphericalCoordinates::LOCAL,
         math::SphericalCoordinates::SPHERICAL);
     EXPECT_NE(in, out);
     auto reverse = sc.PositionTransform(out,
         math::SphericalCoordinates::SPHERICAL,
-        math::SphericalCoordinates::LOCAL2);
+        math::SphericalCoordinates::LOCAL);
     EXPECT_EQ(in, reverse);
   }
 }
