@@ -147,7 +147,6 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
        .value("ECEF", Class::CoordinateType::ECEF)
        .value("GLOBAL", Class::CoordinateType::GLOBAL)
        .value("LOCAL", Class::CoordinateType::LOCAL)
-       .value("LOCAL2", Class::CoordinateType::LOCAL2)
        .export_values();
    py::enum_<Class::SurfaceType>(sphericalCoordinates, "SurfaceType")
        .value("EARTH_WGS84", Class::SurfaceType::EARTH_WGS84)

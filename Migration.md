@@ -5,6 +5,12 @@ Deprecated code produces compile-time warnings. These warning serve as
 notification to users that their code should be upgraded. The next major
 release will remove the deprecated code.
 
+## Gazebo Math 7.X to 8.X
+
+### Breaking Changes
+
+  1. Removed `SphericalCoordinates::CoordinateType::LOCAL2` enum value and fixed the behavior of `LOCAL` coordinates. This might result in some computations using `SphericalCoordinates` to output a value that is rotated 180 degrees in heading.
+
 ## Gazebo Math 6.X to 7.X
 
 ### Breaking Changes
