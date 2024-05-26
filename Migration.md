@@ -5,6 +5,13 @@ Deprecated code produces compile-time warnings. These warning serve as
 notification to users that their code should be upgraded. The next major
 release will remove the deprecated code.
 
+## Gazebo Math 7.X to 8.X
+
+### Breaking Changes
+
+  1. `SphericalCoordinates::PositionTransform()` now uses degrees for `SPHERICAL` frame instead of radians (both for input and output coordinates).
+     This change was made so that its output is consistent with `SphericalFromLocal` etc.
+
 ## Gazebo Math 6.X to 7.X
 
 ### Breaking Changes
