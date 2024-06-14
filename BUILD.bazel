@@ -1,25 +1,20 @@
-load(
-    "@gz//bazel/skylark:build_defs.bzl",
-    "GZ_FEATURES",
-    "GZ_ROOT",
-    "GZ_VISIBILITY",
-    "gz_configure_header",
-    "gz_export_header",
-    "gz_include_header",
-)
-load(
-    "@gz//bazel/lint:lint.bzl",
-    "add_lint_tests",
-)
+load("@buildifier_prebuilt//:rules.bzl", "buildifier", "buildifier_test")
+load("@rules_gz//gz:headers.bzl", "gz_configure_header", "gz_export_header", "gz_include_header")
+load("@rules_license//rules:license.bzl", "license")
 
 package(
-    default_visibility = GZ_VISIBILITY,
-    features = GZ_FEATURES,
+    default_applicable_licenses = [":license"],
 )
 
-licenses(["notice"])  # Apache-2.0
+license(
+    name = "license",
+    package_name = "gz-math",
+)
 
-exports_files(["LICENSE"])
+exports_files([
+    "LICENSE",
+    "MODULE.bazel",
+])
 
 gz_configure_header(
     name = "config",
@@ -49,11 +44,11 @@ sources = glob(
 )
 
 gz_include_header(
-    name = "mathhh_genrule",
+    name = "math_hh_genrule",
     out = "include/gz/math.hh",
     hdrs = public_headers_no_gen + [
-        "include/gz/math/config.hh",
         "include/gz/math/Export.hh",
+        "include/gz/math/config.hh",
     ],
 )
 
@@ -64,15 +59,18 @@ public_headers = public_headers_no_gen + [
 ]
 
 cc_library(
-    name = "math",
+    name = "gz-math",
     srcs = sources + private_headers,
     hdrs = public_headers,
+    copts = ["-fexceptions"],
     includes = ["include"],
+    visibility = ["//visibility:public"],
     deps = [
-        GZ_ROOT + "utils",
+        "@gz-utils",
     ],
 )
 
+# Tests
 test_sources = glob(
     [
         "src/*_TEST.cc",
@@ -84,10 +82,24 @@ test_sources = glob(
     name = src.replace("/", "_").replace(".cc", "").replace("src_", ""),
     srcs = [src],
     deps = [
-        ":math",
-        "@gtest",
-        "@gtest//:gtest_main",
+        ":gz-math",
+        "@googletest//:gtest_main",
     ],
 ) for src in test_sources]
 
-add_lint_tests()
+# Bazel linting
+buildifier(
+    name = "buildifier.fix",
+    exclude_patterns = ["./.git/*"],
+    lint_mode = "fix",
+    mode = "fix",
+)
+
+buildifier_test(
+    name = "buildifier.test",
+    exclude_patterns = ["./.git/*"],
+    lint_mode = "warn",
+    mode = "diff",
+    no_sandbox = True,
+    workspace = "//:MODULE.bazel",
+)

@@ -1,0 +1,15 @@
+## MODULE.bazel
+module(
+    name = "gz-math",
+    repo_name = "org_gazebosim_gz-math",
+)
+
+bazel_dep(name = "buildifier_prebuilt", version = "6.1.2")
+bazel_dep(name = "googletest", version = "1.14.0")
+bazel_dep(name = "rules_license", version = "0.0.8")
+
+bazel_dep(name = "eigen", version = "3.4.0")
+
+# Gazebo dependencies
+bazel_dep(name = "rules_gz")
+bazel_dep(name = "gz-utils")

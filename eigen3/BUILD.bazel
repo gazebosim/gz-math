@@ -1,26 +1,35 @@
-load(
-    "@gz//bazel/skylark:build_defs.bzl",
-    "GZ_FEATURES",
-    "GZ_ROOT",
-    "GZ_VISIBILITY",
-    "gz_configure_header",
-    "gz_export_header",
-    "gz_include_header",
+load("@rules_gz//gz:headers.bzl", "gz_include_header")
+load("@rules_license//rules:license.bzl", "license")
+
+package(
+    default_applicable_licenses = [":license"],
+)
+
+license(
+    name = "license",
+    package_name = "gz-math-eigen3",
 )
 
 public_headers = glob([
     "include/gz/math/eigen3/*.hh",
 ])
 
+gz_include_header(
+    name = "eigen3_hh_genrule",
+    out = "include/gz/math/eigen3.hh",
+    hdrs = public_headers,
+)
+
 cc_library(
     name = "eigen3",
     srcs = public_headers,
-    hdrs = public_headers,
+    hdrs = public_headers + [
+        "include/gz/math/eigen3.hh",
+    ],
     includes = ["include"],
-    visibility = GZ_VISIBILITY,
     deps = [
-        GZ_ROOT + "math",
-        "@eigen3",
+        "//:gz-math",
+        "@eigen",
     ],
 )
 
@@ -35,7 +44,6 @@ test_sources = glob(
     srcs = [src],
     deps = [
         ":eigen3",
-        "@gtest",
-        "@gtest//:gtest_main",
+        "@googletest//:gtest_main",
     ],
 ) for src in test_sources]
