@@ -67,6 +67,11 @@ constexpr T IGN_MASSMATRIX3_DEFAULT_TOLERANCE = T(10);
 /// \param[in] _radius Sphere radius
 #define GZ_SPHERE_VOLUME(_radius) (4.0*GZ_PI*std::pow(_radius, 3)/3.0)
 
+/// \brief Compute cone volume
+/// \param[in] _r Cone base radius
+/// \param[in] _l Cone length
+#define GZ_CONE_VOLUME(_r, _l) (_l * GZ_PI * std::pow(_r, 2) / 3.0)
+
 /// \brief Compute cylinder volume
 /// \param[in] _r Cylinder base radius
 /// \param[in] _l Cylinder length
