@@ -1,5 +1,25 @@
 ## Gazebo Math 7.x
 
+### Gazebo Math 7.5.0 (2024-06-18)
+
+1. Backport: Adding cone primitives.
+    * [Pull request #594](https://github.com/gazebosim/gz-math/pull/594)
+
+1. Enable 24.04 CI on harmonic
+    * [Pull request #590](https://github.com/gazebosim/gz-math/pull/590)
+
+1. Add package.xml
+    * [Pull request #581](https://github.com/gazebosim/gz-math/pull/581)
+
+1. bazel: correctly export license
+    * [Pull request #586](https://github.com/gazebosim/gz-math/pull/586)
+
+1. Add missing eigen3.hh header for bazel build
+    * [Pull request #585](https://github.com/gazebosim/gz-math/pull/585)
+
+1. Expose non-const reference to edges
+    * [Pull request #580](https://github.com/gazebosim/gz-math/pull/580)
+
 ### Gazebo Math 7.4.0 (2024-03-14)
 
 1. Added MecanumDriveOdometry Python wrapper
