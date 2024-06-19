@@ -1,6 +1,6 @@
 # Gazebo Math : Math classes and functions for robot applications
 
-**Maintainer:** nate AT openrobotics DOT org
+**Maintainer:** scpeters AT openrobotics DOT org
 
 [![GitHub open issues](https://img.shields.io/github/issues-raw/gazebosim/gz-math.svg)](https://github.com/gazebosim/gz-math/issues)
 [![GitHub open pull requests](https://img.shields.io/github/issues-pr-raw/gazebosim/gz-math.svg)](https://github.com/gazebosim/gz-math/pulls)
@@ -9,10 +9,10 @@
 
 Build | Status
 -- | --
-Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-math/branch/gz-math8/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-math/branch/gz-math8)
-Ubuntu Focal  | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_math-ci-gz-math8-focal-amd64)](https://build.osrfoundation.org/job/ignition_math-ci-gz-math8-focal-amd64)
-Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_math-ci-gz-math8-homebrew-amd64)](https://build.osrfoundation.org/job/ignition_math-ci-gz-math8-homebrew-amd64)
-Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ign_math-ci-win)](https://build.osrfoundation.org/job/ign_math-ci-win)
+Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-math/branch/main/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-math/branch/main)
+Ubuntu Noble  | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_math-ci-main-noble-amd64)](https://build.osrfoundation.org/job/gz_math-ci-main-noble-amd64)
+Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_math-ci-main-homebrew-amd64)](https://build.osrfoundation.org/job/gz_math-ci-main-homebrew-amd64)
+Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_math-main-win)](https://build.osrfoundation.org/job/gz_math-main-win)
 
 Gazebo Math, a component of [Gazebo](https://gazebosim.org), provides general purpose math
 classes and functions designed for robotic applications.

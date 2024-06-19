@@ -1,10 +1,3 @@
-if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
-  # pybind11 logic for setting up a debug build when both a debug and release
-  # python interpreter are present in the system seems to be pretty much broken.
-  # This works around the issue.
-  set(PYTHON_LIBRARIES "${PYTHON_DEBUG_LIBRARIES}")
-endif()
-
 message(STATUS "Building pybind11 interfaces")
 set(BINDINGS_MODULE_NAME "math${PROJECT_VERSION_MAJOR}")
 # Split from main extension and converted to pybind11
@@ -29,6 +22,7 @@ pybind11_add_module(${BINDINGS_MODULE_NAME} MODULE
   src/Matrix3.cc
   src/Matrix4.cc
   src/Matrix6.cc
+  src/MecanumDriveOdometry.cc
   src/MovingWindowFilter.cc
   src/PID.cc
   src/Polynomial3.cc
@@ -137,6 +131,7 @@ if (BUILD_TESTING)
     Matrix3_TEST
     Matrix4_TEST
     Matrix6_TEST
+    MecanumDriveOdometry_TEST
     MovingWindowFilter_TEST
     OrientedBox_TEST
     PID_TEST

@@ -11,13 +11,23 @@ load(
     "@gz//bazel/lint:lint.bzl",
     "add_lint_tests",
 )
+load(
+    "@rules_license//rules:license.bzl",
+    "license",
+)
 
 package(
+    default_applicable_licenses = [GZ_ROOT + "math:license"],
     default_visibility = GZ_VISIBILITY,
     features = GZ_FEATURES,
 )
 
-licenses(["notice"])  # Apache-2.0
+license(
+    name = "license",
+    package_name = "gz-math",
+)
+
+licenses(["notice"])
 
 exports_files(["LICENSE"])
 
