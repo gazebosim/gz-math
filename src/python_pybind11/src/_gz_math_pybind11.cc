@@ -37,6 +37,7 @@
 #include "Matrix3.hh"
 #include "Matrix4.hh"
 #include "Matrix6.hh"
+#include "MecanumDriveOdometry.hh"
 #include "MovingWindowFilter.hh"
 #include "OrientedBox.hh"
 #include "PID.hh"
@@ -151,6 +152,8 @@ PYBIND11_MODULE(BINDINGS_MODULE_NAME, m)
   gz::math::python::defineMathMatrix4(m, "Matrix4");
 
   gz::math::python::defineMathMatrix6(m, "Matrix6");
+
+  gz::math::python::defineMathMecanumDriveOdometry(m, "MecanumDriveOdometry");
 
   gz::math::python::defineMathTriangle(m, "Triangle");
 
