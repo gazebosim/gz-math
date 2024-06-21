@@ -262,13 +262,14 @@ class TestSphericalCoordinates(unittest.TestCase):
         # > -1510.88 3766.64 (EAST,NORTH)
         vec = Vector3d(-1510.88, 3766.64, -3.29)
 
-        # Convert degrees to radians
-        osrf_s.x(osrf_s.x() * 0.0174532925)
-        osrf_s.y(osrf_s.y() * 0.0174532925)
+        osrf_s_lat = Angle()
+        osrf_s_lon = Angle()
+        osrf_s_lat.set_degree(osrf_s.x())
+        osrf_s_lon.set_degree(osrf_s.y())
 
         # Set the ORIGIN to be the Open Source Robotics Foundation
-        sc2 = SphericalCoordinates(st, Angle(osrf_s.x()),
-                                   Angle(osrf_s.y()), osrf_s.z(), Angle.ZERO)
+        sc2 = SphericalCoordinates(st, osrf_s_lat, osrf_s_lon, osrf_s.z(),
+                                   Angle.ZERO)
 
         # Check that SPHERICAL -> ECEF works
         tmp = sc2.position_transform(osrf_s, SphericalCoordinates.SPHERICAL,

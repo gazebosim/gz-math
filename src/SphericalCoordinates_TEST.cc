@@ -304,13 +304,13 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
       // > -1510.88 3766.64 (EAST,NORTH)
       math::Vector3d vec(-1510.88, 3766.64, -3.29);
 
-      // Convert degrees to radians
-      osrf_s.X() *= 0.0174532925;
-      osrf_s.Y() *= 0.0174532925;
+      math::Angle osrf_s_lat;
+      math::Angle osrf_s_lon;
+      osrf_s_lat.SetDegree(osrf_s.X());
+      osrf_s_lon.SetDegree(osrf_s.Y());
 
       // Set the ORIGIN to be the Open Source Robotics Foundation
-      math::SphericalCoordinates sc2(st, math::Angle(osrf_s.X()),
-          math::Angle(osrf_s.Y()), osrf_s.Z(),
+      math::SphericalCoordinates sc2(st, osrf_s_lat, osrf_s_lon, osrf_s.Z(),
           math::Angle::Zero);
 
       // Check that SPHERICAL -> ECEF works

@@ -377,21 +377,14 @@ void SphericalCoordinates::SetHeadingOffset(const Angle &_angle)
 Vector3d SphericalCoordinates::SphericalFromLocalPosition(
     const Vector3d &_xyz) const
 {
-  Vector3d result =
-    this->PositionTransform(_xyz, LOCAL, SPHERICAL);
-  result.X(GZ_RTOD(result.X()));
-  result.Y(GZ_RTOD(result.Y()));
-  return result;
+  return this->PositionTransform(_xyz, LOCAL, SPHERICAL);
 }
 
 //////////////////////////////////////////////////
 Vector3d SphericalCoordinates::LocalFromSphericalPosition(
     const Vector3d &_xyz) const
 {
-  Vector3d result = _xyz;
-  result.X(GZ_DTOR(result.X()));
-  result.Y(GZ_DTOR(result.Y()));
-  return this->PositionTransform(result, SPHERICAL, LOCAL);
+  return this->PositionTransform(_xyz, SPHERICAL, LOCAL);
 }
 
 //////////////////////////////////////////////////
@@ -520,8 +513,8 @@ void SphericalCoordinates::UpdateTransformationMatrix()
 
   // Cache the ECEF coordinate of the origin
   this->dataPtr->origin = Vector3d(
-    this->dataPtr->latitudeReference.Radian(),
-    this->dataPtr->longitudeReference.Radian(),
+    this->dataPtr->latitudeReference.Degree(),
+    this->dataPtr->longitudeReference.Degree(),
     this->dataPtr->elevationReference);
   this->dataPtr->origin =
     this->PositionTransform(this->dataPtr->origin, SPHERICAL, ECEF);
@@ -535,10 +528,12 @@ Vector3d SphericalCoordinates::PositionTransform(
   Vector3d tmp = _pos;
 
   // Cache trig results
-  double cosLat = cos(_pos.X());
-  double sinLat = sin(_pos.X());
-  double cosLon = cos(_pos.Y());
-  double sinLon = sin(_pos.Y());
+  const double latRad = GZ_DTOR(_pos.X());
+  const double lonRad = GZ_DTOR(_pos.Y());
+  double cosLat = cos(latRad);
+  double sinLat = sin(latRad);
+  double cosLon = cos(lonRad);
+  double sinLon = sin(lonRad);
 
   // Radius of planet curvature (meters)
   double curvature = 1.0 -
@@ -619,8 +614,8 @@ Vector3d SphericalCoordinates::PositionTransform(
           std::pow(sin(lat), 2);
         nCurvature = this->dataPtr->ellA / sqrt(nCurvature);
 
-        tmp.X(lat);
-        tmp.Y(lon);
+        tmp.X(GZ_RTOD(lat));
+        tmp.Y(GZ_RTOD(lon));
 
         // Now calculate Z
         tmp.Z(p/cos(lat) - nCurvature);

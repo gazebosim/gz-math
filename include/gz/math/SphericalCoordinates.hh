@@ -281,7 +281,7 @@ namespace gz
       public: void UpdateTransformationMatrix();
 
       /// \brief Convert between positions in SPHERICAL/ECEF/LOCAL/GLOBAL frame
-      /// Spherical coordinates use radians, while the other frames use meters.
+      /// Spherical coordinates use degrees, while the other frames use meters.
       /// \param[in] _pos Position vector in frame defined by parameter _in
       /// \param[in] _in  CoordinateType for input
       /// \param[in] _out CoordinateType for output
@@ -290,8 +290,9 @@ namespace gz
               PositionTransform(const gz::math::Vector3d &_pos,
                   const CoordinateType &_in, const CoordinateType &_out) const;
 
-      /// \brief Convert between velocity in SPHERICAL/ECEF/LOCAL/GLOBAL frame
-      /// Spherical coordinates use radians, while the other frames use meters.
+      /// \brief Convert between velocity in ECEF/LOCAL/GLOBAL frame
+      /// Velocity should not be expressed in SPHERICAL frame (such values will
+      /// be passed through). All other frames use meters.
       /// \param[in] _vel Velocity vector in frame defined by parameter _in
       /// \param[in] _in  CoordinateType for input
       /// \param[in] _out CoordinateType for output
