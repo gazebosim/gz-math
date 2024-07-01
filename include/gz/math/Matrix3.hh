@@ -187,19 +187,6 @@ namespace gz::math
     /// \param[in] _xAxis The x axis, the first column of the matrix.
     /// \param[in] _yAxis The y axis, the second column of the matrix.
     /// \param[in] _zAxis The z axis, the third column of the matrix.
-    /// \deprecated Use SetAxes(const Vector3<T> &, const Vector3<T> &,
-    /// const Vector3<T> &,)
-    public: void GZ_DEPRECATED(7) Axes(const Vector3<T> &_xAxis,
-                const Vector3<T> &_yAxis,
-                const Vector3<T> &_zAxis)
-    {
-      this->SetAxes(_xAxis, _yAxis, _zAxis);
-    }
-
-    /// \brief Set the matrix from three axis (1 per column).
-    /// \param[in] _xAxis The x axis, the first column of the matrix.
-    /// \param[in] _yAxis The y axis, the second column of the matrix.
-    /// \param[in] _zAxis The z axis, the third column of the matrix.
     public: void SetAxes(const Vector3<T> &_xAxis,
                          const Vector3<T> &_yAxis,
                          const Vector3<T> &_zAxis)
@@ -209,14 +196,6 @@ namespace gz::math
       this->SetCol(2, _zAxis);
     }
 
-    /// \brief Set as a rotation matrix from an axis and angle.
-    /// \param[in] _axis the axis
-    /// \param[in] _angle ccw rotation around the axis in radians
-    /// \deprecated Use SetFromAxisAngle(const Vector3<T> &, T)
-    public: void GZ_DEPRECATED(7) Axis(const Vector3<T> &_axis, T _angle)
-    {
-      this->SetFromAxisAngle(_axis, _angle);
-    }
 
     /// \brief Set as a rotation matrix from an axis and angle.
     /// \param[in] _axis the axis
@@ -238,19 +217,6 @@ namespace gz::math
       this->data[2][0] = _axis.Z()*_axis.X()*C - _axis.Y()*s;
       this->data[2][1] = _axis.Z()*_axis.Y()*C + _axis.X()*s;
       this->data[2][2] = _axis.Z()*_axis.Z()*C + c;
-    }
-
-    /// \brief Set as a rotation matrix to represent rotation from
-    /// vector _v1 to vector _v2, so that
-    /// _v2.Normalize() == this * _v1.Normalize() holds.
-    ///
-    /// \param[in] _v1 The first vector
-    /// \param[in] _v2 The second vector
-    /// \deprecated Use SetFrom2Axes(const Vector3<T> &, const Vector3<T> &)
-    public: void GZ_DEPRECATED(7) From2Axes(
-                const Vector3<T> &_v1, const Vector3<T> &_v2)
-    {
-      this->SetFrom2Axes(_v1, _v2);
     }
 
     /// \brief Set as a rotation matrix to represent rotation from
@@ -294,16 +260,6 @@ namespace gz::math
       const Vector3<T> cross = _v1.Cross(_v2).Normalize();
 
       this->SetFromAxisAngle(cross, acos(dot));
-    }
-
-    /// \brief Set a column.
-    /// \param[in] _c The colum index [0, 1, 2]. _col is clamped to the
-    /// range [0, 2].
-    /// \param[in] _v The value to set in each row of the column.
-    /// \deprecated Use SetCol(unsigned int _c, const Vector3<T> &_v)
-    public: void GZ_DEPRECATED(7) Col(unsigned int _c, const Vector3<T> &_v)
-    {
-      this->SetCol(_c, _v);
     }
 
     /// \brief Set a column.
