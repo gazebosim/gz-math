@@ -30,7 +30,9 @@ namespace gz
     // Use a steady clock
     // This alias is now deprecated; please use std::chrono::steady_clock
     // directly instead.
-    using clock GZ_DEPRECATED(8) = std::chrono::steady_clock;
+    using clock
+        [[deprecated("As of 8.0, use std::chrono::steady_clock directly.")]]
+        = std::chrono::steady_clock;
 
     // Inline bracket to help doxygen filtering.
     inline namespace GZ_MATH_VERSION_NAMESPACE {
