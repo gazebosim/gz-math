@@ -98,17 +98,7 @@ namespace gz
 
       /// \brief Set the value from an angle in radians.
       /// \param[in] _radian Radian value.
-      /// \deprecated Use void SetRadian(double)
-      public: void GZ_DEPRECATED(7) Radian(double _radian);
-
-      /// \brief Set the value from an angle in radians.
-      /// \param[in] _radian Radian value.
       public: void SetRadian(double _radian);
-
-      /// \brief Set the value from an angle in degrees
-      /// \param[in] _degree Degree value
-      /// \deprecated Use void SetDegree(double)
-      public: void GZ_DEPRECATED(7) Degree(double _degree);
 
       /// \brief Set the value from an angle in degrees
       /// \param[in] _degree Degree value

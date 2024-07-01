@@ -37,49 +37,6 @@ class TestPose3(unittest.TestCase):
         B = Pose3d(Vector3d(1, 0, 0),
                    Quaterniond(0, 0, math.pi/2.0))
 
-        # test hypothesis that if
-        # A is the transform from O to P specified in frame O
-        # B is the transform from P to Q specified in frame P
-        # then, B + A is the transform from O to Q specified in frame O
-        self.assertAlmostEqual((B + A).x(), 1.0 + 1.0/math.sqrt(2))
-        self.assertAlmostEqual((B + A).y(), 1.0/math.sqrt(2))
-        self.assertAlmostEqual((B + A).z(), 0.0)
-        self.assertAlmostEqual((B + A).roll(), 0.0)
-        self.assertAlmostEqual((B + A).pitch(), 0.0)
-        self.assertAlmostEqual((B + A).yaw(), 3.0*math.pi/4.0)
-
-        # If:
-        # A is the transform from O to P in frame O
-        # B is the transform from O to Q in frame O
-        # then -A is transform from P to O specified in frame P
-        self.assertAlmostEqual((Pose3d() - A).x(), -1.0/math.sqrt(2))
-        self.assertAlmostEqual((Pose3d() - A).y(), 1.0/math.sqrt(2))
-        self.assertAlmostEqual((Pose3d() - A).z(), 0.0)
-        self.assertAlmostEqual((Pose3d() - A).roll(),  0.0)
-        self.assertAlmostEqual((Pose3d() - A).pitch(),  0.0)
-        self.assertAlmostEqual((Pose3d() - A).yaw(), -math.pi/4)
-
-        # test negation operator
-        self.assertAlmostEqual((-A).x(), -1.0/math.sqrt(2))
-        self.assertAlmostEqual((-A).y(), 1.0/math.sqrt(2))
-        self.assertAlmostEqual((-A).z(), 0.0)
-        self.assertAlmostEqual((-A).roll(), 0.0)
-        self.assertAlmostEqual((-A).pitch(), 0.0)
-        self.assertAlmostEqual((-A).yaw(), -math.pi/4.0)
-
-        # If:
-        # A is the transform from O to P in frame O
-        # B is the transform from O to Q in frame O
-        # B - A is the transform from P to Q in frame P
-        B = Pose3d(Vector3d(1, 1, 0),
-                   Quaterniond(0, 0, math.pi/2.0))
-        self.assertAlmostEqual((B - A).x(), 1.0/math.sqrt(2))
-        self.assertAlmostEqual((B - A).y(), 1.0/math.sqrt(2))
-        self.assertAlmostEqual((B - A).z(), 0.0)
-        self.assertAlmostEqual((B - A).roll(), 0.0)
-        self.assertAlmostEqual((B - A).pitch(), 0.0)
-        self.assertAlmostEqual((B - A).yaw(), math.pi/4.0)
-
         pose = Pose3d()
         self.assertTrue(pose.pos() == Vector3d(0, 0, 0))
         self.assertTrue(pose.rot() == Quaterniond(0, 0, 0))
@@ -100,17 +57,6 @@ class TestPose3(unittest.TestCase):
         self.assertTrue(pose1.pos() == Vector3d(-1.38368, -3.05541, -4.21306))
         self.assertTrue(pose1.rot() == Quaterniond(0.946281, -0.0933066,
                                                    -0.226566, -0.210984))
-
-        pose = Pose3d(1, 2, 3, .1, .2, .3) + Pose3d(4, 5, 6, .4, .5, .6)
-        self.assertTrue(pose == Pose3d(5.74534, 7.01053, 8.62899,
-                                       0.675732, 0.535753, 1.01174))
-
-        pose += pose
-        self.assertTrue(pose == Pose3d(11.314, 16.0487, 15.2559,
-                                       1.49463, 0.184295, 2.13932))
-
-        pose -= Pose3d(pose)
-        self.assertTrue(pose == Pose3d(0, 0, 0, 0, 0, 0))
 
         pose.pos().set(5, 6, 7)
         pose.rot().set_from_euler(Vector3d(.4, .6, 0))
