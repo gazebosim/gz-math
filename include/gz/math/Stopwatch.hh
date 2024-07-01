@@ -92,7 +92,6 @@ namespace gz::math
     /// elapsed duration and elapsed stop duration.
     public: void Reset();
 
-
     /// \brief Get the amount of time that the stop watch has been
     /// running. This is the total amount of run time, spannning all start
     /// and stop calls. The Reset function or passing true to the Start
@@ -115,6 +114,7 @@ namespace gz::math
     /// \param[in] _watch The watch to compare.
     /// \return True if this watch does not equal the provided watch.
     public: bool operator!=(const Stopwatch &_watch) const;
+
 
     /// \brief Private data pointer.
     GZ_UTILS_IMPL_PTR(dataPtr)
