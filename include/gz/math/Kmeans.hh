@@ -24,62 +24,58 @@
 
 #include <gz/utils/ImplPtr.hh>
 
-namespace gz
+namespace gz::math
 {
-  namespace math
+  // Inline bracket to help doxygen filtering.
+  inline namespace GZ_MATH_VERSION_NAMESPACE {
+
+  /// \class Kmeans Kmeans.hh math/gzmath.hh
+  /// \brief K-Means clustering algorithm. Given a set of observations,
+  /// k-means partitions the observations into k sets so as to minimize the
+  /// within-cluster sum of squares.
+  /// Description based on http://en.wikipedia.org/wiki/K-means_clustering.
+  class GZ_MATH_VISIBLE Kmeans
   {
-    // Inline bracket to help doxygen filtering.
-    inline namespace GZ_MATH_VERSION_NAMESPACE {
+    /// \brief constructor
+    /// \param[in] _obs Set of observations to cluster.
+    public: explicit Kmeans(const std::vector<Vector3d> &_obs);
 
-    /// \class Kmeans Kmeans.hh math/gzmath.hh
-    /// \brief K-Means clustering algorithm. Given a set of observations,
-    /// k-means partitions the observations into k sets so as to minimize the
-    /// within-cluster sum of squares.
-    /// Description based on http://en.wikipedia.org/wiki/K-means_clustering.
-    class GZ_MATH_VISIBLE Kmeans
-    {
-      /// \brief constructor
-      /// \param[in] _obs Set of observations to cluster.
-      public: explicit Kmeans(const std::vector<Vector3d> &_obs);
+    /// \brief Get the observations to cluster.
+    /// \return The vector of observations.
+    public: std::vector<Vector3d> Observations() const;
 
-      /// \brief Get the observations to cluster.
-      /// \return The vector of observations.
-      public: std::vector<Vector3d> Observations() const;
+    /// \brief Set the observations to cluster.
+    /// \param[in] _obs The new vector of observations.
+    /// \return True if the vector is not empty or false otherwise.
+    public: bool Observations(const std::vector<Vector3d> &_obs);
 
-      /// \brief Set the observations to cluster.
-      /// \param[in] _obs The new vector of observations.
-      /// \return True if the vector is not empty or false otherwise.
-      public: bool Observations(const std::vector<Vector3d> &_obs);
+    /// \brief Add observations to the cluster.
+    /// \param[in] _obs Vector of observations.
+    /// \return True if the _obs vector is not empty or false otherwise.
+    public: bool AppendObservations(const std::vector<Vector3d> &_obs);
 
-      /// \brief Add observations to the cluster.
-      /// \param[in] _obs Vector of observations.
-      /// \return True if the _obs vector is not empty or false otherwise.
-      public: bool AppendObservations(const std::vector<Vector3d> &_obs);
+    /// \brief Executes the k-means algorithm.
+    /// \param[in] _k Number of partitions to cluster.
+    /// \param[out] _centroids Vector of centroids. Each element contains the
+    /// centroid of one cluster.
+    /// \param[out] _labels Vector of labels. The size of this vector is
+    /// equals to the number of observations. Each element represents the
+    /// cluster to which observation belongs.
+    /// \return True when the operation succeed or false otherwise. The
+    /// operation will fail if the number of observations is not positive,
+    /// if the number of clusters is non positive, or if the number of
+    /// clusters if greater than the number of observations.
+    public: bool Cluster(int _k,
+                         std::vector<Vector3d> &_centroids,
+                         std::vector<unsigned int> &_labels);
 
-      /// \brief Executes the k-means algorithm.
-      /// \param[in] _k Number of partitions to cluster.
-      /// \param[out] _centroids Vector of centroids. Each element contains the
-      /// centroid of one cluster.
-      /// \param[out] _labels Vector of labels. The size of this vector is
-      /// equals to the number of observations. Each element represents the
-      /// cluster to which observation belongs.
-      /// \return True when the operation succeed or false otherwise. The
-      /// operation will fail if the number of observations is not positive,
-      /// if the number of clusters is non positive, or if the number of
-      /// clusters if greater than the number of observations.
-      public: bool Cluster(int _k,
-                           std::vector<Vector3d> &_centroids,
-                           std::vector<unsigned int> &_labels);
+    /// \brief Given an observation, it returns the closest centroid to it.
+    /// \param[in] _p Point to check.
+    /// \return The index of the closest centroid to the point _p.
+    private: unsigned int ClosestCentroid(const Vector3d &_p) const;
 
-      /// \brief Given an observation, it returns the closest centroid to it.
-      /// \param[in] _p Point to check.
-      /// \return The index of the closest centroid to the point _p.
-      private: unsigned int ClosestCentroid(const Vector3d &_p) const;
-
-      GZ_UTILS_IMPL_PTR(dataPtr)
-    };
-    }
-  }
-}
-
-#endif
+    GZ_UTILS_IMPL_PTR(dataPtr)
+  };
+  }  // namespace GZ_MATH_VERSION_NAMESPACE
+}  // namespace gz::math
+#endif  // GZ_MATH_KMEANS_HH_

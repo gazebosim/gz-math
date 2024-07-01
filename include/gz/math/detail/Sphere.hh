@@ -20,9 +20,7 @@
 #include <optional>
 #include "gz/math/Sphere.hh"
 
-namespace gz
-{
-namespace math
+namespace gz::math
 {
 //////////////////////////////////////////////////
 template<typename T>
@@ -186,6 +184,5 @@ T Sphere<T>::DensityFromMass(const T _mass) const
 
   return _mass / this->Volume();
 }
-}
-}
-#endif
+}  // namespace gz::math
+#endif  // GZ_MATH_DETAIL_SPHERE_HH_
