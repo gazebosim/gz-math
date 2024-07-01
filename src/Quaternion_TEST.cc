@@ -325,16 +325,6 @@ TEST(QuaternionTest, MathAxis)
 {
   math::Quaterniond q(GZ_PI*0.1, GZ_PI*0.5, GZ_PI);
 
-GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
-  // Deprecated in gz-math7
-  q.Axis(0, 1, 0, GZ_PI);
-  EXPECT_EQ(q, math::Quaterniond(6.12303e-17, 0, 1, 0));
-
-  // Deprecated in gz-math7
-  q.Axis(1, 0, 0, GZ_PI);
-  EXPECT_EQ(q, math::Quaterniond(0, 1, 0, 0));
-GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
-
   q.SetFromAxisAngle(0, 1, 0, GZ_PI);
   EXPECT_EQ(q, math::Quaterniond(6.12303e-17, 0, 1, 0));
 
