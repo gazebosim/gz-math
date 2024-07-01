@@ -186,4 +186,4 @@ namespace gz::math
   }  // namespace GZ_MATH_VERSION_NAMESPACE
 }  // namespace gz::math
 #include "gz/math/detail/Cone.hh"
-#endif // GZ_MATH_CONE_HH_
+#endif  // GZ_MATH_CONE_HH_

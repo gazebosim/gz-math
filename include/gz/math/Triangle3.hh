@@ -280,4 +280,4 @@ namespace gz::math
   typedef Triangle3<float> Triangle3f;
   }  // namespace GZ_MATH_VERSION_NAMESPACE
 }  // namespace gz::math
-#endif // GZ_MATH_TRIANGLE3_HH_
+#endif  // GZ_MATH_TRIANGLE3_HH_
