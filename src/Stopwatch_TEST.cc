@@ -21,6 +21,7 @@
 #include "gz/math/Stopwatch.hh"
 
 using namespace gz;
+using steady_clock = std::chrono::steady_clock;
 
 /////////////////////////////////////////////////
 // Helper function that runs a few tests
@@ -42,7 +43,7 @@ void runTimer(math::Stopwatch &_time)
   // The start time should be greater than the stop time.
   EXPECT_GT(_time.StartTime(), _time.StopTime());
   // The elapsed stop time should still be zero.
-  EXPECT_EQ(math::clock::duration::zero(),
+  EXPECT_EQ(steady_clock::duration::zero(),
             _time.ElapsedStopTime());
 
   // Wait for some time...
@@ -98,8 +99,8 @@ TEST(Stopwatch, Constructor)
 
   EXPECT_FALSE(watch.Running());
   EXPECT_EQ(watch.StopTime(), watch.StartTime());
-  EXPECT_EQ(math::clock::duration::zero(), watch.ElapsedRunTime());
-  EXPECT_EQ(math::clock::duration::zero(), watch.ElapsedStopTime());
+  EXPECT_EQ(steady_clock::duration::zero(), watch.ElapsedRunTime());
+  EXPECT_EQ(steady_clock::duration::zero(), watch.ElapsedStopTime());
 
   runTimer(watch);
 
@@ -144,8 +145,8 @@ TEST(Stopwatch, StartStopReset)
 
   EXPECT_FALSE(watch.Running());
   EXPECT_EQ(watch.StopTime(), watch.StartTime());
-  EXPECT_EQ(math::clock::duration::zero(), watch.ElapsedRunTime());
-  EXPECT_EQ(math::clock::duration::zero(), watch.ElapsedStopTime());
+  EXPECT_EQ(steady_clock::duration::zero(), watch.ElapsedRunTime());
+  EXPECT_EQ(steady_clock::duration::zero(), watch.ElapsedStopTime());
 
   runTimer(watch);
 
@@ -154,8 +155,8 @@ TEST(Stopwatch, StartStopReset)
   watch.Start(true);
   EXPECT_TRUE(watch.Running());
   EXPECT_LT(watch.StopTime(), watch.StartTime());
-  EXPECT_NE(math::clock::duration::zero(), watch.ElapsedRunTime());
-  EXPECT_EQ(math::clock::duration::zero(), watch.ElapsedStopTime());
+  EXPECT_NE(steady_clock::duration::zero(), watch.ElapsedRunTime());
+  EXPECT_EQ(steady_clock::duration::zero(), watch.ElapsedStopTime());
 }
 
 /////////////////////////////////////////////////

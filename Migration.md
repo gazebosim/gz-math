@@ -5,6 +5,20 @@ Deprecated code produces compile-time warnings. These warning serve as
 notification to users that their code should be upgraded. The next major
 release will remove the deprecated code.
 
+## Gazebo Math 7.X to 8.X
+
+### Breaking Changes
+
+1. All references to `ignition` have been removed. This includes the `ignition/`
+   header files, the `ignition::` namespaces, and `IGN_*` and `IGNITION_*`
+   macros.
+
+### Deprecations
+
+1. **Stopwatch.hh**
+    + The `math::clock` type alias is deprecated. Please use the underlying type
+      (`std::chrono::steady_clock`) directly.
+
 ## Gazebo Math 6.X to 7.X
 
 ### Breaking Changes

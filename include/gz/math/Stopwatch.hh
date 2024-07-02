@@ -28,7 +28,11 @@ namespace gz
   namespace math
   {
     // Use a steady clock
-    using clock = std::chrono::steady_clock;
+    // This alias is now deprecated; please use std::chrono::steady_clock
+    // directly instead.
+    using clock
+        [[deprecated("As of 8.0, use std::chrono::steady_clock directly.")]]
+        = std::chrono::steady_clock;
 
     // Inline bracket to help doxygen filtering.
     inline namespace GZ_MATH_VERSION_NAMESPACE {
@@ -68,7 +72,7 @@ namespace gz
       /// \return The time when stopwatch was started, or
       /// std::chrono::steady_clock::time_point::min() if the stopwatch
       /// has not been started.
-      public: clock::time_point StartTime() const;
+      public: std::chrono::steady_clock::time_point StartTime() const;
 
       /// \brief Stop the stopwatch
       /// \return True if the stopwatch was stopped. This will return false
@@ -79,7 +83,7 @@ namespace gz
       /// \return The time when stopwatch was last stopped, or
       /// std::chrono::steady_clock::time_point::min() if the stopwatch
       /// has never been stopped.
-      public: clock::time_point StopTime() const;
+      public: std::chrono::steady_clock::time_point StopTime() const;
 
       /// \brief Get whether the stopwatch is running.
       /// \return True if the stopwatch is running.
@@ -94,14 +98,14 @@ namespace gz
       /// and stop calls. The Reset function or passing true to the Start
       /// function will reset this value.
       /// \return Total amount of elapsed run time.
-      public: clock::duration ElapsedRunTime() const;
+      public: std::chrono::steady_clock::duration ElapsedRunTime() const;
 
       /// \brief Get the amount of time that the stop watch has been
       /// stopped. This is the total amount of stop time, spannning all start
       /// and stop calls. The Reset function or passing true to the Start
       /// function will reset this value.
       /// \return Total amount of elapsed stop time.
-      public: clock::duration ElapsedStopTime() const;
+      public: std::chrono::steady_clock::duration ElapsedStopTime() const;
 
       /// \brief Equality operator.
       /// \param[in] _watch The watch to compare.
