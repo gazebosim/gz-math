@@ -21,6 +21,7 @@
 #include <cstdint>
 #include <functional>
 #include <map>
+#include <memory>
 #include <ostream>
 #include <set>
 
@@ -204,9 +205,6 @@ namespace graph
   template<typename E>
   class UndirectedEdge : public Edge<E>
   {
-    /// \brief An invalid undirected edge.
-    public: static UndirectedEdge<E> NullEdge;
-
     /// \brief Constructor.
     /// \param[in] _vertices The vertices of the edge.
     /// \param[in] _data The data stored in the edge.
@@ -256,20 +254,12 @@ namespace graph
     }
   };
 
-  /// \brief An invalid undirected edge.
-  template<typename E>
-  UndirectedEdge<E> UndirectedEdge<E>::NullEdge(
-    VertexId_P(kNullId, kNullId), E(), 1.0, kNullId);
-
   /// \brief A directed edge represents a connection between two vertices.
   /// The connection is unidirectional, it's only possible to traverse the edge
   /// in one direction (from the tail to the head).
   template<typename E>
   class DirectedEdge : public Edge<E>
   {
-    /// \brief An invalid directed edge.
-    public: static DirectedEdge<E> NullEdge;
-
     /// \brief Constructor.
     /// \param[in] _vertices The vertices of the edge.
     /// \param[in] _data The data stored in the edge.
@@ -331,10 +321,14 @@ namespace graph
     }
   };
 
-  /// \brief An invalid directed edge.
-  template<typename E>
-  DirectedEdge<E> DirectedEdge<E>::NullEdge(
-    VertexId_P(kNullId, kNullId), E(), 1.0, kNullId);
+  /// \brief An invalid edge.
+  template<typename E, typename EdgeType>
+  EdgeType &NullEdge()
+  {
+    static auto e = std::make_unique<EdgeType>(
+      VertexId_P(kNullId, kNullId), E(), 1.0, kNullId);
+    return *e;
+  }
 }
 }
 }
