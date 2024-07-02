@@ -18,46 +18,42 @@
 #define GZ_MATH_DETAIL_WELLORDERED_VECTOR_HH_
 #include <gz/math/Vector3.hh>
 
-namespace gz
+namespace gz::math
 {
-  namespace math
+  /// \brief Comparator for well-ordering vectors.
+  template<typename T>
+  struct WellOrderedVectors
   {
-    /// \brief Comparator for well-ordering vectors.
-    template<typename T>
-    struct WellOrderedVectors
+    /// \brief The normal Vector3::operator< is not actually properly ordered.
+    /// It does not form an ordinal set. This leads to various complications.
+    /// To solve this we introduce this function which orders vector3's by
+    /// their X value first, then their Y values and lastly their Z-values.
+    /// \param[in] _a - first vector
+    /// \param[in] _b - second vector
+    /// \return true if _a comes before _b.
+    bool operator() (const Vector3<T>& _a, const Vector3<T>& _b) const
     {
-      /// \brief The normal Vector3::operator< is not actually properly ordered.
-      /// It does not form an ordinal set. This leads to various complications.
-      /// To solve this we introduce this function which orders vector3's by
-      /// their X value first, then their Y values and lastly their Z-values.
-      /// \param[in] _a - first vector
-      /// \param[in] _b - second vector
-      /// \return true if _a comes before _b.
-      bool operator() (const Vector3<T>& _a, const Vector3<T>& _b) const
+      if (_a[0] < _b[0])
       {
-        if (_a[0] < _b[0])
+        return true;
+      }
+      else if (equal<T>(_a[0], _b[0], 1e-3))
+      {
+        if (_a[1] < _b[1])
         {
           return true;
         }
-        else if (equal<T>(_a[0], _b[0], 1e-3))
+        else if (equal<T>(_a[1], _b[1], 1e-3))
         {
-          if (_a[1] < _b[1])
-          {
-            return true;
-          }
-          else if (equal<T>(_a[1], _b[1], 1e-3))
-          {
-            return _a[2] < _b[2];
-          }
-          else
-          {
-            return false;
-          }
+          return _a[2] < _b[2];
         }
-        return false;
+        else
+        {
+          return false;
+        }
       }
-    };
-  }
-}
-
-#endif
+      return false;
+    }
+  };
+}  // namespace gz::math
+#endif  // GZ_MATH_DETAIL_WELLORDERED_VECTOR_HH_

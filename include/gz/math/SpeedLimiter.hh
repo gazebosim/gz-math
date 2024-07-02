@@ -23,12 +23,10 @@
 #include <gz/math/config.hh>
 #include "gz/math/Helpers.hh"
 
-namespace gz
+namespace gz::math
 {
-namespace math
-{
-// Inline bracket to help doxygen filtering.
-inline namespace GZ_MATH_VERSION_NAMESPACE {
+  // Inline bracket to help doxygen filtering.
+  inline namespace GZ_MATH_VERSION_NAMESPACE {
   // Forward declaration.
   class SpeedLimiterPrivate;
 
@@ -142,8 +140,6 @@ inline namespace GZ_MATH_VERSION_NAMESPACE {
 #pragma warning(pop)
 #endif
   };
-  }
-}
-}
-
-#endif
+  }  // namespace GZ_MATH_VERSION_NAMESPACE
+}  // namespace gz::math
+#endif  // GZ_MATH_SYSTEMS_SPEEDLIMITER_HH_

@@ -25,11 +25,8 @@
 #include <utility>
 #include <vector>
 
-namespace gz
+namespace gz::math
 {
-namespace math
-{
-
 /// \brief A grid with interpolation where time can be varied. This class has
 /// no implementation to allow for different strategies.
 /// \sa InMemoryTimeVaryingVolumetricGrid for an example
@@ -179,8 +176,5 @@ class InMemoryTimeVaryingVolumetricGridFactory
   /// Temporary datastore
   private: std::map<T, std::vector<std::pair<Vector3d, V>>> _points;
 };
-
-}
-}
-
-#endif
+}  // namespace gz::math
+#endif  // GZ_MATH_TIME_VARYING_VOLUMETRIC_GRID_HH_

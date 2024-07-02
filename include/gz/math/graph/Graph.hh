@@ -29,9 +29,7 @@
 #include "gz/math/graph/Edge.hh"
 #include "gz/math/graph/Vertex.hh"
 
-namespace gz
-{
-namespace math
+namespace gz::math
 {
 // Inline bracket to help doxygen filtering.
 inline namespace GZ_MATH_VERSION_NAMESPACE {
@@ -815,8 +813,7 @@ namespace graph
   /// \brief A directed graph.
   template<typename V, typename E>
   using DirectedGraph = Graph<V, E, DirectedEdge<E>>;
-}
-}
-}
-}
-#endif
+}  // namespace graph
+}  // namespace GZ_MATH_VERSION_NAMESPACE
+}  // namespace gz::math::graph
+#endif  // GZ_MATH_GRAPH_GRAPH_HH_
