@@ -13,6 +13,8 @@ release will remove the deprecated code.
    header files, the `ignition::` namespaces, and `IGN_*` and `IGNITION_*`
    macros.
 
+1. Deprecated functionality from version 7 has been removed.
+
 ### Deprecations
 
 1. **Stopwatch.hh**
