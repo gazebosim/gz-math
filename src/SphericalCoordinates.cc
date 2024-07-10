@@ -429,19 +429,6 @@ double SphericalCoordinates::DistanceWGS84(const Angle &_latA,
 
 //////////////////////////////////////////////////
 /// Based on Haversine formula (http://en.wikipedia.org/wiki/Haversine_formula).
-double SphericalCoordinates::Distance(const Angle &_latA,
-                                      const Angle &_lonA,
-                                      const Angle &_latB,
-                                      const Angle &_lonB)
-{
-  // LCOV_EXCL_START
-  return SphericalCoordinates::DistanceWGS84(
-      _latA, _lonA, _latB, _lonB);
-  // LCOV_EXCL_STOP
-}
-
-//////////////////////////////////////////////////
-/// Based on Haversine formula (http://en.wikipedia.org/wiki/Haversine_formula).
 /// This takes into account the surface type.
 double SphericalCoordinates::DistanceBetweenPoints(
     const Angle &_latA,

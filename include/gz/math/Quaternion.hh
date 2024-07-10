@@ -295,17 +295,6 @@ namespace gz
         return result;
       }
 
-      /// \brief Set the quaternion from an axis and angle
-      /// \param[in] _ax X axis
-      /// \param[in] _ay Y axis
-      /// \param[in] _az Z axis
-      /// \param[in] _aa Angle in radians
-      /// \deprecated Use SetFromAxisAngle(T, T, T, T)
-      public: void GZ_DEPRECATED(7) Axis(T _ax, T _ay, T _az, T _aa)
-      {
-        this->SetFromAxisAngle(_ax, _ay, _az, _aa);
-      }
-
       /// \brief Set the quaternion from an axis and angle.
       /// \param[in] _ax X axis
       /// \param[in] _ay Y axis
@@ -340,15 +329,6 @@ namespace gz
       /// \brief Set the quaternion from an axis and angle
       /// \param[in] _axis Axis
       /// \param[in] _a Angle in radians
-      /// \deprecated Use SetFromAxisAngle(const Vector3<T> &_axis, T _a)
-      public: void GZ_DEPRECATED(7) Axis(const Vector3<T> &_axis, T _a)
-      {
-        this->SetFromAxisAngle(_axis, _a);
-      }
-
-      /// \brief Set the quaternion from an axis and angle
-      /// \param[in] _axis Axis
-      /// \param[in] _a Angle in radians
       public: void SetFromAxisAngle(const Vector3<T> &_axis, T _a)
       {
         this->SetFromAxisAngle(_axis.X(), _axis.Y(), _axis.Z(), _a);
@@ -371,31 +351,10 @@ namespace gz
       /// is roll, pitch, yaw around a fixed body frame axis
       /// (the original frame of the object before rotation is applied).
       /// Roll is a rotation about x, pitch is about y, yaw is about z.
-      /// \param[in] _vec Euler angle
-      /// \deprecated Use SetFromEuler(const Vector3<T> &)
-      public: void GZ_DEPRECATED(7) Euler(const Vector3<T> &_vec)
-      {
-        this->SetFromEuler(_vec);
-      }
-
-      /// \brief Set the quaternion from Euler angles. The order of operations
-      /// is roll, pitch, yaw around a fixed body frame axis
-      /// (the original frame of the object before rotation is applied).
-      /// Roll is a rotation about x, pitch is about y, yaw is about z.
       /// \param[in] _vec Euler angles in radians.
       public: void SetFromEuler(const Vector3<T> &_vec)
       {
         this->SetFromEuler(_vec.X(), _vec.Y(), _vec.Z());
-      }
-
-      /// \brief Set the quaternion from Euler angles.
-      /// \param[in] _roll Roll angle (radians).
-      /// \param[in] _pitch Pitch angle (radians).
-      /// \param[in] _yaw Yaw angle (radians).
-      /// \deprecated Use SetFromEuler(T, T, T)
-      public: void GZ_DEPRECATED(7) Euler(T _roll, T _pitch, T _yaw)
-      {
-        this->SetFromEuler(_roll, _pitch, _yaw);
       }
 
       /// \brief Set the quaternion from Euler angles.
@@ -531,15 +490,6 @@ namespace gz
         return this->Euler().Z();
       }
 
-      /// \brief Return rotation as axis and angle
-      /// \param[out] _axis rotation axis
-      /// \param[out] _angle ccw angle in radians
-      /// \deprecated Use AxisAngle(Vector3<T> &_axis, T &_angle) const
-      public: void GZ_DEPRECATED(7) ToAxis(Vector3<T> &_axis, T &_angle) const
-      {
-        this->AxisAngle(_axis, _angle);
-      }
-
       /// \brief Convert this quaternion to an axis and angle.
       /// \param[out] _axis Rotation axis.
       /// \param[out] _angle CCW angle in radians.
@@ -557,19 +507,6 @@ namespace gz
           T invLen =  1.0 / sqrt(len);
           _axis.Set(this->qx*invLen, this->qy*invLen, this->qz*invLen);
         }
-      }
-
-      /// \brief Set from a rotation matrix.
-      /// \param[in] _mat rotation matrix (must be orthogonal, the function
-      ///                 doesn't check it)
-      ///
-      /// Implementation inspired by
-      /// http://www.euclideanspace.com/maths/geometry/rotations/
-      /// conversions/matrixToQuaternion/
-      /// \deprecated Use SetFromMatrix(const Matrix3<T>&)
-      public: void GZ_DEPRECATED(7) Matrix(const Matrix3<T> &_mat)
-      {
-        this->SetFromMatrix(_mat);
       }
 
       /// \brief Set from a rotation matrix.
@@ -614,22 +551,6 @@ namespace gz
           qx = (_mat(0, 2) + _mat(2, 0)) * s;
           qy = (_mat(1, 2) + _mat(2, 1)) * s;
         }
-      }
-
-      /// \brief Set this quaternion to represent rotation from
-      /// vector _v1 to vector _v2, so that
-      /// _v2.Normalize() == this * _v1.Normalize() holds.
-      ///
-      /// \param[in] _v1 The first vector.
-      /// \param[in] _v2 The second vector.
-      ///
-      /// Implementation inspired by
-      /// http://stackoverflow.com/a/11741520/1076564
-      /// \deprecated Use SetFrom2Axes(const Vector3<T> &, const Vector3<T> &)
-      public: void GZ_DEPRECATED(7) From2Axes(
-                  const Vector3<T> &_v1, const Vector3<T> &_v2)
-      {
-        this->SetFrom2Axes(_v1, _v2);
       }
 
       /// \brief Set this quaternion to represent rotation from
@@ -1133,25 +1054,9 @@ namespace gz
 
       /// \brief Set the x component.
       /// \param[in] _v The new value for the x quaternion component.
-      /// \deprecated Use SetX(T)
-      public: inline void GZ_DEPRECATED(7) X(T _v)
-      {
-        this->SetX(_v);
-      }
-
-      /// \brief Set the x component.
-      /// \param[in] _v The new value for the x quaternion component.
       public: inline void SetX(T _v)
       {
         this->qx = _v;
-      }
-
-      /// \brief Set the y component.
-      /// \param[in] _v The new value for the y quaternion component.
-      /// \deprecated Use SetY(T)
-      public: inline void GZ_DEPRECATED(7) Y(T _v)
-      {
-        this->SetY(_v);
       }
 
       /// \brief Set the y component.
@@ -1164,25 +1069,9 @@ namespace gz
 
       /// \brief Set the z component.
       /// \param[in] _v The new value for the z quaternion component.
-      /// \deprecated Use SetZ(T)
-      public: inline void GZ_DEPRECATED(7) Z(T _v)
-      {
-        this->SetZ(_v);
-      }
-
-      /// \brief Set the z component.
-      /// \param[in] _v The new value for the z quaternion component.
       public: inline void SetZ(T _v)
       {
         this->qz = _v;
-      }
-
-      /// \brief Set the w component.
-      /// \param[in] _v The new value for the w quaternion component.
-      /// \deprecated Use SetW(T)
-      public: inline void GZ_DEPRECATED(7) W(T _v)
-      {
-        this->SetW(_v);
       }
 
       /// \brief Set the w component.

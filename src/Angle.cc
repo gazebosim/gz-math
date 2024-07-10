@@ -36,21 +36,9 @@ const Angle &Angle::HalfPi = gHalfPi;
 const Angle &Angle::TwoPi = gTwoPi;
 
 //////////////////////////////////////////////////
-void Angle::Radian(double _radian)
-{
-  this->value = _radian;
-}
-
-//////////////////////////////////////////////////
 void Angle::SetRadian(double _radian)
 {
   this->value = _radian;
-}
-
-//////////////////////////////////////////////////
-void Angle::Degree(double _degree)
-{
-  this->value = _degree * GZ_PI / 180.0;
 }
 
 //////////////////////////////////////////////////
