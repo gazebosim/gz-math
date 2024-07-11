@@ -54,6 +54,10 @@ namespace graph
   template<typename V>
   class Vertex
   {
+    /// \brief An invalid vertex.
+    // Deprecated in favor of NullVertex().
+    public: static Vertex<V> GZ_DEPRECATED(8) NullVertex;
+
     /// \brief Constructor.
     /// \param[in] _name Non-unique vertex name.
     /// \param[in] _data User information.
@@ -132,6 +136,11 @@ namespace graph
     /// \brief Unique vertex Id.
     private: VertexId id = kNullId;
   };
+
+  /// \brief An invalid vertex.
+  // Deprecated in favor of NullVertex().
+  template<typename V>
+  Vertex<V> Vertex<V>::NullVertex("__null__", V(), kNullId);
 
   /// \brief An invalid vertex.
   template<typename V>

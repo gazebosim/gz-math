@@ -205,6 +205,10 @@ namespace graph
   template<typename E>
   class UndirectedEdge : public Edge<E>
   {
+    /// \brief An invalid undirected edge.
+    // Deprecated in favor of NullEdge().
+    public: static UndirectedEdge<E> GZ_DEPRECATED(8) NullEdge;
+
     /// \brief Constructor.
     /// \param[in] _vertices The vertices of the edge.
     /// \param[in] _data The data stored in the edge.
@@ -254,12 +258,22 @@ namespace graph
     }
   };
 
+  /// \brief An invalid undirected edge.
+  // Deprecated in favor of NullEdge().
+  template<typename E>
+  UndirectedEdge<E> UndirectedEdge<E>::NullEdge(
+    VertexId_P(kNullId, kNullId), E(), 1.0, kNullId);
+
   /// \brief A directed edge represents a connection between two vertices.
   /// The connection is unidirectional, it's only possible to traverse the edge
   /// in one direction (from the tail to the head).
   template<typename E>
   class DirectedEdge : public Edge<E>
   {
+    /// \brief An invalid directed edge.
+    // Deprecated in favor of NullEdge().
+    public: static DirectedEdge<E> GZ_DEPRECATED(8) NullEdge;
+
     /// \brief Constructor.
     /// \param[in] _vertices The vertices of the edge.
     /// \param[in] _data The data stored in the edge.
@@ -320,6 +334,12 @@ namespace graph
       return _out;
     }
   };
+
+  /// \brief An invalid directed edge.
+  // Deprecated in favor of NullEdge().
+  template<typename E>
+  DirectedEdge<E> DirectedEdge<E>::NullEdge(
+    VertexId_P(kNullId, kNullId), E(), 1.0, kNullId);
 
   /// \brief An invalid edge.
   template<typename E, typename EdgeType>
