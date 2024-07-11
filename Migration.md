@@ -7,6 +7,18 @@ release will remove the deprecated code.
 
 ## Gazebo Math 8.X to 9.X
 
+### Breaking Changes
+
+1. **graph/Graph.hh**
+    + The functions `Graph::AddVertex()` and `Graph::VertexFromId()` might
+      return NullVertex() instead of NullVertex.
+      E.g.: https://github.com/gazebosim/gz-math/pull/606/files#diff-0c0220a7e72be70337975433eeddc3f5e072ade5cd80dfb1ac03da233c39c983L153-R153
+
+    + The functions `Graph::AddEdge()`, `Graph::LinkEdge()`,
+      `Graph::EdgeFromVertices()` and `Graph::EdgeFromId()` functions might
+      return NullEdge() instead of NullEdge.
+      E.g.: https://github.com/gazebosim/gz-math/pull/606/files#diff-0c0220a7e72be70337975433eeddc3f5e072ade5cd80dfb1ac03da233c39c983L222-R222
+
 ### Deprecations
 
 1. **graph/Vertex.hh**
