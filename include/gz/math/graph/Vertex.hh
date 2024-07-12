@@ -21,6 +21,7 @@
 #include <cstdint>
 #include <functional>
 #include <map>
+#include <memory>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -43,7 +44,7 @@ namespace graph
   using VertexId_P = std::pair<VertexId, VertexId>;
 
   /// \brief Represents an invalid Id.
-  static const VertexId kNullId = MAX_UI64;
+  constexpr VertexId kNullId = MAX_UI64;
 
   /// \brief A vertex of a graph. It stores user information, an optional name,
   /// and keeps an internal unique Id. This class does not enforce to choose a
@@ -52,7 +53,8 @@ namespace graph
   class Vertex
   {
     /// \brief An invalid vertex.
-    public: static Vertex<V> NullVertex;
+    // Deprecated in favor of NullVertex().
+    public: static Vertex<V> GZ_DEPRECATED(8) NullVertex;
 
     /// \brief Constructor.
     /// \param[in] _name Non-unique vertex name.
@@ -134,8 +136,17 @@ namespace graph
   };
 
   /// \brief An invalid vertex.
+  // Deprecated in favor of NullVertex().
   template<typename V>
   Vertex<V> Vertex<V>::NullVertex("__null__", V(), kNullId);
+
+  /// \brief An invalid vertex.
+  template<typename V>
+  Vertex<V> &NullVertex()
+  {
+    static auto v = std::make_unique<Vertex<V>>("__null__", V(), kNullId);
+    return *v;
+  }
 
   /// \def VertexRef_M
   /// \brief Map of vertices. The key is the vertex Id. The value is a
