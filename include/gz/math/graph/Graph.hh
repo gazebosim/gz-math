@@ -150,7 +150,7 @@ namespace graph
         {
           std::cerr << "[Graph::AddVertex()] The limit of vertices has been "
                     << "reached. Ignoring vertex." << std::endl;
-          return Vertex<V>::NullVertex;
+          return NullVertex<V>();
         }
       }
 
@@ -163,7 +163,7 @@ namespace graph
       {
         std::cerr << "[Graph::AddVertex()] Repeated vertex [" << id << "]"
                   << std::endl;
-        return Vertex<V>::NullVertex;
+        return NullVertex<V>();
       }
 
       // Link the vertex with an empty list of edges.
@@ -219,7 +219,7 @@ namespace graph
       {
         std::cerr << "[Graph::AddEdge()] The limit of edges has been reached. "
                   << "Ignoring edge." << std::endl;
-        return EdgeType::NullEdge;
+        return NullEdge<E, EdgeType>();
       }
 
       EdgeType newEdge(_vertices, _data, _weight, id);
@@ -240,7 +240,7 @@ namespace graph
       for (auto const &v : {edgeVertices.first, edgeVertices.second})
       {
         if (this->vertices.find(v) == this->vertices.end())
-          return EdgeType::NullEdge;
+          return NullEdge<E, EdgeType>();
       }
 
       // Link the new edge.
@@ -611,7 +611,7 @@ namespace graph
     {
       auto iter = this->vertices.find(_id);
       if (iter == this->vertices.end())
-        return Vertex<V>::NullVertex;
+        return NullVertex<V>();
 
       return iter->second;
     }
@@ -624,7 +624,7 @@ namespace graph
     {
       auto iter = this->vertices.find(_id);
       if (iter == this->vertices.end())
-        return Vertex<V>::NullVertex;
+        return NullVertex<V>();
 
       return iter->second;
     }
@@ -646,7 +646,7 @@ namespace graph
 
       // Quit early if there is no adjacency entry
       if (adjIt == this->adjList.end())
-        return EdgeType::NullEdge;
+        return NullEdge<E, EdgeType>();
 
       // Loop over the edges in the source vertex's adjacency list
       for (std::set<EdgeId>::const_iterator edgIt = adjIt->second.begin();
@@ -665,7 +665,7 @@ namespace graph
         }
       }
 
-      return EdgeType::NullEdge;
+      return NullEdge<E, EdgeType>();
     }
 
     /// \brief Get a reference to an edge using its Id.
@@ -676,7 +676,7 @@ namespace graph
     {
       auto iter = this->edges.find(_id);
       if (iter == this->edges.end())
-        return EdgeType::NullEdge;
+        return NullEdge<E, EdgeType>();
 
       return iter->second;
     }
@@ -689,7 +689,7 @@ namespace graph
     {
       auto iter = this->edges.find(_id);
       if (iter == this->edges.end())
-        return EdgeType::NullEdge;
+        return NullEdge<E, EdgeType>();
 
       return iter->second;
     }
