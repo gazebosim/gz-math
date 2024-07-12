@@ -5,6 +5,8 @@ Deprecated code produces compile-time warnings. These warning serve as
 notification to users that their code should be upgraded. The next major
 release will remove the deprecated code.
 
+## Gazebo Math 8.X to 9.X
+
 ### Deprecations
 
 1. **graph/Vertex.hh**
