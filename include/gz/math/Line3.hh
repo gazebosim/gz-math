@@ -263,7 +263,7 @@ namespace gz
       public: bool Intersect(const Line3<T> &_line,
                              double _epsilon = 1e-6) const
       {
-        static math::Vector3<T> ignore;
+        math::Vector3<T> ignore;
         return this->Intersect(_line, ignore, _epsilon);
       }
 
