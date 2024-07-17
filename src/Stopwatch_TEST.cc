@@ -154,8 +154,16 @@ TEST(Stopwatch, StartStopReset)
   watch.Start(true);
   EXPECT_TRUE(watch.Running());
   EXPECT_LT(watch.StopTime(), watch.StartTime());
+<<<<<<< HEAD
   EXPECT_NE(math::clock::duration::zero(), watch.ElapsedRunTime());
   EXPECT_EQ(math::clock::duration::zero(), watch.ElapsedStopTime());
+=======
+  // Add a small sleep to make sure that there's is some time elapsed between
+  // calling Start(true) above and ElapsedRunTime() below.
+  std::this_thread::sleep_for(std::chrono::microseconds(1));
+  EXPECT_NE(steady_clock::duration::zero(), watch.ElapsedRunTime());
+  EXPECT_EQ(steady_clock::duration::zero(), watch.ElapsedStopTime());
+>>>>>>> 0925141 (Fix flaky Stopwatch test (#610))
 }
 
 /////////////////////////////////////////////////
