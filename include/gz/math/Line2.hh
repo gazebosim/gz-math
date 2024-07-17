@@ -180,7 +180,7 @@ namespace gz
       public: bool Intersect(const Line2<T> &_line,
                              double _epsilon = 1e-6) const
       {
-        static math::Vector2<T> ignore;
+        math::Vector2<T> ignore;
         return this->Intersect(_line, ignore, _epsilon);
       }
 
