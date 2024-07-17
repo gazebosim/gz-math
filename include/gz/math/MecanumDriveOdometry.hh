@@ -29,7 +29,6 @@ namespace gz
   {
     // Inline bracket to help doxygen filtering.
     inline namespace GZ_MATH_VERSION_NAMESPACE {
-    //
     /// \class MecanumDriveOdometry MecanumDriveOdometry.hh
     /// gz/math/MecanumDriveOdometry.hh
     ///
@@ -129,6 +128,7 @@ namespace gz
       /// \return Right wheel radius in meters.
       public: double RightWheelRadius() const;
 
+      /// \brief Private data pointer.
       GZ_UTILS_IMPL_PTR(dataPtr)
     };
     }  // namespace GZ_MATH_VERSION_NAMESPACE

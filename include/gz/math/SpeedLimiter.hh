@@ -29,7 +29,6 @@ namespace math
 {
 // Inline bracket to help doxygen filtering.
 inline namespace GZ_MATH_VERSION_NAMESPACE {
-  //
   /// \brief Class to limit velocity, acceleration and jerk.
   class GZ_MATH_VISIBLE SpeedLimiter
   {
@@ -125,6 +124,7 @@ inline namespace GZ_MATH_VERSION_NAMESPACE {
         double _prevPrevVel,
         std::chrono::steady_clock::duration _dt) const;
 
+    /// \brief Private data pointer.
     GZ_UTILS_IMPL_PTR(dataPtr)
   };
   }
