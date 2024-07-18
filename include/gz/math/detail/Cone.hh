@@ -21,11 +21,8 @@
 
 #include <optional>
 
-namespace gz
+namespace gz::math
 {
-namespace math
-{
-
 //////////////////////////////////////////////////
 template<typename T>
 Cone<T>::Cone(const T _length, const T _radius,
@@ -167,6 +164,5 @@ T Cone<T>::DensityFromMass(const T _mass) const
   return _mass / this->Volume();
 }
 
-}  // namespace math
-}  // namespace gz
-#endif
+}  // namespace gz::math
+#endif  // GZ_MATH_DETAIL_CONE_HH_
