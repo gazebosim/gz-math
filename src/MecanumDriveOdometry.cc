@@ -18,16 +18,28 @@
 #include "gz/math/MecanumDriveOdometry.hh"
 #include "gz/math/RollingMean.hh"
 
-using namespace gz;
-using namespace math;
-
 // The implementation was borrowed from: https://github.com/ros-controls/ros_controllers/blob/melodic-devel/diff_drive_controller/src/odometry.cpp
 // And these calculations are based on the following references:
 // https://robohub.org/drive-kinematics-skid-steer-and-mecanum-ros-twist-included
 // https://research.ijcaonline.org/volume113/number3/pxc3901586.pdf
 
-class gz::math::MecanumDriveOdometryPrivate
+namespace gz
 {
+namespace math
+{
+inline namespace GZ_MATH_VERSION_NAMESPACE
+{
+class MecanumDriveOdometry::Implementation
+{
+  /// \brief Constructor.
+  /// \param[in] _windowSize Rolling window size used to compute the
+  /// velocity mean.
+  public: explicit Implementation(size_t _windowSize)
+    : linearMean(_windowSize), lateralMean(_windowSize),
+      angularMean(_windowSize)
+  {
+  }
+
   /// \brief Integrates the pose.
   /// \param[in] _linear Linear velocity.
   /// \param[in] _lateral Lateral velocity.
@@ -51,7 +63,7 @@ class gz::math::MecanumDriveOdometryPrivate
   public: double y{0.0};
 
   /// \brief Current heading in radians.
-  public: Angle heading;
+  public: gz::math::Angle heading;
 
   /// \brief Current linear velocity in meter/second.
   public: double linearVel{0.0};
@@ -60,7 +72,7 @@ class gz::math::MecanumDriveOdometryPrivate
   public: double lateralVel{0.0};
 
   /// \brief Current angular velocity in radians/second.
-  public: Angle angularVel;
+  public: gz::math::Angle angularVel;
 
   /// \brief Left wheel radius in meters.
   public: double leftWheelRadius{0.0};
@@ -87,29 +99,27 @@ class gz::math::MecanumDriveOdometryPrivate
   public: double backRightWheelOldPos{0.0};
 
   /// \brief Rolling mean accumulators for the linear velocity
-  public: RollingMean linearMean;
+  public: gz::math::RollingMean linearMean;
 
   /// \brief Rolling mean accumulators for the lateral velocity
-  public: RollingMean lateralMean;
+  public: gz::math::RollingMean lateralMean;
 
   /// \brief Rolling mean accumulators for the angular velocity
-  public: RollingMean angularMean;
+  public: gz::math::RollingMean angularMean;
 
   /// \brief Initialized flag.
   public: bool initialized{false};
 };
+}
+}
+}
+
+using namespace gz;
+using namespace math;
 
 //////////////////////////////////////////////////
 MecanumDriveOdometry::MecanumDriveOdometry(size_t _windowSize)
-  : dataPtr(new MecanumDriveOdometryPrivate)
-{
-  this->dataPtr->linearMean.SetWindowSize(_windowSize);
-  this->dataPtr->lateralMean.SetWindowSize(_windowSize);
-  this->dataPtr->angularMean.SetWindowSize(_windowSize);
-}
-
-//////////////////////////////////////////////////
-MecanumDriveOdometry::~MecanumDriveOdometry()
+  : dataPtr(gz::utils::MakeImpl<Implementation>(_windowSize))
 {
 }
 
@@ -292,7 +302,7 @@ double MecanumDriveOdometry::RightWheelRadius() const
 }
 
 //////////////////////////////////////////////////
-void MecanumDriveOdometryPrivate::IntegrateRungeKutta2(
+void MecanumDriveOdometry::Implementation::IntegrateRungeKutta2(
     double _linear, double _lateral, double _angular)
 {
   const double direction = *this->heading + _angular * 0.5;
@@ -304,7 +314,7 @@ void MecanumDriveOdometryPrivate::IntegrateRungeKutta2(
 }
 
 //////////////////////////////////////////////////
-void MecanumDriveOdometryPrivate::IntegrateExact(double _linear,
+void MecanumDriveOdometry::Implementation::IntegrateExact(double _linear,
   double _lateral, double _angular)
 {
   if (std::fabs(_angular) < 1e-6)

@@ -18,10 +18,10 @@
 #define GZ_MATH_MECANUMDRIVEODOMETRY_HH_
 
 #include <chrono>
-#include <memory>
 #include <gz/math/Angle.hh>
 #include <gz/math/Export.hh>
 #include <gz/math/config.hh>
+#include <gz/utils/ImplPtr.hh>
 
 namespace gz
 {
@@ -29,9 +29,6 @@ namespace gz
   {
     // Inline bracket to help doxygen filtering.
     inline namespace GZ_MATH_VERSION_NAMESPACE {
-    // Forward declarations.
-    class MecanumDriveOdometryPrivate;
-
     /// \class MecanumDriveOdometry MecanumDriveOdometry.hh
     /// gz/math/MecanumDriveOdometry.hh
     ///
@@ -58,9 +55,6 @@ namespace gz
       /// \param[in] _windowSize Rolling window size used to compute the
       /// velocity mean
       public: explicit MecanumDriveOdometry(size_t _windowSize = 10);
-
-      /// \brief Destructor.
-      public: ~MecanumDriveOdometry();
 
       /// \brief Initialize the odometry
       /// \param[in] _time Current time.
@@ -134,18 +128,8 @@ namespace gz
       /// \return Right wheel radius in meters.
       public: double RightWheelRadius() const;
 
-
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::unique_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
       /// \brief Private data pointer.
-      private: std::unique_ptr<MecanumDriveOdometryPrivate> dataPtr;
-#ifdef _WIN32
-#pragma warning(pop)
-#endif
+      GZ_UTILS_IMPL_PTR(dataPtr)
     };
     }  // namespace GZ_MATH_VERSION_NAMESPACE
   }  // namespace math
