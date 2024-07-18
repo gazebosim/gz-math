@@ -23,12 +23,10 @@
 #include "gz/math/Helpers.hh"
 #include <gz/utils/ImplPtr.hh>
 
-namespace gz
+namespace gz::math
 {
-namespace math
-{
-// Inline bracket to help doxygen filtering.
-inline namespace GZ_MATH_VERSION_NAMESPACE {
+  // Inline bracket to help doxygen filtering.
+  inline namespace GZ_MATH_VERSION_NAMESPACE {
   /// \brief Class to limit velocity, acceleration and jerk.
   class GZ_MATH_VISIBLE SpeedLimiter
   {
@@ -127,8 +125,6 @@ inline namespace GZ_MATH_VERSION_NAMESPACE {
     /// \brief Private data pointer.
     GZ_UTILS_IMPL_PTR(dataPtr)
   };
-  }
-}
-}
-
-#endif
+  }  // namespace GZ_MATH_VERSION_NAMESPACE
+}  // namespace gz::math
+#endif  // GZ_MATH_SYSTEMS_SPEEDLIMITER_HH_
