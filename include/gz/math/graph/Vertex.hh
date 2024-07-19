@@ -21,7 +21,6 @@
 #include <cstdint>
 #include <functional>
 #include <map>
-#include <memory>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -144,8 +143,8 @@ namespace graph
   template<typename V>
   Vertex<V> &NullVertex()
   {
-    static auto v = std::make_unique<Vertex<V>>("__null__", V(), kNullId);
-    return *v;
+    static Vertex<V> v("__null__", V(), kNullId);
+    return v;
   }
 
   /// \def VertexRef_M

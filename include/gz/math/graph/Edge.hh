@@ -21,7 +21,6 @@
 #include <cstdint>
 #include <functional>
 #include <map>
-#include <memory>
 #include <ostream>
 #include <set>
 
@@ -343,9 +342,9 @@ namespace graph
   template<typename E, typename EdgeType>
   EdgeType &NullEdge()
   {
-    static auto e = std::make_unique<EdgeType>(
+    static EdgeType e(
       VertexId_P(kNullId, kNullId), E(), 1.0, kNullId);
-    return *e;
+    return e;
   }
 }  // namespace graph
 }  // namespace GZ_MATH_VERSION_NAMESPACE
