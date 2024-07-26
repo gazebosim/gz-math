@@ -104,7 +104,6 @@ namespace gz::math
                             const float _a = 1.0)
     : r(_r), g(_g), b(_b), a(_a)
     {
-      this->Clamp();
     }
 
     /// \brief Copy Constructor
@@ -267,20 +266,6 @@ namespace gz::math
     /// \param[in] _pt The color to check for inequality
     /// \return True if the this color does not equal _pt
     public: bool operator!=(const Color &_pt) const;
-
-    /// \brief Clamp the color values to valid ranges
-    private: constexpr void Clamp()
-    {
-      // These comparisons are carefully written to handle NaNs correctly.
-      if (!(this->r >= 0)) { this->r = 0; }
-      if (!(this->g >= 0)) { this->g = 0; }
-      if (!(this->b >= 0)) { this->b = 0; }
-      if (!(this->a >= 0)) { this->a = 0; }
-      if (this->r > 1) { this->r = this->r/255.0f; }
-      if (this->g > 1) { this->g = this->g/255.0f; }
-      if (this->b > 1) { this->b = this->b/255.0f; }
-      if (this->a > 1) { this->a = 1; }
-    }
 
     /// \brief Stream insertion operator
     /// \param[in] _out the output stream
