@@ -47,10 +47,6 @@ namespace gz::math
       memset(this->data, 0, sizeof(this->data[0][0])*16);
     }
 
-    /// \brief Copy constructor
-    /// \param _m Matrix to copy
-    public: Matrix4(const Matrix4<T> &_m) = default;
-
     /// \brief Constructor
     /// \param[in] _v00 Row 0, Col 0 value
     /// \param[in] _v01 Row 0, Col 1 value
@@ -109,9 +105,6 @@ namespace gz::math
     {
       this->SetTranslation(_pose.Pos());
     }
-
-    /// \brief Destructor
-    public: ~Matrix4() = default;
 
     /// \brief Change the values
     /// \param[in] _v00 Row 0, Col 0 value
@@ -538,11 +531,6 @@ namespace gz::math
       this->data[0][2], this->data[1][2], this->data[2][2], this->data[3][2],
       this->data[0][3], this->data[1][3], this->data[2][3], this->data[3][3]);
     }
-
-    /// \brief Equal operator. this = _mat
-    /// \param _mat Incoming matrix
-    /// \return itself
-    public: Matrix4<T> &operator=(const Matrix4<T> &_mat) = default;
 
     /// \brief Equal operator for 3x3 matrix
     /// \param _mat Incoming matrix

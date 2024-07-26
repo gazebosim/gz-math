@@ -79,13 +79,6 @@ namespace gz::math
     {
     }
 
-    /// \brief Copy constructor.
-    /// \param[in] _b OrientedBox to copy.
-    public: OrientedBox(const OrientedBox<T> &_b) = default;
-
-    /// \brief Destructor
-    public: ~OrientedBox() = default;
-
     /// \brief Get the length along the x dimension
     /// \return Value of the length in the x dimension
     public: T XLength() const
@@ -136,11 +129,6 @@ namespace gz::math
     {
       this->pose = _pose;
     }
-
-    /// \brief Assignment operator. Set this box to the parameter
-    /// \param[in]  _b OrientedBox to copy
-    /// \return The new box.
-    public: OrientedBox &operator=(const OrientedBox<T> &_b) = default;
 
     /// \brief Equality test operator
     /// \param[in] _b OrientedBox to test
