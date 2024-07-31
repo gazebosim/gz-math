@@ -27,6 +27,7 @@
 
 #include <gz/math/config.hh>
 #include <gz/math/Helpers.hh>
+#include <gz/utils/NeverDestroyed.hh>
 
 namespace gz::math
 {
@@ -143,8 +144,8 @@ namespace graph
   template<typename V>
   Vertex<V> &NullVertex()
   {
-    static Vertex<V> v("__null__", V(), kNullId);
-    return v;
+    static gz::utils::NeverDestroyed<Vertex<V>> v("__null__", V(), kNullId);
+    return v.Access();
   }
 
   /// \def VertexRef_M

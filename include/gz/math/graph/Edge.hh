@@ -25,7 +25,8 @@
 #include <set>
 
 #include <gz/math/config.hh>
-#include "gz/math/graph/Vertex.hh"
+#include <gz/math/graph/Vertex.hh>
+#include <gz/utils/NeverDestroyed.hh>
 
 namespace gz::math
 {
@@ -342,9 +343,9 @@ namespace graph
   template<typename E, typename EdgeType>
   EdgeType &NullEdge()
   {
-    static EdgeType e(
+    static gz::utils::NeverDestroyed<EdgeType> e(
       VertexId_P(kNullId, kNullId), E(), 1.0, kNullId);
-    return e;
+    return e.Access();
   }
 }  // namespace graph
 }  // namespace GZ_MATH_VERSION_NAMESPACE
