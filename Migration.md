@@ -5,6 +5,20 @@ Deprecated code produces compile-time warnings. These warning serve as
 notification to users that their code should be upgraded. The next major
 release will remove the deprecated code.
 
+## Gazebo Math 8.X to 9.X
+
+### Deprecations
+
+1. **graph/Vertex.hh**
+    + The `Vertex::NullVertex` static member is deprecated. Please use
+      `Vertex::NullVertex()` instead.
+      E.g.: https://github.com/gazebosim/gz-math/pull/606/files#diff-0c0220a7e72be70337975433eeddc3f5e072ade5cd80dfb1ac03da233c39c983L153-R153
+
+1. **graph/Edge.hh**
+    + The `Edge::NullEdge` static member is deprecated. Please use
+      `Vertex::NullEdge()` instead.
+      E.g.: https://github.com/gazebosim/gz-math/pull/606/files#diff-0c0220a7e72be70337975433eeddc3f5e072ade5cd80dfb1ac03da233c39c983L222-R222
+
 ## Gazebo Math 7.X to 8.X
 
 ### Breaking Changes
