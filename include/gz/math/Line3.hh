@@ -35,10 +35,6 @@ namespace gz::math
     /// \brief Line Constructor
     public: Line3() = default;
 
-    /// \brief Copy constructor
-    /// \param[in] _line a line object
-    public: Line3(const Line3<T> &_line) = default;
-
     /// \brief Constructor.
     /// \param[in] _ptA Start point of the line segment
     /// \param[in] _ptB End point of the line segment
@@ -393,11 +389,6 @@ namespace gz::math
       _out << _line[0] << " " << _line[1];
       return _out;
     }
-
-    /// \brief Assignment operator
-    /// \param[in] _line a new value
-    /// \return this
-    public: Line3 &operator=(const Line3<T> &_line) = default;
 
     /// \brief Vector for storing the start and end points of the line
     private: math::Vector3<T> pts[2];

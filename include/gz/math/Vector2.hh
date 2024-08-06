@@ -59,13 +59,6 @@ namespace gz::math
     {
     }
 
-    /// \brief Copy constructor
-    /// \param[in] _v the value
-    public: Vector2(const Vector2<T> &_v) = default;
-
-    /// \brief Destructor
-    public: ~Vector2() = default;
-
     /// \brief Return the sum of the values
     /// \return the sum
     public: T Sum() const
@@ -218,11 +211,6 @@ namespace gz::math
     {
       return std::min(this->data[0], this->data[1]);
     }
-
-    /// \brief Assignment operator
-    /// \param[in] _v a value for x and y element
-    /// \return this
-    public: Vector2 &operator=(const Vector2 &_v) = default;
 
     /// \brief Assignment operator
     /// \param[in] _v the value for x and y element

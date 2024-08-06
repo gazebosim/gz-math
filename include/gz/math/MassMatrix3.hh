@@ -58,13 +58,6 @@ namespace gz::math
     : mass(_mass), Ixxyyzz(_ixxyyzz), Ixyxzyz(_ixyxzyz)
     {}
 
-    /// \brief Copy constructor.
-    /// \param[in] _m MassMatrix3 element to copy
-    public: MassMatrix3(const MassMatrix3<T> &_m) = default;
-
-    /// \brief Destructor.
-    public: ~MassMatrix3() = default;
-
     /// \brief Set the mass.
     /// \param[in] _m New mass value.
     /// \return True if the MassMatrix3 is valid.
@@ -250,12 +243,6 @@ namespace gz::math
         0.5*(_moi(1, 2) + _moi(2, 1)));
       return this->IsValid();
     }
-
-    /// \brief Equal operator.
-    /// \param[in] _massMatrix MassMatrix3 to copy.
-    /// \return Reference to this object.
-    public: MassMatrix3 &operator=(const MassMatrix3<T> &_massMatrix)
-      = default;
 
     /// \brief Equality comparison operator.
     /// \param[in] _m MassMatrix3 to copy.

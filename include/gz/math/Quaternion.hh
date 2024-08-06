@@ -142,18 +142,6 @@ namespace gz::math
       this->SetFromMatrix(_mat);
     }
 
-    /// \brief Copy constructor. This constructor does not normalize the
-    /// quaternion.
-    /// \param[in] _qt Quaternion<T> to copy
-    public: Quaternion(const Quaternion<T> &_qt) = default;
-
-    /// \brief Destructor
-    public: ~Quaternion() = default;
-
-    /// \brief Assignment operator
-    /// \param[in] _qt Quaternion<T> to copy
-    public: Quaternion<T> &operator=(const Quaternion<T> &_qt) = default;
-
     /// \brief Invert the quaternion. The quaternion is first normalized,
     /// then inverted.
     public: void Invert()
