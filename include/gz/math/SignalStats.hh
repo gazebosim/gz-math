@@ -39,6 +39,31 @@ namespace gz::math
     /// \brief Constructor
     public: SignalStatistic();
 
+    /// \brief Destructor
+    public: virtual ~SignalStatistic() = default;
+
+    // Since we have to declare the destructor virtual, we have to declare the
+    // all the special member functions as defaulted.
+    // See https://en.cppreference.com/w/cpp/language/rule_of_three
+
+    /// \brief Copy constructor
+    /// \param[in] _ss SignalStatistic to copy
+    public: SignalStatistic(const SignalStatistic &_ss) = default;
+
+    /// \brief Move constructor
+    /// \param[in] _ss SignalStatistic to move
+    public: SignalStatistic(SignalStatistic &&_ss) = default;
+
+    /// \brief Assignment operator
+    /// \param[in] _s A SignalStatistic  to copy
+    /// \return this
+    public: SignalStatistic &operator=(const SignalStatistic &_s) = default;
+
+    /// \brief Move assignment operator
+    /// \param[in] _s A SignalStatistic  to copy
+    /// \return this
+    public: SignalStatistic &operator=(SignalStatistic &&_s) = default;
+
     /// \brief Get the current value of the statistical measure.
     /// \return Current value of the statistical measure.
     public: virtual double Value() const = 0;
