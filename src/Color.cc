@@ -60,8 +60,6 @@ void Color::Set(const float _r, const float _g, const float _b, const float _a)
   this->g = _g;
   this->b = _b;
   this->a = _a;
-
-  this->Clamp();
 }
 
 //////////////////////////////////////////////////
@@ -124,8 +122,6 @@ void Color::SetFromHSV(const float _h, const float _s, const float _v)
       this->b = q;
       break;
   }
-
-  this->Clamp();
 }
 
 //////////////////////////////////////////////////
@@ -183,7 +179,6 @@ void Color::SetFromYUV(const float _y, const float _u, const float _v)
   this->r = _y + 1.140f*_v;
   this->g = _y - 0.395f*_u - 0.581f*_v;
   this->b = _y + 2.032f*_u;
-  this->Clamp();
 }
 
 //////////////////////////////////////////////////
@@ -385,8 +380,6 @@ const Color &Color::operator+=(const Color &_pt)
   this->b += _pt.b;
   this->a += _pt.a;
 
-  this->Clamp();
-
   return *this;
 }
 
@@ -410,8 +403,6 @@ const Color &Color::operator-=(const Color &_pt)
   this->g -= _pt.g;
   this->b -= _pt.b;
   this->a -= _pt.a;
-
-  this->Clamp();
 
   return *this;
 }
@@ -437,8 +428,6 @@ const Color &Color::operator/=(const Color &_pt)
   this->b /= _pt.b;
   this->a /= _pt.a;
 
-  this->Clamp();
-
   return *this;
 }
 
@@ -462,8 +451,6 @@ const Color &Color::operator*=(const Color &_pt)
   this->g *= _pt.g;
   this->b *= _pt.b;
   this->a *= _pt.a;
-
-  this->Clamp();
 
   return *this;
 }
