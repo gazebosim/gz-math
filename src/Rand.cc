@@ -25,6 +25,8 @@
   #include <unistd.h>
 #endif
 
+#include <limits>
+
 #include "gz/math/Rand.hh"
 
 using namespace gz;
@@ -54,7 +56,8 @@ double Rand::DblUniform(double _min, double _max)
 //////////////////////////////////////////////////
 double Rand::DblNormal(double _mean, double _sigma)
 {
-  if (equal(_sigma, 0.0))
+  if (equal(_sigma, 0.0, std::numeric_limits<double>::epsilon()))
+
     return _mean;
 
   NormalRealDist d(_mean, _sigma);
