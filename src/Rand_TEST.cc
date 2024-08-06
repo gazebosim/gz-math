@@ -53,11 +53,11 @@ TEST(RandTest, Rand)
 #endif
 
     // Test with sigma == 0
-    d = math::Rand::DblNormal(2, 0);
+    d = math::Rand::DblNormal(2.0, 0.0);
     i = math::Rand::IntNormal(10, 0);
 
-    EXPECT_NEAR(d, 2.0, 1e-6);
-    EXPECT_EQ(i, 10);
+    EXPECT_NEAR(2.0, d, 1e-6);
+    EXPECT_EQ(10, i);
   }
 #endif
 }
