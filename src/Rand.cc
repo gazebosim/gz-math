@@ -54,6 +54,9 @@ double Rand::DblUniform(double _min, double _max)
 //////////////////////////////////////////////////
 double Rand::DblNormal(double _mean, double _sigma)
 {
+  if (equal(_sigma, 0.0))
+    return _mean;
+
   NormalRealDist d(_mean, _sigma);
   return d(RandGenerator());
 }
@@ -69,6 +72,9 @@ int32_t Rand::IntUniform(int _min, int _max)
 //////////////////////////////////////////////////
 int32_t Rand::IntNormal(int _mean, int _sigma)
 {
+  if (_sigma == 0)
+    return _mean;
+
   NormalRealDist d(_mean, _sigma);
 
   return static_cast<int32_t>(d(RandGenerator()));
