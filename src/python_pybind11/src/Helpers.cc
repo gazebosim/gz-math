@@ -41,6 +41,15 @@ float SphereVolume(const float _radius)
   return GZ_SPHERE_VOLUME(_radius);
 }
 
+/// \brief Compute cone volume
+/// \param[in] _r Cone base radius
+/// \param[in] _l Cone length
+/// \return cone volume
+float ConeVolume(const float _r, const float _l)
+{
+  return GZ_CONE_VOLUME(_r, _l);
+}
+
 /// \brief Compute cylinder volume
 /// \param[in] _r Cylinder base radius
 /// \param[in] _l Cylinder length
@@ -75,6 +84,14 @@ float SphereVolumeDeprecated(const float _radius)
             << "Please use gz_sphere_volume instead"
             << std::endl;
   return SphereVolume(_radius);
+}
+
+float ConeVolumeDeprecated(const float _r, const float _l)
+{
+  std::cerr << "ign_cone_volume is deprecated. "
+            << "Please use gz_cone_volume instead"
+            << std::endl;
+  return ConeVolume(_r, _l);
 }
 
 float CylinderVolumeDeprecated(const float _r, const float _l)
@@ -205,6 +222,9 @@ void defineMathHelpers(py::module &m)
    .def("gz_sphere_volume",
         &SphereVolume,
         "Compute sphere volume")
+   .def("gz_cone_volume",
+        &ConeVolume,
+        "Compute cone volume")
    .def("gz_cylinder_volume",
         &CylinderVolume,
         "Compute cylinder volume")
@@ -219,6 +239,9 @@ void defineMathHelpers(py::module &m)
    .def("ign_sphere_volume",
         &SphereVolumeDeprecated,
         "[Deprecated] Compute sphere volume")
+   .def("ign_cone_volume",
+        &ConeVolumeDeprecated,
+        "[Deprecated] Compute cone volume")
    .def("ign_cylinder_volume",
         &CylinderVolumeDeprecated,
         "[Deprecated] Compute cylinder volume")

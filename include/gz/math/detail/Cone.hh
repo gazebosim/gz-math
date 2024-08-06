@@ -1,5 +1,7 @@
 /*
- * Copyright (C) 2018 Open Source Robotics Foundation
+ * Copyright 2024 CogniPilot Foundation
+ * Copyright 2024 Open Source Robotics Foundation
+ * Copyright 2024 Rudis Laboratories
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +16,8 @@
  * limitations under the License.
  *
 */
-#ifndef GZ_MATH_DETAIL_CYLINDER_HH_
-#define GZ_MATH_DETAIL_CYLINDER_HH_
+#ifndef GZ_MATH_DETAIL_CONE_HH_
+#define GZ_MATH_DETAIL_CONE_HH_
 
 #include <optional>
 
@@ -23,7 +25,7 @@ namespace gz::math
 {
 //////////////////////////////////////////////////
 template<typename T>
-Cylinder<T>::Cylinder(const T _length, const T _radius,
+Cone<T>::Cone(const T _length, const T _radius,
     const Quaternion<T> &_rotOffset)
 {
   this->length = _length;
@@ -33,7 +35,7 @@ Cylinder<T>::Cylinder(const T _length, const T _radius,
 
 //////////////////////////////////////////////////
 template<typename T>
-Cylinder<T>::Cylinder(const T _length, const T _radius,
+Cone<T>::Cone(const T _length, const T _radius,
     const Material &_mat, const Quaternion<T> &_rotOffset)
 {
   this->length = _length;
@@ -44,85 +46,85 @@ Cylinder<T>::Cylinder(const T _length, const T _radius,
 
 //////////////////////////////////////////////////
 template<typename T>
-T Cylinder<T>::Radius() const
+T Cone<T>::Radius() const
 {
   return this->radius;
 }
 
 //////////////////////////////////////////////////
 template<typename T>
-void Cylinder<T>::SetRadius(const T _radius)
+void Cone<T>::SetRadius(const T _radius)
 {
   this->radius = _radius;
 }
 
 //////////////////////////////////////////////////
 template<typename T>
-T Cylinder<T>::Length() const
+T Cone<T>::Length() const
 {
   return this->length;
 }
 
 //////////////////////////////////////////////////
 template<typename T>
-void Cylinder<T>::SetLength(const T _length)
+void Cone<T>::SetLength(const T _length)
 {
   this->length = _length;
 }
 
 //////////////////////////////////////////////////
 template<typename T>
-Quaternion<T> Cylinder<T>::RotationalOffset() const
+Quaternion<T> Cone<T>::RotationalOffset() const
 {
   return this->rotOffset;
 }
 
 //////////////////////////////////////////////////
 template<typename T>
-void Cylinder<T>::SetRotationalOffset(const Quaternion<T> &_rotOffset)
+void Cone<T>::SetRotationalOffset(const Quaternion<T> &_rotOffset)
 {
   this->rotOffset = _rotOffset;
 }
 
 //////////////////////////////////////////////////
 template<typename T>
-const Material &Cylinder<T>::Mat() const
+const Material &Cone<T>::Mat() const
 {
   return this->material;
 }
 
 //////////////////////////////////////////////////
 template<typename T>
-void Cylinder<T>::SetMat(const Material &_mat)
+void Cone<T>::SetMat(const Material &_mat)
 {
   this->material = _mat;
 }
 
 //////////////////////////////////////////////////
 template<typename T>
-bool Cylinder<T>::operator==(const Cylinder &_cylinder) const
+bool Cone<T>::operator==(const Cone &_cone) const
 {
-  return equal(this->radius, _cylinder.Radius()) &&
-    equal(this->length, _cylinder.Length()) &&
-    this->material == _cylinder.Mat();
+  return equal(this->radius, _cone.Radius()) &&
+    equal(this->length, _cone.Length()) &&
+    this->material == _cone.Mat();
 }
 
 //////////////////////////////////////////////////
 template<typename T>
-bool Cylinder<T>::MassMatrix(MassMatrix3d &_massMat) const
+bool Cone<T>::MassMatrix(MassMatrix3d &_massMat) const
 {
-  return _massMat.SetFromCylinderZ(
+  return _massMat.SetFromConeZ(
       this->material, this->length,
       this->radius, this->rotOffset);
 }
 
 //////////////////////////////////////////////////
 template<typename T>
-std::optional < MassMatrix3<T> > Cylinder<T>::MassMatrix() const
+std::optional < MassMatrix3<T> > Cone<T>::MassMatrix() const
 {
   gz::math::MassMatrix3<T> _massMat;
 
-  if(!_massMat.SetFromCylinderZ(
+  if(!_massMat.SetFromConeZ(
       this->material, this->length,
       this->radius, this->rotOffset))
   {
@@ -136,15 +138,15 @@ std::optional < MassMatrix3<T> > Cylinder<T>::MassMatrix() const
 
 //////////////////////////////////////////////////
 template<typename T>
-T Cylinder<T>::Volume() const
+T Cone<T>::Volume() const
 {
   return GZ_PI * std::pow(this->radius, 2) *
-         this->length;
+         this->length / 3.0;
 }
 
 //////////////////////////////////////////////////
 template<typename T>
-bool Cylinder<T>::SetDensityFromMass(const T _mass)
+bool Cone<T>::SetDensityFromMass(const T _mass)
 {
   T newDensity = this->DensityFromMass(_mass);
   if (newDensity > 0)
@@ -154,12 +156,13 @@ bool Cylinder<T>::SetDensityFromMass(const T _mass)
 
 //////////////////////////////////////////////////
 template<typename T>
-T Cylinder<T>::DensityFromMass(const T _mass) const
+T Cone<T>::DensityFromMass(const T _mass) const
 {
   if (this->radius <= 0 || this->length <=0 || _mass <= 0)
     return -1.0;
 
   return _mass / this->Volume();
 }
+
 }  // namespace gz::math
-#endif  // GZ_MATH_DETAIL_CYLINDER_HH_
+#endif  // GZ_MATH_DETAIL_CONE_HH_

@@ -22,11 +22,8 @@
 #include <gz/math/Helpers.hh>
 #include <gz/math/Inertial.hh>
 
-namespace gz
+namespace gz::math
 {
-namespace math
-{
-
 //////////////////////////////////////////////////
 template<typename T>
 Capsule<T>::Capsule(const T _length, const T _radius)
@@ -160,7 +157,5 @@ T Capsule<T>::DensityFromMass(const T _mass) const
 
   return _mass / this->Volume();
 }
-
-}
-}
-#endif
+}  // namespace gz::math
+#endif  // GZ_MATH_DETAIL_CAPSULE_HH_
