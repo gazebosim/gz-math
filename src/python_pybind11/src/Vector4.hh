@@ -43,7 +43,7 @@ template<typename T>
 void helpDefineMathVector4(py::module &m, const std::string &typestr)
 {
   using Class = gz::math::Vector4<T>;
-  const int vec_size = 4;
+  static const int vec_size = 4;
   auto toString = [](const Class &si) {
     std::stringstream stream;
     stream << si;

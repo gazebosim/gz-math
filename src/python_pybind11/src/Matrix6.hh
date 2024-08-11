@@ -51,7 +51,7 @@ template<typename T>
 void helpDefineMathMatrix6(py::module &_m, const std::string &_typestr)
 {
   using Class = Matrix6<T>;
-  const int mat_size = 6;
+  static const int mat_size = 6;
   auto toString = [](const Class &_si) {
     std::stringstream stream;
     stream << _si;

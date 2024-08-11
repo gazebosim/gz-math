@@ -51,7 +51,7 @@ template<typename T>
 void helpDefineMathMatrix3(py::module &m, const std::string &typestr)
 {
   using Class = gz::math::Matrix3<T>;
-  const int mat_size = 3;
+  static constexpr int mat_size = 3;
   auto toString = [](const Class &si) {
     std::stringstream stream;
     stream << si;

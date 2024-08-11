@@ -43,7 +43,7 @@ template<typename T>
 void helpDefineMathVector2(py::module &m, const std::string &typestr)
 {
   using Class = gz::math::Vector2<T>;
-  const int vec_size = 2;
+  static constexpr int vec_size = 2;
   auto toString = [](const Class &si) {
     std::stringstream stream;
     stream << si;
