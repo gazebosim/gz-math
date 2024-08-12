@@ -14,9 +14,10 @@
 
 import math
 import unittest
-from gz.math8 import Matrix3d
+from gz.math8 import Matrix3d, Matrix3f
 from gz.math8 import Quaterniond
 from gz.math8 import Vector3d
+import test_common
 
 
 class TestMatrix3(unittest.TestCase):
@@ -333,6 +334,10 @@ class TestMatrix3(unittest.TestCase):
                        0,  0, -1)
         q2 = Quaterniond(mat)
         self.assertTrue(q == q2)
+
+    def test_buffer(self):
+        test_common.test_matrix(self, 3, Matrix3d)
+        test_common.test_matrix(self, 3, Matrix3f)
 
 
 if __name__ == '__main__':

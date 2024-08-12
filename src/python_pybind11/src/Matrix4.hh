@@ -51,6 +51,7 @@ template<typename T>
 void helpDefineMathMatrix4(py::module &m, const std::string &typestr)
 {
   using Class = gz::math::Matrix4<T>;
+  const int mat_size = 4;
   auto toString = [](const Class &si) {
     std::stringstream stream;
     stream << si;
@@ -144,6 +145,16 @@ void helpDefineMathMatrix4(py::module &m, const std::string &typestr)
     }, "memo"_a)
     .def_readonly_static("IDENTITY", &Class::Identity, "Identity matrix")
     .def_readonly_static("ZERO", &Class::Zero, "Zero matrix")
+    .def_buffer([](Class &self) -> py::buffer_info {
+        return py::buffer_info(
+            self.Data(),
+            sizeof(T),
+            py::format_descriptor<T>::format(),
+            2,
+            { mat_size, mat_size },
+            { mat_size * sizeof(T), sizeof(T) }
+        );
+    })
     .def("__str__", toString)
     .def("__repr__", toString);
 }

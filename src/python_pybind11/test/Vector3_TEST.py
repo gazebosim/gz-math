@@ -15,6 +15,7 @@
 import copy
 import math
 import unittest
+import test_common
 
 from gz.math8 import Vector3d
 from gz.math8 import Vector3f
@@ -373,6 +374,14 @@ class TestVector3(unittest.TestCase):
         nanVecF.correct()
         self.assertEqual(Vector3f.ZERO, nanVecF)
         self.assertTrue(nanVecF.is_finite())
+
+    def test_buffer(self):
+        test_common.test_vector(self, 3, Vector3d)
+        test_common.test_vector(self, 3, Vector3f)
+
+
+if __name__ == '__main__':
+    unittest.main()
 
 if __name__ == '__main__':
     unittest.main()

@@ -706,6 +706,15 @@ namespace gz::math
       return _in;
     }
 
+    /// \brief Underlying data pointer
+    /// \remarks This method is intended for python bindings (numpy).
+    /// \remarks It's preferable not to rely on it.
+    /// \return The pointer to the underlying data.
+    public: T* Data()
+    {
+      return this->data;
+    }
+
     /// \brief Data values, 0==x, 1==y, 2==z, 3==w
     private: T data[4];
   };

@@ -14,10 +14,11 @@
 
 import math
 import unittest
-from gz.math8 import Matrix4d
+from gz.math8 import Matrix4d, Matrix4f
 from gz.math8 import Pose3d
 from gz.math8 import Quaterniond
 from gz.math8 import Vector3d
+import test_common
 
 
 class TestMatrix4(unittest.TestCase):
@@ -515,6 +516,9 @@ class TestMatrix4(unittest.TestCase):
                                Vector3d(0, 1, 1)).pose(),
                                Pose3d(1, 1, 1, math.pi/4, 0, math.pi))
 
+    def test_buffer(self):
+        test_common.test_matrix(self, 4, Matrix4d)
+        test_common.test_matrix(self, 4, Matrix4f)
 
 if __name__ == '__main__':
     unittest.main()

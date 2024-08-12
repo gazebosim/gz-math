@@ -15,6 +15,7 @@
 import copy
 import math
 import unittest
+import test_common
 
 from gz.math8 import Vector4d
 from gz.math8 import Vector4f
@@ -280,6 +281,10 @@ class TestVector4(unittest.TestCase):
         nanVecF.correct()
         self.assertEqual(Vector4f.ZERO, nanVecF)
         self.assertTrue(nanVecF.is_finite())
+
+    def test_buffer(self):
+        test_common.test_vector(self, 4, Vector4d)
+        test_common.test_vector(self, 4, Vector4f)
 
 if __name__ == '__main__':
     unittest.main()

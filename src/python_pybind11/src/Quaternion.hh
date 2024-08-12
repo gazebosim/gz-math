@@ -20,6 +20,7 @@
 
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
@@ -62,7 +63,6 @@ void helpDefineMathQuaternion(py::module &m, const std::string &typestr)
   std::string pyclass_name = typestr;
   py::class_<Class>(m,
                     pyclass_name.c_str(),
-                    py::buffer_protocol(),
                     py::dynamic_attr())
     .def(py::init<>())
     .def(py::init<T, T, T, T>())
@@ -210,6 +210,9 @@ void helpDefineMathQuaternion(py::module &m, const std::string &typestr)
     }, "memo"_a)
     .def_readonly_static("IDENTITY", &Class::Identity, "Identity matrix")
     .def_readonly_static("ZERO", &Class::Zero, "Zero matrix")
+    .def("xyzw", [](const Class &self){
+        return std::vector<T> { self.X(), self.Y(), self.Z(), self.W() };
+      }, "Number of elements in the vector")
     .def("__str__", toString)
     .def("__repr__", toString);
 }

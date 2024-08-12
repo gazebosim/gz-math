@@ -51,6 +51,7 @@ template<typename T>
 void helpDefineMathMatrix6(py::module &_m, const std::string &_typestr)
 {
   using Class = Matrix6<T>;
+  const int mat_size = 6;
   auto toString = [](const Class &_si) {
     std::stringstream stream;
     stream << _si;
@@ -98,6 +99,16 @@ void helpDefineMathMatrix6(py::module &_m, const std::string &_typestr)
     }, "memo"_a)
     .def_readonly_static("IDENTITY", &Class::Identity, "Identity matrix")
     .def_readonly_static("ZERO", &Class::Zero, "Zero matrix")
+    .def_buffer([](Class &self) -> py::buffer_info {
+        return py::buffer_info(
+            self.Data(),
+            sizeof(T),
+            py::format_descriptor<T>::format(),
+            2,
+            { mat_size, mat_size },
+            { mat_size * sizeof(T), sizeof(T) }
+        );
+    })
     .def("__str__", toString)
     .def("__repr__", toString);
 }
