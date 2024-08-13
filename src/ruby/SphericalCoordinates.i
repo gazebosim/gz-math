@@ -24,6 +24,11 @@
 #include <gz/math/Angle.hh>
 #include <gz/math/Vector3.hh>
 #include <gz/math/config.hh>
+
+GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+// GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION is not present;
+// that's not a problem in SWIG generated files
+
 %}
 
 namespace gz
@@ -52,11 +57,14 @@ namespace gz
 
                 /// \brief Heading-adjusted tangent plane (X, Y, Z)
                 /// This has kept a bug for backwards compatibility, use
-                /// LOCAL2 for the correct behaviour.
+                /// LOCAL_TANGENT for the correct behaviour.
                 LOCAL = 4,
 
+                /// \brief Equivalent to LOCAL_TANGENT.
+                LOCAL2 = 5,
+
                 /// \brief Heading-adjusted tangent plane (X, Y, Z)
-                LOCAL2 = 5
+                LOCAL_TANGENT = 5
               };
 
       public: SphericalCoordinates();
@@ -78,6 +86,12 @@ namespace gz
                   const gz::math::Vector3<double> &_xyz) const;
 
       public: gz::math::Vector3<double> GlobalFromLocalVelocity(
+                  const gz::math::Vector3<double> &_xyz) const;
+
+      public: gz::math::Vector3<double> SphericalPositionFromLocal(
+                  const gz::math::Vector3<double> &_xyz) const;
+
+      public: gz::math::Vector3<double> GlobalVelocityFromLocal(
                   const gz::math::Vector3<double> &_xyz) const;
 
       public: static SurfaceType Convert(const std::string &_str);
@@ -113,6 +127,12 @@ namespace gz
                   const gz::math::Vector3<double> &_latLonEle) const;
 
       public: gz::math::Vector3<double> LocalFromGlobalVelocity(
+                  const gz::math::Vector3<double> &_xyz) const;
+
+      public: gz::math::Vector3<double> LocalPositionFromSpherical(
+                  const gz::math::Vector3<double> &_latLonEle) const;
+
+      public: gz::math::Vector3<double> LocalVelocityFromGlobal(
                   const gz::math::Vector3<double> &_xyz) const;
 
       public: void UpdateTransformationMatrix();

@@ -191,28 +191,28 @@ class TestSphericalCoordinates(unittest.TestCase):
         enu = Vector3d()
 
         xyz.set(1, 0, 0)
-        enu = sc.global_from_local_velocity(xyz)
+        enu = sc.global_velocity_from_local(xyz)
         self.assertAlmostEqual(enu.y(), xyz.x(), delta=1e-6)
         self.assertAlmostEqual(enu.x(), -xyz.y(), delta=1e-6)
-        self.assertEqual(xyz, sc.local_from_global_velocity(enu))
+        self.assertEqual(xyz, sc.local_velocity_from_global(enu))
 
         xyz.set(0, 1, 0)
-        enu = sc.global_from_local_velocity(xyz)
+        enu = sc.global_velocity_from_local(xyz)
         self.assertAlmostEqual(enu.y(), xyz.x(), delta=1e-6)
         self.assertAlmostEqual(enu.x(), -xyz.y(), delta=1e-6)
-        self.assertEqual(xyz, sc.local_from_global_velocity(enu))
+        self.assertEqual(xyz, sc.local_velocity_from_global(enu))
 
         xyz.set(1, -1, 0)
-        enu = sc.global_from_local_velocity(xyz)
+        enu = sc.global_velocity_from_local(xyz)
         self.assertAlmostEqual(enu.y(), xyz.x(), delta=1e-6)
         self.assertAlmostEqual(enu.x(), -xyz.y(), delta=1e-6)
-        self.assertEqual(xyz, sc.local_from_global_velocity(enu))
+        self.assertEqual(xyz, sc.local_velocity_from_global(enu))
 
         xyz.set(2243.52334, 556.35, 435.6553)
-        enu = sc.global_from_local_velocity(xyz)
+        enu = sc.global_velocity_from_local(xyz)
         self.assertAlmostEqual(enu.y(), xyz.x(), delta=1e-6)
         self.assertAlmostEqual(enu.x(), -xyz.y(), delta=1e-6)
-        self.assertEqual(xyz, sc.local_from_global_velocity(enu))
+        self.assertEqual(xyz, sc.local_velocity_from_global(enu))
 
         # Check SphericalFromLocal
         # local frame
@@ -222,7 +222,7 @@ class TestSphericalCoordinates(unittest.TestCase):
 
         # No offset
         xyz.set(0, 0, 0)
-        sph = sc.spherical_from_local_position(xyz)
+        sph = sc.spherical_position_from_local(xyz)
         # latitude
         self.assertAlmostEqual(sph.x(), lat.degree(), delta=1e-6)
         # longitude
@@ -235,13 +235,13 @@ class TestSphericalCoordinates(unittest.TestCase):
         # a plane (not along the curvature of Earth). This will result in
         # a large height offset.
         xyz.set(2e5, 0, 0)
-        sph = sc.spherical_from_local_position(xyz)
+        sph = sc.spherical_position_from_local(xyz)
         # increase in latitude about 1.8 degrees
         self.assertAlmostEqual(sph.x(), lat.degree() + 1.8, delta=0.008)
         # no change in longitude
         self.assertAlmostEqual(sph.z(), 3507.024791, delta=1e-6)
 
-        xyz2 = sc.local_from_spherical_position(sph)
+        xyz2 = sc.local_position_from_spherical(sph)
         self.assertEqual(xyz, xyz2)
 
         # Check position projection
@@ -286,13 +286,13 @@ class TestSphericalCoordinates(unittest.TestCase):
         self.assertAlmostEqual(tmp.z(), osrf_s.z(), delta=1e-2)
 
         # Check that SPHERICAL -> LOCAL works
-        tmp = sc2.local_from_spherical_position(goog_s)
+        tmp = sc2.local_position_from_spherical(goog_s)
         self.assertAlmostEqual(tmp.x(), vec.x(), delta=8e-2)
         self.assertAlmostEqual(tmp.y(), vec.y(), delta=8e-2)
         self.assertAlmostEqual(tmp.z(), vec.z(), delta=1e-2)
 
         # Check that SPHERICAL -> LOCAL -> SPHERICAL works
-        tmp = sc2.spherical_from_local_position(tmp)
+        tmp = sc2.spherical_position_from_local(tmp)
         self.assertAlmostEqual(tmp.x(), goog_s.x(), delta=8e-2)
         self.assertAlmostEqual(tmp.y(), goog_s.y(), delta=8e-2)
         self.assertAlmostEqual(tmp.z(), goog_s.z(), delta=1e-2)
@@ -311,24 +311,24 @@ class TestSphericalCoordinates(unittest.TestCase):
         enu = Vector3d()
 
         xyz.set(1, 0, 0)
-        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL2, SphericalCoordinates.GLOBAL)
+        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL_TANGENT, SphericalCoordinates.GLOBAL)
         self.assertEqual(xyz, enu)
-        self.assertEqual(xyz, sc.local_from_global_velocity(enu))
+        self.assertEqual(xyz, sc.local_velocity_from_global(enu))
 
         xyz.set(0, 1, 0)
-        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL2, SphericalCoordinates.GLOBAL)
+        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL_TANGENT, SphericalCoordinates.GLOBAL)
         self.assertEqual(xyz, enu)
-        self.assertEqual(xyz, sc.local_from_global_velocity(enu))
+        self.assertEqual(xyz, sc.local_velocity_from_global(enu))
 
         xyz.set(1, -1, 0)
-        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL2, SphericalCoordinates.GLOBAL)
+        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL_TANGENT, SphericalCoordinates.GLOBAL)
         self.assertEqual(xyz, enu)
-        self.assertEqual(xyz, sc.local_from_global_velocity(enu))
+        self.assertEqual(xyz, sc.local_velocity_from_global(enu))
 
         xyz.set(2243.52334, 556.35, 435.6553)
-        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL2, SphericalCoordinates.GLOBAL)
+        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL_TANGENT, SphericalCoordinates.GLOBAL)
         self.assertEqual(xyz, enu)
-        self.assertEqual(xyz, sc.local_from_global_velocity(enu))
+        self.assertEqual(xyz, sc.local_velocity_from_global(enu))
 
     def test_distance(self):
         latA = Angle()
@@ -482,51 +482,51 @@ class TestSphericalCoordinates(unittest.TestCase):
         sc = SphericalCoordinates(st, lat, lon, elev, heading)
 
         # Origin matches input
-        latLonAlt = sc.spherical_from_local_position(Vector3d(0, 0, 0))
+        latLonAlt = sc.spherical_position_from_local(Vector3d(0, 0, 0))
         self.assertEqual(lat.degree(), latLonAlt.x())
         self.assertEqual(lon.degree(), latLonAlt.y())
         self.assertEqual(elev, latLonAlt.z())
 
-        xyzOrigin = sc.local_from_spherical_position(latLonAlt)
+        xyzOrigin = sc.local_position_from_spherical(latLonAlt)
         self.assertEqual(Vector3d.ZERO, xyzOrigin)
 
         # Check how different lat/lon affect the local position
 
         # Increase latitude == go North == go +Y
-        xyz = sc.local_from_spherical_position(
+        xyz = sc.local_position_from_spherical(
             Vector3d(lat.degree() + 1.0, lon.degree(), elev))
         self.assertAlmostEqual(xyzOrigin.x(), xyz.x(), delta=1e-6)
         self.assertLess(xyzOrigin.y(), xyz.y())
 
         # Decrease latitude == go South == go -Y
-        xyz = sc.local_from_spherical_position(
+        xyz = sc.local_position_from_spherical(
             Vector3d(lat.degree() - 1.0, lon.degree(), elev))
         self.assertAlmostEqual(xyzOrigin.x(), xyz.x(), delta=1e-6)
         self.assertGreater(xyzOrigin.y(), xyz.y())
 
         # Increase longitude == go East == go +X
         # Also move a bit -Y because this is the Southern Hemisphere
-        xyz = sc.local_from_spherical_position(
+        xyz = sc.local_position_from_spherical(
             Vector3d(lat.degree(), lon.degree() + 1.0, elev))
         self.assertLess(xyzOrigin.x(), xyz.x())
         self.assertGreater(xyzOrigin.y(), xyz.y())
 
         # Decrease longitude == go West == go -X
         # Also move a bit -Y because this is the Southern Hemisphere
-        xyz = sc.local_from_spherical_position(
+        xyz = sc.local_position_from_spherical(
             Vector3d(lat.degree(), lon.degree() - 1.0, elev))
         self.assertGreater(xyzOrigin.x(), xyz.x())
         self.assertGreater(xyzOrigin.y(), xyz.y())
 
         # Increase altitude
-        xyz = sc.local_from_spherical_position(
+        xyz = sc.local_position_from_spherical(
             Vector3d(lat.degree(), lon.degree(), elev + 10.0))
         self.assertAlmostEqual(xyzOrigin.x(), xyz.x(), delta=1e-6)
         self.assertAlmostEqual(xyzOrigin.y(), xyz.y(), delta=1e-6)
         self.assertAlmostEqual(xyzOrigin.z() + 10.0, xyz.z(), delta=1e-6)
 
         # Decrease altitude
-        xyz = sc.local_from_spherical_position(
+        xyz = sc.local_position_from_spherical(
             Vector3d(lat.degree(), lon.degree(), elev - 10.0))
         self.assertAlmostEqual(xyzOrigin.x(), xyz.x(), delta=1e-6)
         self.assertAlmostEqual(xyzOrigin.y(), xyz.y(), delta=1e-6)
@@ -538,20 +538,16 @@ class TestSphericalCoordinates(unittest.TestCase):
         # +X (East), +Y (North), -X (West), -Y (South), +Z (up), -Z (down)
         for global_var in [Vector3d.UNIT_X, Vector3d.UNIT_Y, Vector3d.UNIT_Z,
                            -Vector3d.UNIT_X, -Vector3d.UNIT_Y, -Vector3d.UNIT_Z]:
-            local = sc.local_from_global_velocity(global_var)
+            local = sc.local_velocity_from_global(global_var)
             self.assertEqual(global_var, local)
 
-            # This function is broken for horizontal velocities
-            global_var = sc.global_from_local_velocity(local)
-            if abs(global_var.z()) < 0.1:
-                self.assertNotEqual(global_var, local)
-            else:
-                self.assertEqual(global_var, local)
+            global_var = sc.global_velocity_from_local(local)
+            self.assertEqual(global_var, local)
 
-            # Directly call fixed version
+            # Directly call velocity_transform
             global_var = sc.velocity_transform(
                 local,
-                SphericalCoordinates.LOCAL2,
+                SphericalCoordinates.LOCAL_TANGENT,
                 SphericalCoordinates.GLOBAL)
             self.assertEqual(global_var, local)
 
@@ -565,36 +561,36 @@ class TestSphericalCoordinates(unittest.TestCase):
         sc = SphericalCoordinates(st, lat, lon, elev, heading)
 
         # Origin matches input
-        latLonAlt = sc.spherical_from_local_position(Vector3d(0, 0, 0))
+        latLonAlt = sc.spherical_position_from_local(Vector3d(0, 0, 0))
         self.assertEqual(lat.degree(), latLonAlt.x())
         self.assertEqual(lon.degree(), latLonAlt.y())
         self.assertEqual(elev, latLonAlt.z())
 
-        xyzOrigin = sc.local_from_spherical_position(latLonAlt)
+        xyzOrigin = sc.local_position_from_spherical(latLonAlt)
         self.assertEqual(Vector3d.ZERO, xyzOrigin)
 
         # Check how different lat/lon affect the local position
 
         # Increase latitude == go North == go +X
-        xyz = sc.local_from_spherical_position(
+        xyz = sc.local_position_from_spherical(
             Vector3d(lat.degree() + 1.0, lon.degree(), elev))
         self.assertAlmostEqual(xyzOrigin.y(), xyz.y(), delta=1e-6)
         self.assertLess(xyzOrigin.x(), xyz.x())
 
         # Decrease latitude == go South == go -X
-        xyz = sc.local_from_spherical_position(
+        xyz = sc.local_position_from_spherical(
             Vector3d(lat.degree() - 1.0, lon.degree(), elev))
         self.assertAlmostEqual(xyzOrigin.y(), xyz.y(), delta=1e-6)
         self.assertGreater(xyzOrigin.x(), xyz.x())
 
         # Increase longitude == go East == go -Y (and a bit -X)
-        xyz = sc.local_from_spherical_position(
+        xyz = sc.local_position_from_spherical(
             Vector3d(lat.degree(), lon.degree() + 1.0, elev))
         self.assertGreater(xyzOrigin.y(), xyz.y())
         self.assertGreater(xyzOrigin.x(), xyz.x())
 
         # Decrease longitude == go West == go +Y (and a bit -X)
-        xyz = sc.local_from_spherical_position(
+        xyz = sc.local_position_from_spherical(
             Vector3d(lat.degree(), lon.degree() - 1.0, elev))
         self.assertLess(xyzOrigin.y(), xyz.y())
         self.assertGreater(xyzOrigin.x(), xyz.x())
@@ -613,13 +609,13 @@ class TestSphericalCoordinates(unittest.TestCase):
             [Vector3d.UNIT_Y, Vector3d.UNIT_X],
             [-Vector3d.UNIT_Y, -Vector3d.UNIT_X]]
         for [global_var, local] in globalLocal:
-            localRes = sc.local_from_global_velocity(global_var)
+            localRes = sc.local_velocity_from_global(global_var)
             self.assertEqual(local, localRes)
 
             # Directly call fixed version
             globalRes = sc.velocity_transform(
                 local,
-                SphericalCoordinates.LOCAL2,
+                SphericalCoordinates.LOCAL_TANGENT,
                 SphericalCoordinates.GLOBAL)
             self.assertEqual(global_var, globalRes)
 
@@ -631,42 +627,42 @@ class TestSphericalCoordinates(unittest.TestCase):
         elev = 354.1
         sc = SphericalCoordinates(st, lat, lon, elev, heading)
 
-        # GLOBAL <-> LOCAL2
+        # GLOBAL <-> LOCAL_TANGENT
         in_vector = Vector3d(1, 2, -4)
         out = sc.velocity_transform(
             in_vector,
-            SphericalCoordinates.LOCAL2,
+            SphericalCoordinates.LOCAL_TANGENT,
             SphericalCoordinates.GLOBAL)
         self.assertNotEqual(in_vector, out)
         reverse = sc.velocity_transform(
             out,
             SphericalCoordinates.GLOBAL,
-            SphericalCoordinates.LOCAL2)
+            SphericalCoordinates.LOCAL_TANGENT)
         self.assertEqual(in_vector, reverse)
 
         in_vector = Vector3d(1, 2, -4)
         out = sc.position_transform(
             in_vector,
-            SphericalCoordinates.LOCAL2,
+            SphericalCoordinates.LOCAL_TANGENT,
             SphericalCoordinates.GLOBAL)
         self.assertNotEqual(in_vector, out)
         reverse = sc.position_transform(
             out,
             SphericalCoordinates.GLOBAL,
-            SphericalCoordinates.LOCAL2)
+            SphericalCoordinates.LOCAL_TANGENT)
         self.assertEqual(in_vector, reverse)
 
-        # SPHERICAL <-> LOCAL2
+        # SPHERICAL <-> LOCAL_TANGENT
         in_vector = Vector3d(1, 2, -4)
         out = sc.position_transform(
             in_vector,
-            SphericalCoordinates.LOCAL2,
+            SphericalCoordinates.LOCAL_TANGENT,
             SphericalCoordinates.SPHERICAL)
         self.assertNotEqual(in_vector, out)
         reverse = sc.position_transform(
             out,
             SphericalCoordinates.SPHERICAL,
-            SphericalCoordinates.LOCAL2)
+            SphericalCoordinates.LOCAL_TANGENT)
         self.assertEqual(in_vector, reverse)
 
 

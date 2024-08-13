@@ -377,8 +377,10 @@ void SphericalCoordinates::SetHeadingOffset(const Angle &_angle)
 Vector3d SphericalCoordinates::SphericalFromLocalPosition(
     const Vector3d &_xyz) const
 {
+  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
   Vector3d result =
     this->PositionTransform(_xyz, LOCAL, SPHERICAL);
+  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
   result.X(GZ_RTOD(result.X()));
   result.Y(GZ_RTOD(result.Y()));
   return result;
@@ -391,21 +393,62 @@ Vector3d SphericalCoordinates::LocalFromSphericalPosition(
   Vector3d result = _xyz;
   result.X(GZ_DTOR(result.X()));
   result.Y(GZ_DTOR(result.Y()));
+  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
   return this->PositionTransform(result, SPHERICAL, LOCAL);
+  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
 }
 
 //////////////////////////////////////////////////
 Vector3d SphericalCoordinates::GlobalFromLocalVelocity(
     const Vector3d &_xyz) const
 {
+  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
   return this->VelocityTransform(_xyz, LOCAL, GLOBAL);
+  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
 }
 
 //////////////////////////////////////////////////
 Vector3d SphericalCoordinates::LocalFromGlobalVelocity(
     const Vector3d &_xyz) const
 {
+  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
   return this->VelocityTransform(_xyz, GLOBAL, LOCAL);
+  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+}
+
+//////////////////////////////////////////////////
+Vector3d SphericalCoordinates::SphericalPositionFromLocal(
+    const Vector3d &_xyz) const
+{
+  Vector3d result =
+    this->PositionTransform(_xyz, LOCAL_TANGENT, SPHERICAL);
+  result.X(GZ_RTOD(result.X()));
+  result.Y(GZ_RTOD(result.Y()));
+  return result;
+}
+
+//////////////////////////////////////////////////
+Vector3d SphericalCoordinates::LocalPositionFromSpherical(
+    const Vector3d &_xyz) const
+{
+  Vector3d result = _xyz;
+  result.X(GZ_DTOR(result.X()));
+  result.Y(GZ_DTOR(result.Y()));
+  return this->PositionTransform(result, SPHERICAL, LOCAL_TANGENT);
+}
+
+//////////////////////////////////////////////////
+Vector3d SphericalCoordinates::GlobalVelocityFromLocal(
+    const Vector3d &_xyz) const
+{
+  return this->VelocityTransform(_xyz, LOCAL_TANGENT, GLOBAL);
+}
+
+//////////////////////////////////////////////////
+Vector3d SphericalCoordinates::LocalVelocityFromGlobal(
+    const Vector3d &_xyz) const
+{
+  return this->VelocityTransform(_xyz, GLOBAL, LOCAL_TANGENT);
 }
 
 //////////////////////////////////////////////////
@@ -535,8 +578,10 @@ Vector3d SphericalCoordinates::PositionTransform(
   // Convert whatever arrives to a more flexible ECEF coordinate
   switch (_in)
   {
-    // East, North, Up (ENU), note no break at end of case
+    // West, South, Up (WSU)
+    GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
     case LOCAL:
+    GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
       {
         tmp.X(-_pos.X() * this->dataPtr->cosHea + _pos.Y() *
             this->dataPtr->sinHea);
@@ -546,7 +591,8 @@ Vector3d SphericalCoordinates::PositionTransform(
         break;
       }
 
-    case LOCAL2:
+    // East, North, Up (ENU)
+    case LOCAL_TANGENT:
       {
         tmp.X(_pos.X() * this->dataPtr->cosHea + _pos.Y() *
             this->dataPtr->sinHea);
@@ -620,8 +666,10 @@ Vector3d SphericalCoordinates::PositionTransform(
       break;
 
     // Convert from ECEF TO LOCAL
+    GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
     case LOCAL:
-    case LOCAL2:
+    GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+    case LOCAL_TANGENT:
       tmp = this->dataPtr->rotECEFToGlobal * (tmp - this->dataPtr->origin);
 
       tmp = Vector3d(
@@ -659,15 +707,18 @@ Vector3d SphericalCoordinates::VelocityTransform(
   // First, convert to an ECEF vector
   switch (_in)
   {
-    // ENU
+    // WSU
+    GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
     case LOCAL:
+    GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
       tmp.X(-_vel.X() * this->dataPtr->cosHea + _vel.Y() *
             this->dataPtr->sinHea);
       tmp.Y(-_vel.X() * this->dataPtr->sinHea - _vel.Y() *
             this->dataPtr->cosHea);
       tmp = this->dataPtr->rotGlobalToECEF * tmp;
       break;
-    case LOCAL2:
+    // ENU
+    case LOCAL_TANGENT:
       tmp.X(_vel.X() * this->dataPtr->cosHea + _vel.Y() *
             this->dataPtr->sinHea);
       tmp.Y(-_vel.X() * this->dataPtr->sinHea + _vel.Y() *
@@ -700,8 +751,10 @@ Vector3d SphericalCoordinates::VelocityTransform(
       break;
 
     // Convert from ECEF to local
+    GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
     case LOCAL:
-    case LOCAL2:
+    GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+    case LOCAL_TANGENT:
       tmp = this->dataPtr->rotECEFToGlobal * tmp;
       tmp = Vector3d(
           tmp.X() * this->dataPtr->cosHea - tmp.Y() * this->dataPtr->sinHea,

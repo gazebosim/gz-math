@@ -7,6 +7,19 @@ release will remove the deprecated code.
 
 ## Gazebo Math 8.X to 9.X
 
+### Additions
+
+1. **SphericalCoordinates.hh**
+    + `SphericalCoordinates::SphericalPositionFromLocal()`.
+    + `SphericalCoordinates::LocalPositionFromSpherical()`.
+    + `SphericalCoordinates::GlobalVelocityFromLocal()`.
+    + `SphericalCoordinates::LocalVelocityFromGlobal()`.
+    + Enum value `SphericalCoordinates::CoordinateType::LOCAL_TANGENT`
+      which substitutes the wrong `LOCAL` coordinate and improves the
+      name of `LOCAL2` (it is its functional equivalent).
+    + These functions use the newly introduced `LOCAL_TANGENT`
+      coordinate type instead of the wrong `LOCAL` frame.
+
 ### Deprecations
 
 1. **graph/Vertex.hh**
@@ -18,6 +31,27 @@ release will remove the deprecated code.
     + The `Edge::NullEdge` static member is deprecated. Please use
       `Vertex::NullEdge()` instead.
       E.g.: https://github.com/gazebosim/gz-math/pull/606/files#diff-0c0220a7e72be70337975433eeddc3f5e072ade5cd80dfb1ac03da233c39c983L222-R222
+
+1. **SphericalCoordinates.hh**
+    + Deprecated `LOCAL` and `LOCAL2` values of enum
+      `SphericalCoordinates::CoordinateType`. Use `LOCAL_TANGENT`
+      instead. When replacing `LOCAL`, you have to rotate the output by
+      180 degrees in heading.
+    + Deprecated `SphericalCoordinates::SphericalFromLocalPosition` which
+      gives incorrect results.
+      Use `SphericalCoordinates::SphericalPositionFromLocal` instead.
+    + Deprecated `SphericalCoordinates::GlobalFromLocalVelocity` which
+      gives incorrect results (WSU frame instead of ENU).
+      Use `SphericalCoordinates::GlobalVelocityFromLocal` instead and
+      negate the `x` component of the result.
+    + Deprecated `SphericalCoordinates::LocalFromSphericalPosition` to
+      unify naming.
+      Use `SphericalCoordinates::LocalPositionFromSpherical` instead (it
+      yields identical results).
+    + Deprecated `SphericalCoordinates::LocalFromGlobalVelocity` to
+      unify naming.
+      Use `SphericalCoordinates::LocalVelocityFromGlobal` instead (it
+      yields identical results).
 
 ## Gazebo Math 7.X to 8.X
 

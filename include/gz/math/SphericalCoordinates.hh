@@ -65,11 +65,14 @@ namespace gz::math
 
               /// \brief Heading-adjusted tangent plane (X, Y, Z)
               /// This has kept a bug for backwards compatibility, use
-              /// LOCAL2 for the correct behaviour.
-              LOCAL = 4,
+              /// LOCAL_TANGENT for the correct behaviour.
+              LOCAL GZ_DEPRECATED(8) = 4,
+
+              /// \brief Equivalent to LOCAL_TANGENT.
+              LOCAL2 GZ_DEPRECATED(8) = 5,
 
               /// \brief Heading-adjusted tangent plane (X, Y, Z)
-              LOCAL2 = 5
+              LOCAL_TANGENT = 5
             };
 
     /// \brief Constructor.
@@ -104,31 +107,50 @@ namespace gz::math
     /// \brief Convert a Cartesian position vector to geodetic coordinates.
     /// This performs a `PositionTransform` from LOCAL to SPHERICAL.
     ///
-    /// There's a known bug with this computation that can't be fixed on
-    /// version 6 to avoid behaviour changes. Directly call
-    /// `PositionTransform(_xyz, LOCAL2, SPHERICAL)` for correct results.
-    /// Note that `PositionTransform` returns spherical coordinates in
-    /// radians.
+    /// \deprecated This function returns incorrect results.
+    ///             Call `SphericalPositionFromLocal` for correct results.
+    ///             Please note the results of this function are in a wrong
+    ///             frame (West-Sout-Up instead of East-North-Up).
     ///
     /// \param[in] _xyz Cartesian position vector in the heading-adjusted
     /// world frame.
-    /// \return Cooordinates: geodetic latitude (deg), longitude (deg),
-    ///         altitude above sea level (m).
-    public: gz::math::Vector3d SphericalFromLocalPosition(
+    /// \return Cooordinates: geodetic latitude (deg West),
+    ///         longitude (deg South), altitude above sea level (m).
+    public: GZ_DEPRECATED(8) gz::math::Vector3d SphericalFromLocalPosition(
+                const gz::math::Vector3d &_xyz) const;
+
+    /// \brief Convert a Cartesian velocity vector in the local frame
+    ///        to a global Cartesian frame with components West, South, Up.
+    /// This is a wrapper around `VelocityTransform(_xyz, LOCAL, GLOBAL)`
+    ///
+    /// \deprecated This function returns incorrect results.
+    ///             Call `GlobalVelocityFromLocal` for correct results.
+    ///
+    /// \param[in] _xyz Cartesian velocity vector in the heading-adjusted
+    /// world frame.
+    /// \return Rotated vector with components (x,y,z): (West, South, Up).
+    public: GZ_DEPRECATED(8) gz::math::Vector3d GlobalFromLocalVelocity(
+                const gz::math::Vector3d &_xyz) const;
+
+    /// \brief Convert a Cartesian position vector to geodetic coordinates.
+    /// This performs a `PositionTransform` from LOCAL_TANGENT to SPHERICAL.
+    ///
+    /// \param[in] _xyz Cartesian position vector in the heading-adjusted
+    /// world frame.
+    /// \return Cooordinates: geodetic latitude (deg East),
+    ///         longitude (deg North), altitude above sea level (m).
+    public: gz::math::Vector3d SphericalPositionFromLocal(
                 const gz::math::Vector3d &_xyz) const;
 
     /// \brief Convert a Cartesian velocity vector in the local frame
     ///        to a global Cartesian frame with components East, North, Up.
-    /// This is a wrapper around `VelocityTransform(_xyz, LOCAL, GLOBAL)`
-    ///
-    /// There's a known bug with this computation that can't be fixed on
-    /// version 6 to avoid behaviour changes. Directly call
-    /// `VelocityTransform(_xyz, LOCAL2, GLOBAL)` for correct results.
+    /// This is a wrapper around
+    /// `VelocityTransform(_xyz, LOCAL_TANGENT, GLOBAL)`
     ///
     /// \param[in] _xyz Cartesian velocity vector in the heading-adjusted
     /// world frame.
     /// \return Rotated vector with components (x,y,z): (East, North, Up).
-    public: gz::math::Vector3d GlobalFromLocalVelocity(
+    public: gz::math::Vector3d GlobalVelocityFromLocal(
                 const gz::math::Vector3d &_xyz) const;
 
     /// \brief Convert a string to a SurfaceType.
@@ -245,10 +267,30 @@ namespace gz::math
 
     /// \brief Convert a geodetic position vector to Cartesian coordinates.
     /// This performs a `PositionTransform` from SPHERICAL to LOCAL.
+    /// \deprecated Use `LocalPositionFromSpherical` instead (it gives identical
+    ///             results).
     /// \param[in] _latLonEle Geodetic position in the planetary frame of
     /// reference. X: latitude (deg), Y: longitude (deg), X: altitude.
     /// \return Cartesian position vector in the heading-adjusted world frame.
-    public: gz::math::Vector3d LocalFromSphericalPosition(
+    public: GZ_DEPRECATED(8) gz::math::Vector3d LocalFromSphericalPosition(
+                const gz::math::Vector3d &_latLonEle) const;
+
+    /// \brief Convert a Cartesian velocity vector with components East,
+    /// North, Up to a local cartesian frame vector XYZ.
+    /// This is a wrapper around `VelocityTransform(_xyz, GLOBAL, LOCAL)`
+    /// \deprecated Use `LocalVelocityFromGlobal` instead (it gives identical
+    ///             results).
+    /// \param[in] _xyz Vector with components (x,y,z): (East, North, Up).
+    /// \return Cartesian vector in the world frame.
+    public: GZ_DEPRECATED(8) gz::math::Vector3d LocalFromGlobalVelocity(
+                const gz::math::Vector3d &_xyz) const;
+
+    /// \brief Convert a geodetic position vector to Cartesian coordinates.
+    /// This performs a `PositionTransform` from SPHERICAL to LOCAL.
+    /// \param[in] _latLonEle Geodetic position in the planetary frame of
+    /// reference. X: latitude (deg), Y: longitude (deg), X: altitude.
+    /// \return Cartesian position vector in the heading-adjusted world frame.
+    public: gz::math::Vector3d LocalPositionFromSpherical(
                 const gz::math::Vector3d &_latLonEle) const;
 
     /// \brief Convert a Cartesian velocity vector with components East,
@@ -256,7 +298,7 @@ namespace gz::math
     /// This is a wrapper around `VelocityTransform(_xyz, GLOBAL, LOCAL)`
     /// \param[in] _xyz Vector with components (x,y,z): (East, North, Up).
     /// \return Cartesian vector in the world frame.
-    public: gz::math::Vector3d LocalFromGlobalVelocity(
+    public: gz::math::Vector3d LocalVelocityFromGlobal(
                 const gz::math::Vector3d &_xyz) const;
 
     /// \brief Update coordinate transformation matrix with reference location

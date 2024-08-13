@@ -47,10 +47,34 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
     .def(py::self != py::self)
     .def(py::self == py::self)
     .def("spherical_from_local_position",
-         &Class::SphericalFromLocalPosition,
+         [](const Class &self, const gz::math::Vector3d &_xyz)
+         {
+           PyErr_WarnEx(PyExc_DeprecationWarning,
+                        "spherical_from_local_position() is deprecated, "
+                        "use spherical_position_from_local() instead.",
+                        1);
+           GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+           return self.SphericalFromLocalPosition(_xyz);
+           GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+         },
          "Convert a Cartesian position vector to geodetic coordinates.")
     .def("global_from_local_velocity",
-         &Class::GlobalFromLocalVelocity,
+         [](const Class &self, const gz::math::Vector3d &_xyz)
+         {
+           PyErr_WarnEx(PyExc_DeprecationWarning,
+                        "global_from_local_velocity() is deprecated, "
+                        "use global_velocity_from_local() instead.",
+                        1);
+           GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+           return self.GlobalFromLocalVelocity(_xyz);
+           GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+         },
+         "Convert a Cartesian velocity vector in the local frame "
+         " to a global Cartesian frame with components West, South, Up")
+    .def("spherical_position_from_local", &Class::SphericalPositionFromLocal,
+         "Convert a Cartesian position vector to geodetic coordinates.")
+    .def("global_velocity_from_local",
+         &Class::GlobalVelocityFromLocal,
          "Convert a Cartesian velocity vector in the local frame "
          " to a global Cartesian frame with components East, North, Up")
     .def("convert",
@@ -122,10 +146,35 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
          &Class::SetHeadingOffset,
          "Set heading angle offset for the frame.")
     .def("local_from_spherical_position",
-         &Class::LocalFromSphericalPosition,
+         [](const Class &self, const gz::math::Vector3d&_xyz)
+         {
+           PyErr_WarnEx(PyExc_DeprecationWarning,
+                        "local_from_spherical_position() is deprecated, "
+                        "use local_position_from_spherical() instead.",
+                        1);
+           GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+           return self.LocalFromSphericalPosition(_xyz);
+           GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+         },
          "Convert a geodetic position vector to Cartesian coordinates.")
     .def("local_from_global_velocity",
-         &Class::LocalFromGlobalVelocity,
+         [](const Class &self, const gz::math::Vector3d&_xyz)
+         {
+           PyErr_WarnEx(PyExc_DeprecationWarning,
+                        "local_from_global_velocity() is deprecated, "
+                        "use local_velocity_from_global() instead.",
+                        1);
+           GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+           return self.LocalFromGlobalVelocity(_xyz);
+           GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+         },
+         "Convert a Cartesian velocity vector with components East, "
+         "North, Up to a local cartesian frame vector XYZ.")
+    .def("local_position_from_spherical",
+         &Class::LocalPositionFromSpherical,
+         "Convert a geodetic position vector to Cartesian coordinates.")
+    .def("local_velocity_from_global",
+         &Class::LocalVelocityFromGlobal,
          "Convert a Cartesian velocity vector with components East, "
          "North, Up to a local cartesian frame vector XYZ.")
     .def("update_transformation_matrix",
@@ -142,13 +191,16 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
          "Spherical coordinates use radians, while the other frames use "
          "meters.");
 
+   GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
    py::enum_<Class::CoordinateType>(sphericalCoordinates, "CoordinateType")
        .value("SPHERICAL", Class::CoordinateType::SPHERICAL)
        .value("ECEF", Class::CoordinateType::ECEF)
        .value("GLOBAL", Class::CoordinateType::GLOBAL)
        .value("LOCAL", Class::CoordinateType::LOCAL)
+       .value("LOCAL_TANGENT", Class::CoordinateType::LOCAL_TANGENT)
        .value("LOCAL2", Class::CoordinateType::LOCAL2)
        .export_values();
+   GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
    py::enum_<Class::SurfaceType>(sphericalCoordinates, "SurfaceType")
        .value("EARTH_WGS84", Class::SurfaceType::EARTH_WGS84)
        .value("MOON_SCS", Class::SurfaceType::MOON_SCS)
