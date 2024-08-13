@@ -41,8 +41,14 @@ namespace gz
 
       public: enum CoordinateType
               {
-                /// \brief Latitude, Longitude and Altitude by SurfaceType
+                /// \brief Latitude, Longitude and Altitude by SurfaceType [rad]
                 SPHERICAL = 1,
+
+                /// \brief Latitude, Longitude and Altitude by SurfaceType [rad]
+                SPHERICAL_RAD = 1,
+
+                /// \brief Latitude, Longitude and Altitude by SurfaceType [deg]
+                SPHERICAL_DEG = 6,
 
                 /// \brief Earth centered, earth fixed Cartesian
                 ECEF = 2,

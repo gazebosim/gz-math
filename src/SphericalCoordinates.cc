@@ -377,21 +377,14 @@ void SphericalCoordinates::SetHeadingOffset(const Angle &_angle)
 Vector3d SphericalCoordinates::SphericalFromLocalPosition(
     const Vector3d &_xyz) const
 {
-  Vector3d result =
-    this->PositionTransform(_xyz, LOCAL, SPHERICAL);
-  result.X(GZ_RTOD(result.X()));
-  result.Y(GZ_RTOD(result.Y()));
-  return result;
+  return this->PositionTransform(_xyz, LOCAL, SPHERICAL_DEG);
 }
 
 //////////////////////////////////////////////////
 Vector3d SphericalCoordinates::LocalFromSphericalPosition(
     const Vector3d &_xyz) const
 {
-  Vector3d result = _xyz;
-  result.X(GZ_DTOR(result.X()));
-  result.Y(GZ_DTOR(result.Y()));
-  return this->PositionTransform(result, SPHERICAL, LOCAL);
+  return this->PositionTransform(_xyz, SPHERICAL_DEG, LOCAL);
 }
 
 //////////////////////////////////////////////////
@@ -511,7 +504,7 @@ void SphericalCoordinates::UpdateTransformationMatrix()
     this->dataPtr->longitudeReference.Radian(),
     this->dataPtr->elevationReference);
   this->dataPtr->origin =
-    this->PositionTransform(this->dataPtr->origin, SPHERICAL, ECEF);
+    this->PositionTransform(this->dataPtr->origin, SPHERICAL_RAD, ECEF);
 }
 
 /////////////////////////////////////////////////
@@ -520,17 +513,6 @@ Vector3d SphericalCoordinates::PositionTransform(
     const CoordinateType &_in, const CoordinateType &_out) const
 {
   Vector3d tmp = _pos;
-
-  // Cache trig results
-  double cosLat = cos(_pos.X());
-  double sinLat = sin(_pos.X());
-  double cosLon = cos(_pos.Y());
-  double sinLon = sin(_pos.Y());
-
-  // Radius of planet curvature (meters)
-  double curvature = 1.0 -
-    this->dataPtr->ellE * this->dataPtr->ellE * sinLat * sinLat;
-  curvature = this->dataPtr->ellA / sqrt(curvature);
 
   // Convert whatever arrives to a more flexible ECEF coordinate
   switch (_in)
@@ -562,8 +544,24 @@ Vector3d SphericalCoordinates::PositionTransform(
         break;
       }
 
-    case SPHERICAL:
+    case SPHERICAL_DEG:
+    case SPHERICAL_RAD:
       {
+        // Cache trig results
+        const double latRad =
+          (_in == SPHERICAL_DEG) ? GZ_DTOR(_pos.X()) : _pos.X();
+        const double lonRad =
+          (_in == SPHERICAL_DEG) ? GZ_DTOR(_pos.Y()) : _pos.Y();
+        double cosLat = cos(latRad);
+        double sinLat = sin(latRad);
+        double cosLon = cos(lonRad);
+        double sinLon = sin(lonRad);
+
+        // Radius of planet curvature (meters)
+        double curvature =
+          1.0 - this->dataPtr->ellE * this->dataPtr->ellE * sinLat * sinLat;
+        curvature = this->dataPtr->ellA / sqrt(curvature);
+
         tmp.X((_pos.Z() + curvature) * cosLat * cosLon);
         tmp.Y((_pos.Z() + curvature) * cosLat * sinLon);
         tmp.Z(((this->dataPtr->ellB * this->dataPtr->ellB)/
@@ -585,7 +583,8 @@ Vector3d SphericalCoordinates::PositionTransform(
   // Convert ECEF to the requested output coordinate system
   switch (_out)
   {
-    case SPHERICAL:
+    case SPHERICAL_DEG:
+    case SPHERICAL_RAD:
       {
         // Convert from ECEF to SPHERICAL
         double p = sqrt(tmp.X() * tmp.X() + tmp.Y() * tmp.Y());
@@ -606,8 +605,8 @@ Vector3d SphericalCoordinates::PositionTransform(
           std::pow(sin(lat), 2);
         nCurvature = this->dataPtr->ellA / sqrt(nCurvature);
 
-        tmp.X(lat);
-        tmp.Y(lon);
+        tmp.X(_out == SPHERICAL_DEG ? GZ_RTOD(lat) : lat);
+        tmp.Y(_out == SPHERICAL_DEG ? GZ_RTOD(lon) : lon);
 
         // Now calculate Z
         tmp.Z(p/cos(lat) - nCurvature);
@@ -648,7 +647,8 @@ Vector3d SphericalCoordinates::VelocityTransform(
     const CoordinateType &_in, const CoordinateType &_out) const
 {
   // Sanity check -- velocity should not be expressed in spherical coordinates
-  if (_in == SPHERICAL || _out == SPHERICAL)
+  if (_in == SPHERICAL_RAD || _in == SPHERICAL_DEG ||
+    _out == SPHERICAL_RAD || _out == SPHERICAL_DEG)
   {
     return _vel;
   }

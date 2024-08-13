@@ -250,7 +250,11 @@ class TestSphericalCoordinates(unittest.TestCase):
         # > latitude longitude altitude
         # > X Y Z
         tmp = Vector3d()
-        osrf_s = Vector3d(37.3877349, -122.0651166, 32.0)
+        osrf_s_deg = Vector3d(37.3877349, -122.0651166, 32.0)
+        osrf_s_rad = Vector3d(
+            math.radians(osrf_s_deg.x()),
+            math.radians(osrf_s_deg.y()),
+            osrf_s_deg.z())
         osrf_e = Vector3d(-2693701.91434394, -4299942.14687992, 3851691.0393571)
         goog_s = Vector3d(37.4216719, -122.0821853, 30.0)
 
@@ -262,36 +266,72 @@ class TestSphericalCoordinates(unittest.TestCase):
         # > -1510.88 3766.64 (EAST,NORTH)
         vec = Vector3d(-1510.88, 3766.64, -3.29)
 
-        # Convert degrees to radians
-        osrf_s.x(osrf_s.x() * 0.0174532925)
-        osrf_s.y(osrf_s.y() * 0.0174532925)
-
         # Set the ORIGIN to be the Open Source Robotics Foundation
-        sc2 = SphericalCoordinates(st, Angle(osrf_s.x()),
-                                   Angle(osrf_s.y()), osrf_s.z(), Angle.ZERO)
+        sc2 = SphericalCoordinates(st, Angle(osrf_s_rad.x()),
+                                   Angle(osrf_s_rad.y()), osrf_s_rad.z(),
+                                   Angle.ZERO)
 
-        # Check that SPHERICAL -> ECEF works
-        tmp = sc2.position_transform(osrf_s, SphericalCoordinates.SPHERICAL,
+        # Check that SPHERICAL_DEG -> ECEF works
+        tmp = sc2.position_transform(osrf_s_deg,
+                                     SphericalCoordinates.SPHERICAL_DEG,
                                      SphericalCoordinates.ECEF)
 
         self.assertAlmostEqual(tmp.x(), osrf_e.x(), delta=8e-2)
         self.assertAlmostEqual(tmp.y(), osrf_e.y(), delta=8e-2)
         self.assertAlmostEqual(tmp.z(), osrf_e.z(), delta=1e-2)
 
-        # Check that ECEF -> SPHERICAL works
-        tmp = sc2.position_transform(tmp, SphericalCoordinates.ECEF, SphericalCoordinates.SPHERICAL)
+        # Check that SPHERICAL_RAD -> ECEF works
+        tmp = sc2.position_transform(osrf_s_rad,
+                                     SphericalCoordinates.SPHERICAL_RAD,
+                                     SphericalCoordinates.ECEF)
 
-        self.assertAlmostEqual(tmp.x(), osrf_s.x(), delta=1e-2)
-        self.assertAlmostEqual(tmp.y(), osrf_s.y(), delta=1e-2)
-        self.assertAlmostEqual(tmp.z(), osrf_s.z(), delta=1e-2)
+        self.assertAlmostEqual(tmp.x(), osrf_e.x(), delta=8e-2)
+        self.assertAlmostEqual(tmp.y(), osrf_e.y(), delta=8e-2)
+        self.assertAlmostEqual(tmp.z(), osrf_e.z(), delta=1e-2)
 
-        # Check that SPHERICAL -> LOCAL works
+        # Check that ECEF -> SPHERICAL_DEG works
+        tmp = sc2.position_transform(osrf_e,
+                                     SphericalCoordinates.ECEF,
+                                     SphericalCoordinates.SPHERICAL_DEG)
+
+        self.assertAlmostEqual(tmp.x(), osrf_s_deg.x(), delta=1e-2)
+        self.assertAlmostEqual(tmp.y(), osrf_s_deg.y(), delta=1e-2)
+        self.assertAlmostEqual(tmp.z(), osrf_s_deg.z(), delta=1e-2)
+
+        # Check that ECEF -> SPHERICAL_RAD works
+        tmp = sc2.position_transform(osrf_e,
+                                     SphericalCoordinates.ECEF,
+                                     SphericalCoordinates.SPHERICAL_RAD)
+
+        self.assertAlmostEqual(tmp.x(), osrf_s_rad.x(), delta=1e-2)
+        self.assertAlmostEqual(tmp.y(), osrf_s_rad.y(), delta=1e-2)
+        self.assertAlmostEqual(tmp.z(), osrf_s_rad.z(), delta=1e-2)
+
+        # Check that SPHERICAL_DEG -> SPHERICAL_RAD works
+        tmp = sc2.position_transform(osrf_s_deg,
+                                     SphericalCoordinates.SPHERICAL_DEG,
+                                     SphericalCoordinates.SPHERICAL_RAD)
+
+        self.assertAlmostEqual(tmp.x(), osrf_s_rad.x(), delta=1e-2)
+        self.assertAlmostEqual(tmp.y(), osrf_s_rad.y(), delta=1e-2)
+        self.assertAlmostEqual(tmp.z(), osrf_s_rad.z(), delta=1e-2)
+
+        # Check that SPHERICAL_RAD -> SPHERICAL_DEG works
+        tmp = sc2.position_transform(osrf_s_rad,
+                                     SphericalCoordinates.SPHERICAL_RAD,
+                                     SphericalCoordinates.SPHERICAL_DEG)
+
+        self.assertAlmostEqual(tmp.x(), osrf_s_deg.x(), delta=1e-2)
+        self.assertAlmostEqual(tmp.y(), osrf_s_deg.y(), delta=1e-2)
+        self.assertAlmostEqual(tmp.z(), osrf_s_deg.z(), delta=1e-2)
+
+        # Check that SPHERICAL_DEG -> LOCAL works
         tmp = sc2.local_from_spherical_position(goog_s)
         self.assertAlmostEqual(tmp.x(), vec.x(), delta=8e-2)
         self.assertAlmostEqual(tmp.y(), vec.y(), delta=8e-2)
         self.assertAlmostEqual(tmp.z(), vec.z(), delta=1e-2)
 
-        # Check that SPHERICAL -> LOCAL -> SPHERICAL works
+        # Check that SPHERICAL_DEG -> LOCAL -> SPHERICAL_DEG works
         tmp = sc2.spherical_from_local_position(tmp)
         self.assertAlmostEqual(tmp.x(), goog_s.x(), delta=8e-2)
         self.assertAlmostEqual(tmp.y(), goog_s.y(), delta=8e-2)
@@ -402,37 +442,49 @@ class TestSphericalCoordinates(unittest.TestCase):
         sc = SphericalCoordinates()
         pos = Vector3d(1, 2, -4)
         result = sc.position_transform(pos,
-                                       SphericalCoordinates.CoordinateType(7),
-                                       SphericalCoordinates.CoordinateType(6))
+                                       SphericalCoordinates.CoordinateType(17),
+                                       SphericalCoordinates.CoordinateType(16))
 
         self.assertEqual(result, pos)
 
         result = sc.position_transform(pos,
                                        SphericalCoordinates.CoordinateType(4),
-                                       SphericalCoordinates.CoordinateType(6))
+                                       SphericalCoordinates.CoordinateType(16))
 
         self.assertEqual(result, pos)
 
         result = sc.velocity_transform(
             pos,
-            SphericalCoordinates.SPHERICAL,
+            SphericalCoordinates.SPHERICAL_DEG,
             SphericalCoordinates.ECEF)
         self.assertEqual(result, pos)
 
         result = sc.velocity_transform(
             pos,
             SphericalCoordinates.ECEF,
-            SphericalCoordinates.SPHERICAL)
+            SphericalCoordinates.SPHERICAL_DEG)
+        self.assertEqual(result, pos)
+
+        result = sc.velocity_transform(
+            pos,
+            SphericalCoordinates.SPHERICAL_RAD,
+            SphericalCoordinates.ECEF)
+        self.assertEqual(result, pos)
+
+        result = sc.velocity_transform(
+            pos,
+            SphericalCoordinates.ECEF,
+            SphericalCoordinates.SPHERICAL_RAD)
         self.assertEqual(result, pos)
 
         result = sc.velocity_transform(pos,
-                                       SphericalCoordinates.CoordinateType(7),
+                                       SphericalCoordinates.CoordinateType(17),
                                        SphericalCoordinates.ECEF)
         self.assertEqual(result, pos)
 
         result = sc.velocity_transform(pos,
                                        SphericalCoordinates.ECEF,
-                                       SphericalCoordinates.CoordinateType(7))
+                                       SphericalCoordinates.CoordinateType(17))
         self.assertEqual(result, pos)
 
     def test_equality_ops(self):
@@ -656,16 +708,29 @@ class TestSphericalCoordinates(unittest.TestCase):
             SphericalCoordinates.LOCAL2)
         self.assertEqual(in_vector, reverse)
 
-        # SPHERICAL <-> LOCAL2
+        # SPHERICAL_DEG <-> LOCAL2
         in_vector = Vector3d(1, 2, -4)
         out = sc.position_transform(
             in_vector,
             SphericalCoordinates.LOCAL2,
-            SphericalCoordinates.SPHERICAL)
+            SphericalCoordinates.SPHERICAL_DEG)
         self.assertNotEqual(in_vector, out)
         reverse = sc.position_transform(
             out,
-            SphericalCoordinates.SPHERICAL,
+            SphericalCoordinates.SPHERICAL_DEG,
+            SphericalCoordinates.LOCAL2)
+        self.assertEqual(in_vector, reverse)
+
+        # SPHERICAL_RAD <-> LOCAL2
+        in_vector = Vector3d(1, 2, -4)
+        out = sc.position_transform(
+            in_vector,
+            SphericalCoordinates.LOCAL2,
+            SphericalCoordinates.SPHERICAL_RAD)
+        self.assertNotEqual(in_vector, out)
+        reverse = sc.position_transform(
+            out,
+            SphericalCoordinates.SPHERICAL_RAD,
             SphericalCoordinates.LOCAL2)
         self.assertEqual(in_vector, reverse)
 

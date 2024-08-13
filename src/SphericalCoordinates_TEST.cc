@@ -291,7 +291,9 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
       // > latitude longitude altitude
       // > X Y Z
       math::Vector3d tmp;
-      math::Vector3d osrf_s(37.3877349, -122.0651166, 32.0);
+      math::Vector3d osrf_s_deg(37.3877349, -122.0651166, 32.0);
+      math::Vector3d osrf_s_rad(
+          GZ_DTOR(osrf_s_deg.X()), GZ_DTOR(osrf_s_deg.Y()), osrf_s_deg.Z());
       math::Vector3d osrf_e(
           -2693701.91434394, -4299942.14687992, 3851691.0393571);
       math::Vector3d goog_s(37.4216719, -122.0821853, 30.0);
@@ -304,40 +306,72 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
       // > -1510.88 3766.64 (EAST,NORTH)
       math::Vector3d vec(-1510.88, 3766.64, -3.29);
 
-      // Convert degrees to radians
-      osrf_s.X() *= 0.0174532925;
-      osrf_s.Y() *= 0.0174532925;
-
       // Set the ORIGIN to be the Open Source Robotics Foundation
-      math::SphericalCoordinates sc2(st, math::Angle(osrf_s.X()),
-          math::Angle(osrf_s.Y()), osrf_s.Z(),
+      math::SphericalCoordinates sc2(
+          st, osrf_s_rad.X(), osrf_s_rad.Y(), osrf_s_rad.Z(),
           math::Angle::Zero);
 
-      // Check that SPHERICAL -> ECEF works
-      tmp = sc2.PositionTransform(osrf_s,
-          math::SphericalCoordinates::SPHERICAL,
+      // Check that SPHERICAL_DEG -> ECEF works
+      tmp = sc2.PositionTransform(osrf_s_deg,
+          math::SphericalCoordinates::SPHERICAL_DEG,
           math::SphericalCoordinates::ECEF);
 
       EXPECT_NEAR(tmp.X(), osrf_e.X(), 8e-2);
       EXPECT_NEAR(tmp.Y(), osrf_e.Y(), 8e-2);
       EXPECT_NEAR(tmp.Z(), osrf_e.Z(), 1e-2);
 
-      // Check that ECEF -> SPHERICAL works
-      tmp = sc2.PositionTransform(tmp,
+      // Check that SPHERICAL_RAD -> ECEF works
+      tmp = sc2.PositionTransform(osrf_s_rad,
+          math::SphericalCoordinates::SPHERICAL_RAD,
+          math::SphericalCoordinates::ECEF);
+
+      EXPECT_NEAR(tmp.X(), osrf_e.X(), 8e-2);
+      EXPECT_NEAR(tmp.Y(), osrf_e.Y(), 8e-2);
+      EXPECT_NEAR(tmp.Z(), osrf_e.Z(), 1e-2);
+
+      // Check that ECEF -> SPHERICAL_DEG works
+      tmp = sc2.PositionTransform(osrf_e,
           math::SphericalCoordinates::ECEF,
-          math::SphericalCoordinates::SPHERICAL);
+          math::SphericalCoordinates::SPHERICAL_DEG);
 
-      EXPECT_NEAR(tmp.X(), osrf_s.X(), 1e-2);
-      EXPECT_NEAR(tmp.Y(), osrf_s.Y(), 1e-2);
-      EXPECT_NEAR(tmp.Z(), osrf_s.Z(), 1e-2);
+      EXPECT_NEAR(tmp.X(), osrf_s_deg.X(), 1e-2);
+      EXPECT_NEAR(tmp.Y(), osrf_s_deg.Y(), 1e-2);
+      EXPECT_NEAR(tmp.Z(), osrf_s_deg.Z(), 1e-2);
 
-      // Check that SPHERICAL -> LOCAL works
+      // Check that ECEF -> SPHERICAL_RAD works
+      tmp = sc2.PositionTransform(osrf_e,
+          math::SphericalCoordinates::ECEF,
+          math::SphericalCoordinates::SPHERICAL_RAD);
+
+      EXPECT_NEAR(tmp.X(), osrf_s_rad.X(), 1e-2);
+      EXPECT_NEAR(tmp.Y(), osrf_s_rad.Y(), 1e-2);
+      EXPECT_NEAR(tmp.Z(), osrf_s_rad.Z(), 1e-2);
+
+      // Check that SPHERICAL_DEG -> SPHERICAL_RAD works
+      tmp = sc2.PositionTransform(osrf_s_deg,
+          math::SphericalCoordinates::SPHERICAL_DEG,
+          math::SphericalCoordinates::SPHERICAL_RAD);
+
+      EXPECT_NEAR(tmp.X(), osrf_s_rad.X(), 1e-2);
+      EXPECT_NEAR(tmp.Y(), osrf_s_rad.Y(), 1e-2);
+      EXPECT_NEAR(tmp.Z(), osrf_s_rad.Z(), 1e-2);
+
+      // Check that SPHERICAL_RAD -> SPHERICAL_DEG works
+      tmp = sc2.PositionTransform(osrf_s_rad,
+          math::SphericalCoordinates::SPHERICAL_RAD,
+          math::SphericalCoordinates::SPHERICAL_DEG);
+
+      EXPECT_NEAR(tmp.X(), osrf_s_deg.X(), 1e-2);
+      EXPECT_NEAR(tmp.Y(), osrf_s_deg.Y(), 1e-2);
+      EXPECT_NEAR(tmp.Z(), osrf_s_deg.Z(), 1e-2);
+
+      // Check that SPHERICAL_DEG -> LOCAL works
       tmp = sc2.LocalFromSphericalPosition(goog_s);
       EXPECT_NEAR(tmp.X(), vec.X(), 8e-2);
       EXPECT_NEAR(tmp.Y(), vec.Y(), 8e-2);
       EXPECT_NEAR(tmp.Z(), vec.Z(), 1e-2);
 
-      // Check that SPHERICAL -> LOCAL -> SPHERICAL works
+      // Check that SPHERICAL_DEG -> LOCAL -> SPHERICAL_DEG works
       tmp = sc2.SphericalFromLocalPosition(tmp);
       EXPECT_NEAR(tmp.X(), goog_s.X(), 8e-2);
       EXPECT_NEAR(tmp.Y(), goog_s.Y(), 8e-2);
@@ -474,35 +508,45 @@ TEST(SphericalCoordinatesTest, BadCoordinateType)
   math::SphericalCoordinates sc;
   math::Vector3d pos(1, 2, -4);
   math::Vector3d result = sc.PositionTransform(pos,
-      static_cast<math::SphericalCoordinates::CoordinateType>(7),
-      static_cast<math::SphericalCoordinates::CoordinateType>(6));
+      static_cast<math::SphericalCoordinates::CoordinateType>(17),
+      static_cast<math::SphericalCoordinates::CoordinateType>(16));
 
   EXPECT_EQ(result, pos);
 
   result = sc.PositionTransform(pos,
       static_cast<math::SphericalCoordinates::CoordinateType>(4),
-      static_cast<math::SphericalCoordinates::CoordinateType>(6));
+      static_cast<math::SphericalCoordinates::CoordinateType>(16));
 
   EXPECT_EQ(result, pos);
 
   result = sc.VelocityTransform(pos,
-      math::SphericalCoordinates::SPHERICAL,
+      math::SphericalCoordinates::SPHERICAL_DEG,
       math::SphericalCoordinates::ECEF);
   EXPECT_EQ(result, pos);
 
   result = sc.VelocityTransform(pos,
       math::SphericalCoordinates::ECEF,
-      math::SphericalCoordinates::SPHERICAL);
+      math::SphericalCoordinates::SPHERICAL_DEG);
   EXPECT_EQ(result, pos);
 
   result = sc.VelocityTransform(pos,
-      static_cast<math::SphericalCoordinates::CoordinateType>(7),
+      math::SphericalCoordinates::SPHERICAL_RAD,
       math::SphericalCoordinates::ECEF);
   EXPECT_EQ(result, pos);
 
   result = sc.VelocityTransform(pos,
       math::SphericalCoordinates::ECEF,
-      static_cast<math::SphericalCoordinates::CoordinateType>(7));
+      math::SphericalCoordinates::SPHERICAL_RAD);
+  EXPECT_EQ(result, pos);
+
+  result = sc.VelocityTransform(pos,
+      static_cast<math::SphericalCoordinates::CoordinateType>(17),
+      math::SphericalCoordinates::ECEF);
+  EXPECT_EQ(result, pos);
+
+  result = sc.VelocityTransform(pos,
+      math::SphericalCoordinates::ECEF,
+      static_cast<math::SphericalCoordinates::CoordinateType>(17));
   EXPECT_EQ(result, pos);
 }
 
@@ -773,15 +817,28 @@ TEST(SphericalCoordinatesTest, Inverse)
     EXPECT_EQ(in, reverse);
   }
 
-  // SPHERICAL <-> LOCAL2
+  // SPHERICAL_DEG <-> LOCAL2
   {
     math::Vector3d in(1, 2, -4);
     auto out = sc.PositionTransform(in,
         math::SphericalCoordinates::LOCAL2,
-        math::SphericalCoordinates::SPHERICAL);
+        math::SphericalCoordinates::SPHERICAL_DEG);
     EXPECT_NE(in, out);
     auto reverse = sc.PositionTransform(out,
-        math::SphericalCoordinates::SPHERICAL,
+        math::SphericalCoordinates::SPHERICAL_DEG,
+        math::SphericalCoordinates::LOCAL2);
+    EXPECT_EQ(in, reverse);
+  }
+
+  // SPHERICAL_RAD <-> LOCAL2
+  {
+    math::Vector3d in(1, 2, -4);
+    auto out = sc.PositionTransform(in,
+        math::SphericalCoordinates::LOCAL2,
+        math::SphericalCoordinates::SPHERICAL_RAD);
+    EXPECT_NE(in, out);
+    auto reverse = sc.PositionTransform(out,
+        math::SphericalCoordinates::SPHERICAL_RAD,
         math::SphericalCoordinates::LOCAL2);
     EXPECT_EQ(in, reverse);
   }

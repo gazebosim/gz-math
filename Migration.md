@@ -7,6 +7,12 @@ release will remove the deprecated code.
 
 ## Gazebo Math 8.X to 9.X
 
+### Additions
+
+1. **SphericalCoordinates.hh**
+    + `SphericalCoordinates::CoordinateType::SPHERICAL_DEG`
+    + `SphericalCoordinates::CoordinateType::SPHERICAL_RAD`
+
 ### Deprecations
 
 1. **graph/Vertex.hh**
@@ -18,6 +24,11 @@ release will remove the deprecated code.
     + The `Edge::NullEdge` static member is deprecated. Please use
       `Vertex::NullEdge()` instead.
       E.g.: https://github.com/gazebosim/gz-math/pull/606/files#diff-0c0220a7e72be70337975433eeddc3f5e072ade5cd80dfb1ac03da233c39c983L222-R222
+
+1. **SphericalCoordinates.hh**
+    + `SphericalCoordinates::CoordinateType::SPHERICAL` has been deprecated
+      because it is unclear what angular units are used. Instead, explicitly
+      choose either `SPERICAL_DEG` or `SPHERICAL_RAD`.
 
 ## Gazebo Math 7.X to 8.X
 

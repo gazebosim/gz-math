@@ -25,6 +25,13 @@
 #include <gz/math/config.hh>
 #include <gz/utils/ImplPtr.hh>
 
+// MSVC doesn't like deprecating enum values with function macros
+#if _MSC_VER
+#define GZ_SPHERICAL_DEPRECATED [[deprecated]]
+#else
+#define GZ_SPHERICAL_DEPRECATED GZ_DEPRECATED(8)
+#endif
+
 namespace gz::math
 {
   // Inline bracket to help doxygen filtering.
@@ -54,8 +61,15 @@ namespace gz::math
     /// \brief Unique identifiers for coordinate types.
     public: enum CoordinateType
             {
-              /// \brief Latitude, Longitude and Altitude by SurfaceType
-              SPHERICAL = 1,
+              /// \brief Latitude, Longitude and Altitude by SurfaceType [rad].
+              /// \deprecated Use `SPHERICAL_RAD` or `SPHERICAL_DEG` instead.
+              SPHERICAL GZ_SPHERICAL_DEPRECATED = 1,
+
+              /// \brief Latitude, Longitude and Altitude by SurfaceType [rad].
+              SPHERICAL_RAD = 1,
+
+              /// \brief Latitude, Longitude and Altitude by SurfaceType [deg].
+              SPHERICAL_DEG = 6,
 
               /// \brief Earth centered, earth fixed Cartesian
               ECEF = 2,
@@ -262,8 +276,9 @@ namespace gz::math
     /// \brief Update coordinate transformation matrix with reference location
     public: void UpdateTransformationMatrix();
 
-    /// \brief Convert between positions in SPHERICAL/ECEF/LOCAL/GLOBAL frame
-    /// Spherical coordinates use radians, while the other frames use meters.
+    /// \brief Convert between positions in SPHERICAL_*/ECEF/LOCAL/GLOBAL frame.
+    /// Cartesian frames use meters. `SPHERICAL_DEG` frame uses degrees.
+    /// `SPHERICAL_RAD` frame uses radians.
     /// \param[in] _pos Position vector in frame defined by parameter _in
     /// \param[in] _in  CoordinateType for input
     /// \param[in] _out CoordinateType for output
@@ -272,8 +287,9 @@ namespace gz::math
             PositionTransform(const gz::math::Vector3d &_pos,
                 const CoordinateType &_in, const CoordinateType &_out) const;
 
-    /// \brief Convert between velocity in SPHERICAL/ECEF/LOCAL/GLOBAL frame
-    /// Spherical coordinates use radians, while the other frames use meters.
+    /// \brief Convert between velocity in ECEF/LOCAL/GLOBAL frame.
+    /// Velocity should not be expressed in SPHERICAL_* frames (such values will
+    /// be passed through). Cartesian frames use meters.
     /// \param[in] _vel Velocity vector in frame defined by parameter _in
     /// \param[in] _in  CoordinateType for input
     /// \param[in] _out CoordinateType for output

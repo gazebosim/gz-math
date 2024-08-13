@@ -133,22 +133,26 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
          "Update coordinate transformation matrix with reference location")
     .def("position_transform",
          &Class::PositionTransform,
-         "Convert between velocity in SPHERICAL/ECEF/LOCAL/GLOBAL frame "
-         "Spherical coordinates use radians, while the other frames use "
-         "meters.")
+         "Convert between positions in SPHERICAL_*/ECEF/LOCAL/GLOBAL frame. "
+         "Cartesian frames use meters. SPHERICAL_DEG frame uses degrees. "
+         "SPHERICAL_RAD frame uses radians.")
     .def("velocity_transform",
          &Class::VelocityTransform,
-         "Convert between velocity in SPHERICAL/ECEF/LOCAL/GLOBAL frame "
-         "Spherical coordinates use radians, while the other frames use "
-         "meters.");
+         "Convert between velocity in ECEF/LOCAL/GLOBAL frame ."
+         "Velocity should not be expressed in SPHERICAL_* frames (such values "
+         "will be passed through). All Cartesian frames use meters.");
 
+   GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
    py::enum_<Class::CoordinateType>(sphericalCoordinates, "CoordinateType")
+       .value("SPHERICAL_RAD", Class::CoordinateType::SPHERICAL_RAD)
+       .value("SPHERICAL_DEG", Class::CoordinateType::SPHERICAL_DEG)
        .value("SPHERICAL", Class::CoordinateType::SPHERICAL)
        .value("ECEF", Class::CoordinateType::ECEF)
        .value("GLOBAL", Class::CoordinateType::GLOBAL)
        .value("LOCAL", Class::CoordinateType::LOCAL)
        .value("LOCAL2", Class::CoordinateType::LOCAL2)
        .export_values();
+   GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
    py::enum_<Class::SurfaceType>(sphericalCoordinates, "SurfaceType")
        .value("EARTH_WGS84", Class::SurfaceType::EARTH_WGS84)
        .value("MOON_SCS", Class::SurfaceType::MOON_SCS)
