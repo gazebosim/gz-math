@@ -25,6 +25,13 @@
 #include <gz/math/config.hh>
 #include <gz/utils/ImplPtr.hh>
 
+// MSVC doesn't like deprecating enum values with function macros
+#if _MSC_VER
+#define GZ_LOCAL_DEPRECATED
+#else
+#define GZ_LOCAL_DEPRECATED GZ_DEPRECATED(8)
+#endif
+
 namespace gz::math
 {
   // Inline bracket to help doxygen filtering.
@@ -66,10 +73,10 @@ namespace gz::math
               /// \brief Heading-adjusted tangent plane (X, Y, Z)
               /// This has kept a bug for backwards compatibility, use
               /// LOCAL_TANGENT for the correct behaviour.
-              LOCAL GZ_DEPRECATED(8) = 4,
+              LOCAL GZ_LOCAL_DEPRECATED = 4,
 
               /// \brief Equivalent to LOCAL_TANGENT.
-              LOCAL2 GZ_DEPRECATED(8) = 5,
+              LOCAL2 GZ_LOCAL_DEPRECATED = 5,
 
               /// \brief Heading-adjusted tangent plane (X, Y, Z)
               LOCAL_TANGENT = 5
