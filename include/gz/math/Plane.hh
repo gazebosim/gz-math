@@ -79,13 +79,6 @@ namespace gz::math
       this->Set(_normal, _size, _offset);
     }
 
-    /// \brief Copy constructor
-    /// \param[in] _plane Plane to copy
-    public: Plane(const Plane &_plane) = default;
-
-    /// \brief Destructor
-    public: ~Plane() = default;
-
     /// \brief Set the plane
     /// \param[in] _normal The plane normal
     /// \param[in] _offset Offset along the normal
@@ -254,11 +247,6 @@ namespace gz::math
     {
       return this->d;
     }
-
-    /// \brief Equal operator
-    /// \param _p another plane
-    /// \return itself
-    public: Plane<T> &operator=(const Plane<T> &_p) = default;
 
     /// \brief Plane normal
     private: Vector3<T> normal;

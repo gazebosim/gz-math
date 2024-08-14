@@ -61,13 +61,6 @@ namespace gz::math
     {
     }
 
-    /// \brief Copy constructor
-    /// \param[in] _v vector
-    public: Vector4(const Vector4<T> &_v) = default;
-
-    /// \brief Destructor
-    public: ~Vector4() = default;
-
     /// \brief Calc distance to the given point
     /// \param[in] _pt the point
     /// \return the distance
@@ -257,11 +250,6 @@ namespace gz::math
     {
       return this->data[0] + this->data[1] + this->data[2] + this->data[3];
     }
-
-    /// \brief Assignment operator
-    /// \param[in] _v the vector
-    /// \return a reference to this vector
-    public: Vector4<T> &operator=(const Vector4<T> &_v) = default;
 
     /// \brief Assignment operator
     /// \param[in] _value

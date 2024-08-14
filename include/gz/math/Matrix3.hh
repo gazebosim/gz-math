@@ -105,10 +105,6 @@ namespace gz::math
       std::memset(this->data, 0, sizeof(this->data[0][0])*9);
     }
 
-    /// \brief Copy constructor.
-    /// \param _m Matrix to copy
-    public: Matrix3(const Matrix3<T> &_m) = default;
-
     /// \brief Construct a matrix3 using nine values.
     /// \param[in] _v00 Row 0, Col 0 value
     /// \param[in] _v01 Row 0, Col 1 value
@@ -144,9 +140,6 @@ namespace gz::math
                 2 * qt.Y() * qt.Z() + 2 * qt.X() * qt.W(),
                 1 - 2 * qt.X()*qt.X() - 2 * qt.Y()*qt.Y());
     }
-
-    /// \brief Desctructor
-    public: ~Matrix3() = default;
 
     /// \brief Set a single value.
     /// \param[in] _row row index. _row is clamped to the range [0,2]
@@ -273,11 +266,6 @@ namespace gz::math
       this->data[1][c] = _v.Y();
       this->data[2][c] = _v.Z();
     }
-
-    /// \brief Equal operator. this = _mat
-    /// \param _mat Matrix to copy.
-    /// \return This matrix.
-    public: Matrix3<T> &operator=(const Matrix3<T> &_mat) = default;
 
     /// \brief Subtraction operator.
     /// \param[in] _m Matrix to subtract.

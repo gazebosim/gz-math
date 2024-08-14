@@ -106,13 +106,6 @@ namespace gz::math
     {
     }
 
-    /// \brief Copy Constructor
-    /// \param[in] _clr Color to copy
-    public: Color(const Color &_clr) = default;
-
-    /// \brief Destructor
-    public: ~Color() = default;
-
     /// \brief Reset the color to default values to red=0, green=0,
     /// blue=0, alpha=1.
     public: void Reset();
@@ -145,11 +138,6 @@ namespace gz::math
     /// \param[in] _u value
     /// \param[in] _v value
     public: void SetFromYUV(const float _y, const float _u, const float _v);
-
-    /// \brief Equal operator
-    /// \param[in] _pt Color to copy
-    /// \return Reference to this color
-    public: Color &operator=(const Color &_pt) = default;
 
     /// \brief Array index operator
     /// \param[in] _index Color component index(0=red, 1=green, 2=blue,

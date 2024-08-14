@@ -25,7 +25,8 @@
 #include <set>
 
 #include <gz/math/config.hh>
-#include "gz/math/graph/Vertex.hh"
+#include <gz/math/graph/Vertex.hh>
+#include <gz/utils/NeverDestroyed.hh>
 
 namespace gz::math
 {
@@ -203,7 +204,8 @@ namespace graph
   class UndirectedEdge : public Edge<E>
   {
     /// \brief An invalid undirected edge.
-    public: static UndirectedEdge<E> NullEdge;
+    // Deprecated in favor of NullEdge().
+    public: static UndirectedEdge<E> GZ_DEPRECATED(8) NullEdge;
 
     /// \brief Constructor.
     /// \param[in] _vertices The vertices of the edge.
@@ -255,6 +257,7 @@ namespace graph
   };
 
   /// \brief An invalid undirected edge.
+  // Deprecated in favor of NullEdge().
   template<typename E>
   UndirectedEdge<E> UndirectedEdge<E>::NullEdge(
     VertexId_P(kNullId, kNullId), E(), 1.0, kNullId);
@@ -266,7 +269,8 @@ namespace graph
   class DirectedEdge : public Edge<E>
   {
     /// \brief An invalid directed edge.
-    public: static DirectedEdge<E> NullEdge;
+    // Deprecated in favor of NullEdge().
+    public: static DirectedEdge<E> GZ_DEPRECATED(8) NullEdge;
 
     /// \brief Constructor.
     /// \param[in] _vertices The vertices of the edge.
@@ -330,9 +334,19 @@ namespace graph
   };
 
   /// \brief An invalid directed edge.
+  // Deprecated in favor of NullEdge().
   template<typename E>
   DirectedEdge<E> DirectedEdge<E>::NullEdge(
     VertexId_P(kNullId, kNullId), E(), 1.0, kNullId);
+
+  /// \brief An invalid edge.
+  template<typename E, typename EdgeType>
+  EdgeType &NullEdge()
+  {
+    static gz::utils::NeverDestroyed<EdgeType> e(
+      VertexId_P(kNullId, kNullId), E(), 1.0, kNullId);
+    return e.Access();
+  }
 }  // namespace graph
 }  // namespace GZ_MATH_VERSION_NAMESPACE
 }  // namespace gz::math

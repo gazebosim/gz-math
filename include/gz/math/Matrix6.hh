@@ -67,10 +67,6 @@ namespace gz::math
       memset(this->data, 0, sizeof(this->data[0][0])*MatrixSize*MatrixSize);
     }
 
-    /// \brief Copy constructor
-    /// \param _m Matrix to copy
-    public: Matrix6(const Matrix6<T> &_m) = default;
-
     /// \brief Constructor
     /// \param[in] _v00 Row 0, Col 0 value
     /// \param[in] _v01 Row 0, Col 1 value
@@ -293,11 +289,6 @@ namespace gz::math
           this->data[4][5],
           this->data[5][5]);
     }
-
-    /// \brief Assignment operator. this = _mat
-    /// \param _mat Incoming matrix
-    /// \return itself
-    public: Matrix6<T> &operator=(const Matrix6<T> &_mat) = default;
 
     /// \brief Multiplication assignment operator. This matrix will
     /// become equal to this * _m2.
