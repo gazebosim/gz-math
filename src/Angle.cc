@@ -72,6 +72,20 @@ Angle Angle::Normalized() const
 }
 
 //////////////////////////////////////////////////
+Angle Angle::Abs() const
+{
+  return {std::fabs(this->value)};
+}
+
+//////////////////////////////////////////////////
+Angle Angle::ShortestDistance(const gz::math::Angle& _other) const
+{
+  const double diff = std::fmod(
+    _other.value - this->value + GZ_PI, 2 * GZ_PI) - GZ_PI;
+  return {diff < -GZ_PI ? diff + 2 * GZ_PI : diff};
+}
+
+//////////////////////////////////////////////////
 Angle Angle::operator-(const Angle &_angle) const
 {
   return Angle(this->value - _angle.value);

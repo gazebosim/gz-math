@@ -85,6 +85,27 @@ class TestAngle(unittest.TestCase):
         self.assertTrue(angle >= Angle(3))
         self.assertTrue(angle <= Angle(3))
 
+        self.assertAlmostEqual(Angle(1.2).abs().radian(), 1.2)
+        self.assertAlmostEqual(Angle(-1.2).abs().radian(), 1.2)
+        self.assertAlmostEqual(Angle(0).abs().radian(), 0)
+        self.assertAlmostEqual(Angle(-300).abs().radian(), 300)
+        self.assertAlmostEqual(Angle(300).abs().radian(), 300)
+
+        self.assertAlmostEqual(
+            Angle(1.0).shortest_distance(Angle(1.0)).radian(), 0.0)
+        self.assertAlmostEqual(
+            Angle(1.0).shortest_distance(Angle(-1.0)).radian(), -2.0)
+        self.assertAlmostEqual(
+            Angle(-1.0).shortest_distance(Angle(1.0)).radian(), 2.0)
+        self.assertAlmostEqual(
+            Angle(-1.0).shortest_distance(Angle(-1.0)).radian(), 0.0)
+        self.assertAlmostEqual(
+            Angle(-2.0).shortest_distance(Angle(2.0)).radian(),
+            -(2 * math.pi - 4.0))
+        self.assertAlmostEqual(
+            Angle(2.0).shortest_distance(Angle(-2.0)).radian(),
+            2 * math.pi - 4.0)
+
 
 if __name__ == '__main__':
     unittest.main()

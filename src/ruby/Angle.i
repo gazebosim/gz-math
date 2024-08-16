@@ -40,6 +40,8 @@ namespace gz
       public: double Degree() const;
       public: void Normalize();
       public: Angle Normalized() const;
+      public: Angle Abs() const;
+      public: Angle ShortestDistance(const Angle &_angle) const;
       public: inline double operator*() const;
       public: Angle operator-(const Angle &_angle) const;
       public: Angle operator+(const Angle &_angle) const;

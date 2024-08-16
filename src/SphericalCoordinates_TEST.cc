@@ -227,6 +227,7 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
       // east, north, up
       math::Vector3d enu;
 
+      GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
       xyz.Set(1, 0, 0);
       enu = sc.GlobalFromLocalVelocity(xyz);
       EXPECT_NEAR(enu.Y()/*North*/, xyz.X(), 1e-6);
@@ -250,6 +251,7 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
       EXPECT_NEAR(enu.Y(), xyz.X(), 1e-6);
       EXPECT_NEAR(enu.X(), -xyz.Y(), 1e-6);
       EXPECT_EQ(xyz, sc.LocalFromGlobalVelocity(enu));
+      GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
     }
 
     // Check SphericalFromLocal
@@ -259,6 +261,7 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
       // spherical coordinates
       math::Vector3d sph;
 
+      GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
       // No offset
       xyz.Set(0, 0, 0);
       sph = sc.SphericalFromLocalPosition(xyz);
@@ -282,6 +285,7 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
 
       math::Vector3d xyz2 = sc.LocalFromSphericalPosition(sph);
       EXPECT_EQ(xyz, xyz2);
+      GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
     }
 
     // Check position projection
@@ -313,6 +317,7 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
           math::Angle(osrf_s.Y()), osrf_s.Z(),
           math::Angle::Zero);
 
+      GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
       // Check that SPHERICAL -> ECEF works
       tmp = sc2.PositionTransform(osrf_s,
           math::SphericalCoordinates::SPHERICAL,
@@ -342,6 +347,7 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
       EXPECT_NEAR(tmp.X(), goog_s.X(), 8e-2);
       EXPECT_NEAR(tmp.Y(), goog_s.Y(), 8e-2);
       EXPECT_NEAR(tmp.Z(), goog_s.Z(), 1e-2);
+      GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
     }
   }
 
@@ -358,6 +364,7 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
       // east, north, up
       math::Vector3d enu;
 
+      GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
       xyz.Set(1, 0, 0);
       enu = sc.VelocityTransform(xyz,
         math::SphericalCoordinates::LOCAL2,
@@ -385,6 +392,7 @@ TEST(SphericalCoordinatesTest, CoordinateTransforms)
         math::SphericalCoordinates::GLOBAL);
       EXPECT_EQ(xyz, enu);
       EXPECT_EQ(xyz, sc.LocalFromGlobalVelocity(enu));
+      GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
     }
   }
 }
@@ -448,6 +456,7 @@ TEST(SphericalCoordinatesTest, BadSetSurface)
 //////////////////////////////////////////////////
 TEST(SphericalCoordinatesTest, Transform)
 {
+  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
   math::SphericalCoordinates sc;
   math::Vector3d vel(1, 2, -4);
   math::Vector3d result = sc.VelocityTransform(vel,
@@ -460,6 +469,7 @@ TEST(SphericalCoordinatesTest, Transform)
   result = sc.PositionTransform(pos,
       math::SphericalCoordinates::ECEF,
       math::SphericalCoordinates::GLOBAL);
+  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
 
   EXPECT_NEAR(result.X(), 2, 1e-6);
   EXPECT_NEAR(result.Y(), -4, 1e-6);
@@ -471,6 +481,7 @@ TEST(SphericalCoordinatesTest, Transform)
 //////////////////////////////////////////////////
 TEST(SphericalCoordinatesTest, BadCoordinateType)
 {
+  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
   math::SphericalCoordinates sc;
   math::Vector3d pos(1, 2, -4);
   math::Vector3d result = sc.PositionTransform(pos,
@@ -504,6 +515,7 @@ TEST(SphericalCoordinatesTest, BadCoordinateType)
       math::SphericalCoordinates::ECEF,
       static_cast<math::SphericalCoordinates::CoordinateType>(7));
   EXPECT_EQ(result, pos);
+  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
 }
 
 //////////////////////////////////////////////////
@@ -562,6 +574,8 @@ TEST(SphericalCoordinatesTest, NoHeading)
   math::Angle heading(0.0);
   double elev = 0;
   math::SphericalCoordinates sc(st, lat, lon, elev, heading);
+
+  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
 
   // Origin matches input
   auto latLonAlt = sc.SphericalFromLocalPosition({0, 0, 0});
@@ -658,6 +672,8 @@ TEST(SphericalCoordinatesTest, NoHeading)
         math::SphericalCoordinates::GLOBAL);
     EXPECT_EQ(global, local);
   }
+
+  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
 }
 
 //////////////////////////////////////////////////
@@ -670,6 +686,8 @@ TEST(SphericalCoordinatesTest, WithHeading)
   math::Angle heading(GZ_DTOR(90.0));
   double elev = 0;
   math::SphericalCoordinates sc(st, lat, lon, elev, heading);
+
+  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
 
   // Origin matches input
   auto latLonAlt = sc.SphericalFromLocalPosition({0, 0, 0});
@@ -738,6 +756,8 @@ TEST(SphericalCoordinatesTest, WithHeading)
         math::SphericalCoordinates::GLOBAL);
     EXPECT_EQ(global, globalRes);
   }
+
+  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
 }
 
 //////////////////////////////////////////////////
@@ -747,6 +767,8 @@ TEST(SphericalCoordinatesTest, Inverse)
   math::Angle lat(0.3), lon(-1.2), heading(0.5);
   double elev = 354.1;
   math::SphericalCoordinates sc(st, lat, lon, elev, heading);
+
+  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
 
   // GLOBAL <-> LOCAL2
   {
@@ -785,4 +807,6 @@ TEST(SphericalCoordinatesTest, Inverse)
         math::SphericalCoordinates::LOCAL2);
     EXPECT_EQ(in, reverse);
   }
+
+  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
 }

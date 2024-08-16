@@ -98,7 +98,7 @@ class gz::math::SphericalCoordinates::Implementation
   public: Matrix3d rotGlobalToECEF;
 
   /// \brief Cache the ECEF position of the the origin
-  public: Vector3d origin;
+  public: CoordinateVector3 origin;
 
   /// \brief Cache cosine head transform
   public: double cosHea;
@@ -377,11 +377,20 @@ void SphericalCoordinates::SetHeadingOffset(const Angle &_angle)
 Vector3d SphericalCoordinates::SphericalFromLocalPosition(
     const Vector3d &_xyz) const
 {
-  Vector3d result =
-    this->PositionTransform(_xyz, LOCAL, SPHERICAL);
+  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+  Vector3d result = this->PositionTransform(_xyz, LOCAL, SPHERICAL);
+  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
   result.X(GZ_RTOD(result.X()));
   result.Y(GZ_RTOD(result.Y()));
   return result;
+}
+
+//////////////////////////////////////////////////
+std::optional<math::CoordinateVector3>
+SphericalCoordinates::SphericalFromLocalPosition(
+    const math::CoordinateVector3& _xyz) const
+{
+  return this->PositionTransform(_xyz, LOCAL, SPHERICAL);
 }
 
 //////////////////////////////////////////////////
@@ -391,12 +400,32 @@ Vector3d SphericalCoordinates::LocalFromSphericalPosition(
   Vector3d result = _xyz;
   result.X(GZ_DTOR(result.X()));
   result.Y(GZ_DTOR(result.Y()));
+  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
   return this->PositionTransform(result, SPHERICAL, LOCAL);
+  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+}
+
+//////////////////////////////////////////////////
+std::optional<math::CoordinateVector3>
+SphericalCoordinates::LocalFromSphericalPosition(
+  const math::CoordinateVector3& _xyz) const
+{
+  return this->PositionTransform(_xyz, SPHERICAL, LOCAL);
 }
 
 //////////////////////////////////////////////////
 Vector3d SphericalCoordinates::GlobalFromLocalVelocity(
     const Vector3d &_xyz) const
+{
+  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+  return this->VelocityTransform(_xyz, LOCAL, GLOBAL);
+  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+}
+
+//////////////////////////////////////////////////
+std::optional<math::CoordinateVector3>
+SphericalCoordinates::GlobalFromLocalVelocity(
+    const math::CoordinateVector3 &_xyz) const
 {
   return this->VelocityTransform(_xyz, LOCAL, GLOBAL);
 }
@@ -404,6 +433,16 @@ Vector3d SphericalCoordinates::GlobalFromLocalVelocity(
 //////////////////////////////////////////////////
 Vector3d SphericalCoordinates::LocalFromGlobalVelocity(
     const Vector3d &_xyz) const
+{
+  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+  return this->VelocityTransform(_xyz, GLOBAL, LOCAL);
+  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+}
+
+//////////////////////////////////////////////////
+std::optional<math::CoordinateVector3>
+SphericalCoordinates::LocalFromGlobalVelocity(
+    const math::CoordinateVector3 &_xyz) const
 {
   return this->VelocityTransform(_xyz, GLOBAL, LOCAL);
 }
@@ -506,12 +545,170 @@ void SphericalCoordinates::UpdateTransformationMatrix()
   this->dataPtr->sinHea = sin(-this->dataPtr->headingOffset.Radian());
 
   // Cache the ECEF coordinate of the origin
-  this->dataPtr->origin = Vector3d(
-    this->dataPtr->latitudeReference.Radian(),
-    this->dataPtr->longitudeReference.Radian(),
+  this->dataPtr->origin = CoordinateVector3::Spherical(
+    this->dataPtr->latitudeReference,
+    this->dataPtr->longitudeReference,
     this->dataPtr->elevationReference);
   this->dataPtr->origin =
-    this->PositionTransform(this->dataPtr->origin, SPHERICAL, ECEF);
+    *this->PositionTransform(this->dataPtr->origin, SPHERICAL, ECEF);
+}
+
+/////////////////////////////////////////////////
+std::optional<CoordinateVector3> PositionTransformTmp(
+    const gz::utils::ImplPtr<SphericalCoordinates::Implementation>& dataPtr,
+    const CoordinateVector3 &_pos,
+    const SphericalCoordinates::CoordinateType &_in,
+    const SphericalCoordinates::CoordinateType &_out)
+{
+  // This unusual concept of passing dataPtr as a free-function argument is just
+  // a temporary measure for GZ 8. Starting with GZ 9, the code of this function
+  // should be moved inside PositionTransform(CoordinateVector3).
+
+  if ((_in == SphericalCoordinates::SPHERICAL) != _pos.IsSpherical())
+  {
+    std::cerr << "Invalid input to PositionTransform. "
+                 "The passed coordinate vector has wrong type.\n";
+    return std::nullopt;
+  }
+  Vector3d tmp;
+
+  // Convert whatever arrives to a more flexible ECEF coordinate
+  switch (_in)
+  {
+    // East, North, Up (ENU)
+    // When branching code for GZ 9, replace this code block with the block
+    // from LOCAL2 and remove the LOCAL2 block.
+    case SphericalCoordinates::LOCAL:
+      {
+        // This is incorrect computation
+        tmp.X(-_pos.X() * dataPtr->cosHea + _pos.Y() *
+            dataPtr->sinHea);
+        tmp.Y(-_pos.X() * dataPtr->sinHea - _pos.Y() *
+            dataPtr->cosHea);
+        tmp.Z(_pos.Z());
+        tmp = dataPtr->origin.AsMetricVector() +
+          dataPtr->rotGlobalToECEF * tmp;
+        break;
+      }
+
+    GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+    case SphericalCoordinates::LOCAL2:
+    GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+      {
+        // This is correct computation
+        tmp.X(_pos.X() * dataPtr->cosHea + _pos.Y() *
+            dataPtr->sinHea);
+        tmp.Y(-_pos.X() * dataPtr->sinHea + _pos.Y() *
+            dataPtr->cosHea);
+        tmp.Z(_pos.Z());
+        tmp = dataPtr->origin.AsMetricVector() +
+          dataPtr->rotGlobalToECEF * tmp;
+        break;
+      }
+
+    case SphericalCoordinates::GLOBAL:
+      {
+        tmp = _pos.AsMetricVector();
+        tmp = dataPtr->origin.AsMetricVector() +
+          dataPtr->rotGlobalToECEF * tmp;
+        break;
+      }
+
+    case SphericalCoordinates::SPHERICAL:
+      {
+        // Cache trig results
+        const auto latRad = _pos.Lat().Radian();
+        const auto lonRad = _pos.Lon().Radian();
+        double cosLat = cos(latRad);
+        double sinLat = sin(latRad);
+        double cosLon = cos(lonRad);
+        double sinLon = sin(lonRad);
+
+        // Radius of planet curvature (meters)
+        double curvature =
+          1.0 - dataPtr->ellE * dataPtr->ellE * sinLat * sinLat;
+        curvature = dataPtr->ellA / sqrt(curvature);
+
+        tmp.X((_pos.Z() + curvature) * cosLat * cosLon);
+        tmp.Y((_pos.Z() + curvature) * cosLat * sinLon);
+        tmp.Z(((dataPtr->ellB * dataPtr->ellB)/
+              (dataPtr->ellA * dataPtr->ellA) *
+              curvature + _pos.Z()) * sinLat);
+        break;
+      }
+
+    // Just copy the vector.
+    case SphericalCoordinates::ECEF:
+      tmp = _pos.AsMetricVector();
+      break;
+    default:
+      {
+        std::cerr << "Invalid coordinate type[" << _in << "]\n";
+        return std::nullopt;
+      }
+  }
+
+  CoordinateVector3 res;
+  // Convert ECEF to the requested output coordinate system
+  switch (_out)
+  {
+    case SphericalCoordinates::SPHERICAL:
+      {
+        // Convert from ECEF to SPHERICAL
+        double p = sqrt(tmp.X() * tmp.X() + tmp.Y() * tmp.Y());
+        double theta = atan((tmp.Z() * dataPtr->ellA) /
+            (p * dataPtr->ellB));
+
+        // Calculate latitude and longitude
+        double lat = atan(
+            (tmp.Z() + std::pow(dataPtr->ellP, 2) * dataPtr->ellB *
+             std::pow(sin(theta), 3)) /
+            (p - std::pow(dataPtr->ellE, 2) *
+             dataPtr->ellA * std::pow(cos(theta), 3)));
+
+        double lon = atan2(tmp.Y(), tmp.X());
+
+        // Recalculate radius of planet curvature at the current latitude.
+        double nCurvature = 1.0 - std::pow(dataPtr->ellE, 2) *
+          std::pow(sin(lat), 2);
+        nCurvature = dataPtr->ellA / sqrt(nCurvature);
+
+        res = CoordinateVector3::Spherical(lat, lon, p/cos(lat) - nCurvature);
+        break;
+      }
+
+    // Convert from ECEF TO GLOBAL
+    case SphericalCoordinates::GLOBAL:
+      tmp = dataPtr->rotECEFToGlobal *
+        (tmp - dataPtr->origin.AsMetricVector());
+      res.SetMetric(tmp);
+      break;
+
+    // Convert from ECEF TO LOCAL
+    case SphericalCoordinates::LOCAL:
+    GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+    case SphericalCoordinates::LOCAL2:
+    GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+      tmp = dataPtr->rotECEFToGlobal *
+        (tmp - dataPtr->origin.AsMetricVector());
+
+      res.SetMetric(
+          tmp.X() * dataPtr->cosHea - tmp.Y() * dataPtr->sinHea,
+          tmp.X() * dataPtr->sinHea + tmp.Y() * dataPtr->cosHea,
+          tmp.Z());
+      break;
+
+    // Return ECEF (do nothing)
+    case SphericalCoordinates::ECEF:
+      res.SetMetric(tmp);
+      break;
+
+    default:
+      std::cerr << "Unknown coordinate type[" << _out << "]\n";
+      return std::nullopt;
+  }
+
+  return res;
 }
 
 /////////////////////////////////////////////////
@@ -519,127 +716,135 @@ Vector3d SphericalCoordinates::PositionTransform(
     const Vector3d &_pos,
     const CoordinateType &_in, const CoordinateType &_out) const
 {
-  Vector3d tmp = _pos;
+  // This deprecated implementation accepts and returns radians for spherical
+  // coordinates and has a computation bug when working with LOCAL frames.
 
-  // Cache trig results
-  double cosLat = cos(_pos.X());
-  double sinLat = sin(_pos.X());
-  double cosLon = cos(_pos.Y());
-  double sinLon = sin(_pos.Y());
+  CoordinateVector3 vec = _in == SPHERICAL ?
+    CoordinateVector3::Spherical(_pos.X(), _pos.Y(), _pos.Z()) :
+    CoordinateVector3::Metric(_pos.X(), _pos.Y(), _pos.Z());
 
-  // Radius of planet curvature (meters)
-  double curvature = 1.0 -
-    this->dataPtr->ellE * this->dataPtr->ellE * sinLat * sinLat;
-  curvature = this->dataPtr->ellA / sqrt(curvature);
+  const auto result = PositionTransformTmp(this->dataPtr, vec, _in, _out);
+  if (!result)
+    return _pos;
 
-  // Convert whatever arrives to a more flexible ECEF coordinate
-  switch (_in)
+  return result->IsMetric() ?
+    result->AsMetricVector() :
+    Vector3d{result->Lat().Radian(), result->Lon().Radian(), result->Z()};
+}
+
+/////////////////////////////////////////////////
+std::optional<CoordinateVector3> SphericalCoordinates::PositionTransform(
+  const CoordinateVector3 &_pos,
+  const CoordinateType &_in, const CoordinateType &_out) const
+{
+  // Temporarily, for Gazebo 8, this function turns all LOCAL frames into
+  // LOCAL2 to get correct results. Basically, LOCAL and LOCAL2 are equal
+  // when PositionTransform() is called with a CoordinateVector3 argument, while
+  // it returns the compatible (but wrong) result when called with Vector3d and
+  // LOCAL. From Gazebo 9 onwards, LOCAL2 frame will be removed and these
+  // differences will disappear.
+  // TODO(peci1): Move PositionTransformTmp code into this function in GZ 9.
+
+  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+  const auto in = _in == LOCAL ? LOCAL2 : _in;
+  const auto out = _out == LOCAL ? LOCAL2 : _out;
+  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+  return PositionTransformTmp(this->dataPtr, _pos, in, out);
+}
+
+//////////////////////////////////////////////////
+std::optional<CoordinateVector3> VelocityTransformTmp(
+    const gz::utils::ImplPtr<SphericalCoordinates::Implementation>& dataPtr,
+    const CoordinateVector3 &_vel,
+    const SphericalCoordinates::CoordinateType &_in,
+    const SphericalCoordinates::CoordinateType &_out)
+{
+  // This unusual concept of passing dataPtr as a free-function argument is just
+  // a temporary measure for GZ 8. Starting with GZ 9, the code of this function
+  // should be moved inside VelocityTransform(CoordinateVector3).
+
+  // Sanity check -- velocity should not be expressed in spherical coordinates
+  if (_in == SphericalCoordinates::SPHERICAL ||
+      _out == SphericalCoordinates::SPHERICAL ||
+      _vel.IsSpherical())
   {
-    // East, North, Up (ENU), note no break at end of case
-    case LOCAL:
-      {
-        tmp.X(-_pos.X() * this->dataPtr->cosHea + _pos.Y() *
-            this->dataPtr->sinHea);
-        tmp.Y(-_pos.X() * this->dataPtr->sinHea - _pos.Y() *
-            this->dataPtr->cosHea);
-        tmp = this->dataPtr->origin + this->dataPtr->rotGlobalToECEF * tmp;
-        break;
-      }
-
-    case LOCAL2:
-      {
-        tmp.X(_pos.X() * this->dataPtr->cosHea + _pos.Y() *
-            this->dataPtr->sinHea);
-        tmp.Y(-_pos.X() * this->dataPtr->sinHea + _pos.Y() *
-            this->dataPtr->cosHea);
-        tmp = this->dataPtr->origin + this->dataPtr->rotGlobalToECEF * tmp;
-        break;
-      }
-
-    case GLOBAL:
-      {
-        tmp = this->dataPtr->origin + this->dataPtr->rotGlobalToECEF * tmp;
-        break;
-      }
-
-    case SPHERICAL:
-      {
-        tmp.X((_pos.Z() + curvature) * cosLat * cosLon);
-        tmp.Y((_pos.Z() + curvature) * cosLat * sinLon);
-        tmp.Z(((this->dataPtr->ellB * this->dataPtr->ellB)/
-              (this->dataPtr->ellA * this->dataPtr->ellA) *
-              curvature + _pos.Z()) * sinLat);
-        break;
-      }
-
-    // Do nothing
-    case ECEF:
-      break;
-    default:
-      {
-        std::cerr << "Invalid coordinate type[" << _in << "]\n";
-        return _pos;
-      }
+    std::cerr << "Velocity cannot be expressed in spherical coordinates.\n";
+    return std::nullopt;
   }
 
-  // Convert ECEF to the requested output coordinate system
+  // Intermediate data type
+  Vector3d tmp = _vel.AsMetricVector();
+
+  // First, convert to an ECEF vector
+  switch (_in)
+  {
+    // ENU
+    // When branching code for GZ 9, replace this code block with the block
+    // from LOCAL2 and remove the LOCAL2 block.
+    case SphericalCoordinates::LOCAL:
+      // This is incorrect computation
+      tmp.X(-_vel.X() * dataPtr->cosHea + _vel.Y() *
+            dataPtr->sinHea);
+      tmp.Y(-_vel.X() * dataPtr->sinHea - _vel.Y() *
+            dataPtr->cosHea);
+      tmp = dataPtr->rotGlobalToECEF * tmp;
+      break;
+    GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+    case SphericalCoordinates::LOCAL2:
+    GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+      // This is correct computation
+      tmp.X(_vel.X() * dataPtr->cosHea + _vel.Y() *
+            dataPtr->sinHea);
+      tmp.Y(-_vel.X() * dataPtr->sinHea + _vel.Y() *
+            dataPtr->cosHea);
+      tmp = dataPtr->rotGlobalToECEF * tmp;
+      break;
+    // spherical
+    case SphericalCoordinates::GLOBAL:
+      tmp = dataPtr->rotGlobalToECEF * tmp;
+      break;
+    // Do nothing
+    case SphericalCoordinates::ECEF:
+      break;
+    default:
+      std::cerr << "Unknown coordinate type[" << _in << "]\n";
+      return std::nullopt;
+  }
+
+  CoordinateVector3 res;
+
+  // Then, convert to the request coordinate type
   switch (_out)
   {
-    case SPHERICAL:
-      {
-        // Convert from ECEF to SPHERICAL
-        double p = sqrt(tmp.X() * tmp.X() + tmp.Y() * tmp.Y());
-        double theta = atan((tmp.Z() * this->dataPtr->ellA) /
-            (p * this->dataPtr->ellB));
-
-        // Calculate latitude and longitude
-        double lat = atan(
-            (tmp.Z() + std::pow(this->dataPtr->ellP, 2) * this->dataPtr->ellB *
-             std::pow(sin(theta), 3)) /
-            (p - std::pow(this->dataPtr->ellE, 2) *
-             this->dataPtr->ellA * std::pow(cos(theta), 3)));
-
-        double lon = atan2(tmp.Y(), tmp.X());
-
-        // Recalculate radius of planet curvature at the current latitude.
-        double nCurvature = 1.0 - std::pow(this->dataPtr->ellE, 2) *
-          std::pow(sin(lat), 2);
-        nCurvature = this->dataPtr->ellA / sqrt(nCurvature);
-
-        tmp.X(lat);
-        tmp.Y(lon);
-
-        // Now calculate Z
-        tmp.Z(p/cos(lat) - nCurvature);
-        break;
-      }
-
-    // Convert from ECEF TO GLOBAL
-    case GLOBAL:
-      tmp = this->dataPtr->rotECEFToGlobal * (tmp - this->dataPtr->origin);
+    // ECEF, do nothing
+    case SphericalCoordinates::ECEF:
+      res.SetMetric(tmp);
       break;
 
-    // Convert from ECEF TO LOCAL
-    case LOCAL:
-    case LOCAL2:
-      tmp = this->dataPtr->rotECEFToGlobal * (tmp - this->dataPtr->origin);
+    // Convert from ECEF to global
+    case SphericalCoordinates::GLOBAL:
+      tmp = dataPtr->rotECEFToGlobal * tmp;
+      res.SetMetric(tmp);
+      break;
 
-      tmp = Vector3d(
-          tmp.X() * this->dataPtr->cosHea - tmp.Y() * this->dataPtr->sinHea,
-          tmp.X() * this->dataPtr->sinHea + tmp.Y() * this->dataPtr->cosHea,
+    // Convert from ECEF to local
+    case SphericalCoordinates::LOCAL:
+    GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+    case SphericalCoordinates::LOCAL2:
+    GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+      tmp = dataPtr->rotECEFToGlobal * tmp;
+      res.SetMetric(
+          tmp.X() * dataPtr->cosHea - tmp.Y() * dataPtr->sinHea,
+          tmp.X() * dataPtr->sinHea + tmp.Y() * dataPtr->cosHea,
           tmp.Z());
-      break;
-
-    // Return ECEF (do nothing)
-    case ECEF:
       break;
 
     default:
       std::cerr << "Unknown coordinate type[" << _out << "]\n";
-      return _pos;
+      return std::nullopt;
   }
 
-  return tmp;
+  return res;
 }
 
 //////////////////////////////////////////////////
@@ -647,74 +852,33 @@ Vector3d SphericalCoordinates::VelocityTransform(
     const Vector3d &_vel,
     const CoordinateType &_in, const CoordinateType &_out) const
 {
-  // Sanity check -- velocity should not be expressed in spherical coordinates
-  if (_in == SPHERICAL || _out == SPHERICAL)
-  {
+  auto vec = CoordinateVector3::Metric(_vel);
+
+  const auto result = VelocityTransformTmp(this->dataPtr, vec, _in, _out);
+  if (!result)
     return _vel;
-  }
 
-  // Intermediate data type
-  Vector3d tmp = _vel;
+  return result->AsMetricVector();
+}
 
-  // First, convert to an ECEF vector
-  switch (_in)
-  {
-    // ENU
-    case LOCAL:
-      tmp.X(-_vel.X() * this->dataPtr->cosHea + _vel.Y() *
-            this->dataPtr->sinHea);
-      tmp.Y(-_vel.X() * this->dataPtr->sinHea - _vel.Y() *
-            this->dataPtr->cosHea);
-      tmp = this->dataPtr->rotGlobalToECEF * tmp;
-      break;
-    case LOCAL2:
-      tmp.X(_vel.X() * this->dataPtr->cosHea + _vel.Y() *
-            this->dataPtr->sinHea);
-      tmp.Y(-_vel.X() * this->dataPtr->sinHea + _vel.Y() *
-            this->dataPtr->cosHea);
-      tmp = this->dataPtr->rotGlobalToECEF * tmp;
-      break;
-    // spherical
-    case GLOBAL:
-      tmp = this->dataPtr->rotGlobalToECEF * tmp;
-      break;
-    // Do nothing
-    case ECEF:
-      tmp = _vel;
-      break;
-    default:
-      std::cerr << "Unknown coordinate type[" << _in << "]\n";
-      return _vel;
-  }
+//////////////////////////////////////////////////
+std::optional<CoordinateVector3> SphericalCoordinates::VelocityTransform(
+    const CoordinateVector3 &_vel,
+    const CoordinateType &_in, const CoordinateType &_out) const
+{
+  // Temporarily, for Gazebo 8, this function turns all LOCAL frames into
+  // LOCAL2 to get correct results. Basically, LOCAL and LOCAL2 are equal
+  // when VelocityTransform() is called with a CoordinateVector3 argument, while
+  // it returns the compatible (but wrong) result when called with Vector3d and
+  // LOCAL. From Gazebo 9 onwards, LOCAL2 frame will be removed and these
+  // differences will disappear.
+  // TODO(peci1): Move VelocityTransformTmp code into this function in GZ 9.
 
-  // Then, convert to the request coordinate type
-  switch (_out)
-  {
-    // ECEF, do nothing
-    case ECEF:
-      break;
-
-    // Convert from ECEF to global
-    case GLOBAL:
-      tmp = this->dataPtr->rotECEFToGlobal * tmp;
-      break;
-
-    // Convert from ECEF to local
-    case LOCAL:
-    case LOCAL2:
-      tmp = this->dataPtr->rotECEFToGlobal * tmp;
-      tmp = Vector3d(
-          tmp.X() * this->dataPtr->cosHea - tmp.Y() * this->dataPtr->sinHea,
-          tmp.X() * this->dataPtr->sinHea + tmp.Y() * this->dataPtr->cosHea,
-          tmp.Z());
-      break;
-
-    default:
-      std::cerr << "Unknown coordinate type[" << _out << "]\n";
-      return _vel;
-  }
-
-  return tmp;
+  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+  const auto in = _in == LOCAL ? LOCAL2 : _in;
+  const auto out = _out == LOCAL ? LOCAL2 : _out;
+  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+  return VelocityTransformTmp(this->dataPtr, _vel, in, out);
 }
 
 //////////////////////////////////////////////////

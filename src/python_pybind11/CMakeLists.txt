@@ -7,6 +7,7 @@ pybind11_add_module(${BINDINGS_MODULE_NAME} MODULE
   src/AxisAlignedBox.cc
   src/Capsule.cc
   src/Color.cc
+  src/CoordinateVector3.cc
   src/DiffDriveOdometry.cc
   src/Ellipsoid.cc
   src/Filter.cc

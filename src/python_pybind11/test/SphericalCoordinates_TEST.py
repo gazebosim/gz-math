@@ -13,13 +13,22 @@
 # limitations under the License.
 
 import unittest
+import warnings
 
 import gz
 from gz.math8 import Angle, SphericalCoordinates, Vector3d
 import math
 
-class TestSphericalCoordinates(unittest.TestCase):
 
+def ignore_deprecation_warnings(test_func):
+    def do_test(self, *args, **kwargs):
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=DeprecationWarning)
+            test_func(self, *args, **kwargs)
+    return do_test
+
+
+class TestSphericalCoordinates(unittest.TestCase):
     def test_constructor(self):
         # Default surface type
         st = SphericalCoordinates.EARTH_WGS84
@@ -171,6 +180,7 @@ class TestSphericalCoordinates(unittest.TestCase):
         self.assertAlmostEqual(sc_valid.surface_flattening(),
                 0, delta=1e-3)
 
+    @ignore_deprecation_warnings
     def test_coordinate_transforms(self):
         # Default surface type
         st = SphericalCoordinates.EARTH_WGS84
@@ -376,6 +386,7 @@ class TestSphericalCoordinates(unittest.TestCase):
         sc.set_surface(SphericalCoordinates.SurfaceType(3))
         self.assertEqual(sc.surface(), SphericalCoordinates.SurfaceType(3))
 
+    @ignore_deprecation_warnings
     def test_transform(self):
         sc = SphericalCoordinates()
         vel = Vector3d(1, 2, -4)
@@ -398,6 +409,7 @@ class TestSphericalCoordinates(unittest.TestCase):
 
         print('NEW POS[', result.x(), ' ', result.y(), ' ', result.z(), ']\n')
 
+    @ignore_deprecation_warnings
     def test_bad_coordinate_type(self):
         sc = SphericalCoordinates()
         pos = Vector3d(1, 2, -4)
@@ -472,6 +484,7 @@ class TestSphericalCoordinates(unittest.TestCase):
         sc2 = sc1
         self.assertEqual(sc1, sc2)
 
+    @ignore_deprecation_warnings
     def test_no_heading(self):
         # Default heading
         st = SphericalCoordinates.EARTH_WGS84
@@ -555,6 +568,7 @@ class TestSphericalCoordinates(unittest.TestCase):
                 SphericalCoordinates.GLOBAL)
             self.assertEqual(global_var, local)
 
+    @ignore_deprecation_warnings
     def test_with_heading(self):
         # Heading 90 deg: X == North, Y == West , Z == Up
         st = SphericalCoordinates.EARTH_WGS84
@@ -623,6 +637,7 @@ class TestSphericalCoordinates(unittest.TestCase):
                 SphericalCoordinates.GLOBAL)
             self.assertEqual(global_var, globalRes)
 
+    @ignore_deprecation_warnings
     def test_inverse(self):
         st = SphericalCoordinates.EARTH_WGS84
         lat = Angle(0.3)
