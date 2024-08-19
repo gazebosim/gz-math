@@ -110,14 +110,14 @@ namespace gz::math
     /// \param[in] _v vector to add
     /// \return the sum vector
     /// \note If one vector is metric and the other is spherical, a NaN
-    ///       vector will be returned.
+    ///       vector will be returned and a message logged to cerr.
     public: CoordinateVector3 operator+(const CoordinateVector3 &_v) const;
 
     /// \brief Addition assignment operator
     /// \param[in] _v vector to add
     /// \return the sum vector
     /// \note If one vector is metric and the other is spherical, a NaN
-    ///       vector will be set.
+    ///       vector will be set and a message logged to cerr.
     public: const CoordinateVector3 &operator+=(const CoordinateVector3 &_v);
 
     /// \brief Negation operator
@@ -128,14 +128,14 @@ namespace gz::math
     /// \param[in] _pt a vector to subtract
     /// \return a vector after the subtraction
     /// \note If one vector is metric and the other is spherical, a NaN
-    ///       vector will be returned.
+    ///       vector will be returned and a message logged to cerr.
     public: CoordinateVector3 operator-(const CoordinateVector3 &_pt) const;
 
     /// \brief Subtraction assignment operators
     /// \param[in] _pt subtrahend
     /// \return a vector after the subtraction
     /// \note If one vector is metric and the other is spherical, a NaN
-    ///       vector will be set.
+    ///       vector will be set and a message logged to cerr.
     public: const CoordinateVector3 &operator-=(const CoordinateVector3 &_pt);
 
     /// \brief Equality test with tolerance.

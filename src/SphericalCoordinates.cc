@@ -553,6 +553,9 @@ void SphericalCoordinates::UpdateTransformationMatrix()
     *this->PositionTransform(this->dataPtr->origin, SPHERICAL, ECEF);
 }
 
+namespace
+{
+
 /////////////////////////////////////////////////
 std::optional<CoordinateVector3> PositionTransformTmp(
     const gz::utils::ImplPtr<SphericalCoordinates::Implementation>& dataPtr,
@@ -707,6 +710,8 @@ std::optional<CoordinateVector3> PositionTransformTmp(
   return res;
 }
 
+}
+
 /////////////////////////////////////////////////
 Vector3d SphericalCoordinates::PositionTransform(
     const Vector3d &_pos,
@@ -747,6 +752,9 @@ std::optional<CoordinateVector3> SphericalCoordinates::PositionTransform(
   GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
   return PositionTransformTmp(this->dataPtr, _pos, in, out);
 }
+
+namespace
+{
 
 //////////////////////////////////////////////////
 std::optional<CoordinateVector3> VelocityTransformTmp(
@@ -837,6 +845,8 @@ std::optional<CoordinateVector3> VelocityTransformTmp(
   }
 
   return res;
+}
+
 }
 
 //////////////////////////////////////////////////

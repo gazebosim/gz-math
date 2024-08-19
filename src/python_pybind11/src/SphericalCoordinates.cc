@@ -15,6 +15,7 @@
  *
 */
 #include <pybind11/operators.h>
+#include <pybind11/stl.h>
 
 #include "SphericalCoordinates.hh"
 #include <gz/math/Angle.hh>

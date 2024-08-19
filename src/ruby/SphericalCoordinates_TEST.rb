@@ -21,10 +21,36 @@ require 'math'
 class SphericalCoordinates_TEST < Test::Unit::TestCase
   def test_construction
     v = Gz::Math::SphericalCoordinates.new
+    assert(v.Surface() == Gz::Math::SphericalCoordinates::EARTH_WGS84, "Wrong Surface()")
+    assert(v.LatitudeReference() == Gz::Math::Angle.new(), "Wrong LatitudeReference()")
+    assert(v.LongitudeReference() == Gz::Math::Angle.new(), "Wrong LongitudeReference()")
+    assert(v.HeadingOffset() == Gz::Math::Angle.new(), "Wrong HeadingOffset()")
+    assert(v.ElevationReference() == 0.0, "Wrong ElevationReference()")
 
-#     assert(v.X() == 0.0, "x should be 0")
-#     assert(v.Y() == 0.0, "y should be 0")
-#     assert(v.Z() == 0.0, "z should be 0")
+    v = Gz::Math::SphericalCoordinates.new(Gz::Math::SphericalCoordinates::EARTH_WGS84)
+    assert(v.Surface() == Gz::Math::SphericalCoordinates::EARTH_WGS84, "Wrong Surface()")
+    assert(v.LatitudeReference() == Gz::Math::Angle.new(), "Wrong LatitudeReference()")
+    assert(v.LongitudeReference() == Gz::Math::Angle.new(), "Wrong LongitudeReference()")
+    assert(v.HeadingOffset() == Gz::Math::Angle.new(), "Wrong HeadingOffset()")
+    assert(v.ElevationReference() == 0.0, "Wrong ElevationReference()")
+
+    lat = Gz::Math::Angle.new(0.3)
+    lon = Gz::Math::Angle.new(-1.2)
+    heading = Gz::Math::Angle.new(0.5)
+    elev = 354.1
+    v = Gz::Math::SphericalCoordinates.new(
+      Gz::Math::SphericalCoordinates::EARTH_WGS84, lat, lon, elev, heading)
+    assert(v.Surface() == Gz::Math::SphericalCoordinates::EARTH_WGS84, "Wrong Surface()")
+    assert(v.LatitudeReference() == lat, "Wrong LatitudeReference()")
+    assert(v.LongitudeReference() == lon, "Wrong LongitudeReference()")
+    assert(v.HeadingOffset() == heading, "Wrong HeadingOffset()")
+    assert(v.ElevationReference() == elev, "Wrong ElevationReference()")
+
+    v2 = Gz::Math::SphericalCoordinates.new(v)
+    assert(v2 == v, "instances should equal")
+
+    # TODO(anyone): std::optional<> bindings are not working,
+    #               so this test doesn't test much
   end
 
 end

@@ -115,6 +115,7 @@ if (BUILD_TESTING)
     Capsule_TEST
     Color_TEST
     Cone_TEST
+    CoordinateVector3_TEST
     Cylinder_TEST
     DiffDriveOdometry_TEST
     Ellipsoid_TEST
