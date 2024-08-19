@@ -1,6 +1,60 @@
 ## Gazebo Math 8.x
 
-### Gazebo Math 8.0.0 (202X-XX-XX)
+### Gazebo Math 8.0.0 (2024-09-XX)
+
+1. Clamping color channel values to within [0, 1]
+    * [Pull request #613](https://github.com/gazebosim/gz-math/pull/613)
+
+1. Implement rule of zero part 2
+    * [Pull request #614](https://github.com/gazebosim/gz-math/pull/614)
+
+1. Use ImplPtr, fix rule of 0 part 1
+    * [Pull request #608](https://github.com/gazebosim/gz-math/pull/608)
+
+1. Fix flaky Stopwatch test
+    * [Pull request #610](https://github.com/gazebosim/gz-math/pull/610)
+
+1. Line\*.hh: remove unneeded use of static variable
+    * [Pull request #607](https://github.com/gazebosim/gz-math/pull/607)
+
+1. Fix potential unsafe initialization in the Graph class
+    * [Pull request #606](https://github.com/gazebosim/gz-math/pull/606)
+    * [Pull request #609](https://github.com/gazebosim/gz-math/pull/609)
+    * [Pull request #612](https://github.com/gazebosim/gz-math/pull/612)
+
+1. Remove APIs deprecated in gz-math7
+    * [Pull request #601](https://github.com/gazebosim/gz-math/pull/601)
+
+1. Deprecate math::clock alias
+    * [Pull request #600](https://github.com/gazebosim/gz-math/pull/600)
+
+1. Clean up nested namespaces
+    * [Pull request #603](https://github.com/gazebosim/gz-math/pull/603)
+
+1. Find python directly instead of using GzPython
+    * [Pull request #588](https://github.com/gazebosim/gz-math/pull/588)
+
+1. Adding cone primitives.
+    * [Pull request #594](https://github.com/gazebosim/gz-math/pull/594)
+
+1. Enable 24.04 CI, remove distutils dependency
+    * [Pull request #587](https://github.com/gazebosim/gz-math/pull/587)
+
+1. Remove HIDE_SYMBOLS_BY_DEFAULT: replace by a default configuration in gz-cmake.
+    * [Pull request #573](https://github.com/gazebosim/gz-math/pull/573)
+
+1. Use HIDE_SYMBOLS_BY_DEFAULT, fix MovingWindowFilter
+    * [Pull request #566](https://github.com/gazebosim/gz-math/pull/566)
+
+1. Dependency version bumps in ionic: use gz-cmake4, gz-utils3
+    * [Pull request #562](https://github.com/gazebosim/gz-math/pull/562)
+
+1. Remove ignition headers and macros
+    * [Pull request #541](https://github.com/gazebosim/gz-math/pull/541)
+    * [Pull request #602](https://github.com/gazebosim/gz-math/pull/602)
+
+1. Bump major version to 8
+    * [Pull request #478](https://github.com/gazebosim/gz-math/pull/478)
 
 ## Gazebo Math 7.x
 
