@@ -90,26 +90,16 @@ void defineMathCoordinateVector3(py::module &m, const std::string &typestr)
          "Equal to operator")
     .def("is_finite", &Class::IsFinite,
          "See if all vector components are finite (e.g., not nan)")
-    .def("x", py::overload_cast<>(&Class::X),
+    .def("x", py::overload_cast<>(&Class::X, py::const_),
         "Get the x value of a metric vector.")
-    .def("lat", py::overload_cast<>(&Class::Lat),
+    .def("lat", py::overload_cast<>(&Class::Lat, py::const_),
         "Get the latitude of a spherical vector.")
-    .def("y", py::overload_cast<>(&Class::Y),
+    .def("y", py::overload_cast<>(&Class::Y, py::const_),
         "Get the y value of a metric vector.")
-    .def("lon", py::overload_cast<>(&Class::Lon),
+    .def("lon", py::overload_cast<>(&Class::Lon, py::const_),
         "Get the longitude of a spherical vector.")
-    .def("z", py::overload_cast<>(&Class::Z),
+    .def("z", py::overload_cast<>(&Class::Z, py::const_),
         "Get the z value of a metric vector.")
-    .def("x", py::overload_cast<const double&>(&Class::X),
-        "Set the x value of a metric vector.")
-    .def("lat", py::overload_cast<const Angle&>(&Class::Lat),
-        "Set the latitude of a spherical vector.")
-    .def("y", py::overload_cast<const double&>(&Class::Y),
-        "Set the y value of a metric vector.")
-    .def("lon", py::overload_cast<const Angle&>(&Class::Lon),
-         "Set the longitude of a spherical vector.")
-    .def("z", py::overload_cast<const double&>(&Class::Z),
-        "Set the z value of a metric vector.")
     .def("__copy__", [](const Class &self) {
       return Class(self);
     })

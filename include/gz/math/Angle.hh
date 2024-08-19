@@ -140,6 +140,10 @@ namespace gz::math
               return value;
             }
 
+    /// \brief Negation operator, result = -this.
+    /// \return The new angle.
+    public: Angle operator-() const;
+
     /// \brief Subtraction operator, result = this - _angle.
     /// \param[in] _angle Angle for subtraction.
     /// \return The new angle.

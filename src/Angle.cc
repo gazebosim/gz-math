@@ -86,6 +86,12 @@ Angle Angle::ShortestDistance(const gz::math::Angle& _other) const
 }
 
 //////////////////////////////////////////////////
+Angle Angle::operator-() const
+{
+  return {-this->value};
+}
+
+//////////////////////////////////////////////////
 Angle Angle::operator-(const Angle &_angle) const
 {
   return Angle(this->value - _angle.value);

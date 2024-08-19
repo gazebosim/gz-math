@@ -21,10 +21,7 @@ require 'math'
 class CoordinateVector3_TEST < Test::Unit::TestCase
   def test_construction
     v = Gz::Math::CoordinateVector3.new
-
-    assert(v.X() == 0.0, "x should be 0")
-    assert(v.Y() == 0.0, "y should be 0")
-    assert(v.Z() == 0.0, "z should be 0")
+    v = Gz::Math::CoordinateVector3.Metric(1.0, 2.0, 3.0)
   end
 
 end

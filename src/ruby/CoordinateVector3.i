@@ -23,6 +23,8 @@
 
 %module coordinatevector3
 %{
+#include <optional>
+
 #include <gz/math/Angle.hh>
 #include <gz/math/CoordinateVector3.hh>
 #include <gz/math/Vector3.hh>
@@ -47,7 +49,7 @@ namespace gz
       public: void SetMetric(const gz::math::Vector3<double> &_v);
       public: void SetSpherical(const gz::math::Angle& _lat,
                   const gz::math::Angle& _lon, double _z);
-      public: gz::math::Vector3d AsMetricVector() const;
+      public: std::optional<gz::math::Vector3d> AsMetricVector() const;
       public: CoordinateVector3 operator+(const CoordinateVector3 &_v) const;
       public: CoordinateVector3 operator-() const;
       public: CoordinateVector3 operator-(const CoordinateVector3 &_pt) const;
@@ -56,11 +58,11 @@ namespace gz
       public: bool operator==(const CoordinateVector3 &_v) const;
       public: bool IsFinite() const;
       public: bool Equal(const CoordinateVector3 &_v) const;
-      public: double X() const;
-      public: const gz::math::Angle& Lat() const;
-      public: double Y() const;
-      public: const gz::math::Angle& Lon() const;
-      public: double Z() const;
+      public: std::optional<double> X() const;
+      public: std::optional<gz::math::Angle> Lat() const;
+      public: std::optional<double> Y() const;
+      public: std::optional<gz::math::Angle> Lon() const;
+      public: std::optional<double> Z() const;
       public: void X(const double &_v);
       public: void Lat(const gz::math::Angle &_v);
       public: void Y(const double &_v);

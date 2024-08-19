@@ -17,10 +17,7 @@
 #ifndef GZ_MATH_COORDINATE_VECTOR3_HH_
 #define GZ_MATH_COORDINATE_VECTOR3_HH_
 
-#include <algorithm>
-#include <cmath>
-#include <istream>
-#include <limits>
+#include <optional>
 #include <ostream>
 
 #include <gz/math/Angle.hh>
@@ -42,9 +39,13 @@ namespace gz::math
     /// \brief Construct an empty metric vector.
     public: CoordinateVector3();
 
+    public: ~CoordinateVector3();
+
     /// \brief Copy constructor
     /// \param[in] _other The copied value.
-    public: CoordinateVector3(const CoordinateVector3& _other);
+    public: CoordinateVector3(const CoordinateVector3 &_other);
+
+    public: CoordinateVector3(CoordinateVector3 &&_other) noexcept;
 
     /// \brief Constructor for metric values.
     /// \param[in] _x value along x
@@ -64,7 +65,7 @@ namespace gz::math
     /// \param[in] _z value along z
     /// \return The coordinate vector.
     public: static CoordinateVector3 Spherical(
-        const math::Angle& _lat, const math::Angle& _lon, double _z);
+        const math::Angle &_lat, const math::Angle &_lon, double _z);
 
     /// \brief Whether this vector is metric.
     /// \return Whether this vector is metric.
@@ -87,30 +88,36 @@ namespace gz::math
     /// \brief Set the spherical contents of the vector
     /// \param[in] _lat latitude value
     /// \param[in] _lon longitude value
-    /// \param[in] _z value aling z
+    /// \param[in] _z value along z
     public: void SetSpherical(
-      const math::Angle& _lat, const math::Angle& _lon, double _z);
+      const math::Angle &_lat, const math::Angle &_lon, double _z);
 
     /// \brief Return this vector as a metric Vector3d (only valid for metric).
-    /// \return The metric vector.
-    /// \throws std::bad_variant_access if the vector is not metric
-    public: math::Vector3d AsMetricVector() const;
+    /// \return The metric vector (or nullopt if the vector is not metric).
+    public: std::optional<math::Vector3d> AsMetricVector() const;
 
     /// \brief Copy assignment
     /// \param[in] _other The copied value.
     /// \return Reference to this.
     public: CoordinateVector3 &operator=(const CoordinateVector3 &_other);
 
+    /// \brief Move assignment
+    /// \param[in] _other The copied value.
+    /// \return Reference to this.
+    public: CoordinateVector3 &operator=(CoordinateVector3 &&_other) noexcept;
+
     /// \brief Addition operator
     /// \param[in] _v vector to add
     /// \return the sum vector
-    /// \throws std::bad_variant_access if the vectors are not both same type
+    /// \note If one vector is metric and the other is spherical, a NaN
+    ///       vector will be returned.
     public: CoordinateVector3 operator+(const CoordinateVector3 &_v) const;
 
     /// \brief Addition assignment operator
     /// \param[in] _v vector to add
     /// \return the sum vector
-    /// \throws std::bad_variant_access if the vectors are not both same type
+    /// \note If one vector is metric and the other is spherical, a NaN
+    ///       vector will be set.
     public: const CoordinateVector3 &operator+=(const CoordinateVector3 &_v);
 
     /// \brief Negation operator
@@ -120,14 +127,15 @@ namespace gz::math
     /// \brief Subtraction operators
     /// \param[in] _pt a vector to subtract
     /// \return a vector after the subtraction
-    /// \throws std::bad_variant_access if the vectors are not both same type
-    public: CoordinateVector3 operator-(
-        const CoordinateVector3 &_pt) const;
+    /// \note If one vector is metric and the other is spherical, a NaN
+    ///       vector will be returned.
+    public: CoordinateVector3 operator-(const CoordinateVector3 &_pt) const;
 
     /// \brief Subtraction assignment operators
     /// \param[in] _pt subtrahend
     /// \return a vector after the subtraction
-    /// \throws std::bad_variant_access if the vectors are not both same type
+    /// \note If one vector is metric and the other is spherical, a NaN
+    ///       vector will be set.
     public: const CoordinateVector3 &operator-=(const CoordinateVector3 &_pt);
 
     /// \brief Equality test with tolerance.
@@ -163,76 +171,49 @@ namespace gz::math
     public: bool Equal(const CoordinateVector3 &_v) const;
 
     /// \brief Get the x value of a metric vector.
-    /// \return The x component of the metric vector.
-    /// \throws std::bad_variant_access if the vector is spherical.
-    public: double X() const;
+    /// \return The x component of the metric vector (or nullopt if spherical).
+    public: std::optional<double> X() const;
 
     /// \brief Get the latitude of a spherical vector.
-    /// \return The latitude of the spherical vector.
-    /// \throws std::bad_variant_access if the vector is metric.
-    public: const math::Angle& Lat() const;
+    /// \return The latitude of the spherical vector (or nullopt if metric).
+    public: std::optional<math::Angle> Lat() const;
 
     /// \brief Get the y value of a metric vector.
-    /// \return The y component of the metric vector.
-    /// \throws std::bad_variant_access if the vector is spherical.
-    public: double Y() const;
+    /// \return The y component of the metric vector (or nullopt if spherical).
+    public: std::optional<double> Y() const;
 
     /// \brief Get the longitude of a spherical vector.
-    /// \return The longitude of the spherical vector.
-    /// \throws std::bad_variant_access if the vector is metric.
-    public: const math::Angle& Lon() const;
+    /// \return The longitude of the spherical vector (or nullopt if metric).
+    public: std::optional<math::Angle> Lon() const;
 
     /// \brief Get the z value.
-    /// \return The z component of the vector
-    public: double Z() const;
-
-    /// \brief Get a mutable reference to the x value of a metric vector.
-    /// \return The x component of the metric vector
-    /// \throws std::bad_variant_access if the vector is spherical.
-    public: double &X();
-
-    /// \brief Get a mutable reference to the latitude of a spherical vector.
-    /// \return The latitude of the spherical vector
-    /// \throws std::bad_variant_access if the vector is metric.
-    public: math::Angle &Lat();
-
-    /// \brief Get a mutable reference to the y value of a metric vector.
-    /// \return The y component of the metric vector
-    /// \throws std::bad_variant_access if the vector is spherical.
-    public: double &Y();
-
-    /// \brief Get a mutable reference to the longitude of a spherical vector.
-    /// \return The longitude of the spherical vector
-    /// \throws std::bad_variant_access if the vector is metric.
-    public: math::Angle &Lon();
-
-    /// \brief Get a mutable reference to the z value.
-    /// \return The z component of the vector
-    public: double &Z();
+    /// \return The z component of the vector (nullopt is never returned).
+    public: std::optional<double> Z() const;
 
     /// \brief Set the x value.
     /// \param[in] _v Value for the x component.
-    /// \throws std::bad_variant_access if the vector is spherical.
-    public: void X(const double &_v);
+    /// \return True if the vector is metric, false otherwise.
+    public: bool X(const double &_v);
 
     /// \brief Set the latitude.
     /// \param[in] _v Value for the latitude.
-    /// \throws std::bad_variant_access if the vector is metric.
-    public: void Lat(const Angle &_v);
+    /// \return True if the vector is spherical, false otherwise.
+    public: bool Lat(const Angle &_v);
 
     /// \brief Set the y value.
     /// \param[in] _v Value for the y component.
-    /// \throws std::bad_variant_access if the vector is spherical.
-    public: void Y(const double &_v);
+    /// \return True if the vector is metric, false otherwise.
+    public: bool Y(const double &_v);
 
     /// \brief Set the longitude.
     /// \param[in] _v Value for the longitude.
-    /// \throws std::bad_variant_access if the vector is metric.
-  public: void Lon(const Angle &_v);
+    /// \return True if the vector is spherical, false otherwise.
+    public: bool Lon(const Angle &_v);
 
     /// \brief Set the z value.
     /// \param[in] _v Value for the z component.
-    public: void Z(const double &_v);
+    /// \return Always true.
+    public: bool Z(const double &_v);
 
     /// \brief Stream insertion operator
     /// \param _out output stream
@@ -243,27 +224,27 @@ namespace gz::math
     {
       if (_pt.IsMetric())
       {
-        appendToStream(_out, _pt.X());
+        appendToStream(_out, *_pt.X());
       }
       else
       {
-        appendToStream(_out, _pt.Lat().Degree());
+        appendToStream(_out, _pt.Lat()->Degree());
         _out << "°";
       }
       _out << " ";
 
       if (_pt.IsMetric())
       {
-        appendToStream(_out, _pt.Y());
+        appendToStream(_out, *_pt.Y());
       }
       else
       {
-        appendToStream(_out, _pt.Lon().Degree());
+        appendToStream(_out, _pt.Lon()->Degree());
         _out << "°";
       }
       _out << " ";
 
-      appendToStream(_out, _pt.Z());
+      appendToStream(_out, *_pt.Z());
 
       return _out;
     }

@@ -17,9 +17,12 @@
 
 #include "gz/math/Angle.hh"
 #include "gz/math/CoordinateVector3.hh"
+#include "gz/math/Vector3.hh"
+#include "gz/math/Helpers.hh"
 #include "gz/utils/ImplPtr.hh"
 
-#include <ostream>
+#include <cmath>
+#include <optional>
 #include <variant>
 
 /// \brief Private data for the CoordinateVector3 class.
@@ -31,34 +34,122 @@ class gz::math::CoordinateVector3::Implementation
   public: std::variant<double, math::Angle> y_or_lon;
   /// \brief The z coordinate (always metric).
   public: double z;
+
+  /// \brief Raw access to the stored metric X value without type checking.
+  public: double X() const
+  {
+    return std::get<double>(this->x_or_lat);
+  }
+
+  /// \brief Raw access to the stored metric X value without type checking.
+  public: double& X()
+  {
+    return std::get<double>(this->x_or_lat);
+  }
+
+  /// \brief Raw access to the stored spherical Lat value without type checking.
+  public: const math::Angle& Lat() const
+  {
+    return std::get<math::Angle>(this->x_or_lat);
+  }
+
+  /// \brief Raw access to the stored spherical Lat value without type checking.
+  public: math::Angle& Lat()
+  {
+    return std::get<math::Angle>(this->x_or_lat);
+  }
+
+  /// \brief Raw access to the stored metric Y value without type checking.
+  public: double Y() const
+  {
+    return std::get<double>(this->y_or_lon);
+  }
+
+  /// \brief Raw access to the stored metric Y value without type checking.
+  public: double& Y()
+  {
+    return std::get<double>(this->y_or_lon);
+  }
+
+  /// \brief Raw access to the stored spherical Lon value without type checking.
+  public: const math::Angle& Lon() const
+  {
+    return std::get<math::Angle>(this->y_or_lon);
+  }
+
+  /// \brief Raw access to the stored spherical Lon value without type checking.
+  public: math::Angle& Lon()
+  {
+    return std::get<math::Angle>(this->y_or_lon);
+  }
+
+  /// \brief Raw access to the stored Z value without type checking.
+  public: double Z() const
+  {
+    return this->z;
+  }
+
+  /// \brief Raw access to the stored Z value without type checking.
+  public: double& Z()
+  {
+    return this->z;
+  }
+
 };
 
 using namespace gz;
 using namespace math;
 
 /////////////////////////////////////////////////
-CoordinateVector3::CoordinateVector3()
-: dataPtr(gz::utils::MakeUniqueImpl<Implementation>(0.0, 0.0, 0.0))
+CoordinateVector3::CoordinateVector3() :
+  dataPtr(gz::utils::MakeUniqueImpl<Implementation>(0.0, 0.0, 0.0))
 {
-
 }
 
 /////////////////////////////////////////////////
-CoordinateVector3::CoordinateVector3(const CoordinateVector3 &_other)
-: dataPtr(_other.IsMetric() ?
+CoordinateVector3::~CoordinateVector3() = default;
+
+/////////////////////////////////////////////////
+CoordinateVector3::CoordinateVector3(const CoordinateVector3 &_other) :
+  dataPtr(_other.IsMetric() ?
   gz::utils::MakeUniqueImpl<Implementation>(
-    _other.X(), _other.Y(), _other.Z()) :
+    _other.dataPtr->X(), _other.dataPtr->Y(), _other.dataPtr->Z()) :
   gz::utils::MakeUniqueImpl<Implementation>(
-    _other.Lat(), _other.Lon(), _other.Z()))
+    _other.dataPtr->Lat(), _other.dataPtr->Lon(), _other.dataPtr->Z()))
 {
 }
 
+/////////////////////////////////////////////////
+CoordinateVector3::CoordinateVector3(CoordinateVector3 &&_other) noexcept :
+  dataPtr(std::exchange(_other.dataPtr, nullptr))
+{
+}
+
+/////////////////////////////////////////////////
 CoordinateVector3& CoordinateVector3::operator=(const CoordinateVector3 &_other)
 {
+  // If the object was moved from, dataPtr will be null
+  if (!this->dataPtr)
+    this->dataPtr = gz::utils::MakeUniqueImpl<Implementation>();
+
   if (_other.IsMetric())
-    this->SetMetric(_other.X(), _other.Y(), _other.Z());
+  {
+    this->SetMetric(
+      _other.dataPtr->X(), _other.dataPtr->Y(), _other.dataPtr->Z());
+  }
   else
-    this->SetSpherical(_other.Lat(), _other.Lon(), _other.Z());
+  {
+    this->SetSpherical(
+      _other.dataPtr->Lat(), _other.dataPtr->Lon(), _other.dataPtr->Z());
+  }
+  return *this;
+}
+
+/////////////////////////////////////////////////
+CoordinateVector3&
+CoordinateVector3::operator=(CoordinateVector3 &&_other) noexcept
+{
+  std::swap(this->dataPtr, _other.dataPtr);
   return *this;
 }
 
@@ -123,11 +214,13 @@ void CoordinateVector3::SetSpherical(
 }
 
 /////////////////////////////////////////////////
-math::Vector3d CoordinateVector3::AsMetricVector() const
+std::optional<math::Vector3d> CoordinateVector3::AsMetricVector() const
 {
   if (!this->IsMetric())
-    throw std::bad_variant_access();
-  return {this->X(), this->Y(), this->Z()};
+    return std::nullopt;
+
+  return math::Vector3d{
+    this->dataPtr->X(), this->dataPtr->Y(), this->dataPtr->Z()};
 }
 
 /////////////////////////////////////////////////
@@ -135,14 +228,25 @@ CoordinateVector3 CoordinateVector3::operator+(
   const CoordinateVector3 &_v) const
 {
   if (this->IsMetric() != _v.IsMetric())
-    throw std::bad_variant_access();
+  {
+    return this->IsMetric() ? Metric(NAN_D, NAN_D, NAN_D) :
+      Spherical(NAN_D, NAN_D, NAN_D);
+  }
 
   if (this->IsMetric())
+  {
     return CoordinateVector3::Metric(
-      this->X() + _v.X(), this->Y() + _v.Y(), this->Z() + _v.Z());
+      this->dataPtr->X() + _v.dataPtr->X(),
+      this->dataPtr->Y() + _v.dataPtr->Y(),
+      this->dataPtr->Z() + _v.dataPtr->Z());
+  }
   else
+  {
     return CoordinateVector3::Spherical(
-      this->Lat() + _v.Lat(), this->Lon() + _v.Lon(), this->Z() + _v.Z());
+      this->dataPtr->Lat() + _v.dataPtr->Lat(),
+      this->dataPtr->Lon() + _v.dataPtr->Lon(),
+      this->dataPtr->Z() + _v.dataPtr->Z());
+  }
 }
 
 /////////////////////////////////////////////////
@@ -150,19 +254,26 @@ const CoordinateVector3& CoordinateVector3::operator+=(
   const CoordinateVector3 &_v)
 {
   if (this->IsMetric() != _v.IsMetric())
-    throw std::bad_variant_access();
+  {
+    this->dataPtr->Z() = NAN_D;
+    if (this->IsMetric())
+      this->dataPtr->X() = this->dataPtr->Y() = NAN_D;
+    else
+      this->dataPtr->Lat() = this->dataPtr->Lon() = NAN_D;
+    return *this;
+  }
 
   if (this->IsMetric())
   {
-    this->X() += _v.X();
-    this->Y() += _v.Y();
+    this->dataPtr->X() += _v.dataPtr->X();
+    this->dataPtr->Y() += _v.dataPtr->Y();
   }
   else
   {
-    this->Lat() += _v.Lat();
-    this->Lon() += _v.Lon();
+    this->dataPtr->Lat() += _v.dataPtr->Lat();
+    this->dataPtr->Lon() += _v.dataPtr->Lon();
   }
-  this->Z() += _v.Z();
+  this->dataPtr->Z() += _v.dataPtr->Z();
 
   return *this;
 }
@@ -171,11 +282,15 @@ const CoordinateVector3& CoordinateVector3::operator+=(
 CoordinateVector3 CoordinateVector3::operator-() const
 {
   if (this->IsMetric())
-    return Metric(-this->X(), -this->Y(), -this->Z());
+  {
+    return Metric(
+      -this->dataPtr->X(), -this->dataPtr->Y(), -this->dataPtr->Z());
+  }
   else
-    return Spherical({-this->Lat().Radian()},
-                     {-this->Lon().Radian()},
-                     -this->Z());
+  {
+    return Spherical(
+      -this->dataPtr->Lat(), -this->dataPtr->Lon(), -this->dataPtr->Z());
+  }
 }
 
 /////////////////////////////////////////////////
@@ -183,32 +298,52 @@ CoordinateVector3 CoordinateVector3::operator-(
   const CoordinateVector3 &_pt) const
 {
   if (this->IsMetric() != _pt.IsMetric())
-    throw std::bad_variant_access();
+  {
+    return this->IsMetric() ? Metric(NAN_D, NAN_D, NAN_D) :
+           Spherical(NAN_D, NAN_D, NAN_D);
+  }
 
   if (this->IsMetric())
+  {
     return Metric(
-      this->X() - _pt.X(), this->Y() - _pt.Y(), this->Z() - _pt.Z());
+      this->dataPtr->X() - _pt.dataPtr->X(),
+      this->dataPtr->Y() - _pt.dataPtr->Y(),
+      this->dataPtr->Z() - _pt.dataPtr->Z());
+  }
   else
-    return Spherical(this->Lat() - _pt.Lat(),
-                     this->Lon() - _pt.Lon(),
-                     this->Z() - _pt.Z());
+  {
+    return Spherical(
+      this->dataPtr->Lat() - _pt.dataPtr->Lat(),
+      this->dataPtr->Lon() - _pt.dataPtr->Lon(),
+      this->dataPtr->Z() - _pt.dataPtr->Z());
+  }
 }
 
 /////////////////////////////////////////////////
 const CoordinateVector3& CoordinateVector3::operator-=(
   const CoordinateVector3 &_pt)
 {
+  if (this->IsMetric() != _pt.IsMetric())
+  {
+    this->dataPtr->Z() = NAN_D;
+    if (this->IsMetric())
+      this->dataPtr->X() = this->dataPtr->Y() = NAN_D;
+    else
+      this->dataPtr->Lat() = this->dataPtr->Lon() = NAN_D;
+    return *this;
+  }
+
   if (this->IsMetric())
   {
-    this->X() -= _pt.X();
-    this->Y() -= _pt.Y();
+    this->dataPtr->X() -= _pt.dataPtr->X();
+    this->dataPtr->Y() -= _pt.dataPtr->Y();
   }
   else
   {
-    this->Lat() -= _pt.Lat();
-    this->Lon() -= _pt.Lon();
+    this->dataPtr->Lat() -= _pt.dataPtr->Lat();
+    this->dataPtr->Lon() -= _pt.dataPtr->Lon();
   }
-  this->Z() -= _pt.Z();
+  this->dataPtr->Z() -= _pt.dataPtr->Z();
 
   return *this;
 }
@@ -220,17 +355,21 @@ bool CoordinateVector3::Equal(
   if (this->IsMetric() != _v.IsMetric())
     return false;
 
-  if (!equal(this->Z(), _v.Z(), _tol))
+  if (!equal(this->dataPtr->Z(), _v.dataPtr->Z(), _tol))
     return false;
 
   if (this->IsMetric())
   {
-    return equal(this->X(), _v.X(), _tol) && equal(this->Y(), _v.Y(), _tol);
+    return equal(this->dataPtr->X(), _v.dataPtr->X(), _tol) &&
+      equal(this->dataPtr->Y(), _v.dataPtr->Y(), _tol);
   }
   else
   {
-    return this->Lat().ShortestDistance(_v.Lat()).Abs() < _ang_tol &&
-           this->Lon().ShortestDistance(_v.Lon()).Abs() < _ang_tol;
+    return
+      this->dataPtr->Lat().ShortestDistance(
+        _v.dataPtr->Lat()).Abs() <= _ang_tol &&
+      this->dataPtr->Lon().ShortestDistance(
+        _v.dataPtr->Lon()).Abs() <= _ang_tol;
   }
 }
 
@@ -249,13 +388,14 @@ bool CoordinateVector3::operator!=(const CoordinateVector3 &_v) const
 /////////////////////////////////////////////////
 bool CoordinateVector3::IsFinite() const
 {
-  if (!std::isfinite(this->Z()))
+  if (!std::isfinite(this->dataPtr->Z()))
     return false;
   if (this->IsMetric())
-    return std::isfinite(this->X()) && std::isfinite(this->Y());
+    return std::isfinite(this->dataPtr->X()) &&
+      std::isfinite(this->dataPtr->Y());
   else
-    return std::isfinite(this->Lat().Radian()) &&
-           std::isfinite(this->Lon().Radian());
+    return std::isfinite(this->dataPtr->Lat().Radian()) &&
+      std::isfinite(this->dataPtr->Lon().Radian());
 }
 
 /////////////////////////////////////////////////
@@ -265,99 +405,82 @@ bool CoordinateVector3::Equal(const CoordinateVector3 &_v) const
 }
 
 /////////////////////////////////////////////////
-double CoordinateVector3::X() const
-{
-  return std::get<double>(this->dataPtr->x_or_lat);
-}
-
-/////////////////////////////////////////////////
-const math::Angle& CoordinateVector3::Lat() const
-{
-  return std::get<math::Angle>(this->dataPtr->x_or_lat);
-}
-
-/////////////////////////////////////////////////
-double CoordinateVector3::Y() const
-{
-  return std::get<double>(this->dataPtr->y_or_lon);
-}
-
-/////////////////////////////////////////////////
-const math::Angle& CoordinateVector3::Lon() const
-{
-  return std::get<math::Angle>(this->dataPtr->y_or_lon);
-}
-
-/////////////////////////////////////////////////
-double CoordinateVector3::Z() const
-{
-  return this->dataPtr->z;
-}
-
-/////////////////////////////////////////////////
-double& CoordinateVector3::X()
-{
-  return std::get<double>(this->dataPtr->x_or_lat);
-}
-
-/////////////////////////////////////////////////
-math::Angle& CoordinateVector3::Lat()
-{
-  return std::get<math::Angle>(this->dataPtr->x_or_lat);
-}
-
-/////////////////////////////////////////////////
-double& CoordinateVector3::Y()
-{
-  return std::get<double>(this->dataPtr->y_or_lon);
-}
-
-/////////////////////////////////////////////////
-math::Angle& CoordinateVector3::Lon()
-{
-  return std::get<math::Angle>(this->dataPtr->y_or_lon);
-}
-
-/////////////////////////////////////////////////
-double& CoordinateVector3::Z()
-{
-  return this->dataPtr->z;
-}
-
-/////////////////////////////////////////////////
-void CoordinateVector3::X(const double &_v)
+std::optional<double> CoordinateVector3::X() const
 {
   if (!this->IsMetric())
-    throw std::bad_variant_access();
-  this->dataPtr->x_or_lat = _v;
+    return std::nullopt;
+  return this->dataPtr->X();
 }
 
 /////////////////////////////////////////////////
-void CoordinateVector3::Lat(const Angle &_v)
+std::optional<math::Angle> CoordinateVector3::Lat() const
 {
   if (!this->IsSpherical())
-    throw std::bad_variant_access();
-  this->dataPtr->x_or_lat = _v;
+    return std::nullopt;
+  return this->dataPtr->Lat();
 }
 
 /////////////////////////////////////////////////
-void CoordinateVector3::Y(const double &_v)
+std::optional<double> CoordinateVector3::Y() const
 {
   if (!this->IsMetric())
-    throw std::bad_variant_access();
-  this->dataPtr->y_or_lon = _v;
+    return std::nullopt;
+  return this->dataPtr->Y();
 }
 
 /////////////////////////////////////////////////
-void CoordinateVector3::Lon(const Angle &_v)
+std::optional<math::Angle> CoordinateVector3::Lon() const
 {
   if (!this->IsSpherical())
-    throw std::bad_variant_access();
-  this->dataPtr->y_or_lon = _v;
+    return std::nullopt;
+  return this->dataPtr->Lon();
 }
 
 /////////////////////////////////////////////////
-void CoordinateVector3::Z(const double &_v)
+std::optional<double> CoordinateVector3::Z() const
+{
+  return this->dataPtr->Z();
+}
+
+/////////////////////////////////////////////////
+bool CoordinateVector3::X(const double &_v)
+{
+  if (!this->IsMetric())
+    return false;
+  this->dataPtr->X() = _v;
+  return true;
+}
+
+/////////////////////////////////////////////////
+bool CoordinateVector3::Lat(const Angle &_v)
+{
+  if (!this->IsSpherical())
+    return false;
+  this->dataPtr->Lat() = _v;
+  return true;
+}
+
+/////////////////////////////////////////////////
+bool CoordinateVector3::Y(const double &_v)
+{
+  if (!this->IsMetric())
+    return false;
+  this->dataPtr->Y() = _v;
+  return true;
+}
+
+/////////////////////////////////////////////////
+bool CoordinateVector3::Lon(const Angle &_v)
+{
+  if (!this->IsSpherical())
+    return false;
+  this->dataPtr->Lon() = _v;
+  return true;
+}
+
+/////////////////////////////////////////////////
+bool CoordinateVector3::Z(const double &_v)
 {
   this->dataPtr->z = _v;
+  return true;
 }

@@ -91,6 +91,9 @@ class TestAngle(unittest.TestCase):
         self.assertAlmostEqual(Angle(-300).abs().radian(), 300)
         self.assertAlmostEqual(Angle(300).abs().radian(), 300)
 
+        self.assertAlmostEqual(-Angle(1.2).radian(), -1.2)
+        self.assertAlmostEqual(-Angle(-1.2).radian(), 1.2)
+
         self.assertAlmostEqual(
             Angle(1.0).shortest_distance(Angle(1.0)).radian(), 0.0)
         self.assertAlmostEqual(

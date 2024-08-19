@@ -581,12 +581,10 @@ std::optional<CoordinateVector3> PositionTransformTmp(
     case SphericalCoordinates::LOCAL:
       {
         // This is incorrect computation
-        tmp.X(-_pos.X() * dataPtr->cosHea + _pos.Y() *
-            dataPtr->sinHea);
-        tmp.Y(-_pos.X() * dataPtr->sinHea - _pos.Y() *
-            dataPtr->cosHea);
-        tmp.Z(_pos.Z());
-        tmp = dataPtr->origin.AsMetricVector() +
+        tmp.X(-*_pos.X() * dataPtr->cosHea + *_pos.Y() * dataPtr->sinHea);
+        tmp.Y(-*_pos.X() * dataPtr->sinHea - *_pos.Y() * dataPtr->cosHea);
+        tmp.Z(*_pos.Z());
+        tmp = *dataPtr->origin.AsMetricVector() +
           dataPtr->rotGlobalToECEF * tmp;
         break;
       }
@@ -596,20 +594,18 @@ std::optional<CoordinateVector3> PositionTransformTmp(
     GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
       {
         // This is correct computation
-        tmp.X(_pos.X() * dataPtr->cosHea + _pos.Y() *
-            dataPtr->sinHea);
-        tmp.Y(-_pos.X() * dataPtr->sinHea + _pos.Y() *
-            dataPtr->cosHea);
-        tmp.Z(_pos.Z());
-        tmp = dataPtr->origin.AsMetricVector() +
+        tmp.X(*_pos.X() * dataPtr->cosHea + *_pos.Y() * dataPtr->sinHea);
+        tmp.Y(-*_pos.X() * dataPtr->sinHea + *_pos.Y() * dataPtr->cosHea);
+        tmp.Z(*_pos.Z());
+        tmp = *dataPtr->origin.AsMetricVector() +
           dataPtr->rotGlobalToECEF * tmp;
         break;
       }
 
     case SphericalCoordinates::GLOBAL:
       {
-        tmp = _pos.AsMetricVector();
-        tmp = dataPtr->origin.AsMetricVector() +
+        tmp = *_pos.AsMetricVector();
+        tmp = *dataPtr->origin.AsMetricVector() +
           dataPtr->rotGlobalToECEF * tmp;
         break;
       }
@@ -617,8 +613,8 @@ std::optional<CoordinateVector3> PositionTransformTmp(
     case SphericalCoordinates::SPHERICAL:
       {
         // Cache trig results
-        const auto latRad = _pos.Lat().Radian();
-        const auto lonRad = _pos.Lon().Radian();
+        const auto latRad = _pos.Lat()->Radian();
+        const auto lonRad = _pos.Lon()->Radian();
         double cosLat = cos(latRad);
         double sinLat = sin(latRad);
         double cosLon = cos(lonRad);
@@ -629,17 +625,17 @@ std::optional<CoordinateVector3> PositionTransformTmp(
           1.0 - dataPtr->ellE * dataPtr->ellE * sinLat * sinLat;
         curvature = dataPtr->ellA / sqrt(curvature);
 
-        tmp.X((_pos.Z() + curvature) * cosLat * cosLon);
-        tmp.Y((_pos.Z() + curvature) * cosLat * sinLon);
+        tmp.X((*_pos.Z() + curvature) * cosLat * cosLon);
+        tmp.Y((*_pos.Z() + curvature) * cosLat * sinLon);
         tmp.Z(((dataPtr->ellB * dataPtr->ellB)/
               (dataPtr->ellA * dataPtr->ellA) *
-              curvature + _pos.Z()) * sinLat);
+              curvature + *_pos.Z()) * sinLat);
         break;
       }
 
     // Just copy the vector.
     case SphericalCoordinates::ECEF:
-      tmp = _pos.AsMetricVector();
+      tmp = *_pos.AsMetricVector();
       break;
     default:
       {
@@ -680,7 +676,7 @@ std::optional<CoordinateVector3> PositionTransformTmp(
     // Convert from ECEF TO GLOBAL
     case SphericalCoordinates::GLOBAL:
       tmp = dataPtr->rotECEFToGlobal *
-        (tmp - dataPtr->origin.AsMetricVector());
+        (tmp - *dataPtr->origin.AsMetricVector());
       res.SetMetric(tmp);
       break;
 
@@ -690,7 +686,7 @@ std::optional<CoordinateVector3> PositionTransformTmp(
     case SphericalCoordinates::LOCAL2:
     GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
       tmp = dataPtr->rotECEFToGlobal *
-        (tmp - dataPtr->origin.AsMetricVector());
+        (tmp - *dataPtr->origin.AsMetricVector());
 
       res.SetMetric(
           tmp.X() * dataPtr->cosHea - tmp.Y() * dataPtr->sinHea,
@@ -728,8 +724,8 @@ Vector3d SphericalCoordinates::PositionTransform(
     return _pos;
 
   return result->IsMetric() ?
-    result->AsMetricVector() :
-    Vector3d{result->Lat().Radian(), result->Lon().Radian(), result->Z()};
+    *result->AsMetricVector() :
+    Vector3d{result->Lat()->Radian(), result->Lon()->Radian(), *result->Z()};
 }
 
 /////////////////////////////////////////////////
@@ -773,7 +769,7 @@ std::optional<CoordinateVector3> VelocityTransformTmp(
   }
 
   // Intermediate data type
-  Vector3d tmp = _vel.AsMetricVector();
+  Vector3d tmp = *_vel.AsMetricVector();
 
   // First, convert to an ECEF vector
   switch (_in)
@@ -783,20 +779,16 @@ std::optional<CoordinateVector3> VelocityTransformTmp(
     // from LOCAL2 and remove the LOCAL2 block.
     case SphericalCoordinates::LOCAL:
       // This is incorrect computation
-      tmp.X(-_vel.X() * dataPtr->cosHea + _vel.Y() *
-            dataPtr->sinHea);
-      tmp.Y(-_vel.X() * dataPtr->sinHea - _vel.Y() *
-            dataPtr->cosHea);
+      tmp.X(-*_vel.X() * dataPtr->cosHea + *_vel.Y() * dataPtr->sinHea);
+      tmp.Y(-*_vel.X() * dataPtr->sinHea - *_vel.Y() * dataPtr->cosHea);
       tmp = dataPtr->rotGlobalToECEF * tmp;
       break;
     GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
     case SphericalCoordinates::LOCAL2:
     GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
       // This is correct computation
-      tmp.X(_vel.X() * dataPtr->cosHea + _vel.Y() *
-            dataPtr->sinHea);
-      tmp.Y(-_vel.X() * dataPtr->sinHea + _vel.Y() *
-            dataPtr->cosHea);
+      tmp.X(*_vel.X() * dataPtr->cosHea + *_vel.Y() * dataPtr->sinHea);
+      tmp.Y(-*_vel.X() * dataPtr->sinHea + *_vel.Y() * dataPtr->cosHea);
       tmp = dataPtr->rotGlobalToECEF * tmp;
       break;
     // spherical
@@ -855,10 +847,10 @@ Vector3d SphericalCoordinates::VelocityTransform(
   auto vec = CoordinateVector3::Metric(_vel);
 
   const auto result = VelocityTransformTmp(this->dataPtr, vec, _in, _out);
-  if (!result)
+  if (!result || !result->IsMetric())
     return _vel;
 
-  return result->AsMetricVector();
+  return *result->AsMetricVector();
 }
 
 //////////////////////////////////////////////////
