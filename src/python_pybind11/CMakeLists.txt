@@ -7,6 +7,7 @@ pybind11_add_module(${BINDINGS_MODULE_NAME} MODULE
   src/AxisAlignedBox.cc
   src/Capsule.cc
   src/Color.cc
+  src/CoordinateVector3.cc
   src/DiffDriveOdometry.cc
   src/Ellipsoid.cc
   src/Filter.cc
@@ -114,6 +115,7 @@ if (BUILD_TESTING)
     Capsule_TEST
     Color_TEST
     Cone_TEST
+    CoordinateVector3_TEST
     Cylinder_TEST
     DiffDriveOdometry_TEST
     Ellipsoid_TEST
