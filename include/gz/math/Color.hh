@@ -100,11 +100,34 @@ namespace gz::math
     /// \param[in] _g Green value (range 0 to 1)
     /// \param[in] _b Blue value (range 0 to 1)
     /// \param[in] _a Alpha value (0=transparent, 1=opaque)
-    public: constexpr Color(const float _r, const float _g, const float _b,
-                            const float _a = 1.0)
+    /// \note If there are values outside the range [0, 1], they will be
+    /// clamped and an error message will be printed
+    public: Color(const float _r, const float _g, const float _b,
+                  const float _a = 1.0)
     : r(_r), g(_g), b(_b), a(_a)
     {
       this->Clamp();
+    }
+
+    /// \brief Static function to create colors that are not clamped.
+    /// \param[in] _r Red value (range 0 to 1)
+    /// \param[in] _g Green value (range 0 to 1)
+    /// \param[in] _b Blue value (range 0 to 1)
+    /// \param[in] _a Alpha value (0=transparent, 1=opaque)
+    /// \note This is mainly intended to initialize constexpr values
+    /// such as Color::gRed. The Color::Color constructor is recommended
+    /// for regular use.
+    public: static constexpr Color UnclampedColor(const float _r,
+                                                  const float _g,
+                                                  const float _b,
+                                                  const float _a)
+    {
+      auto clr = Color();
+      clr.r = _r;
+      clr.g = _g;
+      clr.b = _b;
+      clr.a = _a;
+      return clr;
     }
 
     /// \brief Reset the color to default values to red=0, green=0,
@@ -257,18 +280,7 @@ namespace gz::math
     public: bool operator!=(const Color &_pt) const;
 
     /// \brief Clamp the color values to valid ranges
-    private: constexpr void Clamp()
-    {
-      // These comparisons are carefully written to handle NaNs correctly.
-      if (!(this->r >= 0)) { this->r = 0; }
-      if (!(this->g >= 0)) { this->g = 0; }
-      if (!(this->b >= 0)) { this->b = 0; }
-      if (!(this->a >= 0)) { this->a = 0; }
-      if (this->r > 1) { this->r = this->r/255.0f; }
-      if (this->g > 1) { this->g = this->g/255.0f; }
-      if (this->b > 1) { this->b = this->b/255.0f; }
-      if (this->a > 1) { this->a = 1; }
-    }
+    private: void Clamp();
 
     /// \brief Stream insertion operator
     /// \param[in] _out the output stream

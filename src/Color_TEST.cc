@@ -247,7 +247,7 @@ TEST(Color, Color)
 
   clr = math::Color(1.0f, 0.0f, 0.5f, 1.0f) +
     math::Color(0.1f, 0.3f, 0.4f, 1.0f);
-  EXPECT_TRUE(math::equal(0.00431373f, clr.R()));
+  EXPECT_TRUE(math::equal(1.0f, clr.R())) << clr;
   EXPECT_TRUE(math::equal(0.3f, clr.G()));
   EXPECT_TRUE(math::equal(0.9f, clr.B()));
   EXPECT_TRUE(math::equal(1.0f, clr.A()));
@@ -422,8 +422,8 @@ TEST(Color, HSV)
   EXPECT_NEAR(hsv.Z(), 0.3f, 1e-3);
 
   clr.SetFromHSV(60, 10, 5);
-  EXPECT_NEAR(clr.R(), 0.0196078f, 1e-3);
-  EXPECT_NEAR(clr.G(), 0.0196078f, 1e-3);
+  EXPECT_NEAR(clr.R(), 1.0, 1e-3);
+  EXPECT_NEAR(clr.G(), 1.0, 1e-3);
   EXPECT_NEAR(clr.B(), 0.0f, 1e-3);
   EXPECT_NEAR(clr.A(), 1.0, 1e-3);
 
