@@ -5,9 +5,28 @@ Deprecated code produces compile-time warnings. These warning serve as
 notification to users that their code should be upgraded. The next major
 release will remove the deprecated code.
 
-## Gazebo Math 8.X to 9.X
+## Gazebo Math 7.X to 8.X
+
+### Breaking Changes
+
+1. All references to `ignition` have been removed. This includes the `ignition/`
+   header files, the `ignition::` namespaces, and `IGN_*` and `IGNITION_*`
+   macros.
+
+1. Behavior change in `math::Color` clamping functionality. Previously when
+   any of the color r, g, or b values are larger than 1, they are assumed to
+   be in the range of [0, 255] and the values are divided by 255
+   by the `math::Color::Clamp` funcion. This is no longer the case. Users are
+   expected to specify floating point r, g, b values in the range of [0, 1].
+   Any values larger than 1 will be clamped to 1.
+
+1. Deprecated functionality from version 7 has been removed.
 
 ### Deprecations
+
+1. **Stopwatch.hh**
+    + The `math::clock` type alias is deprecated. Please use the underlying type
+      (`std::chrono::steady_clock`) directly.
 
 1. **graph/Vertex.hh**
     + The `Vertex::NullVertex` static member is deprecated. Please use
@@ -19,21 +38,9 @@ release will remove the deprecated code.
       `Vertex::NullEdge()` instead.
       E.g.: https://github.com/gazebosim/gz-math/pull/606/files#diff-0c0220a7e72be70337975433eeddc3f5e072ade5cd80dfb1ac03da233c39c983L222-R222
 
-## Gazebo Math 7.X to 8.X
-
-### Breaking Changes
-
-1. All references to `ignition` have been removed. This includes the `ignition/`
-   header files, the `ignition::` namespaces, and `IGN_*` and `IGNITION_*`
-   macros.
-
-1. Deprecated functionality from version 7 has been removed.
-
-### Deprecations
-
-1. **Stopwatch.hh**
-    + The `math::clock` type alias is deprecated. Please use the underlying type
-      (`std::chrono::steady_clock`) directly.
+1. **SphericalCoordinates.hh**
+    + `math::SphericalCoordinates::LOCAL2` enum is deprecated. Please use
+      `math::SphericalCoordinates::LOCAL` instead
 
 ## Gazebo Math 6.X to 7.X
 
