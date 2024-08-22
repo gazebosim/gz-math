@@ -39,8 +39,36 @@ release will remove the deprecated code.
       E.g.: https://github.com/gazebosim/gz-math/pull/606/files#diff-0c0220a7e72be70337975433eeddc3f5e072ade5cd80dfb1ac03da233c39c983L222-R222
 
 1. **SphericalCoordinates.hh**
+    + Deprecated: `gz::math::Vector3d SphericalFromLocalPosition(
+        const gz::math::Vector3d &_xyz) const`
+    + Replacement: `std::optional<math::CoordinateVector3> SphericalFromLocalPosition(
+        const gz::math::CoordinateVector3 &) const`
+    + Deprecated: `gz::math::Vector3d GlobalFromLocalVelocity(
+        const gz::math::Vector3d &_xyz) const`
+    + Replacement: `std::optional<math::CoordinateVector3> GlobalFromLocalVelocity(
+        const gz::math::CoordinateVector3 &) const`
+    + Deprecated: `gz::math::Vector3d LocalFromSphericalPosition(
+        const gz::math::Vector3d &) const`
+    + Replacement: `std::optional<math::CoordinateVector3> LocalFromSphericalPosition(
+        const gz::math::CoordinateVector3 &) const`
+    + Deprecated: `gz::math::Vector3d LocalFromGlobalVelocity(
+        const gz::math::Vector3d &_xyz) const`
+    + Replacement: `std::optional<math::CoordinateVector3> LocalFromGlobalVelocity(
+        const gz::math::CoordinateVector3 &_xyz) const`
+    + Deprecated: `gz::math::Vector3d PositionTransform(const gz::math::Vector3d &,
+        const CoordinateType &, const CoordinateType &) const`
+    + Replacement: `std::optional<gz::math::CoordinateVector3>
+        PositionTransform(const gz::math::CoordinateVector3 &,
+        const CoordinateType &, const CoordinateType &) const`
+    + Deprecated: `gz::math::Vector3d VelocityTransform(
+        const gz::math::Vector3d &,
+        const CoordinateType &, const CoordinateType &) const`
+    + Replacement: `std::optional<gz::math::CoordinateVector3> VelocityTransform(
+        const gz::math::CoordinateVector3 &,
+        const CoordinateType &, const CoordinateType &) const`
     + `math::SphericalCoordinates::LOCAL2` enum is deprecated. Please use
-      `math::SphericalCoordinates::LOCAL` instead
+      `math::SphericalCoordinates::LOCAL` with conversion functions that take a
+      `math::CoordinateVector3` instead.
 
 ## Gazebo Math 6.X to 7.X
 
