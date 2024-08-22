@@ -544,7 +544,7 @@ namespace gz::math
     public: void AxisAngle(Vector3<T> &_axis, T &_angle) const
     {
       T sqLen = this->qx*this->qx + this->qy*this->qy + this->qz*this->qz;
-      if (equal<T>(sqLen, static_cast<T>(0), 1e-12))
+      if (equal<T>(sqLen, static_cast<T>(0), static_cast<T>(1e-12)))
       {
         _angle = 0.0;
         _axis.Set(1, 0, 0);
