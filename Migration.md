@@ -20,6 +20,11 @@ release will remove the deprecated code.
    expected to specify floating point r, g, b values in the range of [0, 1].
    Any values larger than 1 will be clamped to 1.
 
+1. `math::SphericalCoordinates::LOCAL` now gives ENU coordinates instead of WNU.
+Both `math::SphericalCoordinates::LOCAL2` and
+`math::SphericalCoordinates::LOCAL` have the same behaviour now with
+`math::SphericalCoordinates::LOCAL2` being deprecated.
+
 1. Deprecated functionality from version 7 has been removed.
 
 ### Deprecations
