@@ -543,8 +543,8 @@ namespace gz::math
     /// \param[out] _angle CCW angle in radians.
     public: void AxisAngle(Vector3<T> &_axis, T &_angle) const
     {
-      T len = sqrt(this->qx*this->qx + this->qy*this->qy + this->qz*this->qz);
-      if (equal<T>(len, static_cast<T>(0)))
+      T sqLen = this->qx*this->qx + this->qy*this->qy + this->qz*this->qz;
+      if (equal<T>(sqLen, static_cast<T>(0), 1e-12))
       {
         _angle = 0.0;
         _axis.Set(1, 0, 0);
@@ -552,7 +552,7 @@ namespace gz::math
       else
       {
         _angle = 2.0 * acos(this->qw);
-        T invLen =  1.0 / len;
+        T invLen =  1.0 / sqrt(sqLen);
         _axis.Set(this->qx*invLen, this->qy*invLen, this->qz*invLen);
       }
     }
