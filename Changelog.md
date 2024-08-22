@@ -2,6 +2,9 @@
 
 ### Gazebo Math 8.0.0 (2024-09-XX)
 
+1. Added CoordinateVector3 and used it in SphericalCoordinates
+    * [Pull request #616](https://github.com/gazebosim/gz-math/pull/616)
+
 1. Clamping color channel values to within [0, 1]
     * [Pull request #613](https://github.com/gazebosim/gz-math/pull/613)
 
