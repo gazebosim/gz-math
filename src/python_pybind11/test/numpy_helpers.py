@@ -13,7 +13,7 @@ try:
         # Have to cast through bytes for some reason...
         aslist = memoryview(matrix).tolist()
         self.assertEqual(np.array(elements).reshape((size,size)).tolist(), aslist)
-        
+
         v = np.array(matrix, copy=False)
         self.assertEqual(matrix(0,1), 2)
         v[0,1] = 5
@@ -28,7 +28,7 @@ try:
         # Have to cast through bytes for some reason...
         aslist = memoryview(vector).tolist()
         self.assertEqual(elements, aslist)
-        
+
         v = np.array(vector, copy=False)
         self.assertEqual(vector[1], 2)
         v[1] = 5
@@ -38,7 +38,7 @@ try:
 
 except ImportError:
     def test_matrix(self: unittest.TestCase, size:int, cl):
-        pass
+        print("Numpy unavailable. Skipping test")
 
     def test_vector(self: unittest.TestCase, size:int, cl):
-        pass
+        print("Numpy unavailable. Skipping test")
