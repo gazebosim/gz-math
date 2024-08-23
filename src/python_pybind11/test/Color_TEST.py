@@ -216,10 +216,10 @@ class TestColor(unittest.TestCase):
         self.assertAlmostEqual(0.9064, clr.b(), delta=1e-3)
         self.assertAlmostEqual(0.04, clr.a())
 
-        self.assertTrue(clr.yuv() == Vector3f(0.104985, 0.95227, 0.429305))
+        self.assertTrue(clr.yuv() == Vector3f(0.104985, 0.95227, 0.429305), msg=f"{clr}")
 
         clr = Color(1.0, 0.0, 0.5, 1.0) + Color(0.1, 0.3, 0.4, 1.0)
-        self.assertAlmostEqual(0.00431373, clr.r(), delta=1e-4)
+        self.assertAlmostEqual(1.0, clr.r(), delta=1e-4)
         self.assertAlmostEqual(0.3, clr.g(), delta=1e-4)
         self.assertAlmostEqual(0.9, clr.b(), delta=1e-4)
         self.assertAlmostEqual(1.0, clr.a(), delta=1e-4)
@@ -318,8 +318,8 @@ class TestColor(unittest.TestCase):
         self.assertAlmostEqual(hsv.z(), 0.3, delta=1e-3)
 
         clr.set_from_hsv(60, 10, 5)
-        self.assertAlmostEqual(clr.r(), 0.0196078, delta=1e-3)
-        self.assertAlmostEqual(clr.g(), 0.0196078, delta=1e-3)
+        self.assertAlmostEqual(clr.r(), 1.0, delta=1e-3)
+        self.assertAlmostEqual(clr.g(), 1.0, delta=1e-3)
         self.assertAlmostEqual(clr.b(), 0.0, delta=1e-3)
         self.assertAlmostEqual(clr.a(), 1.0, delta=1e-3)
 

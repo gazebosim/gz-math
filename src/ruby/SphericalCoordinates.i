@@ -15,15 +15,28 @@
  *
 */
 
+#ifdef SWIGRUBY
+%begin %{
+#define HAVE_ISFINITE 1
+%}
+#endif
+
 %module sphericalcoordinates
 %{
 #include <memory>
+#include <optional>
 #include <string>
 
 #include <gz/math/SphericalCoordinates.hh>
 #include <gz/math/Angle.hh>
+#include <gz/math/CoordinateVector3.hh>
 #include <gz/math/Vector3.hh>
 #include <gz/math/config.hh>
+
+GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+// GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION is not present;
+// that's not a problem in SWIG generated files
+
 %}
 
 namespace gz
@@ -36,7 +49,15 @@ namespace gz
               {
                 /// \brief Model of reference ellipsoid for earth, based on
                 /// WGS 84 standard. see wikipedia: World_Geodetic_System
-                EARTH_WGS84 = 1
+                EARTH_WGS84 = 1,
+
+                /// \brief Model of the moon, based on the Selenographic
+                /// coordinate system, see wikipedia: Selenographic
+                /// Coordinate System.
+                MOON_SCS = 2,
+
+                /// \brief Custom surface type
+                CUSTOM_SURFACE = 10
               };
 
       public: enum CoordinateType
@@ -77,17 +98,25 @@ namespace gz
       public: gz::math::Vector3<double> SphericalFromLocalPosition(
                   const gz::math::Vector3<double> &_xyz) const;
 
+      public: std::optional<gz::math::CoordinateVector3>
+              SphericalFromLocalPosition(
+                  const gz::math::CoordinateVector3 &_xyz) const;
+
       public: gz::math::Vector3<double> GlobalFromLocalVelocity(
                   const gz::math::Vector3<double> &_xyz) const;
+
+      public: std::optional<gz::math::CoordinateVector3>
+              GlobalFromLocalVelocity(
+                  const gz::math::CoordinateVector3 &_xyz) const;
 
       public: static SurfaceType Convert(const std::string &_str);
 
       public: static std::string Convert(SurfaceType _type);
 
-      public: static double Distance(const gz::math::Angle &_latA,
-                                     const gz::math::Angle &_lonA,
-                                     const gz::math::Angle &_latB,
-                                     const gz::math::Angle &_lonB);
+      public: static double DistanceWGS84(const gz::math::Angle &_latA,
+                                          const gz::math::Angle &_lonA,
+                                          const gz::math::Angle &_latB,
+                                          const gz::math::Angle &_lonB);
 
       public: SurfaceType Surface() const;
 
@@ -112,8 +141,16 @@ namespace gz
       public: gz::math::Vector3<double> LocalFromSphericalPosition(
                   const gz::math::Vector3<double> &_latLonEle) const;
 
+      public: std::optional<gz::math::CoordinateVector3>
+              LocalFromSphericalPosition(
+                  const gz::math::CoordinateVector3 &_latLonEle) const;
+
       public: gz::math::Vector3<double> LocalFromGlobalVelocity(
                   const gz::math::Vector3<double> &_xyz) const;
+
+      public: std::optional<gz::math::CoordinateVector3>
+              LocalFromGlobalVelocity(
+                  const gz::math::CoordinateVector3 &_xyz) const;
 
       public: void UpdateTransformationMatrix();
 
@@ -121,14 +158,20 @@ namespace gz
               PositionTransform(const gz::math::Vector3<double> &_pos,
                   const CoordinateType &_in, const CoordinateType &_out) const;
 
+      public: std::optional<gz::math::CoordinateVector3> PositionTransform(
+                  const gz::math::CoordinateVector3 &_pos,
+                  const CoordinateType &_in, const CoordinateType &_out) const;
+
       /// \return Transformed velocity vector
       public: gz::math::Vector3<double> VelocityTransform(
                   const gz::math::Vector3<double> &_vel,
                   const CoordinateType &_in, const CoordinateType &_out) const;
 
-      public: bool operator==(const SphericalCoordinates &_sc) const;
+      public: std::optional<gz::math::CoordinateVector3> VelocityTransform(
+                  const gz::math::CoordinateVector3 &_vel,
+                  const CoordinateType &_in, const CoordinateType &_out) const;
 
-      public: bool operator!=(const SphericalCoordinates &_sc) const;
+      public: bool operator==(const SphericalCoordinates &_sc) const;
     };
   }
 }

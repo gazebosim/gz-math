@@ -120,6 +120,15 @@ namespace gz::math
     /// \return The normalized value of this Angle.
     public: Angle Normalized() const;
 
+    /// \brief Return the absolute value of this Angle.
+    /// \return The absolute value of this Angle.
+    public: Angle Abs() const;
+
+    /// \brief Return the shortest angular distance between this and the
+    /// other angle.
+    /// \return The shortest distance.
+    public: Angle ShortestDistance(const Angle &_other) const;
+
     /// \brief Return the angle's radian value
     /// \return double containing the angle's radian value
     public: double operator()() const;
@@ -130,6 +139,10 @@ namespace gz::math
             {
               return value;
             }
+
+    /// \brief Negation operator, result = -this.
+    /// \return The new angle.
+    public: Angle operator-() const;
 
     /// \brief Subtraction operator, result = this - _angle.
     /// \param[in] _angle Angle for subtraction.

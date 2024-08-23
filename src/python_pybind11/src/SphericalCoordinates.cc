@@ -15,6 +15,7 @@
  *
 */
 #include <pybind11/operators.h>
+#include <pybind11/stl.h>
 
 #include "SphericalCoordinates.hh"
 #include <gz/math/Angle.hh>
@@ -29,6 +30,8 @@ namespace python
 void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
 {
   using Class = gz::math::SphericalCoordinates;
+  using CoordinateVector3 = gz::math::CoordinateVector3;
+  using CoordinateType = gz::math::SphericalCoordinates::CoordinateType;
   std::string pyclass_name = typestr;
 
   py::class_<Class> sphericalCoordinates(m,
@@ -47,12 +50,46 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
     .def(py::self != py::self)
     .def(py::self == py::self)
     .def("spherical_from_local_position",
-         &Class::SphericalFromLocalPosition,
+         py::overload_cast<const CoordinateVector3&>(
+           &Class::SphericalFromLocalPosition, py::const_),
          "Convert a Cartesian position vector to geodetic coordinates.")
+    .def("spherical_from_local_position",
+         [](const Class &self, const gz::math::Vector3d &_xyz)
+         {
+           PyErr_WarnEx(
+             PyExc_DeprecationWarning,
+             "Passing Vector3d to spherical_from_local_position() is deprecated"
+             " and will be removed. Pass CoordinateVector3 instead and arrange "
+             "for the different behavior. See Migration.md ",
+             1);
+           GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+           return self.SphericalFromLocalPosition(_xyz);
+           GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+         },
+         "DEPRECATED: Passing Vector3d is deprecated and will be removed. "
+         "Pass CoordinateVector3 instead and arrange for the different "
+         "behavior. See Migration.md .")
     .def("global_from_local_velocity",
-         &Class::GlobalFromLocalVelocity,
+         py::overload_cast<const CoordinateVector3&>(
+           &Class::GlobalFromLocalVelocity, py::const_),
          "Convert a Cartesian velocity vector in the local frame "
          " to a global Cartesian frame with components East, North, Up")
+    .def("global_from_local_velocity",
+         [](const Class &self, const gz::math::Vector3d &_xyz)
+         {
+           PyErr_WarnEx(
+             PyExc_DeprecationWarning,
+             "Passing Vector3d to global_from_local_velocity() is deprecated"
+             " and will be removed. Pass CoordinateVector3 instead and arrange "
+             "for the different behavior. See Migration.md ",
+             1);
+           GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+           return self.GlobalFromLocalVelocity(_xyz);
+           GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+         },
+         "DEPRECATED: Passing Vector3d is deprecated and will be removed. "
+         "Pass CoordinateVector3 instead and arrange for the different "
+         "behavior. See Migration.md .")
     .def("convert",
          py::overload_cast<const std::string &>(&Class::Convert),
          "Convert a string to a SurfaceType.")
@@ -122,26 +159,103 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
          &Class::SetHeadingOffset,
          "Set heading angle offset for the frame.")
     .def("local_from_spherical_position",
-         &Class::LocalFromSphericalPosition,
+         py::overload_cast<const CoordinateVector3&>(
+           &Class::LocalFromSphericalPosition, py::const_),
          "Convert a geodetic position vector to Cartesian coordinates.")
+    .def("local_from_spherical_position",
+         [](const Class &self, const gz::math::Vector3d &_xyz)
+         {
+           PyErr_WarnEx(
+             PyExc_DeprecationWarning,
+             "Passing Vector3d to local_from_spherical_position() is deprecated"
+             " and will be removed. Pass CoordinateVector3 instead.",
+             1);
+           GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+           return self.LocalFromSphericalPosition(_xyz);
+           GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+         },
+         "DEPRECATED: Passing Vector3d is deprecated and will be removed. "
+         "Pass CoordinateVector3 instead.")
     .def("local_from_global_velocity",
-         &Class::LocalFromGlobalVelocity,
+         py::overload_cast<const CoordinateVector3&>(
+           &Class::LocalFromGlobalVelocity, py::const_),
          "Convert a Cartesian velocity vector with components East, "
          "North, Up to a local cartesian frame vector XYZ.")
+    .def("local_from_global_velocity",
+         [](const Class &self, const gz::math::Vector3d &_xyz)
+         {
+           PyErr_WarnEx(
+             PyExc_DeprecationWarning,
+             "Passing Vector3d to local_from_global_velocity() is deprecated"
+             " and will be removed. Pass CoordinateVector3 instead.",
+             1);
+           GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+           return self.LocalFromGlobalVelocity(_xyz);
+           GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+         },
+         "DEPRECATED: Passing Vector3d is deprecated and will be removed. "
+         "Pass CoordinateVector3 instead.")
     .def("update_transformation_matrix",
          &Class::UpdateTransformationMatrix,
          "Update coordinate transformation matrix with reference location")
     .def("position_transform",
-         &Class::PositionTransform,
+         py::overload_cast<
+           const CoordinateVector3&,
+           const CoordinateType&,
+           const CoordinateType&
+           >(&Class::PositionTransform, py::const_),
+         "Convert between velocity in SPHERICAL/ECEF/LOCAL/GLOBAL frame "
+         "Spherical coordinates use radians, while the other frames use "
+         "meters.")
+    .def("position_transform",
+         [](const Class &self,
+            const gz::math::Vector3d &_pos,
+            const CoordinateType& _in,
+            const CoordinateType& _out) -> gz::math::Vector3d
+         {
+           PyErr_WarnEx(
+             PyExc_DeprecationWarning,
+             "Passing Vector3d to position_transform() is deprecated and will "
+             "be removed. Pass CoordinateVector3 instead and arrange for the "
+             "different behavior. See Migration.md .",
+             1);
+           GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+           return self.PositionTransform(_pos, _in, _out);
+           GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+         },
+         "DEPRECATED: Passing Vector3d is deprecated and will be removed. "
+         "Pass CoordinateVector3 instead and arrange for the different "
+         "behavior. See Migration.md .")
+    .def("velocity_transform",
+         py::overload_cast<
+           const CoordinateVector3&,
+           const CoordinateType&,
+           const CoordinateType&
+         >(&Class::VelocityTransform, py::const_),
          "Convert between velocity in SPHERICAL/ECEF/LOCAL/GLOBAL frame "
          "Spherical coordinates use radians, while the other frames use "
          "meters.")
     .def("velocity_transform",
-         &Class::VelocityTransform,
-         "Convert between velocity in SPHERICAL/ECEF/LOCAL/GLOBAL frame "
-         "Spherical coordinates use radians, while the other frames use "
-         "meters.");
+         [](const Class &self,
+            const gz::math::Vector3d &_vel,
+            const CoordinateType& _in,
+            const CoordinateType& _out) -> gz::math::Vector3d
+         {
+           PyErr_WarnEx(
+             PyExc_DeprecationWarning,
+             "Passing Vector3d to velocity_transform() is deprecated and will "
+             "be removed. Pass CoordinateVector3 instead and arrange for the "
+             "different behavior. See Migration.md .",
+             1);
+           GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+           return self.VelocityTransform(_vel, _in, _out);
+           GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+         },
+         "DEPRECATED: Passing Vector3d is deprecated and will be removed. "
+         "Pass CoordinateVector3 instead and arrange for the different "
+         "behavior. See Migration.md .");
 
+   GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
    py::enum_<Class::CoordinateType>(sphericalCoordinates, "CoordinateType")
        .value("SPHERICAL", Class::CoordinateType::SPHERICAL)
        .value("ECEF", Class::CoordinateType::ECEF)
@@ -149,6 +263,8 @@ void defineMathSphericalCoordinates(py::module &m, const std::string &typestr)
        .value("LOCAL", Class::CoordinateType::LOCAL)
        .value("LOCAL2", Class::CoordinateType::LOCAL2)
        .export_values();
+   GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+
    py::enum_<Class::SurfaceType>(sphericalCoordinates, "SurfaceType")
        .value("EARTH_WGS84", Class::SurfaceType::EARTH_WGS84)
        .value("MOON_SCS", Class::SurfaceType::MOON_SCS)

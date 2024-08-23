@@ -16,6 +16,7 @@
  */
 #include <cmath>
 #include <algorithm>
+#include <iostream>
 
 #include "gz/math/Color.hh"
 
@@ -26,14 +27,14 @@ namespace {
 
 // Use constexpr storage for the Color constants, to avoid the C++ static
 // initialization order fiasco.
-constexpr Color gWhite = Color(1, 1, 1, 1);
-constexpr Color gBlack = Color(0, 0, 0, 1);
-constexpr Color gRed = Color(1, 0, 0, 1);
-constexpr Color gGreen = Color(0, 1, 0, 1);
-constexpr Color gBlue = Color(0, 0, 1, 1);
-constexpr Color gYellow = Color(1, 1, 0, 1);
-constexpr Color gMagenta = Color(1, 0, 1, 1);
-constexpr Color gCyan = Color(0, 1, 1, 1);
+constexpr Color gWhite = Color::UnclampedColor(1, 1, 1, 1);
+constexpr Color gBlack = Color::UnclampedColor(0, 0, 0, 1);
+constexpr Color gRed = Color::UnclampedColor(1, 0, 0, 1);
+constexpr Color gGreen = Color::UnclampedColor(0, 1, 0, 1);
+constexpr Color gBlue = Color::UnclampedColor(0, 0, 1, 1);
+constexpr Color gYellow = Color::UnclampedColor(1, 1, 0, 1);
+constexpr Color gMagenta = Color::UnclampedColor(1, 0, 1, 1);
+constexpr Color gCyan = Color::UnclampedColor(0, 1, 1, 1);
 
 }  // namespace
 
@@ -183,6 +184,9 @@ void Color::SetFromYUV(const float _y, const float _u, const float _v)
   this->r = _y + 1.140f*_v;
   this->g = _y - 0.395f*_u - 0.581f*_v;
   this->b = _y + 2.032f*_u;
+  this->r = this->r > 1 ? this->r / 255.0 : this->r;
+  this->g = this->g > 1 ? this->g / 255.0 : this->g;
+  this->b = this->b > 1 ? this->b / 255.0 : this->b;
   this->Clamp();
 }
 
@@ -551,4 +555,25 @@ void Color::B(const float _b)
 void Color::A(const float _a)
 {
   this->a = _a;
+}
+
+//////////////////////////////////////////////////
+void Color::Clamp()
+{
+  bool clamped = false;
+  // These comparisons are carefully written to handle NaNs correctly.
+  if (!(this->r >= 0)) { this->r = 0; clamped=true;}
+  if (!(this->g >= 0)) { this->g = 0; clamped=true;}
+  if (!(this->b >= 0)) { this->b = 0; clamped=true;}
+  if (!(this->a >= 0)) { this->a = 0; clamped=true;}
+  if (this->r > 1) { this->r = 1.0; clamped=true;}
+  if (this->g > 1) { this->g = 1.0; clamped=true;}
+  if (this->b > 1) { this->b = 1.0; clamped=true;}
+  if (this->a > 1) { this->a = 1.0; clamped=true;}
+
+  if (clamped)
+  {
+    // TODO(azeey) Use spdlog when we have it's available.
+    std::cerr << "Color values were clamped\n";
+  }
 }

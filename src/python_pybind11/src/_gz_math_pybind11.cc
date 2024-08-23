@@ -20,6 +20,7 @@
 #include "Capsule.hh"
 #include "Color.hh"
 #include "Cone.hh"
+#include "CoordinateVector3.hh"
 #include "Cylinder.hh"
 #include "DiffDriveOdometry.hh"
 #include "Ellipsoid.hh"
@@ -190,4 +191,6 @@ PYBIND11_MODULE(BINDINGS_MODULE_NAME, m)
     m, "OnePoleQuaternion");
   gz::math::python::defineMathOnePoleVector3(
     m, "OnePoleVector3");
+
+  gz::math::python::defineMathCoordinateVector3(m, "CoordinateVector3");
 }
