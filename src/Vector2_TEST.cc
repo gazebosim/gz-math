@@ -476,3 +476,15 @@ TEST(Vector2Test, NaN)
   EXPECT_EQ(math::Vector2f::Zero, nanVecF);
   EXPECT_TRUE(nanVecF.IsFinite());
 }
+
+/////////////////////////////////////////////////
+TEST(Vector2Test, Data)
+{
+  math::Vector2d v(0, 1);
+  for (int i = 0; i < 2; ++i) EXPECT_EQ(v.Data()[i], v[i]);
+
+  auto v2 = math::Vector2d::Zero;
+  for (int i = 0; i < 2; ++i) v2.Data()[i] = i;
+
+  EXPECT_EQ(v, v2);
+}

@@ -576,3 +576,15 @@ TEST(Vector3dTest, OperatorStreamOut)
   stream << std::setprecision(1) << std::fixed << v;
   EXPECT_EQ(stream.str(), "0.1 1.2 2.3");
 }
+
+/////////////////////////////////////////////////
+TEST(Vector3Test, Data)
+{
+  math::Vector3d v(0, 1, 2);
+  for (int i = 0; i < 3; ++i) EXPECT_EQ(v.Data()[i], v[i]);
+
+  auto v2 = math::Vector3d::Zero;
+  for (int i = 0; i < 3; ++i) v2.Data()[i] = i;
+
+  EXPECT_EQ(v, v2);
+}

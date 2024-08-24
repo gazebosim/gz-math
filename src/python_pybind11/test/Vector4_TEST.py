@@ -15,7 +15,7 @@
 import copy
 import math
 import unittest
-import test_common
+import numpy_helpers
 
 from gz.math8 import Vector4d
 from gz.math8 import Vector4f
@@ -283,8 +283,8 @@ class TestVector4(unittest.TestCase):
         self.assertTrue(nanVecF.is_finite())
 
     def test_buffer(self):
-        test_common.test_vector(self, 4, Vector4d)
-        test_common.test_vector(self, 4, Vector4f)
+        numpy_helpers.test_vector(self, 4, Vector4d)
+        numpy_helpers.test_vector(self, 4, Vector4f)
 
 if __name__ == '__main__':
     unittest.main()

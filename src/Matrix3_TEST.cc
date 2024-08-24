@@ -417,3 +417,16 @@ TEST(Matrix3dTest, From2Axes)
   m1.SetFrom2Axes(v1, v2);
   EXPECT_EQ(math::Matrix3d::Zero - math::Matrix3d::Identity, m1);
 }
+
+/////////////////////////////////////////////////
+TEST(Matrix3dTest, Data)
+{
+  math::Matrix3d m1(0, 1, 2,
+                    3, 4, 5,
+                    6, 7, 8);
+
+  for (int i = 0; i < 9; ++i) EXPECT_EQ(m1.Data()[i], i);
+  math::Matrix3d m2 = math::Matrix3d::Zero;
+  for (int i = 0; i < 9; ++i) m2.Data()[i] = i;
+  EXPECT_EQ(m1, m2);
+}

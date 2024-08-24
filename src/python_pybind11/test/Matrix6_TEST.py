@@ -15,7 +15,7 @@
 import math
 import unittest
 from gz.math8 import Matrix3d, Matrix6d, Matrix6dCorner, Matrix6f
-import test_common
+import numpy_helpers
 
 
 class TestMatrix6(unittest.TestCase):
@@ -256,8 +256,8 @@ class TestMatrix6(unittest.TestCase):
             30, 31, 32, 33, 34, 35))
 
     def test_buffer(self):
-        test_common.test_matrix(self, 6, Matrix6d)
-        test_common.test_matrix(self, 6, Matrix6f)
+        numpy_helpers.test_matrix(self, 6, Matrix6d)
+        numpy_helpers.test_matrix(self, 6, Matrix6f)
 
 
 if __name__ == '__main__':
