@@ -9,10 +9,10 @@
 
 Build | Status
 -- | --
-Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-math/branch/main/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-math/branch/main)
-Ubuntu Noble  | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_math-ci-main-noble-amd64)](https://build.osrfoundation.org/job/gz_math-ci-main-noble-amd64)
-Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_math-ci-main-homebrew-amd64)](https://build.osrfoundation.org/job/gz_math-ci-main-homebrew-amd64)
-Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_math-main-win)](https://build.osrfoundation.org/job/gz_math-main-win)
+Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-math/branch/gz-math8/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-math/tree/gz-math8)
+Ubuntu Noble  | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_math-ci-gz-math8-noble-amd64)](https://build.osrfoundation.org/job/gz_math-ci-gz-math8-noble-amd64)
+Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_math-ci-gz-math8-homebrew-amd64)](https://build.osrfoundation.org/job/gz_math-ci-gz-math8-homebrew-amd64)
+Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_math-8-win)](https://build.osrfoundation.org/job/gz_math-8-win)
 
 Gazebo Math, a component of [Gazebo](https://gazebosim.org), provides general purpose math
 classes and functions designed for robotic applications.
@@ -47,11 +47,11 @@ Math types.
 
 # Install
 
-See the [installation tutorial](https://gazebosim.org/api/math/7/install.html).
+See the [installation tutorial](https://gazebosim.org/api/math/8/install.html).
 
 # Usage
 
-Please refer to the [examples directory](https://github.com/gazebosim/gz-math/raw/main/examples/).
+Please refer to the [examples directory](https://github.com/gazebosim/gz-math/raw/gz-math8/examples/).
 
 # Folder Structure
 
@@ -90,4 +90,4 @@ This library uses [Semantic Versioning](https://semver.org/). Additionally, this
 
 # License
 
-This library is licensed under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0). See also the [LICENSE](https://github.com/gazebosim/gz-math/blob/main/LICENSE) file.
+This library is licensed under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0). See also the [LICENSE](https://github.com/gazebosim/gz-math/blob/gz-math8/LICENSE) file.
