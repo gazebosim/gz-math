@@ -741,3 +741,17 @@ TEST(Matrix4dTest, LookAt)
                 .Pose(),
             math::Pose3d(1, 1, 1, GZ_PI_4, 0, GZ_PI));
 }
+
+/////////////////////////////////////////////////
+TEST(Matrix4dTest, Data)
+{
+  math::Matrix4d m1(0, 1, 2, 3,
+                    4, 5, 6, 7,
+                    8, 9, 10, 11,
+                    12, 13, 14, 15);
+
+  for (int i = 0; i < 16; ++i) EXPECT_EQ(m1.Data()[i], i);
+  math::Matrix4d m2 = math::Matrix4d::Zero;
+  for (int i = 0; i < 16; ++i) m2.Data()[i] = i;
+  EXPECT_EQ(m1, m2);
+}

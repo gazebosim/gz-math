@@ -480,3 +480,15 @@ TEST(Vector4Test, NaN)
   EXPECT_EQ(math::Vector4f::Zero, nanVecF);
   EXPECT_TRUE(nanVecF.IsFinite());
 }
+
+/////////////////////////////////////////////////
+TEST(Vector4Test, Data)
+{
+  math::Vector4d v(0, 1, 2, 3);
+  for (int i = 0; i < 4; ++i) EXPECT_EQ(v.Data()[i], v[i]);
+
+  auto v2 = math::Vector4d::Zero;
+  for (int i = 0; i < 4; ++i) v2.Data()[i] = i;
+
+  EXPECT_EQ(v, v2);
+}

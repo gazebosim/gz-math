@@ -18,6 +18,7 @@ import unittest
 
 from gz.math8 import Vector2d
 from gz.math8 import Vector2f
+import numpy_helpers
 
 
 class TestVector2(unittest.TestCase):
@@ -316,6 +317,11 @@ class TestVector2(unittest.TestCase):
         nanVecF.correct()
         self.assertEqual(Vector2f.ZERO, nanVecF)
         self.assertTrue(nanVecF.is_finite())
+
+    def test_buffer(self):
+        numpy_helpers.test_vector(self, 2, Vector2d)
+        numpy_helpers.test_vector(self, 2, Vector2f)
+
 
 if __name__ == '__main__':
     unittest.main()

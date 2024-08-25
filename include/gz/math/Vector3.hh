@@ -746,6 +746,16 @@ namespace gz::math
       return _in;
     }
 
+    /// \brief Underlying data pointer
+    /// \remarks This method is intended for python bindings (numpy).
+    /// \remarks The bounds-checking array subscript operator is much preferred
+    /// for element access from C++.
+    /// \return A pointer to the underlying data array.
+    public: T* Data()
+    {
+      return this->data;
+    }
+
     /// \brief The x, y, and z values
     private: T data[3];
   };
