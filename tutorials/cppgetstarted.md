@@ -84,7 +84,16 @@ Compile the example:
 ```
 mkdir build && cd build
 cmake ..
+```
+
+For Unix systems:
+```
 make
+```
+
+For Windows systems:
+```
+cmake --build . --config Release
 ```
 
 Run the example:
