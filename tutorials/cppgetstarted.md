@@ -76,7 +76,7 @@ project(gz-math-cpp-example)
 find_package(gz-math8 QUIET REQUIRED)
  
 add_executable(gz-math-example main.cpp)
-target_link_libraries(gz-math-example ${GZ-MATH_LIBRARIES})
+target_link_libraries(gz-math-example PUBLIC gz-math8::gz-math8)
 ```
 
 Compile the example:
