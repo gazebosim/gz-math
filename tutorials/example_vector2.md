@@ -23,7 +23,7 @@ When the code is compiled, run:
 ./vector2_example
 ```
 
-The ouput of the program:
+The output of the program:
 
 ```{.sh}
 Vec2: 2 4
@@ -42,7 +42,7 @@ Vec2b: x=1.2 y=3.4
 
 ### Code
 
-Create a `Vector2` called `vec2` of doubles using the typedef `Vector2d`. **The initial x and y values are zero**. The x and y component of `vec2` can be set at anytime.
+Create a `Vector2` called `vec2` of doubles using the typedef `Vector2d`. **The initial x and y values are zero**. The x and y components of `vec2` can be set at anytime.
 
 \snippet examples/vector2_example.cc constructor
 
@@ -67,7 +67,7 @@ The `Vector2` class overloads many common operators, such as:
 
 \snippet examples/vector2_example.cc operators
 
-There are also many useful function such as finding the distance between two vectors.
+There are also many useful functions, such as finding the distance between two vectors.
 
 \snippet examples/vector2_example.cc distance
 
@@ -82,6 +82,8 @@ on Ubuntu:
 sudo apt install ruby-gz-math<#>
 ```
 
+Be sure to replace <#> with a number value, such as 8 or 7, depending on which version you need.<#>.
+
 Modify the `RUBYLIB` environment variable to include the Gazebo Math library install path. For example, if you install to `/usr`:
 
 ```{.sh}
@@ -94,16 +96,41 @@ Move to the examples folder:
 cd examples
 ```
 
-Execute the examples:
+Execute the example:
 
 ```{.sh}
 ruby vector2_example.rb
+```
+
+The output of the program:
+
+```{.sh}
+va = 1.000000 2.000000
+vb = 3.000000 4.000000
+vc = 3.000000 4.000000
+vb += va: 4.000000 6.000000
+vb.Normalize = 0.554700 0.832050
+vb.Distance(va) = 1.249959
+```
+
+Execute the example:
+
+```{.sh}
 ruby vector3_example.rb
+```
+
+The output of the program:
+
+```{.sh}
+v1 =: 0.000000 0.000000 0.000000
+v2 = 1.000000 0.000000 0.000000
+v1 + v2 = 1.000000 0.000000 0.000000
+v1.Distance(v2) = 1.000000
 ```
 
 ### Code
 
-Create a `Vector2` of doubles using the typedef `Vector2d`. It's possible to set initial values or use another object to create a identical copy.
+Create a `Vector2` of doubles using the typedef `Vector2d`. It's possible to set initial values or use another object to create an identical copy.
 
 ```{.rb}
 va = Gz::Math::Vector2d.new(1, 2)
@@ -141,5 +168,5 @@ v1 = Gz::Math::Vector3d.new(0, 0, 0)
 You can also get access to each component in the vector using the `X()`, `Y()` and `Z()` accessors:
 
 ```{.rb}
-printf("v =: %f %f %f\n", v1.X(), v1.Y(), v1.Z())
+printf("v1 =: %f %f %f\n", v1.X(), v1.Y(), v1.Z())
 ```
