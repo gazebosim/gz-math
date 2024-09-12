@@ -14,13 +14,20 @@ cd gz-math/examples
 mkdir build
 cd build
 cmake ..
+# Linux and macOS
 make
+# Windows
+cd ..
+cmake --build build --config Release
 ```
 
 When the code is compiled, run:
 
 ```bash
+# Linux and macOS
 ./vector2_example
+# Windows
+.\build\Release\vector2_example.exe
 ```
 
 The output of the program:

@@ -12,13 +12,20 @@ cd gz-math/examples
 mkdir build
 cd build
 cmake ..
+# Linux and macOS
 make
+# Windows
+cd ..
+cmake --build build --config Release
 ```
 
 When the code is compiled, run:
 
 ```{.sh}
+# Linux and macOS
 ./triangle_example
+# Windows
+.\build\Release\triangle_example.exe
 ```
 
 The ouput of the program:
