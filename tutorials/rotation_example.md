@@ -11,7 +11,10 @@ git clone https://github.com/gazebosim/gz-math/ -b gz-math8
 cd gz-math/examples
 mkdir build
 cd build
+# linux and macOS
 cmake ..
+# Windows
+cmake --build build --config Release
 make
 ```
 
@@ -38,7 +41,10 @@ Example
 The ouput of each program, respectively:
 
 ```{.sh}
+# Linux and macOS
 ./quaternion_to_euler 0.5 0.5 0.5 0.5
+# Windows
+.\build\Release\quaternion_to_euler.exe 0.5 0.5 0.5 0.5
 Normalizing Quaternion components:
   W 0.5
   X 0.5
@@ -66,7 +72,10 @@ to Rotation matrix
 ```
 
 ```{.sh}
+# Linux and macOS
 ./quaternion_from_euler 0 0 1.57
+# Windows
+.\build\Release\quaternion_to_euler.exe 0 0 1.57
 Converting Euler angles:
  roll   0.000000 radians
  pitch  0.000000 radians
