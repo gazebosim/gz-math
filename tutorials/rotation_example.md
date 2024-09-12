@@ -75,7 +75,7 @@ to Rotation matrix
 # Linux and macOS
 ./quaternion_from_euler 0 0 1.57
 # Windows
-.\build\Release\quaternion_to_euler.exe 0 0 1.57
+.\build\Release\quaternion_from_euler.exe 0 0 1.57
 Converting Euler angles:
  roll   0.000000 radians
  pitch  0.000000 radians
