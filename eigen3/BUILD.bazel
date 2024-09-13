@@ -2,12 +2,7 @@ load("@rules_gz//gz:headers.bzl", "gz_include_header")
 load("@rules_license//rules:license.bzl", "license")
 
 package(
-    default_applicable_licenses = [":license"],
-)
-
-license(
-    name = "license",
-    package_name = "gz-math-eigen3",
+    default_applicable_licenses = ["//:license"],
 )
 
 public_headers = glob([
