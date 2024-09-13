@@ -15,8 +15,10 @@ if (SWIG_FOUND)
 
   set(swig_files
     Angle
+    CoordinateVector3
     GaussMarkovProcess
     Rand
+    SphericalCoordinates
     Vector2
     Vector3
     Vector4)

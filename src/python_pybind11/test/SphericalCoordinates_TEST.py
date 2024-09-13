@@ -12,14 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import unittest
-
-import gz
-from gz.math8 import Angle, SphericalCoordinates, Vector3d
 import math
+import unittest
+import warnings
+
+from gz.math8 import Angle, CoordinateVector3, SphericalCoordinates, Vector3d
+
+
+def ignore_deprecation_warnings(test_func):
+    def do_test(self, *args, **kwargs):
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=DeprecationWarning)
+            test_func(self, *args, **kwargs)
+    return do_test
+
 
 class TestSphericalCoordinates(unittest.TestCase):
-
     def test_constructor(self):
         # Default surface type
         st = SphericalCoordinates.EARTH_WGS84
@@ -186,6 +194,206 @@ class TestSphericalCoordinates(unittest.TestCase):
         # Heading 0:  X == East, Y == North, Z == Up
         # Heading 90: X == North, Y == West , Z == Up
         # local frame
+        xyz = CoordinateVector3()
+        # east, north, up
+        enu = CoordinateVector3()
+
+        xyz.set_metric(1, 0, 0)
+        enu = sc.global_from_local_velocity(xyz)
+        self.assertIsNotNone(enu)
+        self.assertTrue(enu.is_metric())
+        self.assertAlmostEqual(enu.y(), xyz.x(), delta=1e-6)
+        self.assertAlmostEqual(enu.x(), -xyz.y(), delta=1e-6)
+        self.assertEqual(xyz, sc.local_from_global_velocity(enu))
+
+        xyz.set_metric(0, 1, 0)
+        enu = sc.global_from_local_velocity(xyz)
+        self.assertIsNotNone(enu)
+        self.assertTrue(enu.is_metric())
+        self.assertAlmostEqual(enu.y(), xyz.x(), delta=1e-6)
+        self.assertAlmostEqual(enu.x(), -xyz.y(), delta=1e-6)
+        self.assertEqual(xyz, sc.local_from_global_velocity(enu))
+
+        xyz.set_metric(1, -1, 0)
+        enu = sc.global_from_local_velocity(xyz)
+        self.assertIsNotNone(enu)
+        self.assertTrue(enu.is_metric())
+        self.assertAlmostEqual(enu.y(), xyz.x(), delta=1e-6)
+        self.assertAlmostEqual(enu.x(), -xyz.y(), delta=1e-6)
+        self.assertEqual(xyz, sc.local_from_global_velocity(enu))
+
+        xyz.set_metric(2243.52334, 556.35, 435.6553)
+        enu = sc.global_from_local_velocity(xyz)
+        self.assertIsNotNone(enu)
+        self.assertTrue(enu.is_metric())
+        self.assertAlmostEqual(enu.y(), xyz.x(), delta=1e-6)
+        self.assertAlmostEqual(enu.x(), -xyz.y(), delta=1e-6)
+        self.assertEqual(xyz, sc.local_from_global_velocity(enu))
+
+        # Check SphericalFromLocal
+        # local frame
+        xyz = CoordinateVector3()
+        # spherical coordinates
+        sph = CoordinateVector3()
+
+        # No offset
+        xyz.set_metric(0, 0, 0)
+        sph = sc.spherical_from_local_position(xyz)
+        self.assertIsNotNone(sph)
+        self.assertTrue(sph.is_spherical())
+        # latitude
+        self.assertAlmostEqual(sph.lat().degree(), lat.degree(), delta=1e-6)
+        # longitude
+        self.assertAlmostEqual(sph.lon().degree(), lon.degree(), delta=1e-6)
+        # elevation
+        self.assertAlmostEqual(sph.z(), elev, delta=1e-6)
+
+        # 200 km offset in x (pi/2 heading offset means North). We use
+        # SphericalFromLocal, which means that xyz is a linear movement on
+        # a plane (not along the curvature of Earth). This will result in
+        # a large height offset.
+        xyz.set_metric(2e5, 0, 0)
+        sph = sc.spherical_from_local_position(xyz)
+        self.assertIsNotNone(sph)
+        self.assertTrue(sph.is_spherical())
+        # increase in latitude about 1.8 degrees
+        self.assertAlmostEqual(
+            sph.lat().degree(), lat.degree() + 1.8, delta=0.008)
+        # no change in longitude
+        self.assertAlmostEqual(sph.z(), 3507.024791, delta=1e-6)
+
+        xyz2 = sc.local_from_spherical_position(sph)
+        self.assertIsNotNone(xyz2)
+        self.assertTrue(xyz2.is_metric())
+        self.assertEqual(xyz, xyz2)
+
+        # Check position projection
+        # WGS84 coordinate obtained from online mapping software
+        # > gdaltransform -s_srs WGS84 -t_srs EPSG:4978
+        # > latitude longitude altitude
+        # > X Y Z
+        tmp = CoordinateVector3()
+        osrf_s = CoordinateVector3.spherical(
+            Angle(math.radians(37.3877349)),
+            Angle(math.radians(-122.0651166)),
+            32.0)
+        osrf_e = CoordinateVector3.metric(
+            -2693701.91434394, -4299942.14687992, 3851691.0393571)
+        goog_s = CoordinateVector3.spherical(
+            Angle(math.radians(37.4216719)),
+            Angle(math.radians(-122.0821853)),
+            30.0)
+
+        # Local tangent plane coordinates (ENU = GLOBAL) coordinates of
+        # Google when OSRF is taken as the origin:
+        # > proj +ellps=WGS84  +proj=tmerc
+        # +lat_0=37.3877349 +lon_0=-122.0651166 +k=1 +x_0=0 +y_0=0
+        # > -122.0821853 37.4216719 (LON,LAT)
+        # > -1510.88 3766.64 (EAST,NORTH)
+        vec = CoordinateVector3.metric(-1510.88, 3766.64, -3.29)
+
+        # Set the ORIGIN to be the Open Source Robotics Foundation
+        sc2 = SphericalCoordinates(
+            st, osrf_s.lat(), osrf_s.lon(), osrf_s.z(), Angle.ZERO)
+
+        # Check that SPHERICAL -> ECEF works
+        tmp = sc2.position_transform(osrf_s, SphericalCoordinates.SPHERICAL,
+                                     SphericalCoordinates.ECEF)
+
+        self.assertIsNotNone(tmp)
+        self.assertTrue(tmp.is_metric())
+        self.assertAlmostEqual(tmp.x(), osrf_e.x(), delta=8e-2)
+        self.assertAlmostEqual(tmp.y(), osrf_e.y(), delta=8e-2)
+        self.assertAlmostEqual(tmp.z(), osrf_e.z(), delta=1e-2)
+
+        # Check that ECEF -> SPHERICAL works
+        tmp = sc2.position_transform(tmp, SphericalCoordinates.ECEF,
+                                     SphericalCoordinates.SPHERICAL)
+
+        self.assertIsNotNone(tmp)
+        self.assertTrue(tmp.is_spherical())
+        self.assertAlmostEqual(
+            tmp.lat().degree(), osrf_s.lat().degree(), delta=1e-2)
+        self.assertAlmostEqual(
+            tmp.lon().degree(), osrf_s.lon().degree(), delta=1e-2)
+        self.assertAlmostEqual(tmp.z(), osrf_s.z(), delta=1e-2)
+
+        # Check that SPHERICAL -> LOCAL works
+        tmp = sc2.local_from_spherical_position(goog_s)
+        self.assertIsNotNone(tmp)
+        self.assertTrue(tmp.is_metric())
+        self.assertAlmostEqual(tmp.x(), vec.x(), delta=8e-2)
+        self.assertAlmostEqual(tmp.y(), vec.y(), delta=8e-2)
+        self.assertAlmostEqual(tmp.z(), vec.z(), delta=1e-2)
+
+        # Check that SPHERICAL -> LOCAL -> SPHERICAL works
+        tmp = sc2.spherical_from_local_position(tmp)
+        self.assertIsNotNone(tmp)
+        self.assertTrue(tmp.is_spherical())
+        self.assertAlmostEqual(
+            tmp.lat().degree(), goog_s.lat().degree(), delta=8e-2)
+        self.assertAlmostEqual(
+            tmp.lon().degree(), goog_s.lon().degree(), delta=8e-2)
+        self.assertAlmostEqual(tmp.z(), goog_s.z(), delta=1e-2)
+
+        # Give no heading offset to confirm ENU frame
+        lat = Angle(0.3)
+        lon = Angle(-1.2)
+        heading = Angle(0.0)
+        elev = 354.1
+        sc = SphericalCoordinates(st, lat, lon, elev, heading)
+
+        # Check GlobalFromLocal with no heading offset
+        # local frame
+        xyz = CoordinateVector3()
+        # east, north, up
+        enu = CoordinateVector3()
+
+        xyz.set_metric(1, 0, 0)
+        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL, SphericalCoordinates.GLOBAL)
+        self.assertIsNotNone(enu)
+        self.assertTrue(enu.is_metric())
+        self.assertEqual(xyz, enu)
+        self.assertEqual(xyz, sc.local_from_global_velocity(enu))
+
+        xyz.set_metric(0, 1, 0)
+        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL, SphericalCoordinates.GLOBAL)
+        self.assertIsNotNone(enu)
+        self.assertTrue(enu.is_metric())
+        self.assertEqual(xyz, enu)
+        self.assertEqual(xyz, sc.local_from_global_velocity(enu))
+
+        xyz.set_metric(1, -1, 0)
+        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL, SphericalCoordinates.GLOBAL)
+        self.assertIsNotNone(enu)
+        self.assertTrue(enu.is_metric())
+        self.assertEqual(xyz, enu)
+        self.assertEqual(xyz, sc.local_from_global_velocity(enu))
+
+        xyz.set_metric(2243.52334, 556.35, 435.6553)
+        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL2, SphericalCoordinates.GLOBAL)
+        self.assertIsNotNone(enu)
+        self.assertTrue(enu.is_metric())
+        self.assertEqual(xyz, enu)
+        self.assertEqual(xyz, sc.local_from_global_velocity(enu))
+
+    # TODO(peci1): Remove this test in Gazebo 9
+    @ignore_deprecation_warnings
+    def test_coordinate_transforms_deprecated(self):
+        # Default surface type
+        st = SphericalCoordinates.EARTH_WGS84
+
+        # Parameters
+        lat = Angle(0.3)
+        lon = Angle(-1.2)
+        heading = Angle(Angle.HALF_PI)
+        elev = 354.1
+        sc = SphericalCoordinates(st, lat, lon, elev, heading)
+
+        # Check GlobalFromLocal with heading offset of 90 degrees
+        # Heading 0:  X == East, Y == North, Z == Up
+        # Heading 90: X == North, Y == West , Z == Up
+        # local frame
         xyz = Vector3d()
         # east, north, up
         enu = Vector3d()
@@ -330,6 +538,32 @@ class TestSphericalCoordinates(unittest.TestCase):
         self.assertEqual(xyz, enu)
         self.assertEqual(xyz, sc.local_from_global_velocity(enu))
 
+        # This is the incorrect and deprecated behavior of LOCAL frame
+
+        xyz.set(1, 0, 0)
+        wsu = Vector3d(-xyz.x(), -xyz.y(), xyz.z())
+        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL, SphericalCoordinates.GLOBAL)
+        self.assertEqual(wsu, enu)
+        self.assertEqual(wsu, sc.local_from_global_velocity(enu))
+
+        xyz.set(0, 1, 0)
+        wsu = Vector3d(-xyz.x(), -xyz.y(), xyz.z())
+        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL, SphericalCoordinates.GLOBAL)
+        self.assertEqual(wsu, enu)
+        self.assertEqual(wsu, sc.local_from_global_velocity(enu))
+
+        xyz.set(1, -1, 0)
+        wsu = Vector3d(-xyz.x(), -xyz.y(), xyz.z())
+        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL, SphericalCoordinates.GLOBAL)
+        self.assertEqual(wsu, enu)
+        self.assertEqual(wsu, sc.local_from_global_velocity(enu))
+
+        xyz.set(2243.52334, 556.35, 435.6553)
+        wsu = Vector3d(-xyz.x(), -xyz.y(), xyz.z())
+        enu = sc.velocity_transform(xyz, SphericalCoordinates.LOCAL, SphericalCoordinates.GLOBAL)
+        self.assertEqual(wsu, enu)
+        self.assertEqual(wsu, sc.local_from_global_velocity(enu))
+
     def test_distance(self):
         latA = Angle()
         longA = Angle()
@@ -378,6 +612,34 @@ class TestSphericalCoordinates(unittest.TestCase):
 
     def test_transform(self):
         sc = SphericalCoordinates()
+        vel = CoordinateVector3.metric(1, 2, -4)
+        result = sc.velocity_transform(
+            vel,
+            SphericalCoordinates.ECEF,
+            SphericalCoordinates.ECEF)
+
+        self.assertIsNotNone(result)
+        self.assertTrue(result.is_metric())
+        self.assertEqual(result, vel)
+
+        pos = CoordinateVector3.metric(-1510.88, 2, -4)
+        result = sc.position_transform(
+            pos,
+            SphericalCoordinates.ECEF,
+            SphericalCoordinates.GLOBAL)
+
+        self.assertIsNotNone(result)
+        self.assertTrue(result.is_metric())
+        self.assertAlmostEqual(result.x(), 2, delta=1e-6)
+        self.assertAlmostEqual(result.y(), -4, delta=1e-6)
+        self.assertAlmostEqual(result.z(), -6379647.8799999999, delta=1e-6)
+
+        print('NEW POS[', result.x(), ' ', result.y(), ' ', result.z(), ']\n')
+
+    # TODO(peci1): Remove this test in Gazebo 9
+    @ignore_deprecation_warnings
+    def test_transform_deprecated(self):
+        sc = SphericalCoordinates()
         vel = Vector3d(1, 2, -4)
         result = sc.velocity_transform(
             vel,
@@ -399,6 +661,45 @@ class TestSphericalCoordinates(unittest.TestCase):
         print('NEW POS[', result.x(), ' ', result.y(), ' ', result.z(), ']\n')
 
     def test_bad_coordinate_type(self):
+        sc = SphericalCoordinates()
+        pos = CoordinateVector3.metric(1, 2, -4)
+        result = sc.position_transform(pos,
+                                       SphericalCoordinates.CoordinateType(7),
+                                       SphericalCoordinates.CoordinateType(6))
+
+        self.assertIsNone(result)
+
+        result = sc.position_transform(pos,
+                                       SphericalCoordinates.CoordinateType(4),
+                                       SphericalCoordinates.CoordinateType(6))
+
+        self.assertIsNone(result)
+
+        result = sc.velocity_transform(
+            pos,
+            SphericalCoordinates.SPHERICAL,
+            SphericalCoordinates.ECEF)
+        self.assertIsNone(result)
+
+        result = sc.velocity_transform(
+            pos,
+            SphericalCoordinates.ECEF,
+            SphericalCoordinates.SPHERICAL)
+        self.assertIsNone(result)
+
+        result = sc.velocity_transform(pos,
+                                       SphericalCoordinates.CoordinateType(7),
+                                       SphericalCoordinates.ECEF)
+        self.assertIsNone(result)
+
+        result = sc.velocity_transform(pos,
+                                       SphericalCoordinates.ECEF,
+                                       SphericalCoordinates.CoordinateType(7))
+        self.assertIsNone(result)
+
+    # TODO(peci1): Remove this test in Gazebo 9
+    @ignore_deprecation_warnings
+    def test_bad_coordinate_type_deprecated(self):
         sc = SphericalCoordinates()
         pos = Vector3d(1, 2, -4)
         result = sc.position_transform(pos,
@@ -482,6 +783,110 @@ class TestSphericalCoordinates(unittest.TestCase):
         sc = SphericalCoordinates(st, lat, lon, elev, heading)
 
         # Origin matches input
+        latLonAlt = sc.spherical_from_local_position(
+            CoordinateVector3.metric(0, 0, 0))
+        self.assertIsNotNone(latLonAlt)
+        self.assertTrue(latLonAlt.is_spherical())
+        self.assertEqual(lat.degree(), latLonAlt.lat().degree())
+        self.assertEqual(lon.degree(), latLonAlt.lon().degree())
+        self.assertEqual(elev, latLonAlt.z())
+
+        xyzOrigin = sc.local_from_spherical_position(latLonAlt)
+        self.assertIsNotNone(xyzOrigin)
+        self.assertTrue(xyzOrigin.is_metric())
+        self.assertEqual(Vector3d.ZERO, xyzOrigin.as_metric_vector())
+
+        # Check how different lat/lon affect the local position
+
+        # Increase latitude == go North == go +Y
+        xyz = sc.local_from_spherical_position(CoordinateVector3.spherical(
+            lat + Angle(math.radians(1.0)), lon, elev))
+        self.assertIsNotNone(xyz)
+        self.assertTrue(xyz.is_metric())
+        self.assertAlmostEqual(xyzOrigin.x(), xyz.x(), delta=1e-6)
+        self.assertLess(xyzOrigin.y(), xyz.y())
+
+        # Decrease latitude == go South == go -Y
+        xyz = sc.local_from_spherical_position(CoordinateVector3.spherical(
+            lat - Angle(math.radians(1.0)), lon, elev))
+        self.assertIsNotNone(xyz)
+        self.assertTrue(xyz.is_metric())
+        self.assertAlmostEqual(xyzOrigin.x(), xyz.x(), delta=1e-6)
+        self.assertGreater(xyzOrigin.y(), xyz.y())
+
+        # Increase longitude == go East == go +X
+        # Also move a bit -Y because this is the Southern Hemisphere
+        xyz = sc.local_from_spherical_position(CoordinateVector3.spherical(
+            lat, lon + Angle(math.radians(1.0)), elev))
+        self.assertIsNotNone(xyz)
+        self.assertTrue(xyz.is_metric())
+        self.assertLess(xyzOrigin.x(), xyz.x())
+        self.assertGreater(xyzOrigin.y(), xyz.y())
+
+        # Decrease longitude == go West == go -X
+        # Also move a bit -Y because this is the Southern Hemisphere
+        xyz = sc.local_from_spherical_position(CoordinateVector3.spherical(
+            lat, lon - Angle(math.radians(1.0)), elev))
+        self.assertIsNotNone(xyz)
+        self.assertTrue(xyz.is_metric())
+        self.assertGreater(xyzOrigin.x(), xyz.x())
+        self.assertGreater(xyzOrigin.y(), xyz.y())
+
+        # Increase altitude
+        xyz = sc.local_from_spherical_position(CoordinateVector3.spherical(
+            lat, lon, elev + 10.0))
+        self.assertIsNotNone(xyz)
+        self.assertTrue(xyz.is_metric())
+        self.assertAlmostEqual(xyzOrigin.x(), xyz.x(), delta=1e-6)
+        self.assertAlmostEqual(xyzOrigin.y(), xyz.y(), delta=1e-6)
+        self.assertAlmostEqual(xyzOrigin.z() + 10.0, xyz.z(), delta=1e-6)
+
+        # Decrease altitude
+        xyz = sc.local_from_spherical_position(CoordinateVector3.spherical(
+            lat, lon, elev - 10.0))
+        self.assertIsNotNone(xyz)
+        self.assertTrue(xyz.is_metric())
+        self.assertAlmostEqual(xyzOrigin.x(), xyz.x(), delta=1e-6)
+        self.assertAlmostEqual(xyzOrigin.y(), xyz.y(), delta=1e-6)
+        self.assertAlmostEqual(xyzOrigin.z() - 10.0, xyz.z(), delta=1e-6)
+
+        # Check how global and local velocities are connected
+
+        # Velocity in
+        # +X (East), +Y (North), -X (West), -Y (South), +Z (up), -Z (down)
+        for global_var in [Vector3d.UNIT_X, Vector3d.UNIT_Y, Vector3d.UNIT_Z,
+                           -Vector3d.UNIT_X, -Vector3d.UNIT_Y, -Vector3d.UNIT_Z]:
+            local = sc.local_from_global_velocity(
+                CoordinateVector3.metric(global_var))
+            self.assertIsNotNone(local)
+            self.assertTrue(local.is_metric())
+            self.assertEqual(global_var, local.as_metric_vector())
+
+            global_var = sc.global_from_local_velocity(local)
+            self.assertIsNotNone(global_var)
+            self.assertTrue(global_var.is_metric())
+            self.assertEqual(global_var, local)
+
+            # Directly call velocity_transform
+            global_var = sc.velocity_transform(
+                local,
+                SphericalCoordinates.LOCAL,
+                SphericalCoordinates.GLOBAL)
+            self.assertIsNotNone(global_var)
+            self.assertTrue(global_var.is_metric())
+            self.assertEqual(global_var, local)
+
+    @ignore_deprecation_warnings
+    def test_no_heading_deprecated(self):
+        # Default heading
+        st = SphericalCoordinates.EARTH_WGS84
+        lat = Angle(-22.9 * math.pi / 180.0)
+        lon = Angle(-43.2 * math.pi / 180.0)
+        heading = Angle(0.0)
+        elev = 0
+        sc = SphericalCoordinates(st, lat, lon, elev, heading)
+
+        # Origin matches input
         latLonAlt = sc.spherical_from_local_position(Vector3d(0, 0, 0))
         self.assertEqual(lat.degree(), latLonAlt.x())
         self.assertEqual(lon.degree(), latLonAlt.y())
@@ -543,19 +948,112 @@ class TestSphericalCoordinates(unittest.TestCase):
 
             # This function is broken for horizontal velocities
             global_var = sc.global_from_local_velocity(local)
-            if abs(global_var.z()) < 0.1:
-                self.assertNotEqual(global_var, local)
-            else:
-                self.assertEqual(global_var, local)
+            wsu = CoordinateVector3.metric(
+                -global_var.x(), -global_var.y(), global_var.z())
+            self.assertAlmostEqual(wsu.x(), local.x(), delta=1e-6)
+            self.assertAlmostEqual(wsu.y(), local.y(), delta=1e-6)
+            self.assertAlmostEqual(wsu.z(), local.z(), delta=1e-6)
 
-            # Directly call fixed version
+            # Directly call velocity_transform
             global_var = sc.velocity_transform(
                 local,
-                SphericalCoordinates.LOCAL2,
+                SphericalCoordinates.LOCAL,
                 SphericalCoordinates.GLOBAL)
-            self.assertEqual(global_var, local)
+            wsu = CoordinateVector3.metric(
+                -global_var.x(), -global_var.y(), global_var.z())
+            self.assertAlmostEqual(wsu.x(), local.x(), delta=1e-6)
+            self.assertAlmostEqual(wsu.y(), local.y(), delta=1e-6)
+            self.assertAlmostEqual(wsu.z(), local.z(), delta=1e-6)
 
     def test_with_heading(self):
+        # Heading 90 deg: X == North, Y == West , Z == Up
+        st = SphericalCoordinates.EARTH_WGS84
+        lat = Angle(-22.9 * math.pi / 180.0)
+        lon = Angle(-43.2 * math.pi / 180.0)
+        heading = Angle(90.0 * math.pi / 180.0)
+        elev = 0
+        sc = SphericalCoordinates(st, lat, lon, elev, heading)
+
+        # Origin matches input
+        latLonAlt = sc.spherical_from_local_position(
+            CoordinateVector3.metric(0, 0, 0))
+        self.assertIsNotNone(latLonAlt)
+        self.assertTrue(latLonAlt.is_spherical())
+        self.assertEqual(lat.degree(), latLonAlt.lat().degree())
+        self.assertEqual(lon.degree(), latLonAlt.lon().degree())
+        self.assertEqual(elev, latLonAlt.z())
+
+        xyzOrigin = sc.local_from_spherical_position(latLonAlt)
+        self.assertIsNotNone(xyzOrigin)
+        self.assertTrue(xyzOrigin.is_metric())
+        self.assertEqual(Vector3d.ZERO, xyzOrigin.as_metric_vector())
+
+        # Check how different lat/lon affect the local position
+
+        # Increase latitude == go North == go +X
+        xyz = sc.local_from_spherical_position(CoordinateVector3.spherical(
+            lat + Angle(math.radians(1.0)), lon, elev))
+        self.assertIsNotNone(xyz)
+        self.assertTrue(xyz.is_metric())
+        self.assertAlmostEqual(xyzOrigin.y(), xyz.y(), delta=1e-6)
+        self.assertLess(xyzOrigin.x(), xyz.x())
+
+        # Decrease latitude == go South == go -X
+        xyz = sc.local_from_spherical_position(CoordinateVector3.spherical(
+            lat - Angle(math.radians(1.0)), lon, elev))
+        self.assertIsNotNone(xyz)
+        self.assertTrue(xyz.is_metric())
+        self.assertAlmostEqual(xyzOrigin.y(), xyz.y(), delta=1e-6)
+        self.assertGreater(xyzOrigin.x(), xyz.x())
+
+        # Increase longitude == go East == go -Y (and a bit -X)
+        xyz = sc.local_from_spherical_position(CoordinateVector3.spherical(
+            lat, lon + Angle(math.radians(1.0)), elev))
+        self.assertIsNotNone(xyz)
+        self.assertTrue(xyz.is_metric())
+        self.assertGreater(xyzOrigin.y(), xyz.y())
+        self.assertGreater(xyzOrigin.x(), xyz.x())
+
+        # Decrease longitude == go West == go +Y (and a bit -X)
+        xyz = sc.local_from_spherical_position(CoordinateVector3.spherical(
+            lat, lon - Angle(math.radians(1.0)), elev))
+        self.assertIsNotNone(xyz)
+        self.assertTrue(xyz.is_metric())
+        self.assertLess(xyzOrigin.y(), xyz.y())
+        self.assertGreater(xyzOrigin.x(), xyz.x())
+
+        # Check how global and local velocities are connected
+
+        # Global     | Local
+        # ---------- | ------
+        # +X (East)  | -Y
+        # -X (West)  | +Y
+        # +Y (North) | +X
+        # -Y (South) | -X
+        globalLocal = [
+            [Vector3d.UNIT_X, -Vector3d.UNIT_Y],
+            [-Vector3d.UNIT_X, Vector3d.UNIT_Y],
+            [Vector3d.UNIT_Y, Vector3d.UNIT_X],
+            [-Vector3d.UNIT_Y, -Vector3d.UNIT_X]]
+        for [global_var, local] in globalLocal:
+            localRes = sc.local_from_global_velocity(
+                CoordinateVector3.metric(global_var))
+            self.assertIsNotNone(localRes)
+            self.assertTrue(localRes.is_metric())
+            self.assertEqual(local, localRes.as_metric_vector())
+
+            # Directly call velocity_transform
+            globalRes = sc.velocity_transform(
+                CoordinateVector3.metric(local),
+                SphericalCoordinates.LOCAL,
+                SphericalCoordinates.GLOBAL)
+            self.assertIsNotNone(globalRes)
+            self.assertTrue(globalRes.is_metric())
+            self.assertEqual(global_var, globalRes.as_metric_vector())
+
+    # TODO(peci1): Remove this test in Gazebo 9
+    @ignore_deprecation_warnings
+    def test_with_heading_deprecated(self):
         # Heading 90 deg: X == North, Y == West , Z == Up
         st = SphericalCoordinates.EARTH_WGS84
         lat = Angle(-22.9 * math.pi / 180.0)
@@ -619,11 +1117,71 @@ class TestSphericalCoordinates(unittest.TestCase):
             # Directly call fixed version
             globalRes = sc.velocity_transform(
                 local,
-                SphericalCoordinates.LOCAL2,
+                SphericalCoordinates.LOCAL,
                 SphericalCoordinates.GLOBAL)
             self.assertEqual(global_var, globalRes)
 
     def test_inverse(self):
+        st = SphericalCoordinates.EARTH_WGS84
+        lat = Angle(0.3)
+        lon = Angle(-1.2)
+        heading = Angle(0.5)
+        elev = 354.1
+        sc = SphericalCoordinates(st, lat, lon, elev, heading)
+
+        # GLOBAL <-> LOCAL
+        in_vector = CoordinateVector3.metric(1, 2, -4)
+        out = sc.velocity_transform(
+            in_vector,
+            SphericalCoordinates.LOCAL,
+            SphericalCoordinates.GLOBAL)
+        self.assertIsNotNone(out)
+        self.assertTrue(out.is_metric())
+        self.assertNotEqual(in_vector, out)
+        reverse = sc.velocity_transform(
+            out,
+            SphericalCoordinates.GLOBAL,
+            SphericalCoordinates.LOCAL)
+        self.assertIsNotNone(reverse)
+        self.assertTrue(reverse.is_metric())
+        self.assertEqual(in_vector, reverse)
+
+        in_vector = CoordinateVector3.metric(1, 2, -4)
+        out = sc.position_transform(
+            in_vector,
+            SphericalCoordinates.LOCAL,
+            SphericalCoordinates.GLOBAL)
+        self.assertIsNotNone(out)
+        self.assertTrue(out.is_metric())
+        self.assertNotEqual(in_vector, out)
+        reverse = sc.position_transform(
+            out,
+            SphericalCoordinates.GLOBAL,
+            SphericalCoordinates.LOCAL)
+        self.assertIsNotNone(reverse)
+        self.assertTrue(reverse.is_metric())
+        self.assertEqual(in_vector, reverse)
+
+        # SPHERICAL <-> LOCAL
+        in_vector = CoordinateVector3.metric(1, 2, -4)
+        out = sc.position_transform(
+            in_vector,
+            SphericalCoordinates.LOCAL,
+            SphericalCoordinates.SPHERICAL)
+        self.assertIsNotNone(out)
+        self.assertTrue(out.is_spherical())
+        self.assertNotEqual(in_vector, out)
+        reverse = sc.position_transform(
+            out,
+            SphericalCoordinates.SPHERICAL,
+            SphericalCoordinates.LOCAL)
+        self.assertIsNotNone(reverse)
+        self.assertTrue(reverse.is_metric())
+        self.assertEqual(in_vector, reverse)
+
+    # TODO(peci1): Remove this test in Gazebo 9
+    @ignore_deprecation_warnings
+    def test_inverse_deprecated(self):
         st = SphericalCoordinates.EARTH_WGS84
         lat = Angle(0.3)
         lon = Angle(-1.2)
@@ -668,6 +1226,44 @@ class TestSphericalCoordinates(unittest.TestCase):
             SphericalCoordinates.SPHERICAL,
             SphericalCoordinates.LOCAL2)
         self.assertEqual(in_vector, reverse)
+
+        # GLOBAL <-> LOCAL
+        in_vector = Vector3d(1, 2, -4)
+        out = sc.velocity_transform(
+            in_vector,
+            SphericalCoordinates.LOCAL,
+            SphericalCoordinates.GLOBAL)
+        self.assertNotEqual(in_vector, out)
+        reverse = sc.velocity_transform(
+            out,
+            SphericalCoordinates.GLOBAL,
+            SphericalCoordinates.LOCAL)
+        self.assertNotEqual(in_vector, reverse)
+
+        in_vector = Vector3d(1, 2, -4)
+        out = sc.position_transform(
+            in_vector,
+            SphericalCoordinates.LOCAL,
+            SphericalCoordinates.GLOBAL)
+        self.assertNotEqual(in_vector, out)
+        reverse = sc.position_transform(
+            out,
+            SphericalCoordinates.GLOBAL,
+            SphericalCoordinates.LOCAL)
+        self.assertNotEqual(in_vector, reverse)
+
+        # SPHERICAL <-> LOCAL
+        in_vector = Vector3d(1, 2, -4)
+        out = sc.position_transform(
+            in_vector,
+            SphericalCoordinates.LOCAL,
+            SphericalCoordinates.SPHERICAL)
+        self.assertNotEqual(in_vector, out)
+        reverse = sc.position_transform(
+            out,
+            SphericalCoordinates.SPHERICAL,
+            SphericalCoordinates.LOCAL)
+        self.assertNotEqual(in_vector, reverse)
 
 
 if __name__ == '__main__':

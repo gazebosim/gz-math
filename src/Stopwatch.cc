@@ -18,6 +18,7 @@
 #include "gz/math/Stopwatch.hh"
 
 using namespace gz::math;
+using steady_clock = std::chrono::steady_clock;
 
 // Private data class
 class gz::math::Stopwatch::Implementation
@@ -26,16 +27,16 @@ class gz::math::Stopwatch::Implementation
   public: bool running = false;
 
   /// \brief Time point that marks the start of the real-time clock.
-  public: clock::time_point startTime = clock::time_point::min();
+  public: steady_clock::time_point startTime = steady_clock::time_point::min();
 
   /// \brief Time point that marks the stop of the real-time clock.
-  public: clock::time_point stopTime = clock::time_point::min();
+  public: steady_clock::time_point stopTime = steady_clock::time_point::min();
 
   /// \brief Amount of stop time.
-  public: clock::duration stopDuration = clock::duration::zero();
+  public: steady_clock::duration stopDuration = steady_clock::duration::zero();
 
   /// \brief Amount of run time.
-  public: clock::duration runDuration = clock::duration::zero();
+  public: steady_clock::duration runDuration = steady_clock::duration::zero();
 };
 
 //////////////////////////////////////////////////
@@ -55,11 +56,11 @@ bool Stopwatch::Start(const bool _reset)
     if (this->dataPtr->startTime != this->dataPtr->stopTime)
     {
       this->dataPtr->stopDuration +=
-        clock::now() - this->dataPtr->stopTime;
+        steady_clock::now() - this->dataPtr->stopTime;
     }
 
     this->dataPtr->running = true;
-    this->dataPtr->startTime = clock::now();
+    this->dataPtr->startTime = steady_clock::now();
     return true;
   }
 
@@ -67,7 +68,7 @@ bool Stopwatch::Start(const bool _reset)
 }
 
 //////////////////////////////////////////////////
-clock::time_point Stopwatch::StartTime() const
+steady_clock::time_point Stopwatch::StartTime() const
 {
   return this->dataPtr->startTime;
 }
@@ -78,7 +79,7 @@ bool Stopwatch::Stop()
   if (this->dataPtr->running)
   {
     this->dataPtr->running = false;
-    this->dataPtr->stopTime = clock::now();
+    this->dataPtr->stopTime = steady_clock::now();
     this->dataPtr->runDuration +=
       this->dataPtr->stopTime - this->dataPtr->startTime;
     return true;
@@ -88,7 +89,7 @@ bool Stopwatch::Stop()
 }
 
 //////////////////////////////////////////////////
-clock::time_point Stopwatch::StopTime() const
+steady_clock::time_point Stopwatch::StopTime() const
 {
   return this->dataPtr->stopTime;
 }
@@ -103,18 +104,19 @@ bool Stopwatch::Running() const
 void Stopwatch::Reset()
 {
   this->dataPtr->running = false;
-  this->dataPtr->startTime = clock::time_point::min();
-  this->dataPtr->stopTime = clock::time_point::min();
-  this->dataPtr->stopDuration = clock::duration::zero();
-  this->dataPtr->runDuration = clock::duration::zero();
+  this->dataPtr->startTime = steady_clock::time_point::min();
+  this->dataPtr->stopTime = steady_clock::time_point::min();
+  this->dataPtr->stopDuration = steady_clock::duration::zero();
+  this->dataPtr->runDuration = steady_clock::duration::zero();
 }
 
 //////////////////////////////////////////////////
-clock::duration Stopwatch::ElapsedRunTime() const
+steady_clock::duration Stopwatch::ElapsedRunTime() const
 {
   if (this->dataPtr->running)
   {
-    return clock::now() - this->dataPtr->startTime + this->dataPtr->runDuration;
+    return steady_clock::now() - this->dataPtr->startTime
+                               + this->dataPtr->runDuration;
   }
   else
   {
@@ -123,7 +125,7 @@ clock::duration Stopwatch::ElapsedRunTime() const
 }
 
 //////////////////////////////////////////////////
-clock::duration Stopwatch::ElapsedStopTime() const
+steady_clock::duration Stopwatch::ElapsedStopTime() const
 {
   // If running, then return the stopDuration.
   if (this->dataPtr->running)
@@ -131,14 +133,14 @@ clock::duration Stopwatch::ElapsedStopTime() const
     return this->dataPtr->stopDuration;
   }
   // The clock is not running, and Stop() has been called.
-  else if (this->dataPtr->stopTime > clock::time_point::min())
+  else if (this->dataPtr->stopTime > steady_clock::time_point::min())
   {
     return this->dataPtr->stopDuration +
-      (clock::now() - this->dataPtr->stopTime);
+      (steady_clock::now() - this->dataPtr->stopTime);
   }
 
   // Otherwise, the stopwatch has been reset or never started.
-  return clock::duration::zero();
+  return steady_clock::duration::zero();
 }
 
 //////////////////////////////////////////////////

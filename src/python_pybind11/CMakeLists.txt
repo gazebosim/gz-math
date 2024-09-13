@@ -1,10 +1,3 @@
-if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
-  # pybind11 logic for setting up a debug build when both a debug and release
-  # python interpreter are present in the system seems to be pretty much broken.
-  # This works around the issue.
-  set(PYTHON_LIBRARIES "${PYTHON_DEBUG_LIBRARIES}")
-endif()
-
 message(STATUS "Building pybind11 interfaces")
 set(BINDINGS_MODULE_NAME "math${PROJECT_VERSION_MAJOR}")
 # Split from main extension and converted to pybind11
@@ -14,6 +7,7 @@ pybind11_add_module(${BINDINGS_MODULE_NAME} MODULE
   src/AxisAlignedBox.cc
   src/Capsule.cc
   src/Color.cc
+  src/CoordinateVector3.cc
   src/DiffDriveOdometry.cc
   src/Ellipsoid.cc
   src/Filter.cc
@@ -29,6 +23,7 @@ pybind11_add_module(${BINDINGS_MODULE_NAME} MODULE
   src/Matrix3.cc
   src/Matrix4.cc
   src/Matrix6.cc
+  src/MecanumDriveOdometry.cc
   src/MovingWindowFilter.cc
   src/PID.cc
   src/Polynomial3.cc
@@ -73,9 +68,10 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 endif()
 
 if(USE_SYSTEM_PATHS_FOR_PYTHON_INSTALLATION)
-  # Get install variable from Python3 module
-  # Python3_SITEARCH is available from 3.12 on, workaround if needed:
-  find_package(Python3 COMPONENTS Interpreter)
+  if(NOT Python3_SITEARCH)
+    # Get install variable from Python3 module
+    find_package(Python3 COMPONENTS Interpreter)
+  endif()
 
   if(USE_DIST_PACKAGES_FOR_PYTHON)
     string(REPLACE "site-packages" "dist-packages" GZ_PYTHON_INSTALL_PATH ${Python3_SITEARCH})
@@ -118,6 +114,8 @@ if (BUILD_TESTING)
     Box_TEST
     Capsule_TEST
     Color_TEST
+    Cone_TEST
+    CoordinateVector3_TEST
     Cylinder_TEST
     DiffDriveOdometry_TEST
     Ellipsoid_TEST
@@ -135,6 +133,7 @@ if (BUILD_TESTING)
     Matrix3_TEST
     Matrix4_TEST
     Matrix6_TEST
+    MecanumDriveOdometry_TEST
     MovingWindowFilter_TEST
     OrientedBox_TEST
     PID_TEST

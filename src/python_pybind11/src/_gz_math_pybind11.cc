@@ -19,6 +19,8 @@
 #include "Box.hh"
 #include "Capsule.hh"
 #include "Color.hh"
+#include "Cone.hh"
+#include "CoordinateVector3.hh"
 #include "Cylinder.hh"
 #include "DiffDriveOdometry.hh"
 #include "Ellipsoid.hh"
@@ -36,6 +38,7 @@
 #include "Matrix3.hh"
 #include "Matrix4.hh"
 #include "Matrix6.hh"
+#include "MecanumDriveOdometry.hh"
 #include "MovingWindowFilter.hh"
 #include "OrientedBox.hh"
 #include "PID.hh"
@@ -151,6 +154,8 @@ PYBIND11_MODULE(BINDINGS_MODULE_NAME, m)
 
   gz::math::python::defineMathMatrix6(m, "Matrix6");
 
+  gz::math::python::defineMathMecanumDriveOdometry(m, "MecanumDriveOdometry");
+
   gz::math::python::defineMathTriangle(m, "Triangle");
 
   gz::math::python::defineMathTriangle3(m, "Triangle3");
@@ -164,6 +169,8 @@ PYBIND11_MODULE(BINDINGS_MODULE_NAME, m)
   gz::math::python::defineMathMassMatrix3(m, "MassMatrix3");
 
   gz::math::python::defineMathSphere<double>(m, "Sphered");
+
+  gz::math::python::defineMathCone<double>(m, "Coned");
 
   gz::math::python::defineMathCylinder<double>(m, "Cylinderd");
 
@@ -184,4 +191,6 @@ PYBIND11_MODULE(BINDINGS_MODULE_NAME, m)
     m, "OnePoleQuaternion");
   gz::math::python::defineMathOnePoleVector3(
     m, "OnePoleVector3");
+
+  gz::math::python::defineMathCoordinateVector3(m, "CoordinateVector3");
 }

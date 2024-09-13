@@ -325,16 +325,6 @@ TEST(QuaternionTest, MathAxis)
 {
   math::Quaterniond q(GZ_PI*0.1, GZ_PI*0.5, GZ_PI);
 
-GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
-  // Deprecated in gz-math7
-  q.Axis(0, 1, 0, GZ_PI);
-  EXPECT_EQ(q, math::Quaterniond(6.12303e-17, 0, 1, 0));
-
-  // Deprecated in gz-math7
-  q.Axis(1, 0, 0, GZ_PI);
-  EXPECT_EQ(q, math::Quaterniond(0, 1, 0, 0));
-GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
-
   q.SetFromAxisAngle(0, 1, 0, GZ_PI);
   EXPECT_EQ(q, math::Quaterniond(6.12303e-17, 0, 1, 0));
 
@@ -453,6 +443,17 @@ TEST(QuaternionTest, Math)
   q.AxisAngle(axis, angle);
   EXPECT_TRUE(axis == math::Vector3d(1, 0, 0));
   EXPECT_TRUE(math::equal(angle, 0.0, 1e-3));
+
+  {
+    // Verify that small quaternions can be converted to small axis angle.
+    // Quaternions of length 1e-6 (default epsilon value in math::equal) or
+    // larger should be treated as non-zero for conversion to axis angle.
+    q.SetFromAxisAngle(0, 0, 1, 1e-4);
+    q.AxisAngle(axis, angle);
+    EXPECT_TRUE(axis == math::Vector3d(0, 0, 1));
+    EXPECT_TRUE(math::equal(angle, 1e-4));
+  }
+
   {
     // simple 180 rotation about yaw, should result in x and y flipping signs
     q = math::Quaterniond(0, 0, GZ_PI);

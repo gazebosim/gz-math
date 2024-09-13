@@ -17,29 +17,45 @@
 #include <cmath>
 #include <iostream>
 #include <gz/math/SignalStats.hh>
-#include "SignalStatsPrivate.hh"
 
 using namespace gz;
 using namespace math;
 
+/// \brief Private data class for the SignalStatistic class.
+class SignalStatistic::Implementation
+{
+  /// \brief Scalar representation of signal data.
+  public: double data;
+
+  /// \brief Scalar representation of extra signal data.
+  /// For example, the standard deviation statistic needs an extra variable.
+  public: double extraData;
+
+  /// \brief Count of data values in mean.
+  public: unsigned int count;
+};
+
+/// \def SignalStatisticPtr
+/// \brief Shared pointer to SignalStatistic object
+typedef std::shared_ptr<SignalStatistic> SignalStatisticPtr;
+
+/// \def SignalStatistic_V
+/// \brief Vector of SignalStatisticPtr
+typedef std::vector<SignalStatisticPtr> SignalStatistic_V;
+
+/// \brief Private data class for the SignalStats class.
+class SignalStats::Implementation
+{
+  /// \brief Vector of `SignalStatistic`s.
+  public: SignalStatistic_V stats;
+};
 //////////////////////////////////////////////////
 SignalStatistic::SignalStatistic()
-  : dataPtr(new SignalStatisticPrivate)
+  : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
   this->dataPtr->data = 0.0;
   this->dataPtr->extraData = 0.0;
   this->dataPtr->count = 0;
-}
-
-//////////////////////////////////////////////////
-SignalStatistic::~SignalStatistic()
-{
-}
-
-//////////////////////////////////////////////////
-SignalStatistic::SignalStatistic(const SignalStatistic &_ss)
-  : dataPtr(_ss.dataPtr->Clone())
-{
 }
 
 //////////////////////////////////////////////////
@@ -206,18 +222,7 @@ void SignalVariance::InsertData(const double _data)
 
 //////////////////////////////////////////////////
 SignalStats::SignalStats()
-  : dataPtr(new SignalStatsPrivate)
-{
-}
-
-//////////////////////////////////////////////////
-SignalStats::~SignalStats()
-{
-}
-
-//////////////////////////////////////////////////
-SignalStats::SignalStats(const SignalStats &_ss)
-  : dataPtr(_ss.dataPtr->Clone())
+  : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
 }
 
@@ -349,11 +354,4 @@ void SignalStats::Reset()
   {
     statistic->Reset();
   }
-}
-
-//////////////////////////////////////////////////
-SignalStats &SignalStats::operator=(const SignalStats &_s)
-{
-  this->dataPtr = _s.dataPtr->Clone();
-  return *this;
 }

@@ -29,9 +29,7 @@
 #include "gz/math/graph/Graph.hh"
 #include "gz/math/Helpers.hh"
 
-namespace gz
-{
-namespace math
+namespace gz::math
 {
 // Inline bracket to help doxygen filtering.
 inline namespace GZ_MATH_VERSION_NAMESPACE {
@@ -353,8 +351,7 @@ namespace graph
 
     return UndirectedGraph<V, E>(vertices, edges);
   }
-}
-}
-}
-}
-#endif
+}  // namespace graph
+}  // namespace GZ_MATH_VERSION_NAMESPACE
+}  // namespace gz::math
+#endif   // GZ_MATH_GRAPH_GRAPHALGORITHMS_HH_

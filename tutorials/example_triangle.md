@@ -12,13 +12,20 @@ cd gz-math/examples
 mkdir build
 cd build
 cmake ..
+# Linux and macOS
 make
+# Windows
+cd ..
+cmake --build build --config Release
 ```
 
 When the code is compiled, run:
 
 ```{.sh}
+# Linux and macOS
 ./triangle_example
+# Windows
+.\build\Release\triangle_example.exe
 ```
 
 The ouput of the program:
@@ -69,4 +76,4 @@ The `Intersects` function checks if a line segment intersects the triangle. It a
 
 \snippet examples/triangle_example.cc intersect
 
-There are more functions in `Triangle`. Take a look at the [API](https://gazebosim.org/api/math/7/)
+There are more functions in `Triangle`. Take a look at the [API](https://gazebosim.org/api/math/8/)

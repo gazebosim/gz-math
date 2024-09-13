@@ -105,9 +105,32 @@ TEST(AngleTest, Angle)
   EXPECT_TRUE(angle >= 1.19);
   EXPECT_TRUE(angle >= 1.2);
   EXPECT_TRUE(angle >= -1.19);
+  EXPECT_EQ(-angle, math::Angle(-1.2));
+  EXPECT_EQ(-(-angle), angle);
 
   EXPECT_TRUE(math::Angle(1.2) >= math::Angle(1.2000000001));
   EXPECT_TRUE(math::Angle(1.2000000001) >= math::Angle(1.2));
+
+  EXPECT_DOUBLE_EQ(math::Angle(1.2).Abs().Radian(), 1.2);
+  EXPECT_DOUBLE_EQ(math::Angle(-1.2).Abs().Radian(), 1.2);
+  EXPECT_DOUBLE_EQ(math::Angle(0).Abs().Radian(), 0);
+  EXPECT_DOUBLE_EQ(math::Angle(-300).Abs().Radian(), 300);
+  EXPECT_DOUBLE_EQ(math::Angle(300).Abs().Radian(), 300);
+
+  EXPECT_DOUBLE_EQ(
+    math::Angle(1.0).ShortestDistance(math::Angle(1.0)).Radian(), 0.0);
+  EXPECT_DOUBLE_EQ(
+    math::Angle(1.0).ShortestDistance(math::Angle(-1.0)).Radian(), -2.0);
+  EXPECT_DOUBLE_EQ(
+    math::Angle(-1.0).ShortestDistance(math::Angle(1.0)).Radian(), 2.0);
+  EXPECT_DOUBLE_EQ(
+    math::Angle(-1.0).ShortestDistance(math::Angle(-1.0)).Radian(), 0.0);
+  EXPECT_DOUBLE_EQ(
+    math::Angle(-2.0).ShortestDistance(math::Angle(2.0)).Radian(),
+    -(2 * GZ_PI - 4.0));
+  EXPECT_DOUBLE_EQ(
+    math::Angle(2.0).ShortestDistance(math::Angle(-2.0)).Radian(),
+    2 * GZ_PI - 4.0);
 }
 
 /////////////////////////////////////////////////

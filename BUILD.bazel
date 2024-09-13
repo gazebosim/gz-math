@@ -11,6 +11,8 @@ license(
     package_name = "gz-math",
 )
 
+licenses(["notice"])
+
 exports_files([
     "LICENSE",
     "MODULE.bazel",

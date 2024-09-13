@@ -41,6 +41,15 @@ float SphereVolume(const float _radius)
   return GZ_SPHERE_VOLUME(_radius);
 }
 
+/// \brief Compute cone volume
+/// \param[in] _r Cone base radius
+/// \param[in] _l Cone length
+/// \return cone volume
+float ConeVolume(const float _r, const float _l)
+{
+  return GZ_CONE_VOLUME(_r, _l);
+}
+
 /// \brief Compute cylinder volume
 /// \param[in] _r Cylinder base radius
 /// \param[in] _l Cylinder length
@@ -172,6 +181,9 @@ void defineMathHelpers(py::module &m)
    .def("gz_sphere_volume",
         &SphereVolume,
         "Compute sphere volume")
+   .def("gz_cone_volume",
+        &ConeVolume,
+        "Compute cone volume")
    .def("gz_cylinder_volume",
         &CylinderVolume,
         "Compute cylinder volume")

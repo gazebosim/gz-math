@@ -25,9 +25,7 @@
 #include <utility>
 #include <vector>
 
-namespace gz
-{
-namespace math
+namespace gz::math
 {
 //////////////////////////////////////////////////
 template<typename T>
@@ -373,7 +371,5 @@ IntersectionPoints<T> Box<T>::Intersections(
 
   return intersections;
 }
-
-}
-}
-#endif
+}  // namespace gz::math
+#endif  // GZ_MATH_DETAIL_BOX_HH_

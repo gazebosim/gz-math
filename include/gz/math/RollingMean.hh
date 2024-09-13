@@ -21,54 +21,50 @@
 #include <gz/math/config.hh>
 #include <gz/utils/ImplPtr.hh>
 
-namespace gz
+namespace gz::math
 {
-  namespace math
+  // Inline bracket to help doxygen filtering.
+  inline namespace GZ_MATH_VERSION_NAMESPACE {
+  /// \brief A class that computes the mean over a series of data points.
+  /// The window size determines the maximum number of data points. The
+  /// oldest value is popped off when the window size is reached and
+  /// a new value is pushed in.
+  class GZ_MATH_VISIBLE RollingMean
   {
-    // Inline bracket to help doxygen filtering.
-    inline namespace GZ_MATH_VERSION_NAMESPACE {
-    /// \brief A class that computes the mean over a series of data points.
-    /// The window size determines the maximum number of data points. The
-    /// oldest value is popped off when the window size is reached and
-    /// a new value is pushed in.
-    class GZ_MATH_VISIBLE RollingMean
-    {
-      /// \brief Constructor
-      /// \param[in] _windowSize The window size to use. This value will be
-      /// ignored if it is equal to zero.
-      public: explicit RollingMean(size_t _windowSize = 10);
+    /// \brief Constructor
+    /// \param[in] _windowSize The window size to use. This value will be
+    /// ignored if it is equal to zero.
+    public: explicit RollingMean(size_t _windowSize = 10);
 
-      /// \brief Get the mean value.
-      /// \return The current mean value, or
-      /// std::numeric_limits<double>::quiet_NaN() if data points are not
-      /// present.
-      public: double Mean() const;
+    /// \brief Get the mean value.
+    /// \return The current mean value, or
+    /// std::numeric_limits<double>::quiet_NaN() if data points are not
+    /// present.
+    public: double Mean() const;
 
-      /// \brief Get the number of data points.
-      /// \return The number of datapoints.
-      public: size_t Count() const;
+    /// \brief Get the number of data points.
+    /// \return The number of datapoints.
+    public: size_t Count() const;
 
-      /// \brief Insert a new value.
-      /// \param[in] _value New value to insert.
-      public: void Push(double _value);
+    /// \brief Insert a new value.
+    /// \param[in] _value New value to insert.
+    public: void Push(double _value);
 
-      /// \brief Remove all the pushed values.
-      public: void Clear();
+    /// \brief Remove all the pushed values.
+    public: void Clear();
 
-      /// \brief Set the new window size. This will also clear the data.
-      /// Nothing happens if the _windowSize is zero.
-      /// \param[in] _windowSize The window size to use.
-      public: void SetWindowSize(size_t _windowSize);
+    /// \brief Set the new window size. This will also clear the data.
+    /// Nothing happens if the _windowSize is zero.
+    /// \param[in] _windowSize The window size to use.
+    public: void SetWindowSize(size_t _windowSize);
 
-      /// \brief Get the window size.
-      /// \return The window size.
-      public: size_t WindowSize() const;
+    /// \brief Get the window size.
+    /// \return The window size.
+    public: size_t WindowSize() const;
 
-      /// \brief Private data pointer.
-      GZ_UTILS_IMPL_PTR(dataPtr)
-    };
-    }
-  }
-}
-
-#endif
+    /// \brief Private data pointer.
+    GZ_UTILS_IMPL_PTR(dataPtr)
+  };
+  }  // namespace GZ_MATH_VERSION_NAMESPACE
+}  // namespace gz::math
+#endif  // GZ_MATH_ROLLINGMEAN_HH_

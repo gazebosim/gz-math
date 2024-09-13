@@ -23,7 +23,7 @@
 import gz.math8
 
 v1 = gz.math8.Vector3d(0, 0, 3)
-print("v =: {} {} {}\n".format(v1.x(), v1.y(), v1.z()))
+print("v1 = {} {} {}\n".format(v1.x(), v1.y(), v1.z()))
 
 v2 = gz.math8.Vector3d(4, 0, 0)
 print("v2 = {} {} {}\n".format(v2.x(), v2.y(), v2.z()))

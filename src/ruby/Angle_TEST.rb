@@ -111,6 +111,9 @@ class Angle_TEST < Test::Unit::TestCase
     assert(angle >= 1.2, "Angle should be greater or equal to 1.2")
     assert(angle >= -1.19, "Angle should be greater or equal to -1.19")
 
+    assert(-Gz::Math::Angle::new(1.2) == Gz::Math::Angle::new(-1.2),
+           "Angle should be greater or equal to -1.19")
+
     assert(Gz::Math::Angle.new(1.2) >=
            Gz::Math::Angle.new(1.2000000001),
            "1.2 should be greater than or equal to 1.2000000001")

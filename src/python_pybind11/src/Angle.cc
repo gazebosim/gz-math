@@ -65,10 +65,18 @@ void defineMathAngle(py::module &m, const std::string &typestr)
     .def("normalized",
          &Class::Normalized,
          "Return a normalized vector")
+    .def("abs",
+         &Class::Abs,
+         "Return the absolute value")
+    .def("shortest_distance",
+         &Class::ShortestDistance,
+         "Return the shortest angular distance between this and the "
+         "other angle.")
     .def(py::self + py::self)
     .def(py::self += py::self)
     .def(py::self * py::self)
     .def(py::self *= py::self)
+    .def(-py::self)
     .def(py::self - py::self)
     .def(py::self -= py::self)
     .def(py::self / py::self)

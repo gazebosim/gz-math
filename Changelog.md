@@ -1,8 +1,126 @@
 ## Gazebo Math 8.x
 
-### Gazebo Math 8.0.0 (202X-XX-XX)
+### Gazebo Math 8.0.0 (2024-09-XX)
+
+1. Added CoordinateVector3 and used it in SphericalCoordinates
+    * [Pull request #616](https://github.com/gazebosim/gz-math/pull/616)
+
+1. Clamping color channel values to within [0, 1]
+    * [Pull request #613](https://github.com/gazebosim/gz-math/pull/613)
+
+1. Implement rule of zero part 2
+    * [Pull request #614](https://github.com/gazebosim/gz-math/pull/614)
+
+1. Use ImplPtr, fix rule of 0 part 1
+    * [Pull request #608](https://github.com/gazebosim/gz-math/pull/608)
+
+1. Fix flaky Stopwatch test
+    * [Pull request #610](https://github.com/gazebosim/gz-math/pull/610)
+
+1. Line\*.hh: remove unneeded use of static variable
+    * [Pull request #607](https://github.com/gazebosim/gz-math/pull/607)
+
+1. Fix potential unsafe initialization in the Graph class
+    * [Pull request #606](https://github.com/gazebosim/gz-math/pull/606)
+    * [Pull request #609](https://github.com/gazebosim/gz-math/pull/609)
+    * [Pull request #612](https://github.com/gazebosim/gz-math/pull/612)
+
+1. Remove APIs deprecated in gz-math7
+    * [Pull request #601](https://github.com/gazebosim/gz-math/pull/601)
+
+1. Deprecate math::clock alias
+    * [Pull request #600](https://github.com/gazebosim/gz-math/pull/600)
+
+1. Clean up nested namespaces
+    * [Pull request #603](https://github.com/gazebosim/gz-math/pull/603)
+
+1. Find python directly instead of using GzPython
+    * [Pull request #588](https://github.com/gazebosim/gz-math/pull/588)
+
+1. Adding cone primitives.
+    * [Pull request #594](https://github.com/gazebosim/gz-math/pull/594)
+
+1. Enable 24.04 CI, remove distutils dependency
+    * [Pull request #587](https://github.com/gazebosim/gz-math/pull/587)
+
+1. Remove HIDE_SYMBOLS_BY_DEFAULT: replace by a default configuration in gz-cmake.
+    * [Pull request #573](https://github.com/gazebosim/gz-math/pull/573)
+
+1. Use HIDE_SYMBOLS_BY_DEFAULT, fix MovingWindowFilter
+    * [Pull request #566](https://github.com/gazebosim/gz-math/pull/566)
+
+1. Dependency version bumps in ionic: use gz-cmake4, gz-utils3
+    * [Pull request #562](https://github.com/gazebosim/gz-math/pull/562)
+
+1. Remove ignition headers and macros
+    * [Pull request #541](https://github.com/gazebosim/gz-math/pull/541)
+    * [Pull request #602](https://github.com/gazebosim/gz-math/pull/602)
+
+1. Bump major version to 8
+    * [Pull request #478](https://github.com/gazebosim/gz-math/pull/478)
 
 ## Gazebo Math 7.x
+
+### Gazebo Math 7.5.0 (2024-06-18)
+
+1. Backport: Adding cone primitives.
+    * [Pull request #594](https://github.com/gazebosim/gz-math/pull/594)
+
+1. Enable 24.04 CI on harmonic
+    * [Pull request #590](https://github.com/gazebosim/gz-math/pull/590)
+
+1. Add package.xml
+    * [Pull request #581](https://github.com/gazebosim/gz-math/pull/581)
+
+1. bazel: correctly export license
+    * [Pull request #586](https://github.com/gazebosim/gz-math/pull/586)
+
+1. Add missing eigen3.hh header for bazel build
+    * [Pull request #585](https://github.com/gazebosim/gz-math/pull/585)
+
+1. Expose non-const reference to edges
+    * [Pull request #580](https://github.com/gazebosim/gz-math/pull/580)
+
+### Gazebo Math 7.4.0 (2024-03-14)
+
+1. Added MecanumDriveOdometry Python wrapper
+    * [Pull request #549](https://github.com/gazebosim/gz-math/pull/549)
+
+1. Update CI badges in README
+    * [Pull request #571](https://github.com/gazebosim/gz-math/pull/571)
+
+1. Infrastructure
+    * [Pull request #569](https://github.com/gazebosim/gz-math/pull/569)
+
+1. Suppress warnings on MSVC
+    * [Pull request #564](https://github.com/gazebosim/gz-math/pull/564)
+
+1. Remove the use of numeric_limits in appendToStream test
+    * [Pull request #553](https://github.com/gazebosim/gz-math/pull/553)
+
+1. Replace CMake Python variables with new ones from FindPython3 module
+    * [Pull request #402](https://github.com/gazebosim/gz-math/pull/402)
+
+1. Fix `Matrix3_TEST.py` on Windows with conda-forge dependencies
+    * [Pull request #561](https://github.com/gazebosim/gz-math/pull/561)
+
+1. Fix small typo cppgetstarted.md
+    * [Pull request #560](https://github.com/gazebosim/gz-math/pull/560)
+
+1. Update Ubuntu Binary installation since apt-key is deprecated
+    * [Pull request #559](https://github.com/gazebosim/gz-math/pull/559)
+
+1. Update file tree in README to point out pybind11
+    * [Pull request #558](https://github.com/gazebosim/gz-math/pull/558)
+
+1. Update tutorial/color.md
+    * [Pull request #557](https://github.com/gazebosim/gz-math/pull/557)
+
+1. ign->gz in README.md
+    * [Pull request #556](https://github.com/gazebosim/gz-math/pull/556)
+
+1. Update example_triangle.md
+    * [Pull request #555](https://github.com/gazebosim/gz-math/pull/555)
 
 ### Gazebo Math 7.3.0 (2023-08-29)
 
@@ -273,6 +391,28 @@
     * [BitBucket pull request 336](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/336)
 
 ## Gazebo Math 6.x
+
+## Gazebo Math 6.15.1 (2024-01-05)
+
+1. Replace CMake Python variables with new ones from FindPython3 module
+    * [Pull request #402](https://github.com/gazebosim/gz-math/pull/402)
+
+1. Suppress warnings on MSVC
+    * [Pull request #564](https://github.com/gazebosim/gz-math/pull/564)
+
+1. Infrastructure
+    * [Pull request #569](https://github.com/gazebosim/gz-math/pull/569)
+
+## Gazebo Math 6.15.0 (2023-09-01)
+
+1. Fixes for testing in non standard architectures
+    * [Pull request #546](https://github.com/gazebosim/gz-math/pull/546)
+
+1. MecanumDriveOdometry to handle odometry estimation of Mecanum wheeled models
+    * [Pull request #486](https://github.com/gazebosim/gz-math/pull/486)
+
+1. Infrastructure
+    * [Pull request #547](https://github.com/gazebosim/gz-math/pull/547)
 
 ## Gazebo Math 6.14.0 (2023-04-14)
 
