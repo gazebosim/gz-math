@@ -1,6 +1,15 @@
 ## Gazebo Math 8.x
 
-### Gazebo Math 8.0.0 (2024-09-XX)
+### Gazebo Math 8.0.0 (2024-09-25)
+
+1. Miscellaneous documentation fixes
+    * [Pull request #632](https://github.com/gazebosim/gz-math/pull/632)
+    * [Pull request #631](https://github.com/gazebosim/gz-math/pull/631)
+    * [Pull request #630](https://github.com/gazebosim/gz-math/pull/630)
+    * [Pull request #628](https://github.com/gazebosim/gz-math/pull/628)
+
+1. Fix Vector examples
+    * [Pull request #629](https://github.com/gazebosim/gz-math/pull/629)
 
 1. Added CoordinateVector3 and used it in SphericalCoordinates
     * [Pull request #616](https://github.com/gazebosim/gz-math/pull/616)
@@ -8,11 +17,9 @@
 1. Clamping color channel values to within [0, 1]
     * [Pull request #613](https://github.com/gazebosim/gz-math/pull/613)
 
-1. Implement rule of zero part 2
-    * [Pull request #614](https://github.com/gazebosim/gz-math/pull/614)
-
-1. Use ImplPtr, fix rule of 0 part 1
+1. Use ImplPtr, Implement rule of zero
     * [Pull request #608](https://github.com/gazebosim/gz-math/pull/608)
+    * [Pull request #614](https://github.com/gazebosim/gz-math/pull/614)
 
 1. Fix flaky Stopwatch test
     * [Pull request #610](https://github.com/gazebosim/gz-math/pull/610)
