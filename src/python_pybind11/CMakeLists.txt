@@ -1,3 +1,18 @@
+# Detect if we are doing a standalone build of the bindings, using an external gz-math
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+  cmake_minimum_required(VERSION 3.16)
+  set(GZ_MATH_VER 8)
+  project(gz-math${GZ_MATH_VER}-python VERSION ${GZ_MATH_VER})
+  find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
+  find_package(pybind11 REQUIRED)
+  find_package(gz-math${PROJECT_VERSION_MAJOR} REQUIRED)
+  set(PROJECT_LIBRARY_TARGET_NAME "gz-math${PROJECT_VERSION_MAJOR}::gz-math${PROJECT_VERSION_MAJOR}")
+  include(CTest)
+  if(BUILD_TESTING)
+    enable_testing()
+  endif()
+endif()
+
 message(STATUS "Building pybind11 interfaces")
 set(BINDINGS_MODULE_NAME "math${PROJECT_VERSION_MAJOR}")
 # Split from main extension and converted to pybind11
