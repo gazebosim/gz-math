@@ -21,9 +21,8 @@
 #include <cstring>
 #include <utility>
 #include <gz/math/Helpers.hh>
-#include <gz/math/Vector3.hh>
-#include <gz/math/Quaternion.hh>
 #include <gz/math/config.hh>
+#include <gz/math/Vector3.hh>
 
 namespace gz::math
 {
