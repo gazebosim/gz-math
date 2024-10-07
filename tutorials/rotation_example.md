@@ -12,7 +12,11 @@ cd gz-math/examples
 mkdir build
 cd build
 cmake ..
+# Linux and macOS
 make
+# Windows
+cd ..
+cmake --build build --config Release
 ```
 
 When the code is compiled, you can run two different examples, one which converts from quaternion to euler angles:
@@ -38,7 +42,10 @@ Example
 The ouput of each program, respectively:
 
 ```{.sh}
+# Linux and macOS
 ./quaternion_to_euler 0.5 0.5 0.5 0.5
+# Windows
+.\build\Release\quaternion_to_euler.exe 0.5 0.5 0.5 0.5
 Normalizing Quaternion components:
   W 0.5
   X 0.5
@@ -66,7 +73,10 @@ to Rotation matrix
 ```
 
 ```{.sh}
+# Linux and macOS
 ./quaternion_from_euler 0 0 1.57
+# Windows
+.\build\Release\quaternion_from_euler.exe 0 0 1.57
 Converting Euler angles:
  roll   0.000000 radians
  pitch  0.000000 radians
