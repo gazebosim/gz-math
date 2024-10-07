@@ -23,7 +23,7 @@
 require 'gz/math'
 
 v1 = Gz::Math::Vector3d.new(0, 0, 0)
-printf("v =: %f %f %f\n", v1.X(), v1.Y(), v1.Z())
+printf("v1 = %f %f %f\n", v1.X(), v1.Y(), v1.Z())
 
 v2 = Gz::Math::Vector3d.new(1, 0, 0)
 printf("v2 = %f %f %f\n", v2.X(), v2.Y(), v2.Z())
