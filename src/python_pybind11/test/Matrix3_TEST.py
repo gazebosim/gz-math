@@ -14,9 +14,9 @@
 
 import math
 import unittest
-from gz.math8 import Matrix3d, Matrix3f
-from gz.math8 import Quaterniond
-from gz.math8 import Vector3d
+from gz.math9 import Matrix3d, Matrix3f
+from gz.math9 import Quaterniond
+from gz.math9 import Vector3d
 import numpy_helpers
 
 

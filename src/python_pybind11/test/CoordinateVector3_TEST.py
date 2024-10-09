@@ -16,7 +16,7 @@ import copy
 import math
 import unittest
 
-from gz.math8 import Angle, CoordinateVector3, Vector3d
+from gz.math9 import Angle, CoordinateVector3, Vector3d
 
 
 class TestCoordinateVector3(unittest.TestCase):
