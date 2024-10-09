@@ -1,3 +1,7 @@
+## Gazebo Math 9.x
+
+### Gazebo Math 9.0.0 (20XX-XX-XX)
+
 ## Gazebo Math 8.x
 
 ### Gazebo Math 8.0.0 (2024-09-25)

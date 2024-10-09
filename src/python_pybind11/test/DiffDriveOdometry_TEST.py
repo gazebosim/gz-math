@@ -17,7 +17,7 @@ import math
 import time
 import unittest
 
-from gz.math8 import Angle, DiffDriveOdometry
+from gz.math9 import Angle, DiffDriveOdometry
 
 
 class TestDiffDriveOdometry(unittest.TestCase):

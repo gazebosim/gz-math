@@ -17,8 +17,8 @@ import math
 import unittest
 import numpy_helpers
 
-from gz.math8 import Vector3d
-from gz.math8 import Vector3f
+from gz.math9 import Vector3d
+from gz.math9 import Vector3f
 
 
 class TestVector3(unittest.TestCase):

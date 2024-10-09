@@ -16,8 +16,8 @@ import copy
 import math
 import unittest
 
-from gz.math8 import Vector2d
-from gz.math8 import Vector2f
+from gz.math9 import Vector2d
+from gz.math9 import Vector2f
 import numpy_helpers
 
 
