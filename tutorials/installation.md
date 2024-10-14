@@ -38,9 +38,9 @@ you should use `ign-math<#>`.
 
 ### macOS
 
-On macOS, add OSRF packages:
+On macOS, after installing the [Homebrew package manager](https://brew.sh),
+add OSRF packages:
   ```
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   brew tap osrf/simulation
   ```
 
