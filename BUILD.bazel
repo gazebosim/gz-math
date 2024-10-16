@@ -1,10 +1,10 @@
+load("@buildifier_prebuilt//:rules.bzl", "buildifier", "buildifier_test")
 load("@rules_gazebo//gazebo:headers.bzl", "gz_configure_header", "gz_export_header")
 load("@rules_license//rules:license.bzl", "license")
-load("@buildifier_prebuilt//:rules.bzl", "buildifier", "buildifier_test")
 
 package(
     default_applicable_licenses = [":license"],
-    default_visibility = ["//visibility:public"]
+    default_visibility = ["//visibility:public"],
 )
 
 license(
@@ -1198,4 +1198,3 @@ buildifier_test(
     no_sandbox = True,
     workspace = "//:MODULE.bazel",
 )
-
