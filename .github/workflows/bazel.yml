@@ -19,6 +19,7 @@ jobs:
         ]
       exclude: |
         [
+          {"folder": ".", "bzlmodEnabled": false},
           {"bazelversion": "6.4.0"},
           {"bazelversion": "5.4.0"}
         ]
