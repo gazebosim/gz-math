@@ -1,3 +1,59 @@
+load("@rules_license//rules:license.bzl", "license")
+
 package(
     default_applicable_licenses = ["//:license"],
+)
+
+license(
+    name = "license",
+    package_name = "gz-math-eigen3",
+)
+
+cc_library(
+    name = "Conversions",
+    hdrs = ["include/gz/math/eigen3/Conversions.hh"],
+    includes = ["include"],
+    deps = [
+        "//:AxisAlignedBox",
+        "//:Matrix3",
+        "//:Matrix6",
+        "//:Pose3",
+        "//:Quaternion",
+        "//:Vector3",
+        "@eigen",
+    ],
+)
+
+cc_test(
+    name = "Conversions_TEST",
+    srcs = ["src/Conversions_TEST.cc"],
+    deps = [
+        ":Conversions",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_library(
+    name = "Util",
+    hdrs = ["include/gz/math/eigen3/Util.hh"],
+    includes = ["include"],
+    deps = [
+        ":Conversions",
+        "//:AxisAlignedBox",
+        "//:Matrix3",
+        "//:OrientedBox",
+        "//:Pose3",
+        "//:Quaternion",
+        "//:Vector3",
+        "@eigen",
+    ],
+)
+
+cc_test(
+    name = "Util_TEST",
+    srcs = ["src/Util_TEST.cc"],
+    deps = [
+        ":Util",
+        "@googletest//:gtest_main",
+    ],
 )
