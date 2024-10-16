@@ -16,7 +16,8 @@
 */
 
 #include <iostream>
-#include <gz/math.hh>
+
+#include <gz/math/graph/Graph.hh>
 
 int main(int argc, char **argv)
 {

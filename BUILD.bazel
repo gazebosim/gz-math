@@ -334,6 +334,86 @@ cc_test(
 )
 
 cc_library(
+    name = "Graph",
+    hdrs = [
+        "include/gz/math/graph/Edge.hh",
+        "include/gz/math/graph/Graph.hh",
+        "include/gz/math/graph/Vertex.hh",
+    ],
+    includes = ["include"],
+    deps = [
+        ":Helpers",
+        ":config",
+    ],
+)
+
+cc_test(
+    name = "Edge_TEST",
+    srcs = ["src/graph/Edge_TEST.cc"],
+    deps = [
+        ":Graph",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "Graph_TEST",
+    srcs = ["src/graph/Graph_TEST.cc"],
+    deps = [
+        ":Graph",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "GraphAlgorithms_TEST",
+    srcs = ["src/graph/GraphAlgorithms_TEST.cc"],
+    deps = [
+        ":GraphAlgorithms",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "GraphDirected_TEST",
+    srcs = ["src/graph/GraphDirected_TEST.cc"],
+    deps = [
+        ":Graph",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "GraphUndirected_TEST",
+    srcs = ["src/graph/GraphUndirected_TEST.cc"],
+    deps = [
+        ":Graph",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "Vertex_TEST",
+    srcs = ["src/graph/Vertex_TEST.cc"],
+    deps = [
+        ":Graph",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_library(
+    name = "GraphAlgorithms",
+    hdrs = [
+        "include/gz/math/graph/GraphAlgorithms.hh",
+    ],
+    includes = ["include"],
+    deps = [
+        ":Graph",
+        ":config",
+    ],
+)
+
+cc_library(
     name = "Helpers",
     srcs = ["src/Helpers.cc"],
     hdrs = ["include/gz/math/Helpers.hh"],
