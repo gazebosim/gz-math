@@ -27,7 +27,7 @@ gz_export_header(
 )
 
 gz_configure_header(
-    name = "config",
+    name = "Config",
     src = "include/gz/math/config.hh.in",
     package_xml = "package.xml",
 )
@@ -74,10 +74,10 @@ cc_library(
     hdrs = ["include/gz/math/AxisAlignedBox.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Helpers",
         ":Line3",
         ":MassMatrix3",
-        ":config",
     ],
 )
 
@@ -99,11 +99,11 @@ cc_library(
     ],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Line2",
         ":MassMatrix3",
         ":Plane",
         ":Triangle3",
-        ":config",
     ],
 )
 
@@ -317,9 +317,9 @@ cc_library(
     hdrs = ["include/gz/math/GaussMarkovProcess.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Export",
         ":Rand",
-        ":config",
         "@gz-utils//:ImplPtr",
     ],
 )
@@ -342,8 +342,8 @@ cc_library(
     ],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Helpers",
-        ":config",
     ],
 )
 
@@ -408,8 +408,8 @@ cc_library(
     ],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Graph",
-        ":config",
     ],
 )
 
@@ -419,8 +419,8 @@ cc_library(
     hdrs = ["include/gz/math/Helpers.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Export",
-        ":config",
         "@gz-utils//:NeverDestroyed",
     ],
 )
@@ -442,10 +442,10 @@ cc_library(
     hdrs = ["include/gz/math/Inertial.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":MassMatrix3",
         ":Matrix6",
         ":Pose3",
-        ":config",
     ],
 )
 
@@ -485,7 +485,7 @@ cc_library(
     hdrs = ["include/gz/math/Interval.hh"],
     includes = ["include"],
     deps = [
-        ":config",
+        ":Config",
     ],
 )
 
@@ -593,10 +593,10 @@ cc_library(
     hdrs = ["include/gz/math/Material.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Export",
         ":Helpers",
         ":MaterialType",
-        ":config",
         "@gz-utils//:ImplPtr",
     ],
 )
@@ -882,8 +882,8 @@ cc_library(
     hdrs = ["include/gz/math/RollingMean.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Export",
-        ":config",
         "@gz-utils//:ImplPtr",
     ],
 )
@@ -1057,8 +1057,8 @@ cc_library(
     hdrs = ["include/gz/math/Stopwatch.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Export",
-        ":config",
         "@gz-utils//:ImplPtr",
     ],
 )
@@ -1080,9 +1080,9 @@ cc_library(
     hdrs = ["include/gz/math/Temperature.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Export",
         ":Helpers",
-        ":config",
         "@gz-utils//:ImplPtr",
     ],
 )
