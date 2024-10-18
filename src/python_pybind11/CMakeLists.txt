@@ -1,6 +1,6 @@
 # Detect if we are doing a standalone build of the bindings, using an external gz-math
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-  cmake_minimum_required(VERSION 3.16)
+  cmake_minimum_required(VERSION 3.22.1)
   set(GZ_MATH_VER 8)
   project(gz-math${GZ_MATH_VER}-python VERSION ${GZ_MATH_VER})
   find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
