@@ -1,8 +1,26 @@
 # Detect if we are doing a standalone build of the bindings, using an external gz-math
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   cmake_minimum_required(VERSION 3.22.1)
-  set(GZ_MATH_VER 8)
-  project(gz-math${GZ_MATH_VER}-python VERSION ${GZ_MATH_VER})
+  ####################################################################
+  # parse version number from package.xml
+  find_package(Python3 COMPONENTS Interpreter REQUIRED)
+  execute_process(
+    COMMAND "${Python3_EXECUTABLE}"
+                ${CMAKE_SOURCE_DIR}/../../print_package_xml_version.py
+                ${CMAKE_SOURCE_DIR}/../../package.xml
+    OUTPUT_VARIABLE PACKAGE_XML_version
+    ERROR_VARIABLE  PACKAGE_XML_error
+    RESULT_VARIABLE PACKAGE_XML_result)
+  if(NOT ${PACKAGE_XML_result} EQUAL 0)
+    message("")
+    message(FATAL_ERROR "Failed to parse version number from package.xml: ${PACKAGE_XML_error}")
+  endif()
+  # split version number into list of three numbers
+  string(REPLACE "." ";" PACKAGE_XML_version_list ${PACKAGE_XML_version})
+  list(GET PACKAGE_XML_version_list 0 PROJECT_VERSION_MAJOR)
+  message(STATUS "Parsed version number ${PACKAGE_XML_version}, major version ${PROJECT_VERSION_MAJOR} from package.xml")
+  ####################################################################
+  project(gz-math${PROJECT_VERSION_MAJOR}-python VERSION ${PACKAGE_XML_version})
   find_package(gz-math${PROJECT_VERSION_MAJOR} REQUIRED)
   set(PROJECT_LIBRARY_TARGET_NAME "gz-math${PROJECT_VERSION_MAJOR}::gz-math${PROJECT_VERSION_MAJOR}")
   # require python dependencies to be found
