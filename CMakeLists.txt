@@ -99,6 +99,7 @@ endif()
 if (SKIP_PYBIND11)
   message(STATUS "SKIP_PYBIND11 set - disabling python bindings")
 else()
+<<<<<<< HEAD
   #include(GzPython) TODO: allow to specify for what it should search and then
   # the code below can be removed; e.g. pybind needs Interpreter and Development components
   # see https://pybind11.readthedocs.io/en/stable/cmake/index.html#new-findpython-mode
@@ -133,6 +134,14 @@ else()
       GZ_BUILD_WARNING("pybind11 is missing: Python interfaces are disabled.")
       message (STATUS "Searching for pybind11 - not found.")
     endif()
+=======
+  find_package(Python3 REQUIRED
+    COMPONENTS Interpreter
+    OPTIONAL_COMPONENTS Development
+  )
+  if (NOT Python3_Development_FOUND)
+    GZ_BUILD_WARNING("Python development libraries are missing: Python interfaces are disabled.")
+>>>>>>> 17deea2b (Permit building python bindings separately from gz-math library (#636))
   endif()
 endif()
 
