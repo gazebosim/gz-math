@@ -1,17 +1,7 @@
-<<<<<<< HEAD
-if(${CMAKE_VERSION} VERSION_LESS "3.12.0")
-  # TODO: remove once the minimum CMake version is increased
-  if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
-    # pybind11 logic for setting up a debug build when both a debug and release
-    # python interpreter are present in the system seems to be pretty much broken.
-    # This works around the issue.
-    set(PYTHON_LIBRARIES "${PYTHON_DEBUG_LIBRARIES}")
-  endif()
-=======
 # Detect if we are doing a standalone build of the bindings, using an external gz-math
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   cmake_minimum_required(VERSION 3.22.1)
-  set(GZ_MATH_VER 8)
+  set(GZ_MATH_VER 7)
   project(gz-math${GZ_MATH_VER}-python VERSION ${GZ_MATH_VER})
   find_package(gz-math${PROJECT_VERSION_MAJOR} REQUIRED)
   set(PROJECT_LIBRARY_TARGET_NAME "gz-math${PROJECT_VERSION_MAJOR}::gz-math${PROJECT_VERSION_MAJOR}")
@@ -20,6 +10,14 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   set(CMAKE_REQUIRE_FIND_PACKAGE_pybind11 TRUE)
   include(GNUInstallDirs)
   include(CTest)
+elseif(${CMAKE_VERSION} VERSION_LESS "3.12.0")
+  # TODO: remove once the minimum CMake version is increased
+  if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+    # pybind11 logic for setting up a debug build when both a debug and release
+    # python interpreter are present in the system seems to be pretty much broken.
+    # This works around the issue.
+    set(PYTHON_LIBRARIES "${PYTHON_DEBUG_LIBRARIES}")
+  endif()
 endif()
 
 set(PYBIND11_PYTHON_VERSION 3)
@@ -30,7 +28,6 @@ if (${pybind11_FOUND})
 else()
   message(WARNING "pybind11 is missing: Python interfaces are disabled.")
   return()
->>>>>>> 17deea2b (Permit building python bindings separately from gz-math library (#636))
 endif()
 
 message(STATUS "Building pybind11 interfaces")

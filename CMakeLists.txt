@@ -99,7 +99,6 @@ endif()
 if (SKIP_PYBIND11)
   message(STATUS "SKIP_PYBIND11 set - disabling python bindings")
 else()
-<<<<<<< HEAD
   #include(GzPython) TODO: allow to specify for what it should search and then
   # the code below can be removed; e.g. pybind needs Interpreter and Development components
   # see https://pybind11.readthedocs.io/en/stable/cmake/index.html#new-findpython-mode
@@ -112,36 +111,18 @@ else()
       set(Python3_EXECUTABLE ${PYTHON_EXECUTABLE})
       find_package(PythonLibs QUIET)
       # we found the interpreter but did we also find the libs? both are required
-      set(Python3_FOUND ${PYTHONLIBS_FOUND})
+      set(Python3_Development_FOUND ${PYTHONLIBS_FOUND})
       set(Python3_VERSION ${PYTHONLIBS_VERSION_STRING})
     endif()
   else()
     find_package(Python3 QUIET COMPONENTS Interpreter Development)
   endif()
 
-  if (NOT Python3_FOUND)
+  if (NOT Python3_Development_FOUND)
     GZ_BUILD_WARNING("Python3 is missing: Python interfaces are disabled.")
     message (STATUS "Searching for Python3 - not found.")
   else()
     message (STATUS "Searching for Python3 - found version ${Python3_VERSION}.")
-
-    set(PYBIND11_PYTHON_VERSION 3)
-    find_package(pybind11 2.2 QUIET)
-
-    if (${pybind11_FOUND})
-      message (STATUS "Searching for pybind11 - found version ${pybind11_VERSION}.")
-    else()
-      GZ_BUILD_WARNING("pybind11 is missing: Python interfaces are disabled.")
-      message (STATUS "Searching for pybind11 - not found.")
-    endif()
-=======
-  find_package(Python3 REQUIRED
-    COMPONENTS Interpreter
-    OPTIONAL_COMPONENTS Development
-  )
-  if (NOT Python3_Development_FOUND)
-    GZ_BUILD_WARNING("Python development libraries are missing: Python interfaces are disabled.")
->>>>>>> 17deea2b (Permit building python bindings separately from gz-math library (#636))
   endif()
 endif()
 
