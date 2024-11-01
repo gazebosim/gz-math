@@ -246,6 +246,8 @@ The optional Eigen component of Gazebo Math requires:
 If you want to build Python bindings separately from the main gz-math library
 (for example if you want to build Python bindings for multiple versions of Python),
 you can invoke cmake on the `src/python_pybind11` folder instead of the root folder.
+This requires cmake version 3.22.1 due to the use of a `CMAKE_REQUIRE_FIND_PACKAGE_*`
+variable, which is newer than the minimum required version of cmake for gz-math7.
 Specify the path to the python executable with which you wish to build bindings
 in the `Python3_EXECUTABLE` cmake variable.
 Specify the install path for the bindings in the `CMAKE_INSTALL_PREFIX`
