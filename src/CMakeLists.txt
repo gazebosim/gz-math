@@ -18,7 +18,7 @@ gz_build_tests(TYPE UNIT SOURCES ${gtest_sources})
 add_subdirectory(graph)
 
 # Bindings subdirectories
-if (pybind11_FOUND AND NOT SKIP_PYBIND11)
+if (Python3_Development_FOUND AND NOT SKIP_PYBIND11)
   add_subdirectory(python_pybind11)
 endif()
 
