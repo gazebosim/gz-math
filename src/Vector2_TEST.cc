@@ -170,9 +170,9 @@ TEST(Vector2Test, Vector2)
 /////////////////////////////////////////////////
 TEST(Vector2Test, TestSum)
 {
-  math::Vector2d vec1(0, 0);
-  math::Vector2d vec2(1.0, 2.5);
-  math::Vector2d vec3(-2, -4);
+  math::Vector2i vec1(0, 0);
+  math::Vector2f vec2(1.0, 2.5);
+  math::Vector2i vec3(-2, -4);
 
   int sum1 = vec1.Sum();
   float sum2 = vec2.Sum();
