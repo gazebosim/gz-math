@@ -57,7 +57,10 @@ cc_library(
     srcs = ["src/Angle.cc"],
     hdrs = ["include/gz/math/Angle.hh"],
     includes = ["include"],
-    deps = [":Helpers"],
+    deps = [
+        ":Helpers",
+        ":Config",
+    ],
 )
 
 cc_test(
