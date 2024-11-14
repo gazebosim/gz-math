@@ -147,6 +147,7 @@ cc_library(
     ],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Helpers",
         ":Vector3",
     ],
