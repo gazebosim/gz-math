@@ -58,8 +58,8 @@ cc_library(
     hdrs = ["include/gz/math/Angle.hh"],
     includes = ["include"],
     deps = [
-        ":Helpers",
         ":Config",
+        ":Helpers",
     ],
 )
 
@@ -1018,8 +1018,8 @@ cc_library(
     hdrs = ["include/gz/math/SphericalCoordinates.hh"],
     includes = ["include"],
     deps = [
-        ":Config",
         ":Angle",
+        ":Config",
         ":CoordinateVector3",
         ":Helpers",
         ":Matrix3",
