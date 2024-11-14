@@ -82,6 +82,9 @@ cc_library(
         ":Helpers",
         ":Line3",
         ":MassMatrix3",
+        ":Material",
+        ":Vector3",
+        "@gz-utils//:ImplPtr",
     ],
 )
 
