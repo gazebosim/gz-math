@@ -196,6 +196,8 @@ cc_library(
     includes = ["include"],
     deps = [
         ":Angle",
+        ":Config",
+        ":Helpers",
         ":Vector3",
         "@gz-utils//:ImplPtr",
     ],
@@ -932,6 +934,7 @@ cc_library(
     hdrs = ["include/gz/math/SemanticVersion.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Helpers",
         "@gz-utils//:ImplPtr",
     ],
@@ -1015,10 +1018,12 @@ cc_library(
     hdrs = ["include/gz/math/SphericalCoordinates.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Angle",
         ":CoordinateVector3",
         ":Helpers",
         ":Matrix3",
+        ":Vector3",
         "@gz-utils//:ImplPtr",
     ],
 )
