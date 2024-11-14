@@ -20,6 +20,7 @@
 #define GZ_MATH_DETAIL_CONE_HH_
 
 #include <optional>
+#include "gz/math/Cone.hh"
 
 namespace gz::math
 {

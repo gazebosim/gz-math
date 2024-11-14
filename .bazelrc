@@ -10,3 +10,4 @@ build --strip=never
 build --strict_system_includes
 build --fission=dbg
 build --features=per_object_debug_info
+build --process_headers_in_dependencies
