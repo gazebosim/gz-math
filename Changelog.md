@@ -10,14 +10,14 @@
     * [Pull request #644](https://github.com/gazebosim/gz-math/pull/644)
     * [Pull request #589](https://github.com/gazebosim/gz-math/pull/589)
 
-1. Add CI support fot bzlmod
+1. Add CI support for bzlmod
     * [Pull request #643](https://github.com/gazebosim/gz-math/pull/643)
     * [Pull request #637](https://github.com/gazebosim/gz-math/pull/637)
 
 1. Specify template for Vector2 in Vector2_TEST
     * [Pull request #645](https://github.com/gazebosim/gz-math/pull/645)
 
-1. python bindings: get version from package.xml
+1. Python bindings: get version from package.xml
     * [Pull request #642](https://github.com/gazebosim/gz-math/pull/642)
 
 1. Permit building python bindings separately from gz-math library
