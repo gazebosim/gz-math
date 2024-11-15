@@ -20,6 +20,8 @@
 #include <array>
 #include <utility>
 
+#include "gz/math/Material.hh"
+
 using namespace gz;
 using namespace math;
 

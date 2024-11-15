@@ -5,7 +5,10 @@ load("@rules_license//rules:license.bzl", "license")
 package(
     default_applicable_licenses = [":license"],
     default_visibility = ["//visibility:public"],
-    features = ["layering_check"],
+    features = [
+        "layering_check",
+        "parse_headers",
+    ],
 )
 
 license(
@@ -592,6 +595,10 @@ cc_library(
     name = "MaterialType",
     hdrs = ["include/gz/math/MaterialType.hh"],
     includes = ["include"],
+    deps = [
+        ":Config",
+        ":Export",
+    ],
 )
 
 cc_library(
@@ -698,6 +705,9 @@ cc_library(
     hdrs = ["include/gz/math/MovingWindowFilter.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
+        ":Export",
+        ":Vector3",
         "@gz-utils//:SuppressWarning",
     ],
 )
@@ -757,6 +767,9 @@ cc_library(
     name = "PiecewiseScalarField3",
     hdrs = ["include/gz/math/PiecewiseScalarField3.hh"],
     includes = ["include"],
+    deps = [
+        ":Region3",
+    ],
 )
 
 cc_test(
