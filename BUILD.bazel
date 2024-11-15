@@ -60,7 +60,10 @@ cc_library(
     srcs = ["src/Angle.cc"],
     hdrs = ["include/gz/math/Angle.hh"],
     includes = ["include"],
-    deps = [":Helpers"],
+    deps = [
+        ":Config",
+        ":Helpers",
+    ],
 )
 
 cc_test(
@@ -82,6 +85,9 @@ cc_library(
         ":Helpers",
         ":Line3",
         ":MassMatrix3",
+        ":Material",
+        ":Vector3",
+        "@gz-utils//:ImplPtr",
     ],
 )
 
@@ -150,6 +156,7 @@ cc_library(
     ],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Helpers",
         ":Vector3",
     ],
@@ -192,6 +199,8 @@ cc_library(
     includes = ["include"],
     deps = [
         ":Angle",
+        ":Config",
+        ":Helpers",
         ":Vector3",
         "@gz-utils//:ImplPtr",
     ],
@@ -938,6 +947,7 @@ cc_library(
     hdrs = ["include/gz/math/SemanticVersion.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Helpers",
         "@gz-utils//:ImplPtr",
     ],
@@ -1022,9 +1032,11 @@ cc_library(
     includes = ["include"],
     deps = [
         ":Angle",
+        ":Config",
         ":CoordinateVector3",
         ":Helpers",
         ":Matrix3",
+        ":Vector3",
         "@gz-utils//:ImplPtr",
     ],
 )
