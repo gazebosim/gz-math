@@ -41,7 +41,9 @@ cc_library(
     hdrs = ["include/gz/math/AdditivelySeparableScalarField3.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Region3",
+        ":Vector3",
     ],
 )
 
@@ -51,6 +53,7 @@ cc_test(
     deps = [
         ":AdditivelySeparableScalarField3",
         ":Polynomial3",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -71,6 +74,8 @@ cc_test(
     srcs = ["src/Angle_TEST.cc"],
     deps = [
         ":Angle",
+        ":Helpers",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -96,6 +101,7 @@ cc_test(
     srcs = ["src/AxisAlignedBox_TEST.cc"],
     deps = [
         ":AxisAlignedBox",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -112,8 +118,10 @@ cc_library(
         ":Config",
         ":Line2",
         ":MassMatrix3",
+        ":Material",
         ":Plane",
         ":Triangle3",
+        ":Vector3",
     ],
 )
 
@@ -122,6 +130,7 @@ cc_test(
     srcs = ["src/Box_TEST.cc"],
     deps = [
         ":Box",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -134,8 +143,10 @@ cc_library(
     ],
     includes = ["include"],
     deps = [
+        ":Helpers",
         ":Inertial",
         ":MassMatrix3",
+        ":Material",
     ],
 )
 
@@ -144,6 +155,8 @@ cc_test(
     srcs = ["src/Capsule_TEST.cc"],
     deps = [
         ":Capsule",
+        ":Helpers",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -167,6 +180,7 @@ cc_test(
     srcs = ["src/Color_TEST.cc"],
     deps = [
         ":Color",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -180,6 +194,8 @@ cc_library(
     includes = ["include"],
     deps = [
         ":MassMatrix3",
+        ":Material",
+        ":Quaternion",
     ],
 )
 
@@ -188,6 +204,7 @@ cc_test(
     srcs = ["src/Cone_TEST.cc"],
     deps = [
         ":Cone",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -210,7 +227,11 @@ cc_test(
     name = "CoordinateVector3_TEST",
     srcs = ["src/CoordinateVector3_TEST.cc"],
     deps = [
+        ":Angle",
         ":CoordinateVector3",
+        ":Helpers",
+        ":Vector3",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -224,6 +245,8 @@ cc_library(
     includes = ["include"],
     deps = [
         ":MassMatrix3",
+        ":Material",
+        ":Quaternion",
     ],
 )
 
@@ -232,6 +255,7 @@ cc_test(
     srcs = ["src/Cylinder_TEST.cc"],
     deps = [
         ":Cylinder",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -245,6 +269,8 @@ cc_library(
     includes = ["include"],
     deps = [
         ":Angle",
+        ":Config",
+        ":Export",
         ":RollingMean",
         "@gz-utils//:ImplPtr",
     ],
@@ -254,7 +280,10 @@ cc_test(
     name = "DiffDriveOdometry_TEST",
     srcs = ["src/DiffDriveOdometry_TEST.cc"],
     deps = [
+        ":Angle",
         ":DiffDriveOdometry",
+        ":Helpers",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -267,8 +296,10 @@ cc_library(
     ],
     includes = ["include"],
     deps = [
+        ":Helpers",
         ":Inertial",
         ":MassMatrix3",
+        ":Material",
     ],
 )
 
@@ -277,6 +308,9 @@ cc_test(
     srcs = ["src/Ellipsoid_TEST.cc"],
     deps = [
         ":Ellipsoid",
+        ":Helpers",
+        ":Vector3",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -286,6 +320,7 @@ cc_library(
     hdrs = ["include/gz/math/Filter.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Helpers",
         ":Quaternion",
         ":Vector3",
@@ -297,6 +332,7 @@ cc_test(
     srcs = ["src/Filter_TEST.cc"],
     deps = [
         ":Filter",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -309,9 +345,11 @@ cc_library(
     deps = [
         ":Angle",
         ":AxisAlignedBox",
+        ":Config",
         ":Matrix4",
         ":Plane",
         ":Pose3",
+        "@gz-utils//:ImplPtr",
     ],
 )
 
@@ -320,6 +358,8 @@ cc_test(
     srcs = ["src/Frustum_TEST.cc"],
     deps = [
         ":Frustum",
+        ":Helpers",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -342,6 +382,8 @@ cc_test(
     srcs = ["src/GaussMarkovProcess_TEST.cc"],
     deps = [
         ":GaussMarkovProcess",
+        ":Rand",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -357,6 +399,7 @@ cc_library(
     deps = [
         ":Config",
         ":Helpers",
+        "@gz-utils//:NeverDestroyed",
     ],
 )
 
@@ -365,6 +408,7 @@ cc_test(
     srcs = ["src/graph/Edge_TEST.cc"],
     deps = [
         ":Graph",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -374,6 +418,7 @@ cc_test(
     srcs = ["src/graph/Graph_TEST.cc"],
     deps = [
         ":Graph",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -382,7 +427,9 @@ cc_test(
     name = "GraphAlgorithms_TEST",
     srcs = ["src/graph/GraphAlgorithms_TEST.cc"],
     deps = [
+        ":Graph",
         ":GraphAlgorithms",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -392,6 +439,7 @@ cc_test(
     srcs = ["src/graph/GraphDirected_TEST.cc"],
     deps = [
         ":Graph",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -401,6 +449,7 @@ cc_test(
     srcs = ["src/graph/GraphUndirected_TEST.cc"],
     deps = [
         ":Graph",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -410,6 +459,7 @@ cc_test(
     srcs = ["src/graph/Vertex_TEST.cc"],
     deps = [
         ":Graph",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -423,6 +473,7 @@ cc_library(
     deps = [
         ":Config",
         ":Graph",
+        ":Helpers",
     ],
 )
 
@@ -445,6 +496,7 @@ cc_test(
         ":Helpers",
         ":Rand",
         ":Vector3",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
         "@gz-utils//:SuppressWarning",
     ],
@@ -457,6 +509,7 @@ cc_library(
     deps = [
         ":Config",
         ":MassMatrix3",
+        ":Matrix3",
         ":Matrix6",
         ":Pose3",
     ],
@@ -467,6 +520,7 @@ cc_test(
     srcs = ["src/Inertial_TEST.cc"],
     deps = [
         ":Inertial",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -489,6 +543,7 @@ cc_test(
     srcs = ["src/InterpolationPoint_TEST.cc"],
     deps = [
         ":InterpolationPoint",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -507,6 +562,7 @@ cc_test(
     srcs = ["src/Interval_TEST.cc"],
     deps = [
         ":Interval",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -520,6 +576,8 @@ cc_library(
     hdrs = ["include/gz/math/Kmeans.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
+        ":Helpers",
         ":Rand",
         ":Vector3",
         "@gz-utils//:ImplPtr",
@@ -531,6 +589,7 @@ cc_test(
     srcs = ["src/Kmeans_TEST.cc"],
     deps = [
         ":Kmeans",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -540,6 +599,7 @@ cc_library(
     hdrs = ["include/gz/math/Line2.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Vector2",
     ],
 )
@@ -548,7 +608,9 @@ cc_test(
     name = "Line2_TEST",
     srcs = ["src/Line2_TEST.cc"],
     deps = [
+        ":Helpers",
         ":Line2",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -558,6 +620,7 @@ cc_library(
     hdrs = ["include/gz/math/Line3.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Vector3",
     ],
 )
@@ -566,7 +629,9 @@ cc_test(
     name = "Line3_TEST",
     srcs = ["src/Line3_TEST.cc"],
     deps = [
+        ":Helpers",
         ":Line3",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -576,9 +641,13 @@ cc_library(
     hdrs = ["include/gz/math/MassMatrix3.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
+        ":Helpers",
         ":Material",
+        ":Matrix3",
         ":Quaternion",
         ":Vector2",
+        ":Vector3",
     ],
 )
 
@@ -586,7 +655,10 @@ cc_test(
     name = "MassMatrix3_TEST",
     srcs = ["src/MassMatrix3_TEST.cc"],
     deps = [
+        ":Helpers",
         ":MassMatrix3",
+        ":Material",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -623,6 +695,8 @@ cc_library(
     hdrs = ["include/gz/math/Matrix3.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
+        ":Helpers",
         ":Vector3",
     ],
 )
@@ -634,6 +708,7 @@ cc_test(
         ":Helpers",
         ":Matrix3",
         ":Quaternion",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -643,6 +718,8 @@ cc_library(
     hdrs = ["include/gz/math/Matrix4.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
+        ":Helpers",
         ":Matrix3",
         ":Pose3",
         ":Quaternion",
@@ -655,6 +732,10 @@ cc_test(
     srcs = ["src/Matrix4_TEST.cc"],
     deps = [
         ":Matrix4",
+        ":Pose3",
+        ":Quaternion",
+        ":Vector3",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -664,6 +745,8 @@ cc_library(
     hdrs = ["include/gz/math/Matrix6.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
+        ":Helpers",
         ":Matrix3",
         ":Vector3",
     ],
@@ -675,6 +758,7 @@ cc_test(
     deps = [
         ":Helpers",
         ":Matrix6",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -686,6 +770,8 @@ cc_library(
     includes = ["include"],
     deps = [
         ":Angle",
+        ":Config",
+        ":Export",
         ":RollingMean",
         "@gz-utils//:ImplPtr",
     ],
@@ -695,7 +781,10 @@ cc_test(
     name = "MecanumDriveOdometry_TEST",
     srcs = ["src/MecanumDriveOdometry_TEST.cc"],
     deps = [
+        ":Angle",
+        ":Helpers",
         ":MecanumDriveOdometry",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -708,6 +797,7 @@ cc_library(
         ":Config",
         ":Export",
         ":Vector3",
+        "@googletest//:gtest",
         "@gz-utils//:SuppressWarning",
     ],
 )
@@ -718,6 +808,7 @@ cc_test(
     deps = [
         ":MovingWindowFilter",
         ":Vector3",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -727,8 +818,13 @@ cc_library(
     hdrs = ["include/gz/math/OrientedBox.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
+        ":Helpers",
         ":MassMatrix3",
+        ":Material",
         ":Matrix4",
+        ":Pose3",
+        ":Vector3",
     ],
 )
 
@@ -738,6 +834,7 @@ cc_test(
     deps = [
         ":Angle",
         ":OrientedBox",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -748,6 +845,7 @@ cc_library(
     hdrs = ["include/gz/math/PID.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Helpers",
         "@gz-utils//:ImplPtr",
     ],
@@ -758,7 +856,9 @@ cc_test(
     srcs = ["src/PID_TEST.cc"],
     deps = [
         ":Angle",
+        ":Helpers",
         ":PID",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -768,7 +868,9 @@ cc_library(
     hdrs = ["include/gz/math/PiecewiseScalarField3.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Region3",
+        ":Vector3",
     ],
 )
 
@@ -779,6 +881,8 @@ cc_test(
         ":AdditivelySeparableScalarField3",
         ":PiecewiseScalarField3",
         ":Polynomial3",
+        ":Vector3",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -789,7 +893,11 @@ cc_library(
     includes = ["include"],
     deps = [
         ":AxisAlignedBox",
+        ":Config",
         ":Line2",
+        ":Quaternion",
+        ":Vector2",
+        ":Vector3",
     ],
 )
 
@@ -799,6 +907,7 @@ cc_test(
     deps = [
         ":Helpers",
         ":Plane",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -808,6 +917,7 @@ cc_library(
     hdrs = ["include/gz/math/Polynomial3.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Interval",
         ":Vector4",
     ],
@@ -818,6 +928,7 @@ cc_test(
     srcs = ["src/Polynomial3_TEST.cc"],
     deps = [
         ":Polynomial3",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -826,7 +937,11 @@ cc_library(
     name = "Pose3",
     hdrs = ["include/gz/math/Pose3.hh"],
     includes = ["include"],
-    deps = [":Quaternion"],
+    deps = [
+        ":Config",
+        ":Quaternion",
+        ":Vector3",
+    ],
 )
 
 cc_test(
@@ -835,6 +950,7 @@ cc_test(
     deps = [
         ":Helpers",
         ":Pose3",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
         "@gz-utils//:SuppressWarning",
     ],
@@ -846,6 +962,8 @@ cc_library(
     includes = ["include"],
     deps = [
         ":Angle",
+        ":Config",
+        ":Helpers",
         ":Matrix3",
         ":Vector3",
     ],
@@ -856,8 +974,10 @@ cc_test(
     srcs = ["src/Quaternion_TEST.cc"],
     deps = [
         ":Helpers",
+        ":Matrix3",
         ":Matrix4",
         ":Quaternion",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
         "@gz-utils//:SuppressWarning",
     ],
@@ -868,14 +988,19 @@ cc_library(
     srcs = ["src/Rand.cc"],
     hdrs = ["include/gz/math/Rand.hh"],
     includes = ["include"],
-    deps = [":Helpers"],
+    deps = [
+        ":Config",
+        ":Helpers",
+    ],
 )
 
 cc_test(
     name = "Rand_TEST",
     srcs = ["src/Rand_TEST.cc"],
     deps = [
+        ":Helpers",
         ":Rand",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -885,6 +1010,7 @@ cc_library(
     hdrs = ["include/gz/math/Region3.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Interval",
         ":Vector3",
     ],
@@ -895,6 +1021,7 @@ cc_test(
     srcs = ["src/Region3_TEST.cc"],
     deps = [
         ":Region3",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -917,6 +1044,7 @@ cc_test(
     deps = [
         ":Helpers",
         ":RollingMean",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -927,6 +1055,7 @@ cc_library(
     hdrs = ["include/gz/math/RotationSpline.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Quaternion",
         "@gz-utils//:ImplPtr",
     ],
@@ -936,7 +1065,11 @@ cc_test(
     name = "RotationSpline_TEST",
     srcs = ["src/RotationSpline_TEST.cc"],
     deps = [
+        ":Helpers",
+        ":Quaternion",
         ":RotationSpline",
+        ":Vector3",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -958,6 +1091,7 @@ cc_test(
     srcs = ["src/SemanticVersion_TEST.cc"],
     deps = [
         ":SemanticVersion",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -968,6 +1102,7 @@ cc_library(
     hdrs = ["include/gz/math/SignalStats.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Helpers",
         "@gz-utils//:ImplPtr",
     ],
@@ -979,6 +1114,7 @@ cc_test(
     deps = [
         ":Rand",
         ":SignalStats",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -989,6 +1125,7 @@ cc_library(
     hdrs = ["include/gz/math/SpeedLimiter.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Helpers",
         "@gz-utils//:ImplPtr",
     ],
@@ -998,7 +1135,9 @@ cc_test(
     name = "SpeedLimiter_TEST",
     srcs = ["src/SpeedLimiter_TEST.cc"],
     deps = [
+        ":Helpers",
         ":SpeedLimiter",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -1012,7 +1151,9 @@ cc_library(
     includes = ["include"],
     deps = [
         ":MassMatrix3",
+        ":Material",
         ":Plane",
+        ":Quaternion",
     ],
 )
 
@@ -1021,6 +1162,7 @@ cc_test(
     srcs = ["src/Sphere_TEST.cc"],
     deps = [
         ":Sphere",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -1046,6 +1188,7 @@ cc_test(
     srcs = ["src/SphericalCoordinates_TEST.cc"],
     deps = [
         ":SphericalCoordinates",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -1060,7 +1203,10 @@ cc_library(
     hdrs = ["include/gz/math/Spline.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
+        ":Helpers",
         ":Matrix4",
+        ":Vector3",
         ":Vector4",
         "@gz-utils//:ImplPtr",
     ],
@@ -1071,6 +1217,8 @@ cc_test(
     srcs = ["src/Spline_TEST.cc"],
     deps = [
         ":Spline",
+        ":Vector3",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -1094,6 +1242,7 @@ cc_test(
     srcs = ["src/Stopwatch_TEST.cc"],
     deps = [
         ":Stopwatch",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -1118,6 +1267,7 @@ cc_test(
     srcs = ["src/Temperature_TEST.cc"],
     deps = [
         ":Temperature",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -1128,6 +1278,7 @@ cc_library(
     includes = ["include"],
     deps = [
         ":TimeVaryingVolumetricGridLookupField",
+        ":Vector3",
     ],
 )
 
@@ -1136,6 +1287,7 @@ cc_test(
     srcs = ["src/TimeVaryingVolumetricGrid_TEST.cc"],
     deps = [
         ":TimeVaryingVolumetricGrid",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -1145,6 +1297,7 @@ cc_library(
     hdrs = ["include/gz/math/TimeVaryingVolumetricGridLookupField.hh"],
     includes = ["include"],
     deps = [
+        ":InterpolationPoint",
         ":VolumetricGridLookupField",
     ],
 )
@@ -1154,6 +1307,7 @@ cc_test(
     srcs = ["src/TimeVaryingVolumetricGridLookupField_TEST.cc"],
     deps = [
         ":TimeVaryingVolumetricGridLookupField",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -1163,8 +1317,10 @@ cc_library(
     hdrs = ["include/gz/math/Triangle.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Helpers",
         ":Line2",
+        ":Vector2",
     ],
 )
 
@@ -1172,7 +1328,9 @@ cc_test(
     name = "Triangle_TEST",
     srcs = ["src/Triangle_TEST.cc"],
     deps = [
+        ":Helpers",
         ":Triangle",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -1182,9 +1340,11 @@ cc_library(
     hdrs = ["include/gz/math/Triangle3.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Helpers",
         ":Line3",
         ":Plane",
+        ":Vector3",
     ],
 )
 
@@ -1192,7 +1352,10 @@ cc_test(
     name = "Triangle3_TEST",
     srcs = ["src/Triangle3_TEST.cc"],
     deps = [
+        ":Helpers",
         ":Triangle3",
+        ":Vector3",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -1201,7 +1364,10 @@ cc_library(
     name = "Vector2",
     hdrs = ["include/gz/math/Vector2.hh"],
     includes = ["include"],
-    deps = [":Helpers"],
+    deps = [
+        ":Config",
+        ":Helpers",
+    ],
 )
 
 cc_test(
@@ -1210,6 +1376,7 @@ cc_test(
     deps = [
         ":Helpers",
         ":Vector2",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -1218,14 +1385,20 @@ cc_library(
     name = "Vector3",
     hdrs = ["include/gz/math/Vector3.hh"],
     includes = ["include"],
-    deps = [":Helpers"],
+    deps = [
+        ":Config",
+        ":Helpers",
+    ],
 )
 
 cc_test(
     name = "Vector3_TEST",
     srcs = ["src/Vector3_TEST.cc"],
     deps = [
+        ":Config",
+        ":Helpers",
         ":Vector3",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -1236,9 +1409,11 @@ cc_library(
     hdrs = ["include/gz/math/Vector3Stats.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
         ":Helpers",
         ":SignalStats",
         ":Vector3",
+        "@gz-utils//:ImplPtr",
     ],
 )
 
@@ -1247,6 +1422,7 @@ cc_test(
     srcs = ["src/Vector3Stats_TEST.cc"],
     deps = [
         ":Vector3Stats",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -1256,6 +1432,8 @@ cc_library(
     hdrs = ["include/gz/math/Vector4.hh"],
     includes = ["include"],
     deps = [
+        ":Config",
+        ":Helpers",
         ":Matrix4",
     ],
 )
@@ -1265,7 +1443,9 @@ cc_test(
     srcs = ["src/Vector4_TEST.cc"],
     deps = [
         ":Helpers",
+        ":Matrix4",
         ":Vector4",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -1285,6 +1465,7 @@ cc_test(
     srcs = ["src/VolumetricGridLookupField_TEST.cc"],
     deps = [
         ":VolumetricGridLookupField",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
