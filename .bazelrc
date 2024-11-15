@@ -13,5 +13,3 @@ build --features=per_object_debug_info
 
 # Enable header processing, required for layering checks with parse_header.
 build --process_headers_in_dependencies
-
-import %workspace%/tools/bazel.rc
