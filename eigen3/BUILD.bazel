@@ -33,6 +33,7 @@ cc_test(
     srcs = ["src/Conversions_TEST.cc"],
     deps = [
         ":Conversions",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
@@ -58,6 +59,7 @@ cc_test(
     srcs = ["src/Util_TEST.cc"],
     deps = [
         ":Util",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )
