@@ -2,8 +2,6 @@
 
 ### Gazebo Math 8.1.0 (2024-11-15)
 
-1. **Baseline:** this includes all changes from 8.0.0 and earlier.
-
 1. Build gz-math with bzlmod
     * [Pull request #648](https://github.com/gazebosim/gz-math/pull/648)
     * [Pull request #646](https://github.com/gazebosim/gz-math/pull/646)
