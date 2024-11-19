@@ -19,13 +19,12 @@ gz_include_header(
 
 cc_library(
     name = "eigen3",
-    srcs = public_headers,
-    hdrs = public_headers + [
-        "include/gz/math/eigen3.hh",
-    ],
+    hdrs = ["include/gz/math/eigen3.hh"],
     includes = ["include"],
     visibility = GZ_VISIBILITY,
     deps = [
+        ":Conversions",
+        ":Util",
         GZ_ROOT + "math",
         "@eigen3",
     ],
@@ -46,3 +45,34 @@ test_sources = glob(
         "@gtest//:gtest_main",
     ],
 ) for src in test_sources]
+
+cc_library(
+    name = "Conversions",
+    hdrs = ["include/gz/math/eigen3/Conversions.hh"],
+    includes = ["include"],
+    deps = [
+        GZ_ROOT + "math:AxisAlignedBox",
+        GZ_ROOT + "math:Matrix3",
+        GZ_ROOT + "math:Matrix6",
+        GZ_ROOT + "math:Pose3",
+        GZ_ROOT + "math:Quaternion",
+        GZ_ROOT + "math:Vector3",
+        "@eigen3",
+    ],
+)
+
+cc_library(
+    name = "Util",
+    hdrs = ["include/gz/math/eigen3/Util.hh"],
+    includes = ["include"],
+    deps = [
+        ":Conversions",
+        GZ_ROOT + "math:AxisAlignedBox",
+        GZ_ROOT + "math:Matrix3",
+        GZ_ROOT + "math:OrientedBox",
+        GZ_ROOT + "math:Pose3",
+        GZ_ROOT + "math:Quaternion",
+        GZ_ROOT + "math:Vector3",
+        "@eigen3",
+    ],
+)
