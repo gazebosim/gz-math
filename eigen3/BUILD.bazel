@@ -5,7 +5,10 @@ load(
     "gz_include_header",
 )
 
-package(default_applicable_licenses = [GZ_ROOT + "math:license"])
+package(
+    default_applicable_licenses = [GZ_ROOT + "math:license"],
+    default_visibility = GZ_VISIBILITY,
+)
 
 public_headers = glob([
     "include/gz/math/eigen3/*.hh",
@@ -21,7 +24,6 @@ cc_library(
     name = "eigen3",
     hdrs = ["include/gz/math/eigen3.hh"],
     includes = ["include"],
-    visibility = GZ_VISIBILITY,
     deps = [
         ":Conversions",
         ":Util",
