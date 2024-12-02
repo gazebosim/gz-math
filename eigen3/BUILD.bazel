@@ -13,53 +13,52 @@ license(
     package_name = "gz-math-eigen3",
 )
 
-cc_library(
-    name = "Conversions",
-    hdrs = ["include/gz/math/eigen3/Conversions.hh"],
-    includes = ["include"],
-    deps = [
-        "//:AxisAlignedBox",
-        "//:Matrix3",
-        "//:Matrix6",
-        "//:Pose3",
-        "//:Quaternion",
-        "//:Vector3",
-        "@eigen",
+public_headers = glob(
+    include = [
+        "include/gz/math/eigen3/*.hh",
     ],
 )
 
-cc_test(
-    name = "Conversions_TEST",
-    srcs = ["src/Conversions_TEST.cc"],
-    deps = [
-        ":Conversions",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+private_headers = glob(
+    include = ["src/*.hh"],
+)
+
+sources = glob(
+    include = [
+        "src/*.cc",
+    ],
+    exclude = [
+        "src/*_TEST.cc",
     ],
 )
 
 cc_library(
-    name = "Util",
-    hdrs = ["include/gz/math/eigen3/Util.hh"],
+    name = "eigen3",
+    srcs = sources + private_headers,
+    hdrs = public_headers,
     includes = ["include"],
+    visibility = ["//visibility:public"],
     deps = [
-        ":Conversions",
-        "//:AxisAlignedBox",
-        "//:Matrix3",
-        "//:OrientedBox",
-        "//:Pose3",
-        "//:Quaternion",
-        "//:Vector3",
+        "//:math",
         "@eigen",
     ],
 )
 
-cc_test(
-    name = "Util_TEST",
-    srcs = ["src/Util_TEST.cc"],
-    deps = [
-        ":Util",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+test_sources = glob(
+    include = [
+        "src/*_TEST.cc",
     ],
 )
+
+[
+    cc_test(
+        name = src.replace("/", "_").replace(".cc", "").replace("src_", ""),
+        srcs = [src],
+        deps = [
+            ":eigen3",
+            "@googletest//:gtest",
+            "@googletest//:gtest_main",
+        ],
+    )
+    for src in test_sources
+]
