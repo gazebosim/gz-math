@@ -7,7 +7,40 @@ release will remove the deprecated code.
 
 ## Gazebo Math 8.X to 9.X
 
+1. **SphericalCoordinates.hh**
+    Remove `math::SphericalCoordinates::LOCAL2` and related functions.
+    See https://github.com/gazebosim/gz-math/pull/235 . The current behavior
+    converting `LOCAL` to `GLOBAL` should be correct now, unrolling the previous
+    incoherent result, only present to preserve behavior.
 
+    + Removed: `gz::math::Vector3d SphericalFromLocalPosition(
+                const gz::math::Vector3d &_xyz) const`
+    + Removed: `gz::math::Vector3d GlobalFromLocalVelocity(
+                const gz::math::Vector3d &_xyz) const`
+    + Removed: `gz::math::Vector3d LocalFromSphericalPosition(
+                const gz::math::Vector3d &_latLonEle) const`
+    + Removed: `gz::math::Vector3d LocalFromGlobalVelocity(
+                const gz::math::Vector3d &_xyz) const`
+    + Removed: `gz::math::Vector3d
+            PositionTransform(const gz::math::Vector3d &_pos,
+                const CoordinateType &_in, const CoordinateType &_out) const`
+    + Removed: `gz::math::Vector3d VelocityTransform(
+                const gz::math::Vector3d &_vel,
+                const CoordinateType &_in, const CoordinateType &_out) const`
+
+1. **Stopwatch.hh**
+    + The `math::clock` type alias has been removed. Please use the underlying
+      type (`std::chrono::steady_clock`) directly.
+
+1. **graph/Vertex.hh**
+    + The `Vertex::NullVertex` static member has been removed. Please use
+      `Vertex::NullVertex()` instead.
+      E.g.: https://github.com/gazebosim/gz-math/pull/606/files#diff-0c0220a7e72be70337975433eeddc3f5e072ade5cd80dfb1ac03da233c39c983L153-R153
+
+1. **graph/Edge.hh**
+    + The `Edge::NullEdge` static member has been removed. Please use
+      `Vertex::NullEdge()` instead.
+      E.g.: https://github.com/gazebosim/gz-math/pull/606/files#diff-0c0220a7e72be70337975433eeddc3f5e072ade5cd80dfb1ac03da233c39c983L222-R222
 
 ## Gazebo Math 7.X to 8.X
 
