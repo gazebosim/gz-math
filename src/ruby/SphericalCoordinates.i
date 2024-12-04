@@ -33,7 +33,7 @@
 #include <gz/math/Vector3.hh>
 #include <gz/math/config.hh>
 
-GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+// GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
 // GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION is not present;
 // that's not a problem in SWIG generated files
 
@@ -72,8 +72,6 @@ namespace gz
                 GLOBAL = 3,
 
                 /// \brief Heading-adjusted tangent plane (X, Y, Z)
-                /// This has kept a bug for backwards compatibility, use
-                /// LOCAL2 for the correct behaviour.
                 LOCAL = 4,
               };
 
