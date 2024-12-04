@@ -27,13 +27,6 @@
 #include <gz/math/config.hh>
 #include <gz/utils/ImplPtr.hh>
 
-// MSVC doesn't like deprecating enum values with function macros
-#if _MSC_VER
-#define GZ_LOCAL2_DEPRECATED [[deprecated]]
-#else
-#define GZ_LOCAL2_DEPRECATED GZ_DEPRECATED(8)
-#endif
-
 namespace gz::math
 {
   // Inline bracket to help doxygen filtering.
@@ -74,12 +67,6 @@ namespace gz::math
 
               /// \brief Heading-adjusted tangent plane (X, Y, Z)
               LOCAL = 4,
-
-              /// \brief Heading-adjusted tangent plane (X, Y, Z)
-              /// \deprecated The computation bugs for LOCAL have been fixed
-              ///             in Gazebo Ionic (8) so the temporary LOCAL2 type
-              ///             is no more needed.
-              LOCAL2 GZ_LOCAL2_DEPRECATED = 5
             };
 
     /// \brief Constructor.
@@ -114,42 +101,12 @@ namespace gz::math
     /// \brief Convert a Cartesian position vector to geodetic coordinates.
     /// This performs a `PositionTransform` from LOCAL to SPHERICAL.
     ///
-    /// \deprecated There's a known bug with this computation that can't be
-    /// fixed until Gazebo 8 to avoid behaviour changes.
-    /// Call `SphericalFromLocalPosition(CoordinateVector3)` for correct
-    /// results.
-    ///
-    /// \param[in] _xyz Cartesian position vector in the heading-adjusted
-    /// world frame.
-    /// \return Cooordinates: geodetic latitude (deg), longitude (deg),
-    ///         altitude above sea level (m).
-    public: GZ_DEPRECATED(8) gz::math::Vector3d SphericalFromLocalPosition(
-                const gz::math::Vector3d &_xyz) const;
-
-    /// \brief Convert a Cartesian position vector to geodetic coordinates.
-    /// This performs a `PositionTransform` from LOCAL to SPHERICAL.
-    ///
     /// \param[in] _xyz Cartesian position vector in the heading-adjusted
     /// world frame.
     /// \return Cooordinates: geodetic latitude, longitude,
     ///         altitude above sea level.
     public: std::optional<math::CoordinateVector3> SphericalFromLocalPosition(
                 const gz::math::CoordinateVector3 &_xyz) const;
-
-    /// \brief Convert a Cartesian velocity vector in the local frame
-    ///        to a global Cartesian frame with components East, North, Up.
-    /// This is a wrapper around `VelocityTransform(_xyz, LOCAL, GLOBAL)`
-    ///
-    /// \deprecated There's a known bug with this computation that can't be
-    /// fixed until Gazebo 8 to avoid behaviour changes.
-    /// Call `GlobalFromLocalVelocity(CoordinateVector3)` for correct
-    /// results.
-    ///
-    /// \param[in] _xyz Cartesian velocity vector in the heading-adjusted
-    /// world frame.
-    /// \return Rotated vector with components (x,y,z): (East, North, Up).
-    public: GZ_DEPRECATED(8) gz::math::Vector3d GlobalFromLocalVelocity(
-                const gz::math::Vector3d &_xyz) const;
 
     /// \brief Convert a Cartesian velocity vector in the local frame
     ///        to a global Cartesian frame with components East, North, Up.
@@ -192,8 +149,6 @@ namespace gz::math
     /// latitude and longitude. It assumes that both points are at sea level.
     /// Example: _latA = 38.0016667 and _lonA = -123.0016667) represents
     /// the point with latitude 38d 0'6.00"N and longitude 123d 0'6.00"W.
-    /// This is different from the deprecated static Distance() method as it
-    /// takes into account the set surface's radius.
     /// \param[in] _latA Latitude of point A.
     /// \param[in] _lonA Longitude of point A.
     /// \param[in] _latB Latitude of point B.
@@ -275,29 +230,11 @@ namespace gz::math
 
     /// \brief Convert a geodetic position vector to Cartesian coordinates.
     /// This performs a `PositionTransform` from SPHERICAL to LOCAL.
-    /// \deprecated Use `LocalFromSphericalPosition(CoordinateVector3)` instead.
-    /// \param[in] _latLonEle Geodetic position in the planetary frame of
-    /// reference. X: latitude (deg), Y: longitude (deg), X: altitude.
-    /// \return Cartesian position vector in the heading-adjusted world frame.
-    public: GZ_DEPRECATED(8) gz::math::Vector3d LocalFromSphericalPosition(
-                const gz::math::Vector3d &_latLonEle) const;
-
-    /// \brief Convert a geodetic position vector to Cartesian coordinates.
-    /// This performs a `PositionTransform` from SPHERICAL to LOCAL.
     /// \param[in] _latLonEle Geodetic position in the planetary frame of
     /// reference. X: latitude, Y: longitude, Z: altitude.
     /// \return Cartesian position vector in the heading-adjusted world frame.
     public: std::optional<math::CoordinateVector3> LocalFromSphericalPosition(
                 const gz::math::CoordinateVector3 &_latLonEle) const;
-
-    /// \brief Convert a Cartesian velocity vector with components East,
-    /// North, Up to a local cartesian frame vector XYZ.
-    /// This is a wrapper around `VelocityTransform(_xyz, GLOBAL, LOCAL)`
-    /// \deprecated Use `LocalFromSphericalPosition(CoordinateVector3)` instead.
-    /// \param[in] _xyz Vector with components (x,y,z): (East, North, Up).
-    /// \return Cartesian vector in the world frame.
-    public: GZ_DEPRECATED(8) gz::math::Vector3d LocalFromGlobalVelocity(
-                const gz::math::Vector3d &_xyz) const;
 
     /// \brief Convert a Cartesian velocity vector with components East,
     /// North, Up to a local cartesian frame vector XYZ.
@@ -311,26 +248,6 @@ namespace gz::math
     public: void UpdateTransformationMatrix();
 
     /// \brief Convert between positions in SPHERICAL/ECEF/LOCAL/GLOBAL frame
-    /// using the reference point.
-    /// \deprecated To keep compatibility with Gazebo 7 and earlier, this
-    ///             function returns incorrect result for LOCAL->SPHERICAL
-    ///             and LOCAL->GLOBAL cases. Preferably, switch to using
-    ///             `PositionTransform(CoordinateVector3, ..., LOCAL)` which
-    ///             yields correct results. If you need to use this deprecated
-    ///             overload, use coordinate type LOCAL2 to get the correct
-    ///             result.
-    /// \param[in] _pos Position vector in frame defined by parameter _in.
-    ///                 If it is spherical, it has to be in radians.
-    /// \param[in] _in  CoordinateType for input
-    /// \param[in] _out CoordinateType for output
-    /// \return Transformed coordinate using cached origin. Spherical
-    ///         coordinates will be in radians. In case of error, `_pos` is
-    ///         returned unchanged.
-    public: GZ_DEPRECATED(8) gz::math::Vector3d
-            PositionTransform(const gz::math::Vector3d &_pos,
-                const CoordinateType &_in, const CoordinateType &_out) const;
-
-    /// \brief Convert between positions in SPHERICAL/ECEF/LOCAL/GLOBAL frame
     /// using the cached reference point.
     /// \param[in] _pos Position vector in frame defined by parameter _in
     /// \param[in] _in  CoordinateType for input
@@ -338,25 +255,6 @@ namespace gz::math
     /// \return Transformed coordinates (if the transformation succeeded).
     public: std::optional<gz::math::CoordinateVector3>
             PositionTransform(const gz::math::CoordinateVector3 &_pos,
-                const CoordinateType &_in, const CoordinateType &_out) const;
-
-    /// \brief Convert between velocity in ECEF/LOCAL/GLOBAL frame using the
-    /// cached reference point.
-    /// \note Spherical coordinates are not supported.
-    /// \deprecated To keep compatibility with Gazebo 7 and earlier, this
-    ///             function returns incorrect result for LOCAL->SPHERICAL
-    ///             and LOCAL->GLOBAL cases. Preferably, switch to using
-    ///             `VelocityTransform(CoordinateVector3, ..., LOCAL)` which
-    ///             yields correct results. If you need to use this deprecated
-    ///             overload, use coordinate type LOCAL2 to get the correct
-    ///             result.
-    /// \param[in] _vel Velocity vector in frame defined by parameter _in
-    /// \param[in] _in  CoordinateType for input
-    /// \param[in] _out CoordinateType for output
-    /// \return Transformed velocity vector. In case of error, `_vel` is
-    ///         returned unchanged.
-    public: GZ_DEPRECATED(8) gz::math::Vector3d VelocityTransform(
-                const gz::math::Vector3d &_vel,
                 const CoordinateType &_in, const CoordinateType &_out) const;
 
     /// \brief Convert between velocity in ECEF/LOCAL/GLOBAL frame.
