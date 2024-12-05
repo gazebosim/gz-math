@@ -374,35 +374,11 @@ void SphericalCoordinates::SetHeadingOffset(const Angle &_angle)
 }
 
 //////////////////////////////////////////////////
-Vector3d SphericalCoordinates::SphericalFromLocalPosition(
-    const Vector3d &_xyz) const
-{
-  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
-  Vector3d result = this->PositionTransform(_xyz, LOCAL, SPHERICAL);
-  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
-  result.X(GZ_RTOD(result.X()));
-  result.Y(GZ_RTOD(result.Y()));
-  return result;
-}
-
-//////////////////////////////////////////////////
 std::optional<math::CoordinateVector3>
 SphericalCoordinates::SphericalFromLocalPosition(
     const math::CoordinateVector3& _xyz) const
 {
   return this->PositionTransform(_xyz, LOCAL, SPHERICAL);
-}
-
-//////////////////////////////////////////////////
-Vector3d SphericalCoordinates::LocalFromSphericalPosition(
-    const Vector3d &_xyz) const
-{
-  Vector3d result = _xyz;
-  result.X(GZ_DTOR(result.X()));
-  result.Y(GZ_DTOR(result.Y()));
-  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
-  return this->PositionTransform(result, SPHERICAL, LOCAL);
-  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
 }
 
 //////////////////////////////////////////////////
@@ -414,29 +390,11 @@ SphericalCoordinates::LocalFromSphericalPosition(
 }
 
 //////////////////////////////////////////////////
-Vector3d SphericalCoordinates::GlobalFromLocalVelocity(
-    const Vector3d &_xyz) const
-{
-  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
-  return this->VelocityTransform(_xyz, LOCAL, GLOBAL);
-  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
-}
-
-//////////////////////////////////////////////////
 std::optional<math::CoordinateVector3>
 SphericalCoordinates::GlobalFromLocalVelocity(
     const math::CoordinateVector3 &_xyz) const
 {
   return this->VelocityTransform(_xyz, LOCAL, GLOBAL);
-}
-
-//////////////////////////////////////////////////
-Vector3d SphericalCoordinates::LocalFromGlobalVelocity(
-    const Vector3d &_xyz) const
-{
-  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
-  return this->VelocityTransform(_xyz, GLOBAL, LOCAL);
-  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
 }
 
 //////////////////////////////////////////////////
@@ -553,20 +511,11 @@ void SphericalCoordinates::UpdateTransformationMatrix()
     *this->PositionTransform(this->dataPtr->origin, SPHERICAL, ECEF);
 }
 
-namespace
-{
-
 /////////////////////////////////////////////////
-std::optional<CoordinateVector3> PositionTransformTmp(
-    const gz::utils::ImplPtr<SphericalCoordinates::Implementation>& dataPtr,
-    const CoordinateVector3 &_pos,
-    const SphericalCoordinates::CoordinateType &_in,
-    const SphericalCoordinates::CoordinateType &_out)
+std::optional<CoordinateVector3> SphericalCoordinates::PositionTransform(
+  const CoordinateVector3 &_pos,
+  const CoordinateType &_in, const CoordinateType &_out) const
 {
-  // This unusual concept of passing dataPtr as a free-function argument is just
-  // a temporary measure for GZ 8. Starting with GZ 9, the code of this function
-  // should be moved inside PositionTransform(CoordinateVector3).
-
   if ((_in == SphericalCoordinates::SPHERICAL) != _pos.IsSpherical())
   {
     std::cerr << "Invalid input to PositionTransform. "
@@ -579,24 +528,8 @@ std::optional<CoordinateVector3> PositionTransformTmp(
   switch (_in)
   {
     // East, North, Up (ENU)
-    // When branching code for GZ 9, replace this code block with the block
-    // from LOCAL2 and remove the LOCAL2 block.
     case SphericalCoordinates::LOCAL:
       {
-        // This is incorrect computation
-        tmp.X(-*_pos.X() * dataPtr->cosHea + *_pos.Y() * dataPtr->sinHea);
-        tmp.Y(-*_pos.X() * dataPtr->sinHea - *_pos.Y() * dataPtr->cosHea);
-        tmp.Z(*_pos.Z());
-        tmp = *dataPtr->origin.AsMetricVector() +
-          dataPtr->rotGlobalToECEF * tmp;
-        break;
-      }
-
-    GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
-    case SphericalCoordinates::LOCAL2:
-    GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
-      {
-        // This is correct computation
         tmp.X(*_pos.X() * dataPtr->cosHea + *_pos.Y() * dataPtr->sinHea);
         tmp.Y(-*_pos.X() * dataPtr->sinHea + *_pos.Y() * dataPtr->cosHea);
         tmp.Z(*_pos.Z());
@@ -685,9 +618,6 @@ std::optional<CoordinateVector3> PositionTransformTmp(
 
     // Convert from ECEF TO LOCAL
     case SphericalCoordinates::LOCAL:
-    GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
-    case SphericalCoordinates::LOCAL2:
-    GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
       tmp = dataPtr->rotECEFToGlobal *
         (tmp - *dataPtr->origin.AsMetricVector());
 
@@ -710,63 +640,11 @@ std::optional<CoordinateVector3> PositionTransformTmp(
   return res;
 }
 
-}
-
-/////////////////////////////////////////////////
-Vector3d SphericalCoordinates::PositionTransform(
-    const Vector3d &_pos,
+//////////////////////////////////////////////////
+std::optional<CoordinateVector3> SphericalCoordinates::VelocityTransform(
+    const CoordinateVector3 &_vel,
     const CoordinateType &_in, const CoordinateType &_out) const
 {
-  // This deprecated implementation accepts and returns radians for spherical
-  // coordinates and has a computation bug when working with LOCAL frames.
-
-  CoordinateVector3 vec = _in == SPHERICAL ?
-    CoordinateVector3::Spherical(_pos.X(), _pos.Y(), _pos.Z()) :
-    CoordinateVector3::Metric(_pos.X(), _pos.Y(), _pos.Z());
-
-  const auto result = PositionTransformTmp(this->dataPtr, vec, _in, _out);
-  if (!result)
-    return _pos;
-
-  return result->IsMetric() ?
-    *result->AsMetricVector() :
-    Vector3d{result->Lat()->Radian(), result->Lon()->Radian(), *result->Z()};
-}
-
-/////////////////////////////////////////////////
-std::optional<CoordinateVector3> SphericalCoordinates::PositionTransform(
-  const CoordinateVector3 &_pos,
-  const CoordinateType &_in, const CoordinateType &_out) const
-{
-  // Temporarily, for Gazebo 8, this function turns all LOCAL frames into
-  // LOCAL2 to get correct results. Basically, LOCAL and LOCAL2 are equal
-  // when PositionTransform() is called with a CoordinateVector3 argument, while
-  // it returns the compatible (but wrong) result when called with Vector3d and
-  // LOCAL. From Gazebo 9 onwards, LOCAL2 frame will be removed and these
-  // differences will disappear.
-  // TODO(peci1): Move PositionTransformTmp code into this function in GZ 9.
-
-  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
-  const auto in = _in == LOCAL ? LOCAL2 : _in;
-  const auto out = _out == LOCAL ? LOCAL2 : _out;
-  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
-  return PositionTransformTmp(this->dataPtr, _pos, in, out);
-}
-
-namespace
-{
-
-//////////////////////////////////////////////////
-std::optional<CoordinateVector3> VelocityTransformTmp(
-    const gz::utils::ImplPtr<SphericalCoordinates::Implementation>& dataPtr,
-    const CoordinateVector3 &_vel,
-    const SphericalCoordinates::CoordinateType &_in,
-    const SphericalCoordinates::CoordinateType &_out)
-{
-  // This unusual concept of passing dataPtr as a free-function argument is just
-  // a temporary measure for GZ 8. Starting with GZ 9, the code of this function
-  // should be moved inside VelocityTransform(CoordinateVector3).
-
   // Sanity check -- velocity should not be expressed in spherical coordinates
   if (_in == SphericalCoordinates::SPHERICAL ||
       _out == SphericalCoordinates::SPHERICAL ||
@@ -783,18 +661,7 @@ std::optional<CoordinateVector3> VelocityTransformTmp(
   switch (_in)
   {
     // ENU
-    // When branching code for GZ 9, replace this code block with the block
-    // from LOCAL2 and remove the LOCAL2 block.
     case SphericalCoordinates::LOCAL:
-      // This is incorrect computation
-      tmp.X(-*_vel.X() * dataPtr->cosHea + *_vel.Y() * dataPtr->sinHea);
-      tmp.Y(-*_vel.X() * dataPtr->sinHea - *_vel.Y() * dataPtr->cosHea);
-      tmp = dataPtr->rotGlobalToECEF * tmp;
-      break;
-    GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
-    case SphericalCoordinates::LOCAL2:
-    GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
-      // This is correct computation
       tmp.X(*_vel.X() * dataPtr->cosHea + *_vel.Y() * dataPtr->sinHea);
       tmp.Y(-*_vel.X() * dataPtr->sinHea + *_vel.Y() * dataPtr->cosHea);
       tmp = dataPtr->rotGlobalToECEF * tmp;
@@ -829,9 +696,6 @@ std::optional<CoordinateVector3> VelocityTransformTmp(
 
     // Convert from ECEF to local
     case SphericalCoordinates::LOCAL:
-    GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
-    case SphericalCoordinates::LOCAL2:
-    GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
       tmp = dataPtr->rotECEFToGlobal * tmp;
       res.SetMetric(
           tmp.X() * dataPtr->cosHea - tmp.Y() * dataPtr->sinHea,
@@ -845,42 +709,6 @@ std::optional<CoordinateVector3> VelocityTransformTmp(
   }
 
   return res;
-}
-
-}
-
-//////////////////////////////////////////////////
-Vector3d SphericalCoordinates::VelocityTransform(
-    const Vector3d &_vel,
-    const CoordinateType &_in, const CoordinateType &_out) const
-{
-  auto vec = CoordinateVector3::Metric(_vel);
-
-  const auto result = VelocityTransformTmp(this->dataPtr, vec, _in, _out);
-  if (!result || !result->IsMetric())
-    return _vel;
-
-  return *result->AsMetricVector();
-}
-
-//////////////////////////////////////////////////
-std::optional<CoordinateVector3> SphericalCoordinates::VelocityTransform(
-    const CoordinateVector3 &_vel,
-    const CoordinateType &_in, const CoordinateType &_out) const
-{
-  // Temporarily, for Gazebo 8, this function turns all LOCAL frames into
-  // LOCAL2 to get correct results. Basically, LOCAL and LOCAL2 are equal
-  // when VelocityTransform() is called with a CoordinateVector3 argument, while
-  // it returns the compatible (but wrong) result when called with Vector3d and
-  // LOCAL. From Gazebo 9 onwards, LOCAL2 frame will be removed and these
-  // differences will disappear.
-  // TODO(peci1): Move VelocityTransformTmp code into this function in GZ 9.
-
-  GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
-  const auto in = _in == LOCAL ? LOCAL2 : _in;
-  const auto out = _out == LOCAL ? LOCAL2 : _out;
-  GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
-  return VelocityTransformTmp(this->dataPtr, _vel, in, out);
 }
 
 //////////////////////////////////////////////////

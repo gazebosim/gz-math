@@ -33,7 +33,7 @@
 #include <gz/math/Vector3.hh>
 #include <gz/math/config.hh>
 
-GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+// GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
 // GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION is not present;
 // that's not a problem in SWIG generated files
 
@@ -72,12 +72,7 @@ namespace gz
                 GLOBAL = 3,
 
                 /// \brief Heading-adjusted tangent plane (X, Y, Z)
-                /// This has kept a bug for backwards compatibility, use
-                /// LOCAL2 for the correct behaviour.
                 LOCAL = 4,
-
-                /// \brief Heading-adjusted tangent plane (X, Y, Z)
-                LOCAL2 = 5
               };
 
       public: SphericalCoordinates();
@@ -95,15 +90,9 @@ namespace gz
       /// \brief Destructor.
       public: ~SphericalCoordinates();
 
-      public: gz::math::Vector3<double> SphericalFromLocalPosition(
-                  const gz::math::Vector3<double> &_xyz) const;
-
       public: std::optional<gz::math::CoordinateVector3>
               SphericalFromLocalPosition(
                   const gz::math::CoordinateVector3 &_xyz) const;
-
-      public: gz::math::Vector3<double> GlobalFromLocalVelocity(
-                  const gz::math::Vector3<double> &_xyz) const;
 
       public: std::optional<gz::math::CoordinateVector3>
               GlobalFromLocalVelocity(
@@ -138,15 +127,9 @@ namespace gz
 
       public: void SetHeadingOffset(const gz::math::Angle &_angle);
 
-      public: gz::math::Vector3<double> LocalFromSphericalPosition(
-                  const gz::math::Vector3<double> &_latLonEle) const;
-
       public: std::optional<gz::math::CoordinateVector3>
               LocalFromSphericalPosition(
                   const gz::math::CoordinateVector3 &_latLonEle) const;
-
-      public: gz::math::Vector3<double> LocalFromGlobalVelocity(
-                  const gz::math::Vector3<double> &_xyz) const;
 
       public: std::optional<gz::math::CoordinateVector3>
               LocalFromGlobalVelocity(
@@ -154,17 +137,8 @@ namespace gz
 
       public: void UpdateTransformationMatrix();
 
-      public: gz::math::Vector3<double>
-              PositionTransform(const gz::math::Vector3<double> &_pos,
-                  const CoordinateType &_in, const CoordinateType &_out) const;
-
       public: std::optional<gz::math::CoordinateVector3> PositionTransform(
                   const gz::math::CoordinateVector3 &_pos,
-                  const CoordinateType &_in, const CoordinateType &_out) const;
-
-      /// \return Transformed velocity vector
-      public: gz::math::Vector3<double> VelocityTransform(
-                  const gz::math::Vector3<double> &_vel,
                   const CoordinateType &_in, const CoordinateType &_out) const;
 
       public: std::optional<gz::math::CoordinateVector3> VelocityTransform(

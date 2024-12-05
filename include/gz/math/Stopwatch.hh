@@ -25,13 +25,6 @@
 
 namespace gz::math
 {
-  // Use a steady clock
-  // This alias is now deprecated; please use std::chrono::steady_clock
-  // directly instead.
-  using clock
-      [[deprecated("As of 8.0, use std::chrono::steady_clock directly.")]]
-      = std::chrono::steady_clock;
-
   // Inline bracket to help doxygen filtering.
   inline namespace GZ_MATH_VERSION_NAMESPACE {
   /// \class Stopwatch Stopwatch.hh gz/math/Stopwatch.hh
