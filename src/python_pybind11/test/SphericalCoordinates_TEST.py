@@ -19,14 +19,6 @@ import warnings
 from gz.math9 import Angle, CoordinateVector3, SphericalCoordinates, Vector3d
 
 
-def ignore_deprecation_warnings(test_func):
-    def do_test(self, *args, **kwargs):
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", category=DeprecationWarning)
-            test_func(self, *args, **kwargs)
-    return do_test
-
-
 class TestSphericalCoordinates(unittest.TestCase):
     def test_constructor(self):
         # Default surface type
