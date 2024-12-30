@@ -18,14 +18,15 @@
 #define GZ_MATH_PIECEWISE_SCALAR_FIELD3_HH_
 
 #include <algorithm>
-#include <iostream>
 #include <limits>
+#include <sstream>
 #include <utility>
 #include <vector>
 
 #include <gz/math/Region3.hh>
 #include <gz/math/Vector3.hh>
 #include <gz/math/config.hh>
+#include <gz/math/detail/Error.hh>
 
 namespace gz::math
 {
@@ -77,21 +78,23 @@ namespace gz::math
       {
         if (pieces[i].region.Empty())
         {
-          std::cerr << "Region #" << i << " (" << pieces[i].region
-                    << ") in piecewise scalar field definition is empty."
-                    << std::endl;
+          std::ostringstream error_str;
+          error_str << "Region #" << i << " (" << pieces[i].region
+                    << ") in piecewise scalar field definition is empty.";
+          detail::LogErrorMessage(error_str.str());
         }
         for (size_t j = i + 1; j < pieces.size(); ++j)
         {
           if (pieces[i].region.Intersects(pieces[j].region))
           {
-            std::cerr << "Detected overlap between regions in "
+            std::ostringstream error_str;
+            error_str << "Detected overlap between regions in "
                       << "piecewise scalar field definition: "
                       << "region #" << i << " (" << pieces[i].region
                       << ") overlaps with region #" << j << " ("
                       << pieces[j].region << "). Region #" << i
-                      << " will take precedence when overlapping."
-                      << std::endl;
+                      << " will take precedence when overlapping.";
+            detail::LogErrorMessage(error_str.str());
           }
         }
       }

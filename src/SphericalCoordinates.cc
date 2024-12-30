@@ -14,11 +14,12 @@
  * limitations under the License.
  *
 */
-#include <iostream>
+#include <sstream>
 #include <string>
 
 #include "gz/math/Matrix3.hh"
 #include "gz/math/SphericalCoordinates.hh"
+#include "gz/math/detail/Error.hh"
 
 using namespace gz;
 using namespace math;
@@ -118,8 +119,8 @@ SphericalCoordinates::SurfaceType SphericalCoordinates::Convert(
   else if ("CUSTOM_SURFACE" == _str)
     return CUSTOM_SURFACE;
 
-  std::cerr << "SurfaceType string not recognized, "
-    << "EARTH_WGS84 returned by default" << std::endl;
+  detail::LogErrorMessage(
+      "SurfaceType string not recognized, EARTH_WGS84 returned by default");
   return EARTH_WGS84;
 }
 
@@ -134,8 +135,8 @@ std::string SphericalCoordinates::Convert(
   else if (_type == CUSTOM_SURFACE)
     return "CUSTOM_SURFACE";
 
-  std::cerr << "SurfaceType not recognized, "
-    << "EARTH_WGS84 returned by default" << std::endl;
+  detail::LogErrorMessage(
+      "SurfaceType not recognized, EARTH_WGS84 returned by default");
   return "EARTH_WGS84";
 }
 
@@ -283,14 +284,16 @@ void SphericalCoordinates::SetSurface(const SurfaceType &_type)
       }
     case CUSTOM_SURFACE:
       {
-      std::cerr << "For custom surfaces, use SetSurface(type, radius,"
-        "axisEquatorial, axisPolar)" << std::endl;
+      detail::LogErrorMessage(
+          "For custom surfaces, use SetSurface(type, radius,"
+          "axisEquatorial, axisPolar)");
       break;
       }
     default:
       {
-        std::cerr << "Unknown surface type["
-          << this->dataPtr->surfaceType << "]\n";
+      std::ostringstream error_str;
+      error_str << "Unknown surface type[" << this->dataPtr->surfaceType << "]";
+      detail::LogErrorMessage(error_str.str());
       break;
       }
   }
@@ -306,8 +309,9 @@ void SphericalCoordinates::SetSurface(
       (_type != MOON_SCS) &&
       (_type != CUSTOM_SURFACE))
   {
-    std::cerr << "Unknown surface type["
-      << _type << "]\n";
+    std::ostringstream error_str;
+    error_str << "Unknown surface type[" << _type << "]";
+    detail::LogErrorMessage(error_str.str());
     return;
   }
 
@@ -327,8 +331,8 @@ void SphericalCoordinates::SetSurface(
   }
   else
   {
-    std::cerr << "Invalid parameters found, defaulting to "
-      "Earth's parameters" << std::endl;
+    detail::LogErrorMessage(
+        "Invalid parameters found, defaulting to Earth's parameters");
 
     this->dataPtr->ellA = g_EarthWGS84AxisEquatorial;
     this->dataPtr->ellB = g_EarthWGS84AxisPolar;
@@ -569,8 +573,9 @@ std::optional<CoordinateVector3> PositionTransformTmp(
 
   if ((_in == SphericalCoordinates::SPHERICAL) != _pos.IsSpherical())
   {
-    std::cerr << "Invalid input to PositionTransform. "
-                 "The passed coordinate vector has wrong type.\n";
+    detail::LogErrorMessage(
+        "Invalid input to PositionTransform. "
+        "The passed coordinate vector has wrong type.");
     return std::nullopt;
   }
   Vector3d tmp;
@@ -642,7 +647,9 @@ std::optional<CoordinateVector3> PositionTransformTmp(
       break;
     default:
       {
-        std::cerr << "Invalid coordinate type[" << _in << "]\n";
+        std::ostringstream error_str;
+        error_str << "Invalid coordinate type[" << _in << "]";
+        detail::LogErrorMessage(error_str.str());
         return std::nullopt;
       }
   }
@@ -703,8 +710,12 @@ std::optional<CoordinateVector3> PositionTransformTmp(
       break;
 
     default:
-      std::cerr << "Unknown coordinate type[" << _out << "]\n";
-      return std::nullopt;
+      {
+        std::ostringstream error_str;
+        error_str << "Unknown coordinate type[" << _out << "]";
+        detail::LogErrorMessage(error_str.str());
+        return std::nullopt;
+      }
   }
 
   return res;
@@ -772,7 +783,8 @@ std::optional<CoordinateVector3> VelocityTransformTmp(
       _out == SphericalCoordinates::SPHERICAL ||
       _vel.IsSpherical())
   {
-    std::cerr << "Velocity cannot be expressed in spherical coordinates.\n";
+    detail::LogErrorMessage(
+        "Velocity cannot be expressed in spherical coordinates.");
     return std::nullopt;
   }
 
@@ -807,8 +819,12 @@ std::optional<CoordinateVector3> VelocityTransformTmp(
     case SphericalCoordinates::ECEF:
       break;
     default:
-      std::cerr << "Unknown coordinate type[" << _in << "]\n";
-      return std::nullopt;
+      {
+        std::ostringstream error_str;
+        error_str << "Unknown coordinate type[" << _in << "]";
+        detail::LogErrorMessage(error_str.str());
+        return std::nullopt;
+      }
   }
 
   CoordinateVector3 res;
@@ -840,8 +856,12 @@ std::optional<CoordinateVector3> VelocityTransformTmp(
       break;
 
     default:
-      std::cerr << "Unknown coordinate type[" << _out << "]\n";
-      return std::nullopt;
+      {
+        std::ostringstream error_str;
+        error_str << "Unknown coordinate type[" << _out << "]";
+        detail::LogErrorMessage(error_str.str());
+        return std::nullopt;
+      }
   }
 
   return res;

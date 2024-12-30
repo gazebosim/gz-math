@@ -17,9 +17,10 @@
 
 #include <gz/math/Kmeans.hh>
 
-#include <iostream>
+#include <sstream>
 
 #include <gz/math/Rand.hh>
+#include <gz/math/detail/Error.hh>
 #include "KmeansPrivate.hh"
 
 using namespace gz;
@@ -43,8 +44,8 @@ bool Kmeans::Observations(const std::vector<Vector3d> &_obs)
 {
   if (_obs.empty())
   {
-    std::cerr << "Kmeans::SetObservations() error: Observations vector is empty"
-              << std::endl;
+    detail::LogErrorMessage(
+        "Kmeans::SetObservations() error: Observations vector is empty");
     return false;
   }
   this->dataPtr->obs = _obs;
@@ -56,8 +57,8 @@ bool Kmeans::AppendObservations(const std::vector<Vector3d> &_obs)
 {
   if (_obs.empty())
   {
-    std::cerr << "Kmeans::AppendObservations() error: input vector is empty"
-              << std::endl;
+    detail::LogErrorMessage(
+        "Kmeans::AppendObservations() error: input vector is empty");
     return false;
   }
   this->dataPtr->obs.insert(this->dataPtr->obs.end(), _obs.begin(), _obs.end());
@@ -72,23 +73,26 @@ bool Kmeans::Cluster(int _k,
   // Sanity check.
   if (this->dataPtr->obs.empty())
   {
-    std::cerr << "Kmeans error: The set of observations is empty" << std::endl;
+    detail::LogErrorMessage("Kmeans error: The set of observations is empty");
     return false;
   }
 
   if (_k <= 0)
   {
-    std::cerr << "Kmeans error: The number of clusters has to"
-              << " be positive but its value is [" << _k << "]"
-              << std::endl;
+    std::ostringstream error_str;
+    error_str << "Kmeans error: The number of clusters has to"
+              << " be positive but its value is [" << _k << "]";
+    detail::LogErrorMessage(error_str.str());
     return false;
   }
 
   if (_k > static_cast<int>(this->dataPtr->obs.size()))
   {
-    std::cerr << "Kmeans error: The number of clusters [" << _k << "] has to be"
+    std::ostringstream error_str;
+    error_str << "Kmeans error: The number of clusters [" << _k << "] has to be"
               << " lower or equal to the number of observations ["
-              << this->dataPtr->obs.size() << "]" << std::endl;
+              << this->dataPtr->obs.size() << "]";
+    detail::LogErrorMessage(error_str.str());
     return false;
   }
 
