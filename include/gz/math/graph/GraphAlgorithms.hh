@@ -26,6 +26,7 @@
 #include <vector>
 
 #include <gz/math/config.hh>
+#include "gz/math/detail/Error.hh"
 #include "gz/math/graph/Graph.hh"
 #include "gz/math/Helpers.hh"
 
@@ -217,7 +218,9 @@ namespace graph
     // Sanity check: The source vertex should exist.
     if (allVertices.find(_from) == allVertices.end())
     {
-      std::cerr << "Vertex [" << _from << "] Not found" << std::endl;
+      std::ostringstream errStream;
+      errStream << "Vertex [" << _from << "] Not found";
+      detail::LogErrorMessage(errStream.str());
       return {};
     }
 
@@ -225,7 +228,9 @@ namespace graph
     if (_to != kNullId &&
         allVertices.find(_to) == allVertices.end())
     {
-      std::cerr << "Vertex [" << _from << "] Not found" << std::endl;
+      std::ostringstream errStream;
+      errStream << "Vertex [" << _from << "] Not found";
+      detail::LogErrorMessage(errStream.str());
       return {};
     }
 

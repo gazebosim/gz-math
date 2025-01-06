@@ -18,14 +18,16 @@
 #define GZ_MATH_GRAPH_GRAPH_HH_
 
 #include <cassert>
-#include <iostream>
 #include <map>
+#include <ostream>
 #include <set>
+#include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
 
 #include <gz/math/config.hh>
+#include "gz/math/detail/Error.hh"
 #include "gz/math/graph/Edge.hh"
 #include "gz/math/graph/Vertex.hh"
 
@@ -113,8 +115,9 @@ namespace graph
       {
         if (!this->AddVertex(v.Name(), v.Data(), v.Id()).Valid())
         {
-          std::cerr << "Invalid vertex with Id [" << v.Id() << "]. Ignoring."
-                    << std::endl;
+          std::ostringstream errStream;
+          errStream << "Invalid vertex with Id [" << v.Id() << "]. Ignoring.";
+          detail::LogErrorMessage(errStream.str());
         }
       }
 
@@ -122,7 +125,7 @@ namespace graph
       for (auto const &e : _edges)
       {
         if (!this->AddEdge(e.vertices, e.data, e.weight).Valid())
-          std::cerr << "Ignoring edge" << std::endl;
+          detail::LogErrorMessage("Ignoring edge");
       }
     }
 
@@ -146,8 +149,9 @@ namespace graph
         // No space for new Ids.
         if (id == kNullId)
         {
-          std::cerr << "[Graph::AddVertex()] The limit of vertices has been "
-                    << "reached. Ignoring vertex." << std::endl;
+          detail::LogErrorMessage(
+              "[Graph::AddVertex()] The limit of vertices has been reached. "
+              "Ignoring vertex.");
           return NullVertex<V>();
         }
       }
@@ -159,8 +163,9 @@ namespace graph
       // The Id already exists.
       if (!ret.second)
       {
-        std::cerr << "[Graph::AddVertex()] Repeated vertex [" << id << "]"
-                  << std::endl;
+        std::ostringstream errStream;
+        errStream << "[Graph::AddVertex()] Repeated vertex [" << id << "]";
+        detail::LogErrorMessage(errStream.str());
         return NullVertex<V>();
       }
 
@@ -215,8 +220,9 @@ namespace graph
       // No space for new Ids.
       if (id == kNullId)
       {
-        std::cerr << "[Graph::AddEdge()] The limit of edges has been reached. "
-                  << "Ignoring edge." << std::endl;
+        detail::LogErrorMessage(
+            "[Graph::AddEdge()] The limit of edges has been reached. "
+            "Ignoring edge.");
         return NullEdge<E, EdgeType>();
       }
 

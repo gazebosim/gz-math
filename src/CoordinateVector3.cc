@@ -19,10 +19,10 @@
 #include "gz/math/CoordinateVector3.hh"
 #include "gz/math/Vector3.hh"
 #include "gz/math/Helpers.hh"
+#include "gz/math/detail/Error.hh"
 #include "gz/utils/ImplPtr.hh"
 
 #include <cmath>
-#include <iostream>
 #include <optional>
 #include <variant>
 
@@ -220,14 +220,16 @@ CoordinateVector3 CoordinateVector3::operator+(
   {
     if (this->IsMetric())
     {
-      std::cerr << "Spherical coordinates cannot be added to metric. "
-                   "Returning NaN." << std::endl;
+      detail::LogErrorMessage(
+          "Spherical coordinates cannot be added to metric. "
+          "Returning NaN.");
       return Metric(NAN_D, NAN_D, NAN_D);
     }
     else
     {
-      std::cerr << "Metric coordinates cannot be added to spherical. "
-                   "Returning NaN." << std::endl;
+      detail::LogErrorMessage(
+          "Metric coordinates cannot be added to spherical. "
+          "Returning NaN.");
       return Spherical(NAN_D, NAN_D, NAN_D);
     }
   }
@@ -258,14 +260,16 @@ const CoordinateVector3& CoordinateVector3::operator+=(
     if (this->IsMetric())
     {
       this->dataPtr->X() = this->dataPtr->Y() = NAN_D;
-      std::cerr << "Spherical coordinates cannot be added to metric. "
-                   "Setting the result to NaN." << std::endl;
+      detail::LogErrorMessage(
+          "Spherical coordinates cannot be added to metric. "
+          "Setting the result to NaN.");
     }
     else
     {
       this->dataPtr->Lat() = this->dataPtr->Lon() = NAN_D;
-      std::cerr << "Metric coordinates cannot be added to spherical. "
-                   "Setting the result to NaN." << std::endl;
+      detail::LogErrorMessage(
+          "Metric coordinates cannot be added to spherical. "
+          "Setting the result to NaN.");
     }
     return *this;
   }
@@ -308,14 +312,16 @@ CoordinateVector3 CoordinateVector3::operator-(
   {
     if (this->IsMetric())
     {
-      std::cerr << "Spherical coordinates cannot be subtracted from metric. "
-                   "Returning NaN." << std::endl;
+      detail::LogErrorMessage(
+          "Spherical coordinates cannot be subtracted from metric. "
+          "Returning NaN.");
       return Metric(NAN_D, NAN_D, NAN_D);
     }
     else
     {
-      std::cerr << "Metric coordinates cannot be subtracted from spherical. "
-                   "Returning NaN." << std::endl;
+      detail::LogErrorMessage(
+          "Metric coordinates cannot be subtracted from spherical. "
+          "Returning NaN.");
       return Spherical(NAN_D, NAN_D, NAN_D);
     }
   }
@@ -346,14 +352,16 @@ const CoordinateVector3& CoordinateVector3::operator-=(
     if (this->IsMetric())
     {
       this->dataPtr->X() = this->dataPtr->Y() = NAN_D;
-      std::cerr << "Spherical coordinates cannot be subtracted from metric. "
-                   "Setting the result to NaN." << std::endl;
+      detail::LogErrorMessage(
+          "Spherical coordinates cannot be subtracted from metric. "
+          "Setting the result to NaN.");
     }
     else
     {
       this->dataPtr->Lat() = this->dataPtr->Lon() = NAN_D;
-      std::cerr << "Metric coordinates cannot be subtracted from spherical. "
-                   "Setting the result to NaN." << std::endl;
+      detail::LogErrorMessage(
+          "Metric coordinates cannot be subtracted from spherical. "
+          "Setting the result to NaN.");
     }
     return *this;
   }
