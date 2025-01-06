@@ -264,11 +264,11 @@ bool SignalStats::InsertStatistic(const std::string &_name)
     auto map = this->Map();
     if (map.find(_name) != map.end())
     {
-      std::ostringstream error_str;
-      error_str << "Unable to InsertStatistic ["
+      std::ostringstream errStream;
+      errStream << "Unable to InsertStatistic ["
                 << _name
                 << "] since it has already been inserted.";
-      detail::LogErrorMessage(error_str.str());
+      detail::LogErrorMessage(errStream.str());
       return false;
     }
   }
@@ -301,11 +301,11 @@ bool SignalStats::InsertStatistic(const std::string &_name)
   else
   {
     // Unrecognized name string
-    std::ostringstream error_str;
-    error_str << "Unable to InsertStatistic ["
+    std::ostringstream errStream;
+    errStream << "Unable to InsertStatistic ["
               << _name
               << "] since it is an unrecognized name.";
-    detail::LogErrorMessage(error_str.str());
+    detail::LogErrorMessage(errStream.str());
     return false;
   }
   this->dataPtr->stats.push_back(stat);

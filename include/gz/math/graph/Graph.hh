@@ -115,9 +115,9 @@ namespace graph
       {
         if (!this->AddVertex(v.Name(), v.Data(), v.Id()).Valid())
         {
-          std::ostringstream error_str;
-          error_str << "Invalid vertex with Id [" << v.Id() << "]. Ignoring.";
-          detail::LogErrorMessage(error_str.str());
+          std::ostringstream errStream;
+          errStream << "Invalid vertex with Id [" << v.Id() << "]. Ignoring.";
+          detail::LogErrorMessage(errStream.str());
         }
       }
 
@@ -163,9 +163,9 @@ namespace graph
       // The Id already exists.
       if (!ret.second)
       {
-        std::ostringstream error_str;
-        error_str << "[Graph::AddVertex()] Repeated vertex [" << id << "]";
-        detail::LogErrorMessage(error_str.str());
+        std::ostringstream errStream;
+        errStream << "[Graph::AddVertex()] Repeated vertex [" << id << "]";
+        detail::LogErrorMessage(errStream.str());
         return NullVertex<V>();
       }
 

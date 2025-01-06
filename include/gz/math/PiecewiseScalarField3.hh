@@ -78,23 +78,23 @@ namespace gz::math
       {
         if (pieces[i].region.Empty())
         {
-          std::ostringstream error_str;
-          error_str << "Region #" << i << " (" << pieces[i].region
+          std::ostringstream errStream;
+          errStream << "Region #" << i << " (" << pieces[i].region
                     << ") in piecewise scalar field definition is empty.";
-          detail::LogErrorMessage(error_str.str());
+          detail::LogErrorMessage(errStream.str());
         }
         for (size_t j = i + 1; j < pieces.size(); ++j)
         {
           if (pieces[i].region.Intersects(pieces[j].region))
           {
-            std::ostringstream error_str;
-            error_str << "Detected overlap between regions in "
+            std::ostringstream errStream;
+            errStream << "Detected overlap between regions in "
                       << "piecewise scalar field definition: "
                       << "region #" << i << " (" << pieces[i].region
                       << ") overlaps with region #" << j << " ("
                       << pieces[j].region << "). Region #" << i
                       << " will take precedence when overlapping.";
-            detail::LogErrorMessage(error_str.str());
+            detail::LogErrorMessage(errStream.str());
           }
         }
       }

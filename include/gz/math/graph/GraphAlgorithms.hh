@@ -218,9 +218,9 @@ namespace graph
     // Sanity check: The source vertex should exist.
     if (allVertices.find(_from) == allVertices.end())
     {
-      std::ostringstream error_str;
-      error_str << "Vertex [" << _from << "] Not found";
-      detail::LogErrorMessage(error_str.str());
+      std::ostringstream errStream;
+      errStream << "Vertex [" << _from << "] Not found";
+      detail::LogErrorMessage(errStream.str());
       return {};
     }
 
@@ -228,9 +228,9 @@ namespace graph
     if (_to != kNullId &&
         allVertices.find(_to) == allVertices.end())
     {
-      std::ostringstream error_str;
-      error_str << "Vertex [" << _from << "] Not found";
-      detail::LogErrorMessage(error_str.str());
+      std::ostringstream errStream;
+      errStream << "Vertex [" << _from << "] Not found";
+      detail::LogErrorMessage(errStream.str());
       return {};
     }
 

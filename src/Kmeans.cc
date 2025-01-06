@@ -79,20 +79,20 @@ bool Kmeans::Cluster(int _k,
 
   if (_k <= 0)
   {
-    std::ostringstream error_str;
-    error_str << "Kmeans error: The number of clusters has to"
+    std::ostringstream errStream;
+    errStream << "Kmeans error: The number of clusters has to"
               << " be positive but its value is [" << _k << "]";
-    detail::LogErrorMessage(error_str.str());
+    detail::LogErrorMessage(errStream.str());
     return false;
   }
 
   if (_k > static_cast<int>(this->dataPtr->obs.size()))
   {
-    std::ostringstream error_str;
-    error_str << "Kmeans error: The number of clusters [" << _k << "] has to be"
+    std::ostringstream errStream;
+    errStream << "Kmeans error: The number of clusters [" << _k << "] has to be"
               << " lower or equal to the number of observations ["
               << this->dataPtr->obs.size() << "]";
-    detail::LogErrorMessage(error_str.str());
+    detail::LogErrorMessage(errStream.str());
     return false;
   }
 

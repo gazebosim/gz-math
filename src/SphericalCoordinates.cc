@@ -291,9 +291,9 @@ void SphericalCoordinates::SetSurface(const SurfaceType &_type)
       }
     default:
       {
-      std::ostringstream error_str;
-      error_str << "Unknown surface type[" << this->dataPtr->surfaceType << "]";
-      detail::LogErrorMessage(error_str.str());
+      std::ostringstream errStream;
+      errStream << "Unknown surface type[" << this->dataPtr->surfaceType << "]";
+      detail::LogErrorMessage(errStream.str());
       break;
       }
   }
@@ -309,9 +309,9 @@ void SphericalCoordinates::SetSurface(
       (_type != MOON_SCS) &&
       (_type != CUSTOM_SURFACE))
   {
-    std::ostringstream error_str;
-    error_str << "Unknown surface type[" << _type << "]";
-    detail::LogErrorMessage(error_str.str());
+    std::ostringstream errStream;
+    errStream << "Unknown surface type[" << _type << "]";
+    detail::LogErrorMessage(errStream.str());
     return;
   }
 
@@ -647,9 +647,9 @@ std::optional<CoordinateVector3> PositionTransformTmp(
       break;
     default:
       {
-        std::ostringstream error_str;
-        error_str << "Invalid coordinate type[" << _in << "]";
-        detail::LogErrorMessage(error_str.str());
+        std::ostringstream errStream;
+        errStream << "Invalid coordinate type[" << _in << "]";
+        detail::LogErrorMessage(errStream.str());
         return std::nullopt;
       }
   }
@@ -711,9 +711,9 @@ std::optional<CoordinateVector3> PositionTransformTmp(
 
     default:
       {
-        std::ostringstream error_str;
-        error_str << "Unknown coordinate type[" << _out << "]";
-        detail::LogErrorMessage(error_str.str());
+        std::ostringstream errStream;
+        errStream << "Unknown coordinate type[" << _out << "]";
+        detail::LogErrorMessage(errStream.str());
         return std::nullopt;
       }
   }
@@ -820,9 +820,9 @@ std::optional<CoordinateVector3> VelocityTransformTmp(
       break;
     default:
       {
-        std::ostringstream error_str;
-        error_str << "Unknown coordinate type[" << _in << "]";
-        detail::LogErrorMessage(error_str.str());
+        std::ostringstream errStream;
+        errStream << "Unknown coordinate type[" << _in << "]";
+        detail::LogErrorMessage(errStream.str());
         return std::nullopt;
       }
   }
@@ -857,9 +857,9 @@ std::optional<CoordinateVector3> VelocityTransformTmp(
 
     default:
       {
-        std::ostringstream error_str;
-        error_str << "Unknown coordinate type[" << _out << "]";
-        detail::LogErrorMessage(error_str.str());
+        std::ostringstream errStream;
+        errStream << "Unknown coordinate type[" << _out << "]";
+        detail::LogErrorMessage(errStream.str());
         return std::nullopt;
       }
   }
