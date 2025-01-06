@@ -18,6 +18,7 @@
 
 #include "gz/math/detail/Error.hh"
 
-void gz::math::detail::LogErrorMessage(const std::string& message) {
+void gz::math::detail::LogErrorMessage(const std::string& message)
+{
   std::cerr << message << std::endl;
 }
