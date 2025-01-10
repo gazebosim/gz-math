@@ -14,9 +14,10 @@
  * limitations under the License.
  *
 */
+#include <cmath>
+
 #include "gz/math/Quaternion.hh"
 #include "gz/math/RotationSpline.hh"
-#include "cmath"
 
 using namespace gz;
 using namespace math;
