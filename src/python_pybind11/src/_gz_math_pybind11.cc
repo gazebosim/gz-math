@@ -28,6 +28,7 @@
 #include "Frustum.hh"
 #include "GaussMarkovProcess.hh"
 #include "Helpers.hh"
+#include "InterpolationPoint.hh"
 #include "Inertial.hh"
 #include "Interval.hh"
 #include "Kmeans.hh"
@@ -63,12 +64,12 @@
 #include "Vector3.hh"
 #include "Vector3Stats.hh"
 #include "Vector4.hh"
-
-#include "InterpolationPoint.hh"
 #include "VolumetricGridLookupField.hh"
+
 namespace py = pybind11;
 
-PYBIND11_MODULE(BINDINGS_MODULE_NAME, m) {
+PYBIND11_MODULE(BINDINGS_MODULE_NAME, m)
+{
   m.doc() = "Gazebo Math Python Library.";
 
   gz::math::python::defineMathAngle(m, "Angle");
@@ -79,11 +80,14 @@ PYBIND11_MODULE(BINDINGS_MODULE_NAME, m) {
 
   gz::math::python::defineMathColor(m, "Color");
 
-  gz::math::python::defineMathDiffDriveOdometry(m, "DiffDriveOdometry");
+  gz::math::python::defineMathDiffDriveOdometry(
+    m, "DiffDriveOdometry");
 
-  gz::math::python::defineMathEllipsoid(m, "Ellipsoid");
+  gz::math::python::defineMathEllipsoid(
+    m, "Ellipsoid");
 
-  gz::math::python::defineMathGaussMarkovProcess(m, "GaussMarkovProcess");
+  gz::math::python::defineMathGaussMarkovProcess(
+    m, "GaussMarkovProcess");
 
   gz::math::python::defineMathHelpers(m);
 
@@ -104,9 +108,10 @@ PYBIND11_MODULE(BINDINGS_MODULE_NAME, m) {
   gz::math::python::defineMathSignalVariance(m, "SignalVariance");
   gz::math::python::defineMathSignalMaximum(m, "SignalMaximum");
   gz::math::python::defineMathSignalMinimum(m, "SignalMinimum");
-  gz::math::python::defineMathSignalMaxAbsoluteValue(m,
-                                                     "SignalMaxAbsoluteValue");
-  gz::math::python::defineMathSignalRootMeanSquare(m, "SignalRootMeanSquare");
+  gz::math::python::defineMathSignalMaxAbsoluteValue(
+    m, "SignalMaxAbsoluteValue");
+  gz::math::python::defineMathSignalRootMeanSquare(
+    m, "SignalRootMeanSquare");
   gz::math::python::defineMathSignalMean(m, "SignalMean");
 
   gz::math::python::defineMathRotationSpline(m, "RotationSpline");
@@ -115,7 +120,8 @@ PYBIND11_MODULE(BINDINGS_MODULE_NAME, m) {
 
   gz::math::python::defineMathSemanticVersion(m, "SemanticVersion");
 
-  gz::math::python::defineMathSphericalCoordinates(m, "SphericalCoordinates");
+  gz::math::python::defineMathSphericalCoordinates(
+    m, "SphericalCoordinates");
 
   gz::math::python::defineMathSpline(m, "Spline");
 
@@ -178,16 +184,20 @@ PYBIND11_MODULE(BINDINGS_MODULE_NAME, m) {
 
   gz::math::python::defineMathBiQuad(m, "BiQuad");
 
-  gz::math::python::defineMathBiQuadVector3(m, "BiQuadVector3");
+  gz::math::python::defineMathBiQuadVector3(
+    m, "BiQuadVector3");
 
   gz::math::python::defineMathOnePole(m, "OnePole");
 
-  gz::math::python::defineMathOnePoleQuaternion(m, "OnePoleQuaternion");
-  gz::math::python::defineMathOnePoleVector3(m, "OnePoleVector3");
+  gz::math::python::defineMathOnePoleQuaternion(
+    m, "OnePoleQuaternion");
+  gz::math::python::defineMathOnePoleVector3(
+    m, "OnePoleVector3");
 
   gz::math::python::defineMathCoordinateVector3(m, "CoordinateVector3");
 
   gz::math::python::defineMathVolumetricGridLookupField(
       m, "VolumetricGridLookupField");
+
   gz::math::python::defineMathInterpolationPoint3D(m, "InterpolationPoint3D");
 }
