@@ -27,6 +27,7 @@
 
 #include <gz/math/Vector3.hh>
 #include <gz/math/detail/InterpolationPoint.hh>
+#include <optional>
 
 namespace py = pybind11;
 using namespace pybind11::literals;
