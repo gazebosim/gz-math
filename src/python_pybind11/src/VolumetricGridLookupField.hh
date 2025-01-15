@@ -48,7 +48,7 @@ void helpDefineMathVolumetricGridLookupField(py::module &m,
 
   auto toString = [](const Class &si) {
     std::stringstream stream;
-    stream << "VolumetricGridLookupField";
+    stream << si;
     return stream.str();
   };
 
