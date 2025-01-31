@@ -15,9 +15,12 @@
  *
 */
 #include <cmath>
+#include <memory>
 #include <sstream>
+#include <vector>
 #include <gz/math/SignalStats.hh>
 #include <gz/math/detail/Error.hh>
+#include <gz/utils/ImplPtr.hh>
 
 using namespace gz;
 using namespace math;
