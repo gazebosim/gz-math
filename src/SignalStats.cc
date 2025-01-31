@@ -15,8 +15,11 @@
  *
 */
 #include <cmath>
+#include <cstddef>
+#include <map>
 #include <memory>
 #include <sstream>
+#include <string>
 #include <vector>
 #include <gz/math/SignalStats.hh>
 #include <gz/math/detail/Error.hh>
