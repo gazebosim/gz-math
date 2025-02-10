@@ -19,6 +19,6 @@ example_sources = glob(
     name = src.replace(".cc", ""),
     srcs = [src],
     deps = [
-        "//:math",
+        "//:gz-math",
     ],
 ) for src in example_sources]

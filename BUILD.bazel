@@ -91,7 +91,7 @@ test_sources = glob(
         name = src.replace("/", "_").replace(".cc", "").replace("src_", ""),
         srcs = [src],
         deps = [
-            ":math",
+            ":gz-math",
             "@googletest//:gtest",
             "@googletest//:gtest_main",
         ],
