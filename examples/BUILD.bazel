@@ -11,7 +11,7 @@ license(
 
 example_sources = glob(
     include = [
-        "*_example.cc",
+        "*.cc",
     ],
 )
 
