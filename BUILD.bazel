@@ -45,10 +45,15 @@ public_headers = glob(
     exclude = [
         "include/gz/math/sdf.hh",
     ],
-)
+) + [
+    "include/gz/math/Export.hh",
+    "include/gz/math/config.hh",
+]
 
 private_headers = glob(
-    include = ["src/*.hh"],
+    include = [
+        "src/*.hh",
+    ],
 )
 
 sources = glob(
@@ -63,16 +68,13 @@ sources = glob(
 
 cc_library(
     name = "math",
-    srcs = sources + private_headers,
-    hdrs = public_headers,
+    srcs = sources,
+    hdrs = public_headers + private_headers,
     includes = [
         "include",
-        "src",
     ],
     visibility = ["//visibility:public"],
     deps = [
-        ":Config",
-        ":Export",
         "@gz-utils//:ImplPtr",
         "@gz-utils//:NeverDestroyed",
     ],
