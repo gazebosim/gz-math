@@ -20,6 +20,8 @@ add_subdirectory(graph)
 # Bindings subdirectories
 if (Python3_Development_FOUND AND NOT SKIP_PYBIND11)
   add_subdirectory(python_pybind11)
+else()
+  message(WARNING "Python development libraries are missing: Python interfaces are disabled.")
 endif()
 
 if (SWIG_FOUND AND NOT SKIP_SWIG)

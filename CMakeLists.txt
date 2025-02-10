@@ -119,7 +119,6 @@ else()
   endif()
 
   if (NOT Python3_Development_FOUND)
-    GZ_BUILD_WARNING("Python3 is missing: Python interfaces are disabled.")
     message (STATUS "Searching for Python3 - not found.")
   else()
     message (STATUS "Searching for Python3 - found version ${Python3_VERSION}.")
