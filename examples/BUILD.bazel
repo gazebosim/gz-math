@@ -22,3 +22,16 @@ example_sources = glob(
         "//:gz-math",
     ],
 ) for src in example_sources]
+
+example_sources_py = glob(
+    include = [
+        "*.py",
+    ]
+)
+
+[py_binary(
+  name = src.replace(".py", "_py"),
+  srcs = [src],
+  main = src,
+  deps = ["//:python"]
+) for src in example_sources_py]

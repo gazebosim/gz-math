@@ -1,6 +1,8 @@
 load("@buildifier_prebuilt//:rules.bzl", "buildifier", "buildifier_test")
+load("@pybind11_bazel//:build_defs.bzl", "pybind_extension")
 load("@rules_gazebo//gazebo:headers.bzl", "gz_configure_header", "gz_export_header")
 load("@rules_license//rules:license.bzl", "license")
+load("@rules_python//python:py_test.bzl", "py_test")
 
 package(
     default_applicable_licenses = [":license"],
@@ -76,6 +78,28 @@ cc_library(
     ],
 )
 
+pybind_extension(
+    name = "gz/math8",
+    srcs = glob(
+        include = [
+            "src/python_pybind11/src/*.cc",
+            "src/python_pybind11/src/*.hh",
+        ],
+    ),
+    defines = [
+        "BINDINGS_MODULE_NAME=math8",
+    ],
+    linkstatic = True,
+    visibility = ["//visibility:private"],
+    deps = [":gz-math"],
+)
+
+py_library(
+    name = "python",
+    data = [":gz/math8"],
+    visibility = ["//visibility:public"],
+)
+
 test_sources = glob(
     include = [
         "src/*_TEST.cc",
@@ -93,6 +117,22 @@ test_sources = glob(
         ],
     )
     for src in test_sources
+]
+
+py_test_sources = glob(
+    include = [
+        "src/python_pybind11/test/*_TEST.py",
+    ],
+)
+
+[
+    py_test(
+        name = src.replace("/", "_").replace(".py", "_py").replace("src_python_pybind11_test_", ""),
+        srcs = [src],
+        main = src,
+        deps = [":python"],
+    )
+    for src in py_test_sources
 ]
 
 buildifier(
