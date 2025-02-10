@@ -42,9 +42,6 @@ public_headers = glob(
         "include/gz/math/detail/*.hh",
         "include/gz/math/graph/*.hh",
     ],
-    exclude = [
-        "include/gz/math/sdf.hh",
-    ],
 ) + [
     "include/gz/math/Export.hh",
     "include/gz/math/config.hh",
