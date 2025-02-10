@@ -26,12 +26,12 @@ example_sources = glob(
 example_sources_py = glob(
     include = [
         "*.py",
-    ]
+    ],
 )
 
 [py_binary(
-  name = src.replace(".py", "_py"),
-  srcs = [src],
-  main = src,
-  deps = ["//:python"]
+    name = src.replace(".py", "_py"),
+    srcs = [src],
+    main = src,
+    deps = ["//:python"],
 ) for src in example_sources_py]
