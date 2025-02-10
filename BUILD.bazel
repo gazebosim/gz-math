@@ -59,7 +59,6 @@ private_headers = glob(
 sources = glob(
     include = [
         "src/*.cc",
-        "src/bazel/*.cc",
     ],
     exclude = [
         "src/*_TEST.cc",

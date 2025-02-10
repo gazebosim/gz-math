@@ -19,18 +19,8 @@ public_headers = glob(
     ],
 )
 
-sources = glob(
-    include = [
-        "src/*.cc",
-    ],
-    exclude = [
-        "src/*_TEST.cc",
-    ],
-)
-
 cc_library(
     name = "eigen3",
-    srcs = sources,
     hdrs = public_headers,
     includes = ["include"],
     visibility = ["//visibility:public"],
