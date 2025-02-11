@@ -64,8 +64,8 @@ sources = glob(
 
 cc_library(
     name = "gz-math",
-    srcs = sources,
-    hdrs = public_headers + private_headers,
+    srcs = sources + private_headers,
+    hdrs = public_headers,
     includes = [
         "include",
     ],
