@@ -9,154 +9,16 @@ license(
     package_name = "gz-math-examples",
 )
 
-cc_binary(
-    name = "additively_separable_scalar_field3",
-    srcs = ["additively_separable_scalar_field3_example.cc"],
-    deps = [
-        "//:AdditivelySeparableScalarField3",
-        "//:Polynomial3",
+example_sources = glob(
+    include = [
+        "*.cc",
     ],
 )
 
-cc_binary(
-    name = "angle",
-    srcs = ["angle_example.cc"],
+[cc_binary(
+    name = src.replace(".cc", ""),
+    srcs = [src],
     deps = [
-        "//:Angle",
+        "//:gz-math",
     ],
-)
-
-cc_binary(
-    name = "box",
-    srcs = ["box_example.cc"],
-    deps = [
-        "//:Box",
-    ],
-)
-
-cc_binary(
-    name = "color",
-    srcs = ["color_example.cc"],
-    deps = [
-        "//:Color",
-    ],
-)
-
-cc_binary(
-    name = "diff_drive",
-    srcs = ["diff_drive_odometry.cc"],
-    deps = [
-        "//:DiffDriveOdometry",
-    ],
-)
-
-cc_binary(
-    name = "gauss_markov_process",
-    srcs = ["gauss_markov_process_example.cc"],
-    deps = [
-        "//:GaussMarkovProcess",
-    ],
-)
-
-cc_binary(
-    name = "graph",
-    srcs = ["graph_example.cc"],
-    deps = ["//:Graph"],
-)
-
-cc_binary(
-    name = "helpers",
-    srcs = ["helpers_example.cc"],
-    deps = [
-        "//:Helpers",
-        "//:Quaternion",
-    ],
-)
-
-cc_binary(
-    name = "interval",
-    srcs = ["interval_example.cc"],
-    deps = ["//:Interval"],
-)
-
-cc_binary(
-    name = "kmeans",
-    srcs = ["kmeans.cc"],
-    deps = ["//:Kmeans"],
-)
-
-cc_binary(
-    name = "matrix3",
-    srcs = ["matrix3_example.cc"],
-    deps = ["//:Matrix3"],
-)
-
-cc_binary(
-    name = "piecewise_scalar_field3",
-    srcs = ["piecewise_scalar_field3_example.cc"],
-    deps = [
-        "//:AdditivelySeparableScalarField3",
-        "//:PiecewiseScalarField3",
-        "//:Polynomial3",
-    ],
-)
-
-cc_binary(
-    name = "polynomial3",
-    srcs = ["polynomial3_example.cc"],
-    deps = ["//:Polynomial3"],
-)
-
-cc_binary(
-    name = "pose3",
-    srcs = ["pose3_example.cc"],
-    deps = ["//:Pose3"],
-)
-
-cc_binary(
-    name = "quaternion",
-    srcs = ["quaternion_example.cc"],
-    deps = ["//:Quaternion"],
-)
-
-cc_binary(
-    name = "quaternion_from_euler",
-    srcs = ["quaternion_from_euler.cc"],
-    deps = ["//:Quaternion"],
-)
-
-cc_binary(
-    name = "quaternion_to_euler",
-    srcs = ["quaternion_to_euler.cc"],
-    deps = ["//:Quaternion"],
-)
-
-cc_binary(
-    name = "rand",
-    srcs = ["rand_example.cc"],
-    deps = ["//:Rand"],
-)
-
-cc_binary(
-    name = "region3",
-    srcs = ["region3_example.cc"],
-    deps = ["//:Region3"],
-)
-
-cc_binary(
-    name = "temperature",
-    srcs = ["temperature_example.cc"],
-    deps = ["//:Temperature"],
-)
-
-cc_binary(
-    name = "triangle",
-    srcs = ["triangle_example.cc"],
-    deps = ["//:Triangle"],
-)
-
-cc_binary(
-    name = "vector2",
-    srcs = ["vector2_example.cc"],
-    deps = ["//:Vector2"],
-)
+) for src in example_sources]
