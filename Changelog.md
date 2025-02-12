@@ -1,5 +1,22 @@
 ## Gazebo Math 8.x
 
+### Gazebo Math 8.1.1 (2025-02-12)
+
+1. Change to globbed bazel targets
+    * [Pull request #652](https://github.com/gazebosim/gz-math/pull/652)
+
+1. SignalStats.cc: add missing includes
+    * [Pull request #659](https://github.com/gazebosim/gz-math/pull/659)
+
+1. Encapsulate std::cerr under a single point of control
+    * [Pull request #656](https://github.com/gazebosim/gz-math/pull/656)
+
+1. ci.yml: run cppcheck, cpplint on noble
+    * [Pull request #655](https://github.com/gazebosim/gz-math/pull/655)
+
+1. Prepare for 8.1.0 release
+    * [Pull request #650](https://github.com/gazebosim/gz-math/pull/650)
+
 ### Gazebo Math 8.1.0 (2024-11-15)
 
 1. Build gz-math with bzlmod
