@@ -2,6 +2,9 @@
 
 ### Gazebo Math 8.1.1 (2025-02-12)
 
+1. Unify `Python3_Development_FOUND` checks
+    * [Pull request #662](https://github.com/gazebosim/gz-math/pull/662)
+
 1. Change to globbed bazel targets
     * [Pull request #652](https://github.com/gazebosim/gz-math/pull/652)
 
