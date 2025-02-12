@@ -103,9 +103,6 @@ else()
     COMPONENTS Interpreter
     OPTIONAL_COMPONENTS Development
   )
-  if (NOT Python3_Development_FOUND)
-    GZ_BUILD_WARNING("Python development libraries are missing: Python interfaces are disabled.")
-  endif()
 endif()
 
 # Location of "fake install folder" used in tests
