@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.22.1 FATAL_ERROR)
 #============================================================================
 # Initialize the project
 #============================================================================
-project(gz-math8 VERSION 8.1.0)
+project(gz-math8 VERSION 8.1.1)
 
 #============================================================================
 # Find gz-cmake
@@ -103,9 +103,6 @@ else()
     COMPONENTS Interpreter
     OPTIONAL_COMPONENTS Development
   )
-  if (NOT Python3_Development_FOUND)
-    GZ_BUILD_WARNING("Python development libraries are missing: Python interfaces are disabled.")
-  endif()
 endif()
 
 # Location of "fake install folder" used in tests
