@@ -1,4 +1,3 @@
-load("@buildifier_prebuilt//:rules.bzl", "buildifier", "buildifier_test")
 load("@pybind11_bazel//:build_defs.bzl", "pybind_extension")
 load("@rules_gazebo//gazebo:headers.bzl", "gz_configure_header", "gz_export_header")
 load("@rules_license//rules:license.bzl", "license")
@@ -134,19 +133,3 @@ py_test_sources = glob(
     )
     for src in py_test_sources
 ]
-
-buildifier(
-    name = "buildifier.fix",
-    exclude_patterns = ["./.git/*"],
-    lint_mode = "fix",
-    mode = "fix",
-)
-
-buildifier_test(
-    name = "buildifier.test",
-    exclude_patterns = ["./.git/*"],
-    lint_mode = "warn",
-    mode = "diff",
-    no_sandbox = True,
-    workspace = "//:MODULE.bazel",
-)
