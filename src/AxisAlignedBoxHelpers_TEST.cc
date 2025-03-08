@@ -29,7 +29,8 @@ using namespace gz;
 TEST(AxisAlignedBoxHelpersTest, ConvertBox)
 {
   math::Box<double> box(2.0, 4.0, 6.0);
-  math::AxisAlignedBox aabb = math::AxisAlignedBoxHelpers<double>::ConvertToAxisAlignedBox(box);
+  math::AxisAlignedBox aabb =
+          math::AxisAlignedBoxHelpers<double>::ConvertToAxisAlignedBox(box);
   EXPECT_EQ(aabb.Min(), math::Vector3d(-1.0, -2.0, -3.0));
   EXPECT_EQ(aabb.Max(), math::Vector3d(1.0, 2.0, 3.0));
 }
@@ -38,7 +39,8 @@ TEST(AxisAlignedBoxHelpersTest, ConvertBox)
 TEST(AxisAlignedBoxHelpersTest, ConvertSphere)
 {
   math::Sphered sphere(3.0);
-  math::AxisAlignedBox aabb = math::AxisAlignedBoxHelpers<double>::ConvertToAxisAlignedBox(sphere);
+  math::AxisAlignedBox aabb =
+      math::AxisAlignedBoxHelpers<double>::ConvertToAxisAlignedBox(sphere);
   EXPECT_EQ(aabb.Min(), math::Vector3d(-3.0, -3.0, -3.0));
   EXPECT_EQ(aabb.Max(), math::Vector3d(3.0, 3.0, 3.0));
 }
@@ -47,7 +49,8 @@ TEST(AxisAlignedBoxHelpersTest, ConvertSphere)
 TEST(AxisAlignedBoxHelpersTest, ConvertCapsule)
 {
   math::Capsuled capsule(5.0, 2.0);
-  math::AxisAlignedBox aabb = math::AxisAlignedBoxHelpers<double>::ConvertToAxisAlignedBox(capsule);
+  math::AxisAlignedBox aabb =
+      math::AxisAlignedBoxHelpers<double>::ConvertToAxisAlignedBox(capsule);
   EXPECT_EQ(aabb.Min(), math::Vector3d(-2.0, -2.0, -4.5));
   EXPECT_EQ(aabb.Max(), math::Vector3d(2.0, 2.0, 4.5));
 }
@@ -56,7 +59,8 @@ TEST(AxisAlignedBoxHelpersTest, ConvertCapsule)
 TEST(AxisAlignedBoxHelpersTest, ConvertCylinder)
 {
   math::Cylinderd cylinder(5.0, 2.0);
-  math::AxisAlignedBox aabb = math::AxisAlignedBoxHelpers<double>::ConvertToAxisAlignedBox(cylinder);
+  math::AxisAlignedBox aabb =
+      math::AxisAlignedBoxHelpers<double>::ConvertToAxisAlignedBox(cylinder);
   EXPECT_EQ(aabb.Min(), math::Vector3d(-2.0, -2.0, -2.5));
   EXPECT_EQ(aabb.Max(), math::Vector3d(2.0, 2.0, 2.5));
 }
@@ -65,7 +69,8 @@ TEST(AxisAlignedBoxHelpersTest, ConvertCylinder)
 TEST(AxisAlignedBoxHelpersTest, ConvertZeroSizeBox)
 {
   math::Box<double> box(0.0, 0.0, 0.0);
-  math::AxisAlignedBox aabb = math::AxisAlignedBoxHelpers<double>::ConvertToAxisAlignedBox(box);
+  math::AxisAlignedBox aabb =
+      math::AxisAlignedBoxHelpers<double>::ConvertToAxisAlignedBox(box);
   EXPECT_EQ(aabb.Min(), math::Vector3d(0.0, 0.0, 0.0));
   EXPECT_EQ(aabb.Max(), math::Vector3d(0.0, 0.0, 0.0));
 }
@@ -74,7 +79,8 @@ TEST(AxisAlignedBoxHelpersTest, ConvertZeroSizeBox)
 TEST(AxisAlignedBoxHelpersTest, ConvertNegativeSizeBox)
 {
   math::Box<double> box(-2.0, -4.0, -6.0);
-  math::AxisAlignedBox aabb = math::AxisAlignedBoxHelpers<double>::ConvertToAxisAlignedBox(box);
+  math::AxisAlignedBox aabb =
+      math::AxisAlignedBoxHelpers<double>::ConvertToAxisAlignedBox(box);
   EXPECT_EQ(aabb.Min(), math::Vector3d(-1.0, -2.0, -3.0));
   EXPECT_EQ(aabb.Max(), math::Vector3d(1.0, 2.0, 3.0));
 }
@@ -83,7 +89,8 @@ TEST(AxisAlignedBoxHelpersTest, ConvertNegativeSizeBox)
 TEST(AxisAlignedBoxHelpersTest, ConvertLargeSphere)
 {
   math::Sphered sphere(1e6);
-  math::AxisAlignedBox aabb = math::AxisAlignedBoxHelpers<double>::ConvertToAxisAlignedBox(sphere);
+  math::AxisAlignedBox aabb =
+      math::AxisAlignedBoxHelpers<double>::ConvertToAxisAlignedBox(sphere);
   EXPECT_EQ(aabb.Min(), math::Vector3d(-1e6, -1e6, -1e6));
   EXPECT_EQ(aabb.Max(), math::Vector3d(1e6, 1e6, 1e6));
 }

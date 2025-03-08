@@ -27,13 +27,17 @@ namespace gz::math
 {
    // Inline bracket to help doxygen filtering.
    inline namespace GZ_MATH_VERSION_NAMESPACE {
-      
-      /// \class AxisAlignedBoxHelpers AxisAlignedBoxHelpers.hh gz/math/AxisAlignedBoxHelpers.hh
-      /// \brief A utility class to assist in converting different geometric shapes
+
+      /// \class AxisAlignedBoxHelpers
+      ///        AxisAlignedBoxHelpers.hh gz/math/AxisAlignedBoxHelpers.hh
+      /// \brief A utility class to assist in
+      ///        converting different geometric shapes
       ///        into AxisAlignedBox representations.
       ///
-      /// This class provides static methods for converting different types of 3D
-      /// shapes, such as Box, Sphere, Capsule, and Cylinder, into AxisAlignedBox
+      /// This class provides static methods for
+      /// converting different types of 3D
+      /// shapes, such as Box, Sphere, Capsule,
+      /// and Cylinder, into AxisAlignedBox
       /// objects.
       template<typename Precision>
       class AxisAlignedBoxHelpers
@@ -42,22 +46,26 @@ namespace gz::math
          /// \brief Convert a Box to an AxisAlignedBox.
          /// \param[in] _box The Box to be converted.
          /// \return An AxisAlignedBox that fully contains the given Box.
-         static AxisAlignedBox ConvertToAxisAlignedBox(const Box<Precision> &_box);
+         static AxisAlignedBox ConvertToAxisAlignedBox(
+            const Box<Precision> &_box);
 
          /// \brief Convert a Sphere to an AxisAlignedBox.
          /// \param[in] _sphere The Sphere to be converted.
          /// \return An AxisAlignedBox that fully contains the given Sphere.
-         static AxisAlignedBox ConvertToAxisAlignedBox(const Sphere<Precision> &_sphere);
+         static AxisAlignedBox ConvertToAxisAlignedBox(
+            const Sphere<Precision> &_sphere);
 
          /// \brief Convert a Capsule to an AxisAlignedBox.
          /// \param[in] _capsule The Capsule to be converted.
          /// \return An AxisAlignedBox that fully contains the given Capsule.
-         static AxisAlignedBox ConvertToAxisAlignedBox(const Capsule<Precision> &_capsule);
+         static AxisAlignedBox ConvertToAxisAlignedBox(
+            const Capsule<Precision> &_capsule);
 
          /// \brief Convert a Cylinder to an AxisAlignedBox.
          /// \param[in] _cylinder The Cylinder to be converted.
          /// \return An AxisAlignedBox that fully contains the given Cylinder.
-         static AxisAlignedBox ConvertToAxisAlignedBox(const Cylinder<Precision> &_cylinder);
+         static AxisAlignedBox ConvertToAxisAlignedBox(
+            const Cylinder<Precision> &_cylinder);
       };
    }
 }  // namespace gz::math
