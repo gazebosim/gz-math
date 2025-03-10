@@ -16,6 +16,7 @@
 #ifndef GZ_MATH_DETAIL_AXISALIGNEDBOXHELPERS_HH_
 #define GZ_MATH_DETAIL_AXISALIGNEDBOXHELPERS_HH_
 
+#include <gz/math/Vector3.hh>
 #include <gz/math/AxisAlignedBox.hh>
 #include <gz/math/AxisAlignedBoxHelpers.hh>
 #include <gz/math/Box.hh>
