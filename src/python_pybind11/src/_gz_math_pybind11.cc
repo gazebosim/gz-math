@@ -16,6 +16,7 @@
 
 #include "Angle.hh"
 #include "AxisAlignedBox.hh"
+#include "AxisAlignedBoxHelpers.hh"
 #include "Box.hh"
 #include "Capsule.hh"
 #include "Color.hh"
@@ -73,6 +74,9 @@ PYBIND11_MODULE(BINDINGS_MODULE_NAME, m)
   gz::math::python::defineMathAngle(m, "Angle");
 
   gz::math::python::defineMathAxisAlignedBox(m, "AxisAlignedBox");
+
+  gz::math::python::defineMathAxisAlignedBoxHelpers<double>(
+    m, "AxisAlignedBoxHelpers");
 
   gz::math::python::defineMathCapsule(m, "Capsule");
 
