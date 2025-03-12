@@ -136,6 +136,7 @@ if (BUILD_TESTING)
   set(python_tests
     Angle_TEST
     AxisAlignedBox_TEST
+    AxisAlignedBoxHelpers_TEST
     Box_TEST
     Capsule_TEST
     Color_TEST
