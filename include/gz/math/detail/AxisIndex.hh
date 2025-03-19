@@ -67,7 +67,7 @@ namespace gz::math
         return key->first;
       }
 
-      /// \brief Register the existance of a measurement at _value.
+      /// \brief Register the existence of a measurement at _value.
       /// \param[in] _value The position of the measurement.
       public: void AddIndexIfNotFound(T _value)
       {

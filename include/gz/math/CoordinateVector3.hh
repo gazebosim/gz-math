@@ -78,7 +78,7 @@ namespace gz::math
     /// \brief Set the metric contents of the vector
     /// \param[in] _x value along x
     /// \param[in] _y value along y
-    /// \param[in] _z value aling z
+    /// \param[in] _z value along z
     public: void SetMetric(double _x, double _y, double _z);
 
     /// \brief Set the metric contents of the vector

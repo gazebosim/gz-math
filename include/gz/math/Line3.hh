@@ -337,7 +337,7 @@ namespace gz::math
     /// \param[in] _pt Point to check.
     /// \param[in] _epsilon The error bounds within which the within
     /// check will return true.
-    /// \return True if the point is on the segement.
+    /// \return True if the point is on the segment.
     public: bool Within(const math::Vector3<T> &_pt,
                         double _epsilon = 1e-6) const
     {

@@ -271,7 +271,7 @@ namespace gz::math
 
     /// \brief The leftmost interval value
     private: T leftValue{0};
-    /// \brief The righmost interval value
+    /// \brief The rightmost interval value
     private: T rightValue{0};
     /// \brief Whether the interval is left-closed or not
     private: bool leftClosed{false};
