@@ -39,7 +39,7 @@ Example
   quaternion_from_euler 0 0 1.57
 ```
 
-The ouput of each program, respectively:
+The output of each program, respectively:
 
 ```{.sh}
 # Linux and macOS
@@ -109,6 +109,6 @@ To access the quaternions attributes:
 
 \snippet examples/quaternion_from_euler.cc access quaternion
 
-Or to acccess the rotation matrix elements:
+Or to access the rotation matrix elements:
 
 \snippet examples/quaternion_from_euler.cc rotation matrix
