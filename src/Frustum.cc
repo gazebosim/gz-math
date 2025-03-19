@@ -138,7 +138,7 @@ bool Frustum::Contains(const AxisAlignedBox &_b) const
     // Return true if any edge of the frustum passes through the AABB
     for (const auto &edge : this->dataPtr->edges)
     {
-      // If the edge projected onto a world axis does not overlapp with the AABB
+      // If the edge projected onto a world axis does not overlap with the AABB
       // then the edge could not be passing through the AABB.
       if (edge.first.X() < min.X() && edge.second.X() < min.X())
       {
