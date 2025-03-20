@@ -97,7 +97,7 @@ You can create some objects to express rotations:
 
 To access the quaterions attributes:
 
-\snippet examples/quaternion_from_euler.cc access quaterion
+\snippet examples/quaternion_from_euler.cc access quaternion
 
 Or to acccess the rotation matrix elements:
 
