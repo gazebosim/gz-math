@@ -441,7 +441,7 @@ class TestSignalStats(unittest.TestCase):
                          "FakeStatistic" in map2.keys())
 
     def test_02_signal_stats_intern_statistic(self):
-        # insert statics
+        # insert statistics
         stats = SignalStats()
         self.assertFalse(stats.insert_statistics(""))
         self.assertTrue(len(stats.map()) == 0)

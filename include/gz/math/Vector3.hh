@@ -163,7 +163,7 @@ namespace gz::math
     /// \brief Set the contents of the vector
     /// \param[in] _x value along x
     /// \param[in] _y value along y
-    /// \param[in] _z value aling z
+    /// \param[in] _z value along z
     public: inline void Set(T _x = 0, T _y = 0, T _z = 0)
     {
       this->data[0] = _x;
@@ -389,8 +389,8 @@ namespace gz::math
     }
 
     /// \brief Subtraction operators
-    /// \param[in] _pt a vector to substract
-    /// \return a vector after the substraction
+    /// \param[in] _pt a vector to subtract
+    /// \return a vector after the subtraction
     public: inline Vector3<T> operator-(const Vector3<T> &_pt) const
     {
       return Vector3(this->data[0] - _pt[0],
@@ -400,7 +400,7 @@ namespace gz::math
 
     /// \brief Subtraction assignment operators
     /// \param[in] _pt subtrahend
-    /// \return a vector after the substraction
+    /// \return a vector after the subtraction
     public: const Vector3<T> &operator-=(const Vector3<T> &_pt)
     {
       this->data[0] -= _pt[0];
@@ -549,7 +549,7 @@ namespace gz::math
     /// \param[in] _v the vector to compare to
     /// \param[in] _tol equality tolerance.
     /// \return true if the elements of the vectors are equal within
-    /// the tolerence specified by _tol.
+    /// the tolerance specified by _tol.
     public: bool Equal(const Vector3 &_v, const T &_tol) const
     {
       return equal<T>(this->data[0], _v[0], _tol)
@@ -560,7 +560,7 @@ namespace gz::math
     /// \brief Equal to operator
     /// \param[in] _v The vector to compare against
     /// \return true if each component is equal within a
-    /// default tolerence (1e-3), false otherwise
+    /// default tolerance (1e-3), false otherwise
     public: bool operator==(const Vector3<T> &_v) const
     {
       return this->Equal(_v, static_cast<T>(1e-3));
@@ -569,7 +569,7 @@ namespace gz::math
     /// \brief Not equal to operator
     /// \param[in] _v The vector to compare against
     /// \return false if each component is equal within a
-    /// default tolerence (1e-3), true otherwise
+    /// default tolerance (1e-3), true otherwise
     public: bool operator!=(const Vector3<T> &_v) const
     {
       return !(*this == _v);

@@ -254,7 +254,7 @@ namespace gz::math
     }
 
     /// \brief Set a column.
-    /// \param[in] _c The colum index [0, 1, 2]. _col is clamped to the
+    /// \param[in] _c The column index [0, 1, 2]. _col is clamped to the
     /// range [0, 2].
     /// \param[in] _v The value to set in each row of the column.
     public: void SetCol(unsigned int _c, const Vector3<T> &_v)
@@ -400,7 +400,7 @@ namespace gz::math
     /// \param[in] _m the matrix to compare to
     /// \param[in] _tol equality tolerance.
     /// \return true if the elements of the matrices are equal within
-    /// the tolerence specified by _tol.
+    /// the tolerance specified by _tol.
     public: bool Equal(const Matrix3 &_m, const T &_tol) const
     {
       return equal<T>(this->data[0][0], _m(0, 0), _tol)

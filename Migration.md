@@ -16,7 +16,7 @@ release will remove the deprecated code.
 1. Behavior change in `math::Color` clamping functionality. Previously when
    any of the color r, g, or b values are larger than 1, they are assumed to
    be in the range of [0, 255] and the values are divided by 255
-   by the `math::Color::Clamp` funcion. This is no longer the case. Users are
+   by the `math::Color::Clamp` function. This is no longer the case. Users are
    expected to specify floating point r, g, b values in the range of [0, 1].
    Any values larger than 1 will be clamped to 1.
 
