@@ -753,8 +753,8 @@ class ParameterizedTestSuiteRegistry {
 };
 
 // Keep track of what type-parameterized test suite are defined and
-// where as well as which are intatiated. This allows susequently
-// identifying suits that are defined but never used.
+// where as well as which are instantiated. This allows subsequently
+// identifying suites that are defined but never used.
 class TypeParameterizedTestSuiteRegistry {
  public:
   // Add a suite definition
@@ -764,7 +764,7 @@ class TypeParameterizedTestSuiteRegistry {
   // Add an instantiation of a suit.
   void RegisterInstantiation(const char* test_suite_name);
 
-  // For each suit repored as defined but not reported as instantiation,
+  // For each suit reported as defined but not reported as instantiation,
   // emit a test that reports that fact (configurably, as an error).
   void CheckForInstantiations();
 

@@ -112,9 +112,38 @@ namespace gz::math
     ///
     /// \param[in] _xyz Cartesian position vector in the heading-adjusted
     /// world frame.
-    /// \return Cooordinates: geodetic latitude (deg), longitude (deg),
+    /// \return Coordinates: geodetic latitude (deg), longitude (deg),
     ///         altitude above sea level (m).
+<<<<<<< HEAD
     public: gz::math::Vector3d SphericalFromLocalPosition(
+=======
+    public: GZ_DEPRECATED(8) gz::math::Vector3d SphericalFromLocalPosition(
+                const gz::math::Vector3d &_xyz) const;
+
+    /// \brief Convert a Cartesian position vector to geodetic coordinates.
+    /// This performs a `PositionTransform` from LOCAL to SPHERICAL.
+    ///
+    /// \param[in] _xyz Cartesian position vector in the heading-adjusted
+    /// world frame.
+    /// \return Coordinates: geodetic latitude, longitude,
+    ///         altitude above sea level.
+    public: std::optional<math::CoordinateVector3> SphericalFromLocalPosition(
+                const gz::math::CoordinateVector3 &_xyz) const;
+
+    /// \brief Convert a Cartesian velocity vector in the local frame
+    ///        to a global Cartesian frame with components East, North, Up.
+    /// This is a wrapper around `VelocityTransform(_xyz, LOCAL, GLOBAL)`
+    ///
+    /// \deprecated There's a known bug with this computation that can't be
+    /// fixed until Gazebo 8 to avoid behaviour changes.
+    /// Call `GlobalFromLocalVelocity(CoordinateVector3)` for correct
+    /// results.
+    ///
+    /// \param[in] _xyz Cartesian velocity vector in the heading-adjusted
+    /// world frame.
+    /// \return Rotated vector with components (x,y,z): (East, North, Up).
+    public: GZ_DEPRECATED(8) gz::math::Vector3d GlobalFromLocalVelocity(
+>>>>>>> d5a19fe (Docs/spell check (#669))
                 const gz::math::Vector3d &_xyz) const;
 
     /// \brief Convert a Cartesian velocity vector in the local frame

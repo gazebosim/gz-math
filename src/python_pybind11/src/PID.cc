@@ -97,7 +97,7 @@ void defineMathPID(py::module &m, const std::string &typestr)
         "Get the maximum value for the command.")
    .def("cmd_min",
         &Class::CmdMin,
-        "Get the minimun value for the command.")
+        "Get the minimum value for the command.")
    .def("cmd_offset",
         &Class::CmdOffset,
         "Get the offset value for the command.")

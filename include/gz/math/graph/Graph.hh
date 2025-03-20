@@ -37,7 +37,7 @@ namespace graph
 {
   /// \brief A generic graph class.
   /// Both vertices and edges can store user information. A vertex could be
-  /// created passing a custom Id if needed, otherwise it will be choosen
+  /// created passing a custom Id if needed, otherwise it will be chosen
   /// internally. The vertices also have a name that could be reused among
   /// other vertices if needed. This class supports the use of different edge
   /// types (e.g. directed or undirected edges).
@@ -746,7 +746,7 @@ namespace graph
     /// another vertex via (e).
     private: std::map<VertexId, EdgeId_S> adjList;
 
-    /// \brief Association between names and vertices curently used.
+    /// \brief Association between names and vertices currently used.
     private: std::multimap<std::string, VertexId> names;
   };
 

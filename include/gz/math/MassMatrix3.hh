@@ -43,7 +43,7 @@ namespace gz::math
   template<typename T>
   class MassMatrix3
   {
-    /// \brief Default Constructor, which inializes the mass and moments
+    /// \brief Default Constructor, which initializes the mass and moments
     /// to zero.
     public: MassMatrix3() : mass(0)
     {}

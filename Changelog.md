@@ -835,7 +835,7 @@
     * [Pull request 132](https://github.com/gazebosim/gz-math/pull/132)
     * [Issue 71](https://github.com/gazebosim/gz-math/issues/71)
 
-1. Update vector2 fuctions from vector3
+1. Update vector2 functions from vector3
     * [Pull request 130](https://github.com/gazebosim/gz-math/pull/130)
     * [Issue 71](https://github.com/gazebosim/gz-math/issues/71)
 
@@ -1044,7 +1044,7 @@ specify a density.
     * [Issue 72](https://github.com/gazebosim/gz-math/issues/72)
     * [Issue 53](https://github.com/gazebosim/gz-math/issues/53)
 
-1. Added graph utilites:
+1. Added graph utilities:
     1. Added a Vertex class:
     * [BitBucket pull request 170](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/170)
     1. Added an Edge class:
@@ -1115,7 +1115,7 @@ specify a density.
     * [BitBucket pull request 137](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/137)
 
 1. Removed exceptions. Return values should be evaluated to determine if
-   errors have occured.
+   errors have occurred.
     * [BitBucket pull request 132](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/132)
 
 1. Added `operator=(const Quaternion<T> &_q)` to `Matrix3`.

@@ -145,7 +145,7 @@ namespace gz::math
     /// \return The maximum value
     public: double CmdMax() const;
 
-    /// \brief Get the minimun value for the command.
+    /// \brief Get the minimum value for the command.
     /// \return The maximum value
     public: double CmdMin() const;
 

@@ -98,9 +98,9 @@ namespace gz::math
     /// \param[in] _size Size of the box. The vector _size has the following
     /// mapping:
     ///
-    /// * _size[0] == lengt in metersh
+    /// * _size[0] == length in metersh
     /// * _size[1] == widt in metersh
-    /// * _size[2] == heigh in meterst
+    /// * _size[2] == height in meterst
     public: void SetSize(const math::Vector3<Precision> &_size);
 
     /// \brief Set the size of the box.

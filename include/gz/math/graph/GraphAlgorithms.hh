@@ -179,7 +179,7 @@ namespace graph
   ///           3-------4             |
   ///              (1)                |
   ///
-  /// This is the resut of Dijkstra(g, 0):
+  /// This is the result of Dijkstra(g, 0):
   ///
   /// \code
   /// ================================
@@ -233,7 +233,7 @@ namespace graph
     std::priority_queue<CostInfo,
       std::vector<CostInfo>, std::greater<CostInfo>> pq;
 
-    // Create a map for distances and next neightbor and initialize all
+    // Create a map for distances and next neighbor and initialize all
     // distances as infinite.
     std::map<VertexId, CostInfo> dist;
     for (auto const &v : allVertices)
