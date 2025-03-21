@@ -112,7 +112,7 @@ namespace gz::math
     ///
     /// \param[in] _xyz Cartesian position vector in the heading-adjusted
     /// world frame.
-    /// \return Cooordinates: geodetic latitude (deg), longitude (deg),
+    /// \return Coordinates: geodetic latitude (deg), longitude (deg),
     ///         altitude above sea level (m).
     public: gz::math::Vector3d SphericalFromLocalPosition(
                 const gz::math::Vector3d &_xyz) const;

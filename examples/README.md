@@ -36,7 +36,7 @@ cmake -build . --config Release
 
 Several executables were created in the build folder. 
 
-For example, run the angle exaample on Unix:
+For example, run the angle example on Unix:
 
 ```
 cd examples/build

@@ -21,7 +21,7 @@ When the code is compiled, run:
 ./color_example
 ```
 
-The ouput of the program:
+The output of the program:
 
 ```{.sh}
 The alpha value of a should be 1: 1

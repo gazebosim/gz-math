@@ -34,7 +34,7 @@ class gz::math::MecanumDriveOdometryPrivate
   /// \param[in] _angular Angular velocity.
   public: void IntegrateExact(double _linear, double _lateral, double _angular);
 
-  /// \brief Integrates the pose using second order Runge-Kuffa aproximation.
+  /// \brief Integrates the pose using second order Runge-Kuffa approximation.
   /// \param[in] _linear Linear velocity.
   /// \param[in] _lateral Lateral velocity.
   /// \param[in] _angular Angular velocity.
