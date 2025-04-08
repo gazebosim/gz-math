@@ -24,6 +24,12 @@
 
 using namespace gz;
 
+extern int extern_global;
+int __attribute__((noinline)) read_extern_global() {
+  return extern_global;
+}
+int x = read_extern_global() + 1;
+
 /////////////////////////////////////////////////
 TEST(AngleTest, Angle)
 {

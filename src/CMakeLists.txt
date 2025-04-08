@@ -14,6 +14,7 @@ target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
 # Build the unit tests
 gz_build_tests(TYPE UNIT SOURCES ${gtest_sources})
 
+target_sources(UNIT_Angle_TEST PRIVATE b.cpp)
 # graph namespace
 add_subdirectory(graph)
 
