@@ -78,7 +78,7 @@ cc_library(
 )
 
 pybind_extension(
-    name = "gz/math8",
+    name = "gz/math9",
     srcs = glob(
         include = [
             "src/python_pybind11/src/*.cc",
@@ -86,7 +86,7 @@ pybind_extension(
         ],
     ),
     defines = [
-        "BINDINGS_MODULE_NAME=math8",
+        "BINDINGS_MODULE_NAME=math9",
     ],
     linkstatic = True,
     visibility = ["//visibility:private"],
@@ -95,7 +95,7 @@ pybind_extension(
 
 py_library(
     name = "python",
-    data = [":gz/math8"],
+    data = [":gz/math9"],
     visibility = ["//visibility:public"],
 )
 
