@@ -127,9 +127,10 @@ py_test_sources = glob(
 [
     py_test(
         name = src.replace("/", "_").replace(".py", "_py").replace("src_python_pybind11_test_", ""),
-        srcs = [src],
+        srcs = [src, "src/python_pybind11/test/numpy_helpers.py" ],
         main = src,
         deps = [":python"],
+        imports = ["src/python_pybind11/test/"],
     )
     for src in py_test_sources
 ]
