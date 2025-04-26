@@ -19,6 +19,7 @@
 
 #include <limits>
 #include <optional>
+#include "gz/math/Ellipsoid.hh"
 #include <gz/math/Helpers.hh>
 #include <gz/math/Inertial.hh>
 

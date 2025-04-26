@@ -28,7 +28,7 @@ When the code is compiled, run:
 .\build\Release\triangle_example.exe
 ```
 
-The ouput of the program:
+The output of the program:
 
 ```{.sh}
 Vertex 1: -1 0

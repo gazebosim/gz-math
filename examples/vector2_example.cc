@@ -16,7 +16,7 @@
 */
 //! [complete]
 #include <iostream>
-#include <gz/math.hh>
+#include <gz/math/Vector2.hh>
 
 int main(int argc, char **argv)
 {

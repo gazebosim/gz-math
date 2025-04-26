@@ -201,7 +201,7 @@ class TestVector2(unittest.TestCase):
         self.assertAlmostEqual(Vector2d.ZERO + vec1, vec1)
         self.assertAlmostEqual(vec1 + Vector2d.ZERO, vec1)
 
-        # Addition assigment
+        # Addition assignment
         vec4 = Vector2d(vec1)
         vec4 += 0
         self.assertEqual(vec4, vec1)

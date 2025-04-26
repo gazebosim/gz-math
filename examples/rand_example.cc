@@ -37,7 +37,7 @@ int main(int argc, char **argv)
   }
   for (int i = 0; i < 100000; ++i)
   {
-    double value;
+    double value = 0.0;
     if (std::string(argv[1]) == "normal")
     {
       value = gz::math::Rand::DblNormal(0, 100);
@@ -46,6 +46,12 @@ int main(int argc, char **argv)
     {
       value = gz::math::Rand::DblUniform(0, 1000);
     }
+    else
+    {
+      std::cout << "./rand_example [normal, uniform]" << '\n';
+      return -1;
+    }
+
     std::cout << value << std::endl;
   }
 

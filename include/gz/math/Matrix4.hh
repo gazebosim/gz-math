@@ -693,7 +693,7 @@ namespace gz::math
     /// \param[in] _m the matrix to compare to
     /// \param[in] _tol equality tolerance.
     /// \return true if the elements of the matrices are equal within
-    /// the tolerence specified by _tol.
+    /// the tolerance specified by _tol.
     public: bool Equal(const Matrix4 &_m, const T &_tol) const
     {
       return equal<T>(this->data[0][0], _m(0, 0), _tol)

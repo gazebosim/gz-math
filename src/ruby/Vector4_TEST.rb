@@ -101,7 +101,7 @@ class Vector4_TEST < Test::Unit::TestCase
            "Vector4 length of [1, 1, 1, 1] should equal sqrt(4.0)")
 
     assert(Gz::Math::Vector4d.One.SquaredLength() == 4.0,
-           "Vector4 squared lenght of [1, 1, 1, 1] should equal 4.0")
+           "Vector4 squared length of [1, 1, 1, 1] should equal 4.0")
 
     # Arbitrary vector
     v = Gz::Math::Vector4d.new(0.1, -4.2, 2.5, -1.2)
@@ -259,7 +259,7 @@ class Vector4_TEST < Test::Unit::TestCase
 
     # Multiply by itself element-wise
     assert(v*v == Gz::Math::Vector4d.new(0.01, 0.04, 0.09, 0.16),
-           "Vector4 v * v should euqal [0.01, 0.04, 0.09, 0.16]")
+           "Vector4 v * v should equal [0.01, 0.04, 0.09, 0.16]")
   end
 
   def test_not_equal

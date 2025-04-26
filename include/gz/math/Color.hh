@@ -225,7 +225,7 @@ namespace gz::math
     public: const Color &operator+=(const Color &_pt);
 
     /// \brief Subtraction operator
-    /// \param[in] _pt The color to substract
+    /// \param[in] _pt The color to subtract
     /// \return The resulting color
     public: Color operator-(const Color &_pt) const;
 
@@ -255,7 +255,7 @@ namespace gz::math
     public: const Color &operator/=(const Color &_pt);
 
     /// \brief Multiplication operator
-    /// \param[in] _pt The color to muliply by
+    /// \param[in] _pt The color to multiply by
     /// \return The resulting color
     public: const Color operator*(const Color &_pt) const;
 
@@ -265,7 +265,7 @@ namespace gz::math
     public: const Color operator*(const float &_v) const;
 
     /// \brief Multiplication equal operator
-    /// \param[in] _pt The color to muliply by
+    /// \param[in] _pt The color to multiply by
     /// \return The resulting color
     public: const Color &operator*=(const Color &_pt);
 

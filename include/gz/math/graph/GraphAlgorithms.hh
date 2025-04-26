@@ -26,6 +26,7 @@
 #include <vector>
 
 #include <gz/math/config.hh>
+#include "gz/math/detail/Error.hh"
 #include "gz/math/graph/Graph.hh"
 #include "gz/math/Helpers.hh"
 
@@ -179,7 +180,7 @@ namespace graph
   ///           3-------4             |
   ///              (1)                |
   ///
-  /// This is the resut of Dijkstra(g, 0):
+  /// This is the result of Dijkstra(g, 0):
   ///
   /// \code
   /// ================================
@@ -217,7 +218,9 @@ namespace graph
     // Sanity check: The source vertex should exist.
     if (allVertices.find(_from) == allVertices.end())
     {
-      std::cerr << "Vertex [" << _from << "] Not found" << std::endl;
+      std::ostringstream errStream;
+      errStream << "Vertex [" << _from << "] Not found";
+      detail::LogErrorMessage(errStream.str());
       return {};
     }
 
@@ -225,7 +228,9 @@ namespace graph
     if (_to != kNullId &&
         allVertices.find(_to) == allVertices.end())
     {
-      std::cerr << "Vertex [" << _from << "] Not found" << std::endl;
+      std::ostringstream errStream;
+      errStream << "Vertex [" << _from << "] Not found";
+      detail::LogErrorMessage(errStream.str());
       return {};
     }
 
@@ -233,7 +238,7 @@ namespace graph
     std::priority_queue<CostInfo,
       std::vector<CostInfo>, std::greater<CostInfo>> pq;
 
-    // Create a map for distances and next neightbor and initialize all
+    // Create a map for distances and next neighbor and initialize all
     // distances as infinite.
     std::map<VertexId, CostInfo> dist;
     for (auto const &v : allVertices)

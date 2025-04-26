@@ -18,6 +18,7 @@
 #define GZ_MATH_DETAIL_CYLINDER_HH_
 
 #include <optional>
+#include "gz/math/Cylinder.hh"
 
 namespace gz::math
 {

@@ -4,6 +4,48 @@
 
 ## Gazebo Math 8.x
 
+### Gazebo Math 8.1.1 (2025-02-12)
+
+1. Unify `Python3_Development_FOUND` checks
+    * [Pull request #662](https://github.com/gazebosim/gz-math/pull/662)
+
+1. Change to globbed bazel targets
+    * [Pull request #652](https://github.com/gazebosim/gz-math/pull/652)
+
+1. SignalStats.cc: add missing includes
+    * [Pull request #659](https://github.com/gazebosim/gz-math/pull/659)
+
+1. Encapsulate std::cerr under a single point of control
+    * [Pull request #656](https://github.com/gazebosim/gz-math/pull/656)
+
+1. ci.yml: run cppcheck, cpplint on noble
+    * [Pull request #655](https://github.com/gazebosim/gz-math/pull/655)
+
+### Gazebo Math 8.1.0 (2024-11-15)
+
+1. Build gz-math with bzlmod
+    * [Pull request #648](https://github.com/gazebosim/gz-math/pull/648)
+    * [Pull request #646](https://github.com/gazebosim/gz-math/pull/646)
+    * [Pull request #644](https://github.com/gazebosim/gz-math/pull/644)
+    * [Pull request #589](https://github.com/gazebosim/gz-math/pull/589)
+
+1. Add CI support for bzlmod
+    * [Pull request #643](https://github.com/gazebosim/gz-math/pull/643)
+    * [Pull request #637](https://github.com/gazebosim/gz-math/pull/637)
+
+1. Specify template for Vector2 in Vector2_TEST
+    * [Pull request #645](https://github.com/gazebosim/gz-math/pull/645)
+
+1. Python bindings: get version from package.xml
+    * [Pull request #642](https://github.com/gazebosim/gz-math/pull/642)
+
+1. Permit building python bindings separately from gz-math library
+    * [Pull request #640](https://github.com/gazebosim/gz-math/pull/640)
+    * [Pull request #636](https://github.com/gazebosim/gz-math/pull/636)
+
+1. Merge all changes from 7.5.1 
+    * [Pull request #623](https://github.com/gazebosim/gz-math/pull/623)
+
 ### Gazebo Math 8.0.0 (2024-09-25)
 
 1. Miscellaneous documentation fixes
@@ -71,6 +113,20 @@
     * [Pull request #478](https://github.com/gazebosim/gz-math/pull/478)
 
 ## Gazebo Math 7.x
+
+### Gazebo Math 7.5.1 (2024-08-23)
+
+1. Fix tolerance for axis-angle conversion of quaternions
+    * [Pull request #620](https://github.com/gazebosim/gz-math/pull/620)
+
+1. Added box examples in C++ and Python
+    * [Pull request #584](https://github.com/gazebosim/gz-math/pull/584)
+
+1. Check for 0 stddev when generating a random number using normal distribution
+    * [Pull request #615](https://github.com/gazebosim/gz-math/pull/615)
+
+1. Clean up nested namespaces
+    * [Pull request #603](https://github.com/gazebosim/gz-math/pull/603)
 
 ### Gazebo Math 7.5.0 (2024-06-18)
 
@@ -885,7 +941,7 @@
     * [Pull request 132](https://github.com/gazebosim/gz-math/pull/132)
     * [Issue 71](https://github.com/gazebosim/gz-math/issues/71)
 
-1. Update vector2 fuctions from vector3
+1. Update vector2 functions from vector3
     * [Pull request 130](https://github.com/gazebosim/gz-math/pull/130)
     * [Issue 71](https://github.com/gazebosim/gz-math/issues/71)
 
@@ -1094,7 +1150,7 @@ specify a density.
     * [Issue 72](https://github.com/gazebosim/gz-math/issues/72)
     * [Issue 53](https://github.com/gazebosim/gz-math/issues/53)
 
-1. Added graph utilites:
+1. Added graph utilities:
     1. Added a Vertex class:
     * [BitBucket pull request 170](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/170)
     1. Added an Edge class:
@@ -1165,7 +1221,7 @@ specify a density.
     * [BitBucket pull request 137](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/137)
 
 1. Removed exceptions. Return values should be evaluated to determine if
-   errors have occured.
+   errors have occurred.
     * [BitBucket pull request 132](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/132)
 
 1. Added `operator=(const Quaternion<T> &_q)` to `Matrix3`.

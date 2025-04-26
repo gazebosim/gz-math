@@ -280,7 +280,7 @@ namespace gz::math
     }
 
     /// \brief Subtraction operator
-    /// \param[in] _v the vector to substract
+    /// \param[in] _v the vector to subtract
     /// \return the subtracted vector
     public: Vector2 operator-(const Vector2 &_v) const
     {
@@ -288,7 +288,7 @@ namespace gz::math
     }
 
     /// \brief Subtraction assignment operator
-    /// \param[in] _v the vector to substract
+    /// \param[in] _v the vector to subtract
     /// \return this
     public: const Vector2 &operator-=(const Vector2 &_v)
     {
@@ -421,7 +421,7 @@ namespace gz::math
     /// \param[in] _v the vector to compare to
     /// \param[in] _tol equality tolerance.
     /// \return true if the elements of the vectors are equal within
-    /// the tolerence specified by _tol.
+    /// the tolerance specified by _tol.
     public: bool Equal(const Vector2 &_v, const T &_tol) const
     {
       return equal<T>(this->data[0], _v[0], _tol)
@@ -431,14 +431,14 @@ namespace gz::math
     /// \brief Equal to operator
     /// \param[in] _v the vector to compare to
     /// \return true if the elements of the 2 vectors are equal within
-    /// a tolerence (1e-6)
+    /// a tolerance (1e-6)
     public: bool operator==(const Vector2 &_v) const
     {
       return this->Equal(_v, static_cast<T>(1e-6));
     }
 
     /// \brief Not equal to operator
-    /// \return true if elements are of diffent values (tolerence 1e-6)
+    /// \return true if elements are of different values (tolerance 1e-6)
     public: bool operator!=(const Vector2 &_v) const
     {
       return !(*this == _v);

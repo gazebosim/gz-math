@@ -16,7 +16,8 @@
 */
 
 #include <iostream>
-#include <gz/math.hh>
+
+#include <gz/math/Triangle.hh>
 
 int main(int argc, char **argv)
 {

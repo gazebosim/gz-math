@@ -39,7 +39,7 @@ Example
   quaternion_from_euler 0 0 1.57
 ```
 
-The ouput of each program, respectively:
+The output of each program, respectively:
 
 ```{.sh}
 # Linux and macOS
@@ -105,10 +105,10 @@ You can create some objects to express rotations:
 \snippet examples/quaternion_from_euler.cc constructor
 \snippet examples/quaternion_to_euler.cc constructor
 
-To access the quaterions attributes:
+To access the quaternions attributes:
 
-\snippet examples/quaternion_from_euler.cc access quaterion
+\snippet examples/quaternion_from_euler.cc access quaternion
 
-Or to acccess the rotation matrix elements:
+Or to access the rotation matrix elements:
 
 \snippet examples/quaternion_from_euler.cc rotation matrix

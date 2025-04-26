@@ -65,9 +65,9 @@ namespace gz::math
     /// \brief Updates the odometry class with latest wheels and
     /// steerings position
     /// \param[in] _frontLeftPos Left wheel position in radians.
-    /// \param[in] _frontRightPos Right wheel postion in radians.
+    /// \param[in] _frontRightPos Right wheel position in radians.
     /// \param[in] _backLeftPos Left wheel position in radians.
-    /// \param[in] _backRightPos Right wheel postion in radians.
+    /// \param[in] _backRightPos Right wheel position in radians.
     /// \param[in] _time Current time point.
     /// \return True if the odometry is actually updated.
     public: bool Update(

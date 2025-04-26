@@ -489,7 +489,7 @@ TEST(FrustumTest, ContainsAABBNoOverlap)
   frustum.SetAspectRatio(1.8);
   frustum.SetPose(Pose3d(0, 0, 2, 0, 0, 0));
 
-  // AxisAlignedBoxes that don't overlapp any planes
+  // AxisAlignedBoxes that don't overlap any planes
   EXPECT_TRUE(frustum.Contains(
     AxisAlignedBox(Vector3d(1.45, -0.05, 1.95), Vector3d(1.55, 0.05, 2.05))));
   EXPECT_FALSE(frustum.Contains(

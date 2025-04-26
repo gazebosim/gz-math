@@ -1106,7 +1106,7 @@ namespace gz::math
     /// \param[in] _q The quaternion to compare against.
     /// \param[in] _tol equality tolerance.
     /// \return True if the elements of the quaternions are equal within
-    /// the tolerence specified by _tol.
+    /// the tolerance specified by _tol.
     public: bool Equal(const Quaternion &_q, const T &_tol) const
     {
       return equal(this->qx, _q.qx, _tol) &&
