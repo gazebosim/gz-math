@@ -17,8 +17,8 @@ bazel_dep(name = "rules_gazebo", version = "0.0.2")
 bazel_dep(name = "gz-utils")
 archive_override(
     module_name = "gz-utils",
-    strip_prefix = "gz-utils-gz-utils4",
-    urls = ["https://github.com/gazebosim/gz-utils/archive/refs/heads/gz-utils4.tar.gz"],
+    strip_prefix = "gz-utils-main",
+    urls = ["https://github.com/gazebosim/gz-utils/archive/refs/heads/main.tar.gz"],
 )
 
 PYTHON_VERSIONS = [
