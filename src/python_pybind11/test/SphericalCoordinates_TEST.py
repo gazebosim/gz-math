@@ -16,7 +16,7 @@ import math
 import unittest
 import warnings
 
-from gz.math9 import Angle, CoordinateVector3, SphericalCoordinates, Vector3d
+from gz.math import Angle, CoordinateVector3, SphericalCoordinates, Vector3d
 
 
 class TestSphericalCoordinates(unittest.TestCase):

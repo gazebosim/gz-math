@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
-  <name>gz-math9</name>
+  <name>gz-math</name>
   <version>9.0.0</version>
   <description>Gazebo Math : Math classes and functions for robot applications</description>
   <maintainer email="scpeters@openrobotics.org">Steve Peters</maintainer>
@@ -11,11 +11,11 @@
 
   <buildtool_depend>cmake</buildtool_depend>
 
-  <build_depend>gz-cmake4</build_depend>
+  <build_depend>gz-cmake</build_depend>
   <build_depend>pybind11-dev</build_depend>
 
   <depend>eigen</depend>
-  <depend>gz-utils3</depend>
+  <depend>gz-utils</depend>
 
   <test_depend>python3-pytest</test_depend>
 

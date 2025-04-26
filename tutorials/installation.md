@@ -260,7 +260,7 @@ cmake ../src/python_pybind11 \
     -DCMAKE_INSTALL_PREFIX=<prefix>
 ```
 
-See the homebrew [gz-math8 formula](https://github.com/osrf/homebrew-simulation/blob/ccda47647ed9aeb38f0ea1ec8804fd1501058de1/Formula/gz-math8.rb#L12-L52)
+See the homebrew [gz-math9 formula](https://github.com/osrf/homebrew-simulation/blob/ccda47647ed9aeb38f0ea1ec8804fd1501058de1/Formula/gz-math9.rb#L12-L52)
 for an example of building bindings for multiple versions of Python.
 
 # Documentation

@@ -17,7 +17,7 @@ import math
 import time
 import unittest
 
-from gz.math9 import MecanumDriveOdometry, Angle
+from gz.math import MecanumDriveOdometry, Angle
 
 
 class TestMecanumDriveOdometry(unittest.TestCase):

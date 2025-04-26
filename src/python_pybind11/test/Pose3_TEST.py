@@ -14,9 +14,9 @@
 
 import math
 import unittest
-from gz.math9 import Pose3d
-from gz.math9 import Quaterniond
-from gz.math9 import Vector3d
+from gz.math import Pose3d
+from gz.math import Quaterniond
+from gz.math import Vector3d
 
 
 class TestPose3(unittest.TestCase):

@@ -18,7 +18,7 @@ import math
 import unittest
 
 import gz
-from gz.math9 import Coned, MassMatrix3d, Material, Quaterniond
+from gz.math import Coned, MassMatrix3d, Material, Quaterniond
 
 
 class TestCone(unittest.TestCase):

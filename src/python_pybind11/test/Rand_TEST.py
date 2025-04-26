@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import unittest
-from gz.math9 import Rand
+from gz.math import Rand
 
 
 class TestRand(unittest.TestCase):

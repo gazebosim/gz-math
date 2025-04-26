@@ -15,7 +15,7 @@
 import sys
 import unittest
 
-import gz.math9
+import gz.math
 
 
 class TestMaterial(unittest.TestCase):

@@ -14,7 +14,7 @@
 
 import math
 import unittest
-from gz.math9 import Matrix3d, Matrix6d, Matrix6dCorner, Matrix6f
+from gz.math import Matrix3d, Matrix6d, Matrix6dCorner, Matrix6f
 import numpy_helpers
 
 
