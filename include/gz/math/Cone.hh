@@ -26,7 +26,7 @@
 
 namespace gz::math
 {
-  // Foward declarations
+  // Forward declarations
   class ConePrivate;
 
   // Inline bracket to help doxygen filtering.

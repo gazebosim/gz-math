@@ -8,3 +8,6 @@ build_*
 
 # Python generaated files
 *.pyc
+
+# Bazel generated files
+bazel-*

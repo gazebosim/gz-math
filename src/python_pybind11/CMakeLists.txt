@@ -1,3 +1,28 @@
+# Detect if we are doing a standalone build of the bindings, using an external gz-math
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+  cmake_minimum_required(VERSION 3.22.1)
+  find_package(gz-cmake4 4.1.0 REQUIRED)
+  gz_get_package_xml_version(${CMAKE_SOURCE_DIR}/../../package.xml GZ_MATH)
+  project(gz-math${GZ_MATH_VERSION_MAJOR}-python VERSION ${GZ_MATH_VERSION})
+  find_package(gz-math${PROJECT_VERSION_MAJOR} REQUIRED)
+  set(PROJECT_LIBRARY_TARGET_NAME "gz-math${PROJECT_VERSION_MAJOR}::gz-math${PROJECT_VERSION_MAJOR}")
+  # require python dependencies to be found
+  find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
+  set(CMAKE_REQUIRE_FIND_PACKAGE_pybind11 TRUE)
+  include(GNUInstallDirs)
+  include(CTest)
+endif()
+
+set(PYBIND11_PYTHON_VERSION 3)
+find_package(pybind11 2.2 QUIET)
+
+if (${pybind11_FOUND})
+  message(STATUS "Searching for pybind11 - found version ${pybind11_VERSION}.")
+else()
+  message(WARNING "pybind11 is missing: Python interfaces are disabled.")
+  return()
+endif()
+
 message(STATUS "Building pybind11 interfaces")
 set(BINDINGS_MODULE_NAME "math${PROJECT_VERSION_MAJOR}")
 # Split from main extension and converted to pybind11
@@ -81,7 +106,7 @@ if(USE_SYSTEM_PATHS_FOR_PYTHON_INSTALLATION)
   endif()
 else()
   # If not a system installation, respect local paths
-  set(GZ_PYTHON_INSTALL_PATH ${GZ_LIB_INSTALL_DIR}/python)
+  set(GZ_PYTHON_INSTALL_PATH ${CMAKE_INSTALL_LIBDIR}/python)
 endif()
 
 set(GZ_PYTHON_INSTALL_PATH "${GZ_PYTHON_INSTALL_PATH}/gz")
@@ -111,6 +136,7 @@ if (BUILD_TESTING)
   set(python_tests
     Angle_TEST
     AxisAlignedBox_TEST
+    AxisAlignedBoxHelpers_TEST
     Box_TEST
     Capsule_TEST
     Color_TEST

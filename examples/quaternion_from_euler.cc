@@ -75,10 +75,10 @@ int main(int argc, char **argv)
 //![constructor]
 
   std::cout << "\nto Quaternion\n";
-//! [access quaterion]
+//! [access quaternion]
   printf(" W % .6f\n X % .6f\n Y % .6f\n Z % .6f\n",
         q.W(), q.X(), q.Y(), q.Z());
-//! [access quaterion]
+//! [access quaternion]
 
 //! [rotation matrix]
   std::cout << "\nto Rotation matrix\n";

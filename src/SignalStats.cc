@@ -15,8 +15,15 @@
  *
 */
 #include <cmath>
-#include <iostream>
+#include <cstddef>
+#include <map>
+#include <memory>
+#include <sstream>
+#include <string>
+#include <vector>
 #include <gz/math/SignalStats.hh>
+#include <gz/math/detail/Error.hh>
+#include <gz/utils/ImplPtr.hh>
 
 using namespace gz;
 using namespace math;
@@ -263,10 +270,11 @@ bool SignalStats::InsertStatistic(const std::string &_name)
     auto map = this->Map();
     if (map.find(_name) != map.end())
     {
-      std::cerr << "Unable to InsertStatistic ["
+      std::ostringstream errStream;
+      errStream << "Unable to InsertStatistic ["
                 << _name
-                << "] since it has already been inserted."
-                << std::endl;
+                << "] since it has already been inserted.";
+      detail::LogErrorMessage(errStream.str());
       return false;
     }
   }
@@ -299,10 +307,11 @@ bool SignalStats::InsertStatistic(const std::string &_name)
   else
   {
     // Unrecognized name string
-    std::cerr << "Unable to InsertStatistic ["
+    std::ostringstream errStream;
+    errStream << "Unable to InsertStatistic ["
               << _name
-              << "] since it is an unrecognized name."
-              << std::endl;
+              << "] since it is an unrecognized name.";
+    detail::LogErrorMessage(errStream.str());
     return false;
   }
   this->dataPtr->stats.push_back(stat);
@@ -314,9 +323,8 @@ bool SignalStats::InsertStatistics(const std::string &_names)
 {
   if (_names.empty())
   {
-    std::cerr << "Unable to InsertStatistics "
-              << "since no names were supplied."
-              << std::endl;
+    detail::LogErrorMessage(
+        "Unable to InsertStatistics since no names were supplied.");
     return false;
   }
 

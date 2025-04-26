@@ -21,6 +21,7 @@
 #include <gz/math/Vector3.hh>
 #include <gz/math/Helpers.hh>
 #include <gz/math/config.hh>
+#include <gz/math/Kmeans.hh>
 
 namespace gz
 {

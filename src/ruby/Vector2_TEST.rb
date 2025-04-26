@@ -248,7 +248,7 @@ class Vector2_TEST < Test::Unit::TestCase
     assert((Gz::Math::Vector2d.One.Length() - Math.sqrt(2)).abs < 1e-10,
            "Length of one should be near square root of 2")
     assert(Gz::Math::Vector2d.One.SquaredLength() == 2.0,
-           "Squared lenght of one should equal 2")
+           "Squared length of one should equal 2")
 
     # Arbitrary vector
     v = Gz::Math::Vector2d.new(0.1, -4.2)

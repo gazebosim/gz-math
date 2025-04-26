@@ -453,7 +453,7 @@ namespace gz::math
     /// Vector3 and rotation Quaternion are compared.
     /// \param[in] _tol Equality tolerance.
     /// \return True if the position and orientation of the poses are equal
-    /// within the tolerence specified by _tol.
+    /// within the tolerance specified by _tol.
     public: bool Equal(const Pose3 &_p, const T &_tol) const
     {
       return this->p.Equal(_p.p, _tol) && this->q.Equal(_p.q, _tol);

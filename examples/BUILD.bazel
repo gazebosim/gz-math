@@ -1,23 +1,37 @@
-load(
-    "@gz//bazel/skylark:build_defs.bzl",
-    "GZ_ROOT",
-    "GZ_VISIBILITY",
-)
-load(
-    "@gz//bazel/lint:lint.bzl",
-    "add_lint_tests",
+load("@rules_license//rules:license.bzl", "license")
+
+package(
+    default_applicable_licenses = ["//:license"],
 )
 
-sources = glob(
-    ["*.cc"],
+license(
+    name = "license",
+    package_name = "gz-math-examples",
+)
+
+example_sources = glob(
+    include = [
+        "*.cc",
+    ],
 )
 
 [cc_binary(
     name = src.replace(".cc", ""),
     srcs = [src],
     deps = [
-        GZ_ROOT + "math",
+        "//:gz-math",
     ],
-) for src in sources]
+) for src in example_sources]
 
-add_lint_tests()
+example_sources_py = glob(
+    include = [
+        "*.py",
+    ],
+)
+
+[py_binary(
+    name = src.replace(".py", "_py"),
+    srcs = [src],
+    main = src,
+    deps = ["//:python"],
+) for src in example_sources_py]

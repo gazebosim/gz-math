@@ -330,7 +330,7 @@ namespace gz::math
     }
 
     /// \brief Subtraction operator
-    /// \param[in] _v the vector to substract
+    /// \param[in] _v the vector to subtract
     /// \return a vector
     public: Vector4<T> operator-(const Vector4<T> &_v) const
     {
@@ -340,8 +340,8 @@ namespace gz::math
                         this->data[3] - _v[3]);
     }
 
-    /// \brief Subtraction assigment operators
-    /// \param[in] _v the vector to substract
+    /// \brief Subtraction assignment operators
+    /// \param[in] _v the vector to subtract
     /// \return this vector
     public: const Vector4<T> &operator-=(const Vector4<T> &_v)
     {
@@ -519,7 +519,7 @@ namespace gz::math
     /// \param[in] _v the vector to compare to
     /// \param[in] _tol equality tolerance.
     /// \return true if the elements of the vectors are equal within
-    /// the tolerence specified by _tol.
+    /// the tolerance specified by _tol.
     public: bool Equal(const Vector4 &_v, const T &_tol) const
     {
       return equal<T>(this->data[0], _v[0], _tol)
@@ -531,7 +531,7 @@ namespace gz::math
     /// \brief Equal to operator
     /// \param[in] _v the other vector
     /// \return true if each component is equal within a
-    /// default tolerence (1e-6), false otherwise
+    /// default tolerance (1e-6), false otherwise
     public: bool operator==(const Vector4<T> &_v) const
     {
       return this->Equal(_v, static_cast<T>(1e-6));
@@ -540,7 +540,7 @@ namespace gz::math
     /// \brief Not equal to operator
     /// \param[in] _pt the other vector
     /// \return false if each component is equal within a
-    /// default tolerence (1e-6), true otherwise
+    /// default tolerance (1e-6), true otherwise
     public: bool operator!=(const Vector4<T> &_pt) const
     {
       return !(*this == _pt);
