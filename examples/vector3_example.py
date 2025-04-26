@@ -22,10 +22,10 @@
 #
 import gz.math
 
-v1 = gz.math9.Vector3d(0, 0, 3)
+v1 = gz.math.Vector3d(0, 0, 3)
 print("v1 = {} {} {}\n".format(v1.x(), v1.y(), v1.z()))
 
-v2 = gz.math9.Vector3d(4, 0, 0)
+v2 = gz.math.Vector3d(4, 0, 0)
 print("v2 = {} {} {}\n".format(v2.x(), v2.y(), v2.z()))
 
 v3 = v1 + v2

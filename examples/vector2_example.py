@@ -22,9 +22,9 @@
 #
 import gz.math
 
-va = gz.math9.Vector2d(1, 2)
-vb = gz.math9.Vector2d(3, 4)
-vc = gz.math9.Vector2d(vb)
+va = gz.math.Vector2d(1, 2)
+vb = gz.math.Vector2d(3, 4)
+vc = gz.math.Vector2d(vb)
 
 print("va = {} {}\n".format(va.x(), va.y()))
 print("vb = {} {}\n".format(vb.x(), vb.y()))
