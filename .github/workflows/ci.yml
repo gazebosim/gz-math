@@ -20,7 +20,6 @@ jobs:
         uses: gazebo-tooling/action-gz-ci@jammy
         with:
           codecov-enabled: true
-          doxygen-enabled: true
   noble-ci:
     runs-on: ubuntu-latest
     name: Ubuntu Noble CI
@@ -33,3 +32,4 @@ jobs:
         with:
           cppcheck-enabled: true
           cpplint-enabled: true
+          doxygen-enabled: true
