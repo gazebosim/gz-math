@@ -14,7 +14,7 @@
 
 import datetime
 import unittest
-from gz.math9 import PID
+from gz.math import PID
 
 
 class TestPID(unittest.TestCase):

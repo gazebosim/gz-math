@@ -58,8 +58,8 @@ if (RUBY_FOUND)
 
   SWIG_LINK_LIBRARIES(${SWIG_RB_LIB}
     ${RUBY_LIBRARY}
-    gz-utils${GZ_UTILS_VER}::gz-utils${GZ_UTILS_VER}
-    gz-math${PROJECT_VERSION_MAJOR}
+    gz-utils::gz-utils
+    gz-math
   )
 
   set_target_properties(${SWIG_RB_LIB}
