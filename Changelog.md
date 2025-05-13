@@ -1,5 +1,28 @@
 ## Gazebo Math 8.x
 
+### Gazebo Math 8.2.0 (2025-05-12)
+
+1. Fix bazel build errors with clang
+    * [Pull request #678](https://github.com/gazebosim/gz-math/pull/678)
+
+1. Use 24.04 for doxygen CI
+    * [Pull request #676](https://github.com/gazebosim/gz-math/pull/676)
+
+1. Use Bazel Central Registry version of eigen
+    * [Pull request #675](https://github.com/gazebosim/gz-math/pull/675)
+
+1. Test building python bindings in Ubuntu CI
+    * [Pull request #672](https://github.com/gazebosim/gz-math/pull/672)
+
+1. Docs/spell check
+    * [Pull request #669](https://github.com/gazebosim/gz-math/pull/669)
+
+1. feat: Add AxisAlignedBox conversion helpers
+    * [Pull request #667](https://github.com/gazebosim/gz-math/pull/667)
+
+1. bazel: Build pybind module and test
+    * [Pull request #661](https://github.com/gazebosim/gz-math/pull/661)
+
 ### Gazebo Math 8.1.1 (2025-02-12)
 
 1. Unify `Python3_Development_FOUND` checks
@@ -39,7 +62,7 @@
     * [Pull request #640](https://github.com/gazebosim/gz-math/pull/640)
     * [Pull request #636](https://github.com/gazebosim/gz-math/pull/636)
 
-1. Merge all changes from 7.5.1 
+1. Merge all changes from 7.5.1
     * [Pull request #623](https://github.com/gazebosim/gz-math/pull/623)
 
 ### Gazebo Math 8.0.0 (2024-09-25)
