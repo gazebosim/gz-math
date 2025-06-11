@@ -39,6 +39,7 @@ pybind11_add_module(${BINDINGS_MODULE_NAME} MODULE
   src/Frustum.cc
   src/GaussMarkovProcess.cc
   src/Helpers.cc
+  src/InterpolationPoint.cc
   src/Interval.cc
   src/Kmeans.cc
   src/Line2.cc
@@ -70,6 +71,7 @@ pybind11_add_module(${BINDINGS_MODULE_NAME} MODULE
   src/Vector3.cc
   src/Vector4.cc
   src/Vector3Stats.cc
+  src/VolumetricGridLookupField.cc
 )
 
 target_link_libraries(${BINDINGS_MODULE_NAME} PRIVATE
