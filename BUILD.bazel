@@ -113,6 +113,7 @@ py_library(
 test_sources = glob(
     include = [
         "src/*_TEST.cc",
+        "src/graph/*_TEST.cc",
     ],
 )
 
