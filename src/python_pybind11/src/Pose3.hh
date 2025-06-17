@@ -104,7 +104,7 @@ void helpDefineMathPose3(py::module &m, const std::string &typestr)
          " order of operands is reversed (A + B = B * A). See Migration.md .",
          py::is_operator())
     .def("__neg__",
-         [](Class &self)
+         [](const Class &self)
          {
            PyErr_WarnEx(
              PyExc_DeprecationWarning,
