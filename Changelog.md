@@ -133,6 +133,14 @@
 
 ## Gazebo Math 7.x
 
+### Gazebo Math 7.5.2 (2025-01-30)
+
+1. Backport bazel BUILD updates from gz-math8
+    * [Pull request #651](https://github.com/gazebosim/gz-math/pull/651)
+
+1. Permit building python bindings separately from gz-math library
+    * [Pull request #640](https://github.com/gazebosim/gz-math/pull/640)
+
 ### Gazebo Math 7.5.1 (2024-08-23)
 
 1. Fix tolerance for axis-angle conversion of quaternions
