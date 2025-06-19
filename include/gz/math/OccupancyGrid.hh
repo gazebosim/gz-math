@@ -79,7 +79,7 @@ public:
 private:
     // PIMPL idiom: Pointer to implementation
     struct Impl;
-    std::unique_ptr<Impl> pImpl_;
+    std::unique_ptr<Impl> pImpl;
 };
 }
 }
