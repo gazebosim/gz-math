@@ -1,6 +1,7 @@
 load("@pybind11_bazel//:build_defs.bzl", "pybind_extension")
-load("@rules_gazebo//gazebo:headers.bzl", "gz_configure_header", "gz_export_header")
+load("@rules_gazebo//gazebo:headers.bzl", "gz_configure_header", "gz_export_header", "gz_include_header")
 load("@rules_license//rules:license.bzl", "license")
+load("@rules_python//python:py_library.bzl", "py_library")
 load("@rules_python//python:py_test.bzl", "py_test")
 
 package(
@@ -37,13 +38,22 @@ gz_configure_header(
     package_xml = "package.xml",
 )
 
-public_headers = glob(
+public_headers_no_gen = glob(
     include = [
         "include/gz/math/*.hh",
         "include/gz/math/detail/*.hh",
         "include/gz/math/graph/*.hh",
     ],
-) + [
+)
+
+gz_include_header(
+    name = "Include",
+    out = "include/gz/math.hh",
+    hdrs = public_headers_no_gen + ["include/gz/math/config.hh"],
+)
+
+public_headers = public_headers_no_gen + [
+    "include/gz/math.hh",
     "include/gz/math/Export.hh",
     "include/gz/math/config.hh",
 ]
@@ -74,6 +84,7 @@ cc_library(
     deps = [
         "@gz-utils//:ImplPtr",
         "@gz-utils//:NeverDestroyed",
+        "@gz-utils//:SuppressWarning",
     ],
 )
 
@@ -102,6 +113,7 @@ py_library(
 test_sources = glob(
     include = [
         "src/*_TEST.cc",
+        "src/graph/*_TEST.cc",
     ],
 )
 
@@ -113,6 +125,7 @@ test_sources = glob(
             ":gz-math",
             "@googletest//:gtest",
             "@googletest//:gtest_main",
+            "@gz-utils//:SuppressWarning",
         ],
     )
     for src in test_sources
