@@ -17,65 +17,79 @@
 #ifndef GZ_MATH_OCCUPANCY_GRID_HH_
 #define GZ_MATH_OCCUPANCY_GRID_HH_
 
+#include <memory>
+#include <vector>
+
 namespace gz {
 namespace math {
 // Define cell states
 enum class CellState {
-    Free,
-    Occupied,
-    Unknown
+  Free,
+  Occupied,
+  Unknown
 };
 
 class OccupancyGrid {
 public:
-    // Constructor
-    OccupancyGrid(double resolutionMeters, int widthCells, int heightCells, double originX = 0.0, double originY = 0.0);
+  // Constructor
+  OccupancyGrid(double resolutionMeters, int widthCells, int heightCells, double originX = 0.0, double originY = 0.0);
 
-    // Destructor (important for PIMPL)
-    ~OccupancyGrid();
+  // Destructor (important for PIMPL)
+  ~OccupancyGrid();
 
-    // Copy Constructor and Assignment Operator (deleted for simplicity, or implement deep copy if needed)
-    OccupancyGrid(const OccupancyGrid&) = delete;
-    OccupancyGrid& operator=(const OccupancyGrid&) = delete;
+  // Copy Constructor and Assignment Operator (deleted for simplicity, or implement deep copy if needed)
+  OccupancyGrid(const OccupancyGrid&) = delete;
+  OccupancyGrid& operator=(const OccupancyGrid&) = delete;
 
-    // Move Constructor and Assignment Operator
-    OccupancyGrid(OccupancyGrid&&) noexcept;
-    OccupancyGrid& operator=(OccupancyGrid&&) noexcept;
+  // Move Constructor and Assignment Operator
+  OccupancyGrid(OccupancyGrid&&) noexcept;
+  OccupancyGrid& operator=(OccupancyGrid&&) noexcept;
 
-    // Convert world coordinates (meters) to grid coordinates (cells)
-    bool WorldToGrid(double worldX, double worldY, int& gridX, int& gridY) const;
+  // Convert world coordinates (meters) to grid coordinates (cells)
+  bool WorldToGrid(double worldX, double worldY, int& gridX, int& gridY) const;
 
-    // Convert grid coordinates (cells) to world coordinates (meters - center of cell)
-    void GridToWorld(int gridX, int gridY, double& worldX, double& worldY) const;
+  // Convert grid coordinates (cells) to world coordinates (meters - center of cell)
+  void GridToWorld(int gridX, int gridY, double& worldX, double& worldY) const;
 
-    // Check if grid coordinates are within bounds
-    bool IsValidGridCoordinate(int gridX, int gridY) const;
+  // Check if grid coordinates are within bounds
+  bool IsValidGridCoordinate(int gridX, int gridY) const;
 
-    // Get the state of a cell
-    CellState GetCellState(int gridX, int gridY) const;
+  // Get the state of a cell
+  CellState GetCellState(int gridX, int gridY) const;
 
-    // Set the state of a cell
-    void SetCellState(int gridX, int gridY, CellState state);
+  // Set the state of a cell
+  void SetCellState(int gridX, int gridY, CellState state);
 
-    // Bresenham's Line Algorithm to mark cells along a line
-    // Marks cells from (x0, y0) to (x1, y1) with the specified state
-    void MarkLine(int x0, int y0, int x1, int y1, CellState state);
+  // Bresenham's Line Algorithm to mark cells along a line
+  // Marks cells from (x0, y0) to (x1, y1) with the specified state
+  void MarkLine(int x0, int y0, int x1, int y1, CellState state);
 
-    // Helper to mark a single point as occupied (e.g., an obstacle detection)
-    void MarkOccupied(double worldX, double worldY);
+  // Helper to mark a single point as occupied (e.g., an obstacle detection)
+  void MarkOccupied(double worldX, double worldY);
 
-    // Helper to mark a path as free (e.g., a clear line of sight)
-    void MarkFree(double worldX0, double worldY0, double worldX1, double worldY1);
+  // Helper to mark a path as free (e.g., a clear line of sight)
+  void MarkFree(double worldX0, double worldY0, double worldX1, double worldY1);
 
-    // Export the occupancy grid to a PNG image
-    bool ExportToRGBImage(std::vector<unsigned char>& pixels) const;
+  // Export the occupancy grid to a PNG image
+  void ExportToRGBImage(std::vector<unsigned char>& pixels) const;
 
-    // Getters for grid properties
-    double GetResolution() const;
-    int GetWidth() const;
-    int GetHeight() const;
-    double GetOriginX() const;
-    double GetOriginY() const;
+  // Export the occupancy grid to a PNG image
+  void GetRawOccupancy(std::vector<char>& pixels) const;
+
+  /// Resolution of the occupancy grid
+  double GetResolution() const;
+
+  /// Get the number of cells in width
+  int GetWidth() const;
+
+  /// Get the number of cells in height
+  int GetHeight() const;
+
+  /// Get the origin X position
+  double GetOriginX() const;
+
+  /// Get the origin Y position
+  double GetOriginY() const;
 private:
     // PIMPL idiom: Pointer to implementation
     struct Impl;
@@ -83,3 +97,4 @@ private:
 };
 }
 }
+#endif

@@ -16,7 +16,7 @@
 */
 
 #include "gz/math/OccupancyGrid.hh"
-
+#include <cmath>
 using namespace gz;
 using namespace math;
 
@@ -50,8 +50,8 @@ struct OccupancyGrid::Impl {
 
     // IsValidGridCoordinate is also needed internally for Impl operations
     bool IsValidGridCoordinateImpl(int gridX, int gridY) const {
-      return this->gridX >= 0 && this->gridX < widthCells && 
-          this->gridY >= 0 && this->gridY < heightCells;
+      return gridX >= 0 && gridX < this->widthCells && 
+          gridY >= 0 && gridY < this->heightCells;
     }
 
     // Get and Set CellState are also needed internally
@@ -168,7 +168,7 @@ void OccupancyGrid::MarkOccupied(double worldX, double worldY)
 {
   int gridX, gridY;
   if (WorldToGrid(worldX, worldY, gridX, gridY)) {
-    pImpl_->SetCellStateImpl(gridX, gridY, CellState::Occupied);
+    this->pImpl->SetCellStateImpl(gridX, gridY, CellState::Occupied);
   }
 }
 
@@ -182,7 +182,7 @@ void OccupancyGrid::MarkFree(double worldX0, double worldY0, double worldX1, dou
 }
 
 /////////////////////////////////////////////////
-bool OccupancyGrid::ExportToRGBImage(std::vector<unsigned char>& _pixels) const 
+void OccupancyGrid::ExportToRGBImage(std::vector<unsigned char>& _pixels) const 
 {
   _pixels.assign(this->pImpl->widthCells * this->pImpl->heightCells * 3, 0);
 
@@ -190,7 +190,7 @@ bool OccupancyGrid::ExportToRGBImage(std::vector<unsigned char>& _pixels) const
   {
     for (int gridX = 0; gridX < this->pImpl->widthCells; ++gridX)
     {
-      unsigned char r, g, b;
+      unsigned char r=0, g=0, b=0;
       switch (this->pImpl->GetCellStateImpl(gridX, gridY))
       {
         case CellState::Occupied:
