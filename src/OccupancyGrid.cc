@@ -23,59 +23,63 @@ using namespace math;
 /////////////////////////////////////////////////
 // Private implementation struct/class
 struct OccupancyGrid::Impl {
-    double resolutionMeters; // Meters per cell
-    int widthCells;          // Number of cells wide
-    int heightCells;         // Number of cells high
+  double resolutionMeters;
+  int widthCells;
+  int heightCells;
 
-    // Origin of the grid in world coordinates (bottom-left corner of the grid)
-    double originX;
-    double originY;
+  // Origin of the grid in world coordinates (bottom-left corner of the grid)
+  double originX;
+  double originY;
 
-    std::vector<CellState> gridData; // Stores cell states
+  std::vector<CellState> gridData;
 
-    // Helper to get the 1D index from 2D grid coordinates
-    int GetIndex(int gridX, int gridY) const {
-        return gridY * widthCells + gridX;
-    }
+  // Helper to get the 1D index from 2D grid coordinates
+  int GetIndex(int _gridX, int _gridY) const {
+    return _gridY * this->widthCells + _gridX;
+  }
 
-    // Constructor for Impl
-    Impl(double resolutionMeters, int widthCells, int heightCells, double originX, double originY)
-        : resolutionMeters(resolutionMeters),
-          widthCells(widthCells),
-          heightCells(heightCells),
-          originX(originX),
-          originY(originY),
-          gridData(widthCells * heightCells, CellState::Unknown)
-    {}
+  // Constructor for Impl
+  Impl(double resolutionMeters, int widthCells, int heightCells, double originX, double originY)
+    : resolutionMeters(resolutionMeters),
+      widthCells(widthCells),
+      heightCells(heightCells),
+      originX(originX),
+      originY(originY),
+      gridData(widthCells * heightCells, CellState::Unknown)
+  {}
 
-    // IsValidGridCoordinate is also needed internally for Impl operations
-    bool IsValidGridCoordinateImpl(int gridX, int gridY) const {
-      return gridX >= 0 && gridX < this->widthCells && 
-          gridY >= 0 && gridY < this->heightCells;
-    }
+  // IsValidGridCoordinate is also needed internally for Impl operations
+  bool IsValidGridCoordinateImpl(int gridX, int gridY) const {
+    return gridX >= 0 && gridX < this->widthCells && 
+      gridY >= 0 && gridY < this->heightCells;
+  }
 
-    // Get and Set CellState are also needed internally
-    CellState GetCellStateImpl(int gridX, int gridY) const
+  // Get and Set CellState are also needed internally
+  CellState GetCellStateImpl(int gridX, int gridY) const
+  {
+    if (this->IsValidGridCoordinateImpl(gridX, gridY))
     {
-      if (IsValidGridCoordinateImpl(gridX, gridY))
-      {
-        return gridData[GetIndex(gridX, gridY)];
-      }
-      return CellState::Unknown;
+      return this->gridData[GetIndex(gridX, gridY)];
     }
+    return CellState::Unknown;
+  }
 
-    void SetCellStateImpl(int gridX, int gridY, CellState state)
-    {
-      if (IsValidGridCoordinateImpl(gridX, gridY)) {
-        gridData[GetIndex(gridX, gridY)] = state;
-      }
+  void SetCellStateImpl(int gridX, int gridY, CellState state)
+  {
+    if (this->IsValidGridCoordinateImpl(gridX, gridY))
+    {    
+      this->gridData[GetIndex(gridX, gridY)] = state;
     }
+  }
 };
 
 /////////////////////////////////////////////////
-OccupancyGrid::OccupancyGrid(double resolutionMeters, int widthCells, int heightCells, double originX, double originY)
-    : pImpl(std::make_unique<Impl>(resolutionMeters, widthCells, heightCells, originX, originY))
-{}
+OccupancyGrid::OccupancyGrid(double resolutionMeters, int widthCells,
+  int heightCells, double originX, double originY)
+    : pImpl(std::make_unique<Impl>(
+      resolutionMeters, widthCells, heightCells, originX, originY))
+{
+}
 
 /////////////////////////////////////////////////
 OccupancyGrid::~OccupancyGrid() = default; // std::unique_ptr handles deletion
@@ -106,8 +110,8 @@ bool OccupancyGrid::WorldToGrid(double worldX, double worldY, int& gridX, int& g
 /////////////////////////////////////////////////
 void OccupancyGrid::GridToWorld(int gridX, int gridY, double& worldX, double& worldY) const
 {
-  worldX = gridX * this->pImpl->resolutionMeters + this->pImpl->originX + this->pImpl->resolutionMeters / 2.0;
-  worldY = gridY * this->pImpl->resolutionMeters + this->pImpl->originY + this->pImpl->resolutionMeters / 2.0;
+  worldX = gridX * this->pImpl->resolutionMeters + this->pImpl->originX;
+  worldY = gridY * this->pImpl->resolutionMeters + this->pImpl->originY;
 }
 
 /////////////////////////////////////////////////
@@ -164,6 +168,56 @@ void OccupancyGrid::MarkLine(int x0, int y0, int x1, int y1, CellState state)
 }
 
 /////////////////////////////////////////////////
+double OccupancyGrid::CalculateIGain(int x0, int y0, int x1, int y1)
+{
+  // Bresenham logic now operates on the internal Impl's data and methods
+  bool steep = std::abs(y1 - y0) > std::abs(x1 - x0);
+
+  if (steep) {
+    std::swap(x0, y0);
+    std::swap(x1, y1);
+  }
+  if (x0 > x1) {
+    std::swap(x0, x1);
+    std::swap(y0, y1);
+  }
+
+  int dx = x1 - x0;
+  int dy = std::abs(y1 - y0);
+  int error = dx / 2;
+  int yStep = (y0 < y1) ? 1 : -1;
+  int y = y0;
+
+  double iGain = 0.0;
+
+  for (int x = x0; x <= x1; ++x) {
+    if (steep) {
+      auto res = this->pImpl->GetCellStateImpl(y, x); // Note: swapped back
+      if (res == CellState::Occupied) {
+        return iGain;
+      }
+      if (res == CellState::Unknown) {
+        iGain+=1;
+      }
+    } else {
+      auto res = this->pImpl->GetCellStateImpl(x, y);
+      if (res == CellState::Occupied) {
+        return iGain;
+      }
+      if (res == CellState::Unknown) {
+        iGain+=1;
+      }
+    }
+    error -= dy;
+    if (error < 0) {
+      y += yStep;
+      error += dx;
+    }
+  }
+  return iGain;
+}
+
+/////////////////////////////////////////////////
 void OccupancyGrid::MarkOccupied(double worldX, double worldY) 
 {
   int gridX, gridY;
@@ -176,7 +230,8 @@ void OccupancyGrid::MarkOccupied(double worldX, double worldY)
 void OccupancyGrid::MarkFree(double worldX0, double worldY0, double worldX1, double worldY1) 
 {
   int gridX0, gridY0, gridX1, gridY1;
-  if (WorldToGrid(worldX0, worldY0, gridX0, gridY0) && WorldToGrid(worldX1, worldY1, gridX1, gridY1)) {
+  if (WorldToGrid(worldX0, worldY0, gridX0, gridY0)) {
+    WorldToGrid(worldX1, worldY1, gridX1, gridY1);
     MarkLine(gridX0, gridY0, gridX1, gridY1, CellState::Free); // Use public MarkLine
   }
 }
@@ -191,7 +246,8 @@ void OccupancyGrid::ExportToRGBImage(std::vector<unsigned char>& _pixels) const
     for (int gridX = 0; gridX < this->pImpl->widthCells; ++gridX)
     {
       unsigned char r=0, g=0, b=0;
-      switch (this->pImpl->GetCellStateImpl(gridX, gridY))
+      auto res = this->pImpl->GetCellStateImpl(gridX, gridY);
+      switch (res)
       {
         case CellState::Occupied:
           r = 0; g = 0; b = 0;
@@ -204,12 +260,12 @@ void OccupancyGrid::ExportToRGBImage(std::vector<unsigned char>& _pixels) const
           break;
       }
 
-      int imageY = this->pImpl->heightCells - 1 - gridY;
-      int pixelIdx = (imageY * this->pImpl->widthCells + gridX) * 3;
+      int pixelIdx = (gridY * this->pImpl->widthCells + gridX) * 3;
 
       _pixels[pixelIdx + 0] = r;
       _pixels[pixelIdx + 1] = g;
       _pixels[pixelIdx + 2] = b;
+
     }
   }
 }
