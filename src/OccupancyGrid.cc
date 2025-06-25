@@ -155,8 +155,18 @@ void OccupancyGrid::MarkLine(int x0, int y0, int x1, int y1, CellState state)
 
   for (int x = x0; x <= x1; ++x) {
     if (steep) {
+      auto res = this->pImpl->GetCellStateImpl(y, x); // Note: swapped back
+      if (res == CellState::Occupied)
+      {
+        continue;
+      }
       this->pImpl->SetCellStateImpl(y, x, state); // Note: swapped back
     } else {
+      auto res = this->pImpl->GetCellStateImpl(y, x); // Note: swapped back
+      if (res == CellState::Occupied)
+      {
+        continue;
+      }
       this->pImpl->SetCellStateImpl(x, y, state);
     }
     error -= dy;
@@ -193,7 +203,8 @@ double OccupancyGrid::CalculateIGain(int x0, int y0, int x1, int y1)
   for (int x = x0; x <= x1; ++x) {
     if (steep) {
       auto res = this->pImpl->GetCellStateImpl(y, x); // Note: swapped back
-      if (res == CellState::Occupied) {
+      if (res == CellState::Occupied ||
+        !this->IsValidGridCoordinate(y, x)) {
         return iGain;
       }
       if (res == CellState::Unknown) {
@@ -201,7 +212,8 @@ double OccupancyGrid::CalculateIGain(int x0, int y0, int x1, int y1)
       }
     } else {
       auto res = this->pImpl->GetCellStateImpl(x, y);
-      if (res == CellState::Occupied) {
+      if (res == CellState::Occupied ||
+        !this->IsValidGridCoordinate(x, y)) {
         return iGain;
       }
       if (res == CellState::Unknown) {

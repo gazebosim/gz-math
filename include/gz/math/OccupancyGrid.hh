@@ -51,6 +51,7 @@ public:
   OccupancyGrid& operator=(OccupancyGrid&&) noexcept;
 
   /// Convert world coordinates (meters) to grid coordinates (cells)
+  /// \return True if coordinates within bounds, false otherwise
   bool WorldToGrid(double worldX, double worldY, int& gridX, int& gridY) const;
 
   /// Convert grid coordinates (cells) to world coordinates
