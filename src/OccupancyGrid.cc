@@ -178,7 +178,7 @@ void OccupancyGrid::MarkLine(int x0, int y0, int x1, int y1, CellState state)
 }
 
 /////////////////////////////////////////////////
-double OccupancyGrid::CalculateIGain(int x0, int y0, int x1, int y1)
+int OccupancyGrid::CalculateIGain(int x0, int y0, int x1, int y1)
 {
   // Bresenham logic now operates on the internal Impl's data and methods
   bool steep = std::abs(y1 - y0) > std::abs(x1 - x0);
@@ -198,7 +198,7 @@ double OccupancyGrid::CalculateIGain(int x0, int y0, int x1, int y1)
   int yStep = (y0 < y1) ? 1 : -1;
   int y = y0;
 
-  double iGain = 0.0;
+  int iGain = 0;
 
   for (int x = x0; x <= x1; ++x) {
     if (steep) {

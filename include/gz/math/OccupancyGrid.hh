@@ -69,7 +69,7 @@ public:
 
   /// Calculate information gain along a line. Useful when implementing
   /// safe frontier exploration algorithms.
-  double CalculateIGain(int x0, int y0, int x1, int y1);
+  int CalculateIGain(int x0, int y0, int x1, int y1);
 
   /// Bresenham's Line Algorithm to mark cells along a line
   /// Marks cells from (x0, y0) to (x1, y1) with the specified state
