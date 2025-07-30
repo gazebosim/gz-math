@@ -65,6 +65,12 @@ TEST(RotationSplineTest, RotationSpline)
       math::Quaterniond(0.978787, 0.107618, 0.137159, 0.107618));
   EXPECT_EQ(s.Interpolate(1, 0.0), s.Point(1));
   EXPECT_EQ(s.Interpolate(1, 1.0), s.Point(2));
+
+  // ::Interpolate
+  s.Clear();
+  s.AddPoint(math::Quaterniond(0.1, 0, 0));
+  s.AddPoint(math::Quaterniond(0.2, 0, 0));
+  EXPECT_EQ(s.Interpolate(0.5), math::Quaterniond(0.15, 0, 0));
 }
 
 /////////////////////////////////////////////////
