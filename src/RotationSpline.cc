@@ -22,7 +22,6 @@
 using namespace gz;
 using namespace math;
 
-using namespace std;
 /// \internal
 /// \brief Private data for RotationSpline
 class RotationSpline::Implementation
