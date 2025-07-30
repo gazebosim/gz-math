@@ -38,9 +38,9 @@ you should use `ign-math<#>`.
 
 ### macOS
 
-On macOS, add OSRF packages:
+On macOS, after installing the [Homebrew package manager](https://brew.sh),
+add OSRF packages:
   ```
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   brew tap osrf/simulation
   ```
 
@@ -90,6 +90,13 @@ The optional Eigen component of Gazebo Math requires:
 * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page). Refer to the [Eigen Documentation](http://eigen.tuxfamily.org/index.php?title=Main_Page#Documentation) for installation instructions. On Ubuntu systems, `apt-get` can be used to install Eigen:
   ```
   sudo apt-get install libeigen3-dev
+  ```
+
+The optional Python bindings of Gazebo Math require:
+
+* [Pybind11](https://pybind11.readthedocs.io/en/stable/index.html). Refer to the [Pybind11 Documentation](https://pybind11.readthedocs.io/en/stable/installing.html) for installation instructions. On Ubuntu systems, `apt-get` can be used to install Pybind11:
+  ```
+  sudo apt-get install python3-pybind11
   ```
 
 The optional Ruby tests of Gazebo Math require:
@@ -227,6 +234,36 @@ The optional Eigen component of Gazebo Math requires:
   ```
   cmake --install . --config Release
   ```
+
+### cmake parameters
+
+| Name            | Type | Default | Description                                |
+|-----------------|------|---------|--------------------------------------------|
+| `SKIP_PYBIND11` | BOOL | OFF     | Set to ON to skip building python bindings |
+
+### Building Python bindings separately from main library
+
+If you want to build Python bindings separately from the main gz-math library
+(for example if you want to build Python bindings for multiple versions of Python),
+you can invoke cmake on the `src/python_pybind11` folder instead of the root folder.
+This requires cmake version 3.22.1 due to the use of a `CMAKE_REQUIRE_FIND_PACKAGE_*`
+variable, which is newer than the minimum required version of cmake for gz-math7.
+Specify the path to the python executable with which you wish to build bindings
+in the `Python3_EXECUTABLE` cmake variable.
+Specify the install path for the bindings in the `CMAKE_INSTALL_PREFIX`
+variable, and be sure to set your `PYTHONPATH` accordingly after install.
+
+```bash
+cd gz-math
+mkdir build_python3
+cd build_python3
+cmake ../src/python_pybind11 \
+    -DPython3_EXECUTABLE=/usr/local/bin/python3.12 \
+    -DCMAKE_INSTALL_PREFIX=<prefix>
+```
+
+See the homebrew [gz-math8 formula](https://github.com/osrf/homebrew-simulation/blob/ccda47647ed9aeb38f0ea1ec8804fd1501058de1/Formula/gz-math8.rb#L12-L52)
+for an example of building bindings for multiple versions of Python.
 
 # Documentation
 

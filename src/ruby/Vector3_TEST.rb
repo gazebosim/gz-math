@@ -166,7 +166,7 @@ class Vector3_TEST < Test::Unit::TestCase
            "Vector3 length of [1, 1, 1] should equal sqrt(3.0)")
 
     assert(Gz::Math::Vector3d.One.SquaredLength() == 3.0,
-           "Vector3 squared lenght of [1, 1, 1] should equal 3.0")
+           "Vector3 squared length of [1, 1, 1] should equal 3.0")
 
     # Arbitrary vector
     v = Gz::Math::Vector3d.new(0.1, -4.2, 2.5)
@@ -195,7 +195,7 @@ class Vector3_TEST < Test::Unit::TestCase
     assert(vecConst.Normalized() == vec3,
            "Vector3 vecConst should equal vec3")
     assert(vecConst == Gz::Math::Vector3d.new(1, 2, 3),
-           "Vector3 vecConst should euqal [1, 2, 3]")
+           "Vector3 vecConst should equal [1, 2, 3]")
   end
 
   def test_ge_normal
@@ -404,7 +404,7 @@ class Vector3_TEST < Test::Unit::TestCase
 
     # Multiply by itself element-wise
     assert(v*v == Gz::Math::Vector3d.new(0.01, 0.04, 0.09),
-           "Vector3 v * v should euqal [0.01, 0.04, 0.09]")
+           "Vector3 v * v should equal [0.01, 0.04, 0.09]")
   end
 
   def test_not_equal

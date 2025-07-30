@@ -453,6 +453,17 @@ TEST(QuaternionTest, Math)
   q.AxisAngle(axis, angle);
   EXPECT_TRUE(axis == math::Vector3d(1, 0, 0));
   EXPECT_TRUE(math::equal(angle, 0.0, 1e-3));
+
+  {
+    // Verify that small quaternions can be converted to small axis angle.
+    // Quaternions of length 1e-6 (default epsilon value in math::equal) or
+    // larger should be treated as non-zero for conversion to axis angle.
+    q.SetFromAxisAngle(0, 0, 1, 1e-4);
+    q.AxisAngle(axis, angle);
+    EXPECT_TRUE(axis == math::Vector3d(0, 0, 1));
+    EXPECT_TRUE(math::equal(angle, 1e-4));
+  }
+
   {
     // simple 180 rotation about yaw, should result in x and y flipping signs
     q = math::Quaterniond(0, 0, GZ_PI);

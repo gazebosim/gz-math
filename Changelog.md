@@ -1,5 +1,47 @@
 ## Gazebo Math 7.x
 
+### Gazebo Math 7.5.2 (2025-01-30)
+
+1. Backport bazel BUILD updates from gz-math8
+    * [Pull request #651](https://github.com/gazebosim/gz-math/pull/651)
+
+1. Permit building python bindings separately from gz-math library
+    * [Pull request #640](https://github.com/gazebosim/gz-math/pull/640)
+
+### Gazebo Math 7.5.1 (2024-08-23)
+
+1. Fix tolerance for axis-angle conversion of quaternions
+    * [Pull request #620](https://github.com/gazebosim/gz-math/pull/620)
+
+1. Added box examples in C++ and Python
+    * [Pull request #584](https://github.com/gazebosim/gz-math/pull/584)
+
+1. Check for 0 stddev when generating a random number using normal distribution
+    * [Pull request #615](https://github.com/gazebosim/gz-math/pull/615)
+
+1. Clean up nested namespaces
+    * [Pull request #603](https://github.com/gazebosim/gz-math/pull/603)
+
+### Gazebo Math 7.5.0 (2024-06-18)
+
+1. Backport: Adding cone primitives.
+    * [Pull request #594](https://github.com/gazebosim/gz-math/pull/594)
+
+1. Enable 24.04 CI on harmonic
+    * [Pull request #590](https://github.com/gazebosim/gz-math/pull/590)
+
+1. Add package.xml
+    * [Pull request #581](https://github.com/gazebosim/gz-math/pull/581)
+
+1. bazel: correctly export license
+    * [Pull request #586](https://github.com/gazebosim/gz-math/pull/586)
+
+1. Add missing eigen3.hh header for bazel build
+    * [Pull request #585](https://github.com/gazebosim/gz-math/pull/585)
+
+1. Expose non-const reference to edges
+    * [Pull request #580](https://github.com/gazebosim/gz-math/pull/580)
+
 ### Gazebo Math 7.4.0 (2024-03-14)
 
 1. Added MecanumDriveOdometry Python wrapper
@@ -793,7 +835,7 @@
     * [Pull request 132](https://github.com/gazebosim/gz-math/pull/132)
     * [Issue 71](https://github.com/gazebosim/gz-math/issues/71)
 
-1. Update vector2 fuctions from vector3
+1. Update vector2 functions from vector3
     * [Pull request 130](https://github.com/gazebosim/gz-math/pull/130)
     * [Issue 71](https://github.com/gazebosim/gz-math/issues/71)
 
@@ -1002,7 +1044,7 @@ specify a density.
     * [Issue 72](https://github.com/gazebosim/gz-math/issues/72)
     * [Issue 53](https://github.com/gazebosim/gz-math/issues/53)
 
-1. Added graph utilites:
+1. Added graph utilities:
     1. Added a Vertex class:
     * [BitBucket pull request 170](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/170)
     1. Added an Edge class:
@@ -1073,7 +1115,7 @@ specify a density.
     * [BitBucket pull request 137](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/137)
 
 1. Removed exceptions. Return values should be evaluated to determine if
-   errors have occured.
+   errors have occurred.
     * [BitBucket pull request 132](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/132)
 
 1. Added `operator=(const Quaternion<T> &_q)` to `Matrix3`.

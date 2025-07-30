@@ -20,80 +20,77 @@
 #include <gz/math/Export.hh>
 #include <gz/math/config.hh>
 
-namespace gz
+namespace gz::math
 {
-  namespace math
+  // Inline bracket to help doxygen filtering.
+  inline namespace GZ_MATH_VERSION_NAMESPACE {
+  //
+  /// \enum MaterialType
+  /// \brief This enum lists the supported material types. A value can be
+  /// used to create a Material instance.
+  /// Source: https://en.wikipedia.org/wiki/Density
+  /// \sa Material
+  // Developer Note: When modifying this enum, make sure to also modify
+  // the kMaterials map in src/MaterialTypes.hh.
+  enum class MaterialType
   {
-    // Inline bracket to help doxygen filtering.
-    inline namespace GZ_MATH_VERSION_NAMESPACE {
-    //
-    /// \enum MaterialType
-    /// \brief This enum lists the supported material types. A value can be
-    /// used to create a Material instance.
-    /// Source: https://en.wikipedia.org/wiki/Density
-    /// \sa Material
-    // Developer Note: When modifying this enum, make sure to also modify
-    // the kMaterials map in src/MaterialTypes.hh.
-    enum class MaterialType
-    {
-      /// \brief Styrofoam, density = 75.0 kg/m^3
-      /// String name = "styrofoam"
-      STYROFOAM = 0,
+    /// \brief Styrofoam, density = 75.0 kg/m^3
+    /// String name = "styrofoam"
+    STYROFOAM = 0,
 
-      /// \brief Pine, density = 373.0 kg/m^3
-      /// String name = "pine"
-      PINE,
+    /// \brief Pine, density = 373.0 kg/m^3
+    /// String name = "pine"
+    PINE,
 
-      /// \brief Wood, density = 700.0 kg/m^3
-      /// String name = "wood"
-      WOOD,
+    /// \brief Wood, density = 700.0 kg/m^3
+    /// String name = "wood"
+    WOOD,
 
-      /// \brief Oak, density = 710.0 kg/m^3
-      /// String name = "oak"
-      OAK,
+    /// \brief Oak, density = 710.0 kg/m^3
+    /// String name = "oak"
+    OAK,
 
-      /// \brief Plastic, density = 1175.0 kg/m^3
-      /// String name = "plastic"
-      PLASTIC,
+    /// \brief Plastic, density = 1175.0 kg/m^3
+    /// String name = "plastic"
+    PLASTIC,
 
-      /// \brief Concrete, density = 2000.0 kg/m^3
-      /// String name = "concrete"
-      CONCRETE,
+    /// \brief Concrete, density = 2000.0 kg/m^3
+    /// String name = "concrete"
+    CONCRETE,
 
-      /// \brief Aluminum, density = 2700.0 kg/m^3
-      /// String name = "aluminum"
-      ALUMINUM,
+    /// \brief Aluminum, density = 2700.0 kg/m^3
+    /// String name = "aluminum"
+    ALUMINUM,
 
-      /// \brief Steel alloy, density = 7600.0 kg/m^3
-      /// String name = "steel_alloy"
-      STEEL_ALLOY,
+    /// \brief Steel alloy, density = 7600.0 kg/m^3
+    /// String name = "steel_alloy"
+    STEEL_ALLOY,
 
-      /// \brief Stainless steel, density = 7800.0 kg/m^3
-      /// String name = "steel_stainless"
-      STEEL_STAINLESS,
+    /// \brief Stainless steel, density = 7800.0 kg/m^3
+    /// String name = "steel_stainless"
+    STEEL_STAINLESS,
 
-      /// \brief Iron, density = 7870.0 kg/m^3
-      /// String name = "iron"
-      IRON,
+    /// \brief Iron, density = 7870.0 kg/m^3
+    /// String name = "iron"
+    IRON,
 
-      /// \brief Brass, density = 8600.0 kg/m^3
-      /// String name = "brass"
-      BRASS,
+    /// \brief Brass, density = 8600.0 kg/m^3
+    /// String name = "brass"
+    BRASS,
 
-      /// \brief Copper, density = 8940.0 kg/m^3
-      /// String name = "copper"
-      COPPER,
+    /// \brief Copper, density = 8940.0 kg/m^3
+    /// String name = "copper"
+    COPPER,
 
-      /// \brief Tungsten, density = 19300.0 kg/m^3
-      /// String name = "tungsten"
-      TUNGSTEN,
+    /// \brief Tungsten, density = 19300.0 kg/m^3
+    /// String name = "tungsten"
+    TUNGSTEN,
 
-      /// \brief Represents an invalid or unknown material.
-      // This value should always be last in the enum; it is used in
-      // MaterialDensity_TEST.
-      UNKNOWN_MATERIAL
-    };
-    }
-  }
-}
-#endif
+    /// \brief Represents an invalid or unknown material.
+    // This value should always be last in the enum; it is used in
+    // MaterialDensity_TEST.
+    UNKNOWN_MATERIAL
+  };
+  }  // namespace GZ_MATH_VERSION_NAMESPACE
+}  // namespace gz::math
+#endif  /// GZ_MATH_MATERIALTYPE_HH_

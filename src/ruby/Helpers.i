@@ -53,6 +53,9 @@ import math
 def gz_sphere_volume(_radius):
    return (4.0*GZ_PI*math.pow(_radius, 3)/3.0)
 
+def gz_cone_volume(_r, _l):
+  return (_l * GZ_PI * math.pow(_r, 2)/3.0)
+
 def gz_cylinder_volume(_r, _l):
   return (_l * GZ_PI * math.pow(_r, 2))
 

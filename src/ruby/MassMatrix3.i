@@ -99,10 +99,21 @@ namespace gz
       public: bool SetFromCylinderZ(const T _mass,
                                     const T _length,
                                     const T _radius,
-                            const Quaternion<T> &_rot = Quaternion<T>::Identity);
+                                    const Quaternion<T> &_rot = Quaternion<T>::Identity);
       public: bool SetFromCylinderZ(const T _length,
                                     const T _radius,
                                     const Quaternion<T> &_rot);
+      public: bool SetFromConeZ(const Material &_mat,
+                                const T _length,
+                                const T _radius,
+                                const Quaternion<T> &_rot = Quaternion<T>::Identity);
+      public: bool SetFromConeZ(const T _mass,
+                                const T _length,
+                                const T _radius,
+                                const Quaternion<T> &_rot = Quaternion<T>::Identity);
+      public: bool SetFromConeZ(const T _length,
+                                const T _radius,
+                                const Quaternion<T> &_rot);
       public: bool SetFromSphere(const Material &_mat, const T _radius);
       public: bool SetFromSphere(const T _mass, const T _radius);
       public: bool SetFromSphere(const T _radius);

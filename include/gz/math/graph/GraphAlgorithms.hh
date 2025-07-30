@@ -29,9 +29,7 @@
 #include "gz/math/graph/Graph.hh"
 #include "gz/math/Helpers.hh"
 
-namespace gz
-{
-namespace math
+namespace gz::math
 {
 // Inline bracket to help doxygen filtering.
 inline namespace GZ_MATH_VERSION_NAMESPACE {
@@ -181,7 +179,7 @@ namespace graph
   ///           3-------4             |
   ///              (1)                |
   ///
-  /// This is the resut of Dijkstra(g, 0):
+  /// This is the result of Dijkstra(g, 0):
   ///
   /// \code
   /// ================================
@@ -235,7 +233,7 @@ namespace graph
     std::priority_queue<CostInfo,
       std::vector<CostInfo>, std::greater<CostInfo>> pq;
 
-    // Create a map for distances and next neightbor and initialize all
+    // Create a map for distances and next neighbor and initialize all
     // distances as infinite.
     std::map<VertexId, CostInfo> dist;
     for (auto const &v : allVertices)
@@ -353,8 +351,7 @@ namespace graph
 
     return UndirectedGraph<V, E>(vertices, edges);
   }
-}
-}
-}
-}
-#endif
+}  // namespace graph
+}  // namespace GZ_MATH_VERSION_NAMESPACE
+}  // namespace gz::math
+#endif   // GZ_MATH_GRAPH_GRAPHALGORITHMS_HH_

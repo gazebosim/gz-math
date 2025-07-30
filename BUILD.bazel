@@ -1,4 +1,8 @@
 load(
+    "@gz//bazel/lint:lint.bzl",
+    "add_lint_tests",
+)
+load(
     "@gz//bazel/skylark:build_defs.bzl",
     "GZ_FEATURES",
     "GZ_ROOT",
@@ -8,16 +12,22 @@ load(
     "gz_include_header",
 )
 load(
-    "@gz//bazel/lint:lint.bzl",
-    "add_lint_tests",
+    "@rules_license//rules:license.bzl",
+    "license",
 )
 
 package(
+    default_applicable_licenses = [GZ_ROOT + "math:license"],
     default_visibility = GZ_VISIBILITY,
     features = GZ_FEATURES,
 )
 
-licenses(["notice"])  # Apache-2.0
+license(
+    name = "license",
+    package_name = "gz-math",
+)
+
+licenses(["notice"])
 
 exports_files(["LICENSE"])
 
@@ -41,34 +51,78 @@ public_headers_no_gen = glob([
     "include/gz/math/graph/*.hh",
 ])
 
-private_headers = glob(["src/*.hh"])
-
-sources = glob(
-    ["src/*.cc"],
-    exclude = ["src/*_TEST.cc"],
-)
-
 gz_include_header(
     name = "mathhh_genrule",
     out = "include/gz/math.hh",
     hdrs = public_headers_no_gen + [
-        "include/gz/math/config.hh",
         "include/gz/math/Export.hh",
+        "include/gz/math/config.hh",
     ],
 )
 
-public_headers = public_headers_no_gen + [
-    "include/gz/math/config.hh",
-    "include/gz/math/Export.hh",
-    "include/gz/math.hh",
-]
-
 cc_library(
     name = "math",
-    srcs = sources + private_headers,
-    hdrs = public_headers,
+    hdrs = ["include/gz/math.hh"],
     includes = ["include"],
     deps = [
+        ":AdditivelySeparableScalarField3",
+        ":Angle",
+        ":AxisAlignedBox",
+        ":Box",
+        ":Capsule",
+        ":Color",
+        ":Cone",
+        ":Cylinder",
+        ":DiffDriveOdometry",
+        ":Ellipsoid",
+        ":Filter",
+        ":Frustum",
+        ":GaussMarkovProcess",
+        ":Graph",
+        ":GraphAlgorithms",
+        ":Helpers",
+        ":Inertial",
+        ":InterpolationPoint",
+        ":Interval",
+        ":Kmeans",
+        ":Line2",
+        ":Line3",
+        ":MassMatrix3",
+        ":Material",
+        ":MaterialType",
+        ":Matrix3",
+        ":Matrix4",
+        ":Matrix6",
+        ":MecanumDriveOdometry",
+        ":MovingWindowFilter",
+        ":OrientedBox",
+        ":PID",
+        ":PiecewiseScalarField3",
+        ":Plane",
+        ":Polynomial3",
+        ":Pose3",
+        ":Quaternion",
+        ":Rand",
+        ":Region3",
+        ":RollingMean",
+        ":RotationSpline",
+        ":SemanticVersion",
+        ":SignalStats",
+        ":SpeedLimiter",
+        ":Sphere",
+        ":SphericalCoordinates",
+        ":Spline",
+        ":Stopwatch",
+        ":Temperature",
+        ":TimeVaryingVolumetricGrid",
+        ":TimeVaryingVolumetricGridLookupField",
+        ":Triangle",
+        ":Triangle3",
+        ":Vector2",
+        ":Vector3",
+        ":Vector3Stats",
+        ":Vector4",
+        ":VolumetricGridLookupField",
         GZ_ROOT + "utils",
     ],
 )
@@ -89,5 +143,772 @@ test_sources = glob(
         "@gtest//:gtest_main",
     ],
 ) for src in test_sources]
+
+cc_library(
+    name = "Config",
+    hdrs = ["include/gz/math/config.hh"],
+    includes = ["include"],
+)
+
+cc_library(
+    name = "Export",
+    hdrs = ["include/gz/math/Export.hh"],
+    includes = ["include"],
+)
+
+cc_library(
+    name = "AdditivelySeparableScalarField3",
+    hdrs = ["include/gz/math/AdditivelySeparableScalarField3.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Region3",
+        ":Vector3",
+    ],
+)
+
+cc_library(
+    name = "Angle",
+    srcs = ["src/Angle.cc"],
+    hdrs = ["include/gz/math/Angle.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+    ],
+)
+
+cc_library(
+    name = "AxisAlignedBox",
+    srcs = ["src/AxisAlignedBox.cc"],
+    hdrs = ["include/gz/math/AxisAlignedBox.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+        ":Line3",
+        ":MassMatrix3",
+        ":Material",
+        ":Vector3",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "Box",
+    hdrs = [
+        "include/gz/math/Box.hh",
+        "include/gz/math/detail/Box.hh",
+        "include/gz/math/detail/WellOrderedVector.hh",
+    ],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Line2",
+        ":MassMatrix3",
+        ":Material",
+        ":Plane",
+        ":Triangle3",
+        ":Vector3",
+    ],
+)
+
+cc_library(
+    name = "Capsule",
+    hdrs = [
+        "include/gz/math/Capsule.hh",
+        "include/gz/math/detail/Capsule.hh",
+    ],
+    includes = ["include"],
+    deps = [
+        ":Helpers",
+        ":Inertial",
+        ":MassMatrix3",
+        ":Material",
+    ],
+)
+
+cc_library(
+    name = "Color",
+    srcs = ["src/Color.cc"],
+    hdrs = [
+        "include/gz/math/Color.hh",
+    ],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+        ":Vector3",
+    ],
+)
+
+cc_library(
+    name = "Cone",
+    hdrs = [
+        "include/gz/math/Cone.hh",
+        "include/gz/math/detail/Cone.hh",
+    ],
+    includes = ["include"],
+    deps = [
+        ":MassMatrix3",
+        ":Material",
+        ":Quaternion",
+    ],
+)
+
+cc_library(
+    name = "Cylinder",
+    hdrs = [
+        "include/gz/math/Cylinder.hh",
+        "include/gz/math/detail/Cylinder.hh",
+    ],
+    includes = ["include"],
+    deps = [
+        ":MassMatrix3",
+        ":Material",
+        ":Quaternion",
+    ],
+)
+
+cc_library(
+    name = "DiffDriveOdometry",
+    srcs = ["src/DiffDriveOdometry.cc"],
+    hdrs = [
+        "include/gz/math/DiffDriveOdometry.hh",
+    ],
+    includes = ["include"],
+    deps = [
+        ":Angle",
+        ":Config",
+        ":Export",
+        ":RollingMean",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "Ellipsoid",
+    hdrs = [
+        "include/gz/math/Ellipsoid.hh",
+        "include/gz/math/detail/Ellipsoid.hh",
+    ],
+    includes = ["include"],
+    deps = [
+        ":Helpers",
+        ":Inertial",
+        ":MassMatrix3",
+        ":Material",
+    ],
+)
+
+cc_library(
+    name = "Filter",
+    hdrs = ["include/gz/math/Filter.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+        ":Quaternion",
+        ":Vector3",
+    ],
+)
+
+cc_library(
+    name = "Frustum",
+    srcs = ["src/Frustum.cc"],
+    hdrs = ["include/gz/math/Frustum.hh"],
+    includes = ["include"],
+    deps = [
+        ":Angle",
+        ":AxisAlignedBox",
+        ":Config",
+        ":Matrix4",
+        ":Plane",
+        ":Pose3",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "GaussMarkovProcess",
+    srcs = ["src/GaussMarkovProcess.cc"],
+    hdrs = ["include/gz/math/GaussMarkovProcess.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Export",
+        ":Rand",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "Graph",
+    hdrs = [
+        "include/gz/math/graph/Edge.hh",
+        "include/gz/math/graph/Graph.hh",
+        "include/gz/math/graph/Vertex.hh",
+    ],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "GraphAlgorithms",
+    hdrs = [
+        "include/gz/math/graph/GraphAlgorithms.hh",
+    ],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Graph",
+        ":Helpers",
+    ],
+)
+
+cc_library(
+    name = "Helpers",
+    srcs = ["src/Helpers.cc"],
+    hdrs = ["include/gz/math/Helpers.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Export",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "Inertial",
+    hdrs = ["include/gz/math/Inertial.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":MassMatrix3",
+        ":Matrix3",
+        ":Matrix6",
+        ":Pose3",
+    ],
+)
+
+cc_library(
+    name = "InterpolationPoint",
+    hdrs = [
+        "include/gz/math/detail/AxisIndex.hh",
+        "include/gz/math/detail/InterpolationPoint.hh",
+    ],
+    includes = ["include"],
+    deps = [
+        ":Vector2",
+        ":Vector3",
+    ],
+)
+
+cc_library(
+    name = "Interval",
+    hdrs = ["include/gz/math/Interval.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+    ],
+)
+
+cc_library(
+    name = "Kmeans",
+    srcs = [
+        "src/Kmeans.cc",
+        "src/KmeansPrivate.hh",
+    ],
+    hdrs = ["include/gz/math/Kmeans.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+        ":Rand",
+        ":Vector3",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "Line2",
+    hdrs = ["include/gz/math/Line2.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Vector2",
+    ],
+)
+
+cc_library(
+    name = "Line3",
+    hdrs = ["include/gz/math/Line3.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Vector3",
+    ],
+)
+
+cc_library(
+    name = "MassMatrix3",
+    hdrs = ["include/gz/math/MassMatrix3.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+        ":Material",
+        ":Matrix3",
+        ":Quaternion",
+        ":Vector2",
+        ":Vector3",
+    ],
+)
+
+cc_library(
+    name = "MaterialType",
+    hdrs = ["include/gz/math/MaterialType.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Export",
+    ],
+)
+
+cc_library(
+    name = "Material",
+    srcs = [
+        "src/Material.cc",
+        "src/MaterialType.hh",
+    ],
+    hdrs = ["include/gz/math/Material.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Export",
+        ":Helpers",
+        ":MaterialType",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "Matrix3",
+    hdrs = ["include/gz/math/Matrix3.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+        ":Vector3",
+    ],
+)
+
+cc_library(
+    name = "Matrix4",
+    hdrs = ["include/gz/math/Matrix4.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+        ":Matrix3",
+        ":Pose3",
+        ":Quaternion",
+        ":Vector3",
+    ],
+)
+
+cc_library(
+    name = "Matrix6",
+    hdrs = ["include/gz/math/Matrix6.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+        ":Matrix3",
+        ":Vector3",
+    ],
+)
+
+cc_library(
+    name = "MecanumDriveOdometry",
+    srcs = ["src/MecanumDriveOdometry.cc"],
+    hdrs = ["include/gz/math/MecanumDriveOdometry.hh"],
+    includes = ["include"],
+    deps = [
+        ":Angle",
+        ":Config",
+        ":Export",
+        ":RollingMean",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "MovingWindowFilter",
+    srcs = ["src/MovingWindowFilter.cc"],
+    hdrs = ["include/gz/math/MovingWindowFilter.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Export",
+        ":Vector3",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "OrientedBox",
+    hdrs = ["include/gz/math/OrientedBox.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+        ":MassMatrix3",
+        ":Material",
+        ":Matrix4",
+        ":Pose3",
+        ":Vector3",
+    ],
+)
+
+cc_library(
+    name = "PID",
+    srcs = ["src/PID.cc"],
+    hdrs = ["include/gz/math/PID.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "PiecewiseScalarField3",
+    hdrs = ["include/gz/math/PiecewiseScalarField3.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Region3",
+        ":Vector3",
+    ],
+)
+
+cc_library(
+    name = "Plane",
+    hdrs = ["include/gz/math/Plane.hh"],
+    includes = ["include"],
+    deps = [
+        ":AxisAlignedBox",
+        ":Config",
+        ":Line2",
+        ":Quaternion",
+        ":Vector2",
+        ":Vector3",
+    ],
+)
+
+cc_library(
+    name = "Polynomial3",
+    hdrs = ["include/gz/math/Polynomial3.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Interval",
+        ":Vector4",
+    ],
+)
+
+cc_library(
+    name = "Pose3",
+    hdrs = ["include/gz/math/Pose3.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Quaternion",
+        ":Vector3",
+    ],
+)
+
+cc_library(
+    name = "Quaternion",
+    hdrs = ["include/gz/math/Quaternion.hh"],
+    includes = ["include"],
+    deps = [
+        ":Angle",
+        ":Config",
+        ":Helpers",
+        ":Matrix3",
+        ":Vector3",
+    ],
+)
+
+cc_library(
+    name = "Rand",
+    srcs = ["src/Rand.cc"],
+    hdrs = ["include/gz/math/Rand.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+    ],
+)
+
+cc_library(
+    name = "Region3",
+    hdrs = ["include/gz/math/Region3.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Interval",
+        ":Vector3",
+    ],
+)
+
+cc_library(
+    name = "RollingMean",
+    srcs = ["src/RollingMean.cc"],
+    hdrs = ["include/gz/math/RollingMean.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Export",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "RotationSpline",
+    srcs = ["src/RotationSpline.cc"],
+    hdrs = ["include/gz/math/RotationSpline.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Quaternion",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "SemanticVersion",
+    srcs = ["src/SemanticVersion.cc"],
+    hdrs = ["include/gz/math/SemanticVersion.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "SignalStats",
+    srcs = [
+        "src/SignalStats.cc",
+        "src/SignalStatsPrivate.hh",
+    ],
+    hdrs = ["include/gz/math/SignalStats.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "SpeedLimiter",
+    srcs = ["src/SpeedLimiter.cc"],
+    hdrs = ["include/gz/math/SpeedLimiter.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "Sphere",
+    hdrs = [
+        "include/gz/math/Sphere.hh",
+        "include/gz/math/detail/Sphere.hh",
+    ],
+    includes = ["include"],
+    deps = [
+        ":MassMatrix3",
+        ":Material",
+        ":Plane",
+        ":Quaternion",
+    ],
+)
+
+cc_library(
+    name = "SphericalCoordinates",
+    srcs = ["src/SphericalCoordinates.cc"],
+    hdrs = ["include/gz/math/SphericalCoordinates.hh"],
+    includes = ["include"],
+    deps = [
+        ":Angle",
+        ":Config",
+        ":Helpers",
+        ":Matrix3",
+        ":Quaternion",
+        ":Vector3",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "Spline",
+    srcs = [
+        "src/Spline.cc",
+        "src/SplinePrivate.cc",
+        "src/SplinePrivate.hh",
+    ],
+    hdrs = ["include/gz/math/Spline.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+        ":Matrix4",
+        ":Vector3",
+        ":Vector4",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "Stopwatch",
+    srcs = [
+        "src/Stopwatch.cc",
+    ],
+    hdrs = ["include/gz/math/Stopwatch.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Export",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "Temperature",
+    srcs = [
+        "src/Temperature.cc",
+    ],
+    hdrs = ["include/gz/math/Temperature.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Export",
+        ":Helpers",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "TimeVaryingVolumetricGrid",
+    hdrs = ["include/gz/math/TimeVaryingVolumetricGrid.hh"],
+    includes = ["include"],
+    deps = [
+        ":TimeVaryingVolumetricGridLookupField",
+        ":Vector3",
+    ],
+)
+
+cc_library(
+    name = "TimeVaryingVolumetricGridLookupField",
+    hdrs = ["include/gz/math/TimeVaryingVolumetricGridLookupField.hh"],
+    includes = ["include"],
+    deps = [
+        ":InterpolationPoint",
+        ":VolumetricGridLookupField",
+    ],
+)
+
+cc_library(
+    name = "Triangle",
+    hdrs = ["include/gz/math/Triangle.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+        ":Line2",
+        ":Vector2",
+    ],
+)
+
+cc_library(
+    name = "Triangle3",
+    hdrs = ["include/gz/math/Triangle3.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+        ":Line3",
+        ":Plane",
+        ":Vector3",
+    ],
+)
+
+cc_library(
+    name = "Vector2",
+    hdrs = ["include/gz/math/Vector2.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+    ],
+)
+
+cc_library(
+    name = "Vector3",
+    hdrs = ["include/gz/math/Vector3.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+    ],
+)
+
+cc_library(
+    name = "Vector3Stats",
+    srcs = ["src/Vector3Stats.cc"],
+    hdrs = ["include/gz/math/Vector3Stats.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+        ":SignalStats",
+        ":Vector3",
+        GZ_ROOT + "utils",
+    ],
+)
+
+cc_library(
+    name = "Vector4",
+    hdrs = ["include/gz/math/Vector4.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+        ":Helpers",
+        ":Matrix4",
+    ],
+)
+
+cc_library(
+    name = "VolumetricGridLookupField",
+    hdrs = ["include/gz/math/VolumetricGridLookupField.hh"],
+    includes = ["include"],
+    deps = [
+        ":InterpolationPoint",
+        ":Vector3",
+    ],
+)
 
 add_lint_tests()

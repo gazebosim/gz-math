@@ -25,6 +25,7 @@
 #include <pybind11/operators.h>
 
 #include <gz/math/Pose3.hh>
+#include <gz/utils/SuppressWarning.hh>
 
 namespace py = pybind11;
 using namespace pybind11::literals;
@@ -67,11 +68,91 @@ void helpDefineMathPose3(py::module &m, const std::string &typestr)
     .def(py::init<T, T, T, T, T, T>())
     .def(py::init<T, T, T, T, T, T, T>())
     .def(py::init<const Class&>())
-    .def(py::self + py::self)
-    .def(py::self += py::self)
-    .def(-py::self)
-    .def(py::self - py::self)
-    .def(py::self -= py::self)
+    .def("__add__",
+         [](const Class &self, const gz::math::Pose3<T> &other)
+         {
+           PyErr_WarnEx(
+             PyExc_DeprecationWarning,
+             "The addition operator + is deprecated in favor of"
+             " the multiplication operator *, though the order of operands is"
+             " reversed (A + B = B * A). See Migration.md .",
+             1);
+           GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+           return self + other;
+           GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+         },
+         "DEPRECATED: The addition operator + is deprecated in favor of"
+         " the multiplication operator *, though the order of operands is"
+         " reversed (A + B = B * A). See Migration.md .",
+         py::is_operator())
+    .def("__iadd__",
+         [](Class &self, const gz::math::Pose3<T> &other)
+         {
+           PyErr_WarnEx(
+             PyExc_DeprecationWarning,
+             "The addition assignment operator += is deprecated in favor of"
+             " the multiplication assignment operator *=, though the order of"
+             " operands is reversed (A + B = B * A). See Migration.md .",
+             1);
+           GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+           self += other;
+           GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+           return self;
+         },
+         "DEPRECATED: The addition assignment operator += is deprecated in"
+         " favor of the multiplication assignment operator *=, though the"
+         " order of operands is reversed (A + B = B * A). See Migration.md .",
+         py::is_operator())
+    .def("__neg__",
+         [](const Class &self)
+         {
+           PyErr_WarnEx(
+             PyExc_DeprecationWarning,
+             "The unitary negation operator - is deprecated in favor"
+             " of the inverse operator. See Migration.md .",
+             1);
+           GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+           return -self;
+           GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+         },
+         "DEPRECATED: The unitary negation operator - is deprecated in favor"
+         " of the inverse operator. See Migration.md .",
+         py::is_operator())
+    .def("__sub__",
+         [](const Class &self, const gz::math::Pose3<T> &other)
+         {
+           PyErr_WarnEx(
+             PyExc_DeprecationWarning,
+             "The subtraction operator - is deprecated in favor of"
+             " multiplication by the inverse, though the order of operands is"
+             " reversed (A - B = B.inverse() * A). See Migration.md .",
+             1);
+           GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+           return self - other;
+           GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+         },
+         "DEPRECATED: The subtraction operator - is deprecated in favor of"
+         " multiplication by the inverse, though the order of operands is"
+         " reversed (A - B = B.inverse() * A). See Migration.md .",
+         py::is_operator())
+    .def("__isub__",
+         [](Class &self, const gz::math::Pose3<T> &other)
+         {
+           PyErr_WarnEx(
+             PyExc_DeprecationWarning,
+             "The subtraction assignment operator -= is deprecated in favor"
+             " of multiplication by the inverse, though the order of operands"
+             " is reversed (A - B = B.inverse() * A). See Migration.md .",
+             1);
+           GZ_UTILS_WARN_IGNORE__DEPRECATED_DECLARATION
+           self -= other;
+           GZ_UTILS_WARN_RESUME__DEPRECATED_DECLARATION
+           return self;
+         },
+         "DEPRECATED: The subtraction assignment operator -= is deprecated in"
+         " favor of multiplication by the inverse, though the order of operands"
+         " is reversed (A - B = B.inverse() * A). See Migration.md .",
+         py::is_operator())
     .def(py::self == py::self)
     .def(py::self != py::self)
     .def(py::self * py::self)

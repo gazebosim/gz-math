@@ -27,9 +27,7 @@
 #include <gz/math/config.hh>
 #include "gz/math/graph/Vertex.hh"
 
-namespace gz
-{
-namespace math
+namespace gz::math
 {
 // Inline bracket to help doxygen filtering.
 inline namespace GZ_MATH_VERSION_NAMESPACE {
@@ -335,8 +333,7 @@ namespace graph
   template<typename E>
   DirectedEdge<E> DirectedEdge<E>::NullEdge(
     VertexId_P(kNullId, kNullId), E(), 1.0, kNullId);
-}
-}
-}
-}
-#endif
+}  // namespace graph
+}  // namespace GZ_MATH_VERSION_NAMESPACE
+}  // namespace gz::math
+#endif  // GZ_MATH_GRAPH_EDGE_HH_

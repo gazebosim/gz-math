@@ -114,6 +114,35 @@ void helpDefineMathMassMatrix3(py::module &m, const std::string &typestr)
        py::arg("_size") = gz::math::Vector3<T>::Zero,
        py::arg("_rot") = gz::math::Quaternion<T>::Identity,
        "Set inertial properties based on a Material and equivalent box.")
+  .def("set_from_cone_z",
+       py::overload_cast<const Material&, const T, const T,
+                         const gz::math::Quaternion<T>&>
+                         (&Class::SetFromConeZ),
+       py::arg("_mat") = gz::math::Material(),
+       py::arg("_length") = 0,
+       py::arg("_radius") = 0,
+       py::arg("_rot") = gz::math::Quaternion<T>::Identity,
+       "Set inertial properties based on a Material and equivalent "
+       "cone aligned with Z axis.")
+  .def("set_from_cone_z",
+       py::overload_cast<const T, const T, const T,
+                         const gz::math::Quaternion<T>&>
+                         (&Class::SetFromConeZ),
+       py::arg("_mass") = 0,
+       py::arg("_length") = 0,
+       py::arg("_radius") = 0,
+       py::arg("_rot") = gz::math::Quaternion<T>::Identity,
+       "Set inertial properties based on a Material and equivalent "
+       "cone aligned with Z axis.")
+  .def("set_from_cone_z",
+       py::overload_cast<const T, const T,
+                         const gz::math::Quaternion<T>&>
+                         (&Class::SetFromConeZ),
+       py::arg("_length") = 0,
+       py::arg("_radius") = 0,
+       py::arg("_rot") = gz::math::Quaternion<T>::Identity,
+       "Set inertial properties based on a Material and equivalent "
+       "cone aligned with Z axis.")
   .def("set_from_cylinder_z",
        py::overload_cast<const Material&, const T, const T,
                          const gz::math::Quaternion<T>&>

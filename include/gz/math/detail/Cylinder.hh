@@ -19,11 +19,8 @@
 
 #include <optional>
 
-namespace gz
+namespace gz::math
 {
-namespace math
-{
-
 //////////////////////////////////////////////////
 template<typename T>
 Cylinder<T>::Cylinder(const T _length, const T _radius,
@@ -164,7 +161,5 @@ T Cylinder<T>::DensityFromMass(const T _mass) const
 
   return _mass / this->Volume();
 }
-
-}
-}
-#endif
+}  // namespace gz::math
+#endif  // GZ_MATH_DETAIL_CYLINDER_HH_

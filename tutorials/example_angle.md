@@ -23,7 +23,7 @@ When the code is compiled, run:
 ./angle_example
 ```
 
-The ouput of the program:
+The output of the program:
 
 ```{.sh}
 The angle 'a' should be zero: 0

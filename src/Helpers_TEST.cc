@@ -429,6 +429,9 @@ TEST(HelpersTest, Volume)
   EXPECT_DOUBLE_EQ(GZ_SPHERE_VOLUME(0.1), 4.0*GZ_PI*std::pow(.1, 3)/3.0);
   EXPECT_DOUBLE_EQ(GZ_SPHERE_VOLUME(-1.1), 4.0*GZ_PI*std::pow(-1.1, 3)/3.0);
 
+  EXPECT_DOUBLE_EQ(GZ_CONE_VOLUME(0.5, 2.0), 2 * GZ_PI * std::pow(.5, 2) / 3.0);
+  EXPECT_DOUBLE_EQ(GZ_CONE_VOLUME(1, -1), -1 * GZ_PI * std::pow(1, 2) / 3.0);
+
   EXPECT_DOUBLE_EQ(GZ_CYLINDER_VOLUME(0.5, 2.0), 2 * GZ_PI * std::pow(.5, 2));
   EXPECT_DOUBLE_EQ(GZ_CYLINDER_VOLUME(1, -1), -1 * GZ_PI * std::pow(1, 2));
 
