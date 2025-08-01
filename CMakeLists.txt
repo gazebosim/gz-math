@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.22.1 FATAL_ERROR)
 #============================================================================
 # Initialize the project
 #============================================================================
-project(gz-math8 VERSION 8.0.0)
+project(gz-math8 VERSION 8.2.0)
 
 #============================================================================
 # Find gz-cmake
@@ -18,7 +18,7 @@ set(GZ_CMAKE_VER ${gz-cmake4_VERSION_MAJOR})
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-gz_configure_project(VERSION_SUFFIX pre1)
+gz_configure_project(VERSION_SUFFIX)
 
 #============================================================================
 # Set project-specific options
@@ -103,19 +103,6 @@ else()
     COMPONENTS Interpreter
     OPTIONAL_COMPONENTS Development
   )
-  if (NOT Python3_Development_FOUND)
-    GZ_BUILD_WARNING("Python development libraries are missing: Python interfaces are disabled.")
-  else()
-    set(PYBIND11_PYTHON_VERSION 3)
-    find_package(pybind11 2.2 QUIET)
-
-    if (${pybind11_FOUND})
-      message (STATUS "Searching for pybind11 - found version ${pybind11_VERSION}.")
-    else()
-      GZ_BUILD_WARNING("pybind11 is missing: Python interfaces are disabled.")
-      message (STATUS "Searching for pybind11 - not found.")
-    endif()
-  endif()
 endif()
 
 # Location of "fake install folder" used in tests

@@ -83,7 +83,7 @@ namespace gz::math
     }
 
     /// \brief Get a line segment for one side of the triangle.
-    /// \param[in] _index Index of the side to retreive, where
+    /// \param[in] _index Index of the side to retrieve, where
     /// 0 == Line2(pt1, pt2),
     /// 1 == Line2(pt2, pt3),
     /// 2 == Line2(pt3, pt1)

@@ -1,48 +1,61 @@
-load(
-    "@gz//bazel/skylark:build_defs.bzl",
-    "GZ_ROOT",
-    "GZ_VISIBILITY",
-    "gz_include_header",
+load("@rules_gazebo//gazebo:headers.bzl", "gz_include_header")
+load("@rules_license//rules:license.bzl", "license")
+
+package(
+    default_applicable_licenses = ["//:license"],
+    features = [
+        "layering_check",
+        "parse_headers",
+    ],
 )
 
-package(default_applicable_licenses = [GZ_ROOT + "math:license"])
+license(
+    name = "license",
+    package_name = "gz-math-eigen3",
+)
 
-public_headers = glob([
-    "include/gz/math/eigen3/*.hh",
-])
+public_headers_no_gen = glob(
+    include = [
+        "include/gz/math/eigen3/*.hh",
+    ],
+)
 
 gz_include_header(
-    name = "eigen3_hh_genrule",
+    name = "Include",
     out = "include/gz/math/eigen3.hh",
-    hdrs = public_headers,
+    hdrs = public_headers_no_gen,
 )
+
+public_headers = public_headers_no_gen + [
+    "include/gz/math/eigen3.hh",
+]
 
 cc_library(
     name = "eigen3",
-    srcs = public_headers,
-    hdrs = public_headers + [
-        "include/gz/math/eigen3.hh",
-    ],
+    hdrs = public_headers,
     includes = ["include"],
-    visibility = GZ_VISIBILITY,
+    visibility = ["//visibility:public"],
     deps = [
-        GZ_ROOT + "math",
-        "@eigen3",
+        "//:gz-math",
+        "@eigen",
     ],
 )
 
 test_sources = glob(
-    [
+    include = [
         "src/*_TEST.cc",
     ],
 )
 
-[cc_test(
-    name = src.replace("/", "_").replace(".cc", "").replace("src_", ""),
-    srcs = [src],
-    deps = [
-        ":eigen3",
-        "@gtest",
-        "@gtest//:gtest_main",
-    ],
-) for src in test_sources]
+[
+    cc_test(
+        name = src.replace("/", "_").replace(".cc", "").replace("src_", ""),
+        srcs = [src],
+        deps = [
+            ":eigen3",
+            "@googletest//:gtest",
+            "@googletest//:gtest_main",
+        ],
+    )
+    for src in test_sources
+]

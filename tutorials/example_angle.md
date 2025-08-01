@@ -14,16 +14,23 @@ cd gz-math/examples
 mkdir build
 cd build
 cmake ..
+# Linux and macOS
 make
+# Windows
+cd ..
+cmake --build build --config Release
 ```
 
 When the code is compiled, run:
 
 ```{.sh}
+# Linux and macOS
 ./angle_example
+# Windows
+.\build\Release\angle_example.exe
 ```
 
-The ouput of the program:
+The output of the program:
 
 ```{.sh}
 The angle 'a' should be zero: 0

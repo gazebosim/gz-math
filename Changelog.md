@@ -1,6 +1,80 @@
 ## Gazebo Math 8.x
 
-### Gazebo Math 8.0.0 (2024-09-XX)
+### Gazebo Math 8.2.0 (2025-05-12)
+
+1. Fix bazel build errors with clang
+    * [Pull request #678](https://github.com/gazebosim/gz-math/pull/678)
+
+1. Use 24.04 for doxygen CI
+    * [Pull request #676](https://github.com/gazebosim/gz-math/pull/676)
+
+1. Use Bazel Central Registry version of eigen
+    * [Pull request #675](https://github.com/gazebosim/gz-math/pull/675)
+
+1. Test building python bindings in Ubuntu CI
+    * [Pull request #672](https://github.com/gazebosim/gz-math/pull/672)
+
+1. Docs/spell check
+    * [Pull request #669](https://github.com/gazebosim/gz-math/pull/669)
+
+1. feat: Add AxisAlignedBox conversion helpers
+    * [Pull request #667](https://github.com/gazebosim/gz-math/pull/667)
+
+1. bazel: Build pybind module and test
+    * [Pull request #661](https://github.com/gazebosim/gz-math/pull/661)
+
+### Gazebo Math 8.1.1 (2025-02-12)
+
+1. Unify `Python3_Development_FOUND` checks
+    * [Pull request #662](https://github.com/gazebosim/gz-math/pull/662)
+
+1. Change to globbed bazel targets
+    * [Pull request #652](https://github.com/gazebosim/gz-math/pull/652)
+
+1. SignalStats.cc: add missing includes
+    * [Pull request #659](https://github.com/gazebosim/gz-math/pull/659)
+
+1. Encapsulate std::cerr under a single point of control
+    * [Pull request #656](https://github.com/gazebosim/gz-math/pull/656)
+
+1. ci.yml: run cppcheck, cpplint on noble
+    * [Pull request #655](https://github.com/gazebosim/gz-math/pull/655)
+
+### Gazebo Math 8.1.0 (2024-11-15)
+
+1. Build gz-math with bzlmod
+    * [Pull request #648](https://github.com/gazebosim/gz-math/pull/648)
+    * [Pull request #646](https://github.com/gazebosim/gz-math/pull/646)
+    * [Pull request #644](https://github.com/gazebosim/gz-math/pull/644)
+    * [Pull request #589](https://github.com/gazebosim/gz-math/pull/589)
+
+1. Add CI support for bzlmod
+    * [Pull request #643](https://github.com/gazebosim/gz-math/pull/643)
+    * [Pull request #637](https://github.com/gazebosim/gz-math/pull/637)
+
+1. Specify template for Vector2 in Vector2_TEST
+    * [Pull request #645](https://github.com/gazebosim/gz-math/pull/645)
+
+1. Python bindings: get version from package.xml
+    * [Pull request #642](https://github.com/gazebosim/gz-math/pull/642)
+
+1. Permit building python bindings separately from gz-math library
+    * [Pull request #640](https://github.com/gazebosim/gz-math/pull/640)
+    * [Pull request #636](https://github.com/gazebosim/gz-math/pull/636)
+
+1. Merge all changes from 7.5.1
+    * [Pull request #623](https://github.com/gazebosim/gz-math/pull/623)
+
+### Gazebo Math 8.0.0 (2024-09-25)
+
+1. Miscellaneous documentation fixes
+    * [Pull request #632](https://github.com/gazebosim/gz-math/pull/632)
+    * [Pull request #631](https://github.com/gazebosim/gz-math/pull/631)
+    * [Pull request #630](https://github.com/gazebosim/gz-math/pull/630)
+    * [Pull request #628](https://github.com/gazebosim/gz-math/pull/628)
+
+1. Fix Vector examples
+    * [Pull request #629](https://github.com/gazebosim/gz-math/pull/629)
 
 1. Added CoordinateVector3 and used it in SphericalCoordinates
     * [Pull request #616](https://github.com/gazebosim/gz-math/pull/616)
@@ -8,11 +82,9 @@
 1. Clamping color channel values to within [0, 1]
     * [Pull request #613](https://github.com/gazebosim/gz-math/pull/613)
 
-1. Implement rule of zero part 2
-    * [Pull request #614](https://github.com/gazebosim/gz-math/pull/614)
-
-1. Use ImplPtr, fix rule of 0 part 1
+1. Use ImplPtr, Implement rule of zero
     * [Pull request #608](https://github.com/gazebosim/gz-math/pull/608)
+    * [Pull request #614](https://github.com/gazebosim/gz-math/pull/614)
 
 1. Fix flaky Stopwatch test
     * [Pull request #610](https://github.com/gazebosim/gz-math/pull/610)
@@ -60,6 +132,28 @@
     * [Pull request #478](https://github.com/gazebosim/gz-math/pull/478)
 
 ## Gazebo Math 7.x
+
+### Gazebo Math 7.5.2 (2025-01-30)
+
+1. Backport bazel BUILD updates from gz-math8
+    * [Pull request #651](https://github.com/gazebosim/gz-math/pull/651)
+
+1. Permit building python bindings separately from gz-math library
+    * [Pull request #640](https://github.com/gazebosim/gz-math/pull/640)
+
+### Gazebo Math 7.5.1 (2024-08-23)
+
+1. Fix tolerance for axis-angle conversion of quaternions
+    * [Pull request #620](https://github.com/gazebosim/gz-math/pull/620)
+
+1. Added box examples in C++ and Python
+    * [Pull request #584](https://github.com/gazebosim/gz-math/pull/584)
+
+1. Check for 0 stddev when generating a random number using normal distribution
+    * [Pull request #615](https://github.com/gazebosim/gz-math/pull/615)
+
+1. Clean up nested namespaces
+    * [Pull request #603](https://github.com/gazebosim/gz-math/pull/603)
 
 ### Gazebo Math 7.5.0 (2024-06-18)
 
@@ -874,7 +968,7 @@
     * [Pull request 132](https://github.com/gazebosim/gz-math/pull/132)
     * [Issue 71](https://github.com/gazebosim/gz-math/issues/71)
 
-1. Update vector2 fuctions from vector3
+1. Update vector2 functions from vector3
     * [Pull request 130](https://github.com/gazebosim/gz-math/pull/130)
     * [Issue 71](https://github.com/gazebosim/gz-math/issues/71)
 
@@ -1083,7 +1177,7 @@ specify a density.
     * [Issue 72](https://github.com/gazebosim/gz-math/issues/72)
     * [Issue 53](https://github.com/gazebosim/gz-math/issues/53)
 
-1. Added graph utilites:
+1. Added graph utilities:
     1. Added a Vertex class:
     * [BitBucket pull request 170](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/170)
     1. Added an Edge class:
@@ -1154,7 +1248,7 @@ specify a density.
     * [BitBucket pull request 137](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/137)
 
 1. Removed exceptions. Return values should be evaluated to determine if
-   errors have occured.
+   errors have occurred.
     * [BitBucket pull request 132](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-math/pull-requests/132)
 
 1. Added `operator=(const Quaternion<T> &_q)` to `Matrix3`.

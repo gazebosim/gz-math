@@ -16,9 +16,9 @@
  */
 #include <cmath>
 #include <algorithm>
-#include <iostream>
 
 #include "gz/math/Color.hh"
+#include "gz/math/detail/Error.hh"
 
 using namespace gz;
 using namespace math;
@@ -574,6 +574,6 @@ void Color::Clamp()
   if (clamped)
   {
     // TODO(azeey) Use spdlog when we have it's available.
-    std::cerr << "Color values were clamped\n";
+    detail::LogErrorMessage("Color values were clamped");
   }
 }

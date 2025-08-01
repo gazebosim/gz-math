@@ -35,7 +35,7 @@ namespace gz::math
   /// \brief Implementation of a stationary gauss-markov process, also
   /// known as a Ornstein Ulenbeck process.
   ///
-  /// See the Update(const clock::duration &) for details on the forumla
+  /// See the Update(const clock::duration &) for details on the formula
   /// used to update the process.
   ///
   /// ## Example usage
@@ -109,7 +109,7 @@ namespace gz::math
     ///     degree of volatility, and theta as the rate by which changes
     ///     dissipate and revert towards the mean.
     ///   * \f$dt\f$ is the time step in seconds.
-    ///   * \f$dW_t\f$ is a random number drawm from a normal distribution
+    ///   * \f$dW_t\f$ is a random number drawn from a normal distribution
     ///     with mean of zero and variance of 1.
     ///   * \f$x_t\f$ is the current value of the Gauss-Markov process
     ///   * \f$x_{t+1}\f$ is the new value of the Gauss-Markvov process

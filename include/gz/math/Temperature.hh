@@ -68,7 +68,7 @@ namespace gz::math
   ///
   /// newTemp = Gz::Math::Temperature.new(temp.Kelvin())
   /// newTemp += temp + 23.5;
-  /// printf("Copied temp and added 23.5K. The new tempurature is %fF\n",
+  /// printf("Copied temp and added 23.5K. The new temperature is %fF\n",
   ///     newTemp.Fahrenheit());
   /// \endcode
   class GZ_MATH_VISIBLE Temperature

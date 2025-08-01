@@ -25,6 +25,7 @@
 #include <pybind11/operators.h>
 
 #include <gz/math/Matrix3.hh>
+#include <gz/math/Quaternion.hh>
 
 namespace py = pybind11;
 using namespace pybind11::literals;

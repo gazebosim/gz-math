@@ -22,7 +22,7 @@
 
 #include "gz/math/Helpers.hh"
 
-// Placing the kMaterialData in a separate file for conveniece and clarity.
+// Placing the kMaterialData in a separate file for convenience and clarity.
 #include "MaterialType.hh"
 
 using namespace gz;

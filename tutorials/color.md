@@ -21,7 +21,7 @@ When the code is compiled, run:
 ./color_example
 ```
 
-The ouput of the program:
+The output of the program:
 
 ```{.sh}
 The alpha value of a should be 1: 1
@@ -54,4 +54,4 @@ You can also set or read a color in HSV.
 
 \snippet examples/color_example.cc Set value from HSV
 
-There are more functions in `Color`. Take a look at the [API](https://gazebosim.org/api/math/7/classgz_1_1math_1_1Color.html)
+There are more functions in `Color`. Take a look at the [API](https://gazebosim.org/api/math/8/classgz_1_1math_1_1Color.html)

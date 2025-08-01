@@ -66,11 +66,11 @@ namespace gz::math
 
     /// \brief Make an open region
     /// \param[in] _xLeft leftmost x-axis interval value
-    /// \param[in] _xRight righmost x-axis interval value
+    /// \param[in] _xRight rightmost x-axis interval value
     /// \param[in] _yLeft leftmost y-axis interval value
-    /// \param[in] _yRight righmost y-axis interval value
+    /// \param[in] _yRight rightmost y-axis interval value
     /// \param[in] _zLeft leftmost z-axis interval value
-    /// \param[in] _zRight righmost z-axis interval value
+    /// \param[in] _zRight rightmost z-axis interval value
     /// \return the (`_xLeft`, `_xRight`) ✕ (`_yLeft`, `_yRight`)
     ///  ✕ (`_zLeft`, `_zRight`) open region
     public: static constexpr Region3<T> Open(
@@ -84,11 +84,11 @@ namespace gz::math
 
     /// \brief Make a closed region
     /// \param[in] _xLeft leftmost x-axis interval value
-    /// \param[in] _xRight righmost x-axis interval value
+    /// \param[in] _xRight rightmost x-axis interval value
     /// \param[in] _yLeft leftmost y-axis interval value
-    /// \param[in] _yRight righmost y-axis interval value
+    /// \param[in] _yRight rightmost y-axis interval value
     /// \param[in] _zLeft leftmost z-axis interval value
-    /// \param[in] _zRight righmost z-axis interval value
+    /// \param[in] _zRight rightmost z-axis interval value
     /// \return the [`_xLeft`, `_xRight`] ✕ [`_yLeft`, `_yRight`]
     ///  ✕ [`_zLeft`, `_zRight`] closed region
     public: static constexpr Region3<T> Closed(
