@@ -69,7 +69,7 @@ int main()
 
 To compile the code create a `CMakeLists.txt`:
 
-```
+```{.bash}
 cmake_minimum_required(VERSION 3.22.1 FATAL_ERROR)
 project(gz-math-cpp-example)
 
@@ -81,20 +81,20 @@ target_link_libraries(gz-math-example PUBLIC gz-math8::gz-math8)
 
 Compile the example:
 
-```
+```{.bash}
 mkdir build && cd build
 cmake ..
 ```
 
 For Unix systems:
-```
+
+```{.bash}
 make
-```
 
 For Windows systems:
-```
+
+```{.bash}
 cmake --build . --config Release
-```
 
 Run the example:
 
@@ -106,7 +106,6 @@ Output should be:
 ```{.bash}
 Distance from 1 3 5 to 2 4 6 is 1.73205
 ```
-
 
 ## Bonus: Vector2 Example
 
