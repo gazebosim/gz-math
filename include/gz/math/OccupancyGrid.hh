@@ -71,7 +71,8 @@ public:
   /// safe frontier exploration algorithms.
   int CalculateIGain(int x0, int y0, int x1, int y1);
 
-  /// Bresenham's Line Algorithm to mark cells along a line
+  /// Bresenham's Line Algorithm to mark cells along a line. This function
+  /// will not modify cells that are already marked as Occupied.
   /// Marks cells from (x0, y0) to (x1, y1) with the specified state
   void MarkLine(int x0, int y0, int x1, int y1, CellState state);
 

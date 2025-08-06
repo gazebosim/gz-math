@@ -162,7 +162,7 @@ void OccupancyGrid::MarkLine(int x0, int y0, int x1, int y1, CellState state)
       }
       this->pImpl->SetCellStateImpl(y, x, state); // Note: swapped back
     } else {
-      auto res = this->pImpl->GetCellStateImpl(y, x); // Note: swapped back
+      auto res = this->pImpl->GetCellStateImpl(x, y);
       if (res == CellState::Occupied)
       {
         continue;
@@ -278,6 +278,36 @@ void OccupancyGrid::ExportToRGBImage(std::vector<unsigned char>& _pixels) const
       _pixels[pixelIdx + 1] = g;
       _pixels[pixelIdx + 2] = b;
 
+    }
+  }
+}
+
+/////////////////////////////////////////////////
+void OccupancyGrid::GetRawOccupancy(std::vector<char>& _data) const
+{
+  _data.assign(this->pImpl->widthCells * this->pImpl->heightCells, 0);
+
+  for (int gridY = 0; gridY < this->pImpl->heightCells; ++gridY)
+  {
+    for (int gridX = 0; gridX < this->pImpl->widthCells; ++gridX)
+    {
+      char val = -1;
+      auto res = this->pImpl->GetCellStateImpl(gridX, gridY);
+      switch (res)
+      {
+        case CellState::Occupied:
+          val = 100;
+          break;
+        case CellState::Free:
+          val = 0;
+          break;
+        case CellState::Unknown:
+          val = -1;
+          break;
+      }
+
+      int pixelIdx = (gridY * this->pImpl->widthCells + gridX);
+      _data[pixelIdx] = val;
     }
   }
 }
