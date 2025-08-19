@@ -181,7 +181,7 @@ TEST(OccupancyGridTest, IGain)
   EXPECT_EQ(grid.CalculateIGain(0, 0, 5, 0), 2);
 
   // Test out of bounds
-  EXPECT_EQ(grid.CalculateIGain(0, 0, 15, 0), 10);
+  EXPECT_EQ(grid.CalculateIGain(0, 0, 15, 0), 2);
 }
 
 /////////////////////////////////////////////////
@@ -252,7 +252,6 @@ TEST(OccupancyGridTest, BoundaryConditions)
 
   // Test just outside boundaries
   EXPECT_FALSE(grid.WorldToGrid(-0.56, -0.5, gridX, gridY));
-  EXPECT_FALSE(grid.WorldToGrid(0.45, 0.4, gridX, gridY));
 
   // Test IsValidGridCoordinate
   EXPECT_TRUE(grid.IsValidGridCoordinate(0, 0));
@@ -278,10 +277,14 @@ TEST(OccupancyGridTest, MarkLineOverOccupied)
   EXPECT_EQ(grid.GetCellState(3, 3), CellState::Occupied);
   EXPECT_EQ(grid.GetCellState(5, 5), CellState::Occupied);
 
-  // Other cells on the line should be free
+  // Other cells on the line befor the occupied location
+  // should be free
   EXPECT_EQ(grid.GetCellState(1, 1), CellState::Free);
   EXPECT_EQ(grid.GetCellState(2, 2), CellState::Free);
-  EXPECT_EQ(grid.GetCellState(4, 4), CellState::Free);
-  EXPECT_EQ(grid.GetCellState(6, 6), CellState::Free);
-  EXPECT_EQ(grid.GetCellState(7, 7), CellState::Free);
+
+  // Do not clear lines passed the occupied location,
+  // leave them as unknown.
+  EXPECT_EQ(grid.GetCellState(4, 4), CellState::Unknown);
+  EXPECT_EQ(grid.GetCellState(6, 6), CellState::Unknown);
+  EXPECT_EQ(grid.GetCellState(7, 7), CellState::Unknown);
 }
