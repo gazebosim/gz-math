@@ -211,7 +211,7 @@ int OccupancyGrid::CalculateIGain(int x0, int y0, int x1, int y1)
 
   for (int x = x0; x <= x1; ++x) {
     if (steep) {
-      auto res = this->pImpl->GetCellStateImpl(y, x); // Note: swapped back
+      auto res = this->pImpl->GetCellStateImpl(y, x);
       if (res == CellState::Occupied ||
         !this->IsValidGridCoordinate(y, x)) {
         return iGain;
@@ -268,7 +268,7 @@ void OccupancyGrid::ExportToRGBImage(std::vector<unsigned char>& _pixels) const
   {
     for (int gridX = 0; gridX < this->pImpl->widthCells; ++gridX)
     {
-      unsigned char r=0, g=0, b=0;
+      unsigned char r = 0, g = 0, b = 0;
       auto res = this->pImpl->GetCellStateImpl(gridX, gridY);
       switch (res)
       {
