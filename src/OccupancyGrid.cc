@@ -17,6 +17,8 @@
 
 #include "gz/math/OccupancyGrid.hh"
 #include <cmath>
+#include <utility>
+
 using namespace gz;
 using namespace math;
 
@@ -39,7 +41,8 @@ struct OccupancyGrid::Impl {
   }
 
   // Constructor for Impl
-  Impl(double resolutionMeters, int widthCells, int heightCells, double originX, double originY)
+  Impl(double resolutionMeters, int widthCells, int heightCells,
+    double originX, double originY)
     : resolutionMeters(resolutionMeters),
       widthCells(widthCells),
       heightCells(heightCells),
@@ -50,7 +53,7 @@ struct OccupancyGrid::Impl {
 
   // IsValidGridCoordinate is also needed internally for Impl operations
   bool IsValidGridCoordinateImpl(int gridX, int gridY) const {
-    return gridX >= 0 && gridX < this->widthCells && 
+    return gridX >= 0 && gridX < this->widthCells &&
       gridY >= 0 && gridY < this->heightCells;
   }
 
@@ -67,7 +70,7 @@ struct OccupancyGrid::Impl {
   void SetCellStateImpl(int gridX, int gridY, CellState state)
   {
     if (this->IsValidGridCoordinateImpl(gridX, gridY))
-    {    
+    {
       this->gridData[GetIndex(gridX, gridY)] = state;
     }
   }
@@ -100,22 +103,28 @@ OccupancyGrid& OccupancyGrid::operator=(OccupancyGrid&& other) noexcept
 }
 
 /////////////////////////////////////////////////
-bool OccupancyGrid::WorldToGrid(double worldX, double worldY, int& gridX, int& gridY) const
+bool OccupancyGrid::WorldToGrid(double worldX, double worldY,
+  int& gridX, int& gridY) const
 {
-  gridX = static_cast<int>(std::round((worldX - this->pImpl->originX) / this->pImpl->resolutionMeters));
-  gridY = static_cast<int>(std::round((worldY - this->pImpl->originY) / this->pImpl->resolutionMeters));
+  gridX = static_cast<int>(
+    std::round((worldX - this->pImpl->originX) / this->pImpl->resolutionMeters)
+  );
+  gridY = static_cast<int>(
+    std::round((worldY - this->pImpl->originY) / this->pImpl->resolutionMeters)
+  );
   return this->pImpl->IsValidGridCoordinateImpl(gridX, gridY);
 }
 
 /////////////////////////////////////////////////
-void OccupancyGrid::GridToWorld(int gridX, int gridY, double& worldX, double& worldY) const
+void OccupancyGrid::GridToWorld(int gridX, int gridY,
+  double& worldX, double& worldY) const
 {
   worldX = gridX * this->pImpl->resolutionMeters + this->pImpl->originX;
   worldY = gridY * this->pImpl->resolutionMeters + this->pImpl->originY;
 }
 
 /////////////////////////////////////////////////
-bool OccupancyGrid::IsValidGridCoordinate(int gridX, int gridY) const 
+bool OccupancyGrid::IsValidGridCoordinate(int gridX, int gridY) const
 {
   return this->pImpl->IsValidGridCoordinateImpl(gridX, gridY);
 }
@@ -230,7 +239,7 @@ int OccupancyGrid::CalculateIGain(int x0, int y0, int x1, int y1)
 }
 
 /////////////////////////////////////////////////
-void OccupancyGrid::MarkOccupied(double worldX, double worldY) 
+void OccupancyGrid::MarkOccupied(double worldX, double worldY)
 {
   int gridX, gridY;
   if (WorldToGrid(worldX, worldY, gridX, gridY)) {
@@ -239,17 +248,17 @@ void OccupancyGrid::MarkOccupied(double worldX, double worldY)
 }
 
 /////////////////////////////////////////////////
-void OccupancyGrid::MarkFree(double worldX0, double worldY0, double worldX1, double worldY1) 
+void OccupancyGrid::MarkFree(double worldX0, double worldY0, double worldX1,
+  double worldY1) 
 {
   int gridX0, gridY0, gridX1, gridY1;
   if (WorldToGrid(worldX0, worldY0, gridX0, gridY0)) {
     WorldToGrid(worldX1, worldY1, gridX1, gridY1);
-    MarkLine(gridX0, gridY0, gridX1, gridY1, CellState::Free); // Use public MarkLine
-  }
+    MarkLine(gridX0, gridY0, gridX1, gridY1, CellState::Free);
 }
 
 /////////////////////////////////////////////////
-void OccupancyGrid::ExportToRGBImage(std::vector<unsigned char>& _pixels) const 
+void OccupancyGrid::ExportToRGBImage(std::vector<unsigned char>& _pixels) const
 {
   _pixels.assign(this->pImpl->widthCells * this->pImpl->heightCells * 3, 0);
 
@@ -314,14 +323,14 @@ void OccupancyGrid::GetRawOccupancy(std::vector<char>& _data) const
 
 /////////////////////////////////////////////////
 double OccupancyGrid::GetResolution() const
-{ 
-  return this->pImpl->resolutionMeters; 
+{
+  return this->pImpl->resolutionMeters;
 }
 
 /////////////////////////////////////////////////
 int OccupancyGrid::GetWidth() const
-{ 
-  return this->pImpl->widthCells; 
+{
+  return this->pImpl->widthCells;
 }
 
 /////////////////////////////////////////////////
@@ -333,11 +342,11 @@ int OccupancyGrid::GetHeight() const
 /////////////////////////////////////////////////
 double OccupancyGrid::GetOriginX() const
 {
-  return this->pImpl->originX; 
+  return this->pImpl->originX;
 }
 
 /////////////////////////////////////////////////
-double OccupancyGrid::GetOriginY() const 
-{ 
-  return this->pImpl->originY; 
+double OccupancyGrid::GetOriginY() const
+{
+  return this->pImpl->originY;
 }

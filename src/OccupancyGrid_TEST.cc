@@ -1,5 +1,3 @@
-
-
 /*
  * Copyright (C) 2025 Open Source Robotics Foundation
  *
@@ -118,8 +116,8 @@ TEST(OccupancyGridTest, CellState)
   EXPECT_EQ(grid.GetCellState(2, 2), CellState::Free);
 
   // Test out-of-bounds access
-  grid.SetCellState(10, 10, CellState::Occupied); // Should not crash
-  EXPECT_EQ(grid.GetCellState(10, 10), CellState::Unknown); // Should return Unknown
+  grid.SetCellState(10, 10, CellState::Occupied);
+  EXPECT_EQ(grid.GetCellState(10, 10), CellState::Unknown);
 }
 
 /////////////////////////////////////////////////
@@ -201,19 +199,27 @@ TEST(OccupancyGridTest, ExportToRGBImage)
 
   // Check pixel colors (in row-major order)
   // (0, 0) - Free (White)
-  EXPECT_EQ(pixels[0], 255); EXPECT_EQ(pixels[1], 255); EXPECT_EQ(pixels[2], 255);
+  EXPECT_EQ(pixels[0], 255);
+  EXPECT_EQ(pixels[1], 255);
+  EXPECT_EQ(pixels[2], 255);
   // (1, 0) - Unknown (Gray)
-  EXPECT_EQ(pixels[3], 128); EXPECT_EQ(pixels[4], 128); EXPECT_EQ(pixels[5], 128);
+  EXPECT_EQ(pixels[3], 128);
+  EXPECT_EQ(pixels[4], 128);
+  EXPECT_EQ(pixels[5], 128);
   // (0, 1) - Occupied (Black)
-  EXPECT_EQ(pixels[6], 0);   EXPECT_EQ(pixels[7], 0);   EXPECT_EQ(pixels[8], 0);
+  EXPECT_EQ(pixels[6], 0);
+  EXPECT_EQ(pixels[7], 0);
+  EXPECT_EQ(pixels[8], 0);
   // (1, 1) - Unknown (Gray)
-  EXPECT_EQ(pixels[9], 128); EXPECT_EQ(pixels[10], 128); EXPECT_EQ(pixels[11], 128);
+  EXPECT_EQ(pixels[9], 128);
+  EXPECT_EQ(pixels[10], 128);
+  EXPECT_EQ(pixels[11], 128);
 }
 
 /////////////////////////////////////////////////
 TEST(OccupancyGridTest, GetRawOccupancy)
 {
-  OccupancyGrid grid(1.0, 3, 2); // 3 width, 2 height
+  OccupancyGrid grid(1.0, 3, 2);
   grid.SetCellState(0, 0, CellState::Free);
   grid.SetCellState(1, 0, CellState::Occupied);
   grid.SetCellState(2, 0, CellState::Unknown);

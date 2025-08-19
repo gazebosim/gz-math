@@ -19,6 +19,10 @@
 #include <pybind11/stl.h>
 #include <pybind11/numpy.h>
 
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "OccupancyGrid.hh"
 
 #include <gz/math/OccupancyGrid.hh>
@@ -60,7 +64,8 @@ void defineMathOccupancyGrid(py::module &m, const std::string &typestr)
     .def("export_to_rgb_image", [](const Class &self) {
         std::vector<unsigned char> pixels;
         self.ExportToRGBImage(pixels);
-        return py::bytes(reinterpret_cast<const char*>(pixels.data()), pixels.size());
+        return py::bytes(reinterpret_cast<const char*>(pixels.data()),
+        pixels.size());
      }, "Export the occupancy grid to a RGB image buffer.")
     .def("get_raw_occupancy", [](const Class &self) {
         std::vector<char> data;
