@@ -43,9 +43,19 @@ void defineMathOccupancyGrid(py::module &m, const std::string &typestr)
     .def(py::init<double, int, int, double, double>(),
          "resolutionMeters"_a, "widthCells"_a, "heightCells"_a,
          "originX"_a = 0.0, "originY"_a = 0.0)
-    .def("world_to_grid", &Class::WorldToGrid,
+    .def("world_to_grid",
+         [](const Class &self, double worldX, double worldY) {
+           int gridX, gridY;
+           bool ok = self.WorldToGrid(worldX, worldY, gridX, gridY);
+           return std::make_tuple(ok, gridX, gridY);
+         },
          "Convert world coordinates to grid coordinates.")
-    .def("grid_to_world", &Class::GridToWorld,
+    .def("grid_to_world",
+        [](const Class &self, int gridX, int gridY) {
+            double worldX, worldY;
+            self.GridToWorld(gridX, gridY, worldX, worldY);
+            return std::make_tuple(worldX, worldY);
+        },
          "Convert grid coordinates to world coordinates.")
     .def("is_valid_grid_coordinate", &Class::IsValidGridCoordinate,
          "Check if grid coordinates are within bounds.")

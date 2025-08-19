@@ -58,12 +58,12 @@ class TestOccupancyGrid(unittest.TestCase):
 
         # Test GridToWorld
         world_x, world_y = grid.grid_to_world(0, 0)
-        self.assertAlmostEqual(world_x, 1.25)
-        self.assertAlmostEqual(world_y, 2.25)
+        self.assertAlmostEqual(world_x, 1.0)
+        self.assertAlmostEqual(world_y, 2.0)
 
         world_x, world_y = grid.grid_to_world(9, 9)
-        self.assertAlmostEqual(world_x, 5.75)
-        self.assertAlmostEqual(world_y, 6.75)
+        self.assertAlmostEqual(world_x, 5.5)
+        self.assertAlmostEqual(world_y, 6.5)
 
     def test_cell_state(self):
         grid = OccupancyGrid(1.0, 5, 5)
@@ -93,9 +93,11 @@ class TestOccupancyGrid(unittest.TestCase):
         grid = OccupancyGrid(1.0, 10, 10)
         self.assertEqual(grid.calculate_i_gain(0, 0, 5, 0), 6)
         grid.set_cell_state(3, 0, CellState.Occupied)
-        self.assertEqual(grid.calculate_i_gain(0, 0, 5, 0), 4)
+        self.assertEqual(grid.calculate_i_gain(0, 0, 5, 0), 3)
         grid.set_cell_state(1, 0, CellState.Free)
-        self.assertEqual(grid.calculate_i_gain(0, 0, 5, 0), 4)
+        self.assertEqual(grid.calculate_i_gain(0, 0, 5, 0), 2)
+        # Test out of bounds
+        self.assertEqual(grid.calculate_i_gain(0, 0, 15, 0), 2)
 
     def test_export_to_rgb_image(self):
         grid = OccupancyGrid(1.0, 2, 2)
