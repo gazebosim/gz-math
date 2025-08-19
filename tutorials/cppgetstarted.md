@@ -67,16 +67,43 @@ int main()
 }
 ```
 
-To compile this code on UNIX with pkg-config, use the following command:
+To compile the code create a `CMakeLists.txt`:
 
 ```{.bash}
-c++ $(pkg-config --cflags gz-math9) main.cpp -o main
+cmake_minimum_required(VERSION 3.22.1 FATAL_ERROR)
+project(gz-math-cpp-example)
+
+find_package(gz-math QUIET REQUIRED)
+
+add_executable(gz-math-example main.cpp)
+target_link_libraries(gz-math-example PUBLIC gz-math::gz-math)
 ```
 
-The program can then be run as:
+Compile the example:
 
 ```{.bash}
-$ ./main
+mkdir build && cd build
+cmake ..
+```
+
+For Unix systems:
+
+```{.bash}
+make
+
+For Windows systems:
+
+```{.bash}
+cmake --build . --config Release
+
+Run the example:
+
+```{.bash}
+./gz-math-example
+```
+
+Output should be:
+```{.bash}
 Distance from 1 3 5 to 2 4 6 is 1.73205
 ```
 
