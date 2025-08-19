@@ -50,6 +50,7 @@ pybind11_add_module(${BINDINGS_MODULE_NAME} MODULE
   src/Matrix6.cc
   src/MecanumDriveOdometry.cc
   src/MovingWindowFilter.cc
+  src/OccupancyGrid.cc
   src/PID.cc
   src/Polynomial3.cc
   src/Pose3.cc
@@ -161,6 +162,7 @@ if (BUILD_TESTING)
     Matrix6_TEST
     MecanumDriveOdometry_TEST
     MovingWindowFilter_TEST
+    OccupancyGrid_TEST
     OrientedBox_TEST
     PID_TEST
     Plane_TEST
