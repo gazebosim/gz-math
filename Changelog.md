@@ -1,6 +1,39 @@
 ## Gazebo Math 9.x
 
-### Gazebo Math 9.0.0 (20XX-XX-XX)
+### Gazebo Math 9.0.0 (2025-09-24)
+
+1. **Baseline:** this includes all changes from 8.2.0 and earlier.
+
+1. Update tutorial build step
+    * [Pull request #626](https://github.com/gazebosim/gz-math/pull/626)
+
+1. Bazel support
+    * [Pull request #683](https://github.com/gazebosim/gz-math/pull/683)
+    * [Pull request #681](https://github.com/gazebosim/gz-math/pull/681)
+    * [Pull request #680](https://github.com/gazebosim/gz-math/pull/680)
+    * [Pull request #673](https://github.com/gazebosim/gz-math/pull/673)
+
+1. python: suppress Pose3 deprecation warnings
+    * [Pull request #682](https://github.com/gazebosim/gz-math/pull/682)
+
+1. Bump dependency versions of gz-cmake and others in jetty and remove version from package names
+    * [Pull request #677](https://github.com/gazebosim/gz-math/pull/677)
+    * [Release-tools issue #1309](https://github.com/gazebo-tooling/release-tools/issues/1309)
+
+1. Include `numpy_helpers` in the `py_test` calls
+    * [Pull request #673](https://github.com/gazebosim/gz-math/pull/673)
+
+1. Unify `Python3_Development_FOUND` checks
+    * [Pull request #663](https://github.com/gazebosim/gz-math/pull/663)
+
+1. Remove deprecations from SphericalCoordinates, Stopwatch, graph/Edge, and graph/Vertex classes
+    * [Pull request #653](https://github.com/gazebosim/gz-math/pull/653)
+
+1. Bump major version to 9
+    * [Pull request #635](https://github.com/gazebosim/gz-math/pull/635)
+
+1. `buffer_protocol` for vectors and matrices in python bindings
+    * [Pull request #524](https://github.com/gazebosim/gz-math/pull/524)
 
 ## Gazebo Math 8.x
 
