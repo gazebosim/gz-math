@@ -41,14 +41,14 @@ struct OccupancyGrid::Impl {
   }
 
   // Constructor for Impl
-  Impl(double resolutionMeters, int widthCells, int heightCells,
-    double originX, double originY)
-    : resolutionMeters(resolutionMeters),
-      widthCells(widthCells),
-      heightCells(heightCells),
-      originX(originX),
-      originY(originY),
-      gridData(widthCells * heightCells, CellState::Unknown)
+  Impl(double _resolutionMeters, int _widthCells, int _heightCells,
+    double _originX, double _originY)
+    : resolutionMeters(_resolutionMeters),
+      widthCells(_widthCells),
+      heightCells(_heightCells),
+      originX(_originX),
+      originY(_originY),
+      gridData(_widthCells * _heightCells, CellState::Unknown)
   {}
 
   // IsValidGridCoordinate is also needed internally for Impl operations
@@ -85,7 +85,7 @@ OccupancyGrid::OccupancyGrid(double resolutionMeters, int widthCells,
 }
 
 /////////////////////////////////////////////////
-OccupancyGrid::~OccupancyGrid() = default; // std::unique_ptr handles deletion
+OccupancyGrid::~OccupancyGrid() = default;
 
 /////////////////////////////////////////////////
 OccupancyGrid::OccupancyGrid(OccupancyGrid&& other) noexcept
@@ -93,7 +93,7 @@ OccupancyGrid::OccupancyGrid(OccupancyGrid&& other) noexcept
 {}
 
 /////////////////////////////////////////////////
-OccupancyGrid& OccupancyGrid::operator=(OccupancyGrid&& other) noexcept 
+OccupancyGrid& OccupancyGrid::operator=(OccupancyGrid&& other) noexcept
 {
   if (this != &other)
   {
@@ -164,12 +164,12 @@ void OccupancyGrid::MarkLine(int x0, int y0, int x1, int y1, CellState state)
 
   for (int x = x0; x <= x1; ++x) {
     if (steep) {
-      auto res = this->pImpl->GetCellStateImpl(y, x); // Note: swapped back
+      auto res = this->pImpl->GetCellStateImpl(y, x);
       if (res == CellState::Occupied)
       {
         continue;
       }
-      this->pImpl->SetCellStateImpl(y, x, state); // Note: swapped back
+      this->pImpl->SetCellStateImpl(y, x, state);
     } else {
       auto res = this->pImpl->GetCellStateImpl(x, y);
       if (res == CellState::Occupied)
@@ -249,12 +249,14 @@ void OccupancyGrid::MarkOccupied(double worldX, double worldY)
 
 /////////////////////////////////////////////////
 void OccupancyGrid::MarkFree(double worldX0, double worldY0, double worldX1,
-  double worldY1) 
+  double worldY1)
 {
   int gridX0, gridY0, gridX1, gridY1;
-  if (WorldToGrid(worldX0, worldY0, gridX0, gridY0)) {
+  if (WorldToGrid(worldX0, worldY0, gridX0, gridY0))
+  {
     WorldToGrid(worldX1, worldY1, gridX1, gridY1);
     MarkLine(gridX0, gridY0, gridX1, gridY1, CellState::Free);
+  }
 }
 
 /////////////////////////////////////////////////
@@ -277,6 +279,10 @@ void OccupancyGrid::ExportToRGBImage(std::vector<unsigned char>& _pixels) const
           r = 255; g = 255; b = 255;
           break;
         case CellState::Unknown:
+          r = 128; g = 128; b = 128;
+          break;
+        default:
+          // Should never reach here
           r = 128; g = 128; b = 128;
           break;
       }
@@ -311,6 +317,9 @@ void OccupancyGrid::GetRawOccupancy(std::vector<char>& _data) const
           val = 0;
           break;
         case CellState::Unknown:
+          val = -1;
+          break;
+        default:
           val = -1;
           break;
       }
