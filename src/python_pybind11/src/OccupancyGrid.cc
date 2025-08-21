@@ -77,12 +77,13 @@ void defineMathOccupancyGrid(py::module &m, const std::string &typestr)
         std::vector<uint8_t> pixels;
         self.ExportToRGBImage(pixels);
         return py::bytes(reinterpret_cast<const char*>(pixels.data()),
-        pixels.size());
+          pixels.size());
      }, "Export the occupancy grid to a RGB image buffer.")
     .def("get_raw_occupancy", [](const Class &self) {
         std::vector<int8_t> data;
         self.GetRawOccupancy(data);
-        return py::bytes(reinterpret_cast<const char*>(data.data()), data.size());
+        return py::bytes(reinterpret_cast<const char*>(data.data()),
+          data.size());
      }, "Export the occupancy grid to a raw buffer.")
     .def("get_resolution", &Class::GetResolution,
          "Get the resolution of the occupancy grid.")
