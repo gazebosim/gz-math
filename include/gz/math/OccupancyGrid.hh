@@ -21,91 +21,136 @@
 #include <vector>
 
 #include <gz/math/Helpers.hh>
+#include <gz/utils/ImplPtr.hh>
 
 namespace gz::math {
 inline namespace GZ_MATH_VERSION_NAMESPACE {
-// Define cell states
-enum class CellState {
-  Free,
-  Occupied,
-  Unknown
-};
 
-/// Class representing an occupancy grid.
-class GZ_MATH_VISIBLE OccupancyGrid {
-public:
-  /// Constructor
-  OccupancyGrid(double resolutionMeters, int widthCells,
-    int heightCells, double originX = 0.0, double originY = 0.0);
+  /// \enum CellState
+  /// \brief Defines the state of a cell in the occupancy grid.
+  enum class CellState
+  {
+    /// \brief The cell is considered free space.
+    Free,
+    /// \brief The cell is considered occupied.
+    Occupied,
+    /// \brief The state of the cell is unknown.
+    Unknown
+  };
 
-  /// Destructor (important for PIMPL)
-  ~OccupancyGrid();
+  /// \class OccupancyGrid OccupancyGrid.hh gz/math/OccupancyGrid.hh
+  /// \brief Class representing an occupancy grid.
+  class GZ_MATH_VISIBLE OccupancyGrid {
+  /// \brief Constructor.
+  /// \param[in] _resolutionMeters Resolution of the grid in meters per cell.
+  /// \param[in] _widthCells Width of the grid in cells.
+  /// \param[in] _heightCells Height of the grid in cells.
+  /// \param[in] _originX X-coordinate of the grid's origin in world
+  /// coordinates.
+  /// \param[in] _originY Y-coordinate of the grid's origin in world
+  /// coordinates.
+  public: OccupancyGrid(double _resolutionMeters, int _widthCells,
+    int _heightCells, double _originX = 0.0, double _originY = 0.0);
 
-  /// Copy Constructor and Assignment Operator (deleted for to prevent expensive
-  /// copies)
-  OccupancyGrid(const OccupancyGrid&) = delete;
-  OccupancyGrid& operator=(const OccupancyGrid&) = delete;
+  /// \brief Convert world coordinates (meters) to grid coordinates (cells).
+  /// \param[in] _worldX World X coordinate in meters.
+  /// \param[in] _worldY World Y coordinate in meters.
+  /// \param[out] _gridX Grid X coordinate in cells.
+  /// \param[out] _gridY Grid Y coordinate in cells.
+  /// \return True if coordinates are within bounds, false otherwise.
+  public: bool WorldToGrid(double _worldX, double _worldY, int &_gridX,
+                           int &_gridY) const;
 
-  /// Move Constructor and Assignment Operator
-  OccupancyGrid(OccupancyGrid&&) noexcept;
-  OccupancyGrid& operator=(OccupancyGrid&&) noexcept;
+  /// \brief Convert grid coordinates (cells) to world coordinates (meters -
+  /// center of cell).
+  /// \param[in] _gridX Grid X coordinate in cells.
+  /// \param[in] _gridY Grid Y coordinate in cells.
+  /// \param[out] _worldX World X coordinate in meters.
+  /// \param[out] _worldY World Y coordinate in meters.
+  public: void GridToWorld(int _gridX, int _gridY, double &_worldX,
+                           double &_worldY) const;
 
-  /// Convert world coordinates (meters) to grid coordinates (cells)
-  /// \return True if coordinates within bounds, false otherwise
-  bool WorldToGrid(double worldX, double worldY, int& gridX, int& gridY) const;
+  /// \brief Check if grid coordinates are within bounds.
+  /// \param[in] _gridX Grid X coordinate in cells.
+  /// \param[in] _gridY Grid Y coordinate in cells.
+  /// \return True if the coordinates are valid, false otherwise.
+  public: bool IsValidGridCoordinate(int _gridX, int _gridY) const;
 
-  /// Convert grid coordinates (cells) to world coordinates
-  /// (meters - center of cell)
-  void GridToWorld(int gridX, int gridY, double& worldX, double& worldY) const;
+  /// \brief Get the state of a cell.
+  /// \param[in] _gridX Grid X coordinate in cells.
+  /// \param[in] _gridY Grid Y coordinate in cells.
+  /// \return The state of the cell.
+  public: CellState GetCellState(int _gridX, int _gridY) const;
 
-  /// Check if grid coordinates are within bounds
-  bool IsValidGridCoordinate(int gridX, int gridY) const;
+  /// \brief Set the state of a cell.
+  /// \param[in] _gridX Grid X coordinate in cells.
+  /// \param[in] _gridY Grid Y coordinate in cells.
+  /// \param[in] _state The new state of the cell.
+  public: void SetCellState(int _gridX, int _gridY, CellState _state);
 
-  /// Get the state of a cell
-  CellState GetCellState(int gridX, int gridY) const;
+  /// \brief Calculate information gain along a line. This is useful when
+  /// implementing safe frontier exploration algorithms.
+  /// \param[in] _x0 X coordinate of the start point in cells.
+  /// \param[in] _y0 Y coordinate of the start point in cells.
+  /// \param[in] _x1 X coordinate of the end point in cells.
+  /// \param[in] _y1 Y coordinate of the end point in cells.
+  /// \return The information gain.
+  public: int CalculateIGain(int _x0, int _y0, int _x1, int _y1);
 
-  /// Set the state of a cell
-  void SetCellState(int gridX, int gridY, CellState state);
+  /// \brief Use Bresenham's Line Algorithm to mark cells along a line. This
+  /// function will not modify cells that are already marked as Occupied.
+  /// It marks cells from (_x0, _y0) to (_x1, _y1) with the specified state.
+  /// \param[in] _x0 X coordinate of the start point in cells.
+  /// \param[in] _y0 Y coordinate of the start point in cells.
+  /// \param[in] _x1 X coordinate of the end point in cells.
+  /// \param[in] _y1 Y coordinate of the end point in cells.
+  /// \param[in] _state The state to mark the cells with.
+  public: void MarkLine(int _x0, int _y0, int _x1, int _y1, CellState _state);
 
-  /// Calculate information gain along a line. Useful when implementing
-  /// safe frontier exploration algorithms.
-  int CalculateIGain(int x0, int y0, int x1, int y1);
+  /// \brief Helper to mark a single point as occupied (e.g., an obstacle
+  /// detection).
+  /// \param[in] _worldX World X coordinate in meters.
+  /// \param[in] _worldY World Y coordinate in meters.
+  public: void MarkOccupied(double _worldX, double _worldY);
 
-  /// Bresenham's Line Algorithm to mark cells along a line. This function
-  /// will not modify cells that are already marked as Occupied.
-  /// Marks cells from (x0, y0) to (x1, y1) with the specified state
-  void MarkLine(int x0, int y0, int x1, int y1, CellState state);
+  /// \brief Helper to mark a path as free (e.g., a clear line of sight).
+  /// \param[in] _worldX0 World X coordinate of the start point in meters.
+  /// \param[in] _worldY0 World Y coordinate of the start point in meters.
+  /// \param[in] _worldX1 World X coordinate of the end point in meters.
+  /// \param[in] _worldY1 World Y coordinate of the end point in meters.
+  public: void MarkFree(double _worldX0, double _worldY0, double _worldX1,
+                        double _worldY1);
 
-  /// Helper to mark a single point as occupied (e.g., an obstacle detection)
-  void MarkOccupied(double worldX, double worldY);
+  /// \brief Export the occupancy grid to a RGB image buffer.
+  /// \param[out] _pixels The output buffer to store the RGB image data.
+  public: void ExportToRGBImage(std::vector<unsigned char> &_pixels) const;
 
-  /// Helper to mark a path as free (e.g., a clear line of sight)
-  void MarkFree(double worldX0, double worldY0, double worldX1, double worldY1);
+  /// \brief Export the occupancy grid to a raw buffer.
+  /// \param[out] _data The output buffer to store the raw occupancy data.
+  public: void GetRawOccupancy(std::vector<char> &_data) const;
 
-  /// Export the occupancy grid to a RGB image buffer
-  void ExportToRGBImage(std::vector<unsigned char>& _pixels) const;
+  /// \brief Get the resolution of the occupancy grid.
+  /// \return The resolution in meters per cell.
+  public: double GetResolution() const;
 
-  /// Export the occupancy grid to a raw buffer
-  void GetRawOccupancy(std::vector<char>& _data) const;
+  /// \brief Get the number of cells in width.
+  /// \return The width of the grid in cells.
+  public: int GetWidth() const;
 
-  /// Resolution of the occupancy grid
-  double GetResolution() const;
+  /// \brief Get the number of cells in height.
+  /// \return The height of the grid in cells.
+  public: int GetHeight() const;
 
-  /// Get the number of cells in width
-  int GetWidth() const;
+  /// \brief Get the origin X position.
+  /// \return The X-coordinate of the grid's origin in world coordinates.
+  public: double GetOriginX() const;
 
-  /// Get the number of cells in height
-  int GetHeight() const;
+  /// \brief Get the origin Y position.
+  /// \return The Y-coordinate of the grid's origin in world coordinates.
+  public: double GetOriginY() const;
 
-  /// Get the origin X position
-  double GetOriginX() const;
-
-  /// Get the origin Y position
-  double GetOriginY() const;
-private:
-  // PIMPL idiom: Pointer to implementation
-  struct Impl;
-  std::unique_ptr<Impl> pImpl;
+  /// \brief Private data pointer.
+  GZ_UTILS_IMPL_PTR(pImpl)
 };
 }
 }

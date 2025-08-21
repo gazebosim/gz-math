@@ -14,19 +14,21 @@
  * limitations under the License.
  *
 */
-
-#include "gz/math/OccupancyGrid.hh"
 #include <cmath>
 #include <memory>
 #include <utility>
 #include <vector>
+
+#include <gz/utils/ImplPtr.hh>
+
+#include "gz/math/OccupancyGrid.hh"
 
 using namespace gz;
 using namespace math;
 
 /////////////////////////////////////////////////
 // Private implementation struct/class
-struct OccupancyGrid::Impl {
+struct OccupancyGrid::Implementation {
   double resolutionMeters;
   int widthCells;
   int heightCells;
@@ -43,7 +45,7 @@ struct OccupancyGrid::Impl {
   }
 
   // Constructor for Impl
-  Impl(double _resolutionMeters, int _widthCells, int _heightCells,
+  Implementation(double _resolutionMeters, int _widthCells, int _heightCells,
     double _originX, double _originY)
     : resolutionMeters(_resolutionMeters),
       widthCells(_widthCells),
@@ -81,27 +83,9 @@ struct OccupancyGrid::Impl {
 /////////////////////////////////////////////////
 OccupancyGrid::OccupancyGrid(double resolutionMeters, int widthCells,
   int heightCells, double originX, double originY)
-    : pImpl(std::make_unique<Impl>(
+    : pImpl(gz::utils::MakeImpl<Implementation>(
       resolutionMeters, widthCells, heightCells, originX, originY))
 {
-}
-
-/////////////////////////////////////////////////
-OccupancyGrid::~OccupancyGrid() = default;
-
-/////////////////////////////////////////////////
-OccupancyGrid::OccupancyGrid(OccupancyGrid&& other) noexcept
-    : pImpl(std::move(other.pImpl))
-{}
-
-/////////////////////////////////////////////////
-OccupancyGrid& OccupancyGrid::operator=(OccupancyGrid&& other) noexcept
-{
-  if (this != &other)
-  {
-    pImpl = std::move(other.pImpl);
-  }
-  return *this;
 }
 
 /////////////////////////////////////////////////
