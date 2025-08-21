@@ -16,6 +16,10 @@
  */
 
 #include <gtest/gtest.h>
+
+#include <utility>
+#include <vector>
+
 #include "gz/math/OccupancyGrid.hh"
 
 using namespace gz;

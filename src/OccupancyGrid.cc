@@ -17,7 +17,9 @@
 
 #include "gz/math/OccupancyGrid.hh"
 #include <cmath>
+#include <memory>
 #include <utility>
+#include <vector>
 
 using namespace gz;
 using namespace math;
@@ -292,7 +294,6 @@ void OccupancyGrid::ExportToRGBImage(std::vector<unsigned char>& _pixels) const
       _pixels[pixelIdx + 0] = r;
       _pixels[pixelIdx + 1] = g;
       _pixels[pixelIdx + 2] = b;
-
     }
   }
 }
