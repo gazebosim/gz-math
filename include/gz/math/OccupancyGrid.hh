@@ -58,7 +58,8 @@ inline namespace GZ_MATH_VERSION_NAMESPACE {
   /// \param[in] _worldY World Y coordinate in meters.
   /// \param[out] _gridX Grid X coordinate in cells.
   /// \param[out] _gridY Grid Y coordinate in cells.
-  /// \return True if coordinates are within bounds, false otherwise.
+  /// \return True if coordinates are within bounds, false otherwise. May also
+  // be false if resolution is set to zero.
   public: bool WorldToGrid(double _worldX, double _worldY, int &_gridX,
                            int &_gridY) const;
 
@@ -106,7 +107,6 @@ inline namespace GZ_MATH_VERSION_NAMESPACE {
   /// \param[in] _x1 X coordinate of the end point in cells.
   /// \param[in] _y1 Y coordinate of the end point in cells.
   /// \param[in] _state The state to mark the cells with.
-  /// \returns true if the grid was inside the coordinates, false otherwise
   public: void MarkLine(int _x0, int _y0, int _x1, int _y1,
     OccupancyCellState _state);
 
@@ -122,6 +122,7 @@ inline namespace GZ_MATH_VERSION_NAMESPACE {
   /// \param[in] _worldY0 World Y coordinate of the start point in meters.
   /// \param[in] _worldX1 World X coordinate of the end point in meters.
   /// \param[in] _worldY1 World Y coordinate of the end point in meters.
+  /// \returns true if the grid was inside the coordinates, false otherwise
   public: bool MarkFree(double _worldX0, double _worldY0, double _worldX1,
                         double _worldY1);
 
