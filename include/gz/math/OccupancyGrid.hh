@@ -17,6 +17,7 @@
 #ifndef GZ_MATH_OCCUPANCY_GRID_HH_
 #define GZ_MATH_OCCUPANCY_GRID_HH_
 
+#include <cstdint>
 #include <memory>
 #include <vector>
 
@@ -123,11 +124,11 @@ inline namespace GZ_MATH_VERSION_NAMESPACE {
 
   /// \brief Export the occupancy grid to a RGB image buffer.
   /// \param[out] _pixels The output buffer to store the RGB image data.
-  public: void ExportToRGBImage(std::vector<unsigned char> &_pixels) const;
+  public: void ExportToRGBImage(std::vector<uint8_t> &_pixels) const;
 
   /// \brief Export the occupancy grid to a raw buffer.
   /// \param[out] _data The output buffer to store the raw occupancy data.
-  public: void GetRawOccupancy(std::vector<char> &_data) const;
+  public: void GetRawOccupancy(std::vector<int8_t> &_data) const;
 
   /// \brief Get the resolution of the occupancy grid.
   /// \return The resolution in meters per cell.

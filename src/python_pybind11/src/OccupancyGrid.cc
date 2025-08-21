@@ -19,6 +19,7 @@
 #include <pybind11/stl.h>
 #include <pybind11/numpy.h>
 
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <tuple>
@@ -73,15 +74,15 @@ void defineMathOccupancyGrid(py::module &m, const std::string &typestr)
     .def("mark_free", &Class::MarkFree,
          "Mark a path as free.")
     .def("export_to_rgb_image", [](const Class &self) {
-        std::vector<unsigned char> pixels;
+        std::vector<uint8_t> pixels;
         self.ExportToRGBImage(pixels);
         return py::bytes(reinterpret_cast<const char*>(pixels.data()),
         pixels.size());
      }, "Export the occupancy grid to a RGB image buffer.")
     .def("get_raw_occupancy", [](const Class &self) {
-        std::vector<char> data;
+        std::vector<int8_t> data;
         self.GetRawOccupancy(data);
-        return py::bytes(data.data(), data.size());
+        return py::bytes(reinterpret_cast<const char*>(data.data()), data.size());
      }, "Export the occupancy grid to a raw buffer.")
     .def("get_resolution", &Class::GetResolution,
          "Get the resolution of the occupancy grid.")

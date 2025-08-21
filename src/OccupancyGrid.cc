@@ -15,6 +15,7 @@
  *
 */
 #include <cmath>
+#include <cstdint>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -246,7 +247,7 @@ void OccupancyGrid::MarkFree(double worldX0, double worldY0, double worldX1,
 }
 
 /////////////////////////////////////////////////
-void OccupancyGrid::ExportToRGBImage(std::vector<unsigned char>& _pixels) const
+void OccupancyGrid::ExportToRGBImage(std::vector<uint8_t>& _pixels) const
 {
   _pixels.assign(this->pImpl->widthCells * this->pImpl->heightCells * 3, 0);
 
@@ -254,7 +255,7 @@ void OccupancyGrid::ExportToRGBImage(std::vector<unsigned char>& _pixels) const
   {
     for (int gridX = 0; gridX < this->pImpl->widthCells; ++gridX)
     {
-      unsigned char r = 0, g = 0, b = 0;
+      uint8_t r = 0, g = 0, b = 0;
       auto res = this->pImpl->GetCellStateImpl(gridX, gridY);
       switch (res)
       {
@@ -283,7 +284,7 @@ void OccupancyGrid::ExportToRGBImage(std::vector<unsigned char>& _pixels) const
 }
 
 /////////////////////////////////////////////////
-void OccupancyGrid::GetRawOccupancy(std::vector<char>& _data) const
+void OccupancyGrid::GetRawOccupancy(std::vector<int8_t>& _data) const
 {
   _data.assign(this->pImpl->widthCells * this->pImpl->heightCells, 0);
 
@@ -291,7 +292,7 @@ void OccupancyGrid::GetRawOccupancy(std::vector<char>& _data) const
   {
     for (int gridX = 0; gridX < this->pImpl->widthCells; ++gridX)
     {
-      char val = -1;
+      int8_t val = -1;
       auto res = this->pImpl->GetCellStateImpl(gridX, gridY);
       switch (res)
       {

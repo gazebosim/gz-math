@@ -195,7 +195,7 @@ TEST(OccupancyGridTest, ExportToRGBImage)
   grid.SetCellState(1, 0, CellState::Unknown);
   // (1, 1) is implicitly Unknown
 
-  std::vector<unsigned char> pixels;
+  std::vector<uint8_t> pixels;
   grid.ExportToRGBImage(pixels);
 
   // Expected size: 2x2 grid * 3 channels (RGB)
@@ -231,7 +231,7 @@ TEST(OccupancyGridTest, GetRawOccupancy)
   grid.SetCellState(1, 1, CellState::Free);
   grid.SetCellState(2, 1, CellState::Unknown);
 
-  std::vector<char> data;
+  std::vector<int8_t> data;
   grid.GetRawOccupancy(data);
 
   ASSERT_EQ(data.size(), 6);
