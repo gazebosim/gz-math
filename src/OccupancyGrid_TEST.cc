@@ -36,18 +36,18 @@ TEST(OccupancyGridTest, Constructor)
 
   OccupancyGrid grid(resolution, width, height, originX, originY);
 
-  EXPECT_DOUBLE_EQ(grid.GetResolution(), resolution);
-  EXPECT_EQ(grid.GetWidth(), width);
-  EXPECT_EQ(grid.GetHeight(), height);
-  EXPECT_DOUBLE_EQ(grid.GetOriginX(), originX);
-  EXPECT_DOUBLE_EQ(grid.GetOriginY(), originY);
+  EXPECT_DOUBLE_EQ(grid.Resolution(), resolution);
+  EXPECT_EQ(grid.Width(), width);
+  EXPECT_EQ(grid.Height(), height);
+  EXPECT_DOUBLE_EQ(grid.OriginX(), originX);
+  EXPECT_DOUBLE_EQ(grid.OriginY(), originY);
 
   // Verify all cells are initialized to Unknown
   for (int y = 0; y < height; ++y)
   {
     for (int x = 0; x < width; ++x)
     {
-      EXPECT_EQ(grid.GetCellState(x, y), CellState::Unknown);
+      EXPECT_EQ(grid.CellState(x, y), OccupancyCellState::Unknown);
     }
   }
 }
@@ -56,23 +56,23 @@ TEST(OccupancyGridTest, Constructor)
 TEST(OccupancyGridTest, MoveOperations)
 {
   OccupancyGrid grid1(0.1, 10, 10);
-  grid1.SetCellState(1, 1, CellState::Occupied);
+  grid1.CellState(1, 1, OccupancyCellState::Occupied);
 
   // Test Move Constructor
   OccupancyGrid grid2(std::move(grid1));
-  EXPECT_EQ(grid2.GetCellState(1, 1), CellState::Occupied);
+  EXPECT_EQ(grid2.CellState(1, 1), OccupancyCellState::Occupied);
 
   // grid1 should be in a valid but unspecified state.
   // Let's check if it's still usable.
   // For instance, we could try to re-assign to it.
   grid1 = OccupancyGrid(0.05, 5, 5);
-  EXPECT_EQ(grid1.GetWidth(), 5);
+  EXPECT_EQ(grid1.Width(), 5);
 
   // Test Move Assignment
   OccupancyGrid grid3(0.2, 20, 20);
-  grid3.SetCellState(2, 2, CellState::Free);
+  grid3.CellState(2, 2, OccupancyCellState::Free);
   grid1 = std::move(grid3);
-  EXPECT_EQ(grid1.GetCellState(2, 2), CellState::Free);
+  EXPECT_EQ(grid1.CellState(2, 2), OccupancyCellState::Free);
 }
 
 /////////////////////////////////////////////////
@@ -110,18 +110,18 @@ TEST(OccupancyGridTest, CellState)
   OccupancyGrid grid(1.0, 5, 5);
 
   // Test initial state
-  EXPECT_EQ(grid.GetCellState(2, 2), CellState::Unknown);
+  EXPECT_EQ(grid.CellState(2, 2), OccupancyCellState::Unknown);
 
   // Test setting and getting state
-  grid.SetCellState(2, 2, CellState::Occupied);
-  EXPECT_EQ(grid.GetCellState(2, 2), CellState::Occupied);
+  grid.CellState(2, 2, OccupancyCellState::Occupied);
+  EXPECT_EQ(grid.CellState(2, 2), OccupancyCellState::Occupied);
 
-  grid.SetCellState(2, 2, CellState::Free);
-  EXPECT_EQ(grid.GetCellState(2, 2), CellState::Free);
+  grid.CellState(2, 2, OccupancyCellState::Free);
+  EXPECT_EQ(grid.CellState(2, 2), OccupancyCellState::Free);
 
   // Test out-of-bounds access
-  grid.SetCellState(10, 10, CellState::Occupied);
-  EXPECT_EQ(grid.GetCellState(10, 10), CellState::Unknown);
+  grid.CellState(10, 10, OccupancyCellState::Occupied);
+  EXPECT_EQ(grid.CellState(10, 10), OccupancyCellState::Unknown);
 }
 
 /////////////////////////////////////////////////
@@ -133,12 +133,12 @@ TEST(OccupancyGridTest, MarkOccupiedAndFree)
   grid.MarkOccupied(0.55, 0.55);
   int gridX, gridY;
   grid.WorldToGrid(0.55, 0.55, gridX, gridY);
-  EXPECT_EQ(grid.GetCellState(gridX, gridY), CellState::Occupied);
+  EXPECT_EQ(grid.CellState(gridX, gridY), OccupancyCellState::Occupied);
 
   // Mark a line as free
   grid.MarkFree(0.1, 0.1, 0.8, 0.1);
   for (int i = 1; i <= 8; ++i) {
-    EXPECT_EQ(grid.GetCellState(i, 1), CellState::Free);
+    EXPECT_EQ(grid.CellState(i, 1), OccupancyCellState::Free);
   }
 }
 
@@ -148,22 +148,22 @@ TEST(OccupancyGridTest, Bresenham)
   OccupancyGrid grid(1.0, 10, 10);
 
   // Mark a diagonal line
-  grid.MarkLine(0, 0, 5, 5, CellState::Occupied);
+  grid.MarkLine(0, 0, 5, 5, OccupancyCellState::Occupied);
   for (int i = 0; i <= 5; ++i) {
-    EXPECT_EQ(grid.GetCellState(i, i), CellState::Occupied);
+    EXPECT_EQ(grid.CellState(i, i), OccupancyCellState::Occupied);
   }
 
   // Mark a non-steep line that does not overlap
-  grid.MarkLine(0, 6, 8, 8, CellState::Free);
-  EXPECT_EQ(grid.GetCellState(0, 6), CellState::Free);
-  EXPECT_EQ(grid.GetCellState(1, 6), CellState::Free);
-  EXPECT_EQ(grid.GetCellState(2, 6), CellState::Free);
-  EXPECT_EQ(grid.GetCellState(3, 7), CellState::Free);
-  EXPECT_EQ(grid.GetCellState(4, 7), CellState::Free);
-  EXPECT_EQ(grid.GetCellState(5, 7), CellState::Free);
-  EXPECT_EQ(grid.GetCellState(6, 7), CellState::Free);
-  EXPECT_EQ(grid.GetCellState(7, 8), CellState::Free);
-  EXPECT_EQ(grid.GetCellState(8, 8), CellState::Free);
+  grid.MarkLine(0, 6, 8, 8, OccupancyCellState::Free);
+  EXPECT_EQ(grid.CellState(0, 6), OccupancyCellState::Free);
+  EXPECT_EQ(grid.CellState(1, 6), OccupancyCellState::Free);
+  EXPECT_EQ(grid.CellState(2, 6), OccupancyCellState::Free);
+  EXPECT_EQ(grid.CellState(3, 7), OccupancyCellState::Free);
+  EXPECT_EQ(grid.CellState(4, 7), OccupancyCellState::Free);
+  EXPECT_EQ(grid.CellState(5, 7), OccupancyCellState::Free);
+  EXPECT_EQ(grid.CellState(6, 7), OccupancyCellState::Free);
+  EXPECT_EQ(grid.CellState(7, 8), OccupancyCellState::Free);
+  EXPECT_EQ(grid.CellState(8, 8), OccupancyCellState::Free);
 }
 
 /////////////////////////////////////////////////
@@ -175,11 +175,11 @@ TEST(OccupancyGridTest, IGain)
   EXPECT_EQ(grid.CalculateIGain(0, 0, 5, 0), 6);
 
   // Introduce an obstacle
-  grid.SetCellState(3, 0, CellState::Occupied);
+  grid.CellState(3, 0, OccupancyCellState::Occupied);
   EXPECT_EQ(grid.CalculateIGain(0, 0, 5, 0), 3);
 
   // Mark some as free
-  grid.SetCellState(1, 0, CellState::Free);
+  grid.CellState(1, 0, OccupancyCellState::Free);
   EXPECT_EQ(grid.CalculateIGain(0, 0, 5, 0), 2);
 
   // Test out of bounds
@@ -190,9 +190,9 @@ TEST(OccupancyGridTest, IGain)
 TEST(OccupancyGridTest, ExportToRGBImage)
 {
   OccupancyGrid grid(1.0, 2, 2);
-  grid.SetCellState(0, 0, CellState::Free);
-  grid.SetCellState(0, 1, CellState::Occupied);
-  grid.SetCellState(1, 0, CellState::Unknown);
+  grid.CellState(0, 0, OccupancyCellState::Free);
+  grid.CellState(0, 1, OccupancyCellState::Occupied);
+  grid.CellState(1, 0, OccupancyCellState::Unknown);
   // (1, 1) is implicitly Unknown
 
   std::vector<uint8_t> pixels;
@@ -224,15 +224,15 @@ TEST(OccupancyGridTest, ExportToRGBImage)
 TEST(OccupancyGridTest, GetRawOccupancy)
 {
   OccupancyGrid grid(1.0, 3, 2);
-  grid.SetCellState(0, 0, CellState::Free);
-  grid.SetCellState(1, 0, CellState::Occupied);
-  grid.SetCellState(2, 0, CellState::Unknown);
-  grid.SetCellState(0, 1, CellState::Occupied);
-  grid.SetCellState(1, 1, CellState::Free);
-  grid.SetCellState(2, 1, CellState::Unknown);
+  grid.CellState(0, 0, OccupancyCellState::Free);
+  grid.CellState(1, 0, OccupancyCellState::Occupied);
+  grid.CellState(2, 0, OccupancyCellState::Unknown);
+  grid.CellState(0, 1, OccupancyCellState::Occupied);
+  grid.CellState(1, 1, OccupancyCellState::Free);
+  grid.CellState(2, 1, OccupancyCellState::Unknown);
 
   std::vector<int8_t> data;
-  grid.GetRawOccupancy(data);
+  grid.RawOccupancy(data);
 
   ASSERT_EQ(data.size(), 6);
 
@@ -277,24 +277,24 @@ TEST(OccupancyGridTest, MarkLineOverOccupied)
 {
   OccupancyGrid grid(1.0, 10, 10);
 
-  grid.SetCellState(3, 3, CellState::Occupied);
-  grid.SetCellState(5, 5, CellState::Occupied);
+  grid.CellState(3, 3, OccupancyCellState::Occupied);
+  grid.CellState(5, 5, OccupancyCellState::Occupied);
 
   // Mark a line that passes through the occupied cells
-  grid.MarkLine(1, 1, 7, 7, CellState::Free);
+  grid.MarkLine(1, 1, 7, 7, OccupancyCellState::Free);
 
   // The occupied cells should remain occupied
-  EXPECT_EQ(grid.GetCellState(3, 3), CellState::Occupied);
-  EXPECT_EQ(grid.GetCellState(5, 5), CellState::Occupied);
+  EXPECT_EQ(grid.CellState(3, 3), OccupancyCellState::Occupied);
+  EXPECT_EQ(grid.CellState(5, 5), OccupancyCellState::Occupied);
 
   // Other cells on the line befor the occupied location
   // should be free
-  EXPECT_EQ(grid.GetCellState(1, 1), CellState::Free);
-  EXPECT_EQ(grid.GetCellState(2, 2), CellState::Free);
+  EXPECT_EQ(grid.CellState(1, 1), OccupancyCellState::Free);
+  EXPECT_EQ(grid.CellState(2, 2), OccupancyCellState::Free);
 
   // Do not clear lines passed the occupied location,
   // leave them as unknown.
-  EXPECT_EQ(grid.GetCellState(4, 4), CellState::Unknown);
-  EXPECT_EQ(grid.GetCellState(6, 6), CellState::Unknown);
-  EXPECT_EQ(grid.GetCellState(7, 7), CellState::Unknown);
+  EXPECT_EQ(grid.CellState(4, 4), OccupancyCellState::Unknown);
+  EXPECT_EQ(grid.CellState(6, 6), OccupancyCellState::Unknown);
+  EXPECT_EQ(grid.CellState(7, 7), OccupancyCellState::Unknown);
 }

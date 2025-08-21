@@ -27,9 +27,9 @@
 namespace gz::math {
 inline namespace GZ_MATH_VERSION_NAMESPACE {
 
-  /// \enum CellState
+  /// \enum OccupancyCellState
   /// \brief Defines the state of a cell in the occupancy grid.
-  enum class CellState
+  enum class OccupancyCellState
   {
     /// \brief The cell is considered free space.
     Free,
@@ -81,13 +81,13 @@ inline namespace GZ_MATH_VERSION_NAMESPACE {
   /// \param[in] _gridX Grid X coordinate in cells.
   /// \param[in] _gridY Grid Y coordinate in cells.
   /// \return The state of the cell.
-  public: CellState GetCellState(int _gridX, int _gridY) const;
+  public: OccupancyCellState CellState(int _gridX, int _gridY) const;
 
   /// \brief Set the state of a cell.
   /// \param[in] _gridX Grid X coordinate in cells.
   /// \param[in] _gridY Grid Y coordinate in cells.
   /// \param[in] _state The new state of the cell.
-  public: void SetCellState(int _gridX, int _gridY, CellState _state);
+  public: void CellState(int _gridX, int _gridY, OccupancyCellState _state);
 
   /// \brief Calculate information gain along a line. This is useful when
   /// implementing safe frontier exploration algorithms.
@@ -106,7 +106,8 @@ inline namespace GZ_MATH_VERSION_NAMESPACE {
   /// \param[in] _x1 X coordinate of the end point in cells.
   /// \param[in] _y1 Y coordinate of the end point in cells.
   /// \param[in] _state The state to mark the cells with.
-  public: void MarkLine(int _x0, int _y0, int _x1, int _y1, CellState _state);
+  public: void MarkLine(int _x0, int _y0, int _x1, int _y1,
+    OccupancyCellState _state);
 
   /// \brief Helper to mark a single point as occupied (e.g., an obstacle
   /// detection).
@@ -128,27 +129,27 @@ inline namespace GZ_MATH_VERSION_NAMESPACE {
 
   /// \brief Export the occupancy grid to a raw buffer.
   /// \param[out] _data The output buffer to store the raw occupancy data.
-  public: void GetRawOccupancy(std::vector<int8_t> &_data) const;
+  public: void RawOccupancy(std::vector<int8_t> &_data) const;
 
   /// \brief Get the resolution of the occupancy grid.
   /// \return The resolution in meters per cell.
-  public: double GetResolution() const;
+  public: double Resolution() const;
 
   /// \brief Get the number of cells in width.
   /// \return The width of the grid in cells.
-  public: int GetWidth() const;
+  public: int Width() const;
 
   /// \brief Get the number of cells in height.
   /// \return The height of the grid in cells.
-  public: int GetHeight() const;
+  public: int Height() const;
 
   /// \brief Get the origin X position.
   /// \return The X-coordinate of the grid's origin in world coordinates.
-  public: double GetOriginX() const;
+  public: double OriginX() const;
 
   /// \brief Get the origin Y position.
   /// \return The Y-coordinate of the grid's origin in world coordinates.
-  public: double GetOriginY() const;
+  public: double OriginY() const;
 
   /// \brief Private data pointer.
   GZ_UTILS_IMPL_PTR(pImpl)

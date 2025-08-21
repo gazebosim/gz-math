@@ -61,9 +61,10 @@ void defineMathOccupancyGrid(py::module &m, const std::string &typestr)
          "Convert grid coordinates to world coordinates.")
     .def("is_valid_grid_coordinate", &Class::IsValidGridCoordinate,
          "Check if grid coordinates are within bounds.")
-    .def("get_cell_state", &Class::GetCellState,
+    .def("get_cell_state", py::overload_cast<int, int>(&Class::CellState, py::const_),
          "Get the state of a cell.")
-    .def("set_cell_state", &Class::SetCellState,
+    .def("set_cell_state",
+          py::overload_cast<int, int, gz::math::OccupancyCellState>(&Class::CellState),
          "Set the state of a cell.")
     .def("calculate_i_gain", &Class::CalculateIGain,
          "Calculate information gain along a line.")
@@ -81,25 +82,25 @@ void defineMathOccupancyGrid(py::module &m, const std::string &typestr)
      }, "Export the occupancy grid to a RGB image buffer.")
     .def("get_raw_occupancy", [](const Class &self) {
         std::vector<int8_t> data;
-        self.GetRawOccupancy(data);
+        self.RawOccupancy(data);
         return py::bytes(reinterpret_cast<const char*>(data.data()),
           data.size());
      }, "Export the occupancy grid to a raw buffer.")
-    .def("get_resolution", &Class::GetResolution,
+    .def("get_resolution", &Class::Resolution,
          "Get the resolution of the occupancy grid.")
-    .def("get_width", &Class::GetWidth,
+    .def("get_width", &Class::Width,
          "Get the number of cells in width.")
-    .def("get_height", &Class::GetHeight,
+    .def("get_height", &Class::Height,
          "Get the number of cells in height.")
-    .def("get_origin_x", &Class::GetOriginX,
+    .def("get_origin_x", &Class::OriginX,
          "Get the origin X position.")
-    .def("get_origin_y", &Class::GetOriginY,
+    .def("get_origin_y", &Class::OriginY,
          "Get the origin Y position.");
 
-  py::enum_<gz::math::CellState>(m, "CellState")
-    .value("Free", gz::math::CellState::Free)
-    .value("Occupied", gz::math::CellState::Occupied)
-    .value("Unknown", gz::math::CellState::Unknown)
+  py::enum_<gz::math::OccupancyCellState>(m, "CellState")
+    .value("Free", gz::math::OccupancyCellState::Free)
+    .value("Occupied", gz::math::OccupancyCellState::Occupied)
+    .value("Unknown", gz::math::OccupancyCellState::Unknown)
     .export_values();
 }
 }  // namespace python
