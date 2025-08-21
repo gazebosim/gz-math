@@ -132,7 +132,6 @@ void OccupancyGrid::CellState(int gridX, int gridY, OccupancyCellState state)
 void OccupancyGrid::MarkLine(int x0, int y0, int x1, int y1,
   OccupancyCellState state)
 {
-  // Bresenham logic now operates on the internal Impl's data and methods
   bool steep = std::abs(y1 - y0) > std::abs(x1 - x0);
 
   if (steep) {
@@ -227,16 +226,18 @@ int OccupancyGrid::CalculateIGain(int x0, int y0, int x1, int y1)
 }
 
 /////////////////////////////////////////////////
-void OccupancyGrid::MarkOccupied(double worldX, double worldY)
+bool OccupancyGrid::MarkOccupied(double worldX, double worldY)
 {
   int gridX, gridY;
   if (WorldToGrid(worldX, worldY, gridX, gridY)) {
     this->pImpl->CellStateImpl(gridX, gridY, OccupancyCellState::Occupied);
+    return true;
   }
+  return false;
 }
 
 /////////////////////////////////////////////////
-void OccupancyGrid::MarkFree(double worldX0, double worldY0, double worldX1,
+bool OccupancyGrid::MarkFree(double worldX0, double worldY0, double worldX1,
   double worldY1)
 {
   int gridX0, gridY0, gridX1, gridY1;
@@ -244,7 +245,9 @@ void OccupancyGrid::MarkFree(double worldX0, double worldY0, double worldX1,
   {
     WorldToGrid(worldX1, worldY1, gridX1, gridY1);
     MarkLine(gridX0, gridY0, gridX1, gridY1, OccupancyCellState::Free);
+    return true;
   }
+  return false;
 }
 
 /////////////////////////////////////////////////

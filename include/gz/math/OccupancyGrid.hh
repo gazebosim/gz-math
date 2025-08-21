@@ -106,21 +106,23 @@ inline namespace GZ_MATH_VERSION_NAMESPACE {
   /// \param[in] _x1 X coordinate of the end point in cells.
   /// \param[in] _y1 Y coordinate of the end point in cells.
   /// \param[in] _state The state to mark the cells with.
+  /// \returns true if the grid was inside the coordinates, false otherwise
   public: void MarkLine(int _x0, int _y0, int _x1, int _y1,
     OccupancyCellState _state);
 
-  /// \brief Helper to mark a single point as occupied (e.g., an obstacle
+  /// \brief Mark a single point as occupied (e.g., an obstacle
   /// detection).
   /// \param[in] _worldX World X coordinate in meters.
   /// \param[in] _worldY World Y coordinate in meters.
-  public: void MarkOccupied(double _worldX, double _worldY);
+  /// \returns true if the grid was inside the coordinates, false otherwise
+  public: bool MarkOccupied(double _worldX, double _worldY);
 
-  /// \brief Helper to mark a path as free (e.g., a clear line of sight).
+  /// \brief Mark a path as free (e.g., a clear line of sight).
   /// \param[in] _worldX0 World X coordinate of the start point in meters.
   /// \param[in] _worldY0 World Y coordinate of the start point in meters.
   /// \param[in] _worldX1 World X coordinate of the end point in meters.
   /// \param[in] _worldY1 World Y coordinate of the end point in meters.
-  public: void MarkFree(double _worldX0, double _worldY0, double _worldX1,
+  public: bool MarkFree(double _worldX0, double _worldY0, double _worldX1,
                         double _worldY1);
 
   /// \brief Export the occupancy grid to a RGB image buffer.

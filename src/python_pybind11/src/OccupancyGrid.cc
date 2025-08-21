@@ -43,28 +43,30 @@ void defineMathOccupancyGrid(py::module &m, const std::string &typestr)
   using Class = gz::math::OccupancyGrid;
   py::class_<Class, std::unique_ptr<Class>>(m, typestr.c_str())
     .def(py::init<double, int, int, double, double>(),
-         "resolutionMeters"_a, "widthCells"_a, "heightCells"_a,
-         "originX"_a = 0.0, "originY"_a = 0.0)
+        "resolutionMeters"_a, "widthCells"_a, "heightCells"_a,
+        "originX"_a = 0.0, "originY"_a = 0.0)
     .def("world_to_grid",
          [](const Class &self, double worldX, double worldY) {
-           int gridX, gridY;
-           bool ok = self.WorldToGrid(worldX, worldY, gridX, gridY);
-           return std::make_tuple(ok, gridX, gridY);
-         },
-         "Convert world coordinates to grid coordinates.")
+          int gridX, gridY;
+          bool ok = self.WorldToGrid(worldX, worldY, gridX, gridY);
+          return std::make_tuple(ok, gridX, gridY);
+        },
+        "Convert world coordinates to grid coordinates.")
     .def("grid_to_world",
         [](const Class &self, int gridX, int gridY) {
-            double worldX, worldY;
-            self.GridToWorld(gridX, gridY, worldX, worldY);
-            return std::make_tuple(worldX, worldY);
+          double worldX, worldY;
+          self.GridToWorld(gridX, gridY, worldX, worldY);
+          return std::make_tuple(worldX, worldY);
         },
          "Convert grid coordinates to world coordinates.")
     .def("is_valid_grid_coordinate", &Class::IsValidGridCoordinate,
          "Check if grid coordinates are within bounds.")
-    .def("get_cell_state", py::overload_cast<int, int>(&Class::CellState, py::const_),
+    .def("get_cell_state",
+          py::overload_cast<int, int>(&Class::CellState, py::const_),
          "Get the state of a cell.")
     .def("set_cell_state",
-          py::overload_cast<int, int, gz::math::OccupancyCellState>(&Class::CellState),
+          py::overload_cast<int, int, gz::math::OccupancyCellState>(
+               &Class::CellState),
          "Set the state of a cell.")
     .def("calculate_i_gain", &Class::CalculateIGain,
          "Calculate information gain along a line.")
@@ -79,13 +81,13 @@ void defineMathOccupancyGrid(py::module &m, const std::string &typestr)
         self.ExportToRGBImage(pixels);
         return py::bytes(reinterpret_cast<const char*>(pixels.data()),
           pixels.size());
-     }, "Export the occupancy grid to a RGB image buffer.")
+    }, "Export the occupancy grid to a RGB image buffer.")
     .def("get_raw_occupancy", [](const Class &self) {
         std::vector<int8_t> data;
         self.RawOccupancy(data);
         return py::bytes(reinterpret_cast<const char*>(data.data()),
           data.size());
-     }, "Export the occupancy grid to a raw buffer.")
+    }, "Export the occupancy grid to a raw buffer.")
     .def("get_resolution", &Class::Resolution,
          "Get the resolution of the occupancy grid.")
     .def("get_width", &Class::Width,
