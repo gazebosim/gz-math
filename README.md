@@ -12,7 +12,7 @@ Build | Status
 Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-math/branch/gz-math9/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-math/tree/gz-math9)
 Ubuntu Noble  | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_math-ci-gz-math9-noble-amd64)](https://build.osrfoundation.org/job/gz_math-ci-gz-math9-noble-amd64)
 Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_math-ci-gz-math9-homebrew-amd64)](https://build.osrfoundation.org/job/gz_math-ci-gz-math9-homebrew-amd64)
-Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_math-9-clowin)](https://build.osrfoundation.org/job/gz_math-9-clowin)
+Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_math-9-cnlwin)](https://build.osrfoundation.org/job/gz_math-9-cnlwin)
 
 Gazebo Math, a component of [Gazebo](https://gazebosim.org), provides general purpose math
 classes and functions designed for robotic applications.
