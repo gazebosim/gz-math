@@ -18,30 +18,31 @@
 #define GZ_MATH_OCCUPANCY_GRID_HH_
 
 #include <cstdint>
-#include <memory>
 #include <vector>
 
 #include <gz/math/Helpers.hh>
 #include <gz/utils/ImplPtr.hh>
 
-namespace gz::math {
+namespace gz::math
+{
 inline namespace GZ_MATH_VERSION_NAMESPACE {
 
-  /// \enum OccupancyCellState
-  /// \brief Defines the state of a cell in the occupancy grid.
-  enum class OccupancyCellState
-  {
-    /// \brief The cell is considered free space.
-    Free,
-    /// \brief The cell is considered occupied.
-    Occupied,
-    /// \brief The state of the cell is unknown.
-    Unknown
-  };
+/// \enum OccupancyCellState
+/// \brief Defines the state of a cell in the occupancy grid.
+enum class OccupancyCellState
+{
+  /// \brief The cell is considered free space.
+  Free,
+  /// \brief The cell is considered occupied.
+  Occupied,
+  /// \brief The state of the cell is unknown.
+  Unknown
+};
 
   /// \class OccupancyGrid OccupancyGrid.hh gz/math/OccupancyGrid.hh
   /// \brief Class representing an occupancy grid.
-  class GZ_MATH_VISIBLE OccupancyGrid {
+class GZ_MATH_VISIBLE OccupancyGrid
+{
   /// \brief Constructor.
   /// \param[in] _resolutionMeters Resolution of the grid in meters per cell.
   /// \param[in] _widthCells Width of the grid in cells.
@@ -158,6 +159,6 @@ inline namespace GZ_MATH_VERSION_NAMESPACE {
   GZ_UTILS_IMPL_PTR(dataPtr)
 };
 }
-}
+}  // namespace gz::math
 
 #endif
