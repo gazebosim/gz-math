@@ -1,6 +1,6 @@
+gz-jetty-cmake
+gz-jetty-utils
 libeigen3-dev
-libgz-cmake5-dev
-libgz-utils4-dev
 libpython3-dev
 python3-numpy
 python3-pybind11
