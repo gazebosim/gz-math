@@ -4,6 +4,12 @@
 
 1. **Baseline:** this includes all changes from 8.2.0 and earlier.
 
+1. packages.apt: use jetty package names
+    * [Pull request #687](https://github.com/gazebosim/gz-math/pull/687)
+
+1. Add simple OccupancyGrid class
+    * [Pull request #685](https://github.com/gazebosim/gz-math/pull/685)
+
 1. Update tutorial build step
     * [Pull request #626](https://github.com/gazebosim/gz-math/pull/626)
 
