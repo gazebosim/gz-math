@@ -64,6 +64,7 @@
 #include "Vector3.hh"
 #include "Vector3Stats.hh"
 #include "Vector4.hh"
+#include "OccupancyGrid.hh"
 
 namespace py = pybind11;
 
@@ -197,4 +198,6 @@ PYBIND11_MODULE(BINDINGS_MODULE_NAME, m)
     m, "OnePoleVector3");
 
   gz::math::python::defineMathCoordinateVector3(m, "CoordinateVector3");
+
+  gz::math::python::defineMathOccupancyGrid(m, "OccupancyGrid");
 }
