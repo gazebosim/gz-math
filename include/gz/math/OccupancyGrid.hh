@@ -155,7 +155,7 @@ inline namespace GZ_MATH_VERSION_NAMESPACE {
   public: double OriginY() const;
 
   /// \brief Private data pointer.
-  GZ_UTILS_IMPL_PTR(pImpl)
+  GZ_UTILS_IMPL_PTR(dataPtr)
 };
 }
 }

@@ -60,7 +60,7 @@ struct OccupancyGrid::Implementation {
 /////////////////////////////////////////////////
 OccupancyGrid::OccupancyGrid(double resolutionMeters, int widthCells,
   int heightCells, double originX, double originY)
-    : pImpl(gz::utils::MakeImpl<Implementation>(
+    : dataPtr(gz::utils::MakeImpl<Implementation>(
       resolutionMeters, widthCells, heightCells, originX, originY))
 {
 }
@@ -69,15 +69,15 @@ OccupancyGrid::OccupancyGrid(double resolutionMeters, int widthCells,
 bool OccupancyGrid::WorldToGrid(double worldX, double worldY,
   int& gridX, int& gridY) const
 {
-  if (this->pImpl->resolutionMeters < 1e-6)
+  if (this->dataPtr->resolutionMeters < 1e-6)
   {
     return false;
   }
   gridX = static_cast<int>(
-    std::round((worldX - this->pImpl->originX) / this->pImpl->resolutionMeters)
+    std::round((worldX - this->dataPtr->originX) / this->dataPtr->resolutionMeters)
   );
   gridY = static_cast<int>(
-    std::round((worldY - this->pImpl->originY) / this->pImpl->resolutionMeters)
+    std::round((worldY - this->dataPtr->originY) / this->dataPtr->resolutionMeters)
   );
   return this->IsValidGridCoordinate(gridX, gridY);
 }
@@ -86,15 +86,15 @@ bool OccupancyGrid::WorldToGrid(double worldX, double worldY,
 void OccupancyGrid::GridToWorld(int gridX, int gridY,
   double& worldX, double& worldY) const
 {
-  worldX = gridX * this->pImpl->resolutionMeters + this->pImpl->originX;
-  worldY = gridY * this->pImpl->resolutionMeters + this->pImpl->originY;
+  worldX = gridX * this->dataPtr->resolutionMeters + this->dataPtr->originX;
+  worldY = gridY * this->dataPtr->resolutionMeters + this->dataPtr->originY;
 }
 
 /////////////////////////////////////////////////
 bool OccupancyGrid::IsValidGridCoordinate(int gridX, int gridY) const
 {
-  return gridX >= 0 && gridX < this->pImpl->widthCells &&
-      gridY >= 0 && gridY < this->pImpl->heightCells;
+  return gridX >= 0 && gridX < this->dataPtr->widthCells &&
+      gridY >= 0 && gridY < this->dataPtr->heightCells;
 }
 
 /////////////////////////////////////////////////
@@ -102,7 +102,7 @@ OccupancyCellState OccupancyGrid::CellState(int gridX, int gridY) const
 {
   if (this->IsValidGridCoordinate(gridX, gridY))
   {
-    return this->pImpl->gridData[this->pImpl->GetIndex(gridX, gridY)];
+    return this->dataPtr->gridData[this->dataPtr->GetIndex(gridX, gridY)];
   }
   return OccupancyCellState::Unknown;
 }
@@ -112,7 +112,7 @@ void OccupancyGrid::CellState(int gridX, int gridY, OccupancyCellState state)
 {
   if (this->IsValidGridCoordinate(gridX, gridY))
   {
-    this->pImpl->gridData[this->pImpl->GetIndex(gridX, gridY)] = state;
+    this->dataPtr->gridData[this->dataPtr->GetIndex(gridX, gridY)] = state;
   }
 }
 
@@ -241,11 +241,11 @@ bool OccupancyGrid::MarkFree(double worldX0, double worldY0, double worldX1,
 /////////////////////////////////////////////////
 void OccupancyGrid::ExportToRGBImage(std::vector<uint8_t>& _pixels) const
 {
-  _pixels.assign(this->pImpl->widthCells * this->pImpl->heightCells * 3, 0);
+  _pixels.assign(this->dataPtr->widthCells * this->dataPtr->heightCells * 3, 0);
 
-  for (int gridY = 0; gridY < this->pImpl->heightCells; ++gridY)
+  for (int gridY = 0; gridY < this->dataPtr->heightCells; ++gridY)
   {
-    for (int gridX = 0; gridX < this->pImpl->widthCells; ++gridX)
+    for (int gridX = 0; gridX < this->dataPtr->widthCells; ++gridX)
     {
       uint8_t r = 0, g = 0, b = 0;
       auto res = this->CellState(gridX, gridY);
@@ -266,7 +266,7 @@ void OccupancyGrid::ExportToRGBImage(std::vector<uint8_t>& _pixels) const
           break;
       }
 
-      int pixelIdx = (gridY * this->pImpl->widthCells + gridX) * 3;
+      int pixelIdx = (gridY * this->dataPtr->widthCells + gridX) * 3;
 
       _pixels[pixelIdx + 0] = r;
       _pixels[pixelIdx + 1] = g;
@@ -278,11 +278,11 @@ void OccupancyGrid::ExportToRGBImage(std::vector<uint8_t>& _pixels) const
 /////////////////////////////////////////////////
 void OccupancyGrid::RawOccupancy(std::vector<int8_t>& _data) const
 {
-  _data.assign(this->pImpl->widthCells * this->pImpl->heightCells, 0);
+  _data.assign(this->dataPtr->widthCells * this->dataPtr->heightCells, 0);
 
-  for (int gridY = 0; gridY < this->pImpl->heightCells; ++gridY)
+  for (int gridY = 0; gridY < this->dataPtr->heightCells; ++gridY)
   {
-    for (int gridX = 0; gridX < this->pImpl->widthCells; ++gridX)
+    for (int gridX = 0; gridX < this->dataPtr->widthCells; ++gridX)
     {
       int8_t val = -1;
       auto res = this->CellState(gridX, gridY);
@@ -302,7 +302,7 @@ void OccupancyGrid::RawOccupancy(std::vector<int8_t>& _data) const
           break;
       }
 
-      int pixelIdx = (gridY * this->pImpl->widthCells + gridX);
+      int pixelIdx = (gridY * this->dataPtr->widthCells + gridX);
       _data[pixelIdx] = val;
     }
   }
@@ -311,29 +311,29 @@ void OccupancyGrid::RawOccupancy(std::vector<int8_t>& _data) const
 /////////////////////////////////////////////////
 double OccupancyGrid::Resolution() const
 {
-  return this->pImpl->resolutionMeters;
+  return this->dataPtr->resolutionMeters;
 }
 
 /////////////////////////////////////////////////
 int OccupancyGrid::Width() const
 {
-  return this->pImpl->widthCells;
+  return this->dataPtr->widthCells;
 }
 
 /////////////////////////////////////////////////
 int OccupancyGrid::Height() const
 {
-  return this->pImpl->heightCells;
+  return this->dataPtr->heightCells;
 }
 
 /////////////////////////////////////////////////
 double OccupancyGrid::OriginX() const
 {
-  return this->pImpl->originX;
+  return this->dataPtr->originX;
 }
 
 /////////////////////////////////////////////////
 double OccupancyGrid::OriginY() const
 {
-  return this->pImpl->originY;
+  return this->dataPtr->originY;
 }
