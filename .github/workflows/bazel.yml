@@ -1,9 +1,9 @@
 name: Bazel CI
 on:
   push:
-    branches: [gz-math8, main]
+    branches: [gz-math8, gz-math9, main]
   pull_request:
-    branches: [gz-math8, main]
+    branches: [gz-math8, gz-math9, main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
