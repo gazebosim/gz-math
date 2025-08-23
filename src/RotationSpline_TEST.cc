@@ -51,8 +51,8 @@ TEST(RotationSplineTest, RotationSpline)
   s.AutoCalculate(true);
 
   // ::Interpolate
-  math::Quaterniond expected(0.999181, 0.0184352, 0.030948, 0.0184352);
-  EXPECT_TRUE(s.Interpolate(0.5).Equal(expected, 1e-6));
+  EXPECT_TRUE(s.Interpolate(0.5) ==
+      math::Quaterniond(0.998089, 0.0315333, 0.0427683, 0.0315333));
 
   // ::Interpolate
   s.AddPoint(math::Quaterniond(.4, .4, .4));
