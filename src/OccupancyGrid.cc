@@ -29,6 +29,7 @@ using namespace math;
 // Private implementation struct/class
 class OccupancyGrid::Implementation
 {
+public:
   double resolutionMeters;
   int widthCells;
   int heightCells;
