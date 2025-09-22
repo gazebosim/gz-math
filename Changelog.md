@@ -4,6 +4,9 @@
 
 1. **Baseline:** this includes all changes from 8.2.0 and earlier.
 
+1. Removed warning OccupancyGrid
+    * [Pull request #693](https://github.com/gazebosim/gz-math/pull/693)
+
 1. packages.apt: use jetty package names
     * [Pull request #687](https://github.com/gazebosim/gz-math/pull/687)
 
@@ -14,6 +17,8 @@
     * [Pull request #626](https://github.com/gazebosim/gz-math/pull/626)
 
 1. Bazel support
+    * [Pull request #695](https://github.com/gazebosim/gz-math/pull/695)
+    * [Pull request #691](https://github.com/gazebosim/gz-math/pull/691)
     * [Pull request #683](https://github.com/gazebosim/gz-math/pull/683)
     * [Pull request #681](https://github.com/gazebosim/gz-math/pull/681)
     * [Pull request #680](https://github.com/gazebosim/gz-math/pull/680)
