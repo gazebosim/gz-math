@@ -17,6 +17,7 @@
     * [Pull request #626](https://github.com/gazebosim/gz-math/pull/626)
 
 1. Bazel support
+    * [Pull request #695](https://github.com/gazebosim/gz-math/pull/695)
     * [Pull request #691](https://github.com/gazebosim/gz-math/pull/691)
     * [Pull request #683](https://github.com/gazebosim/gz-math/pull/683)
     * [Pull request #681](https://github.com/gazebosim/gz-math/pull/681)
