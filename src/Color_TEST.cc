@@ -186,20 +186,36 @@ TEST(Color, Color)
   EXPECT_FLOAT_EQ(1.0f, clr.A());
 
   clr.SetFromHSV(300, 0.5, 1.0);
-  EXPECT_FLOAT_EQ(1.0f, clr[0]);
-  EXPECT_FLOAT_EQ(0.5f, clr[1]);
-  EXPECT_FLOAT_EQ(1.0f, clr[2]);
-  EXPECT_FLOAT_EQ(1.0f, clr[3]);
-  EXPECT_TRUE(std::isnan(clr[4]));
+  EXPECT_FLOAT_EQ(1.0f, clr.R());
+  EXPECT_FLOAT_EQ(0.5f, clr.G());
+  EXPECT_FLOAT_EQ(1.0f, clr.B());
+  EXPECT_FLOAT_EQ(1.0f, clr.A());
 
   clr.R() = 0.1f;
   clr.G() = 0.2f;
   clr.B() = 0.3f;
   clr.A() = 0.4f;
-  EXPECT_FLOAT_EQ(0.1f, clr[0]);
-  EXPECT_FLOAT_EQ(0.2f, clr[1]);
-  EXPECT_FLOAT_EQ(0.3f, clr[2]);
-  EXPECT_FLOAT_EQ(0.4f, clr[3]);
+  EXPECT_FLOAT_EQ(0.1f, clr.R());
+  EXPECT_FLOAT_EQ(0.2f, clr.G());
+  EXPECT_FLOAT_EQ(0.3f, clr.B());
+  EXPECT_FLOAT_EQ(0.4f, clr.A());
+
+  EXPECT_FLOAT_EQ(clr.R(), clr[0]);
+  EXPECT_FLOAT_EQ(clr.G(), clr[1]);
+  EXPECT_FLOAT_EQ(clr.B(), clr[2]);
+  EXPECT_FLOAT_EQ(clr.A(), clr[3]);
+  EXPECT_TRUE(std::isnan(clr[4]));
+
+  clr[0] = 0.5f;
+  clr[1] = 0.6f;
+  clr[2] = 0.7f;
+  clr[3] = 0.8f;
+  clr[4] = 0.9f;
+  EXPECT_FLOAT_EQ(0.5f, clr[0]);
+  EXPECT_FLOAT_EQ(0.6f, clr[1]);
+  EXPECT_FLOAT_EQ(0.7f, clr[2]);
+  EXPECT_FLOAT_EQ(0.8f, clr[3]);
+  EXPECT_TRUE(std::isnan(clr[4]));
 
   clr.Set(0.1f, 0.2f, 0.3f, 0.4f);
   clr = clr + 0.2f;
@@ -327,6 +343,12 @@ TEST(Color, ConstAndSet)
   EXPECT_FLOAT_EQ(clr.G(), 0.2f);
   EXPECT_FLOAT_EQ(clr.B(), 0.3f);
   EXPECT_FLOAT_EQ(clr.A(), 0.4f);
+
+  EXPECT_FLOAT_EQ(clr.R(), clr[0]);
+  EXPECT_FLOAT_EQ(clr.G(), clr[1]);
+  EXPECT_FLOAT_EQ(clr.B(), clr[2]);
+  EXPECT_FLOAT_EQ(clr.A(), clr[3]);
+  EXPECT_TRUE(std::isnan(clr[4]));
 
   math::Color clr2;
   clr2.R(0.4f);

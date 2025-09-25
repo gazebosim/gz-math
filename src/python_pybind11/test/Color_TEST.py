@@ -172,10 +172,15 @@ class TestColor(unittest.TestCase):
         self.assertAlmostEqual(1.0, clr.a())
 
         clr.set_from_hsv(300, 0.5, 1.0)
-        self.assertAlmostEqual(1.0, clr[0])
-        self.assertAlmostEqual(0.5, clr[1])
-        self.assertAlmostEqual(1.0, clr[2])
-        self.assertAlmostEqual(1.0, clr[3])
+        self.assertAlmostEqual(1.0, clr.r())
+        self.assertAlmostEqual(0.5, clr.g())
+        self.assertAlmostEqual(1.0, clr.b())
+        self.assertAlmostEqual(1.0, clr.a())
+
+        self.assertAlmostEqual(clr.r(), clr[0])
+        self.assertAlmostEqual(clr.g(), clr[1])
+        self.assertAlmostEqual(clr.b(), clr[2])
+        self.assertAlmostEqual(clr.a(), clr[3])
         self.assertTrue(math.isnan(clr[4]))
 
         clr.set(0.1, 0.2, 0.3, 0.4)

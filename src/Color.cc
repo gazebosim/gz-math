@@ -191,9 +191,29 @@ void Color::SetFromYUV(const float _y, const float _u, const float _v)
 }
 
 //////////////////////////////////////////////////
-float Color::operator[](const unsigned int _index)
+float &Color::operator[](const unsigned int _index)
 {
-  return (*static_cast<const Color *>(this))[_index];
+  switch (_index)
+  {
+    case 0:
+        return this->r;
+    case 1:
+        return this->g;
+    case 2:
+        return this->b;
+    case 3:
+        return this->a;
+    default:
+        break;
+  }
+
+  // This allows referencing a NAN_F value.
+  static float invalidParam;
+  // Prevents overwriting of invalidParam with non NAN_F
+  // value through wrong index.
+  invalidParam = NAN_F;
+
+  return invalidParam;
 }
 
 //////////////////////////////////////////////////
