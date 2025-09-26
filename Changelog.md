@@ -1,6 +1,6 @@
 ## Gazebo Math 9.x
 
-### Gazebo Math 9.0.0 (2025-09-24)
+### Gazebo Math 9.0.0 (2025-09-30)
 
 1. **Baseline:** this includes all changes from 8.2.0 and earlier.
 
