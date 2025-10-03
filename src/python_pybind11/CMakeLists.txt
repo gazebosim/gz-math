@@ -93,21 +93,23 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   target_compile_options(${BINDINGS_MODULE_NAME} PRIVATE -Wno-self-assign-overloaded)
 endif()
 
-if(USE_SYSTEM_PATHS_FOR_PYTHON_INSTALLATION)
-  if(NOT Python3_SITEARCH)
-    # Get install variable from Python3 module
-    find_package(Python3 COMPONENTS Interpreter)
-  endif()
-
-  if(USE_DIST_PACKAGES_FOR_PYTHON)
-    string(REPLACE "site-packages" "dist-packages" GZ_PYTHON_INSTALL_PATH ${Python3_SITEARCH})
+if(NOT DEFINED GZ_PYTHON_INSTALL_PATH)
+  if(USE_SYSTEM_PATHS_FOR_PYTHON_INSTALLATION)
+    if(NOT Python3_SITEARCH)
+      # Get install variable from Python3 module
+      find_package(Python3 COMPONENTS Interpreter)
+    endif()
+  
+    if(USE_DIST_PACKAGES_FOR_PYTHON)
+      string(REPLACE "site-packages" "dist-packages" GZ_PYTHON_INSTALL_PATH ${Python3_SITEARCH})
+    else()
+      # custom cmake command is returning dist-packages
+      string(REPLACE "dist-packages" "site-packages" GZ_PYTHON_INSTALL_PATH ${Python3_SITEARCH})
+    endif()
   else()
-    # custom cmake command is returning dist-packages
-    string(REPLACE "dist-packages" "site-packages" GZ_PYTHON_INSTALL_PATH ${Python3_SITEARCH})
+    # If not a system installation, respect local paths
+    set(GZ_PYTHON_INSTALL_PATH ${CMAKE_INSTALL_LIBDIR}/python)
   endif()
-else()
-  # If not a system installation, respect local paths
-  set(GZ_PYTHON_INSTALL_PATH ${CMAKE_INSTALL_LIBDIR}/python)
 endif()
 
 set(GZ_PYTHON_INSTALL_PATH "${GZ_PYTHON_INSTALL_PATH}/gz")
