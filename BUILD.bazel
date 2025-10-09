@@ -1,4 +1,6 @@
+load("@buildifier_prebuilt//:rules.bzl", "buildifier", "buildifier_test")
 load("@pybind11_bazel//:build_defs.bzl", "pybind_extension")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 load("@rules_gazebo//gazebo:headers.bzl", "gz_configure_header", "gz_export_header", "gz_include_header")
 load("@rules_license//rules:license.bzl", "license")
 load("@rules_python//python:py_library.bzl", "py_library")
@@ -140,10 +142,29 @@ py_test_sources = glob(
 [
     py_test(
         name = src.replace("/", "_").replace(".py", "_py").replace("src_python_pybind11_test_", ""),
-        srcs = [src, "src/python_pybind11/test/numpy_helpers.py" ],
+        srcs = [
+            src,
+            "src/python_pybind11/test/numpy_helpers.py",
+        ],
+        imports = ["src/python_pybind11/test/"],
         main = src,
         deps = [":python"],
-        imports = ["src/python_pybind11/test/"],
     )
     for src in py_test_sources
 ]
+
+buildifier(
+    name = "buildifier.fix",
+    exclude_patterns = ["./.git/*"],
+    lint_mode = "fix",
+    mode = "fix",
+)
+
+buildifier_test(
+    name = "buildifier.test",
+    exclude_patterns = ["./.git/*"],
+    lint_mode = "warn",
+    mode = "diff",
+    no_sandbox = True,
+    workspace = "//:MODULE.bazel",
+)
