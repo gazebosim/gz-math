@@ -177,6 +177,13 @@ namespace gz::math
     /// returned if the _index is invalid
     public: float operator[](const unsigned int _index) const;
 
+    /// \brief Returns the Color component indexed by _index (accessible also through const object)
+    /// \param[in] _index Color component index(0=red, 1=green, 2=blue,
+    /// 3=alpha)
+    /// \return r, g, b, or a when _index is 0, 1, 2 or 3. A NAN_F value is
+    /// returned if the _index is invalid
+    private: const float &GetMutableRGBAfromIndex(const unsigned int _index) const;
+
     /// \brief Get as uint32 RGBA packed value
     /// \return the color
     public: RGBA AsRGBA() const;
