@@ -194,18 +194,18 @@ void Color::SetFromYUV(const float _y, const float _u, const float _v)
 float &Color::operator[](const unsigned int _index)
 {
     return const_cast<float&>(
-            static_cast<const Color *>(this)->GetMutableRGBAfromIndex(_index)
+            static_cast<const Color *>(this)->GetRGBAfromIndex(_index)
             );
 }
 
 //////////////////////////////////////////////////
 float Color::operator[](const unsigned int _index) const
 {
-  return this->GetMutableRGBAfromIndex(_index);
+  return this->GetRGBAfromIndex(_index);
 }
 
 //////////////////////////////////////////////////
-const float &Color::GetMutableRGBAfromIndex(const unsigned int _index) const
+const float &Color::GetRGBAfromIndex(const unsigned int _index) const
 {
   switch (_index)
   {
