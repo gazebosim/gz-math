@@ -5,6 +5,13 @@ Deprecated code produces compile-time warnings. These warning serve as
 notification to users that their code should be upgraded. The next major
 release will remove the deprecated code.
 
+## Gazebo Math 10.X
+
+### Breaking Changes
+
+1. **Color.hh**
+    + Fix: return type and behaviour change of member function `Color::operator[](const unsigned int _index)`. Now behaves like a mutator function, returning a mutable reference to the `Color` component (`float&`) instead of just the component value (`float`). In case of wrong index input, function returns a reference to `NAN_F`, and assigning any value to it has no effect. Refer to [#701](https://github.com/gazebosim/gz-math/pull/701) for further details.
+
 ## Gazebo Math 8.X to 9.X
 
 1. **SphericalCoordinates.hh**

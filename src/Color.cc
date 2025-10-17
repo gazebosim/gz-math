@@ -191,13 +191,21 @@ void Color::SetFromYUV(const float _y, const float _u, const float _v)
 }
 
 //////////////////////////////////////////////////
-float Color::operator[](const unsigned int _index)
+float &Color::operator[](const unsigned int _index)
 {
-  return (*static_cast<const Color *>(this))[_index];
+    return const_cast<float&>(
+            static_cast<const Color *>(this)->GetRGBAfromIndex(_index)
+            );
 }
 
 //////////////////////////////////////////////////
 float Color::operator[](const unsigned int _index) const
+{
+  return this->GetRGBAfromIndex(_index);
+}
+
+//////////////////////////////////////////////////
+const float &Color::GetRGBAfromIndex(const unsigned int _index) const
 {
   switch (_index)
   {
@@ -213,7 +221,13 @@ float Color::operator[](const unsigned int _index) const
       break;
   }
 
-  return NAN_F;
+  // This allows referencing a NAN_F value.
+  static float invalidParam;
+  // Prevents overwriting of invalidParam with non NAN_F
+  // value through wrong index.
+  invalidParam = NAN_F;
+
+  return invalidParam;
 }
 
 //////////////////////////////////////////////////

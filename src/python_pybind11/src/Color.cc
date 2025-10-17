@@ -116,29 +116,33 @@ void defineMathColor(py::module &m, const std::string &typestr)
         &Class::SetFromABGR,
         "Set from uint32 ABGR packed value")
    .def("r",
-        py::overload_cast<>(&Class::R),
+        py::overload_cast<>(&Class::R, py::const_),
         "Get the red value")
    .def("g",
-        py::overload_cast<>(&Class::G),
+        py::overload_cast<>(&Class::G, py::const_),
         "Get the green value")
    .def("b",
-        py::overload_cast<>(&Class::B),
+        py::overload_cast<>(&Class::B, py::const_),
         "Get the blue value")
    .def("a",
-        py::overload_cast<>(&Class::A),
+        py::overload_cast<>(&Class::A, py::const_),
         "Get the alpha value")
    .def("r",
-        py::overload_cast<float>(&Class::R),
-        "Get the red value")
+        py::overload_cast<const float>(&Class::R),
+        "Set the red value",
+        "_r"_a)
    .def("g",
-        py::overload_cast<float>(&Class::G),
-        "Get the green value")
+        py::overload_cast<const float>(&Class::G),
+        "Set the green value",
+        "_g"_a)
    .def("b",
-        py::overload_cast<float>(&Class::B),
-        "Get the blue value")
+        py::overload_cast<const float>(&Class::B),
+        "Set the blue value",
+        "_b"_a)
    .def("a",
-        py::overload_cast<float>(&Class::A),
-        "Get the alpha value")
+        py::overload_cast<const float>(&Class::A),
+        "Set the alpha value",
+        "_a"_a)
    .def("__str__", toString)
    .def("__repr__", toString)
    .def("__copy__", [](const Class &self) {
@@ -148,7 +152,15 @@ void defineMathColor(py::module &m, const std::string &typestr)
      return Class(self);
    }, "memo"_a)
    .def("__getitem__",
-        py::overload_cast<const unsigned int>(&Class::operator[]));
+        py::overload_cast<const unsigned int>(&Class::operator[], py::const_),
+        "Array index operator, const version. Get the indexed component value",
+        "_index"_a)
+   .def("__setitem__",
+        [](Class &self, const unsigned int _index, const float value) {
+          self[_index] = value;
+        },
+        "Array index operator. Set the indexed component value",
+        "_index"_a, "value"_a);
 }
 }  // namespace python
 }  // namespace math
