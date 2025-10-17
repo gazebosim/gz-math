@@ -183,6 +183,17 @@ class TestColor(unittest.TestCase):
         self.assertAlmostEqual(clr.a(), clr[3])
         self.assertTrue(math.isnan(clr[4]))
 
+        clr[0] = 0.5
+        clr[1] = 0.6
+        clr[2] = 0.7
+        clr[3] = 0.8
+        clr[4] = 0.9
+        self.assertAlmostEqual(0.5, clr[0])
+        self.assertAlmostEqual(0.6, clr[1])
+        self.assertAlmostEqual(0.7, clr[2])
+        self.assertAlmostEqual(0.8, clr[3])
+        self.assertTrue(math.isnan(clr[4]))
+
         clr.set(0.1, 0.2, 0.3, 0.4)
         clr = clr + 0.2
         self.assertTrue(clr == Color(0.3, 0.4, 0.5, 0.6))
