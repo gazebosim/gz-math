@@ -26,6 +26,7 @@
 #include "DiffDriveOdometry.hh"
 #include "Ellipsoid.hh"
 #include "Filter.hh"
+#include "FourwidsDriveOdometry.hh"
 #include "Frustum.hh"
 #include "GaussMarkovProcess.hh"
 #include "Helpers.hh"
@@ -160,6 +161,8 @@ PYBIND11_MODULE(BINDINGS_MODULE_NAME, m)
   gz::math::python::defineMathMatrix6(m, "Matrix6");
 
   gz::math::python::defineMathMecanumDriveOdometry(m, "MecanumDriveOdometry");
+
+  gz::math::python::defineMathFourwidsDriveOdometry(m, "FourwidsDriveOdometry");
 
   gz::math::python::defineMathTriangle(m, "Triangle");
 
