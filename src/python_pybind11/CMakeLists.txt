@@ -36,6 +36,7 @@ pybind11_add_module(${BINDINGS_MODULE_NAME} MODULE
   src/DiffDriveOdometry.cc
   src/Ellipsoid.cc
   src/Filter.cc
+  src/FourwidsDriveOdometry.cc
   src/Frustum.cc
   src/GaussMarkovProcess.cc
   src/Helpers.cc
@@ -149,6 +150,7 @@ if (BUILD_TESTING)
     DiffDriveOdometry_TEST
     Ellipsoid_TEST
     Filter_TEST
+    FourwidsDriveOdometry_TEST
     Frustum_TEST
     GaussMarkovProcess_TEST
     Helpers_TEST
