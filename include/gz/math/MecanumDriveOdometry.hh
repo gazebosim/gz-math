@@ -38,12 +38,14 @@ namespace gz::math
   ///
   /// A vehicle with a heading of zero degrees has a local
   /// reference frame according to the diagram below.
+  /// In Gazebo Sim, the vehicle forward direction is +X,
+  /// and +Y points to the left.
   ///
-  ///       Y
-  ///       ^
-  ///       |
-  ///       |
-  ///       O--->X(forward)
+  ///        X(forward)
+  ///        ^
+  ///        |
+  ///        |
+  ///   Y<---O
   class GZ_MATH_VISIBLE MecanumDriveOdometry
   {
     // Use a steady clock

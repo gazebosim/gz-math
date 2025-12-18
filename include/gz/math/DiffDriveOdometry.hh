@@ -38,22 +38,28 @@ namespace gz::math
   ///
   /// A vehicle with a heading of zero degrees has a local
   /// reference frame according to the diagram below.
+  /// In Gazebo Sim, the vehicle forward direction is +X,
+  /// and +Y points to the left.
   ///
-  ///       Y
-  ///       ^
-  ///       |
-  ///       |
-  ///       O--->X(forward)
+  ///        X(forward)
+  ///        ^
+  ///        |
+  ///        |
+  ///   Y<---O
   ///
   /// Rotating the right wheel while keeping the left wheel fixed will cause
   /// the vehicle to rotate counter-clockwise. For example (excuse the
   /// lack of precision with ASCII art):
   ///
-  ///     Y     X(forward)
-  ///     ^     ^
-  ///      \   /
-  ///       \ /
+  ///     X(forward)
+  ///     ^
+  ///      \
+  ///       \
   ///        O
+  ///      /
+  ///     /
+  ///    ↙
+  ///   Y
   ///
   /// **Example Usage**
   ///
