@@ -1,9 +1,17 @@
 name: Bazel CI
 on:
+<<<<<<< HEAD
   push:
     branches: [gz-math8, main]
   pull_request:
     branches: [gz-math8, main]
+=======
+  pull_request:
+  push:
+    branches:
+      - 'gz-math[1-9]?[0-9]'
+      - 'main'
+>>>>>>> 073c9db ([bazel/infra] CI updates (#711))
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -11,7 +19,7 @@ concurrency:
 
 jobs:
   test:
-    uses: bazel-contrib/.github/.github/workflows/bazel.yaml@v7
+    uses: bazel-contrib/.github/.github/workflows/bazel.yaml@v7.2.3
     with:
       folders: |
         [
@@ -21,3 +29,4 @@ jobs:
         [
           {"folder": ".", "bzlmodEnabled": false},
         ]
+      exclude_windows: true
