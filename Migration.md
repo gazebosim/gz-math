@@ -8,9 +8,6 @@ release will remove the deprecated code.
 
 ## Gazebo Math 9.X to 10.X
 
-
-## Gazebo Math 10.X
-
 ### Breaking Changes
 
 1. **Color.hh**
