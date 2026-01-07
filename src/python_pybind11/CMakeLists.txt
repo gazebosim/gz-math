@@ -1,10 +1,10 @@
 # Detect if we are doing a standalone build of the bindings, using an external gz-math
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   cmake_minimum_required(VERSION 3.22.1)
-  find_package(gz-cmake REQUIRED)
+  find_package(gz-cmake 5 REQUIRED)
   gz_get_package_xml_version(${CMAKE_SOURCE_DIR}/../../package.xml GZ_MATH)
   project(gz-math-python VERSION ${GZ_MATH_VERSION})
-  find_package(gz-math REQUIRED)
+  find_package(gz-math 9 REQUIRED)
   set(PROJECT_LIBRARY_TARGET_NAME "gz-math::gz-math")
   # require python dependencies to be found
   find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
