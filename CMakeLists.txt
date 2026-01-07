@@ -9,7 +9,7 @@ project(gz-math VERSION 9.0.0)
 # Find gz-cmake
 #============================================================================
 # If you get an error at this line, you need to install gz-cmake
-find_package(gz-cmake REQUIRED)
+find_package(gz-cmake 5 REQUIRED)
 
 #============================================================================
 # Configure the project
@@ -55,7 +55,7 @@ cmake_dependent_option(USE_DIST_PACKAGES_FOR_PYTHON
 
 #--------------------------------------
 # Find gz-utils
-gz_find_package(gz-utils REQUIRED)
+gz_find_package(gz-utils VERSION 4 REQUIRED)
 
 #--------------------------------------
 # Find eigen3
