@@ -1,5 +1,31 @@
 ## Gazebo Math 8.x
 
+### Gazebo Math 8.2.1 (2026-01-15)
+
+1. Bazel Infrastructure
+    * [Pull request #713](https://github.com/gazebosim/gz-math/pull/713)
+    * [Pull request #710](https://github.com/gazebosim/gz-math/pull/710)
+    * [Pull request #708](https://github.com/gazebosim/gz-math/pull/708)
+    * [Pull request #683](https://github.com/gazebosim/gz-math/pull/683)
+    * [Pull request #681](https://github.com/gazebosim/gz-math/pull/681)
+    * [Pull request #651](https://github.com/gazebosim/gz-math/pull/651)
+    * [Pull request #680](https://github.com/gazebosim/gz-math/pull/680)
+
+1. Correct calculation in ProjectPointToPlane
+    * [Pull request #702](https://github.com/gazebosim/gz-math/pull/702)
+
+1. Update tutorial build step
+    * [Pull request #626](https://github.com/gazebosim/gz-math/pull/626)
+
+1. python: suppress Pose3 deprecation warnings
+    * [Pull request #682](https://github.com/gazebosim/gz-math/pull/682)
+
+1. Fix spelling in docs
+    * [Pull request #670](https://github.com/gazebosim/gz-math/pull/670)
+
+1. Unify Python3_Development_FOUND checks
+    * [Pull request #663](https://github.com/gazebosim/gz-math/pull/663)
+
 ### Gazebo Math 8.2.0 (2025-05-12)
 
 1. Fix bazel build errors with clang
