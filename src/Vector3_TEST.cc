@@ -17,6 +17,7 @@
 
 #include <gtest/gtest.h>
 
+#include <iomanip>
 #include <sstream>
 
 #include "gz/math/Helpers.hh"

@@ -17,6 +17,8 @@
 
 #include <gtest/gtest.h>
 
+#include <iomanip>
+
 #include "gz/math/Helpers.hh"
 #include "gz/math/Matrix4.hh"
 #include "gz/math/Vector4.hh"

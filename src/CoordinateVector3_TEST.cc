@@ -18,6 +18,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <iomanip>
 #include <optional>
 #include <sstream>
 
