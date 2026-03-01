@@ -4,12 +4,12 @@ import math
 import time
 import unittest
 
-from gz.math7 import FourwidsDriveOdometry, Angle
+from gz.math7 import SwerveDriveOdometry, Angle
 
-class TestFourwidsDriveOdometry(unittest.TestCase):
+class TestSwerveDriveOdometry(unittest.TestCase):
 
     def test_basic_init(self):
-        odom = FourwidsDriveOdometry()
+        odom = SwerveDriveOdometry()
         self.assertAlmostEqual(0.0, odom.heading().radian())
         self.assertAlmostEqual(0.0, odom.x())
         self.assertAlmostEqual(0.0, odom.y())
@@ -43,7 +43,7 @@ class TestFourwidsDriveOdometry(unittest.TestCase):
         self.assertAlmostEqual(0.0, odom.angular_velocity().radian())
   
     def test_straight_forward(self):
-        odom = FourwidsDriveOdometry()
+        odom = SwerveDriveOdometry()
 
         wheelSeparation = 0.5
         wheelBase = 0.5
@@ -74,7 +74,7 @@ class TestFourwidsDriveOdometry(unittest.TestCase):
         self.assertAlmostEqual(0.0, odom.angular_velocity().radian(), delta=1e-3)
 
     def test_straight_side(self):
-        odom = FourwidsDriveOdometry()
+        odom = SwerveDriveOdometry()
 
         wheelSeparation = 0.5
         wheelBase = 0.5
@@ -105,7 +105,7 @@ class TestFourwidsDriveOdometry(unittest.TestCase):
         self.assertAlmostEqual(0.0, odom.angular_velocity().radian(), delta=1e-3)
 
     def test_straight_diagonal(self):
-        odom = FourwidsDriveOdometry()
+        odom = SwerveDriveOdometry()
         
         wheelSeparation = 0.5
         wheelBase = 0.5
@@ -135,7 +135,7 @@ class TestFourwidsDriveOdometry(unittest.TestCase):
         self.assertAlmostEqual(0.0, odom.angular_velocity().radian(), delta=1e-3)
   
     def test_rotate_in_place(self):
-        odom = FourwidsDriveOdometry()
+        odom = SwerveDriveOdometry()
 
         wheelSeparation = 0.5
         wheelBase = 0.5

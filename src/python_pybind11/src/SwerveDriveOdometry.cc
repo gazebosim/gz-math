@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2026 Open Source Robotics Foundation
+ * Copyright (C) 2026 Jiayi Cai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
  */
 #include <string>
 
-#include <gz/math/FourwidsDriveOdometry.hh>
+#include <gz/math/SwerveDriveOdometry.hh>
 
-#include "FourwidsDriveOdometry.hh"
+#include "SwerveDriveOdometry.hh"
 
 namespace gz
 {
@@ -26,9 +26,9 @@ namespace math
 {
 namespace python
 {
-void defineMathFourwidsDriveOdometry(py::module &m, const std::string &typestr)
+void defineMathSwerveDriveOdometry(py::module &m, const std::string &typestr)
 {
-  using Class = gz::math::FourwidsDriveOdometry;
+  using Class = gz::math::SwerveDriveOdometry;
   std::string pyclass_name = typestr;
   py::class_<Class>(m,
                     pyclass_name.c_str(),

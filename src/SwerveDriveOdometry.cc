@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2026 Open Source Robotics Foundation
+ * Copyright (C) 2026 Jiayi Cai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  *
  */
 #include <cmath>
-#include "gz/math/FourwidsDriveOdometry.hh"
+#include "gz/math/SwerveDriveOdometry.hh"
 #include "gz/math/RollingMean.hh"
 
 #include <Eigen/Dense>
@@ -30,7 +30,7 @@ namespace math
 {
 inline namespace GZ_MATH_VERSION_NAMESPACE
 {
-class FourwidsDriveOdometry::Implementation
+class SwerveDriveOdometry::Implementation
 {
   /// \brief Constructor.
   /// \param[in] _windowSize Rolling window size used to compute the
@@ -55,7 +55,7 @@ class FourwidsDriveOdometry::Implementation
     double _angular);
 
   /// \brief Current timestamp.
-  public: FourwidsDriveOdometry::clock::time_point lastUpdateTime;
+  public: SwerveDriveOdometry::clock::time_point lastUpdateTime;
 
   /// \brief Current x position in meters.
   public: double x{0.0};
@@ -128,12 +128,12 @@ using namespace gz;
 using namespace math;
 
 //////////////////////////////////////////////////
-FourwidsDriveOdometry::FourwidsDriveOdometry(size_t _windowSize)
+SwerveDriveOdometry::SwerveDriveOdometry(size_t _windowSize)
   : dataPtr(gz::utils::MakeImpl<Implementation>(_windowSize))
 {
 }
 
-void FourwidsDriveOdometry::Init(const clock::time_point &_time)
+void SwerveDriveOdometry::Init(const clock::time_point &_time)
 {
   // Reset accumulators and timestamp.
   this->dataPtr->linearMean.Clear();
@@ -159,13 +159,13 @@ void FourwidsDriveOdometry::Init(const clock::time_point &_time)
 }
 
 //////////////////////////////////////////////////
-bool FourwidsDriveOdometry::Initialized() const
+bool SwerveDriveOdometry::Initialized() const
 {
   return this->dataPtr->initialized;
 }
 
 //////////////////////////////////////////////////
-bool FourwidsDriveOdometry::Update(const Angle &_frontLeftPos,
+bool SwerveDriveOdometry::Update(const Angle &_frontLeftPos,
   const Angle &_frontRightPos, const Angle &_backLeftPos,
   const Angle &_backRightPos, const Angle &_frontLeftSteeringPos,
   const Angle &_frontRightSteeringPos, const Angle &_backLeftSteeringPos,
@@ -341,7 +341,7 @@ bool FourwidsDriveOdometry::Update(const Angle &_frontLeftPos,
 }
 
 //////////////////////////////////////////////////
-void FourwidsDriveOdometry::SetWheelParams(double _wheelSeparation,
+void SwerveDriveOdometry::SetWheelParams(double _wheelSeparation,
   double _wheelBase, double _wheelRadius)
 {
   this->dataPtr->wheelSeparation = _wheelSeparation;
@@ -350,7 +350,7 @@ void FourwidsDriveOdometry::SetWheelParams(double _wheelSeparation,
 }
 
 //////////////////////////////////////////////////
-void FourwidsDriveOdometry::SetVelocityRollingWindowSize(size_t _size)
+void SwerveDriveOdometry::SetVelocityRollingWindowSize(size_t _size)
 {
   this->dataPtr->linearMean.SetWindowSize(_size);
   this->dataPtr->lateralMean.SetWindowSize(_size);
@@ -358,61 +358,61 @@ void FourwidsDriveOdometry::SetVelocityRollingWindowSize(size_t _size)
 }
 
 //////////////////////////////////////////////////
-const Angle &FourwidsDriveOdometry::Heading() const
+const Angle &SwerveDriveOdometry::Heading() const
 {
   return this->dataPtr->heading;
 }
 
 //////////////////////////////////////////////////
-double FourwidsDriveOdometry::X() const
+double SwerveDriveOdometry::X() const
 {
   return this->dataPtr->x;
 }
 
 //////////////////////////////////////////////////
-double FourwidsDriveOdometry::Y() const
+double SwerveDriveOdometry::Y() const
 {
   return this->dataPtr->y;
 }
 
 //////////////////////////////////////////////////
-double FourwidsDriveOdometry::LinearVelocity() const
+double SwerveDriveOdometry::LinearVelocity() const
 {
   return this->dataPtr->linearVel;
 }
 
 //////////////////////////////////////////////////
-double FourwidsDriveOdometry::LateralVelocity() const
+double SwerveDriveOdometry::LateralVelocity() const
 {
   return this->dataPtr->lateralVel;
 }
 
 //////////////////////////////////////////////////
-const Angle &FourwidsDriveOdometry::AngularVelocity() const
+const Angle &SwerveDriveOdometry::AngularVelocity() const
 {
   return this->dataPtr->angularVel;
 }
 
 //////////////////////////////////////////////////
-double FourwidsDriveOdometry::WheelSeparation() const
+double SwerveDriveOdometry::WheelSeparation() const
 {
   return this->dataPtr->wheelSeparation;
 }
 
 //////////////////////////////////////////////////
-double FourwidsDriveOdometry::WheelBase() const
+double SwerveDriveOdometry::WheelBase() const
 {
   return this->dataPtr->wheelBase;
 }
 
 //////////////////////////////////////////////////
-double FourwidsDriveOdometry::WheelRadius() const
+double SwerveDriveOdometry::WheelRadius() const
 {
   return this->dataPtr->wheelRadius;
 }
 
 //////////////////////////////////////////////////
-void FourwidsDriveOdometry::Implementation::IntegrateRungeKutta2(
+void SwerveDriveOdometry::Implementation::IntegrateRungeKutta2(
     double _linear, double _lateral, double _angular)
 {
   const double direction = *this->heading + _angular * 0.5;
@@ -424,7 +424,7 @@ void FourwidsDriveOdometry::Implementation::IntegrateRungeKutta2(
 }
 
 //////////////////////////////////////////////////
-void FourwidsDriveOdometry::Implementation::IntegrateExact(double _linear,
+void SwerveDriveOdometry::Implementation::IntegrateExact(double _linear,
   double _lateral, double _angular)
 {
   if (std::fabs(_angular) < 1e-6)

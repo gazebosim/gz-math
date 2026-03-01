@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2026 Open Source Robotics Foundation
+ * Copyright (C) 2026 Jiayi Cai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  *
  */
-#ifndef GZ_MATH_PYTHON_FOURWIDSDRIVEODOMETRY_HH
-#define GZ_MATH_PYTHON_FOURWIDSDRIVEODOMETRY_HH
+#ifndef GZ_MATH_PYTHON_SWERVEDRIVEODOMETRY_HH
+#define GZ_MATH_PYTHON_SWERVEDRIVEODOMETRY_HH
 
 #include <pybind11/chrono.h>
 #include <pybind11/operators.h>
@@ -30,14 +30,14 @@ namespace math
 {
 namespace python
 {
-/// Define a pybind11 wrapper for an gz::math::FourwidsDriveOdometry
+/// Define a pybind11 wrapper for an gz::math::SwerveDriveOdometry
 /**
  * \param[in] module a pybind11 module to add the definition to
  * \param[in] typestr name of the type used by Python
  */
-void defineMathFourwidsDriveOdometry(py::module &m, const std::string &typestr);
+void defineMathSwerveDriveOdometry(py::module &m, const std::string &typestr);
 }  // namespace python
 }  // namespace math
 }  // namespace gz
 
-#endif  // GZ_MATH_PYTHON_FOURWIDSDRIVEODOMETRY_HH
+#endif  // GZ_MATH_PYTHON_SWERVEDRIVEODOMETRY_HH

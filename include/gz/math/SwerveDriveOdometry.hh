@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2026 Open Source Robotics Foundation
+ * Copyright (C) 2026 Jiayi Cai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  *
  */
-#ifndef GZ_MATH_FOURWIDSDRIVEODOMETRY_HH_
-#define GZ_MATH_FOURWIDSDRIVEODOMETRY_HH_
+#ifndef GZ_MATH_SWERVEDRIVEODOMETRY_HH_
+#define GZ_MATH_SWERVEDRIVEODOMETRY_HH_
 
 #include <chrono>
 #include <gz/math/Angle.hh>
@@ -26,11 +26,11 @@
 namespace gz::math
 {
   inline namespace GZ_MATH_VERSION_NAMESPACE {
-  /// \class FourwidsDriveOdometry FourwidsDriveOdometry.hh
-  /// gz/math/FourwidsDriveOdometry.hh
+  /// \class SwerveDriveOdometry SwerveDriveOdometry.hh
+  /// gz/math/SwerveDriveOdometry.hh
   ///
   /// \brief Computes odometry values based on a set of kinematic
-  /// properties and wheel speeds for a fourwids-drive vehicle.
+  /// properties and wheel speeds for a swerve-drive vehicle.
   ///
   /// A vehicle with a heading of zero degrees has a local
   /// reference frame according to the diagram below.
@@ -40,7 +40,7 @@ namespace gz::math
   ///       |
   ///       |
   ///       O--->X(forward)
-  class GZ_MATH_VISIBLE FourwidsDriveOdometry
+  class GZ_MATH_VISIBLE SwerveDriveOdometry
   {
     // Use a steady clock
     using clock = std::chrono::steady_clock;
@@ -48,7 +48,7 @@ namespace gz::math
     /// \brief Constructor.
     /// \param[in] _windowSize Rolling window size used to compute the
     /// velocity mean
-    public: explicit FourwidsDriveOdometry(size_t _windowSize = 10);
+    public: explicit SwerveDriveOdometry(size_t _windowSize = 10);
 
     /// \brief Initialize the odometry
     /// \param[in] _time Current time.
@@ -128,4 +128,4 @@ namespace gz::math
   };
   }  // namespace GZ_MATH_VERSION_NAMESPACE
 }  // namespace gz::math
-#endif  // GZ_MATH_FOURWIDSDRIVEODOMETRY_HH_
+#endif  // GZ_MATH_SWERVEDRIVEODOMETRY_HH_
