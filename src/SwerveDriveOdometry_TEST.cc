@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2026 Open Source Robotics Foundation
+ * Copyright (C) 2026 Jiayi Cai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,13 @@
 
 #include "gz/math/Angle.hh"
 #include "gz/math/Helpers.hh"
-#include "gz/math/FourwidsDriveOdometry.hh"
+#include "gz/math/SwerveDriveOdometry.hh"
 
 using namespace gz;
 
-TEST(FourwidsDriveOdometryTest, BasicInit)
+TEST(SwerveDriveOdometryTest, BasicInit)
 {
-  math::FourwidsDriveOdometry odom;
+  math::SwerveDriveOdometry odom;
   EXPECT_DOUBLE_EQ(0.0, *odom.Heading());
   EXPECT_DOUBLE_EQ(0.0, odom.X());
   EXPECT_DOUBLE_EQ(0.0, odom.Y());
@@ -59,9 +59,9 @@ TEST(FourwidsDriveOdometryTest, BasicInit)
   EXPECT_DOUBLE_EQ(0.0, *odom.AngularVelocity());
 }
 
-TEST(FourwidsDriveOdometryTest, StraightForward)
+TEST(SwerveDriveOdometryTest, StraightForward)
 {
-  math::FourwidsDriveOdometry odom;
+  math::SwerveDriveOdometry odom;
 
   double wheelSeparation = 0.5;
   double wheelBase = 0.5;
@@ -93,9 +93,9 @@ TEST(FourwidsDriveOdometryTest, StraightForward)
   EXPECT_NEAR(0.0, *odom.AngularVelocity(), 1e-3);
 }
 
-TEST(FourwidsDriveOdometryTest, StraightSide)
+TEST(SwerveDriveOdometryTest, StraightSide)
 {
-  math::FourwidsDriveOdometry odom;
+  math::SwerveDriveOdometry odom;
 
   double wheelSeparation = 0.5;
   double wheelBase = 0.5;
@@ -127,9 +127,9 @@ TEST(FourwidsDriveOdometryTest, StraightSide)
   EXPECT_NEAR(0.0, *odom.AngularVelocity(), 1e-3);
 }
 
-TEST(FourwidsDriveOdometryTest, StraightDiagonal)
+TEST(SwerveDriveOdometryTest, StraightDiagonal)
 {
-  math::FourwidsDriveOdometry odom;
+  math::SwerveDriveOdometry odom;
 
   double wheelSeparation = 0.5;
   double wheelBase = 0.5;
@@ -160,9 +160,9 @@ TEST(FourwidsDriveOdometryTest, StraightDiagonal)
   EXPECT_NEAR(0.0, *odom.AngularVelocity(), 1e-3);
 }
 
-TEST(FourwidsDriveOdometryTest, RotateInPlace)
+TEST(SwerveDriveOdometryTest, RotateInPlace)
 {
-  math::FourwidsDriveOdometry odom;
+  math::SwerveDriveOdometry odom;
 
   double wheelSeparation = 0.5;
   double wheelBase = 0.5;
