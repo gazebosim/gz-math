@@ -4,7 +4,7 @@ import math
 import time
 import unittest
 
-from gz.math7 import SwerveDriveOdometry, Angle
+from gz.math import SwerveDriveOdometry, Angle
 
 class TestSwerveDriveOdometry(unittest.TestCase):
 
