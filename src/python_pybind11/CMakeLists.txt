@@ -36,7 +36,6 @@ pybind11_add_module(${BINDINGS_MODULE_NAME} MODULE
   src/DiffDriveOdometry.cc
   src/Ellipsoid.cc
   src/Filter.cc
-  src/SwerveDriveOdometry.cc
   src/Frustum.cc
   src/GaussMarkovProcess.cc
   src/Helpers.cc
@@ -65,6 +64,7 @@ pybind11_add_module(${BINDINGS_MODULE_NAME} MODULE
   src/SphericalCoordinates.cc
   src/Spline.cc
   src/StopWatch.cc
+  src/SwerveDriveOdometry.cc
   src/Temperature.cc
   src/Triangle.cc
   src/Triangle3.cc
@@ -150,7 +150,6 @@ if (BUILD_TESTING)
     DiffDriveOdometry_TEST
     Ellipsoid_TEST
     Filter_TEST
-    SwerveDriveOdometry_TEST
     Frustum_TEST
     GaussMarkovProcess_TEST
     Helpers_TEST
@@ -183,6 +182,7 @@ if (BUILD_TESTING)
     SphericalCoordinates_TEST
     Spline_TEST
     StopWatch_TEST
+    SwerveDriveOdometry_TEST
     Temperature_TEST
     Triangle3_TEST
     Triangle_TEST

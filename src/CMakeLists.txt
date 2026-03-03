@@ -9,6 +9,7 @@ gz_create_core_library(SOURCES ${sources} CXX_STANDARD ${CMAKE_CXX_STANDARD})
 target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
   PUBLIC
     gz-utils::gz-utils
+  PRIVATE
     Eigen3::Eigen
 )
 
