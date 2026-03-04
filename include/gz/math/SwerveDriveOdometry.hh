@@ -73,19 +73,19 @@ namespace gz::math
 
     /// \brief Updates the odometry class with latest wheels and
     /// steerings position
-    /// \param[in] _frontLeftPos Left wheel position in radians.
-    /// \param[in] _frontRightPos Right wheel position in radians.
-    /// \param[in] _backLeftPos Left wheel position in radians.
-    /// \param[in] _backRightPos Right wheel position in radians.
-    /// \param[in] _frontLeftSteeringPos Left steering position in radians.
-    /// \param[in] _frontRightSteeringPos Right steering position in radians.
-    /// \param[in] _backLeftSteeringPos Left steering position in radians.
-    /// \param[in] _backRightSteeringPos Right steering position in radians.
+    /// \param[in] _frontLeftWheelPos Front left wheel position (rad).
+    /// \param[in] _frontRightWheelPos Front right wheel position (rad).
+    /// \param[in] _backLeftWheelPos Back left wheel position (rad).
+    /// \param[in] _backRightWheelPos Back right wheel position (rad).
+    /// \param[in] _frontLeftSteeringPos Front left steering position (rad).
+    /// \param[in] _frontRightSteeringPos Front right steering position (rad).
+    /// \param[in] _backLeftSteeringPos Back left steering position (rad).
+    /// \param[in] _backRightSteeringPos Back right steering position (rad).
     /// \param[in] _time Current time point.
     /// \return True if the odometry is actually updated.
     public: bool Update(
-      const Angle &_frontLeftPos, const Angle &_frontRightPos,
-      const Angle &_backLeftPos, const Angle &_backRightPos,
+      const Angle &_frontLeftWheelPos, const Angle &_frontRightWheelPos,
+      const Angle &_backLeftWheelPos, const Angle &_backRightWheelPos,
       const Angle &_frontLeftSteeringPos, const Angle &_frontRightSteeringPos,
       const Angle &_backLeftSteeringPos, const Angle &_backRightSteeringPos,
       const clock::time_point &_time);

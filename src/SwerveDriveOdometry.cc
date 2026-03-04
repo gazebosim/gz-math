@@ -169,9 +169,9 @@ bool SwerveDriveOdometry::Initialized() const
 }
 
 //////////////////////////////////////////////////
-bool SwerveDriveOdometry::Update(const Angle &_frontLeftPos,
-  const Angle &_frontRightPos, const Angle &_backLeftPos,
-  const Angle &_backRightPos, const Angle &_frontLeftSteeringPos,
+bool SwerveDriveOdometry::Update(const Angle &_frontLeftWheelPos,
+  const Angle &_frontRightWheelPos, const Angle &_backLeftWheelPos,
+  const Angle &_backRightWheelPos, const Angle &_frontLeftSteeringPos,
   const Angle &_frontRightSteeringPos, const Angle &_backLeftSteeringPos,
   const Angle &_backRightSteeringPos, const clock::time_point &_time)
 {
@@ -191,13 +191,13 @@ bool SwerveDriveOdometry::Update(const Angle &_frontLeftPos,
 
   // Get current wheel joint positions:
   const double frontLeftWheelCurPos =
-    *_frontLeftPos * this->dataPtr->wheelRadius;
+    _frontLeftWheelPos.Radian() * this->dataPtr->wheelRadius;
   const double frontRightWheelCurPos =
-    *_frontRightPos * this->dataPtr->wheelRadius;
+    _frontRightWheelPos.Radian() * this->dataPtr->wheelRadius;
   const double backLeftWheelCurPos =
-    *_backLeftPos * this->dataPtr->wheelRadius;
+    _backLeftWheelPos.Radian() * this->dataPtr->wheelRadius;
   const double backRightWheelCurPos =
-    *_backRightPos * this->dataPtr->wheelRadius;
+    _backRightWheelPos.Radian() * this->dataPtr->wheelRadius;
 
   // Estimate velocity of wheels using old and current position:
   const double frontLeftWheelEstVel = frontLeftWheelCurPos -
@@ -278,10 +278,10 @@ bool SwerveDriveOdometry::Update(const Angle &_frontLeftPos,
   A(3, 2) = std::sin(*_backRightSteeringPos) * -1.0 * halfWheelBase -
             std::cos(*_backRightSteeringPos) * -1.0 * halfWheelSeparation;
 
-  s(0) = frontLeftWheelEstVel / dt.count();
-  s(1) = frontRightWheelEstVel / dt.count();
-  s(2) = backLeftWheelEstVel / dt.count();
-  s(3) = backRightWheelEstVel / dt.count();
+  s(0) = frontLeftWheelVel;
+  s(1) = frontRightWheelVel;
+  s(2) = backLeftWheelVel;
+  s(3) = backRightWheelVel;
 
   Eigen::JacobiSVD<Eigen::MatrixXd> svd(
     A,
