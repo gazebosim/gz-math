@@ -51,8 +51,21 @@ namespace gz::math
     public: explicit SwerveDriveOdometry(size_t _windowSize = 10);
 
     /// \brief Initialize the odometry
+    /// \param[in] _frontLeftWheelPos Front left wheel position (rad).
+    /// \param[in] _frontRightWheelPos Front right wheel position (rad).
+    /// \param[in] _backLeftWheelPos Back left wheel position (rad).
+    /// \param[in] _backRightWheelPos Back right wheel position (rad).
+    /// \param[in] _frontLeftSteeringPos Front left steering position (rad).
+    /// \param[in] _frontRightSteeringPos Front right steering position (rad).
+    /// \param[in] _backLeftSteeringPos Back left steering position (rad).
+    /// \param[in] _backRightSteeringPos Back right steering position (rad).
     /// \param[in] _time Current time.
-    public: void Init(const clock::time_point &_time);
+    public: void Init(
+      const Angle &_frontLeftWheelPos, const Angle &_frontRightWheelPos,
+      const Angle &_backLeftWheelPos, const Angle &_backRightWheelPos,
+      const Angle &_frontLeftSteeringPos, const Angle &_frontRightSteeringPos,
+      const Angle &_backLeftSteeringPos, const Angle &_backRightSteeringPos,
+      const clock::time_point &_time);
 
     /// \brief Get whether Init has been called.
     /// \return True if Init has been called, false otherwise.

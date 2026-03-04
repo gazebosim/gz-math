@@ -41,7 +41,9 @@ TEST(SwerveDriveOdometryTest, BasicInit)
   // Setup the wheel parameters, and initialize
   odom.SetWheelParams(wheelSeparation, wheelBase, wheelRadius);
   auto startTime = std::chrono::steady_clock::now();
-  odom.Init(startTime);
+  odom.Init(GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0),
+            GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0),
+            startTime);
   EXPECT_TRUE(odom.Initialized());
 
   auto time1 = startTime + std::chrono::milliseconds(100);
@@ -51,7 +53,9 @@ TEST(SwerveDriveOdometryTest, BasicInit)
 
   // Initialize again, and odom values should be reset.
   startTime = std::chrono::steady_clock::now();
-  odom.Init(startTime);
+  odom.Init(GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0),
+            GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0),
+            startTime);
   EXPECT_DOUBLE_EQ(0.0, *odom.Heading());
   EXPECT_DOUBLE_EQ(0.0, odom.X());
   EXPECT_DOUBLE_EQ(0.0, odom.Y());
@@ -74,7 +78,9 @@ TEST(SwerveDriveOdometryTest, StraightForward)
   // Setup the wheel parameters, and initialize
   odom.SetWheelParams(wheelSeparation, wheelBase, wheelRadius);
   auto startTime = std::chrono::steady_clock::now();
-  odom.Init(startTime);
+  odom.Init(GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0),
+            GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0),
+            startTime);
 
   // Sleep for a little while, then update the odometry with the new wheel
   // position.
@@ -108,7 +114,9 @@ TEST(SwerveDriveOdometryTest, StraightSide)
   // Setup the wheel parameters, and initialize
   odom.SetWheelParams(wheelSeparation, wheelBase, wheelRadius);
   auto startTime = std::chrono::steady_clock::now();
-  odom.Init(startTime);
+  odom.Init(GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0),
+            GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0),
+            startTime);
 
   // Sleep for a little while, then update the odometry with the new wheel
   // position.
@@ -142,7 +150,9 @@ TEST(SwerveDriveOdometryTest, StraightDiagonal)
   // Setup the wheel parameters, and initialize
   odom.SetWheelParams(wheelSeparation, wheelBase, wheelRadius);
   auto startTime = std::chrono::steady_clock::now();
-  odom.Init(startTime);
+  odom.Init(GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0),
+            GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0),
+            startTime);
 
   // Sleep for a little while, then update the odometry with the new wheel
   // position.
@@ -180,7 +190,9 @@ TEST(SwerveDriveOdometryTest, RotateInPlace)
   // Setup the wheel parameters, and initialize
   odom.SetWheelParams(wheelSeparation, wheelBase, wheelRadius);
   auto startTime = std::chrono::steady_clock::now();
-  odom.Init(startTime);
+  odom.Init(GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0),
+            GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0), GZ_DTOR(0.0),
+            startTime);
 
   // Sleep for a little while, then update the odometry with the new wheel
   // position.

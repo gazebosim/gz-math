@@ -133,7 +133,11 @@ SwerveDriveOdometry::SwerveDriveOdometry(size_t _windowSize)
 {
 }
 
-void SwerveDriveOdometry::Init(const clock::time_point &_time)
+void SwerveDriveOdometry::Init(const Angle &_frontLeftWheelPos,
+  const Angle &_frontRightWheelPos, const Angle &_backLeftWheelPos,
+  const Angle &_backRightWheelPos, const Angle &_frontLeftSteeringPos,
+  const Angle &_frontRightSteeringPos, const Angle &_backLeftSteeringPos,
+  const Angle &_backRightSteeringPos, const clock::time_point &_time)
 {
   // Reset accumulators and timestamp.
   this->dataPtr->linearMean.Clear();
@@ -145,14 +149,14 @@ void SwerveDriveOdometry::Init(const clock::time_point &_time)
   this->dataPtr->linearVel = 0.0;
   this->dataPtr->lateralVel = 0.0;
   this->dataPtr->angularVel = 0.0;
-  this->dataPtr->frontLeftWheelOldPos = 0.0;
-  this->dataPtr->frontRightWheelOldPos = 0.0;
-  this->dataPtr->backLeftWheelOldPos = 0.0;
-  this->dataPtr->backRightWheelOldPos = 0.0;
-  this->dataPtr->frontLeftSteeringOldPos = 0.0;
-  this->dataPtr->frontRightSteeringOldPos = 0.0;
-  this->dataPtr->backLeftSteeringOldPos = 0.0;
-  this->dataPtr->backRightSteeringOldPos = 0.0;
+  this->dataPtr->frontLeftWheelOldPos = _frontLeftWheelPos.Radian();
+  this->dataPtr->frontRightWheelOldPos = _frontRightWheelPos.Radian();
+  this->dataPtr->backLeftWheelOldPos = _backLeftWheelPos.Radian();
+  this->dataPtr->backRightWheelOldPos = _backRightWheelPos.Radian();
+  this->dataPtr->frontLeftSteeringOldPos = _frontLeftSteeringPos.Radian();
+  this->dataPtr->frontRightSteeringOldPos = _frontRightSteeringPos.Radian();
+  this->dataPtr->backLeftSteeringOldPos = _backLeftSteeringPos.Radian();
+  this->dataPtr->backRightSteeringOldPos = _backRightSteeringPos.Radian();
 
   this->dataPtr->lastUpdateTime = _time;
   this->dataPtr->initialized = true;
