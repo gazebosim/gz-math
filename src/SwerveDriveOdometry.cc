@@ -84,30 +84,6 @@ class SwerveDriveOdometry::Implementation
   /// \brief Wheel base in meters.
   public: double wheelBase{1.0};
 
-  /// \brief Previous frontleft wheel position/state in radians.
-  public: double frontLeftWheelOldPos{0.0};
-
-  /// \brief Previous frontright wheel position/state in radians.
-  public: double frontRightWheelOldPos{0.0};
-
-  /// \brief Previous backleft wheel position/state in radians.
-  public: double backLeftWheelOldPos{0.0};
-
-  /// \brief Previous backright wheel position/state in radians.
-  public: double backRightWheelOldPos{0.0};
-
-  /// \brief Previous frontleft steering position/state in radians.
-  public: double frontLeftSteeringOldPos{0.0};
-
-  /// \brief Previous frontright steering position/state in radians.
-  public: double frontRightSteeringOldPos{0.0};
-
-  /// \brief Previous backleft steering position/state in radians.
-  public: double backLeftSteeringOldPos{0.0};
-
-  /// \brief Previous backright steering position/state in radians.
-  public: double backRightSteeringOldPos{0.0};
-
   /// \brief Rolling mean accumulators for the linear velocity
   public: gz::math::RollingMean linearMean;
 
@@ -133,11 +109,7 @@ SwerveDriveOdometry::SwerveDriveOdometry(size_t _windowSize)
 {
 }
 
-void SwerveDriveOdometry::Init(const Angle &_frontLeftWheelPos,
-  const Angle &_frontRightWheelPos, const Angle &_backLeftWheelPos,
-  const Angle &_backRightWheelPos, const Angle &_frontLeftSteeringPos,
-  const Angle &_frontRightSteeringPos, const Angle &_backLeftSteeringPos,
-  const Angle &_backRightSteeringPos, const clock::time_point &_time)
+void SwerveDriveOdometry::Init(const clock::time_point &_time)
 {
   // Reset accumulators and timestamp.
   this->dataPtr->linearMean.Clear();
@@ -149,14 +121,6 @@ void SwerveDriveOdometry::Init(const Angle &_frontLeftWheelPos,
   this->dataPtr->linearVel = 0.0;
   this->dataPtr->lateralVel = 0.0;
   this->dataPtr->angularVel = 0.0;
-  this->dataPtr->frontLeftWheelOldPos = _frontLeftWheelPos.Radian();
-  this->dataPtr->frontRightWheelOldPos = _frontRightWheelPos.Radian();
-  this->dataPtr->backLeftWheelOldPos = _backLeftWheelPos.Radian();
-  this->dataPtr->backRightWheelOldPos = _backRightWheelPos.Radian();
-  this->dataPtr->frontLeftSteeringOldPos = _frontLeftSteeringPos.Radian();
-  this->dataPtr->frontRightSteeringOldPos = _frontRightSteeringPos.Radian();
-  this->dataPtr->backLeftSteeringOldPos = _backLeftSteeringPos.Radian();
-  this->dataPtr->backRightSteeringOldPos = _backRightSteeringPos.Radian();
 
   this->dataPtr->lastUpdateTime = _time;
   this->dataPtr->initialized = true;
@@ -169,9 +133,9 @@ bool SwerveDriveOdometry::Initialized() const
 }
 
 //////////////////////////////////////////////////
-bool SwerveDriveOdometry::Update(const Angle &_frontLeftWheelPos,
-  const Angle &_frontRightWheelPos, const Angle &_backLeftWheelPos,
-  const Angle &_backRightWheelPos, const Angle &_frontLeftSteeringPos,
+bool SwerveDriveOdometry::Update(const double &_frontLeftWheelAngVel,
+  const double &_frontRightWheelAngVel, const double &_backLeftWheelAngVel,
+  const double &_backRightWheelAngVel, const Angle &_frontLeftSteeringPos,
   const Angle &_frontRightSteeringPos, const Angle &_backLeftSteeringPos,
   const Angle &_backRightSteeringPos, const clock::time_point &_time)
 {
@@ -189,54 +153,27 @@ bool SwerveDriveOdometry::Update(const Angle &_frontLeftWheelPos,
   if (equal(0.0, dt.count()))
     return false;
 
-  // Get current wheel joint positions:
-  const double frontLeftWheelCurPos =
-    _frontLeftWheelPos.Radian() * this->dataPtr->wheelRadius;
-  const double frontRightWheelCurPos =
-    _frontRightWheelPos.Radian() * this->dataPtr->wheelRadius;
-  const double backLeftWheelCurPos =
-    _backLeftWheelPos.Radian() * this->dataPtr->wheelRadius;
-  const double backRightWheelCurPos =
-    _backRightWheelPos.Radian() * this->dataPtr->wheelRadius;
-
-  // Estimate velocity of wheels using old and current position:
-  const double frontLeftWheelEstVel = frontLeftWheelCurPos -
-                                 this->dataPtr->frontLeftWheelOldPos;
-
-  const double frontRightWheelEstVel = frontRightWheelCurPos -
-                                  this->dataPtr->frontRightWheelOldPos;
-
-  const double backLeftWheelEstVel = backLeftWheelCurPos -
-                                 this->dataPtr->backLeftWheelOldPos;
-
-  const double backRightWheelEstVel = backRightWheelCurPos -
-                                  this->dataPtr->backRightWheelOldPos;
-
-  // Update old position with current
-  this->dataPtr->frontLeftWheelOldPos = frontLeftWheelCurPos;
-  this->dataPtr->frontRightWheelOldPos = frontRightWheelCurPos;
-  this->dataPtr->backLeftWheelOldPos = backLeftWheelCurPos;
-  this->dataPtr->backRightWheelOldPos = backRightWheelCurPos;
-
-  // Handle the degenerate case where all wheel velocities align,
-  // reducing the motion to pure translation.
-  const double frontLeftWheelVel = frontLeftWheelEstVel / dt.count();
-  const double frontRightWheelVel = frontRightWheelEstVel / dt.count();
-  const double backLeftWheelVel = backLeftWheelEstVel / dt.count();
-  const double backRightWheelVel = backRightWheelEstVel / dt.count();
+  const double frontLeftWheelLinVel = 
+    _frontLeftWheelAngVel * this->dataPtr->wheelRadius;
+  const double frontRightWheelLinVel = 
+    _frontRightWheelAngVel * this->dataPtr->wheelRadius;
+  const double backLeftWheelLinVel = 
+    _backLeftWheelAngVel * this->dataPtr->wheelRadius;
+  const double backRightWheelLinVel = 
+    _backRightWheelAngVel * this->dataPtr->wheelRadius;
 
   Eigen::Vector2d frontLeftWheelVelVec(
-    frontLeftWheelVel * std::cos(*_frontLeftSteeringPos),
-    frontLeftWheelVel * std::sin(*_frontLeftSteeringPos));
+    frontLeftWheelLinVel * std::cos(*_frontLeftSteeringPos),
+    frontLeftWheelLinVel * std::sin(*_frontLeftSteeringPos));
   Eigen::Vector2d frontRightWheelVelVec(
-    frontRightWheelVel * std::cos(*_frontRightSteeringPos),
-    frontRightWheelVel * std::sin(*_frontRightSteeringPos));
+    frontRightWheelLinVel * std::cos(*_frontRightSteeringPos),
+    frontRightWheelLinVel * std::sin(*_frontRightSteeringPos));
   Eigen::Vector2d backLeftWheelVelVec(
-    backLeftWheelVel * std::cos(*_backLeftSteeringPos),
-    backLeftWheelVel * std::sin(*_backLeftSteeringPos));
+    backLeftWheelLinVel * std::cos(*_backLeftSteeringPos),
+    backLeftWheelLinVel * std::sin(*_backLeftSteeringPos));
   Eigen::Vector2d backRightWheelVelVec(
-    backRightWheelVel * std::cos(*_backRightSteeringPos),
-    backRightWheelVel * std::sin(*_backRightSteeringPos));
+    backRightWheelLinVel * std::cos(*_backRightSteeringPos),
+    backRightWheelLinVel * std::sin(*_backRightSteeringPos));
 
   Eigen::Vector2d meanVec = (frontLeftWheelVelVec + frontRightWheelVelVec +
     backLeftWheelVelVec + backRightWheelVelVec) / 4.0;
@@ -278,10 +215,10 @@ bool SwerveDriveOdometry::Update(const Angle &_frontLeftWheelPos,
   A(3, 2) = std::sin(*_backRightSteeringPos) * -1.0 * halfWheelBase -
             std::cos(*_backRightSteeringPos) * -1.0 * halfWheelSeparation;
 
-  s(0) = frontLeftWheelVel;
-  s(1) = frontRightWheelVel;
-  s(2) = backLeftWheelVel;
-  s(3) = backRightWheelVel;
+  s(0) = frontLeftWheelLinVel;
+  s(1) = frontRightWheelLinVel;
+  s(2) = backLeftWheelLinVel;
+  s(3) = backRightWheelLinVel;
 
   Eigen::JacobiSVD<Eigen::MatrixXd> svd(
     A,
