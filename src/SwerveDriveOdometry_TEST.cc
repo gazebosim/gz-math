@@ -144,9 +144,9 @@ TEST(SwerveDriveOdometryTest, StraightDiagonal)
   EXPECT_NEAR(expectedDistTraveled / sqrt(2), odom.X(), 1e-3);
   EXPECT_NEAR(expectedDistTraveled / sqrt(2), odom.Y(), 1e-3);
   EXPECT_NEAR(0.0, *odom.Heading(), 1e-3);
-  EXPECT_NEAR(expectedDistTraveled / sqrt(2) / 0.1, 
+  EXPECT_NEAR(expectedDistTraveled / sqrt(2) / 0.1,
     odom.LinearVelocity(), 1e-3);
-  EXPECT_NEAR(expectedDistTraveled / sqrt(2) / 0.1, 
+  EXPECT_NEAR(expectedDistTraveled / sqrt(2) / 0.1,
     odom.LateralVelocity(), 1e-3);
   // Angular velocity should be zero since the "robot" is traveling in a
   // straight line.

@@ -153,13 +153,13 @@ bool SwerveDriveOdometry::Update(const double &_frontLeftWheelAngVel,
   if (equal(0.0, dt.count()))
     return false;
 
-  const double frontLeftWheelLinVel = 
+  const double frontLeftWheelLinVel =
     _frontLeftWheelAngVel * this->dataPtr->wheelRadius;
-  const double frontRightWheelLinVel = 
+  const double frontRightWheelLinVel =
     _frontRightWheelAngVel * this->dataPtr->wheelRadius;
-  const double backLeftWheelLinVel = 
+  const double backLeftWheelLinVel =
     _backLeftWheelAngVel * this->dataPtr->wheelRadius;
-  const double backRightWheelLinVel = 
+  const double backRightWheelLinVel =
     _backRightWheelAngVel * this->dataPtr->wheelRadius;
 
   Eigen::Vector2d frontLeftWheelVelVec(
