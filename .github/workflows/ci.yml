@@ -11,13 +11,13 @@ on:
 jobs:
   noble-ci:
     runs-on: ubuntu-latest
-    name: Ubuntu Noble CI
+    name: Ubuntu Resolute CI
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Compile and test
         id: ci
-        uses: gazebo-tooling/action-gz-ci@noble
+        uses: gazebo-tooling/action-gz-ci@resolute_test
         with:
           # codecov-enabled: true
           cppcheck-enabled: true
