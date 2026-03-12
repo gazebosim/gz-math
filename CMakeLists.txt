@@ -61,7 +61,7 @@ gz_find_package(gz-utils REQUIRED)
 # Find eigen3
 gz_find_package(
   EIGEN3
-  REQUIRED_BY eigen3
+  REQUIRED
   PRETTY eigen3
   PURPOSE "Provide conversions to eigen3 types")
 

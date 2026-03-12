@@ -8,6 +8,17 @@ release will remove the deprecated code.
 
 ## Gazebo Math 9.X to 10.X
 
+### Added dependencies
+
+1. **Eigen**
+    + gz-math now requires Eigen as a build dependency, allowing its
+      use in the implementation of core math classes, though it
+      is not to be used in core public headers to avoid
+      negatively affecting the compilation time of downstream code.
+      Note that Eigen types can be used in headers provided by
+      the `eigen3` component.
+      
+
 ### Breaking Changes
 
 1. **Color.hh**
