@@ -1,5 +1,3 @@
-gz-jetty-cmake
-gz-jetty-utils
 libeigen3-dev
 libpython3-dev
 python3-numpy
