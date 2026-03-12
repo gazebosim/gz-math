@@ -11,10 +11,13 @@ release will remove the deprecated code.
 ### Added dependencies
 
 1. **Eigen**
-    + gz-math now requires Eigen as a build dependency, though it
-      is not to be used in public headers. This allows it to be
-      used in the implementation of core math classes without
+    + gz-math now requires Eigen as a build dependency, allowing its
+      use in the implementation of core math classes, though it
+      is not to be used in core public headers to avoid
       negatively affecting the compilation time of downstream code.
+      Note that Eigen types can be used in headers provided by
+      the `eigen3` component.
+      
 
 ### Breaking Changes
 
