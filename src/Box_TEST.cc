@@ -477,6 +477,213 @@ TEST(BoxTest, VerticesBelow)
 }
 
 //////////////////////////////////////////////////
+TEST(BoxTest, VolumeBelowDiagonalPlanes)
+{
+  // Tetrahedron corner cut: Box 2x2x2, plane n=(1,1,1), d=-1.5
+  // alpha = -1.5 + 1 + 1 + 1 = 1.5 < min(M_i)=2, so pure tetrahedron
+  // V = totalVol * alpha^3 / (6*M1*M2*M3) = 8 * 1.5^3 / (6*2*2*2)
+  {
+    math::Boxd box(2.0, 2.0, 2.0);
+    math::Planed plane(math::Vector3d(1.0, 1.0, 1.0), -1.5);
+    double alpha = 1.5;
+    double expected = 8.0 * alpha * alpha * alpha / (6.0 * 2.0 * 2.0 * 2.0);
+    EXPECT_NEAR(expected, box.VolumeBelow(plane), 1e-10);
+  }
+
+  // Non-unit normal: plane n=(2,1,3), d=1.0, box 4x2x6
+  // m1=2, m2=1, m3=3, h1=2, h2=1, h3=3
+  // M1=2*4=8, M2=1*2=2, M3=3*6=18
+  // alpha = 1 + 2*2 + 1*1 + 3*3 = 15
+  // IE3(15) = 15^3 - max(0,15-8)^3 - max(0,15-2)^3 - max(0,15-18)^3
+  //         + max(0,15-8-2)^3 + max(0,15-8-18)^3 + max(0,15-2-18)^3
+  //         - max(0,15-8-2-18)^3
+  //         = 3375 - 343 - 2197 - 0 + 125 + 0 + 0 - 0 = 960
+  // V = 48 * 960 / (6*8*2*18)
+  {
+    math::Boxd box(4.0, 2.0, 6.0);
+    math::Planed plane(math::Vector3d(2.0, 1.0, 3.0), 1.0);
+    double expected = 48.0 * 960.0 / (6.0 * 2.0 * 8.0 * 18.0);
+    EXPECT_NEAR(expected, box.VolumeBelow(plane), 1e-10);
+  }
+
+  // Asymmetric box 1x2x3, plane n=(1,1,1), d=0
+  // m=1,1,1. h=0.5,1,1.5. M=1,2,3.
+  // alpha = 0 + 0.5 + 1 + 1.5 = 3 = M_sum/2 -> half volume
+  {
+    math::Boxd box(1.0, 2.0, 3.0);
+    math::Planed plane(math::Vector3d(1.0, 1.0, 1.0), 0.0);
+    EXPECT_NEAR(box.Volume() / 2.0, box.VolumeBelow(plane), 1e-10);
+  }
+
+  // Plane tangent to edge: alpha = M1
+  // Box 2x2x2, n=(1,0,0), d=-1. m1=1,m2=0,m3=0. alpha=d+m1*h1= -1+1=0
+  {
+    math::Boxd box(2.0, 2.0, 2.0);
+    math::Planed plane(math::Vector3d(1.0, 0.0, 0.0), -1.0);
+    EXPECT_NEAR(0.0, box.VolumeBelow(plane), 1e-10);
+  }
+
+  // Very small box: 0.002x0.002x0.002, plane through center
+  // This exposes the WellOrderedVectors 1e-3 tolerance bug in old code
+  {
+    math::Boxd box(0.002, 0.002, 0.002);
+    math::Planed plane(math::Vector3d(0.0, 0.0, 1.0), 0.0);
+    EXPECT_NEAR(box.Volume() / 2.0, box.VolumeBelow(plane), 1e-15);
+  }
+
+  // Complementary planes: V(n,d) + V(-n,-d) == totalVolume for diagonal
+  {
+    math::Boxd box(2.0, 2.0, 2.0);
+    math::Planed planeA(math::Vector3d(1.0, 1.0, 1.0), 0.5);
+    math::Planed planeB(math::Vector3d(-1.0, -1.0, -1.0), -0.5);
+    EXPECT_NEAR(box.Volume(),
+        box.VolumeBelow(planeA) + box.VolumeBelow(planeB), 1e-10);
+  }
+
+  // Non-symmetric complementary
+  {
+    math::Boxd box(1.0, 2.0, 3.0);
+    math::Planed planeA(math::Vector3d(2.0, -1.0, 1.0), 0.3);
+    math::Planed planeB(math::Vector3d(-2.0, 1.0, -1.0), -0.3);
+    EXPECT_NEAR(box.Volume(),
+        box.VolumeBelow(planeA) + box.VolumeBelow(planeB), 1e-10);
+  }
+}
+
+//////////////////////////////////////////////////
+TEST(BoxTest, CenterOfVolumeBelowDiagonal)
+{
+  // Centroid direction: for plane through origin with diagonal normal,
+  // n . centroid < 0 (centroid is on the "below" side)
+  {
+    math::Boxd box(2.0, 2.0, 2.0);
+    math::Planed plane(math::Vector3d(1.0, 1.0, 1.0), 0.0);
+    auto cov = box.CenterOfVolumeBelow(plane);
+    ASSERT_TRUE(cov.has_value());
+    double dot = math::Vector3d(1, 1, 1).Dot(cov.value());
+    EXPECT_LT(dot, 0.0);
+  }
+
+  // Tetrahedron corner: Box 2x2x2, plane n=(1,1,1), d=-1.5
+  // alpha = 1.5 < min(M_i) = 2, so the clipped region is a tetrahedron.
+  // Vertices: (-1,-1,-1), (0.5,-1,-1), (-1,0.5,-1), (-1,-1,0.5)
+  // Tet centroid = average of 4 vertices = (-0.625, -0.625, -0.625)
+  {
+    math::Boxd box(2.0, 2.0, 2.0);
+    math::Planed plane(math::Vector3d(1.0, 1.0, 1.0), -1.5);
+    auto cov = box.CenterOfVolumeBelow(plane);
+    ASSERT_TRUE(cov.has_value());
+    EXPECT_NEAR(-0.625, cov.value().X(), 1e-10);
+    EXPECT_NEAR(-0.625, cov.value().Y(), 1e-10);
+    EXPECT_NEAR(-0.625, cov.value().Z(), 1e-10);
+  }
+
+  // Diagonal half-cut: Box 2x2x2, plane x+y+z=0
+  // By symmetry, centroid = (-c,-c,-c) for some c > 0
+  {
+    math::Boxd box(2.0, 2.0, 2.0);
+    math::Planed plane(math::Vector3d(1.0, 1.0, 1.0), 0.0);
+    auto cov = box.CenterOfVolumeBelow(plane);
+    ASSERT_TRUE(cov.has_value());
+    // By symmetry, all coordinates are equal
+    EXPECT_NEAR(cov.value().X(), cov.value().Y(), 1e-10);
+    EXPECT_NEAR(cov.value().Y(), cov.value().Z(), 1e-10);
+    // And negative
+    EXPECT_LT(cov.value().X(), 0.0);
+  }
+
+  // Weighted sum test: CoV_below * V_below + CoV_above * V_above = (0,0,0)
+  // Using complementary planes
+  {
+    math::Boxd box(2.0, 2.0, 2.0);
+    math::Planed planeA(math::Vector3d(1.0, 1.0, 1.0), 0.5);
+    math::Planed planeB(math::Vector3d(-1.0, -1.0, -1.0), -0.5);
+
+    auto covA = box.CenterOfVolumeBelow(planeA);
+    auto covB = box.CenterOfVolumeBelow(planeB);
+    ASSERT_TRUE(covA.has_value());
+    ASSERT_TRUE(covB.has_value());
+
+    auto volA = box.VolumeBelow(planeA);
+    auto volB = box.VolumeBelow(planeB);
+
+    auto weightedSum = covA.value() * volA + covB.value() * volB;
+    EXPECT_NEAR(0.0, weightedSum.X(), 1e-10);
+    EXPECT_NEAR(0.0, weightedSum.Y(), 1e-10);
+    EXPECT_NEAR(0.0, weightedSum.Z(), 1e-10);
+  }
+
+  // Another weighted sum with asymmetric box
+  {
+    math::Boxd box(1.0, 2.0, 3.0);
+    math::Planed planeA(math::Vector3d(2.0, -1.0, 1.0), 0.3);
+    math::Planed planeB(math::Vector3d(-2.0, 1.0, -1.0), -0.3);
+
+    auto covA = box.CenterOfVolumeBelow(planeA);
+    auto covB = box.CenterOfVolumeBelow(planeB);
+    ASSERT_TRUE(covA.has_value());
+    ASSERT_TRUE(covB.has_value());
+
+    auto volA = box.VolumeBelow(planeA);
+    auto volB = box.VolumeBelow(planeB);
+
+    auto weightedSum = covA.value() * volA + covB.value() * volB;
+    EXPECT_NEAR(0.0, weightedSum.X(), 1e-10);
+    EXPECT_NEAR(0.0, weightedSum.Y(), 1e-10);
+    EXPECT_NEAR(0.0, weightedSum.Z(), 1e-10);
+  }
+
+  // 2D normal (nonzero == 2): exercises the k=2 centroid path
+  // n=(1,1,0), d=0.5 on box 2x2x2
+  // z-centroid should be 0 (plane is parallel to z-axis)
+  {
+    math::Boxd box(2.0, 2.0, 2.0);
+    math::Planed planeA(math::Vector3d(1.0, 1.0, 0.0), 0.5);
+    math::Planed planeB(math::Vector3d(-1.0, -1.0, 0.0), -0.5);
+
+    auto covA = box.CenterOfVolumeBelow(planeA);
+    auto covB = box.CenterOfVolumeBelow(planeB);
+    ASSERT_TRUE(covA.has_value());
+    ASSERT_TRUE(covB.has_value());
+
+    // z-centroid must be 0 for both (plane has no z-component)
+    EXPECT_NEAR(0.0, covA.value().Z(), 1e-10);
+    EXPECT_NEAR(0.0, covB.value().Z(), 1e-10);
+
+    // Weighted sum conservation
+    auto volA = box.VolumeBelow(planeA);
+    auto volB = box.VolumeBelow(planeB);
+    auto ws = covA.value() * volA + covB.value() * volB;
+    EXPECT_NEAR(0.0, ws.X(), 1e-10);
+    EXPECT_NEAR(0.0, ws.Y(), 1e-10);
+    EXPECT_NEAR(0.0, ws.Z(), 1e-10);
+  }
+
+  // Flipped 3D normal: n=(-1,1,-1), exercises sign transform for centroid
+  {
+    math::Boxd box(2.0, 2.0, 2.0);
+    math::Planed planeA(math::Vector3d(-1.0, 1.0, -1.0), 0.3);
+    math::Planed planeB(math::Vector3d(1.0, -1.0, 1.0), -0.3);
+
+    auto covA = box.CenterOfVolumeBelow(planeA);
+    auto covB = box.CenterOfVolumeBelow(planeB);
+    ASSERT_TRUE(covA.has_value());
+    ASSERT_TRUE(covB.has_value());
+
+    // centroid should be on the "below" side: n . centroid < 0
+    EXPECT_LT(math::Vector3d(-1, 1, -1).Dot(covA.value()), 0.0);
+
+    // Weighted sum conservation
+    auto volA = box.VolumeBelow(planeA);
+    auto volB = box.VolumeBelow(planeB);
+    auto ws = covA.value() * volA + covB.value() * volB;
+    EXPECT_NEAR(0.0, ws.X(), 1e-10);
+    EXPECT_NEAR(0.0, ws.Y(), 1e-10);
+    EXPECT_NEAR(0.0, ws.Z(), 1e-10);
+  }
+}
+
+//////////////////////////////////////////////////
 TEST(BoxTest, Mass)
 {
   double mass = 2.0;
