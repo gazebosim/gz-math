@@ -20,9 +20,10 @@
 #include "gz/math/Box.hh"
 #include "gz/math/Triangle3.hh"
 
-#include <optional>
 #include <algorithm>
-#include <set>
+#include <array>
+#include <cmath>
+#include <optional>
 #include <utility>
 #include <vector>
 
@@ -122,13 +123,20 @@ T Box<T>::Volume() const
 }
 
 //////////////////////////////////////////////////
-/// \brief Given a *convex* polygon described by the verices in a given plane,
+/// \brief Given a *convex* polygon described by the vertices in a given plane,
 /// compute the list of triangles which form this polygon.
 /// \param[in] _plane The plane in which the vertices exist.
 /// \param[in] _vertices The vertices of the polygon.
 /// \return A vector of triangles and their sign, or an empty vector
 /// if _vertices in the _plane are less than 3. The sign will be +1 if the
 /// triangle is outward facing, -1 otherwise.
+/// \note This function relies on exact float comparison
+/// (Plane::Side() == NO_SIDE) to classify vertices, which silently
+/// drops vertices with any floating-point error and produces wrong
+/// triangle decompositions for non-axis-aligned planes.
+/// Box::VolumeBelow() and Box::CenterOfVolumeBelow() use robust
+/// analytic formulas instead.
+/// See https://github.com/gazebosim/gz-math/pull/724
 template <typename T>
 std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(
     const Plane<T> &_plane, IntersectionPoints<T> &_vertices)
@@ -154,17 +162,14 @@ std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(
   auto axis1 = (pointsInPlane[0] - centroid).Normalize();
   auto axis2 = axis1.Cross(_plane.Normal()).Normalize();
 
-  // Since the polygon is always convex, we can try to create a fan of triangles
-  // by sorting the points by their angle in the plane basis.
+  // Since the polygon is always convex, we can try to create a fan of
+  // triangles by sorting the points by their angle in the plane basis.
   std::sort(pointsInPlane.begin(), pointsInPlane.end(),
     [centroid, axis1, axis2] (const Vector3<T> &_a, const Vector3<T> &_b)
     {
       auto aDisplacement = _a - centroid;
       auto bDisplacement = _b - centroid;
 
-      // project line onto the new basis vectors
-      // The axis length will never be zero as we have three different points
-      // and the centroid will be different.
       auto aX = axis1.Dot(aDisplacement) / axis1.Length();
       auto aY = axis2.Dot(aDisplacement) / axis2.Length();
 
@@ -188,48 +193,88 @@ std::vector<std::pair<Triangle3<T>, T>> TrianglesInPlane(
 template<typename T>
 T Box<T>::VolumeBelow(const Plane<T> &_plane) const
 {
-  auto verticesBelow = this->VerticesBelow(_plane);
-  if (verticesBelow.empty())
+  // Analytic inclusion-exclusion formula for the volume of a box below a plane.
+  // Reference: Scardovelli & Zaleski (2000), Lehmann & Gekle (2022).
+  //
+  // The plane equation is: normal . point = offset
+  // "Below" means normal . point <= offset (i.e. Distance <= 0).
+
+  const auto &n = _plane.Normal();
+  const T d = _plane.Offset();
+  const T totalVol = this->Volume();
+
+  // m_i = |n_i|, half_i = size_i / 2
+  const T m1 = std::abs(n.X());
+  const T m2 = std::abs(n.Y());
+  const T m3 = std::abs(n.Z());
+  const T h1 = this->size.X() / 2;
+  const T h2 = this->size.Y() / 2;
+  const T h3 = this->size.Z() / 2;
+
+  // alpha = offset + sum(m_i * half_i)
+  // This shifts the coordinate so alpha=0 corresponds to the
+  // "most-negative" corner of the box.
+  const T alpha = d + m1 * h1 + m2 * h2 + m3 * h3;
+
+  // M_i = m_i * size_i = 2 * m_i * half_i
+  const T M1 = m1 * this->size.X();
+  const T M2 = m2 * this->size.Y();
+  const T M3 = m3 * this->size.Z();
+  const T Msum = M1 + M2 + M3;
+
+  // Early returns
+  if (alpha <= 0)
     return 0;
+  if (alpha >= Msum)
+    return totalVol;
 
-  auto intersections = this->Intersections(_plane);
-  // TODO(arjo): investigate the use of _epsilon tolerance as this method
-  // implicitly uses Vector3<T>::operator==()
-  verticesBelow.merge(intersections);
+  // Count how many M_i are > 0
+  int nonzero = (M1 > 0 ? 1 : 0) + (M2 > 0 ? 1 : 0) + (M3 > 0 ? 1 : 0);
 
-  // Reconstruct the cut-box as a triangle mesh by attempting to fit planes.
-  std::vector<std::pair<Triangle3<T>, T>> triangles;
+  auto cube = [](T x) -> T { return x * x * x; };
+  auto clampPos = [](T x) -> T { return x > 0 ? x : 0; };
 
-  std::vector<Plane<T>> planes
+  if (nonzero == 3)
   {
-    Plane<T>{Vector3<T>{0, 0, 1}, this->Size().Z()/2},
-    Plane<T>{Vector3<T>{0, 0, -1}, this->Size().Z()/2},
-    Plane<T>{Vector3<T>{1, 0, 0}, this->Size().X()/2},
-    Plane<T>{Vector3<T>{-1, 0, 0}, this->Size().X()/2},
-    Plane<T>{Vector3<T>{0, 1, 0}, this->Size().Y()/2},
-    Plane<T>{Vector3<T>{0, -1, 0}, this->Size().Y()/2},
-    _plane
-  };
-
-  for (const auto &p : planes)
-  {
-    auto newTriangles = TrianglesInPlane(p, verticesBelow);
-    triangles.insert(triangles.end(),
-      newTriangles.begin(),
-      newTriangles.end());
+    // 3D IE formula
+    T ie3 = cube(alpha)
+      - cube(clampPos(alpha - M1))
+      - cube(clampPos(alpha - M2))
+      - cube(clampPos(alpha - M3))
+      + cube(clampPos(alpha - M1 - M2))
+      + cube(clampPos(alpha - M1 - M3))
+      + cube(clampPos(alpha - M2 - M3))
+      - cube(clampPos(alpha - M1 - M2 - M3));
+    return totalVol * ie3 / (6 * M1 * M2 * M3);
   }
-
-  // Calculate the volume of the triangles
-  // https://n-e-r-v-o-u-s.com/blog/?p=4415
-  T volume = 0;
-  for (const auto &triangle : triangles)
+  else if (nonzero == 2)
   {
-    auto crossProduct = (triangle.first[2]).Cross(triangle.first[1]);
-    auto meshVolume = std::abs(crossProduct.Dot(triangle.first[0]));
-    volume += triangle.second * meshVolume;
+    // 2D IE formula — find the two non-zero M values
+    std::array<T, 2> Mv;
+    int idx = 0;
+    if (M1 > 0) Mv[idx++] = M1;
+    if (M2 > 0) Mv[idx++] = M2;
+    if (M3 > 0) Mv[idx++] = M3;
+    T Ma = Mv[0], Mb = Mv[1];
+    auto square = [](T x) -> T { return x * x; };
+    T ie2 = square(alpha)
+      - square(clampPos(alpha - Ma))
+      - square(clampPos(alpha - Mb))
+      + square(clampPos(alpha - Ma - Mb));
+    return totalVol * ie2 / (2 * Ma * Mb);
   }
-
-  return std::abs(volume)/6;
+  else if (nonzero == 1)
+  {
+    // 1D case
+    T Mk = M1 > 0 ? M1 : (M2 > 0 ? M2 : M3);
+    T frac = alpha / Mk;
+    return totalVol * std::clamp(frac, T(0), T(1));
+  }
+  else
+  {
+    // 0D case: degenerate box
+    return alpha >= 0 ? totalVol : 0;
+  }
 }
 
 /////////////////////////////////////////////////
@@ -237,20 +282,144 @@ template<typename T>
 std::optional<Vector3<T>>
   Box<T>::CenterOfVolumeBelow(const Plane<T> &_plane) const
 {
-  auto verticesBelow = this->VerticesBelow(_plane);
-  if (verticesBelow.empty())
+  // Analytic first-moment inclusion-exclusion formula.
+  // Computes the volumetric centroid of the region of the box below the plane.
+  // Uses dimensional reduction: only non-trivial axes (where M_i > 0)
+  // participate in the IE sums, with F_k functions matched to the
+  // effective dimensionality k.
+
+  const auto &n = _plane.Normal();
+  const T d = _plane.Offset();
+
+  const T m1 = std::abs(n.X());
+  const T m2 = std::abs(n.Y());
+  const T m3 = std::abs(n.Z());
+  const T h1 = this->size.X() / 2;
+  const T h2 = this->size.Y() / 2;
+  const T h3 = this->size.Z() / 2;
+
+  const T alpha = d + m1 * h1 + m2 * h2 + m3 * h3;
+
+  const T M1 = m1 * this->size.X();
+  const T M2 = m2 * this->size.Y();
+  const T M3 = m3 * this->size.Z();
+  const T Msum = M1 + M2 + M3;
+
+  if (alpha <= 0)
     return std::nullopt;
 
-  auto intersections = this->Intersections(_plane);
-  verticesBelow.merge(intersections);
+  if (alpha >= Msum)
+    return Vector3<T>::Zero;
 
-  Vector3<T> centroid;
-  for (const auto &v : verticesBelow)
+  auto clampPos = [](T x) -> T { return x > 0 ? x : 0; };
+
+  // F_k(x) = max(0, x)^k / k!
+  auto F1 = [&clampPos](T x) -> T { return clampPos(x); };
+  auto F2 = [&clampPos](T x) -> T {
+    T cx = clampPos(x); return cx * cx / 2;
+  };
+  auto F3 = [&clampPos](T x) -> T {
+    T cx = clampPos(x); return cx * cx * cx / 6;
+  };
+  auto F4 = [&clampPos](T x) -> T {
+    T cx = clampPos(x); return cx * cx * cx * cx / 24;
+  };
+  auto Fn = [&F1, &F2, &F3, &F4](int _n, T x) -> T {
+    switch (_n) {
+      case 1: return F1(x);
+      case 2: return F2(x);
+      case 3: return F3(x);
+      case 4: return F4(x);
+      default: return T(0);
+    }
+  };
+
+  const std::array<T, 3> M = {M1, M2, M3};
+  const std::array<T, 3> half = {h1, h2, h3};
+  const std::array<T, 3> nComp = {n.X(), n.Y(), n.Z()};
+
+  // Identify non-trivial axes (where M_i > 0)
+  std::array<int, 3> ntAxes = {};
+  int k = 0;
+  for (int i = 0; i < 3; ++i)
   {
-    centroid += v;
+    if (M[i] > 0)
+      ntAxes[k++] = i;
   }
 
-  return centroid / static_cast<T>(verticesBelow.size());
+  if (k == 0)
+    return alpha >= 0 ? std::optional<Vector3<T>>(Vector3<T>::Zero)
+                      : std::nullopt;
+
+  // Compute V_v (volume in v-coordinates, where v_i = M_i * u_i):
+  // V_v = sum over subsets S of non-trivial axes: (-1)^|S| F_k(alpha - M_S)
+  T Vv = 0;
+  for (int mask = 0; mask < (1 << k); ++mask)
+  {
+    T Msub = 0;
+    int bits = 0;
+    for (int b = 0; b < k; ++b)
+    {
+      if (mask & (1 << b))
+      {
+        Msub += M[ntAxes[b]];
+        ++bits;
+      }
+    }
+    T sgn = (bits % 2 == 0) ? T(1) : T(-1);
+    Vv += sgn * Fn(k, alpha - Msub);
+  }
+
+  if (Vv <= 0)
+    return std::nullopt;
+
+  // For each non-trivial axis i, compute the first moment J_i in v-coords:
+  // J_i = sum over T subsets of (ntAxes \ {i}):
+  //   (-1)^|T| * [F_{k+1}(a) - F_{k+1}(a - M_i) - M_i * F_k(a - M_i)]
+  //   where a = alpha - M_T
+  // Then: zbar_i = J_i / (M_i * V_v)
+  //       centroid_i = sign(n_i) * half_i * (2*zbar_i - 1)
+
+  Vector3<T> result;
+  for (int ai = 0; ai < k; ++ai)
+  {
+    int i = ntAxes[ai];
+
+    // Build list of other non-trivial axes
+    std::array<int, 2> others = {};
+    int nOthers = 0;
+    for (int aj = 0; aj < k; ++aj)
+    {
+      if (aj != ai)
+        others[nOthers++] = ntAxes[aj];
+    }
+
+    T Ji = 0;
+    for (int mask = 0; mask < (1 << nOthers); ++mask)
+    {
+      T Msub = 0;
+      int bits = 0;
+      for (int b = 0; b < nOthers; ++b)
+      {
+        if (mask & (1 << b))
+        {
+          Msub += M[others[b]];
+          ++bits;
+        }
+      }
+      T sgn = (bits % 2 == 0) ? T(1) : T(-1);
+      T a = alpha - Msub;
+      Ji += sgn * (Fn(k + 1, a) - Fn(k + 1, a - M[i])
+                   - M[i] * Fn(k, a - M[i]));
+    }
+
+    T zbar = Ji / (M[i] * Vv);
+    T sgn = nComp[i] >= 0 ? T(1) : T(-1);
+    result[i] = sgn * half[i] * (2 * zbar - 1);
+  }
+  // Trivial axes remain 0 (default Vector3 initialization)
+
+  return result;
 }
 
 /////////////////////////////////////////////////
