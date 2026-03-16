@@ -267,3 +267,38 @@ TEST(SphereTest, CenterOfVolumeBelow)
     );
   }
 }
+
+//////////////////////////////////////////////////
+TEST(SphereTest, VolumeBelowFloat)
+{
+  float r = 2.0f;
+  Sphere<float> sphere(r);
+
+  // Verify Sphere<float> compiles and produces correct results
+  {
+    Plane<float> plane(Vector3<float>{0, 0, 1}, 0.0f);
+    EXPECT_NEAR(sphere.Volume() / 2.0f, sphere.VolumeBelow(plane), 1e-3f);
+  }
+
+  {
+    Plane<float> plane(Vector3<float>{0, 0, 1},
+        Vector2<float>(4, 4), 2 * r);
+    EXPECT_NEAR(sphere.Volume(), sphere.VolumeBelow(plane), 1e-3f);
+  }
+
+  {
+    Plane<float> plane(Vector3<float>{0, 0, 1},
+        Vector2<float>(4, 4), -2 * r);
+    EXPECT_NEAR(0.0f, sphere.VolumeBelow(plane), 1e-3f);
+  }
+
+  // CenterOfVolumeBelow with float
+  {
+    Plane<float> plane(Vector3<float>{0, 1, 0}, 0.0f);
+    auto cov = sphere.CenterOfVolumeBelow(plane);
+    ASSERT_TRUE(cov.has_value());
+    EXPECT_NEAR(0.0f, cov.value().X(), 1e-3f);
+    EXPECT_NEAR(-0.75f, cov.value().Y(), 1e-3f);
+    EXPECT_NEAR(0.0f, cov.value().Z(), 1e-3f);
+  }
+}
