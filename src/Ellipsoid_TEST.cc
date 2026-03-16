@@ -19,6 +19,8 @@
 
 #include "gz/math/Ellipsoid.hh"
 #include "gz/math/Helpers.hh"
+#include "gz/math/Plane.hh"
+#include "gz/math/Sphere.hh"
 #include "gz/math/Vector3.hh"
 
 using namespace gz;
@@ -143,4 +145,197 @@ TEST(EllipsoidTest, Mass)
 
   const math::Ellipsoidd ellipsoid5(math::Vector3d(-1, -1, 1));
   EXPECT_EQ(std::nullopt, ellipsoid5.MassMatrix());
+}
+
+//////////////////////////////////////////////////
+TEST(EllipsoidTest, VolumeBelow)
+{
+  // Sphere-equivalent ellipsoid (a=b=c=2)
+  {
+    math::Ellipsoidd ellipsoid(math::Vector3d(2, 2, 2));
+    math::Sphered sphere(2.0);
+
+    // Fully above
+    math::Planed planeAbove(math::Vector3d(0, 0, 1), -3.0);
+    EXPECT_NEAR(0.0, ellipsoid.VolumeBelow(planeAbove), 1e-10);
+
+    // Fully below
+    math::Planed planeBelow(math::Vector3d(0, 0, 1), 3.0);
+    EXPECT_NEAR(ellipsoid.Volume(), ellipsoid.VolumeBelow(planeBelow), 1e-10);
+
+    // Plane through center (half volume)
+    math::Planed planeCenter(math::Vector3d(0, 0, 1), 0.0);
+    EXPECT_NEAR(ellipsoid.Volume() / 2, ellipsoid.VolumeBelow(planeCenter),
+                1e-10);
+
+    // Should match sphere results
+    EXPECT_NEAR(sphere.VolumeBelow(planeAbove),
+                ellipsoid.VolumeBelow(planeAbove), 1e-10);
+    EXPECT_NEAR(sphere.VolumeBelow(planeCenter),
+                ellipsoid.VolumeBelow(planeCenter), 1e-10);
+  }
+
+  // Asymmetric ellipsoid (1, 2, 3)
+  {
+    math::Ellipsoidd ellipsoid(math::Vector3d(1, 2, 3));
+
+    // Plane through center along z-axis should give half volume
+    math::Planed planeZ(math::Vector3d(0, 0, 1), 0.0);
+    EXPECT_NEAR(ellipsoid.Volume() / 2, ellipsoid.VolumeBelow(planeZ), 1e-10);
+
+    // Plane through center along x-axis should give half volume
+    math::Planed planeX(math::Vector3d(1, 0, 0), 0.0);
+    EXPECT_NEAR(ellipsoid.Volume() / 2, ellipsoid.VolumeBelow(planeX), 1e-10);
+
+    // Plane through center along y-axis should give half volume
+    math::Planed planeY(math::Vector3d(0, 1, 0), 0.0);
+    EXPECT_NEAR(ellipsoid.Volume() / 2, ellipsoid.VolumeBelow(planeY), 1e-10);
+
+    // Diagonal plane through center should give half volume
+    math::Planed planeDiag(math::Vector3d(1, 1, 1).Normalized(), 0.0);
+    EXPECT_NEAR(ellipsoid.Volume() / 2,
+                ellipsoid.VolumeBelow(planeDiag), 1e-10);
+  }
+
+  // Complementary planes: V(n,d) + V(-n,-d) == totalVolume
+  {
+    math::Ellipsoidd ellipsoid(math::Vector3d(1, 2, 3));
+    math::Vector3d normal(1, 2, 3);
+    normal.Normalize();
+    double offset = 0.5;
+
+    math::Planed plane1(normal, offset);
+    math::Planed plane2(-normal, -offset);
+
+    EXPECT_NEAR(ellipsoid.Volume(),
+                ellipsoid.VolumeBelow(plane1) + ellipsoid.VolumeBelow(plane2),
+                1e-10);
+  }
+
+  // Non-unit normal
+  {
+    math::Ellipsoidd ellipsoid(math::Vector3d(2, 2, 2));
+    // Non-unit normal through center should still give half volume
+    math::Planed plane(math::Vector3d(3, 4, 0), 0.0);
+    EXPECT_NEAR(ellipsoid.Volume() / 2, ellipsoid.VolumeBelow(plane), 1e-10);
+  }
+
+  // Invalid ellipsoid (zero radii)
+  {
+    math::Ellipsoidd ellipsoid(math::Vector3d::Zero);
+    math::Planed plane(math::Vector3d(0, 0, 1), 0.0);
+    EXPECT_DOUBLE_EQ(0.0, ellipsoid.VolumeBelow(plane));
+  }
+}
+
+//////////////////////////////////////////////////
+TEST(EllipsoidTest, CenterOfVolumeBelow)
+{
+  // Sphere-equivalent ellipsoid
+  {
+    math::Ellipsoidd ellipsoid(math::Vector3d(2, 2, 2));
+    math::Sphered sphere(2.0);
+
+    // Fully below: centroid at origin
+    math::Planed planeBelow(math::Vector3d(0, 0, 1), 3.0);
+    auto cov = ellipsoid.CenterOfVolumeBelow(planeBelow);
+    ASSERT_TRUE(cov.has_value());
+    EXPECT_NEAR(0.0, cov->X(), 1e-10);
+    EXPECT_NEAR(0.0, cov->Y(), 1e-10);
+    EXPECT_NEAR(0.0, cov->Z(), 1e-10);
+
+    // Fully above: nullopt
+    math::Planed planeAbove(math::Vector3d(0, 0, 1), -3.0);
+    EXPECT_FALSE(ellipsoid.CenterOfVolumeBelow(planeAbove).has_value());
+
+    // Should match sphere results for plane through center
+    math::Planed planeCenter(math::Vector3d(0, 0, 1), 0.0);
+    auto covEllipsoid = ellipsoid.CenterOfVolumeBelow(planeCenter);
+    auto covSphere = sphere.CenterOfVolumeBelow(planeCenter);
+    ASSERT_TRUE(covEllipsoid.has_value());
+    ASSERT_TRUE(covSphere.has_value());
+    EXPECT_NEAR(covSphere->X(), covEllipsoid->X(), 1e-10);
+    EXPECT_NEAR(covSphere->Y(), covEllipsoid->Y(), 1e-10);
+    EXPECT_NEAR(covSphere->Z(), covEllipsoid->Z(), 1e-10);
+  }
+
+  // Centroid direction: for plane through origin, n . centroid < 0
+  {
+    math::Ellipsoidd ellipsoid(math::Vector3d(1, 2, 3));
+    math::Vector3d normal(1, 1, 1);
+    normal.Normalize();
+    math::Planed plane(normal, 0.0);
+
+    auto cov = ellipsoid.CenterOfVolumeBelow(plane);
+    ASSERT_TRUE(cov.has_value());
+    EXPECT_LT(normal.Dot(*cov), 0);
+  }
+
+  // Weighted sum property:
+  // CoV_below * V_below + CoV_above * V_above == (0,0,0)
+  {
+    math::Ellipsoidd ellipsoid(math::Vector3d(1, 2, 3));
+    math::Vector3d normal(1, 2, 3);
+    normal.Normalize();
+    double offset = 0.5;
+
+    math::Planed plane(normal, offset);
+    math::Planed flipped(-normal, -offset);
+
+    auto vBelow = ellipsoid.VolumeBelow(plane);
+    auto vAbove = ellipsoid.VolumeBelow(flipped);
+    auto covBelow = ellipsoid.CenterOfVolumeBelow(plane);
+    auto covAbove = ellipsoid.CenterOfVolumeBelow(flipped);
+
+    ASSERT_TRUE(covBelow.has_value());
+    ASSERT_TRUE(covAbove.has_value());
+
+    auto weightedSum = (*covBelow) * vBelow + (*covAbove) * vAbove;
+    EXPECT_NEAR(0.0, weightedSum.X(), 1e-10);
+    EXPECT_NEAR(0.0, weightedSum.Y(), 1e-10);
+    EXPECT_NEAR(0.0, weightedSum.Z(), 1e-10);
+  }
+
+  // Invalid ellipsoid
+  {
+    math::Ellipsoidd ellipsoid(math::Vector3d::Zero);
+    math::Planed plane(math::Vector3d(0, 0, 1), 0.0);
+    EXPECT_FALSE(ellipsoid.CenterOfVolumeBelow(plane).has_value());
+  }
+}
+
+//////////////////////////////////////////////////
+TEST(EllipsoidTest, VolumeBelowFloat)
+{
+  // Use equal radii (sphere) for easy validation
+  math::Ellipsoid<float> ellipsoid(math::Vector3<float>(2.0f, 2.0f, 2.0f));
+
+  // Horizontal plane at z=0: half volume
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, 0.0f);
+    EXPECT_NEAR(ellipsoid.Volume() / 2.0f,
+                ellipsoid.VolumeBelow(plane), 1e-3f);
+  }
+
+  // Fully below
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, 10.0f);
+    EXPECT_NEAR(ellipsoid.Volume(), ellipsoid.VolumeBelow(plane), 1e-3f);
+  }
+
+  // Fully above
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, -10.0f);
+    EXPECT_NEAR(0.0f, ellipsoid.VolumeBelow(plane), 1e-3f);
+  }
+
+  // CenterOfVolumeBelow with float
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 1, 0}, 0.0f);
+    auto cov = ellipsoid.CenterOfVolumeBelow(plane);
+    ASSERT_TRUE(cov.has_value());
+    EXPECT_NEAR(0.0f, cov.value().X(), 1e-3f);
+    EXPECT_NEAR(-0.75f, cov.value().Y(), 1e-3f);
+    EXPECT_NEAR(0.0f, cov.value().Z(), 1e-3f);
+  }
 }

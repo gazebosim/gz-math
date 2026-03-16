@@ -15,7 +15,7 @@
 import unittest
 
 import gz
-from gz.math import Capsuled, Material, MassMatrix3d
+from gz.math import Capsuled, Material, MassMatrix3d, Planed, Vector3d
 
 import math
 
@@ -110,6 +110,39 @@ class TestBox(unittest.TestCase):
       self.assertEqual(expectedMassMat, massMat);
       self.assertEqual(expectedMassMat.diagonal_moments(), massMat.diagonal_moments());
       self.assertEqual(expectedMassMat.mass(), massMat.mass());
+
+    def test_volume_below(self):
+        cap = Capsuled(2.0, 1.0)
+
+        # Horizontal plane at z=0: half volume by symmetry
+        plane = Planed(Vector3d(0, 0, 1), 0)
+        self.assertAlmostEqual(
+            cap.volume() / 2, cap.volume_below(plane), delta=1e-3)
+
+        # Fully below
+        plane = Planed(Vector3d(0, 0, 1), 10.0)
+        self.assertAlmostEqual(
+            cap.volume(), cap.volume_below(plane), delta=1e-3)
+
+        # Fully above
+        plane = Planed(Vector3d(0, 0, 1), -10.0)
+        self.assertAlmostEqual(0.0, cap.volume_below(plane), delta=1e-3)
+
+    def test_center_of_volume_below(self):
+        cap = Capsuled(2.0, 1.0)
+
+        # Half below z=0: centroid z < 0
+        plane = Planed(Vector3d(0, 0, 1), 0)
+        cov = cap.center_of_volume_below(plane)
+        self.assertIsNotNone(cov)
+        self.assertAlmostEqual(0.0, cov.x(), delta=1e-3)
+        self.assertAlmostEqual(0.0, cov.y(), delta=1e-3)
+        self.assertTrue(cov.z() < 0.0)
+
+        # Fully above: should return None
+        plane = Planed(Vector3d(0, 0, 1), -10.0)
+        self.assertIsNone(cap.center_of_volume_below(plane))
+
 
 if __name__ == '__main__':
     unittest.main()
