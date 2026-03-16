@@ -101,7 +101,7 @@ T Sphere<T>::VolumeBelow(const Plane<T> &_plane) const
 {
   auto r = this->radius;
   // get nearest point to center on plane
-  auto dist = _plane.Distance(Vector3d(0, 0, 0));
+  auto dist = _plane.Distance(Vector3<T>::Zero);
 
   if (dist < -r)
   {
@@ -125,7 +125,7 @@ std::optional<Vector3<T>>
 {
   auto r = this->radius;
   // get nearest point to center on plane
-  auto dist = _plane.Distance(Vector3d(0, 0, 0));
+  auto dist = _plane.Distance(Vector3<T>::Zero);
 
   if (dist < -r)
   {
