@@ -42,6 +42,16 @@ release will remove the deprecated code.
       `Vertex::NullEdge()` instead.
       E.g.: https://github.com/gazebosim/gz-math/pull/606/files#diff-0c0220a7e72be70337975433eeddc3f5e072ade5cd80dfb1ac03da233c39c983L222-R222
 
+### Deprecations
+
+1. **detail/Box.hh**
+    + The `TrianglesInPlane` free function is deprecated. This function relied
+      on exact float comparison (`Plane::Side() == NO_SIDE`) to classify
+      vertices, producing incorrect triangle decompositions for non-axis-aligned
+      planes. `Box::VolumeBelow()` and `Box::CenterOfVolumeBelow()` now use
+      robust analytic formulas and no longer call `TrianglesInPlane`.
+      See https://github.com/gazebosim/gz-math/pull/724
+
 ## Gazebo Math 7.X to 8.X
 
 ### Breaking Changes
