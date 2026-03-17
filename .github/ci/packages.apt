@@ -1,5 +1,5 @@
-gz-rotary-cmake-dev
-gz-rotary-utils-dev
+gz-rotary-cmake
+gz-rotary-utils
 libeigen3-dev
 libpython3-dev
 python3-numpy
