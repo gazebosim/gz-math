@@ -57,6 +57,7 @@
 #include "SphericalCoordinates.hh"
 #include "Spline.hh"
 #include "StopWatch.hh"
+#include "SwerveDriveOdometry.hh"
 #include "Temperature.hh"
 #include "Triangle.hh"
 #include "Triangle3.hh"
@@ -160,6 +161,8 @@ PYBIND11_MODULE(BINDINGS_MODULE_NAME, m)
   gz::math::python::defineMathMatrix6(m, "Matrix6");
 
   gz::math::python::defineMathMecanumDriveOdometry(m, "MecanumDriveOdometry");
+
+  gz::math::python::defineMathSwerveDriveOdometry(m, "SwerveDriveOdometry");
 
   gz::math::python::defineMathTriangle(m, "Triangle");
 

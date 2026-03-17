@@ -64,6 +64,7 @@ pybind11_add_module(${BINDINGS_MODULE_NAME} MODULE
   src/SphericalCoordinates.cc
   src/Spline.cc
   src/StopWatch.cc
+  src/SwerveDriveOdometry.cc
   src/Temperature.cc
   src/Triangle.cc
   src/Triangle3.cc
@@ -181,6 +182,7 @@ if (BUILD_TESTING)
     SphericalCoordinates_TEST
     Spline_TEST
     StopWatch_TEST
+    SwerveDriveOdometry_TEST
     Temperature_TEST
     Triangle3_TEST
     Triangle_TEST
