@@ -19,6 +19,7 @@
 
 #include "gz/math/Capsule.hh"
 #include "gz/math/Helpers.hh"
+#include "gz/math/Plane.hh"
 
 using namespace gz;
 
@@ -126,4 +127,172 @@ TEST(CapsuleTest, Mass)
   EXPECT_EQ(expectedMassMat, *massMat);
   EXPECT_EQ(expectedMassMat.DiagonalMoments(), massMat->DiagonalMoments());
   EXPECT_DOUBLE_EQ(expectedMassMat.Mass(), massMat->Mass());
+}
+
+//////////////////////////////////////////////////
+TEST(CapsuleTest, VolumeBelow)
+{
+  // Capsule: length=4, radius=1, centered at origin, Z-aligned
+  // Total height = 4 + 2*1 = 6 (from z=-3 to z=3)
+  {
+    math::Capsuled cap(4.0, 1.0);
+
+    // Fully above
+    math::Planed planeAbove(math::Vector3d(0, 0, 1), -4.0);
+    EXPECT_NEAR(0.0, cap.VolumeBelow(planeAbove), 1e-10);
+
+    // Fully below
+    math::Planed planeBelow(math::Vector3d(0, 0, 1), 4.0);
+    EXPECT_NEAR(cap.Volume(), cap.VolumeBelow(planeBelow), 1e-10);
+
+    // Horizontal plane through center: half volume
+    math::Planed planeCenter(math::Vector3d(0, 0, 1), 0.0);
+    EXPECT_NEAR(cap.Volume() / 2, cap.VolumeBelow(planeCenter), 1e-10);
+  }
+
+  // Plane cutting only through hemisphere cap
+  {
+    math::Capsuled cap(4.0, 1.0);
+    // Plane at z = -2.5 cuts through bottom hemisphere only
+    // (hemisphere center at z=-2, hemisphere goes from z=-3 to z=-2)
+    // In hemisphere local frame: plane at z = -0.5
+    math::Planed plane(math::Vector3d(0, 0, 1), -2.5);
+    auto vol = cap.VolumeBelow(plane);
+    EXPECT_GT(vol, 0);
+    // Should be a sphere cap with h = 1 - 0.5 = 0.5
+    double h = 0.5;
+    double expectedCapVol = GZ_PI * h * h * (3.0 - h) / 3.0;
+    EXPECT_NEAR(expectedCapVol, vol, 1e-10);
+  }
+
+  // Complementary planes
+  {
+    math::Capsuled cap(4.0, 1.0);
+    math::Vector3d normal(1, 2, 3);
+    normal.Normalize();
+    double offset = 0.5;
+
+    math::Planed p1(normal, offset);
+    math::Planed p2(-normal, -offset);
+
+    EXPECT_NEAR(cap.Volume(),
+                cap.VolumeBelow(p1) + cap.VolumeBelow(p2), 1e-10);
+  }
+
+  // Diagonal plane through center: half volume
+  {
+    math::Capsuled cap(4.0, 1.0);
+    math::Vector3d normal(1, 0, 1);
+    normal.Normalize();
+    math::Planed plane(normal, 0.0);
+    EXPECT_NEAR(cap.Volume() / 2, cap.VolumeBelow(plane), 1e-10);
+  }
+
+  // Invalid capsule
+  {
+    math::Capsuled cap(0.0, 0.0);
+    math::Planed plane(math::Vector3d(0, 0, 1), 0.0);
+    EXPECT_DOUBLE_EQ(0.0, cap.VolumeBelow(plane));
+  }
+}
+
+//////////////////////////////////////////////////
+TEST(CapsuleTest, CenterOfVolumeBelow)
+{
+  // Fully below: centroid at origin
+  {
+    math::Capsuled cap(4.0, 1.0);
+    math::Planed plane(math::Vector3d(0, 0, 1), 4.0);
+    auto cov = cap.CenterOfVolumeBelow(plane);
+    ASSERT_TRUE(cov.has_value());
+    EXPECT_NEAR(0.0, cov->X(), 1e-10);
+    EXPECT_NEAR(0.0, cov->Y(), 1e-10);
+    EXPECT_NEAR(0.0, cov->Z(), 1e-10);
+  }
+
+  // Fully above: nullopt
+  {
+    math::Capsuled cap(4.0, 1.0);
+    math::Planed plane(math::Vector3d(0, 0, 1), -4.0);
+    EXPECT_FALSE(cap.CenterOfVolumeBelow(plane).has_value());
+  }
+
+  // Centroid direction: for plane through origin, n . centroid < 0
+  {
+    math::Capsuled cap(4.0, 1.0);
+    math::Vector3d normal(1, 1, 1);
+    normal.Normalize();
+    math::Planed plane(normal, 0.0);
+    auto cov = cap.CenterOfVolumeBelow(plane);
+    ASSERT_TRUE(cov.has_value());
+    EXPECT_LT(normal.Dot(*cov), 0);
+  }
+
+  // Weighted sum: CoV_below * V_below + CoV_above * V_above == (0,0,0)
+  {
+    math::Capsuled cap(4.0, 1.0);
+    math::Vector3d normal(1, 2, 3);
+    normal.Normalize();
+    double offset = 0.5;
+
+    math::Planed plane(normal, offset);
+    math::Planed flipped(-normal, -offset);
+
+    auto vBelow = cap.VolumeBelow(plane);
+    auto vAbove = cap.VolumeBelow(flipped);
+    auto covBelow = cap.CenterOfVolumeBelow(plane);
+    auto covAbove = cap.CenterOfVolumeBelow(flipped);
+
+    ASSERT_TRUE(covBelow.has_value());
+    ASSERT_TRUE(covAbove.has_value());
+
+    auto ws = (*covBelow) * vBelow + (*covAbove) * vAbove;
+    EXPECT_NEAR(0.0, ws.X(), 1e-6);
+    EXPECT_NEAR(0.0, ws.Y(), 1e-6);
+    EXPECT_NEAR(0.0, ws.Z(), 1e-6);
+  }
+
+  // Invalid capsule
+  {
+    math::Capsuled cap(0.0, 0.0);
+    math::Planed plane(math::Vector3d(0, 0, 1), 0.0);
+    EXPECT_FALSE(cap.CenterOfVolumeBelow(plane).has_value());
+  }
+}
+
+//////////////////////////////////////////////////
+TEST(CapsuleTest, VolumeBelowFloat)
+{
+  float length = 2.0f;
+  float r = 1.0f;
+  math::Capsule<float> cap(length, r);
+
+  // Horizontal plane at z=0: half volume by symmetry
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, 0.0f);
+    EXPECT_NEAR(cap.Volume() / 2.0f, cap.VolumeBelow(plane), 1e-3f);
+  }
+
+  // Fully below
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, 10.0f);
+    EXPECT_NEAR(cap.Volume(), cap.VolumeBelow(plane), 1e-3f);
+  }
+
+  // Fully above
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, -10.0f);
+    EXPECT_NEAR(0.0f, cap.VolumeBelow(plane), 1e-3f);
+  }
+
+  // CenterOfVolumeBelow with float
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, 0.0f);
+    auto cov = cap.CenterOfVolumeBelow(plane);
+    ASSERT_TRUE(cov.has_value());
+    EXPECT_NEAR(0.0f, cov.value().X(), 1e-3f);
+    EXPECT_NEAR(0.0f, cov.value().Y(), 1e-3f);
+    // Bottom half centroid is below z=0
+    EXPECT_TRUE(cov.value().Z() < 0.0f);
+  }
 }

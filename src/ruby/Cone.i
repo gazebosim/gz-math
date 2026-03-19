@@ -24,6 +24,20 @@
 #include <gz/math/MassMatrix3.hh>
 #include <gz/math/Material.hh>
 #include <gz/math/Quaternion.hh>
+#include <gz/math/Plane.hh>
+%}
+
+%include "typemaps.i"
+%typemap(out) (std::optional< gz::math::Vector3< double > >) %{
+  if((*(&result)).has_value()) {
+    $result = SWIG_NewPointerObj(
+      (new gz::math::Vector3< double >(static_cast< const gz::math::Vector3< double >& >((*(&result)).value()))),
+      SWIGTYPE_p_gz__math__Vector3T_double_t,
+      SWIG_POINTER_OWN |  0 );
+  } else {
+    $result = Py_None;
+    Py_INCREF(Py_None);
+  }
 %}
 
 namespace gz
@@ -70,6 +84,11 @@ namespace gz
       public: bool operator==(const Cone &_cone) const;
 
       public: Precision Volume() const;
+
+      public: Precision VolumeBelow(const gz::math::Plane<Precision> &_plane) const;
+
+      public: std::optional<gz::math::Vector3<Precision>>
+        CenterOfVolumeBelow(const gz::math::Plane<Precision> &_plane) const;
 
       public: Precision DensityFromMass(const Precision _mass) const;
 
