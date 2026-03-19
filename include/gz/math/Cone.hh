@@ -22,6 +22,7 @@
 #include <optional>
 #include "gz/math/MassMatrix3.hh"
 #include "gz/math/Material.hh"
+#include "gz/math/Plane.hh"
 #include "gz/math/Quaternion.hh"
 
 namespace gz::math
@@ -133,6 +134,23 @@ namespace gz::math
     /// \brief Get the volume of the cone in m^3.
     /// \return Volume of the cone in m^3.
     public: Precision Volume() const;
+
+    /// \brief Get the volume of the cone below a given plane in m^3.
+    /// It is assumed that the center of the cone is on the origin.
+    /// \param[in] _plane The plane which slices this cone, expressed
+    /// in the cone's reference frame.
+    /// \return Volume below the plane in m^3.
+    public: Precision VolumeBelow(const Plane<Precision> &_plane) const;
+
+    /// \brief Center of volume below the plane. This is useful for example
+    /// when calculating where buoyancy should be applied.
+    /// \param[in] _plane The plane which slices this cone, expressed
+    /// in the cone's reference frame.
+    /// \return The center of volume if there is anything below the plane,
+    /// otherwise return a std::nullopt. Expressed in the cone's
+    /// reference frame.
+    public: std::optional<Vector3<Precision>>
+      CenterOfVolumeBelow(const Plane<Precision> &_plane) const;
 
     /// \brief Compute the cone's density given a mass value. The
     /// cone is assumed to be solid with uniform density. This
