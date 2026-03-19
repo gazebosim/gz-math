@@ -93,6 +93,12 @@ void defineMathCone(py::module &m, const std::string &typestr)
     .def("volume",
          &Class::Volume,
          "Get the volume of the box in m^3.")
+    .def("volume_below",
+         &Class::VolumeBelow,
+         "Get the volume below a plane.")
+    .def("center_of_volume_below",
+         &Class::CenterOfVolumeBelow,
+         "Center of volume below the plane.")
     .def("density_from_mass",
          &Class::DensityFromMass,
          "Compute the box's density given a mass value.")
