@@ -138,3 +138,39 @@ TEST(CylinderTest, Mass)
   EXPECT_EQ(expectedMassMat, massMat);
   EXPECT_DOUBLE_EQ(expectedMassMat.Mass(), massMat.Mass());
 }
+
+/////////////////////////////////////////////////
+TEST(CylinderTest, VolumeBelowFloat)
+{
+  float length = 4.0f;
+  float r = 2.0f;
+  math::Cylinder<float> cyl(length, r);
+
+  // Horizontal plane at z=0: half volume
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, 0.0f);
+    EXPECT_NEAR(cyl.Volume() / 2.0f, cyl.VolumeBelow(plane), 1e-3f);
+  }
+
+  // Fully below
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, 10.0f);
+    EXPECT_NEAR(cyl.Volume(), cyl.VolumeBelow(plane), 1e-3f);
+  }
+
+  // Fully above
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, -10.0f);
+    EXPECT_NEAR(0.0f, cyl.VolumeBelow(plane), 1e-3f);
+  }
+
+  // CenterOfVolumeBelow with float
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, 0.0f);
+    auto cov = cyl.CenterOfVolumeBelow(plane);
+    ASSERT_TRUE(cov.has_value());
+    EXPECT_NEAR(0.0f, cov.value().X(), 1e-3f);
+    EXPECT_NEAR(0.0f, cov.value().Y(), 1e-3f);
+    EXPECT_NEAR(-1.0f, cov.value().Z(), 1e-3f);
+  }
+}

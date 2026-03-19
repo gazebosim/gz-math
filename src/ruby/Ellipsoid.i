@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Open Source Robotics Foundation
+ * Copyright (C) 2026 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,14 @@
  *
 */
 
-%module cylinder
+%module ellipsoid
 %{
-#include <gz/math/Cylinder.hh>
+#include <gz/math/Ellipsoid.hh>
 #include <gz/math/config.hh>
 #include <gz/math/MassMatrix3.hh>
 #include <gz/math/Material.hh>
-#include <gz/math/Quaternion.hh>
 #include <gz/math/Plane.hh>
+#include <gz/math/Vector3.hh>
 %}
 
 %include "typemaps.i"
@@ -43,43 +43,26 @@ namespace ignition
   namespace math
   {
     template<typename Precision>
-    class Cylinder
+    class Ellipsoid
     {
       %rename("%(undercase)s", %$isfunction, notregexmatch$name="^[A-Z]*$") "";
 
-      public: Cylinder() = default;
+      public: Ellipsoid() = default;
 
-      public: Cylinder(const Precision _length, const Precision _radius,
-                  const ignition::math::Quaternion<Precision> &_rotOffset =
-                  ignition::math::Quaternion<Precision>::Identity);
+      public: explicit Ellipsoid(const ignition::math::Vector3<Precision> &_radii);
 
-      public: Cylinder(const Precision _length, const Precision _radius,
-                  const ignition::math::Material &_mat,
-                  const ignition::math::Quaternion<Precision> &_rotOffset =
-                  ignition::math::Quaternion<Precision>::Identity);
+      public: Ellipsoid(const ignition::math::Vector3<Precision> &_radii,
+                  const ignition::math::Material &_mat);
 
-      public: ~Cylinder() = default;
+      public: ignition::math::Vector3<Precision> Radii() const;
 
-      public: Precision Radius() const;
-
-      public: void SetRadius(const Precision _radius);
-
-      public: Precision Length() const;
-
-      public: void SetLength(const Precision _length);
-
-      public: ignition::math::Quaternion<Precision> RotationalOffset() const;
-
-      public: void SetRotationalOffset(
-                  const ignition::math::Quaternion<Precision> &_rotOffset);
+      public: void SetRadii(const ignition::math::Vector3<Precision> &_radii);
 
       public: const ignition::math::Material &Mat() const;
 
       public: void SetMat(const ignition::math::Material &_mat);
 
-      public: bool MassMatrix(ignition::math::MassMatrix3<double> &_massMat) const;
-
-      public: bool operator==(const Cylinder &_cylinder) const;
+      public: bool operator==(const Ellipsoid &_ellipsoid) const;
 
       public: Precision Volume() const;
 
@@ -92,6 +75,6 @@ namespace ignition
 
       public: bool SetDensityFromMass(const Precision _mass);
     };
-    %template(Cylinderd) Cylinder<double>;
+    %template(Ellipsoidd) Ellipsoid<double>;
   }
 }

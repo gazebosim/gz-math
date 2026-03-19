@@ -91,6 +91,13 @@ void defineMathCylinder(py::module &m, const std::string &typestr)
     .def("volume",
          &Class::Volume,
          "Get the volume of the box in m^3.")
+    .def("volume_below",
+         &Class::VolumeBelow,
+         "Get the volume of the cylinder below a plane.")
+    .def("center_of_volume_below",
+         &Class::CenterOfVolumeBelow,
+         "Center of volume below the plane. This is useful when "
+         "calculating where buoyancy should be applied, for example.")
     .def("density_from_mass",
          &Class::DensityFromMass,
          "Compute the box's density given a mass value.")

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Open Source Robotics Foundation
+ * Copyright (C) 2026 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,12 @@
  *
 */
 
-%module cylinder
+%module capsule
 %{
-#include <gz/math/Cylinder.hh>
+#include <gz/math/Capsule.hh>
 #include <gz/math/config.hh>
 #include <gz/math/MassMatrix3.hh>
 #include <gz/math/Material.hh>
-#include <gz/math/Quaternion.hh>
 #include <gz/math/Plane.hh>
 %}
 
@@ -43,22 +42,16 @@ namespace ignition
   namespace math
   {
     template<typename Precision>
-    class Cylinder
+    class Capsule
     {
       %rename("%(undercase)s", %$isfunction, notregexmatch$name="^[A-Z]*$") "";
 
-      public: Cylinder() = default;
+      public: Capsule() = default;
 
-      public: Cylinder(const Precision _length, const Precision _radius,
-                  const ignition::math::Quaternion<Precision> &_rotOffset =
-                  ignition::math::Quaternion<Precision>::Identity);
+      public: Capsule(const Precision _length, const Precision _radius);
 
-      public: Cylinder(const Precision _length, const Precision _radius,
-                  const ignition::math::Material &_mat,
-                  const ignition::math::Quaternion<Precision> &_rotOffset =
-                  ignition::math::Quaternion<Precision>::Identity);
-
-      public: ~Cylinder() = default;
+      public: Capsule(const Precision _length, const Precision _radius,
+                  const ignition::math::Material &_mat);
 
       public: Precision Radius() const;
 
@@ -68,18 +61,11 @@ namespace ignition
 
       public: void SetLength(const Precision _length);
 
-      public: ignition::math::Quaternion<Precision> RotationalOffset() const;
-
-      public: void SetRotationalOffset(
-                  const ignition::math::Quaternion<Precision> &_rotOffset);
-
       public: const ignition::math::Material &Mat() const;
 
       public: void SetMat(const ignition::math::Material &_mat);
 
-      public: bool MassMatrix(ignition::math::MassMatrix3<double> &_massMat) const;
-
-      public: bool operator==(const Cylinder &_cylinder) const;
+      public: bool operator==(const Capsule &_capsule) const;
 
       public: Precision Volume() const;
 
@@ -92,6 +78,6 @@ namespace ignition
 
       public: bool SetDensityFromMass(const Precision _mass);
     };
-    %template(Cylinderd) Cylinder<double>;
+    %template(Capsuled) Capsule<double>;
   }
 }

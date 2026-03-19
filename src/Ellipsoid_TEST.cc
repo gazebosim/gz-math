@@ -145,3 +145,39 @@ TEST(EllipsoidTest, Mass)
   const math::Ellipsoidd ellipsoid5(math::Vector3d(-1, -1, 1));
   EXPECT_EQ(std::nullopt, ellipsoid5.MassMatrix());
 }
+
+/////////////////////////////////////////////////
+TEST(EllipsoidTest, VolumeBelowFloat)
+{
+  // Use equal radii (sphere) for easy validation
+  math::Ellipsoid<float> ellipsoid(math::Vector3<float>(2.0f, 2.0f, 2.0f));
+
+  // Horizontal plane at z=0: half volume
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, 0.0f);
+    EXPECT_NEAR(ellipsoid.Volume() / 2.0f,
+                ellipsoid.VolumeBelow(plane), 1e-3f);
+  }
+
+  // Fully below
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, 10.0f);
+    EXPECT_NEAR(ellipsoid.Volume(), ellipsoid.VolumeBelow(plane), 1e-3f);
+  }
+
+  // Fully above
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, -10.0f);
+    EXPECT_NEAR(0.0f, ellipsoid.VolumeBelow(plane), 1e-3f);
+  }
+
+  // CenterOfVolumeBelow with float
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 1, 0}, 0.0f);
+    auto cov = ellipsoid.CenterOfVolumeBelow(plane);
+    ASSERT_TRUE(cov.has_value());
+    EXPECT_NEAR(0.0f, cov.value().X(), 1e-3f);
+    EXPECT_NEAR(-0.75f, cov.value().Y(), 1e-3f);
+    EXPECT_NEAR(0.0f, cov.value().Z(), 1e-3f);
+  }
+}

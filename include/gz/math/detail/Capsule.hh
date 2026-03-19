@@ -17,10 +17,15 @@
 #ifndef GZ_MATH_DETAIL_CAPSULE_HH_
 #define GZ_MATH_DETAIL_CAPSULE_HH_
 
+#include <algorithm>
+#include <cmath>
 #include <limits>
 #include <optional>
+#include <gz/math/Capsule.hh>
+#include <gz/math/Cylinder.hh>
 #include <gz/math/Helpers.hh>
 #include <gz/math/Inertial.hh>
+#include <gz/math/Sphere.hh>
 
 namespace ignition
 {
@@ -137,6 +142,161 @@ T Capsule<T>::Volume() const
 {
   return IGN_PI * std::pow(this->radius, 2) *
          (this->length + 4. / 3. * this->radius);
+}
+
+//////////////////////////////////////////////////
+template<typename T>
+T Capsule<T>::VolumeBelow(const Plane<T> &_plane) const
+{
+  auto r = this->radius;
+  auto halfLen = this->length / 2;
+
+  if (r <= 0 || this->length <= 0)
+    return 0;
+
+  // Decompose into: bottom hemisphere at z = -halfLen,
+  // cylinder from -halfLen to +halfLen, top hemisphere at z = +halfLen.
+  // Translate the plane to each sub-shape's local frame.
+
+  auto n = _plane.Normal();
+  auto d = _plane.Offset();
+
+  // Decompose into cylinder middle + bottom hemisphere + top hemisphere.
+  // For a sub-shape centered at (0,0,zOff), the plane in its local
+  // frame has the same normal but offset d' = d - n.Z()*zOff.
+
+  Sphere<T> sphere(r);
+  Cylinder<T> cyl(this->length, r);
+  T vCyl = cyl.VolumeBelow(_plane);
+
+  T halfSphereVol = sphere.Volume() / 2;
+
+  // Bottom hemisphere: center at (0,0,-halfLen), hemisphere is z <= 0 local.
+  // Translate plane to sphere's local frame.
+  Plane<T> planeBot(n, d + n.Z() * halfLen);
+  T vSphereBot = sphere.VolumeBelow(planeBot);
+  // The hemisphere is {z <= 0}. The sphere volume below cutting plane
+  // that lies within this hemisphere is min(vSphereBot, halfSphereVol).
+  T vBot = std::min(vSphereBot, halfSphereVol);
+
+  // Top hemisphere: center at (0,0,+halfLen), hemisphere is z >= 0 local.
+  Plane<T> planeTop(n, d - n.Z() * halfLen);
+  T vSphereTop = sphere.VolumeBelow(planeTop);
+  // Volume in top hemisphere = volume below plane minus bottom hemisphere
+  T vTop = std::max(static_cast<T>(0), vSphereTop - halfSphereVol);
+
+  return vCyl + vBot + vTop;
+}
+
+//////////////////////////////////////////////////
+template<typename T>
+std::optional<Vector3<T>>
+ Capsule<T>::CenterOfVolumeBelow(const Plane<T> &_plane) const
+{
+  auto r = this->radius;
+  auto halfLen = this->length / 2;
+
+  if (r <= 0 || this->length <= 0)
+    return std::nullopt;
+
+  auto n = _plane.Normal();
+  auto d = _plane.Offset();
+
+  Sphere<T> sphere(r);
+  Cylinder<T> cyl(this->length, r);
+  T halfSphereVol = sphere.Volume() / 2;
+
+  // Cylinder contribution
+  T vCyl = cyl.VolumeBelow(_plane);
+  auto covCyl = cyl.CenterOfVolumeBelow(_plane);
+
+  // Bottom hemisphere: center at (0,0,-halfLen)
+  Plane<T> planeBot(n, d + n.Z() * halfLen);
+  T vSphereBot = sphere.VolumeBelow(planeBot);
+  T vBot = std::min(vSphereBot, halfSphereVol);
+
+  // Top hemisphere: center at (0,0,+halfLen)
+  Plane<T> planeTop(n, d - n.Z() * halfLen);
+  T vSphereTop = sphere.VolumeBelow(planeTop);
+  T vTop = std::max(static_cast<T>(0), vSphereTop - halfSphereVol);
+
+  T totalVol = vCyl + vBot + vTop;
+  if (totalVol <= 0)
+    return std::nullopt;
+
+  Vector3<T> moment(0, 0, 0);
+
+  // Cylinder moment
+  if (covCyl.has_value())
+    moment += (*covCyl) * vCyl;
+
+  // Bottom hemisphere moment
+  // We need the centroid of {sphere below cutting plane} intersect {z <= 0}
+  // in the sphere's local frame, then shift by (0,0,-halfLen).
+  if (vBot > 0)
+  {
+    Vector3<T> botCenter(0, 0, -halfLen);
+    if (vBot < 1e-12 * totalVol)
+    {
+      // Tiny slice: approximate centroid at hemisphere center to avoid
+      // catastrophic cancellation.
+      moment += botCenter * vBot;
+    }
+    else if (vBot >= halfSphereVol - 1e-15 * sphere.Volume())
+    {
+      // Entire hemisphere is below cutting plane
+      // Centroid of hemisphere (z <= 0) of sphere of radius r is at
+      // z = -3r/8
+      moment += (botCenter + Vector3<T>(0, 0, -3 * r / 8)) * vBot;
+    }
+    else
+    {
+      // Cutting plane intersects the hemisphere below the equator.
+      // The entire sphere volume below the cutting plane is within
+      // the hemisphere (vSphereBot <= halfSphereVol).
+      auto covSphBot = sphere.CenterOfVolumeBelow(planeBot);
+      if (covSphBot.has_value())
+        moment += (botCenter + *covSphBot) * vBot;
+    }
+  }
+
+  // Top hemisphere moment
+  if (vTop > 0)
+  {
+    Vector3<T> topCenter(0, 0, halfLen);
+    if (vTop < 1e-12 * totalVol)
+    {
+      // Tiny slice: approximate centroid at hemisphere center to avoid
+      // catastrophic cancellation in the subtraction formula.
+      moment += topCenter * vTop;
+    }
+    else if (vTop >= halfSphereVol - 1e-15 * sphere.Volume())
+    {
+      // Entire top hemisphere is below cutting plane
+      // Centroid of hemisphere (z >= 0) at z = +3r/8
+      moment += (topCenter + Vector3<T>(0, 0, 3 * r / 8)) * vTop;
+    }
+    else
+    {
+      // Cutting plane intersects the top hemisphere.
+      // Volume above equator and below cutting plane:
+      // vTop = vSphereTop - halfSphereVol
+      // This is the "annular" cap between the equator and the cutting plane.
+      // Centroid = (vSphereTop * covSphTop - halfSphereVol * covEquator)
+      //            / vTop
+      auto covSphTop = sphere.CenterOfVolumeBelow(planeTop);
+      // Centroid of bottom hemisphere (below equator) is at (0,0,-3r/8)
+      Vector3<T> covEquator(0, 0, -3 * r / 8);
+      if (covSphTop.has_value())
+      {
+        auto annularMoment = (*covSphTop) * vSphereTop
+                           - covEquator * halfSphereVol;
+        moment += (topCenter * vTop + annularMoment);
+      }
+    }
+  }
+
+  return moment / totalVol;
 }
 
 //////////////////////////////////////////////////
