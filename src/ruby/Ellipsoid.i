@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Open Source Robotics Foundation
+ * Copyright (C) 2026 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,12 @@
  *
 */
 
-%module cylinder
+%module ellipsoid
 %{
-#include <gz/math/Cylinder.hh>
-#include <gz/math/config.hh>
-#include <gz/math/MassMatrix3.hh>
-#include <gz/math/Material.hh>
-#include <gz/math/Quaternion.hh>
-#include <gz/math/Plane.hh>
+#include "gz/math/Ellipsoid.hh"
+#include "gz/math/MassMatrix3.hh"
+#include "gz/math/Material.hh"
+#include "gz/math/Plane.hh"
 %}
 
 %include "typemaps.i"
@@ -43,43 +41,26 @@ namespace gz
   namespace math
   {
     template<typename Precision>
-    class Cylinder
+    class Ellipsoid
     {
-      %rename("%(undercase)s", %$isfunction, notregexmatch$name="^[A-Z]*$") "";
+      public: Ellipsoid() = default;
 
-      public: Cylinder() = default;
+      public: explicit Ellipsoid(const gz::math::Vector3<Precision> &_radii);
 
-      public: Cylinder(const Precision _length, const Precision _radius,
-                  const gz::math::Quaternion<Precision> &_rotOffset =
-                  gz::math::Quaternion<Precision>::Identity);
+      public: Ellipsoid(const gz::math::Vector3<Precision> &_radii,
+                  const gz::math::Material &_mat);
 
-      public: Cylinder(const Precision _length, const Precision _radius,
-                  const gz::math::Material &_mat,
-                  const gz::math::Quaternion<Precision> &_rotOffset =
-                  gz::math::Quaternion<Precision>::Identity);
+      public: ~Ellipsoid() = default;
 
-      public: ~Cylinder() = default;
+      public: gz::math::Vector3<Precision> Radii() const;
 
-      public: Precision Radius() const;
-
-      public: void SetRadius(const Precision _radius);
-
-      public: Precision Length() const;
-
-      public: void SetLength(const Precision _length);
-
-      public: gz::math::Quaternion<Precision> RotationalOffset() const;
-
-      public: void SetRotationalOffset(
-                  const gz::math::Quaternion<Precision> &_rotOffset);
+      public: void SetRadii(const gz::math::Vector3<Precision> &_radii);
 
       public: const gz::math::Material &Mat() const;
 
       public: void SetMat(const gz::math::Material &_mat);
 
-      public: bool MassMatrix(gz::math::MassMatrix3<double> &_massMat) const;
-
-      public: bool operator==(const Cylinder &_cylinder) const;
+      public: bool operator==(const Ellipsoid &_ellipsoid) const;
 
       public: Precision Volume() const;
 
@@ -92,6 +73,6 @@ namespace gz
 
       public: bool SetDensityFromMass(const Precision _mass);
     };
-    %template(Cylinderd) Cylinder<double>;
+    %template(Ellipsoidd) Ellipsoid<double>;
   }
 }
