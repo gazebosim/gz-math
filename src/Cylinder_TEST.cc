@@ -18,6 +18,7 @@
 #include <cmath>
 
 #include "gz/math/Cylinder.hh"
+#include "gz/math/Plane.hh"
 
 using namespace gz;
 
@@ -142,4 +143,209 @@ TEST(CylinderTest, Mass)
   EXPECT_EQ(expectedMassMat, *massMatOpt);
   EXPECT_EQ(expectedMassMat.DiagonalMoments(), massMatOpt->DiagonalMoments());
   EXPECT_DOUBLE_EQ(expectedMassMat.Mass(), massMatOpt->Mass());
+}
+
+//////////////////////////////////////////////////
+TEST(CylinderTest, VolumeBelow)
+{
+  // Cylinder: length=4, radius=2, centered at origin, Z-aligned
+  {
+    math::Cylinderd cyl(4.0, 2.0);
+
+    // Horizontal plane: fully above
+    math::Planed planeAbove(math::Vector3d(0, 0, 1), -3.0);
+    EXPECT_NEAR(0.0, cyl.VolumeBelow(planeAbove), 1e-10);
+
+    // Horizontal plane: fully below
+    math::Planed planeBelow(math::Vector3d(0, 0, 1), 3.0);
+    EXPECT_NEAR(cyl.Volume(), cyl.VolumeBelow(planeBelow), 1e-10);
+
+    // Horizontal plane through center: half volume
+    math::Planed planeCenter(math::Vector3d(0, 0, 1), 0.0);
+    EXPECT_NEAR(cyl.Volume() / 2, cyl.VolumeBelow(planeCenter), 1e-10);
+
+    // Horizontal plane at z = -1 (bottom quarter)
+    math::Planed planeQuarter(math::Vector3d(0, 0, 1), -1.0);
+    EXPECT_NEAR(cyl.Volume() / 4, cyl.VolumeBelow(planeQuarter), 1e-10);
+  }
+
+  // Vertical plane through axis: half volume
+  {
+    math::Cylinderd cyl(4.0, 2.0);
+    math::Planed planeV(math::Vector3d(1, 0, 0), 0.0);
+    EXPECT_NEAR(cyl.Volume() / 2, cyl.VolumeBelow(planeV), 1e-10);
+
+    // Vertical plane tangent to side: full volume
+    math::Planed planeVTangent(math::Vector3d(1, 0, 0), 2.0);
+    EXPECT_NEAR(cyl.Volume(), cyl.VolumeBelow(planeVTangent), 1e-10);
+
+    // Vertical plane beyond cylinder: zero
+    math::Planed planeVOut(math::Vector3d(1, 0, 0), -3.0);
+    EXPECT_NEAR(0.0, cyl.VolumeBelow(planeVOut), 1e-10);
+  }
+
+  // Diagonal plane through center: half volume
+  {
+    math::Cylinderd cyl(4.0, 2.0);
+    math::Vector3d normal(1, 0, 1);
+    normal.Normalize();
+    math::Planed plane(normal, 0.0);
+    EXPECT_NEAR(cyl.Volume() / 2, cyl.VolumeBelow(plane), 1e-10);
+  }
+
+  // Complementary planes: V(n,d) + V(-n,-d) == totalVolume
+  {
+    math::Cylinderd cyl(4.0, 2.0);
+    math::Vector3d normal(1, 2, 3);
+    normal.Normalize();
+    double offset = 0.5;
+
+    math::Planed p1(normal, offset);
+    math::Planed p2(-normal, -offset);
+
+    EXPECT_NEAR(cyl.Volume(),
+                cyl.VolumeBelow(p1) + cyl.VolumeBelow(p2), 1e-10);
+  }
+
+  // Non-unit normal
+  {
+    math::Cylinderd cyl(4.0, 2.0);
+    math::Planed plane(math::Vector3d(0, 0, 5), 0.0);
+    EXPECT_NEAR(cyl.Volume() / 2, cyl.VolumeBelow(plane), 1e-10);
+  }
+
+  // Invalid cylinder
+  {
+    math::Cylinderd cyl(0.0, 0.0);
+    math::Planed plane(math::Vector3d(0, 0, 1), 0.0);
+    EXPECT_DOUBLE_EQ(0.0, cyl.VolumeBelow(plane));
+  }
+}
+
+//////////////////////////////////////////////////
+TEST(CylinderTest, CenterOfVolumeBelow)
+{
+  // Fully below: centroid at origin
+  {
+    math::Cylinderd cyl(4.0, 2.0);
+    math::Planed plane(math::Vector3d(0, 0, 1), 3.0);
+    auto cov = cyl.CenterOfVolumeBelow(plane);
+    ASSERT_TRUE(cov.has_value());
+    EXPECT_NEAR(0.0, cov->X(), 1e-10);
+    EXPECT_NEAR(0.0, cov->Y(), 1e-10);
+    EXPECT_NEAR(0.0, cov->Z(), 1e-10);
+  }
+
+  // Fully above: nullopt
+  {
+    math::Cylinderd cyl(4.0, 2.0);
+    math::Planed plane(math::Vector3d(0, 0, 1), -3.0);
+    EXPECT_FALSE(cyl.CenterOfVolumeBelow(plane).has_value());
+  }
+
+  // Horizontal plane through center: centroid at (0,0,-1)
+  {
+    math::Cylinderd cyl(4.0, 2.0);
+    math::Planed plane(math::Vector3d(0, 0, 1), 0.0);
+    auto cov = cyl.CenterOfVolumeBelow(plane);
+    ASSERT_TRUE(cov.has_value());
+    EXPECT_NEAR(0.0, cov->X(), 1e-10);
+    EXPECT_NEAR(0.0, cov->Y(), 1e-10);
+    EXPECT_NEAR(-1.0, cov->Z(), 1e-10);
+  }
+
+  // Vertical plane through axis: centroid at (-4r/(3pi), 0, 0)
+  {
+    double r = 2.0;
+    math::Cylinderd cyl(4.0, r);
+    math::Planed plane(math::Vector3d(1, 0, 0), 0.0);
+    auto cov = cyl.CenterOfVolumeBelow(plane);
+    ASSERT_TRUE(cov.has_value());
+    double expectedCx = -4.0 * r / (3.0 * GZ_PI);
+    EXPECT_NEAR(expectedCx, cov->X(), 1e-10);
+    EXPECT_NEAR(0.0, cov->Y(), 1e-10);
+    EXPECT_NEAR(0.0, cov->Z(), 1e-10);
+  }
+
+  // Centroid direction: for plane through origin, n . centroid < 0
+  {
+    math::Cylinderd cyl(4.0, 2.0);
+    math::Vector3d normal(1, 1, 1);
+    normal.Normalize();
+    math::Planed plane(normal, 0.0);
+    auto cov = cyl.CenterOfVolumeBelow(plane);
+    ASSERT_TRUE(cov.has_value());
+    EXPECT_LT(normal.Dot(*cov), 0);
+  }
+
+  // Weighted sum: CoV_below * V_below + CoV_above * V_above == (0,0,0)
+  {
+    math::Cylinderd cyl(4.0, 2.0);
+    math::Vector3d normal(1, 2, 3);
+    normal.Normalize();
+    double offset = 0.5;
+
+    math::Planed plane(normal, offset);
+    math::Planed flipped(-normal, -offset);
+
+    auto vBelow = cyl.VolumeBelow(plane);
+    auto vAbove = cyl.VolumeBelow(flipped);
+    auto covBelow = cyl.CenterOfVolumeBelow(plane);
+    auto covAbove = cyl.CenterOfVolumeBelow(flipped);
+
+    ASSERT_TRUE(covBelow.has_value());
+    ASSERT_TRUE(covAbove.has_value());
+
+    auto ws = (*covBelow) * vBelow + (*covAbove) * vAbove;
+    EXPECT_NEAR(0.0, ws.X(), 1e-6);
+    EXPECT_NEAR(0.0, ws.Y(), 1e-6);
+    EXPECT_NEAR(0.0, ws.Z(), 1e-6);
+  }
+
+  // With rotational offset
+  {
+    // Rotate 90 deg around Y: cylinder axis becomes X
+    math::Quaterniond rot(math::Vector3d(0, 1, 0), GZ_PI / 2);
+    math::Cylinderd cyl(4.0, 2.0, rot);
+
+    // Horizontal plane through center: should now split along X axis
+    math::Planed plane(math::Vector3d(1, 0, 0), 0.0);
+    EXPECT_NEAR(cyl.Volume() / 2, cyl.VolumeBelow(plane), 1e-10);
+  }
+}
+
+//////////////////////////////////////////////////
+TEST(CylinderTest, VolumeBelowFloat)
+{
+  float length = 4.0f;
+  float r = 2.0f;
+  math::Cylinder<float> cyl(length, r);
+
+  // Horizontal plane at z=0: half volume
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, 0.0f);
+    EXPECT_NEAR(cyl.Volume() / 2.0f, cyl.VolumeBelow(plane), 1e-3f);
+  }
+
+  // Fully below
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, 10.0f);
+    EXPECT_NEAR(cyl.Volume(), cyl.VolumeBelow(plane), 1e-3f);
+  }
+
+  // Fully above
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, -10.0f);
+    EXPECT_NEAR(0.0f, cyl.VolumeBelow(plane), 1e-3f);
+  }
+
+  // CenterOfVolumeBelow with float
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, 0.0f);
+    auto cov = cyl.CenterOfVolumeBelow(plane);
+    ASSERT_TRUE(cov.has_value());
+    EXPECT_NEAR(0.0f, cov.value().X(), 1e-3f);
+    EXPECT_NEAR(0.0f, cov.value().Y(), 1e-3f);
+    EXPECT_NEAR(-1.0f, cov.value().Z(), 1e-3f);
+  }
 }
