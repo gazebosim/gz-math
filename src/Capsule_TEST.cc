@@ -128,3 +128,40 @@ TEST(CapsuleTest, Mass)
   EXPECT_EQ(expectedMassMat.DiagonalMoments(), massMat->DiagonalMoments());
   EXPECT_DOUBLE_EQ(expectedMassMat.Mass(), massMat->Mass());
 }
+
+/////////////////////////////////////////////////
+TEST(CapsuleTest, VolumeBelowFloat)
+{
+  float length = 2.0f;
+  float r = 1.0f;
+  math::Capsule<float> cap(length, r);
+
+  // Horizontal plane at z=0: half volume by symmetry
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, 0.0f);
+    EXPECT_NEAR(cap.Volume() / 2.0f, cap.VolumeBelow(plane), 1e-3f);
+  }
+
+  // Fully below
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, 10.0f);
+    EXPECT_NEAR(cap.Volume(), cap.VolumeBelow(plane), 1e-3f);
+  }
+
+  // Fully above
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, -10.0f);
+    EXPECT_NEAR(0.0f, cap.VolumeBelow(plane), 1e-3f);
+  }
+
+  // CenterOfVolumeBelow with float
+  {
+    math::Plane<float> plane(math::Vector3<float>{0, 0, 1}, 0.0f);
+    auto cov = cap.CenterOfVolumeBelow(plane);
+    ASSERT_TRUE(cov.has_value());
+    EXPECT_NEAR(0.0f, cov.value().X(), 1e-3f);
+    EXPECT_NEAR(0.0f, cov.value().Y(), 1e-3f);
+    // Bottom half centroid is below z=0
+    EXPECT_TRUE(cov.value().Z() < 0.0f);
+  }
+}

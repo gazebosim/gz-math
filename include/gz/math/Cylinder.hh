@@ -17,8 +17,10 @@
 #ifndef GZ_MATH_CYLINDER_HH_
 #define GZ_MATH_CYLINDER_HH_
 
+#include <optional>
 #include "gz/math/MassMatrix3.hh"
 #include "gz/math/Material.hh"
+#include "gz/math/Plane.hh"
 #include "gz/math/Quaternion.hh"
 
 namespace ignition
@@ -125,6 +127,23 @@ namespace ignition
       /// \brief Get the volume of the cylinder in m^3.
       /// \return Volume of the cylinder in m^3.
       public: Precision Volume() const;
+
+      /// \brief Get the volume of the cylinder below a given plane in m^3.
+      /// It is assumed that the center of the cylinder is on the origin.
+      /// \param[in] _plane The plane which slices this cylinder, expressed
+      /// in the cylinder's reference frame.
+      /// \return Volume below the plane in m^3.
+      public: Precision VolumeBelow(const Plane<Precision> &_plane) const;
+
+      /// \brief Center of volume below the plane. This is useful for example
+      /// when calculating where buoyancy should be applied.
+      /// \param[in] _plane The plane which slices this cylinder, expressed
+      /// in the cylinder's reference frame.
+      /// \return The center of volume if there is anything below the plane,
+      /// otherwise return a std::nullopt. Expressed in the cylinder's
+      /// reference frame.
+      public: std::optional<Vector3<Precision>>
+        CenterOfVolumeBelow(const Plane<Precision> &_plane) const;
 
       /// \brief Compute the cylinder's density given a mass value. The
       /// cylinder is assumed to be solid with uniform density. This
