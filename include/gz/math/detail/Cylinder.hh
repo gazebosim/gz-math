@@ -16,6 +16,13 @@
 */
 #ifndef GZ_MATH_DETAIL_CYLINDER_HH_
 #define GZ_MATH_DETAIL_CYLINDER_HH_
+
+#include <algorithm>
+#include <cmath>
+#include <optional>
+#include "gz/math/Cylinder.hh"
+#include "gz/math/detail/WetVolume.hh"
+
 namespace ignition
 {
 namespace math
@@ -122,6 +129,200 @@ T Cylinder<T>::Volume() const
 {
   return IGN_PI * std::pow(this->radius, 2) *
          this->length;
+}
+
+//////////////////////////////////////////////////
+template<typename T>
+T Cylinder<T>::VolumeBelow(const Plane<T> &_plane) const
+{
+  auto r = this->radius;
+  auto halfLen = this->length / 2;
+
+  if (r <= 0 || this->length <= 0)
+    return 0;
+
+  // Transform plane to Z-aligned cylinder frame
+  auto localNormal =
+    this->rotOffset.RotateVectorReverse(_plane.Normal());
+  auto d = _plane.Offset();
+  auto nx = localNormal.X();
+  auto ny = localNormal.Y();
+  auto nz = localNormal.Z();
+  auto nxy = std::sqrt(nx * nx + ny * ny);
+  auto fullArea = IGN_PI * r * r;
+
+  // Horizontal plane (no radial component)
+  if (nxy < 1e-15 * (std::abs(nz) + 1e-30))
+  {
+    if (std::abs(nz) < 1e-30)
+      return (d >= 0) ? this->Volume() : 0;
+    auto zCut = d / nz;
+    auto h = std::max(static_cast<T>(0),
+                      std::min(this->length, zCut + halfLen));
+    return fullArea * h;
+  }
+
+  // Vertical plane (no axial component)
+  if (std::abs(nz) < 1e-15 * nxy)
+  {
+    auto p = d / nxy;
+    T area;
+    if (p >= r) area = fullArea;
+    else if (p <= -r) area = 0;
+    else area = detail::circSegArea(p, r);
+    return area * this->length;
+  }
+
+  // General case: both nxy > 0 and nz != 0
+  // p(z) = (d - nz*z) / nxy at each height z
+  auto p1 = (d + nz * halfLen) / nxy;  // p at z = -halfLen
+  auto p2 = (d - nz * halfLen) / nxy;  // p at z = +halfLen
+  auto pLo = std::min(p1, p2);
+  auto pHi = std::max(p1, p2);
+  auto dzDp = nxy / std::abs(nz);
+
+  T vol = 0;
+
+  // Full-circle region: p > r
+  if (pHi > r)
+    vol += fullArea * (pHi - std::max(pLo, r)) * dzDp;
+
+  // Partial region: -r <= p <= r
+  auto pLoC = std::max(pLo, -r);
+  auto pHiC = std::min(pHi, r);
+  if (pLoC < pHiC)
+    vol += (detail::circSegAreaAntideriv(pHiC, r)
+          - detail::circSegAreaAntideriv(pLoC, r)) * dzDp;
+
+  return vol;
+}
+
+//////////////////////////////////////////////////
+template<typename T>
+std::optional<Vector3<T>>
+ Cylinder<T>::CenterOfVolumeBelow(const Plane<T> &_plane) const
+{
+  auto r = this->radius;
+  auto halfLen = this->length / 2;
+
+  if (r <= 0 || this->length <= 0)
+    return std::nullopt;
+
+  auto localNormal =
+    this->rotOffset.RotateVectorReverse(_plane.Normal());
+  auto d = _plane.Offset();
+  auto nx = localNormal.X();
+  auto ny = localNormal.Y();
+  auto nz = localNormal.Z();
+  auto nxy = std::sqrt(nx * nx + ny * ny);
+  auto fullArea = IGN_PI * r * r;
+
+  // Horizontal plane
+  if (nxy < 1e-15 * (std::abs(nz) + 1e-30))
+  {
+    if (std::abs(nz) < 1e-30)
+    {
+      return (d >= 0) ? std::optional(Vector3<T>{0, 0, 0}) : std::nullopt;
+    }
+    auto zCut = d / nz;
+    auto zLo = -halfLen;
+    auto h = std::max(static_cast<T>(0),
+                      std::min(this->length, zCut + halfLen));
+    if (h <= 0) return std::nullopt;
+    auto zTop = zLo + h;
+    auto cz = (zLo + zTop) / 2;
+    return this->rotOffset.RotateVector(Vector3<T>(0, 0, cz));
+  }
+
+  // Vertical plane
+  if (std::abs(nz) < 1e-15 * nxy)
+  {
+    auto p = d / nxy;
+    T area;
+    if (p >= r) area = fullArea;
+    else if (p <= -r) area = 0;
+    else area = detail::circSegArea(p, r);
+
+    if (area <= 0)
+      return std::nullopt;
+
+    // Centroid z = 0 by symmetry.
+    // Centroid in 2D normal direction:
+    // m_perp = -(2/3)*(R^2-p^2)^(3/2) for |p| < R, else 0
+    T cx = 0, cy = 0;
+    if (std::abs(p) < r)
+    {
+      auto diff = r * r - p * p;
+      auto mPerp = -(static_cast<T>(2) / 3) * diff * std::sqrt(diff);
+      cx = (nx / nxy) * mPerp / area;
+      cy = (ny / nxy) * mPerp / area;
+    }
+    return this->rotOffset.RotateVector(Vector3<T>(cx, cy, 0));
+  }
+
+  // General case
+  auto p1 = (d + nz * halfLen) / nxy;
+  auto p2 = (d - nz * halfLen) / nxy;
+  auto pLo = std::min(p1, p2);
+  auto pHi = std::max(p1, p2);
+  auto dzDp = nxy / std::abs(nz);
+
+  T vol = 0;
+
+  // Volume computation (same as VolumeBelow)
+  if (pHi > r)
+    vol += fullArea * (pHi - std::max(pLo, r)) * dzDp;
+  auto pLoC = std::max(pLo, -r);
+  auto pHiC = std::min(pHi, r);
+  if (pLoC < pHiC)
+    vol += (detail::circSegAreaAntideriv(pHiC, r)
+          - detail::circSegAreaAntideriv(pLoC, r)) * dzDp;
+
+  if (vol <= 0)
+    return std::nullopt;
+
+  // Z-moment: Mz = (nxy/(|nz|*nz)) * integral of (d-nxy*p)*A(p) dp
+  // = (nxy/(|nz|*nz)) * [d*F(p) - nxy*H(p)] evaluated over regions
+  T zMomIntegral = 0;
+
+  // Full-circle region: p > r -> A = pi*r^2
+  // integral of (d - nxy*p) * pi*r^2 dp
+  // = pi*r^2 * [d*p - nxy*p^2/2]
+  if (pHi > r)
+  {
+    auto pFullLo = std::max(pLo, r);
+    zMomIntegral += fullArea * (d * (pHi - pFullLo)
+      - nxy * (pHi * pHi - pFullLo * pFullLo) / 2);
+  }
+
+  // Partial region: -r <= p <= r
+  if (pLoC < pHiC)
+  {
+    zMomIntegral +=
+      d * (detail::circSegAreaAntideriv(pHiC, r)
+         - detail::circSegAreaAntideriv(pLoC, r))
+    - nxy * (detail::circSegPAntideriv(pHiC, r)
+           - detail::circSegPAntideriv(pLoC, r));
+  }
+
+  auto Mz = (nxy / (std::abs(nz) * nz)) * zMomIntegral;
+
+  // XY-moments via perpendicular first moment of circular segment
+  // m_perp(p) = -(2/3)*(R^2-p^2)^(3/2) for |p| < R, else 0
+  // Mx = -(2*nx)/(3*|nz|) * [J(pHiC) - J(pLoC)]
+  // My = -(2*ny)/(3*|nz|) * [J(pHiC) - J(pLoC)]
+  T Mx = 0, My = 0;
+  if (pLoC < pHiC)
+  {
+    auto dJ = detail::r2p2_32_Antideriv(pHiC, r)
+            - detail::r2p2_32_Antideriv(pLoC, r);
+    auto coeff = static_cast<T>(-2) / (3 * std::abs(nz));
+    Mx = nx * coeff * dJ;
+    My = ny * coeff * dJ;
+  }
+
+  auto centroid = Vector3<T>(Mx / vol, My / vol, Mz / vol);
+  return this->rotOffset.RotateVector(centroid);
 }
 
 //////////////////////////////////////////////////

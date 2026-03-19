@@ -15,7 +15,7 @@
 import unittest
 
 import ignition
-from ignition.math import Ellipsoidd, Material, MassMatrix3d, Vector3d
+from ignition.math import Ellipsoidd, Material, MassMatrix3d, Planed, Vector3d
 
 import math
 
@@ -125,6 +125,48 @@ class TestEllipsoid(unittest.TestCase):
 
         ellipsoid5 = Ellipsoidd(Vector3d(-1, -1, 1))
         self.assertEqual(None, ellipsoid5.mass_matrix())
+
+    def test_volume_below(self):
+        # Use equal radii (sphere) for easy validation
+        ellipsoid = Ellipsoidd(Vector3d(2.0, 2.0, 2.0))
+
+        # Horizontal plane at z=0: half volume
+        plane = Planed(Vector3d(0, 0, 1), 0)
+        self.assertAlmostEqual(
+            ellipsoid.volume() / 2.0, ellipsoid.volume_below(plane),
+            delta=1e-3)
+
+        # Fully below
+        plane = Planed(Vector3d(0, 0, 1), 10.0)
+        self.assertAlmostEqual(
+            ellipsoid.volume(), ellipsoid.volume_below(plane), delta=1e-3)
+
+        # Fully above
+        plane = Planed(Vector3d(0, 0, 1), -10.0)
+        self.assertAlmostEqual(0.0, ellipsoid.volume_below(plane), delta=1e-3)
+
+    def test_center_of_volume_below(self):
+        # Use equal radii (sphere) for easy validation
+        ellipsoid = Ellipsoidd(Vector3d(2.0, 2.0, 2.0))
+
+        # Hemisphere: center of volume for a hemisphere is 3/8 * r
+        plane = Planed(Vector3d(0, 1, 0), 0)
+        cov = ellipsoid.center_of_volume_below(plane)
+        self.assertTrue(cov is not None)
+        self.assertAlmostEqual(0.0, cov.x(), delta=1e-3)
+        self.assertAlmostEqual(-0.75, cov.y(), delta=1e-3)
+        self.assertAlmostEqual(0.0, cov.z(), delta=1e-3)
+
+        # Fully above
+        plane = Planed(Vector3d(0, 0, 1), -10.0)
+        self.assertFalse(ellipsoid.center_of_volume_below(plane) is not None)
+
+        # Entire ellipsoid below plane
+        plane = Planed(Vector3d(0, 0, 1), 10.0)
+        cov = ellipsoid.center_of_volume_below(plane)
+        self.assertTrue(cov is not None)
+        self.assertEqual(Vector3d(0, 0, 0), cov)
+
 
 if __name__ == '__main__':
     unittest.main()
