@@ -1,5 +1,13 @@
 ## Gazebo Math 8.x
 
+### Gazebo Math 8.3.0 (2026-04-02)
+
+1. Add VolumeBelow/CenterOfVolumeBelow for Ellipsoid, Cylinder, Capsule, Cone
+    * [Pull request #730](https://github.com/gazebosim/gz-math/pull/730)
+
+1. Fix Box VolumeBelow/CenterOfVolumeBelow and `Sphere<float>` type error
+    * [Pull request #724](https://github.com/gazebosim/gz-math/pull/724)
+
 ### Gazebo Math 8.2.1 (2026-01-15)
 
 1. Bazel Infrastructure
