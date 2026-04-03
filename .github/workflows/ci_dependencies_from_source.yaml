@@ -1,0 +1,25 @@
+name: Ubuntu CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 'ign-math[0-9]'
+      - 'gz-math[0-9]'
+      - 'main'
+
+jobs:
+  noble-ci:
+    runs-on: ubuntu-latest
+    name: Ubuntu Noble CI (from source)
+    container:
+      image: rostooling/setup-ros-docker:ubuntu-noble-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Compile and test
+        uses: ros-tooling/action-ros-ci@v0.4
+        with:
+          package-name: gz-math
+          target-ros2-distro: kilted
+          vcs-repo-file-url: https://raw.githubusercontent.com/gazebo-tooling/gazebodistro/master/gz-math9.yaml
