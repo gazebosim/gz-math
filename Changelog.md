@@ -3,10 +3,10 @@
 ### Gazebo Math 7.6.0 (2026-04-10)
 
 1. Add VolumeBelow/CenterOfVolumeBelow for Ellipsoid, Cylinder, Capsule, Cone
-    * [Pull request #730](https://github.com/gazebosim/gz-math/pull/730)
+    * [Pull request #734](https://github.com/gazebosim/gz-math/pull/734)
 
 1. Fix Box VolumeBelow/CenterOfVolumeBelow and Sphere<float> type error
-    * [Pull request #724](https://github.com/gazebosim/gz-math/pull/724)
+    * [Pull request #727](https://github.com/gazebosim/gz-math/pull/727)
 
 1. Correct calculation in ProjectPointToPlane
     * [Pull request #702](https://github.com/gazebosim/gz-math/pull/702)
