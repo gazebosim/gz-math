@@ -1,5 +1,25 @@
 ## Gazebo Math 7.x
 
+### Gazebo Math 7.6.0 (2026-04-10)
+
+1. Add VolumeBelow/CenterOfVolumeBelow for Ellipsoid, Cylinder, Capsule, Cone
+    * [Pull request #734](https://github.com/gazebosim/gz-math/pull/734)
+
+1. Fix Box VolumeBelow/CenterOfVolumeBelow and Sphere<float> type error
+    * [Pull request #727](https://github.com/gazebosim/gz-math/pull/727)
+
+1. Correct calculation in ProjectPointToPlane
+    * [Pull request #702](https://github.com/gazebosim/gz-math/pull/702)
+
+1. python: suppress Pose3 deprecation warnings
+    * [Pull request #682](https://github.com/gazebosim/gz-math/pull/682)
+
+1. Backport: Docs/spell check
+    * [Pull request #669](https://github.com/gazebosim/gz-math/pull/669)
+
+1. Unify Python3_Development_FOUND checks
+    * [Pull request #663](https://github.com/gazebosim/gz-math/pull/663)
+
 ### Gazebo Math 7.5.2 (2025-01-30)
 
 1. Backport bazel BUILD updates from gz-math8
