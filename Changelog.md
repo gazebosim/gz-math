@@ -1,5 +1,22 @@
 ## Gazebo Math 6.x
 
+## Gazebo Math 6.16.0 (2026-04-10)
+
+1. Add VolumeBelow/CenterOfVolumeBelow for Ellipsoid, Cylinder, Capsule
+    * [Pull request #735](https://github.com/gazebosim/gz-math/pull/735)
+
+1. Fix Box VolumeBelow/CenterOfVolumeBelow and Sphere<float> type error
+    * [Pull request #728](https://github.com/gazebosim/gz-math/pull/728)
+
+1. Disable Ubuntu Focal CI
+    * [Pull request #716](https://github.com/gazebosim/gz-math/pull/716)
+
+1. Remove the use of numeric_limits in appendToStream test
+    * [Pull request #553](https://github.com/gazebosim/gz-math/pull/553)
+
+1. Added MecanumDriveOdometry Python wrapper
+    * [Pull request #549](https://github.com/gazebosim/gz-math/pull/549)
+
 ## Gazebo Math 6.15.1 (2024-01-05)
 
 1. Replace CMake Python variables with new ones from FindPython3 module
