@@ -11,15 +11,17 @@ on:
 jobs:
   noble-ci:
     runs-on: ubuntu-latest
-    name: Ubuntu Noble CI (from source)
+    name: Ubuntu Resolute CI (from source)
     container:
-      image: rostooling/setup-ros-docker:ubuntu-noble-latest
+      image: ubuntu:resolute
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup ROS
+        uses: ros-tooling/setup-ros@v0.7
       - name: Compile and test
         uses: ros-tooling/action-ros-ci@v0.4
         with:
           package-name: gz-math
-          target-ros2-distro: kilted
+          target-ros2-distro: rolling
           vcs-repo-file-url: https://raw.githubusercontent.com/gazebo-tooling/gazebodistro/master/gz-math9.yaml
