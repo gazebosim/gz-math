@@ -35,7 +35,6 @@ jobs:
         uses: gazebo-tooling/action-gz-ci@resolute
         with:
           gzdev-project-name: rotary
-          # codecov-enabled: true
           cppcheck-enabled: true
           cpplint-enabled: true
           doxygen-enabled: true
