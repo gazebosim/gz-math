@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - 'ign-math[0-9]'
-      - 'gz-math[0-9]'
+      - 'gz-math[1-9]?[0-9]'
       - 'main'
 
 jobs:
