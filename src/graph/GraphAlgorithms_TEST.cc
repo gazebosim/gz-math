@@ -17,6 +17,9 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
+#include <string>
+
 #include "gz/math/graph/Graph.hh"
 #include "gz/math/graph/GraphAlgorithms.hh"
 
@@ -367,4 +370,103 @@ TEST(GraphTestFixture, ToUndirectedGraph)
 
   // std::cerr << directed << std::endl;
   // std::cerr << undirected << std::endl;
+}
+
+/////////////////////////////////////////////////
+// Pin Dijkstra correctness on a graph that triggers many relaxation
+// updates: stale priority-queue entries left behind by relaxation must
+// not produce wrong distances.
+TEST(GraphAlgorithmsBugfix, DijkstraStaleEntrySkipPreservesCorrectness)
+{
+  // Diamond with a long way around to force relaxations.
+  // 0 - 1 - 2 - 3
+  // |           |
+  //  ----- 4 ----
+  UndirectedGraph<int, double> g;
+  for (int i = 0; i < 5; ++i)
+    g.AddVertex("v" + std::to_string(i), i, i);
+  g.AddEdge({0, 1}, 0.0, 1.0);
+  g.AddEdge({1, 2}, 0.0, 1.0);
+  g.AddEdge({2, 3}, 0.0, 1.0);
+  g.AddEdge({0, 4}, 0.0, 10.0);
+  g.AddEdge({4, 3}, 0.0, 10.0);
+
+  auto dist = Dijkstra(g, 0);
+  EXPECT_DOUBLE_EQ(0.0,  dist[0].first);
+  EXPECT_DOUBLE_EQ(1.0,  dist[1].first);
+  EXPECT_DOUBLE_EQ(2.0,  dist[2].first);
+  EXPECT_DOUBLE_EQ(3.0,  dist[3].first);
+  EXPECT_DOUBLE_EQ(10.0, dist[4].first);
+}
+
+/////////////////////////////////////////////////
+// Coverage: BFS on a single-vertex graph returns just that vertex.
+TEST(GraphAlgorithmsCoverage, BFS_SingleVertex)
+{
+  UndirectedGraph<int, double> g;
+  g.AddVertex("only", 0, 0);
+  auto bfs = BreadthFirstSort(g, 0);
+  ASSERT_EQ(bfs.size(), 1u);
+  EXPECT_EQ(bfs[0], 0u);
+
+  auto dfs = DepthFirstSort(g, 0);
+  ASSERT_EQ(dfs.size(), 1u);
+  EXPECT_EQ(dfs[0], 0u);
+}
+
+/////////////////////////////////////////////////
+// Coverage: BFS / DFS visit a self-looped vertex exactly once.
+TEST(GraphAlgorithmsCoverage, BFS_SelfLoopVisitsOnce)
+{
+  UndirectedGraph<int, double> g;
+  g.AddVertex("v0", 0, 0);
+  g.AddVertex("v1", 1, 1);
+  g.AddEdge({0, 0}, 0.0, 1.0);  // self-loop
+  g.AddEdge({0, 1}, 0.0, 1.0);
+
+  auto bfs = BreadthFirstSort(g, 0);
+  EXPECT_EQ(bfs.size(), 2u);
+  EXPECT_EQ(std::count(bfs.begin(), bfs.end(), 0u), 1);
+
+  auto dfs = DepthFirstSort(g, 0);
+  EXPECT_EQ(dfs.size(), 2u);
+  EXPECT_EQ(std::count(dfs.begin(), dfs.end(), 0u), 1);
+}
+
+/////////////////////////////////////////////////
+// Coverage: ConnectedComponents on an empty graph returns no components.
+TEST(GraphAlgorithmsCoverage, ConnectedComponents_EmptyGraph)
+{
+  UndirectedGraph<int, double> g;
+  EXPECT_TRUE(ConnectedComponents(g).empty());
+}
+
+/////////////////////////////////////////////////
+// Coverage: a graph with vertices but no edges has one component per
+// vertex (each is its own singleton component).
+TEST(GraphAlgorithmsCoverage, ConnectedComponents_DisconnectedSingletons)
+{
+  UndirectedGraph<int, double> g;
+  for (int i = 0; i < 4; ++i)
+    g.AddVertex("v" + std::to_string(i), i, i);
+
+  auto components = ConnectedComponents(g);
+  EXPECT_EQ(components.size(), 4u);
+  for (auto const &c : components)
+    EXPECT_EQ(c.Vertices().size(), 1u);
+}
+
+/////////////////////////////////////////////////
+// Coverage: Dijkstra picks the cheapest of multiple parallel edges
+// between the same pair of vertices (multigraph behavior).
+TEST(GraphAlgorithmsCoverage, Dijkstra_MultipleEdgesBetweenSamePair)
+{
+  UndirectedGraph<int, double> g;
+  g.AddVertex("v0", 0, 0);
+  g.AddVertex("v1", 1, 1);
+  g.AddEdge({0, 1}, 0.0, 5.0);
+  g.AddEdge({0, 1}, 0.0, 1.0);
+
+  auto dist = Dijkstra(g, 0);
+  EXPECT_DOUBLE_EQ(dist[1].first, 1.0);
 }
