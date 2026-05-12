@@ -227,7 +227,7 @@ namespace graph
     if (_to != kNullId &&
         allVertices.find(_to) == allVertices.end())
     {
-      std::cerr << "Vertex [" << _from << "] Not found" << std::endl;
+      std::cerr << "Vertex [" << _to << "] Not found" << std::endl;
       return {};
     }
 
@@ -251,6 +251,7 @@ namespace graph
     while (!pq.empty())
     {
       // This is the minimum distance vertex.
+      const double poppedCost = pq.top().first;
       VertexId u = pq.top().second;
 
       // Shortcut: Destination vertex found, exiting.
@@ -259,16 +260,22 @@ namespace graph
 
       pq.pop();
 
+      // Skip stale priority-queue entries left behind by relaxation
+      // updates: dist[u] is the authoritative cost; if the popped cost is
+      // greater, this entry was queued before u was settled.
+      if (poppedCost > dist[u].first)
+        continue;
+
       for (auto const &edgePair : _graph.IncidentsFrom(u))
       {
         const auto &edge = edgePair.second.get();
         const auto &v = edge.From(u);
         double weight = edge.Weight();
 
-        //  If there is shorted path to v through u.
+        // If there is a shorter path to v through u.
         if (dist[v].first > dist[u].first + weight)
         {
-          // Updating distance of v.
+          // Update distance of v.
           dist[v] = std::make_pair(dist[u].first + weight, u);
           pq.push(std::make_pair(dist[v].first, v));
         }

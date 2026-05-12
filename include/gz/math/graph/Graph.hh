@@ -19,6 +19,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <iterator>
 #include <map>
 #include <set>
 #include <string>
@@ -43,6 +44,12 @@ namespace graph
   /// internally. The vertices also have a name that could be reused among
   /// other vertices if needed. This class supports the use of different edge
   /// types (e.g. directed or undirected edges).
+  ///
+  /// \par Thread safety
+  /// This class is not internally synchronized. Concurrent calls into the
+  /// same Graph are unsafe; concurrent read-only access from multiple
+  /// threads is safe only if no thread holds a mutable reference into the
+  /// graph.
   ///
   /// <b> Example directed graph</b>
   //
@@ -334,9 +341,9 @@ namespace graph
     }
 
     /// \brief Get all vertices that are directly connected with one edge
-    /// to a given vertex. In other words, this function will return
-    /// child vertices of the given vertex (all vertices from the given
-    /// vertex).
+    /// to a given vertex. In other words, this returns the parent vertices
+    /// of the given vertex (all vertices i such that the edge (i->_vertex)
+    /// exists).
     ///
     /// In an undirected graph, the result of this function will match
     /// the result provided by AdjacentsFrom.
@@ -552,15 +559,21 @@ namespace graph
     /// \return The number of vertices removed.
     public: size_t RemoveVertices(const std::string &_name)
     {
-      size_t numVertices = this->names.count(_name);
+      // Collect matching ids first so we don't mutate the names index
+      // (and the iterators it produces) while still reading from it.
+      auto range = this->names.equal_range(_name);
+      std::vector<VertexId> toRemove;
+      toRemove.reserve(static_cast<std::size_t>(
+          std::distance(range.first, range.second)));
+      for (auto it = range.first; it != range.second; ++it)
+        toRemove.push_back(it->second);
+
       size_t result = 0;
-      for (size_t i = 0; i < numVertices; ++i)
+      for (auto const &id : toRemove)
       {
-        auto iter = this->names.find(_name);
-        if (this->RemoveVertex(iter->second))
+        if (this->RemoveVertex(id))
           ++result;
       }
-
       return result;
     }
 
