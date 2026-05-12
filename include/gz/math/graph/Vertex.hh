@@ -68,28 +68,28 @@ namespace graph
 
     /// \brief Retrieve the user information.
     /// \return Reference to the user information.
-    public: const V &Data() const
+    public: [[nodiscard]] const V &Data() const noexcept
     {
       return this->data;
     }
 
     /// \brief Get a mutable reference to the user information.
     /// \return Mutable reference to the user information.
-    public: V &Data()
+    public: V &Data() noexcept
     {
       return this->data;
     }
 
     /// \brief Get the vertex Id.
     /// \return The vertex Id.
-    public: VertexId Id() const
+    public: [[nodiscard]] VertexId Id() const noexcept
     {
       return this->id;
     }
 
     /// \brief Get the vertex name.
     /// \return The vertex name.
-    public: const std::string &Name() const
+    public: [[nodiscard]] const std::string &Name() const noexcept
     {
       return this->name;
     }
@@ -103,7 +103,7 @@ namespace graph
 
     /// \brief Whether the vertex is considered valid or not (id==kNullId).
     /// \return True when the vertex is valid or false otherwise (id==kNullId)
-    public: bool Valid() const
+    public: [[nodiscard]] bool Valid() const noexcept
     {
       return this->id != kNullId;
     }

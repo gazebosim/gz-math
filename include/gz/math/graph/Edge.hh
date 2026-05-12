@@ -90,14 +90,14 @@ namespace graph
 
     /// \brief Get the edge Id.
     /// \return The edge Id.
-    public: EdgeId Id() const
+    public: [[nodiscard]] EdgeId Id() const noexcept
     {
       return this->id;
     }
 
     /// \brief Get the two vertices contained in the edge.
     /// \return The two vertices contained in the edge.
-    public: VertexId_P Vertices() const
+    public: [[nodiscard]] VertexId_P Vertices() const
     {
       if (!this->Valid())
         return {kNullId, kNullId};
@@ -107,14 +107,14 @@ namespace graph
 
     /// \brief Get a non-mutable reference to the user data stored in the edge
     /// \return The non-mutable reference to the user data stored in the edge.
-    public: const E &Data() const
+    public: [[nodiscard]] const E &Data() const noexcept
     {
       return this->data;
     }
 
     /// \brief Get a mutable reference to the user data stored in the edge.
     /// \return The mutable reference to the user data stored in the edge.
-    public: E &Data()
+    public: E &Data() noexcept
     {
       return this->data;
     }
@@ -122,14 +122,14 @@ namespace graph
     /// \brief The cost of traversing the _from end to the other end of the
     /// edge.
     /// \return The cost.
-    public: double Weight() const
+    public: [[nodiscard]] double Weight() const noexcept
     {
       return this->weight;
     }
 
     /// \brief Set the cost of the edge.
     /// \param[in] _newWeight The new cost.
-    public: void SetWeight(double _newWeight)
+    public: void SetWeight(double _newWeight) noexcept
     {
       this->weight = _newWeight;
     }
@@ -168,7 +168,7 @@ namespace graph
 
     /// \brief An edge is considered valid when its id is not kNullId.
     /// \return Whether the edge is valid or not.
-    public: bool Valid() const
+    public: [[nodiscard]] bool Valid() const noexcept
     {
       return this->id != kNullId;
     }
