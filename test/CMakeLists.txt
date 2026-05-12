@@ -41,6 +41,7 @@ ExternalProject_Add(
     "-DCMAKE_INSTALL_PREFIX=${FAKE_INSTALL_PREFIX}"
 )
 
+add_subdirectory(benchmark)
 add_subdirectory(integration)
 add_subdirectory(performance)
 add_subdirectory(regression)
