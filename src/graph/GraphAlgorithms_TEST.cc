@@ -550,3 +550,53 @@ TEST(GraphAlgorithmsTree, Ancestors_ToleratesCycle)
   EXPECT_EQ(chain[0], 1u);
   EXPECT_EQ(chain[1], 0u);
 }
+
+/////////////////////////////////////////////////
+// Tree algorithm: IsAncestor walks the descendant up its parent chain.
+TEST(GraphAlgorithmsTree, IsAncestor)
+{
+  // world(0) -> modelA(1) -> linkA(3)
+  // world(0) -> modelB(2) -> linkB(4)
+  DirectedGraph<int, double> g;
+  for (int i = 0; i < 5; ++i)
+    g.AddVertex("v" + std::to_string(i), i, i);
+  g.AddEdge({0, 1}, 0.0); g.AddEdge({1, 3}, 0.0);
+  g.AddEdge({0, 2}, 0.0); g.AddEdge({2, 4}, 0.0);
+
+  EXPECT_TRUE(IsAncestor(g, 0u, 3u));   // world is ancestor of linkA
+  EXPECT_TRUE(IsAncestor(g, 1u, 3u));   // modelA is ancestor of linkA
+  EXPECT_FALSE(IsAncestor(g, 1u, 4u));  // modelA is NOT ancestor of linkB
+  EXPECT_FALSE(IsAncestor(g, 3u, 1u));  // child is not ancestor of parent
+  EXPECT_FALSE(IsAncestor(g, 0u, 0u));  // strict ancestor (a != d)
+  EXPECT_FALSE(IsAncestor(g, 99u, 3u));  // bogus inputs
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: IsAncestor must reject an invalid descendant id.
+TEST(GraphAlgorithmsTree, IsAncestor_InvalidDescendant)
+{
+  DirectedGraph<int, double> g;
+  g.AddVertex("v0", 0, 0);
+  g.AddVertex("v1", 1, 1);
+  g.AddEdge({0, 1}, 0.0);
+
+  EXPECT_FALSE(IsAncestor(g, 0u, 99u));
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: IsAncestor must terminate when the descendant chain
+// contains a cycle that does not include the candidate ancestor.
+TEST(GraphAlgorithmsTree, IsAncestor_ToleratesCycle)
+{
+  DirectedGraph<int, double> g;
+  g.AddVertex("v0", 0, 0);
+  g.AddVertex("v1", 1, 1);
+  g.AddVertex("v2", 2, 2);
+  g.AddVertex("v3", 3, 3);  // isolated -- the candidate ancestor.
+  // Cycle 0 -> 1 -> 2 -> 0, none of which connect to vertex 3.
+  g.AddEdge({0, 1}, 0.0);
+  g.AddEdge({1, 2}, 0.0);
+  g.AddEdge({2, 0}, 0.0);
+
+  EXPECT_FALSE(IsAncestor(g, 3u, 2u));
+}

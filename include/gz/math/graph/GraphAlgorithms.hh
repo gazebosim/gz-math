@@ -380,6 +380,46 @@ namespace graph
     }
     return chain;
   }
+
+  /// \brief Test whether `_ancestor` lies on the parent chain above
+  /// `_descendant`. O(depth) -- walks `_descendant` up via Ancestors() and
+  /// stops as soon as a match is found. Returns false for `_a == _d`
+  /// (consistent with the strict ancestor relation).
+  /// \param[in] _graph Any graph.
+  /// \param[in] _ancestor Candidate ancestor vertex id.
+  /// \param[in] _descendant Candidate descendant vertex id.
+  /// \return True if `_ancestor` is on the parent chain of `_descendant`.
+  template<typename V, typename E, typename EdgeType>
+  bool IsAncestor(
+      const Graph<V, E, EdgeType> &_graph,
+      const VertexId &_ancestor,
+      const VertexId &_descendant)
+  {
+    if (_ancestor == _descendant)
+      return false;
+    if (!_graph.VertexFromId(_ancestor).Valid() ||
+        !_graph.VertexFromId(_descendant).Valid())
+    {
+      return false;
+    }
+
+    std::unordered_set<VertexId> seen;
+    seen.insert(_descendant);
+    VertexId cur = _descendant;
+    while (true)
+    {
+      auto parents = _graph.AdjacentsTo(cur);
+      if (parents.empty())
+        return false;
+      const VertexId next = parents.begin()->first;
+      if (next == _ancestor)
+        return true;
+      // Cycle guard.
+      if (!seen.insert(next).second)
+        return false;
+      cur = next;
+    }
+  }
 }  // namespace graph
 }  // namespace GZ_MATH_VERSION_NAMESPACE
 }  // namespace gz::math
