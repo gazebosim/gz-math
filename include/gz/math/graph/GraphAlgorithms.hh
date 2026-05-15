@@ -86,49 +86,37 @@ namespace graph
   /// \param[in] _graph A graph.
   /// \param[in] _from The starting vertex.
   /// \return The vector of vertices Ids visited in a depth first manner.
+  /// An empty vector if _from is not a vertex of the graph.
   template<typename V, typename E, typename EdgeType>
   std::vector<VertexId> DepthFirstSort(const Graph<V, E, EdgeType> &_graph,
                                        const VertexId &_from)
   {
-    // Create an auxiliary graph, where the data is just a boolean value that
-    // stores whether the vertex has been visited or not.
-    Graph<bool, E, EdgeType> visitorGraph;
-
-    // Copy the vertices (just the Id).
-    for (auto const &v : _graph.Vertices())
-      visitorGraph.AddVertex("", false, v.first);
-
-    // Copy the edges (without data).
-    for (auto const &e : _graph.Edges())
-      visitorGraph.AddEdge(e.second.get().Vertices(), E());
+    if (!_graph.VertexFromId(_from).Valid())
+      return {};
 
     std::vector<VertexId> visited;
-    std::stack<VertexId> pending({_from});
+    std::unordered_set<VertexId> seen;
+    std::stack<VertexId> pending;
+    pending.push(_from);
 
+    // Mark-on-pop: matches the textbook DFS visitation order. Children are
+    // pushed unconditionally and duplicate entries are skipped at pop time.
     while (!pending.empty())
     {
-      auto vId = pending.top();
+      const VertexId u = pending.top();
       pending.pop();
 
-      // If the vertex has been visited, skip.
-      auto &vertex = visitorGraph.VertexFromId(vId);
-      if (vertex.Data())
+      if (!seen.insert(u).second)
         continue;
+      visited.push_back(u);
 
-      visited.push_back(vId);
-      vertex.Data() = true;
-
-      // Add more vertices to visit if they haven't been visited yet.
-      auto adjacents = visitorGraph.AdjacentsFrom(vId);
-      for (auto const &adj : adjacents)
+      for (auto const &adj : _graph.AdjacentsFrom(u))
       {
-        vId = adj.first;
-        auto &v = adj.second.get();
-        if (!v.Data())
-          pending.push(vId);
+        const VertexId next = adj.first;
+        if (!seen.count(next))
+          pending.push(next);
       }
     }
-
     return visited;
   }
 
