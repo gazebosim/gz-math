@@ -512,3 +512,41 @@ TEST(GraphAlgorithmsCoverage, BFS_DFS_SparseHighIds)
   auto dfs = DepthFirstSort(g, 1000000);
   EXPECT_EQ(dfs.size(), 3u);
 }
+
+/////////////////////////////////////////////////
+// Tree algorithm: walk the parent chain of a leaf back to the root.
+TEST(GraphAlgorithmsTree, Ancestors_LinearChain)
+{
+  // 0 - 1 - 2 - 3   (parent pointers; AddEdge follows parent->child).
+  DirectedGraph<int, double> g;
+  for (int i = 0; i < 4; ++i)
+    g.AddVertex("v" + std::to_string(i), i, i);
+  g.AddEdge({0, 1}, 0.0);
+  g.AddEdge({1, 2}, 0.0);
+  g.AddEdge({2, 3}, 0.0);
+
+  EXPECT_EQ(Ancestors(g, 3u), (std::vector<VertexId>{2, 1, 0}));
+  EXPECT_EQ(Ancestors(g, 1u), (std::vector<VertexId>{0}));
+  EXPECT_EQ(Ancestors(g, 0u), std::vector<VertexId>{});
+  EXPECT_EQ(Ancestors(g, 99u), std::vector<VertexId>{});
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: Ancestors() must terminate even if the graph contains
+// a cycle. The chain returned stops at the first revisit.
+TEST(GraphAlgorithmsTree, Ancestors_ToleratesCycle)
+{
+  DirectedGraph<int, double> g;
+  for (int i = 0; i < 3; ++i)
+    g.AddVertex("v" + std::to_string(i), i, i);
+  g.AddEdge({0, 1}, 0.0);
+  g.AddEdge({1, 2}, 0.0);
+  g.AddEdge({2, 0}, 0.0);  // cycle back to 0
+
+  // Walking up from 2: parent is 1, then 0; the cycle would re-visit 2,
+  // which is the seen sentinel -- stop without infinite loop.
+  auto chain = Ancestors(g, 2u);
+  EXPECT_EQ(chain.size(), 2u);
+  EXPECT_EQ(chain[0], 1u);
+  EXPECT_EQ(chain[1], 0u);
+}

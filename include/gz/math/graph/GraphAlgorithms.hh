@@ -338,6 +338,48 @@ namespace graph
 
     return UndirectedGraph<V, E>(vertices, edges);
   }
+
+  /// \brief Walk parent edges from `_vertex` up to a root and return the
+  /// chain of ancestors in walk order (immediate parent first, root last).
+  /// In a tree this returns the unique parent chain; in a more general
+  /// directed graph it follows the *first* incoming edge at each step
+  /// (deterministic via the adjacency-list ordering) and aborts on cycles.
+  ///
+  /// This subsumes the hand-coded "walk to root" loops widely seen in
+  /// downstream code (e.g. gz-sim's worldPose / worldEntity / scopedName,
+  /// sdformat's FrameSemantics::FindSourceVertex).
+  ///
+  /// \param[in] _graph Any graph (typically a directed forest/tree).
+  /// \param[in] _vertex Starting vertex.
+  /// \return Vector of vertex ids: parent, grandparent, ..., root.
+  /// Empty if `_vertex` is invalid or has no parent. If a cycle is detected
+  /// (the same vertex visited twice), the partial chain up to the cycle
+  /// repeat is returned.
+  template<typename V, typename E, typename EdgeType>
+  std::vector<VertexId> Ancestors(
+      const Graph<V, E, EdgeType> &_graph, const VertexId &_vertex)
+  {
+    std::vector<VertexId> chain;
+    if (!_graph.VertexFromId(_vertex).Valid())
+      return chain;
+
+    std::unordered_set<VertexId> seen;
+    seen.insert(_vertex);
+    VertexId cur = _vertex;
+    while (true)
+    {
+      auto parents = _graph.AdjacentsTo(cur);
+      if (parents.empty())
+        break;
+      const VertexId next = parents.begin()->first;
+      // Cycle guard: stop if we revisit a vertex.
+      if (!seen.insert(next).second)
+        break;
+      chain.push_back(next);
+      cur = next;
+    }
+    return chain;
+  }
 }  // namespace graph
 }  // namespace GZ_MATH_VERSION_NAMESPACE
 }  // namespace gz::math
