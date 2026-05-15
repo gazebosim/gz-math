@@ -669,3 +669,44 @@ TEST(GraphAlgorithmsTree, LowestCommonAncestor_BIsAncestorOfA)
   // _a = 3 (deep leaf), _b = 1 (its grandparent) -- _b is on _a's chain.
   EXPECT_EQ(LowestCommonAncestor(g, 3u, 1u), 1u);
 }
+
+/////////////////////////////////////////////////
+// Tree algorithm: Subtree extracts the subtree rooted at a vertex.
+TEST(GraphAlgorithmsTree, Subtree_ExtractsModel)
+{
+  // world -> modelA -> linkA1, linkA2
+  //       -> modelB -> linkB1
+  DirectedGraph<int, double> g;
+  for (int i = 0; i < 6; ++i)
+    g.AddVertex("v" + std::to_string(i), i * 10, i);
+  g.AddEdge({0, 1}, 0.0); g.AddEdge({0, 2}, 0.0);
+  g.AddEdge({1, 3}, 0.0); g.AddEdge({1, 4}, 0.0);
+  g.AddEdge({2, 5}, 0.0);
+
+  // Extract the subtree rooted at modelA.
+  auto sub = Subtree(g, 1u);
+  EXPECT_EQ(sub.Vertices().size(), 3u);  // modelA + linkA1 + linkA2
+  EXPECT_EQ(sub.Edges().size(),    2u);  // modelA->linkA1, modelA->linkA2
+  EXPECT_TRUE(sub.VertexFromId(1).Valid());
+  EXPECT_TRUE(sub.VertexFromId(3).Valid());
+  EXPECT_TRUE(sub.VertexFromId(4).Valid());
+  EXPECT_FALSE(sub.VertexFromId(0).Valid());  // world not in subtree
+  EXPECT_FALSE(sub.VertexFromId(5).Valid());  // linkB1 not in subtree
+
+  // Data preserved.
+  EXPECT_EQ(sub.VertexFromId(3).Data(), 30);
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: Subtree returns an empty graph for an invalid root.
+TEST(GraphAlgorithmsTree, Subtree_InvalidRoot)
+{
+  DirectedGraph<int, double> g;
+  g.AddVertex("v0", 0, 0);
+  g.AddVertex("v1", 1, 1);
+  g.AddEdge({0, 1}, 0.0);
+
+  auto sub = Subtree(g, 99u);
+  EXPECT_TRUE(sub.Vertices().empty());
+  EXPECT_TRUE(sub.Edges().empty());
+}

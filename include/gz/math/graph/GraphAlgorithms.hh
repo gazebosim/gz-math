@@ -462,6 +462,44 @@ namespace graph
     }
     return kNullId;
   }
+
+  /// \brief Extract the subtree rooted at `_root` as a new graph of the
+  /// same type. Vertices and edges are copied (preserving ids, names, data,
+  /// weights). Equivalent to "save just this entity and everything beneath
+  /// it" -- the shape of operation gz-sim and sdformat would invoke when
+  /// serializing a single model out of a world.
+  ///
+  /// \param[in] _graph Source graph.
+  /// \param[in] _root Root vertex of the subtree.
+  /// \return A new graph containing `_root` and all descendants reachable
+  /// from it, plus the edges between them. Empty graph if `_root` is invalid.
+  template<typename V, typename E, typename EdgeType>
+  Graph<V, E, EdgeType> Subtree(
+      const Graph<V, E, EdgeType> &_graph, const VertexId &_root)
+  {
+    Graph<V, E, EdgeType> out;
+    if (!_graph.VertexFromId(_root).Valid())
+      return out;
+
+    auto descendants = BreadthFirstSort(_graph, _root);
+    std::unordered_set<VertexId> set(descendants.begin(), descendants.end());
+
+    // Copy vertices preserving ids.
+    for (auto id : descendants)
+    {
+      const auto &v = _graph.VertexFromId(id);
+      out.AddVertex(v.Name(), v.Data(), v.Id());
+    }
+    // Copy edges whose endpoints both lie in the subtree.
+    for (auto const &ePair : _graph.Edges())
+    {
+      auto const &e = ePair.second.get();
+      auto vs = e.Vertices();
+      if (set.count(vs.first) && set.count(vs.second))
+        out.AddEdge(vs, e.Data(), e.Weight());
+    }
+    return out;
+  }
 }  // namespace graph
 }  // namespace GZ_MATH_VERSION_NAMESPACE
 }  // namespace gz::math
