@@ -470,3 +470,45 @@ TEST(GraphAlgorithmsCoverage, Dijkstra_MultipleEdgesBetweenSamePair)
   auto dist = Dijkstra(g, 0);
   EXPECT_DOUBLE_EQ(dist[1].first, 1.0);
 }
+
+/////////////////////////////////////////////////
+// Coverage: BFS and DFS return an empty result when the source vertex is
+// not part of the graph. Pre-rewrite they would walk the bogus id once and
+// return a single-element vector containing it.
+TEST(GraphAlgorithmsCoverage, BFS_DFS_MissingSourceReturnsEmpty)
+{
+  UndirectedGraph<int, double> g;
+  g.AddVertex("v0", 0, 0);
+
+  EXPECT_TRUE(BreadthFirstSort(g, 99).empty());
+  EXPECT_TRUE(DepthFirstSort(g, 99).empty());
+}
+
+/////////////////////////////////////////////////
+// Coverage: BFS and DFS on a graph with no vertices return an empty result.
+TEST(GraphAlgorithmsCoverage, BFS_DFS_EmptyGraphReturnsEmpty)
+{
+  UndirectedGraph<int, double> g;
+
+  EXPECT_TRUE(BreadthFirstSort(g, 0).empty());
+  EXPECT_TRUE(DepthFirstSort(g, 0).empty());
+}
+
+/////////////////////////////////////////////////
+// Coverage: BFS and DFS work correctly when vertex ids are sparse and
+// scattered across a large numeric range.
+TEST(GraphAlgorithmsCoverage, BFS_DFS_SparseHighIds)
+{
+  UndirectedGraph<int, double> g;
+  g.AddVertex("a", 0, 1000000);
+  g.AddVertex("b", 0, 2000000);
+  g.AddVertex("c", 0, 3000000);
+  g.AddEdge({1000000, 2000000}, 0.0, 1.0);
+  g.AddEdge({2000000, 3000000}, 0.0, 1.0);
+
+  auto bfs = BreadthFirstSort(g, 1000000);
+  EXPECT_EQ(bfs.size(), 3u);
+
+  auto dfs = DepthFirstSort(g, 1000000);
+  EXPECT_EQ(dfs.size(), 3u);
+}
