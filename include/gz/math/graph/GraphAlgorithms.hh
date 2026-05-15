@@ -500,6 +500,37 @@ namespace graph
     }
     return out;
   }
+
+  /// \brief Set of all descendants of `_vertex` (including `_vertex`
+  /// itself). Equivalent to BreadthFirstSort + insert-into-set, but avoids
+  /// the intermediate vector copy. Matches the return shape downstream
+  /// consumers (gz-sim's EntityComponentManager::Descendants) use.
+  /// \param[in] _graph Source graph.
+  /// \param[in] _vertex Root vertex.
+  /// \return Set of vertex ids reachable from `_vertex`.
+  template<typename V, typename E, typename EdgeType>
+  std::unordered_set<VertexId> DescendantsSet(
+      const Graph<V, E, EdgeType> &_graph, const VertexId &_vertex)
+  {
+    std::unordered_set<VertexId> out;
+    if (!_graph.VertexFromId(_vertex).Valid())
+      return out;
+
+    std::queue<VertexId> pending;
+    pending.push(_vertex);
+    out.insert(_vertex);
+    while (!pending.empty())
+    {
+      const VertexId u = pending.front();
+      pending.pop();
+      for (auto const &adj : _graph.AdjacentsFrom(u))
+      {
+        if (out.insert(adj.first).second)
+          pending.push(adj.first);
+      }
+    }
+    return out;
+  }
 }  // namespace graph
 }  // namespace GZ_MATH_VERSION_NAMESPACE
 }  // namespace gz::math

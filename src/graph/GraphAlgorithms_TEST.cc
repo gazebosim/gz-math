@@ -19,6 +19,7 @@
 
 #include <algorithm>
 #include <string>
+#include <unordered_set>
 
 #include "gz/math/graph/Graph.hh"
 #include "gz/math/graph/GraphAlgorithms.hh"
@@ -709,4 +710,33 @@ TEST(GraphAlgorithmsTree, Subtree_InvalidRoot)
   auto sub = Subtree(g, 99u);
   EXPECT_TRUE(sub.Vertices().empty());
   EXPECT_TRUE(sub.Edges().empty());
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: DescendantsSet returns the same vertex set as a
+// BreadthFirstSort copy into a set.
+TEST(GraphAlgorithmsTree, DescendantsSet_AgreesWithBFS)
+{
+  DirectedGraph<int, double> g;
+  for (int i = 0; i < 5; ++i)
+    g.AddVertex("v" + std::to_string(i), i, i);
+  g.AddEdge({0, 1}, 0.0); g.AddEdge({0, 2}, 0.0);
+  g.AddEdge({1, 3}, 0.0); g.AddEdge({2, 4}, 0.0);
+
+  auto bfs = BreadthFirstSort(g, 0u);
+  std::unordered_set<VertexId> bfsSet(bfs.begin(), bfs.end());
+  auto desc = DescendantsSet(g, 0u);
+  EXPECT_EQ(desc, bfsSet);
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: DescendantsSet returns an empty set for an invalid id.
+TEST(GraphAlgorithmsTree, DescendantsSet_InvalidVertex)
+{
+  DirectedGraph<int, double> g;
+  g.AddVertex("v0", 0, 0);
+  g.AddVertex("v1", 1, 1);
+  g.AddEdge({0, 1}, 0.0);
+
+  EXPECT_TRUE(DescendantsSet(g, 99u).empty());
 }
