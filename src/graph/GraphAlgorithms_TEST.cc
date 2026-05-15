@@ -600,3 +600,72 @@ TEST(GraphAlgorithmsTree, IsAncestor_ToleratesCycle)
 
   EXPECT_FALSE(IsAncestor(g, 3u, 2u));
 }
+
+/////////////////////////////////////////////////
+// Tree algorithm: lowest common ancestor of two vertices in a forest.
+TEST(GraphAlgorithmsTree, LowestCommonAncestor)
+{
+  // world -> modelA -> linkA1
+  //                 -> linkA2
+  //       -> modelB -> linkB1
+  DirectedGraph<int, double> g;
+  for (int i = 0; i < 6; ++i)
+    g.AddVertex("v" + std::to_string(i), i, i);
+  // 0 = world; 1 = modelA; 2 = modelB
+  // 3 = linkA1; 4 = linkA2; 5 = linkB1
+  g.AddEdge({0, 1}, 0.0); g.AddEdge({0, 2}, 0.0);
+  g.AddEdge({1, 3}, 0.0); g.AddEdge({1, 4}, 0.0);
+  g.AddEdge({2, 5}, 0.0);
+
+  // Two siblings under modelA -> LCA = modelA.
+  EXPECT_EQ(LowestCommonAncestor(g, 3u, 4u), 1u);
+  // linkA1 vs linkB1 -> LCA = world.
+  EXPECT_EQ(LowestCommonAncestor(g, 3u, 5u), 0u);
+  // Ancestor case: LCA(world, linkA1) = world.
+  EXPECT_EQ(LowestCommonAncestor(g, 0u, 3u), 0u);
+  // LCA(x, x) = x.
+  EXPECT_EQ(LowestCommonAncestor(g, 4u, 4u), 4u);
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: vertices in disjoint trees have no LCA.
+TEST(GraphAlgorithmsTree, LowestCommonAncestor_DisjointTrees)
+{
+  DirectedGraph<int, double> g;
+  for (int i = 0; i < 4; ++i)
+    g.AddVertex("v" + std::to_string(i), i, i);
+  // Two disjoint chains: 0->1, 2->3.
+  g.AddEdge({0, 1}, 0.0); g.AddEdge({2, 3}, 0.0);
+
+  EXPECT_EQ(LowestCommonAncestor(g, 1u, 3u), kNullId);
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: LCA returns kNullId when either input is invalid.
+TEST(GraphAlgorithmsTree, LowestCommonAncestor_InvalidInputs)
+{
+  DirectedGraph<int, double> g;
+  g.AddVertex("v0", 0, 0);
+  g.AddVertex("v1", 1, 1);
+  g.AddEdge({0, 1}, 0.0);
+
+  EXPECT_EQ(LowestCommonAncestor(g, 99u, 1u), kNullId);
+  EXPECT_EQ(LowestCommonAncestor(g, 0u, 99u), kNullId);
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: LCA hits the early-return shortcut when `_b` is itself
+// an ancestor of `_a`.
+TEST(GraphAlgorithmsTree, LowestCommonAncestor_BIsAncestorOfA)
+{
+  // 0 -> 1 -> 2 -> 3
+  DirectedGraph<int, double> g;
+  for (int i = 0; i < 4; ++i)
+    g.AddVertex("v" + std::to_string(i), i, i);
+  g.AddEdge({0, 1}, 0.0);
+  g.AddEdge({1, 2}, 0.0);
+  g.AddEdge({2, 3}, 0.0);
+
+  // _a = 3 (deep leaf), _b = 1 (its grandparent) -- _b is on _a's chain.
+  EXPECT_EQ(LowestCommonAncestor(g, 3u, 1u), 1u);
+}

@@ -420,6 +420,48 @@ namespace graph
       cur = next;
     }
   }
+
+  /// \brief Lowest common ancestor of two vertices in a directed forest.
+  /// Walks `_a` up to root collecting ancestors, then walks `_b` up until
+  /// hitting one of those ancestors. O(depth_a + depth_b).
+  ///
+  /// Useful for relative-frame computation: if two entities live in the
+  /// same world tree, the LCA is the deepest shared frame, and a relative
+  /// pose can be composed by chaining transforms a->LCA and LCA->b.
+  ///
+  /// \param[in] _graph A directed graph (expected to be a forest).
+  /// \param[in] _a One vertex.
+  /// \param[in] _b Another vertex.
+  /// \return The LCA vertex id, or kNullId if the two vertices share no
+  /// common ancestor (different trees) or either is invalid. If `_a == _b`,
+  /// returns `_a`.
+  template<typename V, typename E, typename EdgeType>
+  VertexId LowestCommonAncestor(
+      const Graph<V, E, EdgeType> &_graph,
+      const VertexId &_a, const VertexId &_b)
+  {
+    if (!_graph.VertexFromId(_a).Valid() ||
+        !_graph.VertexFromId(_b).Valid())
+    {
+      return kNullId;
+    }
+    if (_a == _b)
+      return _a;
+
+    std::unordered_set<VertexId> ancestorsA;
+    ancestorsA.insert(_a);
+    for (auto v : Ancestors(_graph, _a))
+      ancestorsA.insert(v);
+
+    if (ancestorsA.count(_b))
+      return _b;
+    for (auto v : Ancestors(_graph, _b))
+    {
+      if (ancestorsA.count(v))
+        return v;
+    }
+    return kNullId;
+  }
 }  // namespace graph
 }  // namespace GZ_MATH_VERSION_NAMESPACE
 }  // namespace gz::math
