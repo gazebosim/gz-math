@@ -516,6 +516,7 @@ TEST(GraphAlgorithmsCoverage, BFS_DFS_SparseHighIds)
 
 /////////////////////////////////////////////////
 // Tree algorithm: walk the parent chain of a leaf back to the root.
+// Verifies both the chain contents and the reachedRoot flag.
 TEST(GraphAlgorithmsTree, Ancestors_LinearChain)
 {
   // 0 - 1 - 2 - 3   (parent pointers; AddEdge follows parent->child).
@@ -526,15 +527,38 @@ TEST(GraphAlgorithmsTree, Ancestors_LinearChain)
   g.AddEdge({1, 2}, 0.0);
   g.AddEdge({2, 3}, 0.0);
 
-  EXPECT_EQ(Ancestors(g, 3u), (std::vector<VertexId>{2, 1, 0}));
-  EXPECT_EQ(Ancestors(g, 1u), (std::vector<VertexId>{0}));
-  EXPECT_EQ(Ancestors(g, 0u), std::vector<VertexId>{});
-  EXPECT_EQ(Ancestors(g, 99u), std::vector<VertexId>{});
+  // Deep leaf: walks to root cleanly.
+  auto r = Ancestors(g, 3u);
+  EXPECT_EQ(r.first, (std::vector<VertexId>{2, 1, 0}));
+  EXPECT_TRUE(r.second);
+
+  // Mid-chain: walks to root cleanly.
+  r = Ancestors(g, 1u);
+  EXPECT_EQ(r.first, (std::vector<VertexId>{0}));
+  EXPECT_TRUE(r.second);
+
+  // Root vertex itself: empty chain, but reachedRoot is true (already at root).
+  r = Ancestors(g, 0u);
+  EXPECT_TRUE(r.first.empty());
+  EXPECT_TRUE(r.second);
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: invalid input vertex returns an empty chain with
+// reachedRoot=false (the walk could not start).
+TEST(GraphAlgorithmsTree, Ancestors_InvalidVertex)
+{
+  DirectedGraph<int, double> g;
+  g.AddVertex("v0", 0, 0);
+  auto r = Ancestors(g, 99u);
+  EXPECT_TRUE(r.first.empty());
+  EXPECT_FALSE(r.second);
 }
 
 /////////////////////////////////////////////////
 // Tree algorithm: Ancestors() must terminate even if the graph contains
-// a cycle. The chain returned stops at the first revisit.
+// a cycle. The chain returned stops at the first revisit and reachedRoot
+// is false to flag the cycle abort.
 TEST(GraphAlgorithmsTree, Ancestors_ToleratesCycle)
 {
   DirectedGraph<int, double> g;
@@ -546,10 +570,11 @@ TEST(GraphAlgorithmsTree, Ancestors_ToleratesCycle)
 
   // Walking up from 2: parent is 1, then 0; the cycle would re-visit 2,
   // which is the seen sentinel -- stop without infinite loop.
-  auto chain = Ancestors(g, 2u);
-  EXPECT_EQ(chain.size(), 2u);
-  EXPECT_EQ(chain[0], 1u);
-  EXPECT_EQ(chain[1], 0u);
+  auto r = Ancestors(g, 2u);
+  EXPECT_EQ(r.first.size(), 2u);
+  EXPECT_EQ(r.first[0], 1u);
+  EXPECT_EQ(r.first[1], 0u);
+  EXPECT_FALSE(r.second);
 }
 
 /////////////////////////////////////////////////
@@ -672,8 +697,8 @@ TEST(GraphAlgorithmsTree, LowestCommonAncestor_BIsAncestorOfA)
 }
 
 /////////////////////////////////////////////////
-// Tree algorithm: Subtree extracts the subtree rooted at a vertex.
-TEST(GraphAlgorithmsTree, Subtree_ExtractsModel)
+// Tree algorithm: Subgraph extracts the reachable region rooted at a vertex.
+TEST(GraphAlgorithmsTree, Subgraph_ExtractsModel)
 {
   // world -> modelA -> linkA1, linkA2
   //       -> modelB -> linkB1
@@ -685,7 +710,7 @@ TEST(GraphAlgorithmsTree, Subtree_ExtractsModel)
   g.AddEdge({2, 5}, 0.0);
 
   // Extract the subtree rooted at modelA.
-  auto sub = Subtree(g, 1u);
+  auto sub = Subgraph(g, 1u);
   EXPECT_EQ(sub.Vertices().size(), 3u);  // modelA + linkA1 + linkA2
   EXPECT_EQ(sub.Edges().size(),    2u);  // modelA->linkA1, modelA->linkA2
   EXPECT_TRUE(sub.VertexFromId(1).Valid());
@@ -699,17 +724,40 @@ TEST(GraphAlgorithmsTree, Subtree_ExtractsModel)
 }
 
 /////////////////////////////////////////////////
-// Tree algorithm: Subtree returns an empty graph for an invalid root.
-TEST(GraphAlgorithmsTree, Subtree_InvalidRoot)
+// Tree algorithm: Subgraph returns an empty graph for an invalid root.
+TEST(GraphAlgorithmsTree, Subgraph_InvalidRoot)
 {
   DirectedGraph<int, double> g;
   g.AddVertex("v0", 0, 0);
   g.AddVertex("v1", 1, 1);
   g.AddEdge({0, 1}, 0.0);
 
-  auto sub = Subtree(g, 99u);
+  auto sub = Subgraph(g, 99u);
   EXPECT_TRUE(sub.Vertices().empty());
   EXPECT_TRUE(sub.Edges().empty());
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: Subgraph preserves cycles within the reachable region.
+// (This is the reason the function is named Subgraph and not Subtree:
+// the result is not necessarily a tree.)
+TEST(GraphAlgorithmsTree, Subgraph_PreservesCycles)
+{
+  // Reachable region forms a cycle: 0 -> 1 -> 2 -> 0, plus a chain
+  // hanging off vertex 1. All four vertices reachable from 0.
+  DirectedGraph<int, double> g;
+  for (int i = 0; i < 4; ++i)
+    g.AddVertex("v" + std::to_string(i), i, i);
+  g.AddEdge({0, 1}, 0.0);
+  g.AddEdge({1, 2}, 0.0);
+  g.AddEdge({2, 0}, 0.0);  // back-edge closing the cycle
+  g.AddEdge({1, 3}, 0.0);
+
+  auto sub = Subgraph(g, 0u);
+  EXPECT_EQ(sub.Vertices().size(), 4u);
+  // All four edges (including the back-edge that forms the cycle) preserved.
+  EXPECT_EQ(sub.Edges().size(), 4u);
+  EXPECT_TRUE(sub.EdgeFromVertices(2u, 0u).Valid());
 }
 
 /////////////////////////////////////////////////

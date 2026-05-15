@@ -340,7 +340,9 @@ namespace graph
   }
 
   /// \brief Walk parent edges from `_vertex` up to a root and return the
-  /// chain of ancestors in walk order (immediate parent first, root last).
+  /// chain of ancestors in walk order (immediate parent first, root last)
+  /// together with a flag indicating whether the walk terminated cleanly
+  /// at a root (no parent) or was aborted by the cycle guard.
   /// In a tree this returns the unique parent chain; in a more general
   /// directed graph it follows the *first* incoming edge at each step
   /// (deterministic via the adjacency-list ordering) and aborts on cycles.
@@ -351,17 +353,21 @@ namespace graph
   ///
   /// \param[in] _graph Any graph (typically a directed forest/tree).
   /// \param[in] _vertex Starting vertex.
-  /// \return Vector of vertex ids: parent, grandparent, ..., root.
-  /// Empty if `_vertex` is invalid or has no parent. If a cycle is detected
-  /// (the same vertex visited twice), the partial chain up to the cycle
-  /// repeat is returned.
+  /// \return A pair (chain, reachedRoot):
+  ///   - chain: vertex ids in walk order (parent, grandparent, ..., root).
+  ///     Empty if `_vertex` is invalid or has no parent.
+  ///   - reachedRoot: true if the walk terminated at a root (parent chain
+  ///     is complete). False if `_vertex` was invalid, or the walk was
+  ///     aborted because a previously visited vertex was reached again
+  ///     (cycle), in which case `chain` holds the partial path traversed
+  ///     up to the revisit.
   template<typename V, typename E, typename EdgeType>
-  std::vector<VertexId> Ancestors(
+  std::pair<std::vector<VertexId>, bool> Ancestors(
       const Graph<V, E, EdgeType> &_graph, const VertexId &_vertex)
   {
     std::vector<VertexId> chain;
     if (!_graph.VertexFromId(_vertex).Valid())
-      return chain;
+      return {chain, false};
 
     std::unordered_set<VertexId> seen;
     seen.insert(_vertex);
@@ -370,15 +376,14 @@ namespace graph
     {
       auto parents = _graph.AdjacentsTo(cur);
       if (parents.empty())
-        break;
+        return {chain, true};
       const VertexId next = parents.begin()->first;
       // Cycle guard: stop if we revisit a vertex.
       if (!seen.insert(next).second)
-        break;
+        return {chain, false};
       chain.push_back(next);
       cur = next;
     }
-    return chain;
   }
 
   /// \brief Test whether `_ancestor` lies on the parent chain above
@@ -450,12 +455,12 @@ namespace graph
 
     std::unordered_set<VertexId> ancestorsA;
     ancestorsA.insert(_a);
-    for (auto v : Ancestors(_graph, _a))
+    for (auto v : Ancestors(_graph, _a).first)
       ancestorsA.insert(v);
 
     if (ancestorsA.count(_b))
       return _b;
-    for (auto v : Ancestors(_graph, _b))
+    for (auto v : Ancestors(_graph, _b).first)
     {
       if (ancestorsA.count(v))
         return v;
@@ -463,18 +468,21 @@ namespace graph
     return kNullId;
   }
 
-  /// \brief Extract the subtree rooted at `_root` as a new graph of the
-  /// same type. Vertices and edges are copied (preserving ids, names, data,
-  /// weights). Equivalent to "save just this entity and everything beneath
-  /// it" -- the shape of operation gz-sim and sdformat would invoke when
-  /// serializing a single model out of a world.
+  /// \brief Extract the subgraph induced by `_root` and all descendants
+  /// reachable from it. Vertices and edges are copied (preserving ids,
+  /// names, data, weights). All edges whose endpoints both lie in the
+  /// reachable set are kept, including back-edges -- so if the source
+  /// graph contains cycles within the reachable region, the cycles are
+  /// preserved in the result. Equivalent to "save just this entity and
+  /// everything beneath it" -- the shape of operation gz-sim and sdformat
+  /// would invoke when serializing a single model out of a world.
   ///
   /// \param[in] _graph Source graph.
-  /// \param[in] _root Root vertex of the subtree.
+  /// \param[in] _root Root vertex of the subgraph.
   /// \return A new graph containing `_root` and all descendants reachable
   /// from it, plus the edges between them. Empty graph if `_root` is invalid.
   template<typename V, typename E, typename EdgeType>
-  Graph<V, E, EdgeType> Subtree(
+  Graph<V, E, EdgeType> Subgraph(
       const Graph<V, E, EdgeType> &_graph, const VertexId &_root)
   {
     Graph<V, E, EdgeType> out;
@@ -490,7 +498,7 @@ namespace graph
       const auto &v = _graph.VertexFromId(id);
       out.AddVertex(v.Name(), v.Data(), v.Id());
     }
-    // Copy edges whose endpoints both lie in the subtree.
+    // Copy edges whose endpoints both lie in the reachable set.
     for (auto const &ePair : _graph.Edges())
     {
       auto const &e = ePair.second.get();

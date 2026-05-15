@@ -16,7 +16,7 @@
 */
 
 // Benchmarks for the tree-shaped algorithms (Ancestors, IsAncestor,
-// LowestCommonAncestor, Subtree, DescendantsSet) on a gz-sim-shaped
+// LowestCommonAncestor, Subgraph, DescendantsSet) on a gz-sim-shaped
 // entity tree. For stable numbers, pin to a single CPU using your
 // platform's affinity tool (on Linux, e.g.,
 // `taskset -c 1 ./bin/BENCHMARK_tree_algorithms`).
@@ -130,16 +130,16 @@ static void BM_LowestCommonAncestorSameModel(benchmark::State &_state)
 BENCHMARK(BM_LowestCommonAncestorSameModel);
 
 /////////////////////////////////////////////////
-static void BM_SubtreeModel0(benchmark::State &_state)
+static void BM_SubgraphModel0(benchmark::State &_state)
 {
   auto g = makeSimEntityTree();
   for (auto _ : _state)
   {
-    auto sub = Subtree(g, kModel0);
+    auto sub = Subgraph(g, kModel0);
     benchmark::DoNotOptimize(sub);
   }
 }
-BENCHMARK(BM_SubtreeModel0);
+BENCHMARK(BM_SubgraphModel0);
 
 /////////////////////////////////////////////////
 static void BM_DescendantsSetWorld(benchmark::State &_state)
