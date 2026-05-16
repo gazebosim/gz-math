@@ -14,6 +14,7 @@ if (GzBenchmark_FOUND)
   set(tests
     graph.cc
     gz_sim_workload.cc
+    tree_algorithms.cc
   )
 
   gz_add_benchmarks(SOURCES ${tests})
