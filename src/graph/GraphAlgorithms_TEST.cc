@@ -709,15 +709,15 @@ TEST(GraphAlgorithmsTree, Subgraph_ExtractsModel)
   g.AddEdge({1, 3}, 0.0); g.AddEdge({1, 4}, 0.0);
   g.AddEdge({2, 5}, 0.0);
 
-  // Extract the subtree rooted at modelA.
+  // Extract the subgraph rooted at modelA.
   auto sub = Subgraph(g, 1u);
   EXPECT_EQ(sub.Vertices().size(), 3u);  // modelA + linkA1 + linkA2
   EXPECT_EQ(sub.Edges().size(),    2u);  // modelA->linkA1, modelA->linkA2
   EXPECT_TRUE(sub.VertexFromId(1).Valid());
   EXPECT_TRUE(sub.VertexFromId(3).Valid());
   EXPECT_TRUE(sub.VertexFromId(4).Valid());
-  EXPECT_FALSE(sub.VertexFromId(0).Valid());  // world not in subtree
-  EXPECT_FALSE(sub.VertexFromId(5).Valid());  // linkB1 not in subtree
+  EXPECT_FALSE(sub.VertexFromId(0).Valid());  // world not in subgraph
+  EXPECT_FALSE(sub.VertexFromId(5).Valid());  // linkB1 not in subgraph
 
   // Data preserved.
   EXPECT_EQ(sub.VertexFromId(3).Data(), 30);
