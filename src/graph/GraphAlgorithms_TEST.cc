@@ -19,6 +19,7 @@
 
 #include <algorithm>
 #include <string>
+#include <unordered_set>
 
 #include "gz/math/graph/Graph.hh"
 #include "gz/math/graph/GraphAlgorithms.hh"
@@ -511,4 +512,279 @@ TEST(GraphAlgorithmsCoverage, BFS_DFS_SparseHighIds)
 
   auto dfs = DepthFirstSort(g, 1000000);
   EXPECT_EQ(dfs.size(), 3u);
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: walk the parent chain of a leaf back to the root.
+// Verifies both the chain contents and the reachedRoot flag.
+TEST(GraphAlgorithmsTree, Ancestors_LinearChain)
+{
+  // 0 - 1 - 2 - 3   (parent pointers; AddEdge follows parent->child).
+  DirectedGraph<int, double> g;
+  for (int i = 0; i < 4; ++i)
+    g.AddVertex("v" + std::to_string(i), i, i);
+  g.AddEdge({0, 1}, 0.0);
+  g.AddEdge({1, 2}, 0.0);
+  g.AddEdge({2, 3}, 0.0);
+
+  // Deep leaf: walks to root cleanly.
+  auto r = Ancestors(g, 3u);
+  EXPECT_EQ(r.first, (std::vector<VertexId>{2, 1, 0}));
+  EXPECT_TRUE(r.second);
+
+  // Mid-chain: walks to root cleanly.
+  r = Ancestors(g, 1u);
+  EXPECT_EQ(r.first, (std::vector<VertexId>{0}));
+  EXPECT_TRUE(r.second);
+
+  // Root vertex itself: empty chain, but reachedRoot is true (already at root).
+  r = Ancestors(g, 0u);
+  EXPECT_TRUE(r.first.empty());
+  EXPECT_TRUE(r.second);
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: invalid input vertex returns an empty chain with
+// reachedRoot=false (the walk could not start).
+TEST(GraphAlgorithmsTree, Ancestors_InvalidVertex)
+{
+  DirectedGraph<int, double> g;
+  g.AddVertex("v0", 0, 0);
+  auto r = Ancestors(g, 99u);
+  EXPECT_TRUE(r.first.empty());
+  EXPECT_FALSE(r.second);
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: Ancestors() must terminate even if the graph contains
+// a cycle. The chain returned stops at the first revisit and reachedRoot
+// is false to flag the cycle abort.
+TEST(GraphAlgorithmsTree, Ancestors_ToleratesCycle)
+{
+  DirectedGraph<int, double> g;
+  for (int i = 0; i < 3; ++i)
+    g.AddVertex("v" + std::to_string(i), i, i);
+  g.AddEdge({0, 1}, 0.0);
+  g.AddEdge({1, 2}, 0.0);
+  g.AddEdge({2, 0}, 0.0);  // cycle back to 0
+
+  // Walking up from 2: parent is 1, then 0; the cycle would re-visit 2,
+  // which is the seen sentinel -- stop without infinite loop.
+  auto r = Ancestors(g, 2u);
+  EXPECT_EQ(r.first.size(), 2u);
+  EXPECT_EQ(r.first[0], 1u);
+  EXPECT_EQ(r.first[1], 0u);
+  EXPECT_FALSE(r.second);
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: IsAncestor walks the descendant up its parent chain.
+TEST(GraphAlgorithmsTree, IsAncestor)
+{
+  // world(0) -> modelA(1) -> linkA(3)
+  // world(0) -> modelB(2) -> linkB(4)
+  DirectedGraph<int, double> g;
+  for (int i = 0; i < 5; ++i)
+    g.AddVertex("v" + std::to_string(i), i, i);
+  g.AddEdge({0, 1}, 0.0); g.AddEdge({1, 3}, 0.0);
+  g.AddEdge({0, 2}, 0.0); g.AddEdge({2, 4}, 0.0);
+
+  EXPECT_TRUE(IsAncestor(g, 0u, 3u));   // world is ancestor of linkA
+  EXPECT_TRUE(IsAncestor(g, 1u, 3u));   // modelA is ancestor of linkA
+  EXPECT_FALSE(IsAncestor(g, 1u, 4u));  // modelA is NOT ancestor of linkB
+  EXPECT_FALSE(IsAncestor(g, 3u, 1u));  // child is not ancestor of parent
+  EXPECT_FALSE(IsAncestor(g, 0u, 0u));  // strict ancestor (a != d)
+  EXPECT_FALSE(IsAncestor(g, 99u, 3u));  // bogus inputs
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: IsAncestor must reject an invalid descendant id.
+TEST(GraphAlgorithmsTree, IsAncestor_InvalidDescendant)
+{
+  DirectedGraph<int, double> g;
+  g.AddVertex("v0", 0, 0);
+  g.AddVertex("v1", 1, 1);
+  g.AddEdge({0, 1}, 0.0);
+
+  EXPECT_FALSE(IsAncestor(g, 0u, 99u));
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: IsAncestor must terminate when the descendant chain
+// contains a cycle that does not include the candidate ancestor.
+TEST(GraphAlgorithmsTree, IsAncestor_ToleratesCycle)
+{
+  DirectedGraph<int, double> g;
+  g.AddVertex("v0", 0, 0);
+  g.AddVertex("v1", 1, 1);
+  g.AddVertex("v2", 2, 2);
+  g.AddVertex("v3", 3, 3);  // isolated -- the candidate ancestor.
+  // Cycle 0 -> 1 -> 2 -> 0, none of which connect to vertex 3.
+  g.AddEdge({0, 1}, 0.0);
+  g.AddEdge({1, 2}, 0.0);
+  g.AddEdge({2, 0}, 0.0);
+
+  EXPECT_FALSE(IsAncestor(g, 3u, 2u));
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: lowest common ancestor of two vertices in a forest.
+TEST(GraphAlgorithmsTree, LowestCommonAncestor)
+{
+  // world -> modelA -> linkA1
+  //                 -> linkA2
+  //       -> modelB -> linkB1
+  DirectedGraph<int, double> g;
+  for (int i = 0; i < 6; ++i)
+    g.AddVertex("v" + std::to_string(i), i, i);
+  // 0 = world; 1 = modelA; 2 = modelB
+  // 3 = linkA1; 4 = linkA2; 5 = linkB1
+  g.AddEdge({0, 1}, 0.0); g.AddEdge({0, 2}, 0.0);
+  g.AddEdge({1, 3}, 0.0); g.AddEdge({1, 4}, 0.0);
+  g.AddEdge({2, 5}, 0.0);
+
+  // Two siblings under modelA -> LCA = modelA.
+  EXPECT_EQ(LowestCommonAncestor(g, 3u, 4u), 1u);
+  // linkA1 vs linkB1 -> LCA = world.
+  EXPECT_EQ(LowestCommonAncestor(g, 3u, 5u), 0u);
+  // Ancestor case: LCA(world, linkA1) = world.
+  EXPECT_EQ(LowestCommonAncestor(g, 0u, 3u), 0u);
+  // LCA(x, x) = x.
+  EXPECT_EQ(LowestCommonAncestor(g, 4u, 4u), 4u);
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: vertices in disjoint trees have no LCA.
+TEST(GraphAlgorithmsTree, LowestCommonAncestor_DisjointTrees)
+{
+  DirectedGraph<int, double> g;
+  for (int i = 0; i < 4; ++i)
+    g.AddVertex("v" + std::to_string(i), i, i);
+  // Two disjoint chains: 0->1, 2->3.
+  g.AddEdge({0, 1}, 0.0); g.AddEdge({2, 3}, 0.0);
+
+  EXPECT_EQ(LowestCommonAncestor(g, 1u, 3u), kNullId);
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: LCA returns kNullId when either input is invalid.
+TEST(GraphAlgorithmsTree, LowestCommonAncestor_InvalidInputs)
+{
+  DirectedGraph<int, double> g;
+  g.AddVertex("v0", 0, 0);
+  g.AddVertex("v1", 1, 1);
+  g.AddEdge({0, 1}, 0.0);
+
+  EXPECT_EQ(LowestCommonAncestor(g, 99u, 1u), kNullId);
+  EXPECT_EQ(LowestCommonAncestor(g, 0u, 99u), kNullId);
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: LCA hits the early-return shortcut when `_b` is itself
+// an ancestor of `_a`.
+TEST(GraphAlgorithmsTree, LowestCommonAncestor_BIsAncestorOfA)
+{
+  // 0 -> 1 -> 2 -> 3
+  DirectedGraph<int, double> g;
+  for (int i = 0; i < 4; ++i)
+    g.AddVertex("v" + std::to_string(i), i, i);
+  g.AddEdge({0, 1}, 0.0);
+  g.AddEdge({1, 2}, 0.0);
+  g.AddEdge({2, 3}, 0.0);
+
+  // _a = 3 (deep leaf), _b = 1 (its grandparent) -- _b is on _a's chain.
+  EXPECT_EQ(LowestCommonAncestor(g, 3u, 1u), 1u);
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: Subgraph extracts the reachable region rooted at a vertex.
+TEST(GraphAlgorithmsTree, Subgraph_ExtractsModel)
+{
+  // world -> modelA -> linkA1, linkA2
+  //       -> modelB -> linkB1
+  DirectedGraph<int, double> g;
+  for (int i = 0; i < 6; ++i)
+    g.AddVertex("v" + std::to_string(i), i * 10, i);
+  g.AddEdge({0, 1}, 0.0); g.AddEdge({0, 2}, 0.0);
+  g.AddEdge({1, 3}, 0.0); g.AddEdge({1, 4}, 0.0);
+  g.AddEdge({2, 5}, 0.0);
+
+  // Extract the subgraph rooted at modelA.
+  auto sub = Subgraph(g, 1u);
+  EXPECT_EQ(sub.Vertices().size(), 3u);  // modelA + linkA1 + linkA2
+  EXPECT_EQ(sub.Edges().size(),    2u);  // modelA->linkA1, modelA->linkA2
+  EXPECT_TRUE(sub.VertexFromId(1).Valid());
+  EXPECT_TRUE(sub.VertexFromId(3).Valid());
+  EXPECT_TRUE(sub.VertexFromId(4).Valid());
+  EXPECT_FALSE(sub.VertexFromId(0).Valid());  // world not in subgraph
+  EXPECT_FALSE(sub.VertexFromId(5).Valid());  // linkB1 not in subgraph
+
+  // Data preserved.
+  EXPECT_EQ(sub.VertexFromId(3).Data(), 30);
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: Subgraph returns an empty graph for an invalid root.
+TEST(GraphAlgorithmsTree, Subgraph_InvalidRoot)
+{
+  DirectedGraph<int, double> g;
+  g.AddVertex("v0", 0, 0);
+  g.AddVertex("v1", 1, 1);
+  g.AddEdge({0, 1}, 0.0);
+
+  auto sub = Subgraph(g, 99u);
+  EXPECT_TRUE(sub.Vertices().empty());
+  EXPECT_TRUE(sub.Edges().empty());
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: Subgraph preserves cycles within the reachable region.
+// (This is the reason the function is named Subgraph and not Subtree:
+// the result is not necessarily a tree.)
+TEST(GraphAlgorithmsTree, Subgraph_PreservesCycles)
+{
+  // Reachable region forms a cycle: 0 -> 1 -> 2 -> 0, plus a chain
+  // hanging off vertex 1. All four vertices reachable from 0.
+  DirectedGraph<int, double> g;
+  for (int i = 0; i < 4; ++i)
+    g.AddVertex("v" + std::to_string(i), i, i);
+  g.AddEdge({0, 1}, 0.0);
+  g.AddEdge({1, 2}, 0.0);
+  g.AddEdge({2, 0}, 0.0);  // back-edge closing the cycle
+  g.AddEdge({1, 3}, 0.0);
+
+  auto sub = Subgraph(g, 0u);
+  EXPECT_EQ(sub.Vertices().size(), 4u);
+  // All four edges (including the back-edge that forms the cycle) preserved.
+  EXPECT_EQ(sub.Edges().size(), 4u);
+  EXPECT_TRUE(sub.EdgeFromVertices(2u, 0u).Valid());
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: DescendantsSet returns the same vertex set as a
+// BreadthFirstSort copy into a set.
+TEST(GraphAlgorithmsTree, DescendantsSet_AgreesWithBFS)
+{
+  DirectedGraph<int, double> g;
+  for (int i = 0; i < 5; ++i)
+    g.AddVertex("v" + std::to_string(i), i, i);
+  g.AddEdge({0, 1}, 0.0); g.AddEdge({0, 2}, 0.0);
+  g.AddEdge({1, 3}, 0.0); g.AddEdge({2, 4}, 0.0);
+
+  auto bfs = BreadthFirstSort(g, 0u);
+  std::unordered_set<VertexId> bfsSet(bfs.begin(), bfs.end());
+  auto desc = DescendantsSet(g, 0u);
+  EXPECT_EQ(desc, bfsSet);
+}
+
+/////////////////////////////////////////////////
+// Tree algorithm: DescendantsSet returns an empty set for an invalid id.
+TEST(GraphAlgorithmsTree, DescendantsSet_InvalidVertex)
+{
+  DirectedGraph<int, double> g;
+  g.AddVertex("v0", 0, 0);
+  g.AddVertex("v1", 1, 1);
+  g.AddEdge({0, 1}, 0.0);
+
+  EXPECT_TRUE(DescendantsSet(g, 99u).empty());
 }
