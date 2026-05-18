@@ -56,7 +56,7 @@ if (RUBY_FOUND)
   )
   target_include_directories(${SWIG_RB_LIB} SYSTEM PUBLIC ${RUBY_INCLUDE_DIRS})
 
-  SWIG_LINK_LIBRARIES(${SWIG_RB_LIB}
+  target_link_libraries(${SWIG_RB_LIB} PRIVATE
     ${RUBY_LIBRARY}
     gz-utils::gz-utils
     gz-math
