@@ -88,6 +88,14 @@ namespace graph
     {
     }
 
+    /// \brief Virtual destructor. Required because `Edge<E>` already has
+    /// virtual member functions (`From`, `To`), so polymorphic deletion
+    /// via a base `Edge<E>*` would otherwise be undefined behavior
+    /// (C++ Core Guideline C.35). With this defaulted virtual dtor,
+    /// `std::unique_ptr<Edge<E>>` and similar polymorphic owners are
+    /// safe.
+    public: virtual ~Edge() = default;
+
     /// \brief Get the edge Id.
     /// \return The edge Id.
     public: [[nodiscard]] EdgeId Id() const noexcept
