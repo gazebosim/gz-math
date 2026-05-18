@@ -17,7 +17,9 @@
 
 #include <gtest/gtest.h>
 #include <iostream>
+#include <memory>
 #include <string>
+#include <type_traits>
 
 #include "gz/math/graph/Edge.hh"
 #include "gz/math/graph/Vertex.hh"
@@ -222,4 +224,26 @@ TEST(EdgeTest, StreamInsertionUndirected)
 
   std::string expectedOutput = "  0 -- 1 [label=2];\n";
   EXPECT_EQ(expectedOutput, output.str());
+}
+
+/////////////////////////////////////////////////
+// Edge<E> has virtual member functions (From, To) and now a virtual
+// destructor; verify the trait and confirm polymorphic deletion via a
+// base-class pointer is safe (would be undefined behavior without it).
+TEST(EdgeTest, HasVirtualDestructor)
+{
+  static_assert(std::has_virtual_destructor_v<Edge<int>>,
+                "Edge<E> must have a virtual destructor");
+  static_assert(std::has_virtual_destructor_v<DirectedEdge<int>>,
+                "DirectedEdge<E> must have a virtual destructor");
+  static_assert(std::has_virtual_destructor_v<UndirectedEdge<int>>,
+                "UndirectedEdge<E> must have a virtual destructor");
+
+  // Polymorphic deletion via a base-class pointer must call the
+  // concrete destructor. Pre-fix this was undefined behavior.
+  std::unique_ptr<Edge<int>> e =
+      std::make_unique<DirectedEdge<int>>(VertexId_P{0, 1}, 0, 1.0, 7u);
+  EXPECT_EQ(e->Id(), 7u);
+  // No assertion needed for the destruction itself; it just has to not
+  // be UB. Sanitizers in CI flag any leak.
 }
