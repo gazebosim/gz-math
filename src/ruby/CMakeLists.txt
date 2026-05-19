@@ -48,12 +48,16 @@ if (RUBY_FOUND)
   set(CMAKE_SWIG_OUTDIR "${CMAKE_BINARY_DIR}/lib/ruby")
   SWIG_ADD_LIBRARY(${SWIG_RB_LIB} LANGUAGE ruby SOURCES ruby.i ${swig_i_files})
 
-  # Suppress warnings on SWIG-generated files
+  # Suppress warnings on SWIG-generated files.
   target_compile_options(${SWIG_RB_LIB} PRIVATE
-    $<$<CXX_COMPILER_ID:GNU>:-Wno-pedantic -Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter>
+    $<$<CXX_COMPILER_ID:GNU>:-Wno-pedantic -Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-switch-default>
     $<$<CXX_COMPILER_ID:Clang>:-Wno-shadow -Wno-unused-parameter -Wno-deprecated-declarations>
     $<$<CXX_COMPILER_ID:AppleClang>:-Wno-shadow -Wno-maybe-uninitialized -Wno-unused-parameter>
   )
+
+  # Skip Ruby's <cstdbool> shim (deprecated in C++17, warns on GCC 15+).
+  target_compile_definitions(${SWIG_RB_LIB} PRIVATE
+    __bool_true_false_are_defined)
   target_include_directories(${SWIG_RB_LIB} SYSTEM PUBLIC ${RUBY_INCLUDE_DIRS})
 
   target_link_libraries(${SWIG_RB_LIB} PRIVATE
