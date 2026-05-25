@@ -179,9 +179,6 @@ namespace graph
       // Link the vertex with an empty list of edges.
       this->adjList[id] = EdgeId_S();
 
-      // Update the map of names.
-      this->names.insert(std::make_pair(_name, id));
-
       return ret.first->second;
     }
 
@@ -518,8 +515,6 @@ namespace graph
       if (vIt == this->vertices.end())
         return false;
 
-      std::string name = vIt->second.Name();
-
       // Remove incident edges.
       auto incidents = this->IncidentsTo(_vertex);
       for (auto edgePair : incidents)
@@ -535,17 +530,6 @@ namespace graph
 
       // Remove the vertex.
       this->vertices.erase(_vertex);
-
-      // Get an iterator to all vertices sharing name.
-      auto iterPair = this->names.equal_range(name);
-      for (auto it = iterPair.first; it != iterPair.second; ++it)
-      {
-        if (it->second == _vertex)
-        {
-          this->names.erase(it);
-          break;
-        }
-      }
 
       return true;
     }
@@ -563,14 +547,12 @@ namespace graph
     /// \return The number of vertices removed.
     public: size_t RemoveVertices(const std::string &_name)
     {
-      // Collect matching ids first so we don't mutate the names index
-      // (and the iterators it produces) while still reading from it.
-      auto range = this->names.equal_range(_name);
       std::vector<VertexId> toRemove;
-      toRemove.reserve(static_cast<std::size_t>(
-          std::distance(range.first, range.second)));
-      for (auto it = range.first; it != range.second; ++it)
-        toRemove.push_back(it->second);
+      for (auto const &[id, vertex] : this->vertices)
+      {
+        if (vertex.Name() == _name)
+          toRemove.push_back(id);
+      }
 
       size_t result = 0;
       for (auto const &id : toRemove)
@@ -765,7 +747,9 @@ namespace graph
     /// another vertex via (e).
     private: std::map<VertexId, EdgeId_S> adjList;
 
-    /// \brief Association between names and vertices currently used.
+    /// \brief Retained for ABI compatibility on the gz-math8 release series;
+    /// no longer maintained or read. std::multimap is non-trivially
+    /// constructible, so GCC and Clang do not warn about it being unused.
     private: std::multimap<std::string, VertexId> names;
   };
 
