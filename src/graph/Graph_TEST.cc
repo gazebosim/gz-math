@@ -457,3 +457,27 @@ TYPED_TEST(GraphTestFixture, EdgelessOutDegree)
     EXPECT_EQ(0u, graph.OutDegree(idVertex.first));
   }
 }
+
+/////////////////////////////////////////////////
+// Regression: renaming a graph-owned vertex via Vertex::SetName and
+// then removing it via Graph::RemoveVertices(name) must find the
+// vertex under its new name. Pre-fix, RemoveVertices read from an
+// internal name->id index that SetName did not update, so the
+// rename made the vertex un-removable by name (silent 0-return).
+TEST(GraphTest, RemoveVerticesAfterSetNameWorks)
+{
+  UndirectedGraph<int, double> graph;
+  graph.AddVertex("alice", 0, 0);
+  graph.AddVertex("bob",   1, 1);
+
+  // Rename through the mutable reference handed back by VertexFromId.
+  graph.VertexFromId(0).SetName("alice2");
+
+  // The vertex must be reachable under the new name.
+  EXPECT_EQ(1u, graph.RemoveVertices("alice2"));
+  EXPECT_FALSE(graph.VertexFromId(0).Valid());
+  // Removing under the old name is a no-op now.
+  EXPECT_EQ(0u, graph.RemoveVertices("alice"));
+  // Bob is untouched.
+  EXPECT_TRUE(graph.VertexFromId(1).Valid());
+}
