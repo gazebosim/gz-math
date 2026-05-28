@@ -519,6 +519,65 @@ TEST(GraphTest, LinkEdgeUndirected)
 }
 
 /////////////////////////////////////////////////
+// The cached Vertices() and Edges() views must stay consistent with
+// the graph after removals. RemoveEdge must drop the edge from the
+// Edges() cache; RemoveVertex must drop the vertex from the
+// Vertices() cache and cascade to remove its incident edges from the
+// Edges() cache; RemoveVertices(name) must do the same in bulk.
+TYPED_TEST(GraphTestFixture, RemoveKeepsCachedAccessorsConsistent)
+{
+  // 0 -- 1 -- 2, plus a third vertex "1" sharing a name with vertex 1.
+  TypeParam graph(
+  {
+    {{"0", 0, 0}, {"1", 1, 1}, {"2", 2, 2}, {"1", 3, 3}},
+    {{{0, 1}, 0.0}, {{1, 2}, 0.0}}
+  });
+
+  // Sanity check the initial cached state.
+  ASSERT_EQ(4u, graph.Vertices().size());
+  ASSERT_EQ(2u, graph.Edges().size());
+
+  const auto edge01Id = graph.EdgeFromVertices(0, 1).Id();
+  const auto edge12Id = graph.EdgeFromVertices(1, 2).Id();
+  ASSERT_NE(kNullId, edge01Id);
+  ASSERT_NE(kNullId, edge12Id);
+
+  // Removing an edge must update the cached Edges() view, leaving the
+  // Vertices() cache untouched.
+  EXPECT_TRUE(graph.RemoveEdge(edge01Id));
+  {
+    const auto &edges = graph.Edges();
+    EXPECT_EQ(1u, edges.size());
+    EXPECT_EQ(edges.end(), edges.find(edge01Id));
+    EXPECT_NE(edges.end(), edges.find(edge12Id));
+  }
+  EXPECT_EQ(4u, graph.Vertices().size());
+
+  // Removing a vertex must update the cached Vertices() view and
+  // cascade to drop its incident edges from the Edges() cache.
+  EXPECT_TRUE(graph.RemoveVertex(1));
+  {
+    const auto &vertices = graph.Vertices();
+    EXPECT_EQ(3u, vertices.size());
+    EXPECT_EQ(vertices.end(), vertices.find(1));
+    EXPECT_NE(vertices.end(), vertices.find(0));
+    EXPECT_NE(vertices.end(), vertices.find(2));
+    EXPECT_NE(vertices.end(), vertices.find(3));
+  }
+  // The incident edge (1 -- 2) must be gone from the Edges() cache.
+  EXPECT_TRUE(graph.Edges().empty());
+
+  // RemoveVertices(name) must also keep the Vertices() cache in sync.
+  // Only vertex 3 still carries the name "1" at this point.
+  EXPECT_EQ(1u, graph.RemoveVertices("1"));
+  {
+    const auto &vertices = graph.Vertices();
+    EXPECT_EQ(2u, vertices.size());
+    EXPECT_EQ(vertices.end(), vertices.find(3));
+  }
+}
+
+/////////////////////////////////////////////////
 // Regression: renaming a graph-owned vertex via Vertex::SetName and
 // then removing it via Graph::RemoveVertices(name) must find the
 // vertex under its new name. Pre-fix, RemoveVertices read from an
