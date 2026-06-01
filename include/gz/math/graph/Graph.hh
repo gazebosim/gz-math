@@ -179,19 +179,20 @@ namespace graph
       // Link the vertex with an empty list of edges.
       this->adjList[id] = EdgeId_S();
 
+      // Maintain the cached Vertices() view.
+      this->verticesRefCache.emplace(id, std::cref(ret.first->second));
+
       return ret.first->second;
     }
 
     /// \brief The collection of all vertices in the graph.
     /// \return A map of vertices, where keys are Ids and values are
-    /// references to the vertices.
-    public: const VertexRef_M<V> Vertices() const
+    /// references to the vertices. The returned map is a cached view
+    /// owned by the Graph; the reference is valid until the next call
+    /// that adds or removes a vertex.
+    public: const VertexRef_M<V> &Vertices() const
     {
-      VertexRef_M<V> res;
-      for (auto const &v : this->vertices)
-        res.emplace(std::make_pair(v.first, std::cref(v.second)));
-
-      return res;
+      return this->verticesRefCache;
     }
 
     /// \brief The collection of all vertices in the graph with name == _name.
@@ -264,22 +265,21 @@ namespace graph
 
       auto ret = this->edges.insert(std::make_pair(_edge.Id(), _edge));
 
+      // Maintain the cached Edges() view.
+      this->edgesRefCache.emplace(_edge.Id(), std::cref(ret.first->second));
+
       // Return the new edge.
       return ret.first->second;
     }
 
     /// \brief The collection of all edges in the graph.
     /// \return A map of edges, where keys are Ids and values are references
-    /// to the edges.
-    public: const EdgeRef_M<EdgeType> Edges() const
+    /// to the edges. The returned map is a cached view owned by the
+    /// Graph; the reference is valid until the next call that adds or
+    /// removes an edge.
+    public: const EdgeRef_M<EdgeType> &Edges() const
     {
-      EdgeRef_M<EdgeType> res;
-      for (auto const &edge : this->edges)
-      {
-        res.emplace(std::make_pair(edge.first, std::cref(edge.second)));
-      }
-
-      return res;
+      return this->edgesRefCache;
     }
 
     /// \brief Get all vertices that are directly connected with one edge
@@ -530,6 +530,9 @@ namespace graph
       // Remove the vertex.
       this->vertices.erase(_vertex);
 
+      // Maintain the cached Vertices() view.
+      this->verticesRefCache.erase(_vertex);
+
       return true;
     }
 
@@ -587,6 +590,9 @@ namespace graph
       }
 
       this->edges.erase(_edge);
+
+      // Maintain the cached Edges() view.
+      this->edgesRefCache.erase(_edge);
 
       return true;
     }
@@ -738,6 +744,16 @@ namespace graph
 
     /// \brief The set of edges.
     private: std::map<EdgeId, EdgeType> edges;
+
+    /// \brief Cached view of `vertices` as a map of const-references,
+    /// returned by `Vertices()` without rebuilding it on every call.
+    /// Maintained alongside `vertices` in `AddVertex` / `RemoveVertex`.
+    private: VertexRef_M<V> verticesRefCache;
+
+    /// \brief Cached view of `edges` as a map of const-references,
+    /// returned by `Edges()` without rebuilding it on every call.
+    /// Maintained alongside `edges` in `LinkEdge` / `RemoveEdge`.
+    private: EdgeRef_M<EdgeType> edgesRefCache;
 
     /// \brief The adjacency list.
     /// A map where the keys are vertex Ids. For each vertex (v)
