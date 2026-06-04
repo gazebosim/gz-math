@@ -600,3 +600,36 @@ TEST(GraphTest, RemoveVerticesAfterSetNameWorks)
   // Bob is untouched.
   EXPECT_TRUE(graph.VertexFromId(1).Valid());
 }
+
+/////////////////////////////////////////////////
+TYPED_TEST(GraphTestFixture, CopyConstructor)
+{
+  TypeParam graph;
+  graph.AddVertex("0", 0, 0);
+  graph.AddVertex("1", 1, 1);
+  graph.AddEdge({0, 1}, 2.0);
+
+  // Copy the graph
+  TypeParam graphCopy = graph;
+
+  // Verify vertices in copy
+  auto vertices = graphCopy.Vertices();
+  ASSERT_EQ(2u, vertices.size());
+  EXPECT_NE(vertices.end(), vertices.find(0));
+  EXPECT_NE(vertices.end(), vertices.find(1));
+
+  // Verify edges in copy
+  auto edges = graphCopy.Edges();
+  ASSERT_EQ(1u, edges.size());
+
+  // Modify the original graph: change vertex data and remove it
+  graph.VertexFromId(0).Data() = 99;
+  graph.RemoveVertex(0);
+
+  // The copy must remain unaffected
+  auto verticesCopy = graphCopy.Vertices();
+  ASSERT_EQ(2u, verticesCopy.size());
+  ASSERT_NE(verticesCopy.end(), verticesCopy.find(0));
+  EXPECT_EQ(0, verticesCopy.at(0).get().Data());
+  EXPECT_EQ("0", verticesCopy.at(0).get().Name());
+}
