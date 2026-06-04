@@ -633,3 +633,90 @@ TYPED_TEST(GraphTestFixture, CopyConstructor)
   EXPECT_EQ(0, verticesCopy.at(0).get().Data());
   EXPECT_EQ("0", verticesCopy.at(0).get().Name());
 }
+
+/////////////////////////////////////////////////
+TYPED_TEST(GraphTestFixture, CopyAssignment)
+{
+  TypeParam graph;
+  graph.AddVertex("0", 0, 0);
+  graph.AddVertex("1", 1, 1);
+  graph.AddEdge({0, 1}, 2.0);
+
+  TypeParam graphCopy;
+  graphCopy = graph;
+
+  // Verify vertices in copy
+  auto vertices = graphCopy.Vertices();
+  ASSERT_EQ(2u, vertices.size());
+  EXPECT_NE(vertices.end(), vertices.find(0));
+  EXPECT_NE(vertices.end(), vertices.find(1));
+
+  // Verify edges in copy
+  auto edges = graphCopy.Edges();
+  ASSERT_EQ(1u, edges.size());
+
+  // Modify the original graph
+  graph.VertexFromId(0).Data() = 99;
+  graph.RemoveVertex(0);
+
+  // The copy must remain unaffected
+  auto verticesCopy = graphCopy.Vertices();
+  ASSERT_EQ(2u, verticesCopy.size());
+  ASSERT_NE(verticesCopy.end(), verticesCopy.find(0));
+  EXPECT_EQ(0, verticesCopy.at(0).get().Data());
+  EXPECT_EQ("0", verticesCopy.at(0).get().Name());
+}
+
+/////////////////////////////////////////////////
+TYPED_TEST(GraphTestFixture, MoveConstructor)
+{
+  TypeParam graph;
+  graph.AddVertex("0", 0, 0);
+  graph.AddVertex("1", 1, 1);
+  graph.AddEdge({0, 1}, 2.0);
+
+  // Move the graph
+  TypeParam graphMoved = std::move(graph);
+
+  // Verify vertices in moved graph
+  auto vertices = graphMoved.Vertices();
+  ASSERT_EQ(2u, vertices.size());
+  EXPECT_NE(vertices.end(), vertices.find(0));
+  EXPECT_NE(vertices.end(), vertices.find(1));
+
+  // Verify edges in moved graph
+  auto edges = graphMoved.Edges();
+  ASSERT_EQ(1u, edges.size());
+
+  // Original graph must be empty
+  EXPECT_TRUE(graph.Empty());
+  EXPECT_EQ(0u, graph.Vertices().size());
+  EXPECT_EQ(0u, graph.Edges().size());
+}
+
+/////////////////////////////////////////////////
+TYPED_TEST(GraphTestFixture, MoveAssignment)
+{
+  TypeParam graph;
+  graph.AddVertex("0", 0, 0);
+  graph.AddVertex("1", 1, 1);
+  graph.AddEdge({0, 1}, 2.0);
+
+  TypeParam graphMoved;
+  graphMoved = std::move(graph);
+
+  // Verify vertices in moved graph
+  auto vertices = graphMoved.Vertices();
+  ASSERT_EQ(2u, vertices.size());
+  EXPECT_NE(vertices.end(), vertices.find(0));
+  EXPECT_NE(vertices.end(), vertices.find(1));
+
+  // Verify edges in moved graph
+  auto edges = graphMoved.Edges();
+  ASSERT_EQ(1u, edges.size());
+
+  // Original graph must be empty
+  EXPECT_TRUE(graph.Empty());
+  EXPECT_EQ(0u, graph.Vertices().size());
+  EXPECT_EQ(0u, graph.Edges().size());
+}

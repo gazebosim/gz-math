@@ -130,6 +130,25 @@ namespace graph
       return *this;
     }
 
+    /// \brief Move constructor.
+    /// \param[in] _from Graph to move.
+    public: Graph(Graph &&_from) noexcept
+    {
+      this->MoveFrom(std::move(_from));
+    }
+
+    /// \brief Move assignment operator.
+    /// \param[in] _from Graph to move.
+    /// \return Reference to this graph.
+    public: Graph &operator=(Graph &&_from) noexcept
+    {
+      if (this != &_from)
+      {
+        this->MoveFrom(std::move(_from));
+      }
+      return *this;
+    }
+
     /// \brief Constructor.
     /// \param[in] _vertices Collection of vertices.
     /// \param[in] _edges Collection of edges.
@@ -803,6 +822,22 @@ namespace graph
       {
         this->edgesRefCache.emplace(id, std::cref(edge));
       }
+    }
+
+    /// \brief Move implementation.
+    /// \param[in] _from Graph to move.
+    private: void MoveFrom(Graph &&_from) noexcept
+    {
+      this->nextVertexId = _from.nextVertexId;
+      this->nextEdgeId = _from.nextEdgeId;
+      this->vertices = std::move(_from.vertices);
+      this->edges = std::move(_from.edges);
+      this->verticesRefCache = std::move(_from.verticesRefCache);
+      this->edgesRefCache = std::move(_from.edgesRefCache);
+      this->adjList = std::move(_from.adjList);
+
+      _from.nextVertexId = 0u;
+      _from.nextEdgeId = 0u;
     }
   };
 
