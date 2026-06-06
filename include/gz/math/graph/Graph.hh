@@ -111,6 +111,44 @@ namespace graph
     /// \brief Default constructor.
     public: Graph() = default;
 
+    /// \brief Copy constructor.
+    /// \param[in] _from Graph to copy.
+    public: Graph(const Graph &_from)
+    {
+      this->CopyFrom(_from);
+    }
+
+    /// \brief Copy assignment operator.
+    /// \param[in] _from Graph to copy.
+    /// \return Reference to this graph.
+    public: Graph &operator=(const Graph &_from)
+    {
+      if (this != &_from)
+      {
+        this->CopyFrom(_from);
+      }
+      return *this;
+    }
+
+    /// \brief Move constructor.
+    /// \param[in] _from Graph to move.
+    public: Graph(Graph &&_from) noexcept
+    {
+      this->MoveFrom(std::move(_from));
+    }
+
+    /// \brief Move assignment operator.
+    /// \param[in] _from Graph to move.
+    /// \return Reference to this graph.
+    public: Graph &operator=(Graph &&_from) noexcept
+    {
+      if (this != &_from)
+      {
+        this->MoveFrom(std::move(_from));
+      }
+      return *this;
+    }
+
     /// \brief Constructor.
     /// \param[in] _vertices Collection of vertices.
     /// \param[in] _edges Collection of edges.
@@ -761,6 +799,46 @@ namespace graph
     /// the edges (e) with Id (eId) represents a connected path from (v) to
     /// another vertex via (e).
     private: std::map<VertexId, EdgeId_S> adjList;
+
+    /// \brief Copy implementation.
+    /// \param[in] _from Graph to copy.
+    private: void CopyFrom(const Graph &_from)
+    {
+      this->nextVertexId = _from.nextVertexId;
+      this->nextEdgeId = _from.nextEdgeId;
+      this->vertices = _from.vertices;
+      this->edges = _from.edges;
+      this->adjList = _from.adjList;
+
+      // Rebuild caches
+      this->verticesRefCache.clear();
+      for (const auto &[id, vertex] : this->vertices)
+      {
+        this->verticesRefCache.emplace(id, std::cref(vertex));
+      }
+
+      this->edgesRefCache.clear();
+      for (const auto &[id, edge] : this->edges)
+      {
+        this->edgesRefCache.emplace(id, std::cref(edge));
+      }
+    }
+
+    /// \brief Move implementation.
+    /// \param[in] _from Graph to move.
+    private: void MoveFrom(Graph &&_from) noexcept
+    {
+      this->nextVertexId = _from.nextVertexId;
+      this->nextEdgeId = _from.nextEdgeId;
+      this->vertices = std::move(_from.vertices);
+      this->edges = std::move(_from.edges);
+      this->verticesRefCache = std::move(_from.verticesRefCache);
+      this->edgesRefCache = std::move(_from.edgesRefCache);
+      this->adjList = std::move(_from.adjList);
+
+      _from.nextVertexId = 0u;
+      _from.nextEdgeId = 0u;
+    }
   };
 
   /////////////////////////////////////////////////
