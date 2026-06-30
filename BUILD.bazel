@@ -243,6 +243,15 @@ cc_library(
 )
 
 cc_library(
+    name = "WetVolume",
+    hdrs = ["include/gz/math/detail/WetVolume.hh"],
+    includes = ["include"],
+    deps = [
+        ":Config",
+    ],
+)
+
+cc_library(
     name = "Cone",
     hdrs = [
         "include/gz/math/Cone.hh",
@@ -253,6 +262,7 @@ cc_library(
         ":MassMatrix3",
         ":Material",
         ":Quaternion",
+	":WetVolume",
     ],
 )
 
@@ -267,6 +277,7 @@ cc_library(
         ":MassMatrix3",
         ":Material",
         ":Quaternion",
+	":WetVolume",
     ],
 )
 
