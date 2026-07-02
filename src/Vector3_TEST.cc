@@ -16,6 +16,7 @@
 */
 
 #include <gtest/gtest.h>
+#include <iomanip>
 
 #include <sstream>
 

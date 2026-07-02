@@ -17,6 +17,7 @@
 
 #include <gtest/gtest.h>
 #include <cmath>
+#include <iomanip>
 #include <gz/math/Color.hh>
 
 using namespace gz;
