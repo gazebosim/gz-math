@@ -16,6 +16,7 @@
 */
 
 #include <gtest/gtest.h>
+#include <iomanip>
 
 #include "gz/math/Matrix4.hh"
 #include "gz/math/Pose3.hh"

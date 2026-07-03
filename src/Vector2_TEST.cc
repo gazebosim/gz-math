@@ -17,6 +17,7 @@
 
 #include <gtest/gtest.h>
 #include <cmath>
+#include <iomanip>
 
 #include "gz/math/Helpers.hh"
 #include "gz/math/Vector2.hh"
