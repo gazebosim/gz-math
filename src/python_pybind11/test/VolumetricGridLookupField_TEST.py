@@ -93,6 +93,43 @@ class TestVolumetricGridLookupField(unittest.TestCase):
         self.assertIsNotNone(value)
         self.assertAlmostEqual(value, 0.0, places=3)
 
+    def test_trilinear_interpolation_with_interpolators(self):
+        # Create cloud points
+        cloud = [
+            Vector3d(0, 0, 0),
+            Vector3d(0, 0, 1),
+            Vector3d(0, 1, 0),
+            Vector3d(0, 1, 1),
+            Vector3d(1, 0, 0),
+            Vector3d(1, 0, 1),
+            Vector3d(1, 1, 0),
+            Vector3d(1, 1, 1),
+        ]
+
+        field = VolumetricGridLookupFieldd(cloud)
+
+        # Compute the interpolators once and reuse them for several
+        # value arrays sampled at the same point
+        pos = Vector3d(0.5, 0.5, 0.5)
+        interpolators = field.get_interpolators(pos)
+
+        values_x = [0, 0, 0, 0, 1, 1, 1, 1]
+        value = field.estimate_value_using_trilinear(
+            interpolators, pos, values_x)
+        self.assertAlmostEqual(value, 0.5, places=3)
+
+        values_z = [0, 1, 0, 1, 0, 1, 0, 1]
+        value = field.estimate_value_using_trilinear(
+            interpolators, pos, values_z)
+        self.assertAlmostEqual(value, 0.5, places=3)
+
+        # Outside point yields empty interpolators and no value
+        pos = Vector3d(-0.5, -0.5, -0.5)
+        interpolators = field.get_interpolators(pos)
+        value = field.estimate_value_using_trilinear(
+            interpolators, pos, values_x)
+        self.assertIsNone(value)
+
     def test_bounds(self):
         cloud = [
             Vector3d(0, 0, 0),

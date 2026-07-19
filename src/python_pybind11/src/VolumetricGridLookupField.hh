@@ -73,6 +73,21 @@ void helpDefineMathVolumetricGridLookupField(py::module &m,
          py::arg("point"),
          py::arg("values"),
          py::arg("default") = 0.0)
+    .def("estimate_value_using_trilinear",
+         [](const Class &self,
+            const std::vector<InterpolationPoint3D<T>> &interpolators,
+            const Vector3Type &pt, const std::vector<double> &values,
+            double defaultVal)
+         {
+           return self.EstimateValueUsingTrilinear(
+             interpolators, pt, values, defaultVal);
+         },
+         "Estimate value using trilinear interpolation from precomputed "
+         "interpolators",
+         py::arg("interpolators"),
+         py::arg("point"),
+         py::arg("values"),
+         py::arg("default") = 0.0)
     .def("bounds",
          &Class::Bounds,
          "Get the bounds of the grid field");
