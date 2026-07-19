@@ -15,21 +15,22 @@
  *
  */
 
-#include "VolumetricGridLookupField.hh"
 #include <string>
 
-namespace gz {
-namespace math {
-namespace python {
+#include "VolumetricGridLookupField.hh"
 
+namespace gz
+{
+namespace math
+{
+namespace python
+{
 void defineMathVolumetricGridLookupField(py::module &m,
-                                         const std::string &typestr) {
-  // Define for double type
+                                         const std::string &typestr)
+{
   helpDefineMathVolumetricGridLookupField<double>(m, typestr + "d");
-  // Define for float type
   helpDefineMathVolumetricGridLookupField<float>(m, typestr + "f");
 }
-
 }  // namespace python
 }  // namespace math
 }  // namespace gz

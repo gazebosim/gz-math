@@ -18,11 +18,9 @@
 #ifndef GZ_MATH_PYTHON__VOLUMETRIC_GRID_LOOKUP_FIELD_HH_
 #define GZ_MATH_PYTHON__VOLUMETRIC_GRID_LOOKUP_FIELD_HH_
 
-#include <sstream>
 #include <string>
 #include <vector>
 
-#include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
@@ -33,55 +31,57 @@
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace gz {
-namespace math {
-namespace python {
-/// define a pybind11 wrapper for a gz::math::VolumetricGridLookupField
+namespace gz
+{
+namespace math
+{
+namespace python
+{
+/// Define a pybind11 wrapper for a gz::math::VolumetricGridLookupField
 /**
  * \param[in] module a pybind11 module to add the definition to
+ * \param[in] typestr name of the type used by Python
  */
-template <typename T, typename I = std::size_t>
+template<typename T, typename I = std::size_t>
 void helpDefineMathVolumetricGridLookupField(py::module &m,
-                                             const std::string &typestr) {
+    const std::string &typestr)
+{
   using Class = gz::math::VolumetricGridLookupField<T, I>;
   using Vector3Type = gz::math::Vector3<T>;
 
-  auto toString = [](const Class &si) {
-    std::stringstream stream;
-    stream << si;
-    return stream.str();
-  };
-
   std::string pyclass_name = typestr;
-  py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
+  py::class_<Class>(m,
+                    pyclass_name.c_str(),
+                    py::buffer_protocol(),
                     py::dynamic_attr())
-      .def(py::init<const std::vector<Vector3Type> &>())
-      .def(py::init<const std::vector<Vector3Type> &, const std::vector<I> &>())
-      .def(
-          "get_interpolators",
-          [](const Class &self, const Vector3Type &pt, double xTol, double yTol,
-             double zTol) {
-            return self.GetInterpolators(pt, xTol, yTol, zTol);
-          },
-          "Get interpolators for a given point", py::arg("point"),
-          py::arg("x_tol") = 1e-6, py::arg("y_tol") = 1e-6,
-          py::arg("z_tol") = 1e-6)
-      .def(
-          "estimate_value_using_trilinear",
-          [](const Class &self, const Vector3Type &pt,
-             const std::vector<double> &values, double defaultVal = 0.0) {
-            return self.EstimateValueUsingTrilinear(pt, values, defaultVal);
-          },
-          "Estimate value using trilinear interpolation", py::arg("point"),
-          py::arg("values"), py::arg("default") = 0.0)
-      .def("bounds", &Class::Bounds, "Get the bounds of the grid field")
-      .def("__str__", toString)
-      .def("__repr__", toString);
+    .def(py::init<const std::vector<Vector3Type>&>())
+    .def(py::init<const std::vector<Vector3Type>&, const std::vector<I>&>())
+    .def("get_interpolators",
+         &Class::GetInterpolators,
+         "Get interpolators for a given point",
+         py::arg("point"),
+         py::arg("x_tol") = 1e-6,
+         py::arg("y_tol") = 1e-6,
+         py::arg("z_tol") = 1e-6)
+    .def("estimate_value_using_trilinear",
+         [](const Class &self, const Vector3Type &pt,
+            const std::vector<double> &values, double defaultVal)
+         {
+           return self.EstimateValueUsingTrilinear(pt, values, defaultVal);
+         },
+         "Estimate value using trilinear interpolation",
+         py::arg("point"),
+         py::arg("values"),
+         py::arg("default") = 0.0)
+    .def("bounds",
+         &Class::Bounds,
+         "Get the bounds of the grid field");
 }
 
 /// Define a pybind11 wrapper for a gz::math::VolumetricGridLookupField
 /**
  * \param[in] module a pybind11 module to add the definition to
+ * \param[in] typestr name of the type used by Python
  */
 void defineMathVolumetricGridLookupField(py::module &m,
                                          const std::string &typestr);

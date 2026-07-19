@@ -192,6 +192,7 @@ if (BUILD_TESTING)
     Vector3_TEST
     Vector3Stats_TEST
     Vector4_TEST
+    VolumetricGridLookupField_TEST
   )
 
   execute_process(COMMAND "${Python3_EXECUTABLE}" -m pytest --version

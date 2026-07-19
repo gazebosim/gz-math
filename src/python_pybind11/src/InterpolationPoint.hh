@@ -18,39 +18,46 @@
 #ifndef GZ_MATH_PYTHON__INTERPOLATION_POINT_HH_
 #define GZ_MATH_PYTHON__INTERPOLATION_POINT_HH_
 
+#include <optional>
 #include <sstream>
 #include <string>
 
-#include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
 #include <gz/math/Vector3.hh>
 #include <gz/math/detail/InterpolationPoint.hh>
-#include <optional>
 
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace gz {
-namespace math {
-namespace python {
-/// define a pybind11 wrapper for gz::math::InterpolationPoint3D
+namespace gz
+{
+namespace math
+{
+namespace python
+{
+/// Define a pybind11 wrapper for a gz::math::InterpolationPoint3D
 /**
  * \param[in] module a pybind11 module to add the definition to
+ * \param[in] typestr name of the type used by Python
  */
-template <typename T>
+template<typename T>
 void helpDefineMathInterpolationPoint3D(py::module &m,
-                                        const std::string &typestr) {
+    const std::string &typestr)
+{
   using Class = gz::math::InterpolationPoint3D<T>;
   using Vector3Type = gz::math::Vector3<T>;
 
   auto toString = [](const Class &si) {
     std::stringstream stream;
     stream << "InterpolationPoint3D(position=" << si.position;
-    if (si.index.has_value()) {
+    if (si.index.has_value())
+    {
       stream << ", index=" << si.index.value();
-    } else {
+    }
+    else
+    {
       stream << ", index=None";
     }
     stream << ")";
@@ -58,19 +65,23 @@ void helpDefineMathInterpolationPoint3D(py::module &m,
   };
 
   std::string pyclass_name = typestr;
-  py::class_<Class>(m, pyclass_name.c_str(), py::dynamic_attr())
-      .def(py::init<>())
-      .def(py::init<Vector3Type, std::optional<std::size_t>>(),
-           py::arg("position"), py::arg("index") = std::nullopt)
-      .def_readwrite("position", &Class::position)
-      .def_readwrite("index", &Class::index)
-      .def("__str__", toString)
-      .def("__repr__", toString);
+  py::class_<Class>(m,
+                    pyclass_name.c_str(),
+                    py::dynamic_attr())
+    .def(py::init<>())
+    .def(py::init<Vector3Type, std::optional<std::size_t>>(),
+         py::arg("position"),
+         py::arg("index") = std::nullopt)
+    .def_readwrite("position", &Class::position)
+    .def_readwrite("index", &Class::index)
+    .def("__str__", toString)
+    .def("__repr__", toString);
 }
 
-/// define a pybind11 wrapper for gz::math::InterpolationPoint3D
+/// Define a pybind11 wrapper for a gz::math::InterpolationPoint3D
 /**
  * \param[in] module a pybind11 module to add the definition to
+ * \param[in] typestr name of the type used by Python
  */
 void defineMathInterpolationPoint3D(py::module &m, const std::string &typestr);
 

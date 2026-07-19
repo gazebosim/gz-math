@@ -14,7 +14,7 @@
 
 import unittest
 
-from gz.math8 import Vector3d, VolumetricGridLookupFieldd
+from gz.math import InterpolationPoint3Dd, Vector3d, VolumetricGridLookupFieldd
 
 
 class TestVolumetricGridLookupField(unittest.TestCase):
@@ -34,7 +34,7 @@ class TestVolumetricGridLookupField(unittest.TestCase):
         # Create lookup field
         field = VolumetricGridLookupFieldd(cloud)
 
-        # Test inside point (should return 8 interpolators??)
+        # Test inside point (should return 8 interpolators)
         pos = Vector3d(0.5, 0.5, 0.5)
         interpolators = field.get_interpolators(pos)
         self.assertEqual(len(interpolators), 8)
@@ -92,6 +92,46 @@ class TestVolumetricGridLookupField(unittest.TestCase):
         value = field.estimate_value_using_trilinear(pos, values)
         self.assertIsNotNone(value)
         self.assertAlmostEqual(value, 0.0, places=3)
+
+    def test_bounds(self):
+        cloud = [
+            Vector3d(0, 0, 0),
+            Vector3d(1, 2, 3),
+        ]
+
+        field = VolumetricGridLookupFieldd(cloud)
+        lower, upper = field.bounds()
+        self.assertEqual(lower, Vector3d(0, 0, 0))
+        self.assertEqual(upper, Vector3d(1, 2, 3))
+
+    def test_interpolation_point(self):
+        point = InterpolationPoint3Dd()
+        self.assertIsNone(point.index)
+
+        point = InterpolationPoint3Dd(position=Vector3d(1, 2, 3), index=4)
+        self.assertEqual(point.position, Vector3d(1, 2, 3))
+        self.assertEqual(point.index, 4)
+
+        point.index = None
+        self.assertIsNone(point.index)
+        self.assertIn("index=None", str(point))
+
+        cloud = [
+            Vector3d(0, 0, 0),
+            Vector3d(0, 0, 1),
+            Vector3d(0, 1, 0),
+            Vector3d(0, 1, 1),
+            Vector3d(1, 0, 0),
+            Vector3d(1, 0, 1),
+            Vector3d(1, 1, 0),
+            Vector3d(1, 1, 1),
+        ]
+
+        field = VolumetricGridLookupFieldd(cloud)
+        interpolators = field.get_interpolators(Vector3d(0, 0, 0))
+        self.assertEqual(len(interpolators), 1)
+        self.assertEqual(interpolators[0].position, Vector3d(0, 0, 0))
+        self.assertEqual(interpolators[0].index, 0)
 
 
 if __name__ == "__main__":

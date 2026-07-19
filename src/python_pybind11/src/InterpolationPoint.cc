@@ -15,18 +15,21 @@
  *
  */
 
-#include "InterpolationPoint.hh"
 #include <string>
 
-namespace gz {
-namespace math {
-namespace python {
+#include "InterpolationPoint.hh"
 
-void defineMathInterpolationPoint3D(py::module &m, const std::string &typestr) {
+namespace gz
+{
+namespace math
+{
+namespace python
+{
+void defineMathInterpolationPoint3D(py::module &m, const std::string &typestr)
+{
   helpDefineMathInterpolationPoint3D<double>(m, typestr + "d");
   helpDefineMathInterpolationPoint3D<float>(m, typestr + "f");
 }
-
 }  // namespace python
 }  // namespace math
 }  // namespace gz
