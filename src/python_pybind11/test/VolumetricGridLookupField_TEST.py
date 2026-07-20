@@ -14,7 +14,7 @@
 
 import unittest
 
-from gz.math import InterpolationPoint3Dd, Vector3d, VolumetricGridLookupFieldd
+from gz.math8 import InterpolationPoint3Dd, Vector3d, VolumetricGridLookupFieldd
 
 
 class TestVolumetricGridLookupField(unittest.TestCase):

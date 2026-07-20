@@ -65,11 +65,7 @@
 #include "Vector3.hh"
 #include "Vector3Stats.hh"
 #include "Vector4.hh"
-<<<<<<< HEAD
-=======
 #include "VolumetricGridLookupField.hh"
-#include "OccupancyGrid.hh"
->>>>>>> 12f4a7b (Add pybindings for VolumetricGridLookupField (#657))
 
 namespace py = pybind11;
 
@@ -203,14 +199,9 @@ PYBIND11_MODULE(BINDINGS_MODULE_NAME, m)
     m, "OnePoleVector3");
 
   gz::math::python::defineMathCoordinateVector3(m, "CoordinateVector3");
-<<<<<<< HEAD
-=======
-
-  gz::math::python::defineMathOccupancyGrid(m, "OccupancyGrid");
 
   gz::math::python::defineMathVolumetricGridLookupField(
     m, "VolumetricGridLookupField");
 
   gz::math::python::defineMathInterpolationPoint3D(m, "InterpolationPoint3D");
->>>>>>> 12f4a7b (Add pybindings for VolumetricGridLookupField (#657))
 }
