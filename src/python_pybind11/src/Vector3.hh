@@ -163,6 +163,9 @@ void helpDefineMathVector3(py::module &m, const std::string &typestr)
          py::overload_cast<const std::size_t>(&Class::operator[], py::const_))
     .def("__setitem__",
          [](Class* vec, unsigned index, T val) { (*vec)[index] = val; })
+    // Required by pybind11 2.4 (Focal): __getitem__ makes PySequence_Check
+    // pass, and sequence casters then need a working PySequence_Size.
+    .def("__len__", [](const Class &) { return 3; })
     .def("__str__", toString)
     .def("__repr__", toString);
 }
