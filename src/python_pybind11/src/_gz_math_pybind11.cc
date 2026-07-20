@@ -28,6 +28,7 @@
 #include "GaussMarkovProcess.hh"
 #include "Helpers.hh"
 #include "Inertial.hh"
+#include "InterpolationPoint.hh"
 #include "Interval.hh"
 #include "Kmeans.hh"
 #include "Line2.hh"
@@ -62,6 +63,7 @@
 #include "Vector3.hh"
 #include "Vector3Stats.hh"
 #include "Vector4.hh"
+#include "VolumetricGridLookupField.hh"
 
 namespace py = pybind11;
 
@@ -190,4 +192,9 @@ PYBIND11_MODULE(BINDINGS_MODULE_NAME, m)
     m, "OnePoleQuaternion");
   gz::math::python::defineMathOnePoleVector3(
     m, "OnePoleVector3");
+
+  gz::math::python::defineMathVolumetricGridLookupField(
+    m, "VolumetricGridLookupField");
+
+  gz::math::python::defineMathInterpolationPoint3D(m, "InterpolationPoint3D");
 }
