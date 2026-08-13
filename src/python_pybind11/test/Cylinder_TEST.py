@@ -1,0 +1,157 @@
+# Copyright (C) 2021 Open Source Robotics Foundation
+#
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#       http:#www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import math
+import unittest
+
+import gz
+from gz.math import Cylinderd, MassMatrix3d, Material, Planed, Quaterniond, Vector3d
+
+
+class TestCylinder(unittest.TestCase):
+
+    def test_constructor(self):
+        # Default constructor
+        cylinder = Cylinderd()
+        self.assertEqual(0.0, cylinder.length())
+        self.assertEqual(0.0, cylinder.radius())
+        self.assertEqual(Quaterniond.IDENTITY, cylinder.rotational_offset())
+        self.assertEqual(Material(), cylinder.mat())
+
+        cylinder2 = Cylinderd()
+        self.assertEqual(cylinder, cylinder2)
+
+        # Length and radius constructor
+        cylinder = Cylinderd(1.0, 2.0)
+        self.assertEqual(1.0, cylinder.length())
+        self.assertEqual(2.0, cylinder.radius())
+        self.assertEqual(Quaterniond.IDENTITY, cylinder.rotational_offset())
+        self.assertEqual(Material(), cylinder.mat())
+
+        cylinder2 = Cylinderd(1.0, 2.0)
+        self.assertEqual(cylinder, cylinder2)
+
+        # Length, radius, and rot constructor
+        cylinder = Cylinderd(1.0, 2.0, Quaterniond(0.1, 0.2, 0.3))
+        self.assertEqual(1.0, cylinder.length())
+        self.assertEqual(2.0, cylinder.radius())
+        self.assertEqual(Quaterniond(0.1, 0.2, 0.3),
+                         cylinder.rotational_offset())
+        self.assertEqual(Material(), cylinder.mat())
+
+        cylinder2 = Cylinderd(1.0, 2.0, Quaterniond(0.1, 0.2, 0.3))
+        self.assertEqual(cylinder, cylinder2)
+
+        # Length, radius, mat and rot constructor
+        cylinder = Cylinderd(1.0, 2.0, Material(gz.math.MaterialType.WOOD),
+                             Quaterniond(0.1, 0.2, 0.3))
+        self.assertEqual(1.0, cylinder.length())
+        self.assertEqual(2.0, cylinder.radius())
+        self.assertEqual(Quaterniond(0.1, 0.2, 0.3), cylinder.rotational_offset())
+        self.assertEqual(Material(gz.math.MaterialType.WOOD), cylinder.mat())
+
+        cylinder2 = Cylinderd(1.0, 2.0, Material(gz.math.MaterialType.WOOD),
+                              Quaterniond(0.1, 0.2, 0.3))
+        self.assertEqual(cylinder, cylinder2)
+
+    def test_mutators(self):
+        cylinder = Cylinderd()
+        self.assertEqual(0.0, cylinder.length())
+        self.assertEqual(0.0, cylinder.radius())
+        self.assertEqual(Quaterniond.IDENTITY, cylinder.rotational_offset())
+        self.assertEqual(Material(), cylinder.mat())
+
+        cylinder.set_length(100.1)
+        cylinder.set_radius(.123)
+        cylinder.set_rotational_offset(Quaterniond(1.2, 2.3, 3.4))
+        cylinder.set_mat(Material(gz.math.MaterialType.PINE))
+
+        self.assertEqual(100.1, cylinder.length())
+        self.assertEqual(.123, cylinder.radius())
+        self.assertEqual(Quaterniond(1.2, 2.3, 3.4), cylinder.rotational_offset())
+        self.assertEqual(Material(gz.math.MaterialType.PINE), cylinder.mat())
+
+    def test_volume_and_density(self):
+        mass = 1.0
+        cylinder = Cylinderd(1.0, 0.001)
+        expectedVolume = (math.pi * math.pow(0.001, 2) * 1.0)
+        self.assertEqual(expectedVolume, cylinder.volume())
+
+        expectedDensity = mass / expectedVolume
+        self.assertEqual(expectedDensity, cylinder.density_from_mass(mass))
+
+        # Bad density
+        cylinder2 = Cylinderd()
+        self.assertGreater(0.0, cylinder2.density_from_mass(mass))
+
+    def test_mass(self):
+        mass = 2.0
+        length = 2.0
+        r = 0.1
+        cylinder = Cylinderd(length, r)
+        cylinder.set_density_from_mass(mass)
+
+        massMat = MassMatrix3d()
+        ixxIyy = (1/12.0) * mass * (3*r*r + length*length)
+        izz = 0.5 * mass * r * r
+
+        expectedMassMat = MassMatrix3d()
+        expectedMassMat.set_inertia_matrix(ixxIyy, ixxIyy, izz, 0.0, 0.0, 0.0)
+        expectedMassMat.set_mass(mass)
+
+        cylinder.mass_matrix(massMat)
+        self.assertEqual(expectedMassMat, massMat)
+        self.assertEqual(expectedMassMat.mass(), massMat.mass())
+
+        massMat2 = cylinder.mass_matrix()
+        self.assertEqual(expectedMassMat, massMat2)
+        self.assertEqual(expectedMassMat.diagonal_moments(), massMat2.diagonal_moments())
+        self.assertEqual(expectedMassMat.mass(), massMat2.mass())
+
+
+    def test_volume_below(self):
+        cyl = Cylinderd(4.0, 2.0)
+
+        # Horizontal plane at z=0: half volume
+        plane = Planed(Vector3d(0, 0, 1), 0)
+        self.assertAlmostEqual(
+            cyl.volume() / 2, cyl.volume_below(plane), delta=1e-3)
+
+        # Fully below
+        plane = Planed(Vector3d(0, 0, 1), 10.0)
+        self.assertAlmostEqual(
+            cyl.volume(), cyl.volume_below(plane), delta=1e-3)
+
+        # Fully above
+        plane = Planed(Vector3d(0, 0, 1), -10.0)
+        self.assertAlmostEqual(0.0, cyl.volume_below(plane), delta=1e-3)
+
+    def test_center_of_volume_below(self):
+        cyl = Cylinderd(4.0, 2.0)
+
+        # Half below z=0: centroid at z = -1
+        plane = Planed(Vector3d(0, 0, 1), 0)
+        cov = cyl.center_of_volume_below(plane)
+        self.assertIsNotNone(cov)
+        self.assertAlmostEqual(0.0, cov.x(), delta=1e-3)
+        self.assertAlmostEqual(0.0, cov.y(), delta=1e-3)
+        self.assertAlmostEqual(-1.0, cov.z(), delta=1e-3)
+
+        # Fully above: should return None
+        plane = Planed(Vector3d(0, 0, 1), -10.0)
+        self.assertIsNone(cyl.center_of_volume_below(plane))
+
+
+if __name__ == '__main__':
+    unittest.main()
