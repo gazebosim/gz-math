@@ -175,6 +175,13 @@ bool Sphere<T>::SetDensityFromMass(const T _mass)
   return newDensity > 0;
 }
 
+/////////////////////////////////////////////////
+template<typename T>
+Vector3<T> Sphere<T>::Centroid() const
+{
+  return Vector3<T>::Zero;
+}
+
 //////////////////////////////////////////////////
 template<typename T>
 T Sphere<T>::DensityFromMass(const T _mass) const

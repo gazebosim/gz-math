@@ -155,6 +155,12 @@ namespace gz::math
     public: IntersectionPoints<Precision>
       VerticesBelow(const Plane<Precision> &_plane) const;
 
+    /// \brief Get the centroid of the box in its reference
+    /// frame: the geometric centre: the origin.
+    /// \return The centroid, expressed in the box's
+    /// reference frame.
+    public: Vector3<Precision> Centroid() const;
+
     /// \brief Compute the box's density given a mass value. The
     /// box is assumed to be solid with uniform density. This
     /// function requires the box's size to be set to

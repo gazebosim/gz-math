@@ -152,6 +152,14 @@ namespace gz::math
     public: std::optional<Vector3<Precision>>
       CenterOfVolumeBelow(const Plane<Precision> &_plane) const;
 
+    /// \brief Get the centroid of the cone in its reference
+    /// frame: on the axis, a quarter of the length above the base. This
+    /// is the standard solid cone centroid; see for example the centroid
+    /// tables in the CRC Standard Mathematical Tables and Formulae.
+    /// \return The centroid, expressed in the cone's
+    /// reference frame.
+    public: Vector3<Precision> Centroid() const;
+
     /// \brief Compute the cone's density given a mass value. The
     /// cone is assumed to be solid with uniform density. This
     /// function requires the cone's radius and length to be set to

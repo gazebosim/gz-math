@@ -100,6 +100,12 @@ namespace gz::math
     public: std::optional<Vector3<Precision>>
       CenterOfVolumeBelow(const Plane<Precision> &_plane) const;
 
+    /// \brief Get the centroid of the ellipsoid in its reference
+    /// frame: the origin.
+    /// \return The centroid, expressed in the ellipsoid's
+    /// reference frame.
+    public: Vector3<Precision> Centroid() const;
+
     /// \brief Compute the ellipsoid's density given a mass value. The
     /// ellipsoid is assumed to be solid with uniform density. This
     /// function requires the ellipsoid's radius and length to be set to

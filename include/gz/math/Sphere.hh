@@ -109,6 +109,12 @@ namespace gz::math
     public: std::optional<Vector3<Precision>>
       CenterOfVolumeBelow(const Plane<Precision> &_plane) const;
 
+    /// \brief Get the centroid of the sphere in its reference
+    /// frame: the origin.
+    /// \return The centroid, expressed in the sphere's
+    /// reference frame.
+    public: Vector3<Precision> Centroid() const;
+
     /// \brief Compute the sphere's density given a mass value. The
     /// sphere is assumed to be solid with uniform density. This
     /// function requires the sphere's radius to be set to a
