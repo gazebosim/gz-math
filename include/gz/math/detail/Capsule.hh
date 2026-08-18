@@ -311,6 +311,13 @@ bool Capsule<T>::SetDensityFromMass(const T _mass)
   return true;
 }
 
+/////////////////////////////////////////////////
+template<typename T>
+Vector3<T> Capsule<T>::Centroid() const
+{
+  return Vector3<T>::Zero;
+}
+
 //////////////////////////////////////////////////
 template<typename T>
 T Capsule<T>::DensityFromMass(const T _mass) const

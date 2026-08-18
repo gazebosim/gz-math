@@ -174,3 +174,15 @@ TEST(CylinderTest, VolumeBelowFloat)
     EXPECT_NEAR(-1.0f, cov.value().Z(), 1e-3f);
   }
 }
+
+/////////////////////////////////////////////////
+TEST(CylinderTest, Centroid)
+{
+  const math::Cylinderd cylinder(2.0, 0.5);
+  EXPECT_EQ(math::Vector3d::Zero, cylinder.Centroid());
+
+  const math::Planed above(math::Vector3d::UnitZ, 1e6);
+  auto cov = cylinder.CenterOfVolumeBelow(above);
+  ASSERT_TRUE(cov.has_value());
+  EXPECT_EQ(cylinder.Centroid(), cov.value());
+}
