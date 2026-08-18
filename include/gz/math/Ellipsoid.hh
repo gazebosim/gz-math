@@ -24,28 +24,7 @@
 
 namespace ignition
 {
-<<<<<<< HEAD
   namespace math
-=======
-  // Inline bracket to help doxygen filtering.
-  inline namespace GZ_MATH_VERSION_NAMESPACE {
-  //
-  /// \class Ellipsoid Ellipsoid.hh gz/math/Ellipsoid.hh
-  /// \brief A representation of a general ellipsoid.
-  ///
-  /// The ellipsoid class supports defining a ellipsoid with three radii and
-  /// material properties. Radii are in meters. See Material for more on
-  /// material properties.
-  ///
-  /// A reference frame is defined with an origin at the geometric center
-  /// of the ellipsoid, with XYZ coordinate axes aligned with the three
-  /// semi axes, so each component of the radii vector is the semi axis
-  /// along the corresponding coordinate axis. This frame is consistent
-  /// with the SDFormat ellipsoid shape.
-  /// \tparam Precision Scalar numeric type.
-  template<typename Precision>
-  class Ellipsoid
->>>>>>> 7bb3d82 (Add Centroid() to the simple shape classes (#791))
   {
     // Inline bracket to help doxygen filtering.
     inline namespace IGNITION_MATH_VERSION_NAMESPACE {
@@ -57,6 +36,12 @@ namespace ignition
     /// material properties. Radii are in meters. See Material for more on
     /// material properties.
     /// \tparam Precision Scalar numeric type.
+    ///
+    /// A reference frame is defined with an origin at the geometric center
+    /// of the ellipsoid, with XYZ coordinate axes aligned with the three
+    /// semi axes, so each component of the radii vector is the semi axis
+    /// along the corresponding coordinate axis. This frame is consistent
+    /// with the SDFormat ellipsoid shape.
     template<typename Precision>
     class Ellipsoid
     {
@@ -123,7 +108,12 @@ namespace ignition
       public: std::optional<Vector3<Precision>>
         CenterOfVolumeBelow(const Plane<Precision> &_plane) const;
 
-<<<<<<< HEAD
+      /// \brief Get the centroid of the ellipsoid. It coincides with the
+      /// origin of the reference frame defined in the class description.
+      /// \return The centroid, in the ellipsoid's reference frame:
+      /// the zero vector.
+      public: Vector3<Precision> Centroid() const;
+
       /// \brief Compute the ellipsoid's density given a mass value. The
       /// ellipsoid is assumed to be solid with uniform density. This
       /// function requires the ellipsoid's radius and length to be set to
@@ -133,23 +123,6 @@ namespace ignition
       /// \return Density of the ellipsoid in kg/m^3. A NaN is returned
       /// if radius, length or _mass is <= 0.
       public: Precision DensityFromMass(const Precision _mass) const;
-=======
-    /// \brief Get the centroid of the ellipsoid. It coincides with the
-    /// origin of the reference frame defined in the class description.
-    /// \return The centroid, in the ellipsoid's reference frame:
-    /// the zero vector.
-    public: Vector3<Precision> Centroid() const;
-
-    /// \brief Compute the ellipsoid's density given a mass value. The
-    /// ellipsoid is assumed to be solid with uniform density. This
-    /// function requires the ellipsoid's radius and length to be set to
-    /// values greater than zero. The Material of the ellipsoid is ignored.
-    /// \param[in] _mass Mass of the ellipsoid, in kg. This value should be
-    /// greater than zero.
-    /// \return Density of the ellipsoid in kg/m^3. A NaN is returned
-    /// if radius, length or _mass is <= 0.
-    public: Precision DensityFromMass(const Precision _mass) const;
->>>>>>> 7bb3d82 (Add Centroid() to the simple shape classes (#791))
 
       /// \brief Set the density of this ellipsoid based on a mass value.
       /// Density is computed using

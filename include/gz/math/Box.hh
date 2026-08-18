@@ -29,34 +29,7 @@
 
 namespace ignition
 {
-<<<<<<< HEAD
   namespace math
-=======
-  // Inline bracket to help doxygen filtering.
-  inline namespace GZ_MATH_VERSION_NAMESPACE {
-  /// \brief This is the type used for deduplicating and returning the set of
-  /// intersections.
-  template<typename T>
-  using IntersectionPoints = std::set<Vector3<T>, WellOrderedVectors<T>>;
-
-  /// \class Box Box.hh gz/math/Box.hh
-  /// \brief A representation of a box. All units are in meters.
-  ///
-  /// The box class supports defining a size and material properties.
-  /// See Material for more on material properties.
-  ///
-  /// By default, a box's size (length, width, and height)  is zero.
-  ///
-  /// A reference frame is defined with an origin at the geometric center
-  /// of the box, with XYZ coordinate axes perpendicular to each face. The
-  /// XYZ components of the size vector are the dimensions of the box
-  /// parallel to the corresponding coordinate axes. This frame is
-  /// consistent with the SDFormat box shape.
-  ///
-  /// See AxisAlignedBox for an axis aligned box implementation.
-  template<typename Precision>
-  class Box
->>>>>>> 7bb3d82 (Add Centroid() to the simple shape classes (#791))
   {
     // Inline bracket to help doxygen filtering.
     inline namespace IGNITION_MATH_VERSION_NAMESPACE {
@@ -74,6 +47,12 @@ namespace ignition
     /// By default, a box's size (length, width, and height)  is zero.
     ///
     /// See AxisAlignedBox for an axis aligned box implementation.
+    ///
+    /// A reference frame is defined with an origin at the geometric center
+    /// of the box, with XYZ coordinate axes perpendicular to each face. The
+    /// XYZ components of the size vector are the dimensions of the box
+    /// parallel to the corresponding coordinate axes. This frame is
+    /// consistent with the SDFormat box shape.
     template<typename Precision>
     class Box
     {
@@ -147,28 +126,10 @@ namespace ignition
       /// \return True if equal.
       public: bool operator==(const Box<Precision> &_b) const;
 
-<<<<<<< HEAD
       /// \brief Inequality test operator.
       /// \param[in] _b Box to test.
       /// \return True if not equal.
       public: bool operator!=(const Box<Precision> &_b) const;
-=======
-    /// \brief Get the centroid of the box. It coincides with the
-    /// origin of the reference frame defined in the class description.
-    /// \return The centroid, in the box's reference frame:
-    /// the zero vector.
-    public: Vector3<Precision> Centroid() const;
-
-    /// \brief Compute the box's density given a mass value. The
-    /// box is assumed to be solid with uniform density. This
-    /// function requires the box's size to be set to
-    /// values greater than zero. The Material of the box is ignored.
-    /// \param[in] _mass Mass of the box, in kg. This value should be
-    /// greater than zero.
-    /// \return Density of the box in kg/m^3. A negative value is
-    /// returned if the size or _mass is <= 0.
-    public: Precision DensityFromMass(const Precision _mass) const;
->>>>>>> 7bb3d82 (Add Centroid() to the simple shape classes (#791))
 
       /// \brief Get the material associated with this box.
       /// \return The material assigned to this box.
@@ -203,6 +164,12 @@ namespace ignition
       /// frame.
       public: IntersectionPoints<Precision>
         VerticesBelow(const Plane<Precision> &_plane) const;
+
+      /// \brief Get the centroid of the box. It coincides with the
+      /// origin of the reference frame defined in the class description.
+      /// \return The centroid, in the box's reference frame:
+      /// the zero vector.
+      public: Vector3<Precision> Centroid() const;
 
       /// \brief Compute the box's density given a mass value. The
       /// box is assumed to be solid with uniform density. This
