@@ -315,3 +315,26 @@ TEST(ConeTest, VolumeBelowFloat)
     EXPECT_NEAR(0.0f, cov.value().Y(), 1e-3f);
   }
 }
+
+/////////////////////////////////////////////////
+TEST(ConeTest, Centroid)
+{
+  // Base at z = -length/2, apex at +length/2: the centroid sits a quarter
+  // of the length above the base, not at the frame origin.
+  const double l = 2.0;
+  const math::Coned cone(l, 0.5);
+  EXPECT_EQ(math::Vector3d(0, 0, -l / 4), cone.Centroid());
+
+  // The centroid is the centre of volume of the whole shape.
+  const math::Planed above(math::Vector3d::UnitZ, 1e6);
+  auto cov = cone.CenterOfVolumeBelow(above);
+  ASSERT_TRUE(cov.has_value());
+  EXPECT_NEAR(cone.Centroid().Z(), cov.value().Z(), 1e-9);
+
+  // A rotational offset rotates the centroid with the shape: pitching the
+  // cone 90 degrees sends the apex to +x and the centroid to -x.
+  const math::Coned pitched(l, 0.5,
+      math::Quaterniond(0, GZ_PI_2, 0));
+  EXPECT_NEAR(-l / 4, pitched.Centroid().X(), 1e-12);
+  EXPECT_NEAR(0.0, pitched.Centroid().Z(), 1e-12);
+}
