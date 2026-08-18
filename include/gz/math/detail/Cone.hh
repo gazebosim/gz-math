@@ -342,6 +342,14 @@ bool Cone<T>::SetDensityFromMass(const T _mass)
   return newDensity > 0;
 }
 
+/////////////////////////////////////////////////
+template<typename T>
+Vector3<T> Cone<T>::Centroid() const
+{
+  return this->rotOffset.RotateVector(
+      Vector3<T>(0, 0, -this->length / 4));
+}
+
 //////////////////////////////////////////////////
 template<typename T>
 T Cone<T>::DensityFromMass(const T _mass) const
