@@ -37,8 +37,11 @@ namespace gz::math
   /// The cylinder class supports defining a cylinder with a radius,
   /// length, rotational offset, and material properties. Radius and
   /// length are in meters. See Material for more on material properties.
-  /// By default, a cylinder's length is aligned with the Z axis. The
-  /// rotational offset encodes a rotation from the z axis.
+  /// A reference frame is defined with an origin at the geometric center
+  /// of the cylinder, with XYZ coordinate axes defined with the Z axis
+  /// parallel to the axis of symmetry. This frame is consistent with the
+  /// SDFormat cylinder shape. The rotational offset encodes an additional
+  /// rotation of the cylinder relative to this frame.
   template<typename Precision>
   class Cylinder
   {
@@ -147,6 +150,12 @@ namespace gz::math
     /// reference frame.
     public: std::optional<Vector3<Precision>>
       CenterOfVolumeBelow(const Plane<Precision> &_plane) const;
+
+    /// \brief Get the centroid of the cylinder. It coincides with the
+    /// origin of the reference frame defined in the class description.
+    /// \return The centroid, in the cylinder's reference frame:
+    /// the zero vector.
+    public: Vector3<Precision> Centroid() const;
 
     /// \brief Compute the cylinder's density given a mass value. The
     /// cylinder is assumed to be solid with uniform density. This

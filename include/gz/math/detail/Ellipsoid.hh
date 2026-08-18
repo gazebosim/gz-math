@@ -199,6 +199,13 @@ bool Ellipsoid<T>::SetDensityFromMass(const T _mass)
   return true;
 }
 
+/////////////////////////////////////////////////
+template<typename T>
+Vector3<T> Ellipsoid<T>::Centroid() const
+{
+  return Vector3<T>::Zero;
+}
+
 //////////////////////////////////////////////////
 template<typename T>
 T Ellipsoid<T>::DensityFromMass(const T _mass) const
