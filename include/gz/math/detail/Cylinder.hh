@@ -350,6 +350,13 @@ bool Cylinder<T>::SetDensityFromMass(const T _mass)
   return newDensity > 0;
 }
 
+/////////////////////////////////////////////////
+template<typename T>
+Vector3<T> Cylinder<T>::Centroid() const
+{
+  return Vector3<T>::Zero;
+}
+
 //////////////////////////////////////////////////
 template<typename T>
 T Cylinder<T>::DensityFromMass(const T _mass) const

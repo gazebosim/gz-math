@@ -296,3 +296,15 @@ TEST(CapsuleTest, VolumeBelowFloat)
     EXPECT_TRUE(cov.value().Z() < 0.0f);
   }
 }
+
+/////////////////////////////////////////////////
+TEST(CapsuleTest, Centroid)
+{
+  const math::Capsuled capsule(2.0, 0.5);
+  EXPECT_EQ(math::Vector3d::Zero, capsule.Centroid());
+
+  const math::Planed above(math::Vector3d::UnitZ, 1e6);
+  auto cov = capsule.CenterOfVolumeBelow(above);
+  ASSERT_TRUE(cov.has_value());
+  EXPECT_EQ(capsule.Centroid(), cov.value());
+}

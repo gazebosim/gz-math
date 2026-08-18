@@ -33,6 +33,12 @@ namespace gz::math
   /// The ellipsoid class supports defining a ellipsoid with three radii and
   /// material properties. Radii are in meters. See Material for more on
   /// material properties.
+  ///
+  /// A reference frame is defined with an origin at the geometric center
+  /// of the ellipsoid, with XYZ coordinate axes aligned with the three
+  /// semi axes, so each component of the radii vector is the semi axis
+  /// along the corresponding coordinate axis. This frame is consistent
+  /// with the SDFormat ellipsoid shape.
   /// \tparam Precision Scalar numeric type.
   template<typename Precision>
   class Ellipsoid
@@ -99,6 +105,12 @@ namespace gz::math
     /// reference frame.
     public: std::optional<Vector3<Precision>>
       CenterOfVolumeBelow(const Plane<Precision> &_plane) const;
+
+    /// \brief Get the centroid of the ellipsoid. It coincides with the
+    /// origin of the reference frame defined in the class description.
+    /// \return The centroid, in the ellipsoid's reference frame:
+    /// the zero vector.
+    public: Vector3<Precision> Centroid() const;
 
     /// \brief Compute the ellipsoid's density given a mass value. The
     /// ellipsoid is assumed to be solid with uniform density. This

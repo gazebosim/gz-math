@@ -37,6 +37,12 @@ namespace gz::math
   /// length, and material properties. The shape is equivalent to a cylinder
   /// aligned with the Z-axis and capped with hemispheres. Radius and
   /// length are in meters. See Material for more on material properties.
+  ///
+  /// A reference frame is defined with an origin at the geometric center
+  /// of the capsule, with XYZ coordinate axes defined with the Z axis
+  /// parallel to the axis of symmetry. The length spans the cylindrical
+  /// segment only; the hemispherical caps extend beyond it. This frame is
+  /// consistent with the SDFormat capsule shape.
   /// \tparam Precision Scalar numeric type.
   template<typename Precision>
   class Capsule
@@ -113,6 +119,12 @@ namespace gz::math
     /// reference frame.
     public: std::optional<Vector3<Precision>>
       CenterOfVolumeBelow(const Plane<Precision> &_plane) const;
+
+    /// \brief Get the centroid of the capsule. It coincides with the
+    /// origin of the reference frame defined in the class description.
+    /// \return The centroid, in the capsule's reference frame:
+    /// the zero vector.
+    public: Vector3<Precision> Centroid() const;
 
     /// \brief Compute the capsule's density given a mass value. The
     /// capsule is assumed to be solid with uniform density. This
