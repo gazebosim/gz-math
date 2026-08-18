@@ -24,29 +24,7 @@
 
 namespace ignition
 {
-<<<<<<< HEAD
   namespace math
-=======
-  // Inline bracket to help doxygen filtering.
-  inline namespace GZ_MATH_VERSION_NAMESPACE {
-  //
-  /// \class Capsule Capsule.hh gz/math/Capsule.hh
-  /// \brief A representation of a capsule or sphere-capped cylinder.
-  ///
-  /// The capsule class supports defining a capsule with a radius,
-  /// length, and material properties. The shape is equivalent to a cylinder
-  /// aligned with the Z-axis and capped with hemispheres. Radius and
-  /// length are in meters. See Material for more on material properties.
-  ///
-  /// A reference frame is defined with an origin at the geometric center
-  /// of the capsule, with XYZ coordinate axes defined with the Z axis
-  /// parallel to the axis of symmetry. The length spans the cylindrical
-  /// segment only; the hemispherical caps extend beyond it. This frame is
-  /// consistent with the SDFormat capsule shape.
-  /// \tparam Precision Scalar numeric type.
-  template<typename Precision>
-  class Capsule
->>>>>>> 7bb3d82 (Add Centroid() to the simple shape classes (#791))
   {
     // Foward declarations
     class CapsulePrivate;
@@ -62,6 +40,12 @@ namespace ignition
     /// aligned with the Z-axis and capped with hemispheres. Radius and
     /// length are in meters. See Material for more on material properties.
     /// \tparam Precision Scalar numeric type.
+    ///
+    /// A reference frame is defined with an origin at the geometric center
+    /// of the capsule, with XYZ coordinate axes defined with the Z axis
+    /// parallel to the axis of symmetry. The length spans the cylindrical
+    /// segment only; the hemispherical caps extend beyond it. This frame is
+    /// consistent with the SDFormat capsule shape.
     template<typename Precision>
     class Capsule
     {
@@ -128,7 +112,6 @@ namespace ignition
       /// \return Volume below the plane in m^3.
       public: Precision VolumeBelow(const Plane<Precision> &_plane) const;
 
-<<<<<<< HEAD
       /// \brief Center of volume below the plane. This is useful for example
       /// when calculating where buoyancy should be applied.
       /// \param[in] _plane The plane which slices this capsule, expressed
@@ -138,23 +121,12 @@ namespace ignition
       /// reference frame.
       public: std::optional<Vector3<Precision>>
         CenterOfVolumeBelow(const Plane<Precision> &_plane) const;
-=======
-    /// \brief Get the centroid of the capsule. It coincides with the
-    /// origin of the reference frame defined in the class description.
-    /// \return The centroid, in the capsule's reference frame:
-    /// the zero vector.
-    public: Vector3<Precision> Centroid() const;
 
-    /// \brief Compute the capsule's density given a mass value. The
-    /// capsule is assumed to be solid with uniform density. This
-    /// function requires the capsule's radius and length to be set to
-    /// values greater than zero. The Material of the capsule is ignored.
-    /// \param[in] _mass Mass of the capsule, in kg. This value should be
-    /// greater than zero.
-    /// \return Density of the capsule in kg/m^3. A NaN is returned
-    /// if radius, length or _mass is <= 0.
-    public: Precision DensityFromMass(const Precision _mass) const;
->>>>>>> 7bb3d82 (Add Centroid() to the simple shape classes (#791))
+      /// \brief Get the centroid of the capsule. It coincides with the
+      /// origin of the reference frame defined in the class description.
+      /// \return The centroid, in the capsule's reference frame:
+      /// the zero vector.
+      public: Vector3<Precision> Centroid() const;
 
       /// \brief Compute the capsule's density given a mass value. The
       /// capsule is assumed to be solid with uniform density. This
