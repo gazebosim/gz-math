@@ -712,3 +712,16 @@ TEST(BoxTest, Mass)
   EXPECT_EQ(expectedMassMat.DiagonalMoments(), massMatOpt->DiagonalMoments());
   EXPECT_DOUBLE_EQ(expectedMassMat.Mass(), massMatOpt->Mass());
 }
+
+/////////////////////////////////////////////////
+TEST(BoxTest, Centroid)
+{
+  const math::Boxd box(2.0, 3.0, 4.0);
+  EXPECT_EQ(math::Vector3d::Zero, box.Centroid());
+
+  // The centroid is the centre of volume of the whole shape.
+  const math::Planed above(math::Vector3d::UnitZ, 1e6);
+  auto cov = box.CenterOfVolumeBelow(above);
+  ASSERT_TRUE(cov.has_value());
+  EXPECT_EQ(box.Centroid(), cov.value());
+}

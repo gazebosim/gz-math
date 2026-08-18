@@ -454,6 +454,13 @@ IntersectionPoints<T> Box<T>::VerticesBelow(const Plane<T> &_plane) const
 
 /////////////////////////////////////////////////
 template<typename T>
+Vector3<T> Box<T>::Centroid() const
+{
+  return Vector3<T>::Zero;
+}
+
+/////////////////////////////////////////////////
+template<typename T>
 T Box<T>::DensityFromMass(const T _mass) const
 {
   if (this->size.Min() <= 0|| _mass <= 0)
