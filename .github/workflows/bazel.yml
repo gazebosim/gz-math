@@ -14,6 +14,7 @@ jobs:
   test:
     uses: bazel-contrib/.github/.github/workflows/bazel.yaml@v7.7.0
     with:
+      cache_version: rotary
       folders: |
         [
           "."
