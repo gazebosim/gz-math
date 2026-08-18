@@ -24,7 +24,25 @@
 
 namespace ignition
 {
+<<<<<<< HEAD
   namespace math
+=======
+  // Inline bracket to help doxygen filtering.
+  inline namespace GZ_MATH_VERSION_NAMESPACE {
+  //
+  /// \class Sphere Sphere.hh gz/math/Sphere.hh
+  /// \brief A representation of a sphere.
+  ///
+  /// The sphere class supports defining a sphere with a radius and
+  /// material properties. Radius is in meters.
+  /// See Material for more on material properties.
+  ///
+  /// A reference frame is defined with an origin at the geometric center
+  /// of the sphere; by symmetry, the orientation of the coordinate axes is
+  /// immaterial. This frame is consistent with the SDFormat sphere shape.
+  template<typename Precision>
+  class Sphere
+>>>>>>> 7bb3d82 (Add Centroid() to the simple shape classes (#791))
   {
     // Foward declarations
     class SpherePrivate;
@@ -99,6 +117,7 @@ namespace ignition
       /// \return Volume below the sphere in m^3.
       public: Precision VolumeBelow(const Plane<Precision> &_plane) const;
 
+<<<<<<< HEAD
       /// \brief Center of volume below the plane. This is useful for example
       /// when calculating where buoyancy should be applied.
       /// \param[in] _plane The plane which slices this sphere, expressed
@@ -108,6 +127,23 @@ namespace ignition
       /// frame.
       public: std::optional<Vector3<Precision>>
         CenterOfVolumeBelow(const Plane<Precision> &_plane) const;
+=======
+    /// \brief Get the centroid of the sphere. It coincides with the
+    /// origin of the reference frame defined in the class description.
+    /// \return The centroid, in the sphere's reference frame:
+    /// the zero vector.
+    public: Vector3<Precision> Centroid() const;
+
+    /// \brief Compute the sphere's density given a mass value. The
+    /// sphere is assumed to be solid with uniform density. This
+    /// function requires the sphere's radius to be set to a
+    /// value greater than zero. The Material of the sphere is ignored.
+    /// \param[in] _mass Mass of the sphere, in kg. This value should be
+    /// greater than zero.
+    /// \return Density of the sphere in kg/m^3. A negative value is
+    /// returned if radius or _mass is <= 0.
+    public: Precision DensityFromMass(const Precision _mass) const;
+>>>>>>> 7bb3d82 (Add Centroid() to the simple shape classes (#791))
 
       /// \brief Compute the sphere's density given a mass value. The
       /// sphere is assumed to be solid with uniform density. This

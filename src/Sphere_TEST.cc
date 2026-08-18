@@ -302,3 +302,15 @@ TEST(SphereTest, VolumeBelowFloat)
     EXPECT_NEAR(0.0f, cov.value().Z(), 1e-3f);
   }
 }
+
+/////////////////////////////////////////////////
+TEST(SphereTest, Centroid)
+{
+  const math::Sphered sphere(1.5);
+  EXPECT_EQ(math::Vector3d::Zero, sphere.Centroid());
+
+  const math::Planed above(math::Vector3d::UnitZ, 1e6);
+  auto cov = sphere.CenterOfVolumeBelow(above);
+  ASSERT_TRUE(cov.has_value());
+  EXPECT_EQ(sphere.Centroid(), cov.value());
+}
