@@ -57,24 +57,24 @@ class TestLine2d(unittest.TestCase):
 
         # Point on segment
         pt1 = Vector2d(5, 5)
-        self.assertTrue(line.within(pt1, 1e-6))
-        self.assertTrue(line.on_segment(pt1, 1e-6))
+        self.assertTrue(line.within(pt1))
+        self.assertTrue(line.on_segment(pt1))
 
         # Point collinear with line, but outside segment bounds
         pt2 = Vector2d(15, 15)
-        self.assertFalse(line.within(pt2, 1e-6))
-        self.assertFalse(line.on_segment(pt2, 1e-6))
+        self.assertFalse(line.within(pt2))
+        self.assertFalse(line.on_segment(pt2))
 
         # Point within bounding box of segment, but not collinear
         pt3 = Vector2d(5, 6)
-        self.assertTrue(line.within(pt3, 1e-6))
-        self.assertFalse(line.on_segment(pt3, 1e-6))
+        self.assertTrue(line.within(pt3))
+        self.assertFalse(line.on_segment(pt3))
 
         # Endpoints
-        self.assertTrue(line.within(line[0], 1e-6))
-        self.assertTrue(line.on_segment(line[0], 1e-6))
-        self.assertTrue(line.within(line[1], 1e-6))
-        self.assertTrue(line.on_segment(line[1], 1e-6))
+        self.assertTrue(line.within(line[0]))
+        self.assertTrue(line.on_segment(line[0]))
+        self.assertTrue(line.within(line[1]))
+        self.assertTrue(line.on_segment(line[1]))
 
     def test_length(self):
         line_a = Line2d(0, 0, 10, 10)

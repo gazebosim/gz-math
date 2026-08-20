@@ -89,9 +89,13 @@ void helpDefineMathLine2(py::module &m, const std::string &typestr)
          "Check if the given line is parallel with this line.")
     .def("on_segment",
          &Class::OnSegment,
+         py::arg("_pt") = gz::math::Vector2<T>::Zero,
+         py::arg("_epsilon") = 1e-6,
          "Return whether the given point is on this line segment.")
     .def("within",
          &Class::Within,
+         py::arg("_pt") = gz::math::Vector2<T>::Zero,
+         py::arg("_epsilon") = 1e-6,
          "Check if the given point is between the start and end "
          "points of the line segment. This does not imply that the point is "
          "on the segment.")
