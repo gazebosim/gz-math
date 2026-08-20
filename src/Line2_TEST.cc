@@ -40,6 +40,49 @@ TEST(Line2Test, Constructor)
   EXPECT_NO_THROW(lineB[2].X());
   EXPECT_DOUBLE_EQ(lineB[2].X(), lineB[1].X());
   EXPECT_NO_THROW(lineA[0].X());
+
+  // Test Set method with Vector2
+  lineA.Set(math::Vector2d(5, 6), math::Vector2d(7, 8));
+  EXPECT_EQ(lineA[0], math::Vector2d(5, 6));
+  EXPECT_EQ(lineA[1], math::Vector2d(7, 8));
+}
+
+/////////////////////////////////////////////////
+TEST(Line2Test, CrossProduct)
+{
+  math::Line2d lineA(0, 0, 10, 0);
+  math::Line2d lineB(0, 0, 0, 10);
+  EXPECT_DOUBLE_EQ(lineA.CrossProduct(lineB), 100.0);
+
+  math::Vector2d pt(5, 5);
+  EXPECT_DOUBLE_EQ(lineA.CrossProduct(pt), 50.0);
+}
+
+/////////////////////////////////////////////////
+TEST(Line2Test, OnSegmentAndWithin)
+{
+  math::Line2d line(0, 0, 10, 10);
+
+  // Point on segment
+  math::Vector2d pt1(5, 5);
+  EXPECT_TRUE(line.Within(pt1));
+  EXPECT_TRUE(line.OnSegment(pt1));
+
+  // Point collinear with line, but outside segment bounds
+  math::Vector2d pt2(15, 15);
+  EXPECT_FALSE(line.Within(pt2));
+  EXPECT_FALSE(line.OnSegment(pt2));
+
+  // Point within bounding box of segment, but not collinear
+  math::Vector2d pt3(5, 6);
+  EXPECT_TRUE(line.Within(pt3));
+  EXPECT_FALSE(line.OnSegment(pt3));
+
+  // Endpoints
+  EXPECT_TRUE(line.Within(line[0]));
+  EXPECT_TRUE(line.OnSegment(line[0]));
+  EXPECT_TRUE(line.Within(line[1]));
+  EXPECT_TRUE(line.OnSegment(line[1]));
 }
 
 /////////////////////////////////////////////////
@@ -83,6 +126,7 @@ TEST(Line2Test, ParallelLine)
     // Line is always parallel with itself
     math::Line2d line(0, 0, 10, 0);
     EXPECT_TRUE(line.Parallel(line, 1e-10));
+    EXPECT_DOUBLE_EQ(line.CrossProduct(line), 0.0);
   }
 
   {
@@ -90,22 +134,26 @@ TEST(Line2Test, ParallelLine)
     // Still expect Line is parallel with itself
     math::Line2d line(0, 0, 0, 0);
     EXPECT_TRUE(line.Parallel(line, 1e-10));
+    EXPECT_DOUBLE_EQ(line.CrossProduct(line), 0.0);
   }
 
   math::Line2d lineA(0, 0, 10, 0);
   math::Line2d lineB(0, 0, 10, 0);
   EXPECT_TRUE(lineA.Parallel(lineB, 1e-10));
+  EXPECT_DOUBLE_EQ(lineA.CrossProduct(lineB), 0.0);
 
   lineB.Set(0, 0, 0, 10);
   EXPECT_FALSE(lineA.Parallel(lineB));
 
   lineB.Set(0, 10, 10, 10);
   EXPECT_TRUE(lineA.Parallel(lineB));
+  EXPECT_DOUBLE_EQ(lineA.CrossProduct(lineB), 0.0);
 
   lineB.Set(0, 10, 10, 10.00001);
   EXPECT_FALSE(lineA.Parallel(lineB, 1e-10));
   EXPECT_FALSE(lineA.Parallel(lineB));
   EXPECT_TRUE(lineA.Parallel(lineB, 1e-3));
+  EXPECT_NEAR(lineA.CrossProduct(lineB), 0.0, 1e-3);
 }
 
 /////////////////////////////////////////////////
@@ -234,6 +282,28 @@ TEST(Line2Test, Intersect)
   lineB.Set(0, 10, 10, 0);
   EXPECT_TRUE(lineA.Intersect(lineB, pt));
   EXPECT_EQ(pt, math::Vector2d(5, 5));
+
+  // Collinear parallel non-overlapping lines
+  lineA.Set(0, 0, 10, 0);
+  lineB.Set(20, 0, 30, 0);
+  EXPECT_FALSE(lineA.Intersect(lineB, pt));
+  EXPECT_FALSE(lineA.Intersect(lineB));
+
+  // Collinear lines where lineB end point is within lineA but start point is not
+  lineA.Set(0, 0, 10, 0);
+  lineB.Set(-5, 0, 5, 0);
+  EXPECT_TRUE(lineA.Intersect(lineB, pt));
+  EXPECT_EQ(pt, math::Vector2d(5, 0));
+
+  // Lines whose extensions intersect, but intersection Y is outside bounds
+  lineA.Set(-10, 0, 10, 0);
+  lineB.Set(0, 2, 0, 10);
+  EXPECT_FALSE(lineA.Intersect(lineB, pt));
+
+  // Lines whose extensions intersect, but intersection X is outside bounds
+  lineA.Set(0, -10, 0, 10);
+  lineB.Set(2, 0, 10, 0);
+  EXPECT_FALSE(lineA.Intersect(lineB, pt));
 }
 
 /////////////////////////////////////////////////
@@ -243,7 +313,9 @@ TEST(Line2Test, Equality)
   math::Line2d lineB(1, 2, 2, 2);
 
   EXPECT_TRUE(lineA != lineB);
+  EXPECT_FALSE(lineA == lineB);
   EXPECT_TRUE(lineA == lineA);
+  EXPECT_FALSE(lineA != lineA);
 
   lineB.Set(1, 1, 2, 1.1);
   EXPECT_FALSE(lineA == lineB);
@@ -266,3 +338,18 @@ TEST(Line2Test, OperatorStreamOut)
   stream << line;
   EXPECT_EQ(stream.str(), "0 1 2 3");
 }
+
+/////////////////////////////////////////////////
+TEST(Line2Test, TemplateTypes)
+{
+  math::Line2i lineI(0, 0, 10, 10);
+  EXPECT_EQ(lineI[0], math::Vector2i(0, 0));
+  EXPECT_EQ(lineI[1], math::Vector2i(10, 10));
+  EXPECT_EQ(lineI.Length(), 14);
+
+  math::Line2f lineF(0.0f, 0.0f, 10.0f, 10.0f);
+  EXPECT_FLOAT_EQ(lineF[0].X(), 0.0f);
+  EXPECT_FLOAT_EQ(lineF[1].Y(), 10.0f);
+  EXPECT_NEAR(lineF.Length(), 14.1421356f, 1e-4f);
+}
+
