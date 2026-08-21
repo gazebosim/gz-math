@@ -5,12 +5,6 @@ on:
     # running twice a week helps protect the bazel cache
     # Run at 16:00 UTC, Monday and Friday
     - cron: '0 16 * * 1,5'
-  workflow_dispatch:
-    inputs:
-      runs_per_test:
-        default: 10
-        required: false
-        type: string
 
 jobs:
   call-repeat-tests:
