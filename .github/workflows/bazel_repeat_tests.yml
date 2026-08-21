@@ -34,4 +34,5 @@ jobs:
         bazel query "attr(flaky, ${{ inputs.flaky }}, tests(//...))" \
             | grep -q '^' || exit 0
         bazel test --runs_per_test=${{ inputs.runs_per_test }} \
+            --test_output=errors \
             $(bazel query "attr(flaky, ${{ inputs.flaky }}, tests(//...))")
