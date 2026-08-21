@@ -1,5 +1,8 @@
 name: Bazel repeat non-flaky tests
 on:
+  push:
+    branches:
+      - 'scpeters/bazel_repeat_tests'
   schedule:
     # GitHub caches are purged after 7 days of inactivity, so
     # running twice a week helps protect the bazel cache
