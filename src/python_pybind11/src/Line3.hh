@@ -60,10 +60,10 @@ void helpDefineMathLine3(py::module &m, const std::string &typestr)
     .def(py::init<const gz::math::Vector3<T>&,
                   const gz::math::Vector3<T>&>(),
          "Constructor")
-    .def(py::init<const double, const double, const double, const double>(),
+    .def(py::init<const T, const T, const T, const T>(),
          "2D Constructor where Z coordinates are 0")
-    .def(py::init<const double, const double, const double, const double,
-                  const double, const double>(),
+    .def(py::init<const T, const T, const T, const T,
+                  const T, const T>(),
          "Constructor")
     .def(py::self != py::self)
     .def(py::self == py::self)
@@ -78,15 +78,15 @@ void helpDefineMathLine3(py::module &m, const std::string &typestr)
          &Class::SetB,
          "Set the end point of the line segment")
     .def("set",
-         py::overload_cast<const double, const double, const double,
-                           const double, const double>(&Class::Set),
+         py::overload_cast<const T, const T, const T,
+                           const T, const T>(&Class::Set),
          py::arg("_x1"), py::arg("_y1"), py::arg("_x2"),
-         py::arg("_y2"), py::arg("_z") = 0,
+         py::arg("_y2"), py::arg("_z") = static_cast<T>(0),
          "Set the start and end point of the line segment, assuming that "
          "both points have the same height.")
     .def("set",
-         py::overload_cast<const double, const double, const double,
-                           const double, const double, const double>(
+         py::overload_cast<const T, const T, const T,
+                           const T, const T, const T>(
                              &Class::Set),
          "Set the start and end point of the line segment")
     .def("direction",
