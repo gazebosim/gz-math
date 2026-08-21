@@ -289,7 +289,7 @@ TEST(Line2Test, Intersect)
   EXPECT_FALSE(lineA.Intersect(lineB, pt));
   EXPECT_FALSE(lineA.Intersect(lineB));
 
-  // Collinear lines where lineB end point is within lineA but start point is not
+  // Collinear lines where lineB end point is within lineA but start point isn't
   lineA.Set(0, 0, 10, 0);
   lineB.Set(-5, 0, 5, 0);
   EXPECT_TRUE(lineA.Intersect(lineB, pt));
