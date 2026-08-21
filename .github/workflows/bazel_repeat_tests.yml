@@ -1,7 +1,7 @@
 name: Bazel repeat tests
 on:
   workflow_call:
-    inputs:
+    inputs: &shared_inputs
       flaky:
         default: 0
         required: false
@@ -11,15 +11,7 @@ on:
         required: false
         type: string
   workflow_dispatch:
-    inputs:
-      flaky:
-        default: 0
-        required: false
-        type: string
-      runs_per_test:
-        default: 10
-        required: false
-        type: string
+    inputs: *shared_inputs
 
 jobs:
   repeat-tests:
