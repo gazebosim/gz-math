@@ -1,0 +1,43 @@
+name: Bazel repeat tests
+on:
+  workflow_call:
+    inputs:
+      flaky:
+        default: 0
+        required: false
+        type: string
+      runs_per_test:
+        default: 10
+        required: false
+        type: string
+  workflow_dispatch:
+    inputs:
+      flaky:
+        default: 0
+        required: false
+        type: string
+      runs_per_test:
+        default: 10
+        required: false
+        type: string
+
+jobs:
+  repeat-tests:
+    uses: bazel-contrib/.github/.github/workflows/bazel.yaml@v7.7.0
+    with:
+      folders: |
+        [
+          "."
+        ]
+      exclude: |
+        [
+          {"folder": ".", "bzlmodEnabled": false}
+        ]
+      exclude_windows: true
+      bazel_test_command: |
+        # Exit with success code 0 if no targets match the query
+        # `grep -q '^' fails if the query output is empty
+        bazel query "attr(flaky, ${{ inputs.flaky }}, tests(//...))" \
+            | grep -q '^' || exit 0
+        bazel test --runs_per_test=${{ inputs.runs_per_test }} \
+            $(bazel query "attr(flaky, ${{ inputs.flaky }}, tests(//...))")

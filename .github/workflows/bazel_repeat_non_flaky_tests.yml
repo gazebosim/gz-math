@@ -1,0 +1,18 @@
+name: Bazel repeat non-flaky tests
+on:
+  push:
+    branches:
+      - 'scpeters/bazel_repeat_tests'
+  workflow_dispatch:
+    inputs:
+      runs_per_test:
+        default: 10
+        required: false
+        type: string
+
+jobs:
+  call-repeat-tests:
+    uses: ./.github/workflows/bazel_repeat_tests.yml
+    with:
+      flaky: 0
+      runs_per_test: 10
