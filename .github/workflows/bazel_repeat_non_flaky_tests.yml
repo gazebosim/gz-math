@@ -7,7 +7,7 @@ on:
     - cron: '0 17 * * 1,5'
 
 jobs:
-  call-repeat-tests:
+  repeat-non-flaky-tests:
     uses: ./.github/workflows/bazel_repeat_tests.yml
     with:
       flaky: 0
