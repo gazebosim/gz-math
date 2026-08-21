@@ -3,10 +3,12 @@ on:
   workflow_call:
     inputs: &shared_inputs
       flaky:
+        description: "0 to execute non-flaky tests, 1 to execute flaky tests"
         default: 0
         required: false
         type: string
       runs_per_test:
+        description: "Number of times to repeat each test"
         default: 10
         required: false
         type: string
