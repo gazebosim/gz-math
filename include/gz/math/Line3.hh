@@ -48,8 +48,8 @@ namespace gz::math
     /// \param[in] _y1 Y coordinate of the start point.
     /// \param[in] _x2 X coordinate of the end point.
     /// \param[in] _y2 Y coordinate of the end point.
-    public: Line3(const double _x1, const double _y1,
-      const double _x2, const double _y2)
+    public: Line3(const T _x1, const T _y1,
+      const T _x2, const T _y2)
     {
       this->Set(_x1, _y1, _x2, _y2);
     }
@@ -61,9 +61,9 @@ namespace gz::math
     /// \param[in] _x2 X coordinate of the end point.
     /// \param[in] _y2 Y coordinate of the end point.
     /// \param[in] _z2 Z coordinate of the end point.
-    public: Line3(const double _x1, const double _y1,
-      const double _z1, const double _x2,
-      const double _y2, const double _z2)
+    public: Line3(const T _x1, const T _y1,
+      const T _z1, const T _x2,
+      const T _y2, const T _z2)
     {
       this->Set(_x1, _y1, _z1, _x2, _y2, _z2);
     }
@@ -100,14 +100,12 @@ namespace gz::math
     /// \param[in] _y2 Y coordinate of the end point.
     /// \param[in] _z Z coordinate of both points,
     /// by default _z is set to 0.
-    public: void Set(const double _x1, const double _y1,
-      const double _x2, const double _y2,
-      const double _z = 0)
+    public: void Set(const T _x1, const T _y1,
+      const T _x2, const T _y2,
+      const T _z = 0)
     {
-      this->pts[0].Set(
-        static_cast<T>(_x1), static_cast<T>(_y1), static_cast<T>(_z));
-      this->pts[1].Set(
-        static_cast<T>(_x2), static_cast<T>(_y2), static_cast<T>(_z));
+      this->pts[0].Set(_x1, _y1, _z);
+      this->pts[1].Set(_x2, _y2, _z);
     }
 
     /// \brief Set the start and end point of the line segment
@@ -117,14 +115,12 @@ namespace gz::math
     /// \param[in] _x2 X coordinate of the end point.
     /// \param[in] _y2 Y coordinate of the end point.
     /// \param[in] _z2 Z coordinate of the end point.
-    public: void Set(const double _x1, const double _y1,
-      const double _z1, const double _x2,
-      const double _y2, const double _z2)
+    public: void Set(const T _x1, const T _y1,
+      const T _z1, const T _x2,
+      const T _y2, const T _z2)
     {
-      this->pts[0].Set(
-        static_cast<T>(_x1), static_cast<T>(_y1), static_cast<T>(_z1));
-      this->pts[1].Set(
-        static_cast<T>(_x2), static_cast<T>(_y2), static_cast<T>(_z2));
+      this->pts[0].Set(_x1, _y1, _z1);
+      this->pts[1].Set(_x2, _y2, _z2);
     }
 
     /// \brief Get the direction of the line
