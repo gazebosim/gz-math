@@ -1,0 +1,38 @@
+name: Bazel repeat tests
+on:
+  workflow_call:
+    inputs: &shared_inputs
+      flaky:
+        description: "0 to execute non-flaky tests, 1 to execute flaky tests"
+        default: 0
+        required: false
+        type: string
+      runs_per_test:
+        description: "Number of times to repeat each test"
+        default: 10
+        required: false
+        type: string
+  workflow_dispatch:
+    inputs: *shared_inputs
+
+jobs:
+  repeat-tests:
+    uses: bazel-contrib/.github/.github/workflows/bazel.yaml@v7.7.0
+    with:
+      folders: |
+        [
+          "."
+        ]
+      exclude: |
+        [
+          {"folder": ".", "bzlmodEnabled": false}
+        ]
+      exclude_windows: true
+      bazel_test_command: |
+        # Exit with success code 0 if no targets match the query
+        # `grep -q '^' fails if the query output is empty
+        bazel query "attr(flaky, ${{ inputs.flaky }}, tests(//...))" \
+            | grep -q '^' || exit 0
+        bazel test --runs_per_test=${{ inputs.runs_per_test }} \
+            --test_output=errors \
+            $(bazel query "attr(flaky, ${{ inputs.flaky }}, tests(//...))")

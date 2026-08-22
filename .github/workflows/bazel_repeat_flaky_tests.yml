@@ -1,0 +1,14 @@
+name: Bazel repeat flaky tests
+on:
+  schedule:
+    # GitHub caches are purged after 7 days of inactivity, so
+    # running twice a week helps protect the bazel cache
+    # Run at 16:00 UTC, Monday and Friday
+    - cron: '0 16 * * 1,5'
+
+jobs:
+  repeat-flaky-tests:
+    uses: ./.github/workflows/bazel_repeat_tests.yml
+    with:
+      flaky: 1
+      runs_per_test: 10
