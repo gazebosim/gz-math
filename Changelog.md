@@ -3,10 +3,10 @@
 ### Gazebo Math 7.7.0 (2026-08-24)
 
 1. Add Centroid() to the simple shape classes
-    * [Pull request #791](https://github.com/gazebosim/gz-math/pull/791)
+    * [Pull request #794](https://github.com/gazebosim/gz-math/pull/794)
 
-1. Add pybindings for VolumetricGridLookupField (backport #657)
-    * [Pull request #657) (#788](https://github.com/gazebosim/gz-math/pull/657) (#788)
+1. Add pybindings for VolumetricGridLookupField
+    * [Pull request #788](https://github.com/gazebosim/gz-math/pull/788)
 
 1. [bazel] Fix build error for Cone_TEST
     * [Pull request #781](https://github.com/gazebosim/gz-math/pull/781)
