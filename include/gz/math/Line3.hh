@@ -48,8 +48,8 @@ namespace gz::math
     /// \param[in] _y1 Y coordinate of the start point.
     /// \param[in] _x2 X coordinate of the end point.
     /// \param[in] _y2 Y coordinate of the end point.
-    public: Line3(const double _x1, const double _y1,
-      const double _x2, const double _y2)
+    public: Line3(const T _x1, const T _y1,
+      const T _x2, const T _y2)
     {
       this->Set(_x1, _y1, _x2, _y2);
     }
@@ -61,9 +61,9 @@ namespace gz::math
     /// \param[in] _x2 X coordinate of the end point.
     /// \param[in] _y2 Y coordinate of the end point.
     /// \param[in] _z2 Z coordinate of the end point.
-    public: Line3(const double _x1, const double _y1,
-      const double _z1, const double _x2,
-      const double _y2, const double _z2)
+    public: Line3(const T _x1, const T _y1,
+      const T _z1, const T _x2,
+      const T _y2, const T _z2)
     {
       this->Set(_x1, _y1, _z1, _x2, _y2, _z2);
     }
@@ -100,9 +100,9 @@ namespace gz::math
     /// \param[in] _y2 Y coordinate of the end point.
     /// \param[in] _z Z coordinate of both points,
     /// by default _z is set to 0.
-    public: void Set(const double _x1, const double _y1,
-      const double _x2, const double _y2,
-      const double _z = 0)
+    public: void Set(const T _x1, const T _y1,
+      const T _x2, const T _y2,
+      const T _z = 0)
     {
       this->pts[0].Set(_x1, _y1, _z);
       this->pts[1].Set(_x2, _y2, _z);
@@ -115,9 +115,9 @@ namespace gz::math
     /// \param[in] _x2 X coordinate of the end point.
     /// \param[in] _y2 Y coordinate of the end point.
     /// \param[in] _z2 Z coordinate of the end point.
-    public: void Set(const double _x1, const double _y1,
-      const double _z1, const double _x2,
-      const double _y2, const double _z2)
+    public: void Set(const T _x1, const T _y1,
+      const T _z1, const T _x2,
+      const T _y2, const T _z2)
     {
       this->pts[0].Set(_x1, _y1, _z1);
       this->pts[1].Set(_x2, _y2, _z2);
@@ -134,7 +134,7 @@ namespace gz::math
     /// \return The length of the line.
     public: T Length() const
     {
-      return this->pts[0].Distance(this->pts[1]);
+      return static_cast<T>(this->pts[0].Distance(this->pts[1]));
     }
 
     /// \brief Get the shortest line between this line and the
@@ -214,7 +214,8 @@ namespace gz::math
       double mua = clamp(numer / denom, 0.0, 1.0);
       double mub = clamp((d1343 + d4321 * mua) / d4343, 0.0, 1.0);
 
-      _result.Set(this->pts[0] + (p21 * mua), _line[0] + (p43 * mub));
+      _result.Set(this->pts[0] + (p21 * static_cast<T>(mua)),
+                  _line[0] + (p43 * static_cast<T>(mub)));
 
       return true;
     }
@@ -229,13 +230,13 @@ namespace gz::math
       auto ptTo1 = _pt - this->pts[1];
 
       // Point is projected beyond pt0 or the line has length 0
-      if (ptTo0.Dot(line) <= 0.0)
+      if (ptTo0.Dot(line) <= static_cast<T>(0))
       {
         return ptTo0.Length();
       }
 
       // Point is projected beyond pt1
-      if (ptTo1.Dot(line) >= 0.0)
+      if (ptTo1.Dot(line) >= static_cast<T>(0))
       {
         return ptTo1.Length();
       }
@@ -341,18 +342,19 @@ namespace gz::math
     public: bool Within(const math::Vector3<T> &_pt,
                         double _epsilon = 1e-6) const
     {
+      auto eps = static_cast<T>(_epsilon);
       return _pt.X() <= std::max(this->pts[0].X(),
-                                 this->pts[1].X()) + _epsilon &&
+                                 this->pts[1].X()) + eps &&
              _pt.X() >= std::min(this->pts[0].X(),
-                                 this->pts[1].X()) - _epsilon &&
+                                 this->pts[1].X()) - eps &&
              _pt.Y() <= std::max(this->pts[0].Y(),
-                                 this->pts[1].Y()) + _epsilon &&
+                                 this->pts[1].Y()) + eps &&
              _pt.Y() >= std::min(this->pts[0].Y(),
-                                 this->pts[1].Y()) - _epsilon &&
+                                 this->pts[1].Y()) - eps &&
              _pt.Z() <= std::max(this->pts[0].Z(),
-                                 this->pts[1].Z()) + _epsilon &&
+                                 this->pts[1].Z()) + eps &&
              _pt.Z() >= std::min(this->pts[0].Z(),
-                                 this->pts[1].Z()) - _epsilon;
+                                 this->pts[1].Z()) - eps;
     }
 
     /// \brief Equality operator.
