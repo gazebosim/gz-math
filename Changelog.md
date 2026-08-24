@@ -1,5 +1,23 @@
 ## Gazebo Math 7.x
 
+### Gazebo Math 7.7.0 (2026-08-24)
+
+1. Add Centroid() to the simple shape classes
+    * [Pull request #791](https://github.com/gazebosim/gz-math/pull/791)
+
+1. Add pybindings for VolumetricGridLookupField (backport #657)
+    * [Pull request #657) (#788](https://github.com/gazebosim/gz-math/pull/657) (#788)
+
+1. [bazel] Fix build error for Cone_TEST
+    * [Pull request #781](https://github.com/gazebosim/gz-math/pull/781)
+
+1. Graph updates:
+    * [Pull request #778](https://github.com/gazebosim/gz-math/pull/778)
+    * [Pull request #766](https://github.com/gazebosim/gz-math/pull/766)
+    * [Pull request #762](https://github.com/gazebosim/gz-math/pull/762)
+    * [Pull request #756](https://github.com/gazebosim/gz-math/pull/756)
+    * [Pull request #751](https://github.com/gazebosim/gz-math/pull/751)
+
 ### Gazebo Math 7.6.0 (2026-04-10)
 
 1. Add VolumeBelow/CenterOfVolumeBelow for Ellipsoid, Cylinder, Capsule, Cone
