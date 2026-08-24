@@ -67,8 +67,8 @@ namespace gz::math
     /// \param[in] _y2 Y coordinate of the end point.
     public: void Set(double _x1, double _y1, double _x2, double _y2)
     {
-      this->pts[0].Set(_x1, _y1);
-      this->pts[1].Set(_x2, _y2);
+      this->pts[0].Set(static_cast<T>(_x1), static_cast<T>(_y1));
+      this->pts[1].Set(static_cast<T>(_x2), static_cast<T>(_y2));
     }
 
     /// \brief Return the cross product of this line and the given line.
@@ -253,10 +253,7 @@ namespace gz::math
     /// \return The length of the line.
     public: T Length() const
     {
-      return sqrt((this->pts[0].X() - this->pts[1].X()) *
-                  (this->pts[0].X() - this->pts[1].X()) +
-                  (this->pts[0].Y() - this->pts[1].Y()) *
-                  (this->pts[0].Y() - this->pts[1].Y()));
+      return static_cast<T>(this->pts[0].Distance(this->pts[1]));
     }
 
     /// \brief Get the slope of the line
