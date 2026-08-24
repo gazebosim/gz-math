@@ -1,5 +1,20 @@
 ## Gazebo Math 6.x
 
+## Gazebo Math 6.17.0 (2026-08-24)
+
+1. Reduce StopWatch_TEST.py sleep times
+    * [Pull request #811](https://github.com/gazebosim/gz-math/pull/811)
+
+1. Add Centroid() to the simple shape classes
+    * [Pull request #795](https://github.com/gazebosim/gz-math/pull/795)
+
+1. Graph updates:
+    * [Pull request #779](https://github.com/gazebosim/gz-math/pull/779)
+    * [Pull request #767](https://github.com/gazebosim/gz-math/pull/767)
+    * [Pull request #763](https://github.com/gazebosim/gz-math/pull/763)
+    * [Pull request #757](https://github.com/gazebosim/gz-math/pull/757)
+    * [Pull request #753](https://github.com/gazebosim/gz-math/pull/753)
+
 ## Gazebo Math 6.16.0 (2026-04-10)
 
 1. Add VolumeBelow/CenterOfVolumeBelow for Ellipsoid, Cylinder, Capsule
