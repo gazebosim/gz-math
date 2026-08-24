@@ -1,5 +1,24 @@
 ## Gazebo Math 9.x
 
+### Gazebo Math 9.3.0 (2026-08-24)
+
+1. Bazel updates:
+    * [Pull request #799](https://github.com/gazebosim/gz-math/pull/799)
+    * [Pull request #784](https://github.com/gazebosim/gz-math/pull/784)
+
+1. Reduce StopWatch_TEST.py sleep times
+    * [Pull request #800](https://github.com/gazebosim/gz-math/pull/800)
+
+1. Add Centroid() to the simple shape classes
+    * [Pull request #791](https://github.com/gazebosim/gz-math/pull/791)
+
+1. ci: test on Ubuntu Resolute (26.04)
+    * [Pull request #789](https://github.com/gazebosim/gz-math/pull/789)
+
+1. Add pybindings for VolumetricGridLookupField
+    * [Pull request #786](https://github.com/gazebosim/gz-math/pull/786)
+
+
 ### Gazebo Math 9.2.0 (2026-07-07)
 
 1. [bazel] Bump default bazel version to 9.1.1
