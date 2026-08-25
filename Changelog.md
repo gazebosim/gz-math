@@ -2,6 +2,10 @@
 
 ### Gazebo Math 7.7.0 (2026-08-24)
 
+1. Line2 updates:
+    * [Pull request #832](https://github.com/gazebosim/gz-math/pull/832)
+    * [Pull request #828](https://github.com/gazebosim/gz-math/pull/828)
+
 1. Add Centroid() to the simple shape classes
     * [Pull request #794](https://github.com/gazebosim/gz-math/pull/794)
 
