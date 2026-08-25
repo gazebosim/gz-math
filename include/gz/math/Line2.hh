@@ -45,7 +45,7 @@ namespace gz::math
     /// \param[in] _y1 Y coordinate of the start point.
     /// \param[in] _x2 X coordinate of the end point.
     /// \param[in] _y2 Y coordinate of the end point.
-    public: Line2(double _x1, double _y1, double _x2, double _y2)
+    public: Line2(T _x1, T _y1, T _x2, T _y2)
     {
       this->Set(_x1, _y1, _x2, _y2);
     }
@@ -65,10 +65,10 @@ namespace gz::math
     /// \param[in] _y1 Y coordinate of the start point.
     /// \param[in] _x2 X coordinate of the end point.
     /// \param[in] _y2 Y coordinate of the end point.
-    public: void Set(double _x1, double _y1, double _x2, double _y2)
+    public: void Set(T _x1, T _y1, T _x2, T _y2)
     {
-      this->pts[0].Set(static_cast<T>(_x1), static_cast<T>(_y1));
-      this->pts[1].Set(static_cast<T>(_x2), static_cast<T>(_y2));
+      this->pts[0].Set(_x1, _y1);
+      this->pts[1].Set(_x2, _y2);
     }
 
     /// \brief Return the cross product of this line and the given line.
@@ -77,7 +77,7 @@ namespace gz::math
     /// (a.start.y - a.end.y) * (b.start.x - b.end.x)
     /// \param[in] _line Line for the cross product computation.
     /// \return Return the cross product of this line and the given line.
-    public: double CrossProduct(const Line2<T> &_line) const
+    public: T CrossProduct(const Line2<T> &_line) const
     {
       return (this->pts[0].X() - this->pts[1].X()) *
              (_line[0].Y() -_line[1].Y()) -
@@ -90,7 +90,7 @@ namespace gz::math
     //  (_pt.y - a.y) * (b.x - a.x) - (_pt.x - a.x) * (b.y - a.y)
     /// \param[in] _pt Point for the cross product computation.
     /// \return Return the cross product of this line and the given point.
-    public: double CrossProduct(const Vector2<T> &_pt) const
+    public: T CrossProduct(const Vector2<T> &_pt) const
     {
       return (_pt.Y() - this->pts[0].Y()) *
              (this->pts[1].X() - this->pts[0].X()) -
@@ -108,7 +108,7 @@ namespace gz::math
                            double _epsilon = 1e-6) const
     {
       return math::equal(this->CrossProduct(_pt),
-          0., _epsilon);
+          static_cast<T>(0), static_cast<T>(_epsilon));
     }
 
     /// \brief Check if the given line is parallel with this line.
@@ -122,7 +122,7 @@ namespace gz::math
                           double _epsilon = 1e-6) const
     {
       return math::equal(this->CrossProduct(_line),
-          0., _epsilon);
+          static_cast<T>(0), static_cast<T>(_epsilon));
     }
 
     /// \brief Check if the given line is collinear with this line. This
@@ -160,14 +160,15 @@ namespace gz::math
     public: bool Within(const math::Vector2<T> &_pt,
                         double _epsilon = 1e-6) const
     {
+      auto eps = static_cast<T>(_epsilon);
       return _pt.X() <= std::max(this->pts[0].X(),
-                                 this->pts[1].X()) + _epsilon &&
+                                 this->pts[1].X()) + eps &&
              _pt.X() >= std::min(this->pts[0].X(),
-                                 this->pts[1].X()) - _epsilon &&
+                                 this->pts[1].X()) - eps &&
              _pt.Y() <= std::max(this->pts[0].Y(),
-                                 this->pts[1].Y()) + _epsilon &&
+                                 this->pts[1].Y()) + eps &&
              _pt.Y() >= std::min(this->pts[0].Y(),
-                                 this->pts[1].Y()) - _epsilon;
+                                 this->pts[1].Y()) - eps;
     }
 
     /// \brief Check if this line intersects the given line segment.
@@ -193,11 +194,11 @@ namespace gz::math
     public: bool Intersect(const Line2<T> &_line, math::Vector2<T> &_pt,
                            double _epsilon = 1e-6) const
     {
-      double d = this->CrossProduct(_line);
+      T d = this->CrossProduct(_line);
 
       // d is zero if the two line are collinear. Must check special
       // cases.
-      if (math::equal(d, 0.0, _epsilon))
+      if (math::equal(d, static_cast<T>(0), static_cast<T>(_epsilon)))
       {
         // Check if _line's starting point is on the line.
         if (this->Within(_line[0], _epsilon))
