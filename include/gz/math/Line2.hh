@@ -67,8 +67,8 @@ namespace gz::math
     /// \param[in] _y2 Y coordinate of the end point.
     public: void Set(T _x1, T _y1, T _x2, T _y2)
     {
-      this->pts[0].Set(static_cast<T>(_x1), static_cast<T>(_y1));
-      this->pts[1].Set(static_cast<T>(_x2), static_cast<T>(_y2));
+      this->pts[0].Set(_x1, _y1);
+      this->pts[1].Set(_x2, _y2);
     }
 
     /// \brief Return the cross product of this line and the given line.
