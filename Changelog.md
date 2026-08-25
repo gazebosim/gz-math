@@ -1,6 +1,10 @@
 ## Gazebo Math 9.x
 
-### Gazebo Math 9.3.0 (2026-08-24)
+### Gazebo Math 9.3.0 (2026-08-25)
+
+1. Line2 updates:
+    * [Pull request #830](https://github.com/gazebosim/gz-math/pull/830)
+    * [Pull request #826](https://github.com/gazebosim/gz-math/pull/826)
 
 1. Bazel updates:
     * [Pull request #801](https://github.com/gazebosim/gz-math/pull/801)
