@@ -1,6 +1,9 @@
 ## Gazebo Math 6.x
 
-## Gazebo Math 6.17.0 (2026-08-24)
+## Gazebo Math 6.17.0 (2026-08-25)
+
+1. Line2: increase test coverage
+    * [Pull request #829](https://github.com/gazebosim/gz-math/pull/829)
 
 1. Reduce StopWatch_TEST.py sleep times
     * [Pull request #811](https://github.com/gazebosim/gz-math/pull/811)
