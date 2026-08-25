@@ -14,17 +14,8 @@
 
 import math
 import unittest
-<<<<<<< HEAD
-from gz.math8 import Line2d
-from gz.math8 import Vector2d
-=======
-from gz.math import Line2d
-from gz.math import Line2f
-from gz.math import Line2i
-from gz.math import Vector2d
-from gz.math import Vector2f
-from gz.math import Vector2i
->>>>>>> 268039c (Line2: increase test coverage (#807))
+from gz.math8 import Line2d, Line2f, Line2i
+from gz.math8 import Vector2d, Vector2i
 
 
 class TestLine2d(unittest.TestCase):
