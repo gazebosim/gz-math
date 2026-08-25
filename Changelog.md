@@ -20,7 +20,7 @@
     * [Pull request #766](https://github.com/gazebosim/gz-math/pull/766)
     * [Pull request #762](https://github.com/gazebosim/gz-math/pull/762)
     * [Pull request #756](https://github.com/gazebosim/gz-math/pull/756)
-    * [Pull request #751](https://github.com/gazebosim/gz-math/pull/751)
+    * [Pull request #752](https://github.com/gazebosim/gz-math/pull/752)
 
 ### Gazebo Math 7.6.0 (2026-04-10)
 
