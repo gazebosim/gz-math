@@ -14,8 +14,17 @@
 
 import math
 import unittest
+<<<<<<< HEAD
 from gz.math7 import Line3d
 from gz.math7 import Vector3d
+=======
+from gz.math import Line3d
+from gz.math import Line3f
+from gz.math import Line3i
+from gz.math import Vector3d
+from gz.math import Vector3f
+from gz.math import Vector3i
+>>>>>>> 1044cd5 (Line3: increase test coverage (#813) (#821))
 
 
 class TestLine3d(unittest.TestCase):
@@ -79,6 +88,10 @@ class TestLine3d(unittest.TestCase):
         self.assertAlmostEqual(line_a[1].x(), 5.0)
         self.assertAlmostEqual(line_a[1].y(), 6.0)
         self.assertAlmostEqual(line_a[1].z(), 7.0)
+
+        line_a.set(Vector3d(20, 21, 22), Vector3d(23, 24, 25))
+        self.assertEqual(line_a[0], Vector3d(20, 21, 22))
+        self.assertEqual(line_a[1], Vector3d(23, 24, 25))
 
     def test_length(self):
         line_a = Line3d(0, 0, 0, 10, 10, 10)
@@ -225,6 +238,17 @@ class TestLine3d(unittest.TestCase):
         self.assertTrue(line.intersect(Line3d(0, -1, 0, 0, 0.1, 0)))
         self.assertTrue(line.intersect(Line3d(0, 1, 0, 0, 1.1, 0)))
 
+        # Parallel non-overlapping lines
+        self.assertFalse(line.intersect(Line3d(0, 2, 0, 0, 3, 0)))
+        self.assertFalse(line.intersect(Line3d(0, 2, 0, 0, 3, 0), pt))
+
+        # Parallel overlapping line where _line[0] is within this line
+        self.assertTrue(line.intersect(Line3d(0, 0.5, 0, 0, 2, 0), pt))
+        self.assertEqual(pt, Vector3d(0, 0.5, 0))
+
+        # Skew non-intersecting lines
+        self.assertFalse(line.intersect(Line3d(1, 0, 1, 1, 1, 1), pt))
+
     def test_parallel(self):
         line = Line3d(0, 0, 0, 0, 1, 0)
         self.assertTrue(line.parallel(Line3d(1, 0, 0, 1, 1, 0)))
@@ -245,6 +269,17 @@ class TestLine3d(unittest.TestCase):
         self.assertFalse(line.coplanar(Line3d(1, 0, 0, 1, 1, 1)))
         self.assertFalse(line.coplanar(Line3d(1, 0, 1, 2, 0, 0)))
 
+    def test_template_types(self):
+        line_i = Line3i(0, 0, 0, 10, 10, 10)
+        self.assertEqual(line_i[0], Vector3i(0, 0, 0))
+        self.assertEqual(line_i[1], Vector3i(10, 10, 10))
+
+        line_f = Line3f(0.0, 0.0, 0.0, 10.0, 10.0, 10.0)
+        self.assertAlmostEqual(line_f[0].x(), 0.0)
+        self.assertAlmostEqual(line_f[1].y(), 10.0)
+        self.assertAlmostEqual(line_f.length(), 17.320508, delta=1e-4)
+
 
 if __name__ == '__main__':
     unittest.main()
+
