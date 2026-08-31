@@ -14,7 +14,7 @@
 
 import math
 import unittest
-from gz.math7 import Line3d, Line3d, Line3i
+from gz.math7 import Line3d, Line3f, Line3i
 from gz.math7 import Vector3d, Vector3i
 
 
