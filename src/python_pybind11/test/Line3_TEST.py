@@ -14,17 +14,8 @@
 
 import math
 import unittest
-<<<<<<< HEAD
-from gz.math7 import Line3d
-from gz.math7 import Vector3d
-=======
-from gz.math import Line3d
-from gz.math import Line3f
-from gz.math import Line3i
-from gz.math import Vector3d
-from gz.math import Vector3f
-from gz.math import Vector3i
->>>>>>> 1044cd5 (Line3: increase test coverage (#813) (#821))
+from gz.math7 import Line3d, Line3d, Line3i
+from gz.math7 import Vector3d, Vector3i
 
 
 class TestLine3d(unittest.TestCase):
