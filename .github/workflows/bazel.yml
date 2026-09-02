@@ -12,15 +12,6 @@ concurrency:
 
 jobs:
   test:
-    name: Test (${{ matrix.name }})
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: default
-            bazel_test_command: "bazel test -c opt --repo_env=CC=clang --repo_env=CXX=clang++ --test_output=errors //..."
-          - name: zenoh
-            bazel_test_command: "bazel test -c opt --repo_env=CC=clang --repo_env=CXX=clang++ --test_output=errors //..."
     uses: bazel-contrib/.github/.github/workflows/bazel.yaml@v7.7.0
     with:
       folders: |
@@ -32,3 +23,4 @@ jobs:
           {"folder": ".", "bzlmodEnabled": false}
         ]
       exclude_windows: true
+      bazel_test_command: "bazel test --repo_env=CC=clang --repo_env=CXX=clang++ //..."
