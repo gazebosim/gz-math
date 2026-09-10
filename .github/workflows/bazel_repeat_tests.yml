@@ -35,4 +35,5 @@ jobs:
             | grep -q '^' || exit 0
         bazel test --runs_per_test=${{ inputs.runs_per_test }} \
             --test_output=errors \
+            --repo_env=CC=clang --repo_env=CXX=clang++ \
             $(bazel query "attr(flaky, ${{ inputs.flaky }}, tests(//...))")
