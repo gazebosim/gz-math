@@ -99,7 +99,7 @@ if (SKIP_PYBIND11)
 else()
   find_package(Python3 REQUIRED
     COMPONENTS Interpreter
-    OPTIONAL_COMPONENTS Development
+    OPTIONAL_COMPONENTS Development.Module
   )
 endif()
 
