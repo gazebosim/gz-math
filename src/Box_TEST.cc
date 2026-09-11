@@ -17,9 +17,67 @@
 
 #include <gtest/gtest.h>
 
+#include <cmath>
+#include <initializer_list>
+#include <string>
+
 #include "gz/math/Box.hh"
 
 using namespace gz;
+
+/////////////////////////////////////////////////
+/// \brief Check VolumeBelow and CenterOfVolumeBelow of a 1 x 0.15 x 0.15 box
+/// against a plane z = d - tx x - ty y that is nearly parallel to its top
+/// face, as when the box floats level. The plane crosses only the long faces,
+/// so the region below is a prism and has closed forms:
+///   volume = W L depth, with depth = d + H / 2
+///   centre = (-tx L^2 / (12 depth), -ty W^2 / (12 depth),
+///             (d - H / 2) / 2 + (tx^2 L^2 + ty^2 W^2) / (24 depth))
+/// \param[in] _slopes Values of tx to test, each also negated.
+/// \param[in] _volumeTol Relative tolerance on the volume.
+/// \param[in] _centreTol Absolute tolerance on the centre of volume [m].
+template<typename T>
+void CheckNearlyParallelPlane(const std::initializer_list<T> &_slopes,
+    double _volumeTol, double _centreTol)
+{
+  const T length = 1;
+  const T width = T(0.15);
+  const T height = T(0.15);
+  math::Box<T> box(length, width, height);
+
+  for (const T tx : _slopes)
+  {
+    for (const T ty : {T(0), T(1e-12), T(1e-4)})
+    {
+      for (const T d : {T(-0.05), T(0), T(0.035)})
+      {
+        for (const T sign : {T(1), T(-1)})
+        {
+          const double px = sign * tx;
+          const double py = ty;
+          const double depth = d + height / 2.0;
+          const double lengthSq = static_cast<double>(length) * length;
+          const double widthSq = static_cast<double>(width) * width;
+          SCOPED_TRACE("tx " + std::to_string(px) + " ty " +
+              std::to_string(py) + " d " + std::to_string(d));
+
+          math::Plane<T> plane(math::Vector3<T>(sign * tx, ty, 1), d);
+
+          const double volume = static_cast<double>(width) * length * depth;
+          EXPECT_NEAR(volume, box.VolumeBelow(plane), _volumeTol * volume);
+
+          auto centre = box.CenterOfVolumeBelow(plane);
+          ASSERT_TRUE(centre.has_value());
+          EXPECT_NEAR(-px * lengthSq / (12 * depth), centre->X(), _centreTol);
+          EXPECT_NEAR(-py * widthSq / (12 * depth), centre->Y(), _centreTol);
+          EXPECT_NEAR((d - height / 2.0) / 2 +
+              (px * px * lengthSq + py * py * widthSq) / (24 * depth),
+              centre->Z(), _centreTol);
+        }
+      }
+    }
+  }
+}
 
 /////////////////////////////////////////////////
 TEST(BoxTest, Constructor)
@@ -336,6 +394,18 @@ TEST(BoxTest, CenterOfVolumeBelow)
     EXPECT_EQ(box.CenterOfVolumeBelow(plane).value(),
       math::Vector3d(0, 0, 0.5));
   }
+}
+
+//////////////////////////////////////////////////
+TEST(BoxTest, BelowNearlyParallelPlane)
+{
+  // A plane within rounding of parallel to a face made the inclusion-exclusion
+  // sums cancel catastrophically: tilted 1e-12, the centre of volume of this
+  // 1 m box came out 1e6 m away, and two such tilts broke the volume too.
+  CheckNearlyParallelPlane<double>(
+      {0, 1e-15, 1e-12, 1e-9, 1e-7, 1e-5, 1e-4, 1e-3}, 1e-9, 1e-8);
+  CheckNearlyParallelPlane<float>(
+      {0, 1e-9f, 1e-6f, 1e-4f, 1e-3f}, 1e-5, 1e-4);
 }
 
 //////////////////////////////////////////////////
