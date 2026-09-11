@@ -26,8 +26,15 @@
 #include <optional>
 #include <vector>
 
+#include <gz/math/config.hh>
+
 namespace gz::math
 {
+// Inside the versioned namespace, like every other gz::math detail helper:
+// Box<T> lives there, so an unqualified detail:: in its members must find
+// this namespace and not a second, unversioned gz::math::detail. MSVC
+// resolves it to the versioned one and fails otherwise.
+inline namespace GZ_MATH_VERSION_NAMESPACE {
 namespace detail
 {
 /// \brief Smallest M_i = |n_i| * size_i that the Box inclusion-exclusion
@@ -46,6 +53,7 @@ T BoxNegligibleSpan(T _msum)
       std::sqrt(std::sqrt(std::numeric_limits<T>::epsilon())));
 }
 }  // namespace detail
+}  // namespace GZ_MATH_VERSION_NAMESPACE
 
 //////////////////////////////////////////////////
 template<typename T>
