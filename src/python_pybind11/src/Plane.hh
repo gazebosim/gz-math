@@ -78,8 +78,8 @@ void defineMathPlane(py::module &m, const std::string &typestr)
          "Get distance to the plane give an origin and direction.")
     .def("intersection",
          &Class::Intersection,
-         py::arg("_point") = gz::math::Vector3<T>::Zero,
-         py::arg("_gradient") = gz::math::Vector3<T>::Zero,
+         py::arg("_point"),
+         py::arg("_gradient"),
          py::arg("_tolerance") = 1e-6,
          "Get the intersection of an infinite line with the plane, "
          "given the line's gradient and a point in parametrized space.")
