@@ -28,21 +28,17 @@
 #include <utility>
 #include <vector>
 
-<<<<<<< HEAD
+#include <gz/math/config.hh>
+
 namespace ignition
 {
 namespace math
-=======
-#include <gz/math/config.hh>
-
-namespace gz::math
->>>>>>> eb933cb (Fix volumeBelow and CenterOfVolumeBelow instability (#847))
 {
-// Inside the versioned namespace, like every other gz::math detail helper:
-// Box<T> lives there, so an unqualified detail:: in its members must find
-// this namespace and not a second, unversioned gz::math::detail. MSVC
-// resolves it to the versioned one and fails otherwise.
-inline namespace GZ_MATH_VERSION_NAMESPACE {
+// Inside the versioned namespace, like every other ignition::math detail
+// helper: Box<T> lives there, so an unqualified detail:: in its members must
+// find this namespace and not a second, unversioned ignition::math::detail.
+// MSVC resolves it to the versioned one and fails otherwise.
+inline namespace IGNITION_MATH_VERSION_NAMESPACE {
 namespace detail
 {
 /// \brief Smallest M_i = |n_i| * size_i that the Box inclusion-exclusion
@@ -153,7 +149,7 @@ BoxPlaneCut<T> BoxCutByPlane(const Vector3<T> &_size, const Plane<T> &_plane)
   return cut;
 }
 }  // namespace detail
-}  // namespace GZ_MATH_VERSION_NAMESPACE
+}  // namespace IGNITION_MATH_VERSION_NAMESPACE
 
 //////////////////////////////////////////////////
 template<typename T>
