@@ -19,7 +19,6 @@
 
 #include <cmath>
 #include <initializer_list>
-#include <string>
 
 #include "gz/math/Box.hh"
 
@@ -53,13 +52,13 @@ void CheckNearlyParallelPlane(const std::initializer_list<T> &_slopes,
       {
         for (const T sign : {T(1), T(-1)})
         {
-          const double px = sign * tx;
+          const double px = static_cast<double>(sign) * tx;
           const double py = ty;
           const double depth = d + height / 2.0;
           const double lengthSq = static_cast<double>(length) * length;
           const double widthSq = static_cast<double>(width) * width;
-          SCOPED_TRACE("tx " + std::to_string(px) + " ty " +
-              std::to_string(py) + " d " + std::to_string(d));
+          SCOPED_TRACE(testing::Message() << "tx " << px << " ty " << py
+              << " d " << d);
 
           math::Plane<T> plane(math::Vector3<T>(sign * tx, ty, 1), d);
 

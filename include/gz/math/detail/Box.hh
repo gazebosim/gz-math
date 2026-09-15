@@ -40,10 +40,17 @@ namespace detail
 /// \brief Smallest M_i = |n_i| * size_i that the Box inclusion-exclusion
 /// formulas treat as an axis the plane crosses, rather than one it is
 /// parallel to. Differencing F(x) - F(x - M_i) cancels catastrophically as
-/// M_i shrinks, leaving the centre of volume with a relative error near
-/// eps * (Msum / M_i)^2. Dropping the axis instead errs by about
-/// (M_i / Msum)^2, so the cut sits where the two meet, eps^(1/4) * Msum, and
-/// both stay near sqrt(eps).
+/// M_i shrinks. With one such axis, that leaves the centre of volume with a
+/// relative error near eps * (Msum / M_i)^2, while dropping the axis instead
+/// errs by about (M_i / Msum)^2, so the cut sits where the two meet,
+/// eps^(1/4) * Msum, and both stay near sqrt(eps).
+///
+/// That balance only holds for one small axis. With two just above the
+/// threshold, the rounding errors of the exact formula compound, to a
+/// relative error of up to about eps * Msum^4 / (M_i^2 * M_j * M_k): below a
+/// plane with normal (2e-5, 1.4e-4, 1) and offset 0.07, the centre of volume
+/// of a 1 x 0.15 x 0.15 m box is off by about 3.7e-6 m. Still small, but do
+/// not tune the threshold from the one-axis estimate alone.
 /// \param[in] _msum Sum of M_i over the three axes.
 /// \return The threshold. Zero for integer types, which do not round.
 template<typename T>
@@ -51,6 +58,91 @@ T BoxNegligibleSpan(T _msum)
 {
   return static_cast<T>(_msum *
       std::sqrt(std::sqrt(std::numeric_limits<T>::epsilon())));
+}
+
+/// \brief The region of a box below a plane, set up for the Box
+/// inclusion-exclusion formulas.
+template<typename T>
+struct BoxPlaneCut
+{
+  /// \brief M_i = |n_i| * size_i for each axis.
+  std::array<T, 3> span{};
+
+  /// \brief Threshold from BoxNegligibleSpan: axes with M_i at or below it
+  /// are dropped.
+  T negligible = 0;
+
+  /// \brief Indices of the kept axes, in increasing order. Only the first
+  /// keptCount are set.
+  std::array<int, 3> keptAxes{};
+
+  /// \brief Number of kept axes. At least 1 whenever 0 < alpha < keptSum,
+  /// since with none kept keptSum is 0.
+  int keptCount = 0;
+
+  /// \brief Sum of M_i over the kept axes.
+  T keptSum = 0;
+
+  /// \brief Plane offset shifted so 0 is the most-negative corner of the
+  /// box, less M_i / 2 for each dropped axis. Nothing lies below the plane
+  /// when it is at most 0, and all of the box does when it is at least
+  /// keptSum.
+  T alpha = 0;
+};
+
+/// \brief Set up the region of a box below a plane for the Box
+/// inclusion-exclusion formulas. An axis whose M_i is negligible is one the
+/// plane is parallel to within rounding: drop it as if M_i were zero, moving
+/// the plane by the mean of its contribution, M_i / 2, which keeps the volume
+/// accurate to second order in M_i. See BoxNegligibleSpan.
+/// \param[in] _size Size of the box.
+/// \param[in] _plane The plane. Below means normal . point <= offset.
+/// \return The cut.
+template<typename T>
+BoxPlaneCut<T> BoxCutByPlane(const Vector3<T> &_size, const Plane<T> &_plane)
+{
+  const auto &n = _plane.Normal();
+
+  // m_i = |n_i|, half_i = size_i / 2
+  const T m1 = std::abs(n.X());
+  const T m2 = std::abs(n.Y());
+  const T m3 = std::abs(n.Z());
+  const T h1 = _size.X() / 2;
+  const T h2 = _size.Y() / 2;
+  const T h3 = _size.Z() / 2;
+
+  // alpha = offset + sum(m_i * half_i)
+  // This shifts the coordinate so alpha=0 corresponds to the
+  // "most-negative" corner of the box.
+  const T alpha = _plane.Offset() + m1 * h1 + m2 * h2 + m3 * h3;
+
+  // M_i = m_i * size_i = 2 * m_i * half_i
+  BoxPlaneCut<T> cut;
+  cut.span = {m1 * _size.X(), m2 * _size.Y(), m3 * _size.Z()};
+  const T Msum = cut.span[0] + cut.span[1] + cut.span[2];
+
+  cut.negligible = BoxNegligibleSpan(Msum);
+  cut.alpha = alpha;
+  for (int i = 0; i < 3; ++i)
+  {
+    if (cut.span[i] > cut.negligible)
+    {
+      cut.keptAxes[cut.keptCount++] = i;
+      cut.keptSum += cut.span[i];
+    }
+    else
+    {
+      cut.alpha -= cut.span[i] / 2;
+    }
+  }
+
+  // Exactly, alpha >= Msum implies cut.alpha >= keptSum: dropping axes keeps
+  // a box wholly below the plane wholly below it. Rounding can break that by
+  // an ulp when a dropped M_i is itself a few ulps, so restore it.
+  if (alpha >= Msum)
+    cut.alpha = std::max(cut.alpha, cut.keptSum);
+
+  return cut;
 }
 }  // namespace detail
 }  // namespace GZ_MATH_VERSION_NAMESPACE
@@ -158,99 +250,56 @@ T Box<T>::VolumeBelow(const Plane<T> &_plane) const
   // The plane equation is: normal . point = offset
   // "Below" means normal . point <= offset (i.e. Distance <= 0).
 
-  const auto &n = _plane.Normal();
-  const T d = _plane.Offset();
   const T totalVol = this->Volume();
-
-  // m_i = |n_i|, half_i = size_i / 2
-  const T m1 = std::abs(n.X());
-  const T m2 = std::abs(n.Y());
-  const T m3 = std::abs(n.Z());
-  const T h1 = this->size.X() / 2;
-  const T h2 = this->size.Y() / 2;
-  const T h3 = this->size.Z() / 2;
-
-  // alpha = offset + sum(m_i * half_i)
-  // This shifts the coordinate so alpha=0 corresponds to the
-  // "most-negative" corner of the box.
-  const T alpha = d + m1 * h1 + m2 * h2 + m3 * h3;
-
-  // M_i = m_i * size_i = 2 * m_i * half_i
-  const T M1 = m1 * this->size.X();
-  const T M2 = m2 * this->size.Y();
-  const T M3 = m3 * this->size.Z();
-  const T Msum = M1 + M2 + M3;
+  const auto cut = detail::BoxCutByPlane(this->size, _plane);
 
   // Early returns
-  if (alpha <= 0)
+  if (cut.alpha <= 0)
     return 0;
-  if (alpha >= Msum)
+  if (cut.alpha >= cut.keptSum)
     return totalVol;
 
-  // Keep the axes whose M_i is not negligible. A negligible one is an axis
-  // the plane is parallel to within rounding: drop it as if M_i were zero,
-  // moving the plane by the mean of its contribution, M_i / 2, which keeps
-  // the volume accurate to second order in M_i. See BoxNegligibleSpan.
-  const T negligible = detail::BoxNegligibleSpan(Msum);
+  // The IE sums run over the kept axes only. See detail::BoxCutByPlane.
+  const T alpha = cut.alpha;
   std::array<T, 3> Mv{};
-  int nonzero = 0;
-  T alphaKept = alpha;
-  T keptSum = 0;
-  for (const T Mi : {M1, M2, M3})
+  for (int j = 0; j < cut.keptCount; ++j)
   {
-    if (Mi > negligible)
-    {
-      Mv[nonzero++] = Mi;
-      keptSum += Mi;
-    }
-    else
-    {
-      alphaKept -= Mi / 2;
-    }
+    Mv[j] = cut.span[cut.keptAxes[j]];
   }
-
-  if (alphaKept <= 0)
-    return 0;
-  if (alphaKept >= keptSum)
-    return totalVol;
 
   auto cube = [](T x) -> T { return x * x * x; };
   auto clampPos = [](T x) -> T { return x > 0 ? x : 0; };
 
-  if (nonzero == 3)
+  if (cut.keptCount == 3)
   {
     // 3D IE formula
-    T ie3 = cube(alphaKept)
-      - cube(clampPos(alphaKept - Mv[0]))
-      - cube(clampPos(alphaKept - Mv[1]))
-      - cube(clampPos(alphaKept - Mv[2]))
-      + cube(clampPos(alphaKept - Mv[0] - Mv[1]))
-      + cube(clampPos(alphaKept - Mv[0] - Mv[2]))
-      + cube(clampPos(alphaKept - Mv[1] - Mv[2]))
-      - cube(clampPos(alphaKept - Mv[0] - Mv[1] - Mv[2]));
+    T ie3 = cube(alpha)
+      - cube(clampPos(alpha - Mv[0]))
+      - cube(clampPos(alpha - Mv[1]))
+      - cube(clampPos(alpha - Mv[2]))
+      + cube(clampPos(alpha - Mv[0] - Mv[1]))
+      + cube(clampPos(alpha - Mv[0] - Mv[2]))
+      + cube(clampPos(alpha - Mv[1] - Mv[2]))
+      - cube(clampPos(alpha - Mv[0] - Mv[1] - Mv[2]));
     return totalVol * ie3 / (6 * Mv[0] * Mv[1] * Mv[2]);
   }
-  else if (nonzero == 2)
+  else if (cut.keptCount == 2)
   {
     // 2D IE formula over the two kept axes
     T Ma = Mv[0], Mb = Mv[1];
     auto square = [](T x) -> T { return x * x; };
-    T ie2 = square(alphaKept)
-      - square(clampPos(alphaKept - Ma))
-      - square(clampPos(alphaKept - Mb))
-      + square(clampPos(alphaKept - Ma - Mb));
+    T ie2 = square(alpha)
+      - square(clampPos(alpha - Ma))
+      - square(clampPos(alpha - Mb))
+      + square(clampPos(alpha - Ma - Mb));
     return totalVol * ie2 / (2 * Ma * Mb);
-  }
-  else if (nonzero == 1)
-  {
-    // 1D case
-    T frac = alphaKept / Mv[0];
-    return totalVol * std::clamp(frac, T(0), T(1));
   }
   else
   {
-    // 0D case: degenerate box
-    return alphaKept >= 0 ? totalVol : 0;
+    // 1D case. There is no 0D case: past the early returns at least one axis
+    // is kept, see detail::BoxPlaneCut::keptCount.
+    T frac = alpha / Mv[0];
+    return totalVol * std::clamp(frac, T(0), T(1));
   }
 }
 
@@ -261,31 +310,15 @@ std::optional<Vector3<T>>
 {
   // Analytic first-moment inclusion-exclusion formula.
   // Computes the volumetric centroid of the region of the box below the plane.
-  // Uses dimensional reduction: only non-trivial axes (where M_i > 0)
-  // participate in the IE sums, with F_k functions matched to the
-  // effective dimensionality k.
+  // Uses dimensional reduction: only non-trivial axes (the kept axes of
+  // detail::BoxCutByPlane) participate in the IE sums, with F_k functions
+  // matched to the effective dimensionality k.
 
-  const auto &n = _plane.Normal();
-  const T d = _plane.Offset();
-
-  const T m1 = std::abs(n.X());
-  const T m2 = std::abs(n.Y());
-  const T m3 = std::abs(n.Z());
-  const T h1 = this->size.X() / 2;
-  const T h2 = this->size.Y() / 2;
-  const T h3 = this->size.Z() / 2;
-
-  const T alpha = d + m1 * h1 + m2 * h2 + m3 * h3;
-
-  const T M1 = m1 * this->size.X();
-  const T M2 = m2 * this->size.Y();
-  const T M3 = m3 * this->size.Z();
-  const T Msum = M1 + M2 + M3;
-
-  if (alpha <= 0)
+  const auto cut = detail::BoxCutByPlane(this->size, _plane);
+  if (cut.alpha <= 0)
     return std::nullopt;
 
-  if (alpha >= Msum)
+  if (cut.alpha >= cut.keptSum)
     return Vector3<T>::Zero;
 
   auto clampPos = [](T x) -> T { return x > 0 ? x : 0; };
@@ -313,41 +346,17 @@ std::optional<Vector3<T>>
     }
   };
 
-  const std::array<T, 3> M = {M1, M2, M3};
-  const std::array<T, 3> half = {h1, h2, h3};
+  const auto &n = _plane.Normal();
+  const std::array<T, 3> &M = cut.span;
+  const std::array<T, 3> half = {
+    this->size.X() / 2, this->size.Y() / 2, this->size.Z() / 2};
   const std::array<T, 3> nComp = {n.X(), n.Y(), n.Z()};
 
-  // Identify non-trivial axes: those whose M_i is not negligible. A
-  // negligible one is an axis the plane is parallel to within rounding: drop
-  // it as if M_i were zero, moving the plane by the mean of its contribution,
-  // M_i / 2. See BoxNegligibleSpan.
-  const T negligible = detail::BoxNegligibleSpan(Msum);
-  std::array<int, 3> ntAxes = {};
-  int k = 0;
-  T alphaKept = alpha;
-  T keptSum = 0;
-  for (int i = 0; i < 3; ++i)
-  {
-    if (M[i] > negligible)
-    {
-      ntAxes[k++] = i;
-      keptSum += M[i];
-    }
-    else
-    {
-      alphaKept -= M[i] / 2;
-    }
-  }
-
-  if (alphaKept <= 0)
-    return std::nullopt;
-
-  if (alphaKept >= keptSum)
-    return Vector3<T>::Zero;
-
-  if (k == 0)
-    return alphaKept >= 0 ? std::optional<Vector3<T>>(Vector3<T>::Zero)
-                          : std::nullopt;
+  // Non-trivial axes. Past the early returns there is at least one, see
+  // detail::BoxPlaneCut::keptCount.
+  const std::array<int, 3> &ntAxes = cut.keptAxes;
+  const int k = cut.keptCount;
+  const T alpha = cut.alpha;
 
   // Compute V_v (volume in v-coordinates, where v_i = M_i * u_i), and its
   // derivative with respect to alpha, which the dropped axes need:
@@ -367,8 +376,8 @@ std::optional<Vector3<T>>
       }
     }
     T sgn = (bits % 2 == 0) ? T(1) : T(-1);
-    Vv += sgn * Fn(k, alphaKept - Msub);
-    dVv += sgn * Fn(k - 1, alphaKept - Msub);
+    Vv += sgn * Fn(k, alpha - Msub);
+    dVv += sgn * Fn(k - 1, alpha - Msub);
   }
 
   if (Vv <= 0)
@@ -409,7 +418,7 @@ std::optional<Vector3<T>>
         }
       }
       T sgn = (bits % 2 == 0) ? T(1) : T(-1);
-      T a = alphaKept - Msub;
+      T a = alpha - Msub;
       Ji += sgn * (Fn(k + 1, a) - Fn(k + 1, a - M[i])
                    - M[i] * Fn(k, a - M[i]));
     }
@@ -425,7 +434,7 @@ std::optional<Vector3<T>>
   // plane. Axes with M_i == 0 remain 0 (default Vector3 initialization).
   for (int i = 0; i < 3; ++i)
   {
-    if (M[i] > negligible || M[i] <= 0)
+    if (M[i] > cut.negligible || M[i] <= 0)
       continue;
 
     T zbar = std::clamp(T(0.5) - M[i] * dVv / (12 * Vv), T(0), T(1));
