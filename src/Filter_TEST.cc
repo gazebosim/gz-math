@@ -51,6 +51,9 @@ TEST(FilterTest, OnePoleQuaternion)
 
   EXPECT_EQ(filterB.Process(math::Quaterniond(0.1, 0.2, 0.3)),
             math::Quaterniond(0.98841, 0.0286272, 0.0885614, 0.119929));
+
+  filterA.Set(math::Quaterniond(0.707, 0, 0.707, 0));
+  EXPECT_EQ(filterA.Value(), math::Quaterniond(0.707, 0, 0.707, 0));
 }
 
 /////////////////////////////////////////////////
@@ -67,6 +70,9 @@ TEST(FilterTest, OnePoleVector3)
 
   EXPECT_EQ(filterB.Process(math::Vector3d(0.1, 0.2, 0.3)),
             math::Vector3d(0.089113, 0.178226, 0.267339));
+
+  filterA.Set(math::Vector3d(1, 2, 3));
+  EXPECT_EQ(filterA.Value(), math::Vector3d(1, 2, 3));
 }
 
 /////////////////////////////////////////////////
@@ -81,6 +87,9 @@ TEST(FilterTest, Biquad)
 
   filterA.Fc(0.3, 1.4, 0.1);
   EXPECT_DOUBLE_EQ(filterA.Process(10.25), 0.96057152402651302);
+  // Multi-step Process calls to exercise state update
+  EXPECT_DOUBLE_EQ(filterA.Process(5.0), 2.2809792005709335);
+  EXPECT_DOUBLE_EQ(filterA.Process(2.0), 2.2786852100645718);
 
   math::BiQuad<double> filterB(4.3, 10.6);
   EXPECT_NEAR(filterB.Value(), 0.0, 1e-10);
@@ -102,4 +111,40 @@ TEST(FilterTest, BiquadVector3)
   EXPECT_EQ(filterB.Value(), math::Vector3d(0, 0, 0));
   EXPECT_EQ(filterB.Process(math::Vector3d(0.1, 20.3, 33.45)),
             math::Vector3d(0.031748, 6.44475, 10.6196));
+
+  filterA.Set(math::Vector3d(4, 5, 6));
+  EXPECT_EQ(filterA.Value(), math::Vector3d(4, 5, 6));
+
+  filterA.Fc(0.5, 2.0);
+  EXPECT_EQ(filterA.Process(math::Vector3d(1.0, 2.0, 3.0)),
+            math::Vector3d(3.25, 4.25, 5.25));
+
+  filterA.Fc(0.5, 2.0, 0.2);
+  EXPECT_EQ(filterA.Process(math::Vector3d(1.0, 2.0, 3.0)),
+            math::Vector3d(19.0 / 7.0, 26.0 / 7.0, 33.0 / 7.0));
 }
+
+/////////////////////////////////////////////////
+TEST(FilterTest, TemplateTypes)
+{
+  // OnePole template instantiations
+  math::OnePole<float> filterF(0.6f, 1.4f);
+  EXPECT_FLOAT_EQ(filterF.Process(2.5f), 2.330771f);
+  filterF.Set(1.5f);
+  EXPECT_FLOAT_EQ(filterF.Value(), 1.5f);
+
+  math::OnePole<int> filterI(1, 2);
+  filterI.Set(10);
+  EXPECT_EQ(filterI.Value(), 10);
+
+  // BiQuad template instantiations
+  math::BiQuad<float> biquadF(4.3f, 10.6f);
+  EXPECT_NEAR(biquadF.Value(), 0.0f, 1e-6f);
+  biquadF.Set(3.5f);
+  EXPECT_FLOAT_EQ(biquadF.Value(), 3.5f);
+
+  math::BiQuad<int> biquadI(1, 2);
+  biquadI.Set(20);
+  EXPECT_EQ(biquadI.Value(), 20);
+}
+
