@@ -87,7 +87,7 @@ namespace gz::math
     /// \return The filter's current output.
     public: const T& Process(const T &_x)
     {
-      this->y0 = a0 * _x + b1 * this->y0;
+      this->y0 = static_cast<T>(a0 * _x + b1 * this->y0);
       return this->y0;
     }
 
@@ -199,11 +199,12 @@ namespace gz::math
     /// \return The filter's current output.
     public: virtual const T& Process(const T &_x)
     {
-      this->y0 = this->a0 * _x +
+      this->y0 = static_cast<T>(
+                 this->a0 * _x +
                  this->a1 * this->x1 +
                  this->a2 * this->x2 -
                  this->b1 * this->y1 -
-                 this->b2 * this->y2;
+                 this->b2 * this->y2);
 
       this->x2 = this->x1;
       this->x1 = _x;
