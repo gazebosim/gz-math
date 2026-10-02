@@ -28,9 +28,6 @@ option(SKIP_SWIG
       OFF)
 
 set(skip_pybind11_default_value OFF)
-if (MSVC)
-  set(skip_pybind11_default_value ON)
-endif()
 
 option(SKIP_PYBIND11
       "Skip generating Python bindings via pybind11"
