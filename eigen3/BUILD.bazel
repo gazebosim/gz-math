@@ -51,6 +51,7 @@ test_sources = glob(
 [
     cc_test(
         name = src.replace("/", "_").replace(".cc", "").replace("src_", ""),
+        size = "small",
         srcs = [src],
         deps = [
             ":eigen3",
