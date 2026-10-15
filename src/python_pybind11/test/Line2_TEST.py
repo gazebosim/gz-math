@@ -55,6 +55,13 @@ class TestLine2d(unittest.TestCase):
     def test_on_segment_and_within(self):
         line = Line2d(0, 0, 10, 10)
 
+        # Match C++ API: point argument is required,
+        # while epsilon remains optional.
+        with self.assertRaises(TypeError):
+            line.within()
+        with self.assertRaises(TypeError):
+            line.on_segment()
+
         # Point on segment
         pt1 = Vector2d(5, 5)
         self.assertTrue(line.within(pt1, 1e-6))
@@ -91,8 +98,13 @@ class TestLine2d(unittest.TestCase):
         self.assertAlmostEqual(line.slope(), 0.0)
 
     def test_parallel_line(self):
-        # Line is always parallel with itself
         line = Line2d(0, 0, 10, 0)
+        # Match C++ API: line argument is required,
+        # while epsilon remains optional.
+        with self.assertRaises(TypeError):
+            line.parallel()
+
+        # Line is always parallel with itself
         self.assertTrue(line.parallel(line, 1e-10))
         self.assertAlmostEqual(line.cross_product(line), 0.0)
 
@@ -121,8 +133,13 @@ class TestLine2d(unittest.TestCase):
         self.assertAlmostEqual(line_a.cross_product(line_b), 0.0, delta=1e-3)
 
     def test_collinear_line(self):
-        # Line is always collinear with itself
         line = Line2d(0, 0, 10, 0)
+        # Match C++ API: line or point argument is required,
+        # while epsilon remains optional.
+        with self.assertRaises(TypeError):
+            line.collinear()
+
+        # Line is always collinear with itself
         self.assertTrue(line.collinear(line, 1e-10))
 
         line_a = Line2d(0, 0, 10, 0)
@@ -177,10 +194,15 @@ class TestLine2d(unittest.TestCase):
         self.assertTrue(line_a.collinear(pt_line, 1e-4))
 
     def test_intersect(self):
+        line_a = Line2d(1, 1, 2, 1)
+        # Match C++ API: line argument is required,
+        # while epsilon remains optional.
+        with self.assertRaises(TypeError):
+            line_a.intersect()
+
         pt = Vector2d()
 
         # parallel horizontal lines
-        line_a = Line2d(1, 1, 2, 1)
         line_b = Line2d(1, 2, 2, 2)
         self.assertFalse(line_a.intersect(line_b, pt))
 
