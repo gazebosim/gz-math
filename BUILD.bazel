@@ -122,6 +122,7 @@ test_sources = glob(
 [
     cc_test(
         name = src.replace("/", "_").replace(".cc", "").replace("src_", ""),
+        size = "small",
         srcs = [src],
         deps = [
             ":gz-math",
@@ -142,6 +143,7 @@ py_test_sources = glob(
 [
     py_test(
         name = src.replace("/", "_").replace(".py", "_py").replace("src_python_pybind11_test_", ""),
+        size = "small",
         srcs = [src],
         main = src,
         deps = [":python"],
