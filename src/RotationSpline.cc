@@ -14,6 +14,8 @@
  * limitations under the License.
  *
 */
+#include <cmath>
+
 #include "gz/math/Quaternion.hh"
 #include "gz/math/RotationSpline.hh"
 
@@ -88,11 +90,21 @@ Quaterniond RotationSpline::Interpolate(const unsigned int _fromIndex,
   // Use squad using tangents we've already set up
   Quaterniond &p = this->dataPtr->points[_fromIndex];
   Quaterniond &q = this->dataPtr->points[_fromIndex+1];
-  Quaterniond &a = this->dataPtr->tangents[_fromIndex];
-  Quaterniond &b = this->dataPtr->tangents[_fromIndex+1];
+
+  auto diffQ = p.Inverse() * q;
+  const double diff = 2 * acos(diffQ.W());
 
   // NB interpolate to nearest rotation
-  return Quaterniond::Squad(_t, p, a, b, q, _useShortestPath);
+  if (diff < 0.16)
+  {
+    return Quaterniond::Slerp(_t, p, q, _useShortestPath);
+  }
+  else
+  {
+    Quaterniond &a = this->dataPtr->tangents[_fromIndex];
+    Quaterniond &b = this->dataPtr->tangents[_fromIndex+1];
+    return Quaterniond::Squad(_t, p, a, b, q, _useShortestPath);
+  }
 }
 
 /////////////////////////////////////////////////
