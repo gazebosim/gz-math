@@ -14,6 +14,7 @@
 
 #include <pybind11/pybind11.h>
 
+#include "AdditivelySeparableScalarField3.hh"
 #include "Angle.hh"
 #include "AxisAlignedBox.hh"
 #include "AxisAlignedBoxHelpers.hh"
@@ -151,6 +152,9 @@ PYBIND11_MODULE(BINDINGS_MODULE_NAME, m)
   gz::math::python::defineMathRegion3(m, "Region3");
 
   gz::math::python::defineMathPolynomial3(m, "Polynomial3");
+
+  gz::math::python::defineMathAdditivelySeparableScalarField3(
+    m, "AdditivelySeparableScalarField3");
 
   gz::math::python::defineMathLine2(m, "Line2");
 
