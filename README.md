@@ -1,6 +1,6 @@
 # Gazebo Math : Math classes and functions for robot applications
 
-**Maintainer:** nate AT openrobotics DOT org
+**Maintainer:** scpeters AT openrobotics DOT org
 
 [![GitHub open issues](https://img.shields.io/github/issues-raw/gazebosim/gz-math.svg)](https://github.com/gazebosim/gz-math/issues)
 [![GitHub open pull requests](https://img.shields.io/github/issues-pr-raw/gazebosim/gz-math.svg)](https://github.com/gazebosim/gz-math/pulls)
