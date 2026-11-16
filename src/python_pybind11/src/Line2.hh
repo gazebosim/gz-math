@@ -56,7 +56,7 @@ void helpDefineMathLine2(py::module &m, const std::string &typestr)
                     py::dynamic_attr())
     .def(py::init<const gz::math::Vector2<T>&,
                   const gz::math::Vector2<T>&>())
-    .def(py::init<double, double, double, double>())
+    .def(py::init<T, T, T, T>())
     .def(py::self != py::self)
     .def(py::self == py::self)
     .def("set",
@@ -64,7 +64,7 @@ void helpDefineMathLine2(py::module &m, const std::string &typestr)
                            const gz::math::Vector2<T>&>(&Class::Set),
          "Set the start and end point of the line segment")
     .def("set",
-         py::overload_cast<double, double, double, double>(&Class::Set),
+         py::overload_cast<T, T, T, T>(&Class::Set),
          "Set the start and end point of the line segment")
     .def("cross_product",
          py::overload_cast<const Class&>(&Class::CrossProduct, py::const_),
