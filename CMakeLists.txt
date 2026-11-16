@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.22.1 FATAL_ERROR)
 #============================================================================
 # Initialize the project
 #============================================================================
-project(gz-math8 VERSION 8.3.0)
+project(gz-math8 VERSION 8.4.0)
 
 #============================================================================
 # Find gz-cmake
@@ -101,7 +101,7 @@ if (SKIP_PYBIND11)
 else()
   find_package(Python3 REQUIRED
     COMPONENTS Interpreter
-    OPTIONAL_COMPONENTS Development
+    OPTIONAL_COMPONENTS Development.Module
   )
 endif()
 

@@ -1,5 +1,31 @@
 ## Gazebo Math 8.x
 
+### Gazebo Math 8.4.0 (2026-08-25)
+
+1. Line2 updates:
+    * [Pull request #831](https://github.com/gazebosim/gz-math/pull/831)
+    * [Pull request #827](https://github.com/gazebosim/gz-math/pull/827)
+
+1. Bazel updates:
+    * [Pull request #798](https://github.com/gazebosim/gz-math/pull/798)
+    * [Pull request #742](https://github.com/gazebosim/gz-math/pull/742)
+
+1. Graph updates:
+    * [Pull request #777](https://github.com/gazebosim/gz-math/pull/777)
+    * [Pull request #765](https://github.com/gazebosim/gz-math/pull/765)
+    * [Pull request #761](https://github.com/gazebosim/gz-math/pull/761)
+    * [Pull request #755](https://github.com/gazebosim/gz-math/pull/755)
+    * [Pull request #751](https://github.com/gazebosim/gz-math/pull/751)
+
+1. Reduce StopWatch_TEST.py sleep times
+    * [Pull request #800](https://github.com/gazebosim/gz-math/pull/800)
+
+1. Add Centroid() to the simple shape classes
+    * [Pull request #793](https://github.com/gazebosim/gz-math/pull/793)
+
+1. Add pybindings for VolumetricGridLookupField
+    * [Pull request #787](https://github.com/gazebosim/gz-math/pull/787)
+
 ### Gazebo Math 8.3.0 (2026-04-02)
 
 1. Add VolumeBelow/CenterOfVolumeBelow for Ellipsoid, Cylinder, Capsule, Cone
