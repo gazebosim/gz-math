@@ -20,6 +20,7 @@
 #include <optional>
 #include "gz/math/MassMatrix3.hh"
 #include "gz/math/Material.hh"
+#include "gz/math/Plane.hh"
 #include "gz/math/Quaternion.hh"
 
 namespace gz::math
@@ -36,8 +37,11 @@ namespace gz::math
   /// The cylinder class supports defining a cylinder with a radius,
   /// length, rotational offset, and material properties. Radius and
   /// length are in meters. See Material for more on material properties.
-  /// By default, a cylinder's length is aligned with the Z axis. The
-  /// rotational offset encodes a rotation from the z axis.
+  /// A reference frame is defined with an origin at the geometric center
+  /// of the cylinder, with XYZ coordinate axes defined with the Z axis
+  /// parallel to the axis of symmetry. This frame is consistent with the
+  /// SDFormat cylinder shape. The rotational offset encodes an additional
+  /// rotation of the cylinder relative to this frame.
   template<typename Precision>
   class Cylinder
   {
@@ -129,6 +133,29 @@ namespace gz::math
     /// \brief Get the volume of the cylinder in m^3.
     /// \return Volume of the cylinder in m^3.
     public: Precision Volume() const;
+
+    /// \brief Get the volume of the cylinder below a given plane in m^3.
+    /// It is assumed that the center of the cylinder is on the origin.
+    /// \param[in] _plane The plane which slices this cylinder, expressed
+    /// in the cylinder's reference frame.
+    /// \return Volume below the plane in m^3.
+    public: Precision VolumeBelow(const Plane<Precision> &_plane) const;
+
+    /// \brief Center of volume below the plane. This is useful for example
+    /// when calculating where buoyancy should be applied.
+    /// \param[in] _plane The plane which slices this cylinder, expressed
+    /// in the cylinder's reference frame.
+    /// \return The center of volume if there is anything below the plane,
+    /// otherwise return a std::nullopt. Expressed in the cylinder's
+    /// reference frame.
+    public: std::optional<Vector3<Precision>>
+      CenterOfVolumeBelow(const Plane<Precision> &_plane) const;
+
+    /// \brief Get the centroid of the cylinder. It coincides with the
+    /// origin of the reference frame defined in the class description.
+    /// \return The centroid, in the cylinder's reference frame:
+    /// the zero vector.
+    public: Vector3<Precision> Centroid() const;
 
     /// \brief Compute the cylinder's density given a mass value. The
     /// cylinder is assumed to be solid with uniform density. This

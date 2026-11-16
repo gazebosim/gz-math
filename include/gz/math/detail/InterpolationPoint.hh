@@ -211,8 +211,9 @@ namespace gz::math
       (_points[_start_index + 1].position - _points[_start_index].position)
       .Cross(
       _points[_start_index + 2].position - _points[_start_index].position);
+    auto n_unit = n.Normalized();
     return
-      _pos - n.Dot(_pos - _points[_start_index].position) * n.Normalized();
+      _pos - n_unit.Dot(_pos - _points[_start_index].position) * n_unit;
   }
 
   /// \brief Trilinear interpolation of eight points in 3D space. It assumes

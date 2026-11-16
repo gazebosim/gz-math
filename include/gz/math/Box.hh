@@ -45,6 +45,12 @@ namespace gz::math
   ///
   /// By default, a box's size (length, width, and height)  is zero.
   ///
+  /// A reference frame is defined with an origin at the geometric center
+  /// of the box, with XYZ coordinate axes perpendicular to each face. The
+  /// XYZ components of the size vector are the dimensions of the box
+  /// parallel to the corresponding coordinate axes. This frame is
+  /// consistent with the SDFormat box shape.
+  ///
   /// See AxisAlignedBox for an axis aligned box implementation.
   template<typename Precision>
   class Box
@@ -154,6 +160,12 @@ namespace gz::math
     /// frame.
     public: IntersectionPoints<Precision>
       VerticesBelow(const Plane<Precision> &_plane) const;
+
+    /// \brief Get the centroid of the box. It coincides with the
+    /// origin of the reference frame defined in the class description.
+    /// \return The centroid, in the box's reference frame:
+    /// the zero vector.
+    public: Vector3<Precision> Centroid() const;
 
     /// \brief Compute the box's density given a mass value. The
     /// box is assumed to be solid with uniform density. This

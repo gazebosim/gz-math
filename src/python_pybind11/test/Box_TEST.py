@@ -380,6 +380,135 @@ class TestBox(unittest.TestCase):
 
         self.assertEqual(vertices.count(nXnYnZ), 1)
 
+    def test_volume_below_diagonal_planes(self):
+        # Tetrahedron corner cut
+        box = Boxd(2.0, 2.0, 2.0)
+        plane = Planed(Vector3d(1.0, 1.0, 1.0), -1.5)
+        alpha = 1.5
+        expected = 8.0 * alpha**3 / (6.0 * 2.0 * 2.0 * 2.0)
+        self.assertAlmostEqual(expected, box.volume_below(plane), delta=1e-10)
+
+        # Non-unit normal
+        box = Boxd(4.0, 2.0, 6.0)
+        plane = Planed(Vector3d(2.0, 1.0, 3.0), 1.0)
+        expected = 48.0 * 960.0 / (6.0 * 8.0 * 2.0 * 18.0)
+        self.assertAlmostEqual(expected, box.volume_below(plane), delta=1e-10)
+
+        # Asymmetric box half volume
+        box = Boxd(1.0, 2.0, 3.0)
+        plane = Planed(Vector3d(1.0, 1.0, 1.0), 0.0)
+        self.assertAlmostEqual(box.volume() / 2.0, box.volume_below(plane),
+                               delta=1e-10)
+
+        # Plane tangent to face
+        box = Boxd(2.0, 2.0, 2.0)
+        plane = Planed(Vector3d(1.0, 0.0, 0.0), -1.0)
+        self.assertAlmostEqual(0.0, box.volume_below(plane), delta=1e-10)
+
+        # Very small box
+        box = Boxd(0.002, 0.002, 0.002)
+        plane = Planed(Vector3d(0.0, 0.0, 1.0), 0.0)
+        self.assertAlmostEqual(box.volume() / 2.0, box.volume_below(plane),
+                               delta=1e-15)
+
+        # Complementary planes
+        box = Boxd(2.0, 2.0, 2.0)
+        planeA = Planed(Vector3d(1.0, 1.0, 1.0), 0.5)
+        planeB = Planed(Vector3d(-1.0, -1.0, -1.0), -0.5)
+        self.assertAlmostEqual(box.volume(),
+                               box.volume_below(planeA) +
+                               box.volume_below(planeB), delta=1e-10)
+
+        # Non-symmetric complementary
+        box = Boxd(1.0, 2.0, 3.0)
+        planeA = Planed(Vector3d(2.0, -1.0, 1.0), 0.3)
+        planeB = Planed(Vector3d(-2.0, 1.0, -1.0), -0.3)
+        self.assertAlmostEqual(box.volume(),
+                               box.volume_below(planeA) +
+                               box.volume_below(planeB), delta=1e-10)
+
+    def test_center_of_volume_below_diagonal(self):
+        # Centroid direction
+        box = Boxd(2.0, 2.0, 2.0)
+        plane = Planed(Vector3d(1.0, 1.0, 1.0), 0.0)
+        cov = box.center_of_volume_below(plane)
+        self.assertIsNotNone(cov)
+        dot = Vector3d(1, 1, 1).dot(cov)
+        self.assertLess(dot, 0.0)
+
+        # Tetrahedron corner centroid
+        box = Boxd(2.0, 2.0, 2.0)
+        plane = Planed(Vector3d(1.0, 1.0, 1.0), -1.5)
+        cov = box.center_of_volume_below(plane)
+        self.assertIsNotNone(cov)
+        self.assertAlmostEqual(-0.625, cov.x(), delta=1e-10)
+        self.assertAlmostEqual(-0.625, cov.y(), delta=1e-10)
+        self.assertAlmostEqual(-0.625, cov.z(), delta=1e-10)
+
+        # Diagonal half-cut symmetry
+        box = Boxd(2.0, 2.0, 2.0)
+        plane = Planed(Vector3d(1.0, 1.0, 1.0), 0.0)
+        cov = box.center_of_volume_below(plane)
+        self.assertIsNotNone(cov)
+        self.assertAlmostEqual(cov.x(), cov.y(), delta=1e-10)
+        self.assertAlmostEqual(cov.y(), cov.z(), delta=1e-10)
+        self.assertLess(cov.x(), 0.0)
+
+        # Weighted sum conservation
+        box = Boxd(2.0, 2.0, 2.0)
+        planeA = Planed(Vector3d(1.0, 1.0, 1.0), 0.5)
+        planeB = Planed(Vector3d(-1.0, -1.0, -1.0), -0.5)
+        covA = box.center_of_volume_below(planeA)
+        covB = box.center_of_volume_below(planeB)
+        volA = box.volume_below(planeA)
+        volB = box.volume_below(planeB)
+        ws = covA * volA + covB * volB
+        self.assertAlmostEqual(0.0, ws.x(), delta=1e-10)
+        self.assertAlmostEqual(0.0, ws.y(), delta=1e-10)
+        self.assertAlmostEqual(0.0, ws.z(), delta=1e-10)
+
+        # Weighted sum with asymmetric box
+        box = Boxd(1.0, 2.0, 3.0)
+        planeA = Planed(Vector3d(2.0, -1.0, 1.0), 0.3)
+        planeB = Planed(Vector3d(-2.0, 1.0, -1.0), -0.3)
+        covA = box.center_of_volume_below(planeA)
+        covB = box.center_of_volume_below(planeB)
+        volA = box.volume_below(planeA)
+        volB = box.volume_below(planeB)
+        ws = covA * volA + covB * volB
+        self.assertAlmostEqual(0.0, ws.x(), delta=1e-10)
+        self.assertAlmostEqual(0.0, ws.y(), delta=1e-10)
+        self.assertAlmostEqual(0.0, ws.z(), delta=1e-10)
+
+        # 2D normal (k=2 centroid path)
+        box = Boxd(2.0, 2.0, 2.0)
+        planeA = Planed(Vector3d(1.0, 1.0, 0.0), 0.5)
+        planeB = Planed(Vector3d(-1.0, -1.0, 0.0), -0.5)
+        covA = box.center_of_volume_below(planeA)
+        covB = box.center_of_volume_below(planeB)
+        self.assertAlmostEqual(0.0, covA.z(), delta=1e-10)
+        self.assertAlmostEqual(0.0, covB.z(), delta=1e-10)
+        volA = box.volume_below(planeA)
+        volB = box.volume_below(planeB)
+        ws = covA * volA + covB * volB
+        self.assertAlmostEqual(0.0, ws.x(), delta=1e-10)
+        self.assertAlmostEqual(0.0, ws.y(), delta=1e-10)
+        self.assertAlmostEqual(0.0, ws.z(), delta=1e-10)
+
+        # Flipped 3D normal
+        box = Boxd(2.0, 2.0, 2.0)
+        planeA = Planed(Vector3d(-1.0, 1.0, -1.0), 0.3)
+        planeB = Planed(Vector3d(1.0, -1.0, 1.0), -0.3)
+        covA = box.center_of_volume_below(planeA)
+        covB = box.center_of_volume_below(planeB)
+        self.assertLess(Vector3d(-1, 1, -1).dot(covA), 0.0)
+        volA = box.volume_below(planeA)
+        volB = box.volume_below(planeB)
+        ws = covA * volA + covB * volB
+        self.assertAlmostEqual(0.0, ws.x(), delta=1e-10)
+        self.assertAlmostEqual(0.0, ws.y(), delta=1e-10)
+        self.assertAlmostEqual(0.0, ws.z(), delta=1e-10)
+
     def test_mass(self):
         mass = 2.0
         length = 2.0

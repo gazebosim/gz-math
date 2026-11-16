@@ -117,7 +117,7 @@ T Sphere<T>::VolumeBelow(const Plane<T> &_plane) const
 {
   auto r = this->radius;
   // get nearest point to center on plane
-  auto dist = _plane.Distance(Vector3d(0, 0, 0));
+  auto dist = _plane.Distance(Vector3<T>::Zero);
 
   if (dist < -r)
   {
@@ -141,7 +141,7 @@ std::optional<Vector3<T>>
 {
   auto r = this->radius;
   // get nearest point to center on plane
-  auto dist = _plane.Distance(Vector3d(0, 0, 0));
+  auto dist = _plane.Distance(Vector3<T>::Zero);
 
   if (dist < -r)
   {
@@ -173,6 +173,13 @@ bool Sphere<T>::SetDensityFromMass(const T _mass)
   if (newDensity > 0)
     this->material.SetDensity(newDensity);
   return newDensity > 0;
+}
+
+/////////////////////////////////////////////////
+template<typename T>
+Vector3<T> Sphere<T>::Centroid() const
+{
+  return Vector3<T>::Zero;
 }
 
 //////////////////////////////////////////////////

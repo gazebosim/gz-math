@@ -22,6 +22,7 @@
 #include <optional>
 #include "gz/math/MassMatrix3.hh"
 #include "gz/math/Material.hh"
+#include "gz/math/Plane.hh"
 #include "gz/math/Quaternion.hh"
 
 namespace gz::math
@@ -38,9 +39,13 @@ namespace gz::math
   /// The cone class supports defining a cone with a radius,
   /// length, rotational offset, and material properties. Radius and
   /// length are in meters. See Material for more on material properties.
-  /// By default, a cone's length is aligned with the Z axis where the base
-  /// of the cone is proximal to the origin and vertex points in positive Z.
-  /// The rotational offset encodes a rotation from the z axis.
+  ///
+  /// A reference frame is defined with an origin on the axis of symmetry
+  /// equidistant from the vertex and the circular base, with XYZ
+  /// coordinate axes defined with the Z axis parallel to the axis of
+  /// symmetry and pointing toward the vertex of the cone. This frame is
+  /// consistent with the SDFormat cone shape. The rotational offset
+  /// encodes an additional rotation of the cone relative to this frame.
   template<typename Precision>
   class Cone
   {
@@ -133,6 +138,33 @@ namespace gz::math
     /// \brief Get the volume of the cone in m^3.
     /// \return Volume of the cone in m^3.
     public: Precision Volume() const;
+
+    /// \brief Get the volume of the cone below a given plane in m^3.
+    /// It is assumed that the center of the cone is on the origin.
+    /// \param[in] _plane The plane which slices this cone, expressed
+    /// in the cone's reference frame.
+    /// \return Volume below the plane in m^3.
+    public: Precision VolumeBelow(const Plane<Precision> &_plane) const;
+
+    /// \brief Center of volume below the plane. This is useful for example
+    /// when calculating where buoyancy should be applied.
+    /// \param[in] _plane The plane which slices this cone, expressed
+    /// in the cone's reference frame.
+    /// \return The center of volume if there is anything below the plane,
+    /// otherwise return a std::nullopt. Expressed in the cone's
+    /// reference frame.
+    public: std::optional<Vector3<Precision>>
+      CenterOfVolumeBelow(const Plane<Precision> &_plane) const;
+
+    /// \brief Get the centroid of the cone in its reference
+    /// frame (defined in the class description): on the axis of symmetry,
+    /// a quarter of the length from the base toward the vertex, i.e.
+    /// (0, 0, -length/4) rotated by the rotational offset. This is the
+    /// standard solid cone centroid; see for example the centroid tables
+    /// in the CRC Standard Mathematical Tables and Formulae.
+    /// \return The centroid, expressed in the cone's
+    /// reference frame.
+    public: Vector3<Precision> Centroid() const;
 
     /// \brief Compute the cone's density given a mass value. The
     /// cone is assumed to be solid with uniform density. This

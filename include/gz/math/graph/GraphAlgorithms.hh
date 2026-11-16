@@ -18,10 +18,10 @@
 #define GZ_MATH_GRAPH_GRAPHALGORITHMS_HH_
 
 #include <functional>
-#include <list>
 #include <map>
 #include <queue>
 #include <stack>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
@@ -46,49 +46,35 @@ namespace graph
   /// \param[in] _graph A graph.
   /// \param[in] _from The starting vertex.
   /// \return The vector of vertices Ids traversed in a breadth first manner.
+  /// An empty vector if _from is not a vertex of the graph.
   template<typename V, typename E, typename EdgeType>
   std::vector<VertexId> BreadthFirstSort(const Graph<V, E, EdgeType> &_graph,
                                          const VertexId &_from)
   {
-    // Create an auxiliary graph, where the data is just a boolean value that
-    // stores whether the vertex has been visited or not.
-    Graph<bool, E, EdgeType> visitorGraph;
-
-    // Copy the vertices (just the Id).
-    for (auto const &v : _graph.Vertices())
-      visitorGraph.AddVertex("", false, v.first);
-
-    // Copy the edges (without data).
-    for (auto const &e : _graph.Edges())
-      visitorGraph.AddEdge(e.second.get().Vertices(), E());
+    if (!_graph.VertexFromId(_from).Valid())
+      return {};
 
     std::vector<VertexId> visited;
-    std::list<VertexId> pending = {_from};
+    std::unordered_set<VertexId> seen;
+    std::queue<VertexId> pending;
+
+    // Mark-on-enqueue: each vertex enters the queue at most once.
+    pending.push(_from);
+    seen.insert(_from);
 
     while (!pending.empty())
     {
-      auto vId = pending.front();
-      pending.pop_front();
+      const VertexId u = pending.front();
+      pending.pop();
+      visited.push_back(u);
 
-      // If the vertex has been visited, skip.
-      auto &vertex = visitorGraph.VertexFromId(vId);
-      if (vertex.Data())
-        continue;
-
-      visited.push_back(vId);
-      vertex.Data() = true;
-
-      // Add more vertices to visit if they haven't been visited yet.
-      auto adjacents = visitorGraph.AdjacentsFrom(vId);
-      for (auto const &adj : adjacents)
+      for (auto const &adj : _graph.AdjacentsFrom(u))
       {
-        vId = adj.first;
-        auto &v = adj.second.get();
-        if (!v.Data())
-          pending.push_back(vId);
+        const VertexId next = adj.first;
+        if (seen.insert(next).second)
+          pending.push(next);
       }
     }
-
     return visited;
   }
 
@@ -98,49 +84,37 @@ namespace graph
   /// \param[in] _graph A graph.
   /// \param[in] _from The starting vertex.
   /// \return The vector of vertices Ids visited in a depth first manner.
+  /// An empty vector if _from is not a vertex of the graph.
   template<typename V, typename E, typename EdgeType>
   std::vector<VertexId> DepthFirstSort(const Graph<V, E, EdgeType> &_graph,
                                        const VertexId &_from)
   {
-    // Create an auxiliary graph, where the data is just a boolean value that
-    // stores whether the vertex has been visited or not.
-    Graph<bool, E, EdgeType> visitorGraph;
-
-    // Copy the vertices (just the Id).
-    for (auto const &v : _graph.Vertices())
-      visitorGraph.AddVertex("", false, v.first);
-
-    // Copy the edges (without data).
-    for (auto const &e : _graph.Edges())
-      visitorGraph.AddEdge(e.second.get().Vertices(), E());
+    if (!_graph.VertexFromId(_from).Valid())
+      return {};
 
     std::vector<VertexId> visited;
-    std::stack<VertexId> pending({_from});
+    std::unordered_set<VertexId> seen;
+    std::stack<VertexId> pending;
+    pending.push(_from);
 
+    // Mark-on-pop: matches the textbook DFS visitation order. Children are
+    // pushed unconditionally and duplicate entries are skipped at pop time.
     while (!pending.empty())
     {
-      auto vId = pending.top();
+      const VertexId u = pending.top();
       pending.pop();
 
-      // If the vertex has been visited, skip.
-      auto &vertex = visitorGraph.VertexFromId(vId);
-      if (vertex.Data())
+      if (!seen.insert(u).second)
         continue;
+      visited.push_back(u);
 
-      visited.push_back(vId);
-      vertex.Data() = true;
-
-      // Add more vertices to visit if they haven't been visited yet.
-      auto adjacents = visitorGraph.AdjacentsFrom(vId);
-      for (auto const &adj : adjacents)
+      for (auto const &adj : _graph.AdjacentsFrom(u))
       {
-        vId = adj.first;
-        auto &v = adj.second.get();
-        if (!v.Data())
-          pending.push(vId);
+        const VertexId next = adj.first;
+        if (!seen.count(next))
+          pending.push(next);
       }
     }
-
     return visited;
   }
 
@@ -225,7 +199,7 @@ namespace graph
     if (_to != kNullId &&
         allVertices.find(_to) == allVertices.end())
     {
-      std::cerr << "Vertex [" << _from << "] Not found" << std::endl;
+      std::cerr << "Vertex [" << _to << "] Not found" << std::endl;
       return {};
     }
 
@@ -249,6 +223,7 @@ namespace graph
     while (!pq.empty())
     {
       // This is the minimum distance vertex.
+      const double poppedCost = pq.top().first;
       VertexId u = pq.top().second;
 
       // Shortcut: Destination vertex found, exiting.
@@ -257,16 +232,22 @@ namespace graph
 
       pq.pop();
 
+      // Skip stale priority-queue entries left behind by relaxation
+      // updates: dist[u] is the authoritative cost; if the popped cost is
+      // greater, this entry was queued before u was settled.
+      if (poppedCost > dist[u].first)
+        continue;
+
       for (auto const &edgePair : _graph.IncidentsFrom(u))
       {
         const auto &edge = edgePair.second.get();
         const auto &v = edge.From(u);
         double weight = edge.Weight();
 
-        //  If there is shorted path to v through u.
+        // If there is a shorter path to v through u.
         if (dist[v].first > dist[u].first + weight)
         {
-          // Updating distance of v.
+          // Update distance of v.
           dist[v] = std::make_pair(dist[u].first + weight, u);
           pq.push(std::make_pair(dist[v].first, v));
         }
@@ -350,6 +331,207 @@ namespace graph
     }
 
     return UndirectedGraph<V, E>(vertices, edges);
+  }
+
+  /// \brief Walk parent edges from `_vertex` up to a root and return the
+  /// chain of ancestors in walk order (immediate parent first, root last)
+  /// together with a flag indicating whether the walk terminated cleanly
+  /// at a root (no parent) or was aborted by the cycle guard.
+  /// In a tree this returns the unique parent chain; in a more general
+  /// directed graph it follows the *first* incoming edge at each step
+  /// (deterministic via the adjacency-list ordering) and aborts on cycles.
+  ///
+  /// This subsumes the hand-coded "walk to root" loops widely seen in
+  /// downstream code (e.g. gz-sim's worldPose / worldEntity / scopedName,
+  /// sdformat's FrameSemantics::FindSourceVertex).
+  ///
+  /// \param[in] _graph Any graph (typically a directed forest/tree).
+  /// \param[in] _vertex Starting vertex.
+  /// \return A pair (chain, reachedRoot):
+  ///   - chain: vertex ids in walk order (parent, grandparent, ..., root).
+  ///     Empty if `_vertex` is invalid or has no parent.
+  ///   - reachedRoot: true if the walk terminated at a root (parent chain
+  ///     is complete). False if `_vertex` was invalid, or the walk was
+  ///     aborted because a previously visited vertex was reached again
+  ///     (cycle), in which case `chain` holds the partial path traversed
+  ///     up to the revisit.
+  template<typename V, typename E, typename EdgeType>
+  std::pair<std::vector<VertexId>, bool> Ancestors(
+      const Graph<V, E, EdgeType> &_graph, const VertexId &_vertex)
+  {
+    std::vector<VertexId> chain;
+    if (!_graph.VertexFromId(_vertex).Valid())
+      return {chain, false};
+
+    std::unordered_set<VertexId> seen;
+    seen.insert(_vertex);
+    VertexId cur = _vertex;
+    while (true)
+    {
+      auto parents = _graph.AdjacentsTo(cur);
+      if (parents.empty())
+        return {chain, true};
+      const VertexId next = parents.begin()->first;
+      // Cycle guard: stop if we revisit a vertex.
+      if (!seen.insert(next).second)
+        return {chain, false};
+      chain.push_back(next);
+      cur = next;
+    }
+  }
+
+  /// \brief Test whether `_ancestor` lies on the parent chain above
+  /// `_descendant`. O(depth) -- walks `_descendant` up via Ancestors() and
+  /// stops as soon as a match is found. Returns false for `_a == _d`
+  /// (consistent with the strict ancestor relation).
+  /// \param[in] _graph Any graph.
+  /// \param[in] _ancestor Candidate ancestor vertex id.
+  /// \param[in] _descendant Candidate descendant vertex id.
+  /// \return True if `_ancestor` is on the parent chain of `_descendant`.
+  template<typename V, typename E, typename EdgeType>
+  bool IsAncestor(
+      const Graph<V, E, EdgeType> &_graph,
+      const VertexId &_ancestor,
+      const VertexId &_descendant)
+  {
+    if (_ancestor == _descendant)
+      return false;
+    if (!_graph.VertexFromId(_ancestor).Valid() ||
+        !_graph.VertexFromId(_descendant).Valid())
+    {
+      return false;
+    }
+
+    std::unordered_set<VertexId> seen;
+    seen.insert(_descendant);
+    VertexId cur = _descendant;
+    while (true)
+    {
+      auto parents = _graph.AdjacentsTo(cur);
+      if (parents.empty())
+        return false;
+      const VertexId next = parents.begin()->first;
+      if (next == _ancestor)
+        return true;
+      // Cycle guard.
+      if (!seen.insert(next).second)
+        return false;
+      cur = next;
+    }
+  }
+
+  /// \brief Lowest common ancestor of two vertices in a directed forest.
+  /// Walks `_a` up to root collecting ancestors, then walks `_b` up until
+  /// hitting one of those ancestors. O(depth_a + depth_b).
+  ///
+  /// Useful for relative-frame computation: if two entities live in the
+  /// same world tree, the LCA is the deepest shared frame, and a relative
+  /// pose can be composed by chaining transforms a->LCA and LCA->b.
+  ///
+  /// \param[in] _graph A directed graph (expected to be a forest).
+  /// \param[in] _a One vertex.
+  /// \param[in] _b Another vertex.
+  /// \return The LCA vertex id, or kNullId if the two vertices share no
+  /// common ancestor (different trees) or either is invalid. If `_a == _b`,
+  /// returns `_a`.
+  template<typename V, typename E, typename EdgeType>
+  VertexId LowestCommonAncestor(
+      const Graph<V, E, EdgeType> &_graph,
+      const VertexId &_a, const VertexId &_b)
+  {
+    if (!_graph.VertexFromId(_a).Valid() ||
+        !_graph.VertexFromId(_b).Valid())
+    {
+      return kNullId;
+    }
+    if (_a == _b)
+      return _a;
+
+    std::unordered_set<VertexId> ancestorsA;
+    ancestorsA.insert(_a);
+    for (auto v : Ancestors(_graph, _a).first)
+      ancestorsA.insert(v);
+
+    if (ancestorsA.count(_b))
+      return _b;
+    for (auto v : Ancestors(_graph, _b).first)
+    {
+      if (ancestorsA.count(v))
+        return v;
+    }
+    return kNullId;
+  }
+
+  /// \brief Extract the subgraph induced by `_root` and all descendants
+  /// reachable from it. Vertices and edges are copied (preserving ids,
+  /// names, data, weights). All edges whose endpoints both lie in the
+  /// reachable set are kept, including back-edges -- so if the source
+  /// graph contains cycles within the reachable region, the cycles are
+  /// preserved in the result. Equivalent to "save just this entity and
+  /// everything beneath it" -- the shape of operation gz-sim and sdformat
+  /// would invoke when serializing a single model out of a world.
+  ///
+  /// \param[in] _graph Source graph.
+  /// \param[in] _root Root vertex of the subgraph.
+  /// \return A new graph containing `_root` and all descendants reachable
+  /// from it, plus the edges between them. Empty graph if `_root` is invalid.
+  template<typename V, typename E, typename EdgeType>
+  Graph<V, E, EdgeType> Subgraph(
+      const Graph<V, E, EdgeType> &_graph, const VertexId &_root)
+  {
+    Graph<V, E, EdgeType> out;
+    if (!_graph.VertexFromId(_root).Valid())
+      return out;
+
+    auto descendants = BreadthFirstSort(_graph, _root);
+    std::unordered_set<VertexId> set(descendants.begin(), descendants.end());
+
+    // Copy vertices preserving ids.
+    for (auto id : descendants)
+    {
+      const auto &v = _graph.VertexFromId(id);
+      out.AddVertex(v.Name(), v.Data(), v.Id());
+    }
+    // Copy edges whose endpoints both lie in the reachable set.
+    for (auto const &ePair : _graph.Edges())
+    {
+      auto const &e = ePair.second.get();
+      auto vs = e.Vertices();
+      if (set.count(vs.first) && set.count(vs.second))
+        out.AddEdge(vs, e.Data(), e.Weight());
+    }
+    return out;
+  }
+
+  /// \brief Set of all descendants of `_vertex` (including `_vertex`
+  /// itself). Equivalent to BreadthFirstSort + insert-into-set, but avoids
+  /// the intermediate vector copy. Matches the return shape downstream
+  /// consumers (gz-sim's EntityComponentManager::Descendants) use.
+  /// \param[in] _graph Source graph.
+  /// \param[in] _vertex Root vertex.
+  /// \return Set of vertex ids reachable from `_vertex`.
+  template<typename V, typename E, typename EdgeType>
+  std::unordered_set<VertexId> DescendantsSet(
+      const Graph<V, E, EdgeType> &_graph, const VertexId &_vertex)
+  {
+    std::unordered_set<VertexId> out;
+    if (!_graph.VertexFromId(_vertex).Valid())
+      return out;
+
+    std::queue<VertexId> pending;
+    pending.push(_vertex);
+    out.insert(_vertex);
+    while (!pending.empty())
+    {
+      const VertexId u = pending.front();
+      pending.pop();
+      for (auto const &adj : _graph.AdjacentsFrom(u))
+      {
+        if (out.insert(adj.first).second)
+          pending.push(adj.first);
+      }
+    }
+    return out;
   }
 }  // namespace graph
 }  // namespace GZ_MATH_VERSION_NAMESPACE

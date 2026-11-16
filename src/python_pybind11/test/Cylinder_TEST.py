@@ -16,7 +16,7 @@ import math
 import unittest
 
 import gz
-from gz.math7 import Cylinderd, MassMatrix3d, Material, Quaterniond
+from gz.math7 import Cylinderd, MassMatrix3d, Material, Planed, Quaterniond, Vector3d
 
 
 class TestCylinder(unittest.TestCase):
@@ -118,6 +118,39 @@ class TestCylinder(unittest.TestCase):
         self.assertEqual(expectedMassMat, massMat2)
         self.assertEqual(expectedMassMat.diagonal_moments(), massMat2.diagonal_moments())
         self.assertEqual(expectedMassMat.mass(), massMat2.mass())
+
+
+    def test_volume_below(self):
+        cyl = Cylinderd(4.0, 2.0)
+
+        # Horizontal plane at z=0: half volume
+        plane = Planed(Vector3d(0, 0, 1), 0)
+        self.assertAlmostEqual(
+            cyl.volume() / 2, cyl.volume_below(plane), delta=1e-3)
+
+        # Fully below
+        plane = Planed(Vector3d(0, 0, 1), 10.0)
+        self.assertAlmostEqual(
+            cyl.volume(), cyl.volume_below(plane), delta=1e-3)
+
+        # Fully above
+        plane = Planed(Vector3d(0, 0, 1), -10.0)
+        self.assertAlmostEqual(0.0, cyl.volume_below(plane), delta=1e-3)
+
+    def test_center_of_volume_below(self):
+        cyl = Cylinderd(4.0, 2.0)
+
+        # Half below z=0: centroid at z = -1
+        plane = Planed(Vector3d(0, 0, 1), 0)
+        cov = cyl.center_of_volume_below(plane)
+        self.assertIsNotNone(cov)
+        self.assertAlmostEqual(0.0, cov.x(), delta=1e-3)
+        self.assertAlmostEqual(0.0, cov.y(), delta=1e-3)
+        self.assertAlmostEqual(-1.0, cov.z(), delta=1e-3)
+
+        # Fully above: should return None
+        plane = Planed(Vector3d(0, 0, 1), -10.0)
+        self.assertIsNone(cyl.center_of_volume_below(plane))
 
 
 if __name__ == '__main__':

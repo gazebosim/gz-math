@@ -86,26 +86,26 @@ TEST(Interpolation, TrilinearInterpolate)
 {
   std::vector<InterpolationPoint3D<double>> vec {
     InterpolationPoint3D<double>{Vector3d{0, 0, 0}, 0},
-    InterpolationPoint3D<double>{Vector3d{1, 0, 0}, 1},
-    InterpolationPoint3D<double>{Vector3d{0, 1, 0}, 2},
-    InterpolationPoint3D<double>{Vector3d{1, 1, 0}, 3},
-    InterpolationPoint3D<double>{Vector3d{0, 0, 1}, 4},
-    InterpolationPoint3D<double>{Vector3d{1, 0, 1}, 5},
-    InterpolationPoint3D<double>{Vector3d{0, 1, 1}, 6},
-    InterpolationPoint3D<double>{Vector3d{1, 1, 1}, 7},
+    InterpolationPoint3D<double>{Vector3d{2, 0, 0}, 1},
+    InterpolationPoint3D<double>{Vector3d{0, 2, 0}, 2},
+    InterpolationPoint3D<double>{Vector3d{2, 2, 0}, 3},
+    InterpolationPoint3D<double>{Vector3d{0, 0, 2}, 4},
+    InterpolationPoint3D<double>{Vector3d{2, 0, 2}, 5},
+    InterpolationPoint3D<double>{Vector3d{0, 2, 2}, 6},
+    InterpolationPoint3D<double>{Vector3d{2, 2, 2}, 7},
   };
 
-  std::vector<double> values {0, 0, 0, 0, 1, 1, 1, 1};
+  std::vector<double> values {0, 0, 0, 0, 1, 1, 2, 2};
 
-  auto v0 = TrilinearInterpolate(vec, values, Vector3d{0.5, 0.5, 0.5});
-  EXPECT_NEAR(v0, 0.5, 1e-3);
+  auto v0 = TrilinearInterpolate(vec, values, Vector3d{1, 1, 1});
+  EXPECT_NEAR(v0, 0.75, 1e-3);
 
-  auto v1 = TrilinearInterpolate(vec, values, Vector3d{0.5, 0.5, 0});
+  auto v1 = TrilinearInterpolate(vec, values, Vector3d{1, 1, 0});
   EXPECT_NEAR(v1, 0, 1e-3);
 
-  auto v2 = TrilinearInterpolate(vec, values, Vector3d{0.5, 0.5, 1});
-  EXPECT_NEAR(v2, 1, 1e-3);
+  auto v2 = TrilinearInterpolate(vec, values, Vector3d{1, 1, 2});
+  EXPECT_NEAR(v2, 1.5, 1e-3);
 
-  auto v3 = TrilinearInterpolate(vec, values, Vector3d{1, 1, 1});
-  EXPECT_NEAR(v3, 1, 1e-3);
+  auto v3 = TrilinearInterpolate(vec, values, Vector3d{2, 2, 2});
+  EXPECT_NEAR(v3, 2, 1e-3);
 }

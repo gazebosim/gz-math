@@ -25,6 +25,10 @@ using namespace gz;
 /////////////////////////////////////////////////
 TEST(Line3Test, Constructor)
 {
+  math::Line3d lineDefault;
+  EXPECT_EQ(lineDefault[0], math::Vector3d::Zero);
+  EXPECT_EQ(lineDefault[1], math::Vector3d::Zero);
+
   math::Line3d lineA(0, 0, 10, 10);
   EXPECT_DOUBLE_EQ(lineA[0].X(), 0.0);
   EXPECT_DOUBLE_EQ(lineA[0].Y(), 0.0);
@@ -88,6 +92,10 @@ TEST(Line3Test, Set)
   EXPECT_DOUBLE_EQ(lineA[1].X(), 5.0);
   EXPECT_DOUBLE_EQ(lineA[1].Y(), 6.0);
   EXPECT_DOUBLE_EQ(lineA[1].Z(), 7.0);
+
+  lineA.Set(math::Vector3d(20, 21, 22), math::Vector3d(23, 24, 25));
+  EXPECT_EQ(lineA[0], math::Vector3d(20, 21, 22));
+  EXPECT_EQ(lineA[1], math::Vector3d(23, 24, 25));
 }
 
 /////////////////////////////////////////////////
@@ -344,6 +352,17 @@ TEST(Line3Test, Intersect)
 
   EXPECT_TRUE(line.Intersect(math::Line3d(0, -1, 0, 0, 0.1, 0)));
   EXPECT_TRUE(line.Intersect(math::Line3d(0, 1, 0, 0, 1.1, 0)));
+
+  // Parallel non-overlapping lines
+  EXPECT_FALSE(line.Intersect(math::Line3d(0, 2, 0, 0, 3, 0)));
+  EXPECT_FALSE(line.Intersect(math::Line3d(0, 2, 0, 0, 3, 0), pt));
+
+  // Parallel overlapping line where _line[0] is within this line
+  EXPECT_TRUE(line.Intersect(math::Line3d(0, 0.5, 0, 0, 2, 0), pt));
+  EXPECT_EQ(pt, math::Vector3d(0, 0.5, 0));
+
+  // Skew non-intersecting lines
+  EXPECT_FALSE(line.Intersect(math::Line3d(1, 0, 1, 1, 1, 1), pt));
 }
 
 /////////////////////////////////////////////////
@@ -371,3 +390,17 @@ TEST(Line3Test, Coplanar)
   EXPECT_FALSE(line.Coplanar(math::Line3d(1, 0, 0, 1, 1, 1)));
   EXPECT_FALSE(line.Coplanar(math::Line3d(1, 0, 1, 2, 0, 0)));
 }
+
+/////////////////////////////////////////////////
+TEST(Line3Test, TemplateTypes)
+{
+  math::Line3i lineI(0, 0, 0, 10, 10, 10);
+  EXPECT_EQ(lineI[0], math::Vector3i(0, 0, 0));
+  EXPECT_EQ(lineI[1], math::Vector3i(10, 10, 10));
+
+  math::Line3f lineF(0.0f, 0.0f, 0.0f, 10.0f, 10.0f, 10.0f);
+  EXPECT_FLOAT_EQ(lineF[0].X(), 0.0f);
+  EXPECT_FLOAT_EQ(lineF[1].Y(), 10.0f);
+  EXPECT_NEAR(lineF.Length(), 17.320508f, 1e-4f);
+}
+

@@ -1,5 +1,47 @@
 ## Gazebo Math 7.x
 
+### Gazebo Math 7.7.0 (2026-08-24)
+
+1. Line2 updates:
+    * [Pull request #832](https://github.com/gazebosim/gz-math/pull/832)
+    * [Pull request #828](https://github.com/gazebosim/gz-math/pull/828)
+
+1. Add Centroid() to the simple shape classes
+    * [Pull request #794](https://github.com/gazebosim/gz-math/pull/794)
+
+1. Add pybindings for VolumetricGridLookupField
+    * [Pull request #788](https://github.com/gazebosim/gz-math/pull/788)
+
+1. [bazel] Fix build error for Cone_TEST
+    * [Pull request #781](https://github.com/gazebosim/gz-math/pull/781)
+
+1. Graph updates:
+    * [Pull request #778](https://github.com/gazebosim/gz-math/pull/778)
+    * [Pull request #766](https://github.com/gazebosim/gz-math/pull/766)
+    * [Pull request #762](https://github.com/gazebosim/gz-math/pull/762)
+    * [Pull request #756](https://github.com/gazebosim/gz-math/pull/756)
+    * [Pull request #752](https://github.com/gazebosim/gz-math/pull/752)
+
+### Gazebo Math 7.6.0 (2026-04-10)
+
+1. Add VolumeBelow/CenterOfVolumeBelow for Ellipsoid, Cylinder, Capsule, Cone
+    * [Pull request #734](https://github.com/gazebosim/gz-math/pull/734)
+
+1. Fix Box VolumeBelow/CenterOfVolumeBelow and Sphere<float> type error
+    * [Pull request #727](https://github.com/gazebosim/gz-math/pull/727)
+
+1. Correct calculation in ProjectPointToPlane
+    * [Pull request #702](https://github.com/gazebosim/gz-math/pull/702)
+
+1. python: suppress Pose3 deprecation warnings
+    * [Pull request #682](https://github.com/gazebosim/gz-math/pull/682)
+
+1. Backport: Docs/spell check
+    * [Pull request #669](https://github.com/gazebosim/gz-math/pull/669)
+
+1. Unify Python3_Development_FOUND checks
+    * [Pull request #663](https://github.com/gazebosim/gz-math/pull/663)
+
 ### Gazebo Math 7.5.2 (2025-01-30)
 
 1. Backport bazel BUILD updates from gz-math8

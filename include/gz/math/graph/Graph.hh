@@ -19,6 +19,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <iterator>
 #include <map>
 #include <set>
 #include <string>
@@ -41,6 +42,12 @@ namespace graph
   /// internally. The vertices also have a name that could be reused among
   /// other vertices if needed. This class supports the use of different edge
   /// types (e.g. directed or undirected edges).
+  ///
+  /// \par Thread safety
+  /// This class is not internally synchronized. Concurrent calls into the
+  /// same Graph are unsafe; concurrent read-only access from multiple
+  /// threads is safe only if no thread holds a mutable reference into the
+  /// graph.
   ///
   /// <b> Example directed graph</b>
   //
@@ -166,9 +173,6 @@ namespace graph
 
       // Link the vertex with an empty list of edges.
       this->adjList[id] = EdgeId_S();
-
-      // Update the map of names.
-      this->names.insert(std::make_pair(_name, id));
 
       return ret.first->second;
     }
@@ -332,9 +336,9 @@ namespace graph
     }
 
     /// \brief Get all vertices that are directly connected with one edge
-    /// to a given vertex. In other words, this function will return
-    /// child vertices of the given vertex (all vertices from the given
-    /// vertex).
+    /// to a given vertex. In other words, this returns the parent vertices
+    /// of the given vertex (all vertices i such that the edge (i->_vertex)
+    /// exists).
     ///
     /// In an undirected graph, the result of this function will match
     /// the result provided by AdjacentsFrom.
@@ -505,8 +509,6 @@ namespace graph
       if (vIt == this->vertices.end())
         return false;
 
-      std::string name = vIt->second.Name();
-
       // Remove incident edges.
       auto incidents = this->IncidentsTo(_vertex);
       for (auto edgePair : incidents)
@@ -522,17 +524,6 @@ namespace graph
 
       // Remove the vertex.
       this->vertices.erase(_vertex);
-
-      // Get an iterator to all vertices sharing name.
-      auto iterPair = this->names.equal_range(name);
-      for (auto it = iterPair.first; it != iterPair.second; ++it)
-      {
-        if (it->second == _vertex)
-        {
-          this->names.erase(it);
-          break;
-        }
-      }
 
       return true;
     }
@@ -550,15 +541,19 @@ namespace graph
     /// \return The number of vertices removed.
     public: size_t RemoveVertices(const std::string &_name)
     {
-      size_t numVertices = this->names.count(_name);
-      size_t result = 0;
-      for (size_t i = 0; i < numVertices; ++i)
+      std::vector<VertexId> toRemove;
+      for (auto const &[id, vertex] : this->vertices)
       {
-        auto iter = this->names.find(_name);
-        if (this->RemoveVertex(iter->second))
-          ++result;
+        if (vertex.Name() == _name)
+          toRemove.push_back(id);
       }
 
+      size_t result = 0;
+      for (auto const &id : toRemove)
+      {
+        if (this->RemoveVertex(id))
+          ++result;
+      }
       return result;
     }
 
@@ -746,7 +741,9 @@ namespace graph
     /// another vertex via (e).
     private: std::map<VertexId, EdgeId_S> adjList;
 
-    /// \brief Association between names and vertices currently used.
+    /// \brief Retained for ABI compatibility on the gz-math7 release series;
+    /// no longer maintained or read. std::multimap is non-trivially
+    /// constructible, so GCC and Clang do not warn about it being unused.
     private: std::multimap<std::string, VertexId> names;
   };
 

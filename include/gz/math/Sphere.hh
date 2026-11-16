@@ -37,6 +37,10 @@ namespace gz::math
   /// The sphere class supports defining a sphere with a radius and
   /// material properties. Radius is in meters.
   /// See Material for more on material properties.
+  ///
+  /// A reference frame is defined with an origin at the geometric center
+  /// of the sphere; by symmetry, the orientation of the coordinate axes is
+  /// immaterial. This frame is consistent with the SDFormat sphere shape.
   template<typename Precision>
   class Sphere
   {
@@ -111,6 +115,12 @@ namespace gz::math
     /// frame.
     public: std::optional<Vector3<Precision>>
       CenterOfVolumeBelow(const Plane<Precision> &_plane) const;
+
+    /// \brief Get the centroid of the sphere. It coincides with the
+    /// origin of the reference frame defined in the class description.
+    /// \return The centroid, in the sphere's reference frame:
+    /// the zero vector.
+    public: Vector3<Precision> Centroid() const;
 
     /// \brief Compute the sphere's density given a mass value. The
     /// sphere is assumed to be solid with uniform density. This

@@ -18,7 +18,7 @@ import math
 import unittest
 
 import gz
-from gz.math7 import Coned, MassMatrix3d, Material, Quaterniond
+from gz.math7 import Coned, MassMatrix3d, Material, Planed, Quaterniond, Vector3d
 
 
 class TestCone(unittest.TestCase):
@@ -120,6 +120,38 @@ class TestCone(unittest.TestCase):
         self.assertEqual(expectedMassMat, massMat2)
         self.assertEqual(expectedMassMat.diagonal_moments(), massMat2.diagonal_moments())
         self.assertEqual(expectedMassMat.mass(), massMat2.mass())
+
+
+    def test_volume_below(self):
+        cone = Coned(4.0, 2.0)
+
+        # Fully below
+        plane = Planed(Vector3d(0, 0, 1), 10.0)
+        self.assertAlmostEqual(
+            cone.volume(), cone.volume_below(plane), delta=1e-3)
+
+        # Fully above
+        plane = Planed(Vector3d(0, 0, 1), -10.0)
+        self.assertAlmostEqual(0.0, cone.volume_below(plane), delta=1e-3)
+
+        # Vertical plane through axis: half by symmetry
+        plane = Planed(Vector3d(1, 0, 0), 0)
+        self.assertAlmostEqual(
+            cone.volume() / 2, cone.volume_below(plane), delta=1e-3)
+
+    def test_center_of_volume_below(self):
+        cone = Coned(4.0, 2.0)
+
+        # Vertical plane through axis: centroid x < 0
+        plane = Planed(Vector3d(1, 0, 0), 0)
+        cov = cone.center_of_volume_below(plane)
+        self.assertIsNotNone(cov)
+        self.assertTrue(cov.x() < 0.0)
+        self.assertAlmostEqual(0.0, cov.y(), delta=1e-3)
+
+        # Fully above: should return None
+        plane = Planed(Vector3d(0, 0, 1), -10.0)
+        self.assertIsNone(cone.center_of_volume_below(plane))
 
 
 if __name__ == '__main__':
