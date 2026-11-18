@@ -173,6 +173,7 @@ if (BUILD_TESTING)
     OccupancyGrid_TEST
     OrientedBox_TEST
     PID_TEST
+    PiecewiseScalarField3_TEST
     Plane_TEST
     Polynomial3_TEST
     Pose3_TEST
