@@ -54,6 +54,7 @@ pybind11_add_module(${BINDINGS_MODULE_NAME} MODULE
   src/MovingWindowFilter.cc
   src/OccupancyGrid.cc
   src/PID.cc
+  src/PiecewiseScalarField3.cc
   src/Polynomial3.cc
   src/Pose3.cc
   src/Quaternion.cc

@@ -45,6 +45,7 @@
 #include "MovingWindowFilter.hh"
 #include "OrientedBox.hh"
 #include "PID.hh"
+#include "PiecewiseScalarField3.hh"
 #include "Plane.hh"
 #include "Polynomial3.hh"
 #include "Pose3.hh"
@@ -155,6 +156,9 @@ PYBIND11_MODULE(BINDINGS_MODULE_NAME, m)
 
   gz::math::python::defineMathAdditivelySeparableScalarField3(
     m, "AdditivelySeparableScalarField3");
+
+  gz::math::python::defineMathPiecewiseScalarField3(
+    m, "PiecewiseScalarField3");
 
   gz::math::python::defineMathLine2(m, "Line2");
 
