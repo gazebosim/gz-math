@@ -18,6 +18,7 @@
 #define GZ_MATH_PIECEWISE_SCALAR_FIELD3_HH_
 
 #include <algorithm>
+#include <cmath>
 #include <limits>
 #include <sstream>
 #include <utility>
@@ -150,19 +151,17 @@ namespace gz::math
     ///   constructed)
     public: ScalarT Minimum(Vector3<ScalarT> &_pMin) const
     {
-      if (this->pieces.empty())
-      {
-        _pMin = Vector3<ScalarT>::NaN;
-        return std::numeric_limits<ScalarT>::quiet_NaN();
-      }
-      ScalarT yMin = std::numeric_limits<ScalarT>::infinity();
+      // NaN until a non-empty piece is found, so that a field with
+      // no pieces, or only empty-region pieces, is reported as undefined.
+      _pMin = Vector3<ScalarT>::NaN;
+      ScalarT yMin = std::numeric_limits<ScalarT>::quiet_NaN();
       for (const Piece &piece : this->pieces)
       {
         if (!piece.region.Empty())
         {
           Vector3<ScalarT> p;
           const ScalarT y = piece.field.Minimum(piece.region, p);
-          if (y < yMin)
+          if (std::isnan(yMin) || y < yMin)
           {
             _pMin = p;
             yMin = y;
