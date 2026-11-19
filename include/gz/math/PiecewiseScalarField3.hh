@@ -18,11 +18,8 @@
 #define GZ_MATH_PIECEWISE_SCALAR_FIELD3_HH_
 
 #include <algorithm>
-<<<<<<< HEAD
-#include <iostream>
-=======
 #include <cmath>
->>>>>>> 60ab4bb (Add PiecewiseScalarField3 Python bindings (#876))
+#include <iostream>
 #include <limits>
 #include <utility>
 #include <vector>
