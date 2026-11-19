@@ -16,11 +16,11 @@ import copy
 import math
 import unittest
 
-from gz.math import AdditivelySeparableScalarField3d
-from gz.math import AdditivelySeparableScalarField3f
-from gz.math import Intervald, Polynomial3d, Polynomial3f, Region3d, Region3f
-from gz.math import PiecewiseScalarField3d, PiecewiseScalarField3f
-from gz.math import Vector3d, Vector3f, Vector4d, Vector4f
+from gz.math8 import AdditivelySeparableScalarField3d
+from gz.math8 import AdditivelySeparableScalarField3f
+from gz.math8 import Intervald, Polynomial3d, Polynomial3f, Region3d, Region3f
+from gz.math8 import PiecewiseScalarField3d, PiecewiseScalarField3f
+from gz.math8 import Vector3d, Vector3f, Vector4d, Vector4f
 
 
 def constant_field(value):
