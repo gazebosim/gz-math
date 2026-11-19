@@ -99,6 +99,21 @@ TEST(PiecewiseScalarField3Test, Minimum)
     EXPECT_TRUE(std::isnan(pMin.Z()));
   }
   {
+    // Only empty-region pieces: minimum is undefined
+    const PiecewiseScalarField3dT scalarField({
+        {math::Region3d::Open(0., 0., 0., 0., 0., 0.),
+         AdditivelySeparableScalarField3dT(
+             1., math::Polynomial3d::Constant(0.),
+             math::Polynomial3d::Constant(1.),
+             math::Polynomial3d::Constant(0.))}});
+    math::Vector3d pMin = math::Vector3d::Zero;
+    EXPECT_TRUE(std::isnan(scalarField.Minimum()));
+    EXPECT_TRUE(std::isnan(scalarField.Minimum(pMin)));
+    EXPECT_TRUE(std::isnan(pMin.X()));
+    EXPECT_TRUE(std::isnan(pMin.Y()));
+    EXPECT_TRUE(std::isnan(pMin.Z()));
+  }
+  {
     const PiecewiseScalarField3dT scalarField =
         PiecewiseScalarField3dT::Throughout(
             AdditivelySeparableScalarField3dT(
