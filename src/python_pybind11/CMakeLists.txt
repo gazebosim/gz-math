@@ -54,6 +54,7 @@ pybind11_add_module(${BINDINGS_MODULE_NAME} MODULE
   src/MovingWindowFilter.cc
   src/OccupancyGrid.cc
   src/PID.cc
+  src/PiecewiseScalarField3.cc
   src/Polynomial3.cc
   src/Pose3.cc
   src/Quaternion.cc
@@ -172,6 +173,7 @@ if (BUILD_TESTING)
     OccupancyGrid_TEST
     OrientedBox_TEST
     PID_TEST
+    PiecewiseScalarField3_TEST
     Plane_TEST
     Polynomial3_TEST
     Pose3_TEST
