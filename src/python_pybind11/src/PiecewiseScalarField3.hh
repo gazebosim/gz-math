@@ -63,6 +63,13 @@ void helpDefineMathPiecewiseScalarField3(
     return stream.str();
   };
 
+  auto pieceToString = [](const Piece &piece)
+  {
+    std::stringstream stream;
+    stream << piece.field << " if (x, y, z) in " << piece.region;
+    return stream.str();
+  };
+
   py::class_<Class> cls(m, typestr.c_str(), py::dynamic_attr());
 
   py::class_<Piece>(cls, "Piece")
@@ -74,18 +81,33 @@ void helpDefineMathPiecewiseScalarField3(
     .def_readwrite("region", &Piece::region,
                    "Region in which the scalar field is defined")
     .def_readwrite("field", &Piece::field,
-                   "Scalar field defined in the region");
+                   "Scalar field defined in the region")
+    .def("__copy__", [](const Piece &self)
+    {
+      return Piece(self);
+    })
+    .def("__deepcopy__", [](const Piece &self, py::dict)
+    {
+      return Piece(self);
+    }, "memo"_a)
+    .def("__str__", pieceToString)
+    .def("__repr__", pieceToString);
 
   cls
     .def(py::init<>())
-    .def(py::init<const std::vector<Piece> &>(), "pieces"_a)
+    .def(py::init<const std::vector<Piece> &>(), "pieces"_a,
+         "Construct from scalar fields and the regions in which these are "
+         "defined. Regions should not overlap. Empty or overlapping "
+         "regions are not rejected: an error is logged to stderr, empty "
+         "regions are ignored, and the first overlapping region takes "
+         "precedence.")
     .def_static("throughout", &Class::Throughout,
                 "Define piecewise scalar field as `_field` "
                 "throughout R^3 space")
     .def("evaluate", &Class::Evaluate,
          "Evaluate the piecewise scalar field at `_p`")
     .def("minimum",
-         [](const Class &self, Vector3<T> &_pMin)
+         [](const Class &self, Vector3<T> _pMin)
          {
            T result = self.Minimum(_pMin);
            return std::make_tuple(result, _pMin);

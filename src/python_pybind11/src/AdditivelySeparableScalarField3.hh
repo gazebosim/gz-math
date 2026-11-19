@@ -62,7 +62,7 @@ void helpDefineMathAdditivelySeparableScalarField3(
     .def("evaluate", &Class::Evaluate,
          "Evaluate the scalar field at `_point`")
     .def("minimum",
-         [](const Class &self, const Region3<T> &_region, Vector3<T> &_pMin)
+         [](const Class &self, const Region3<T> &_region, Vector3<T> _pMin)
          {
            T result = self.Minimum(_region, _pMin);
            return std::make_tuple(result, _pMin);
@@ -73,7 +73,7 @@ void helpDefineMathAdditivelySeparableScalarField3(
              &Class::Minimum, py::const_),
          "Compute the scalar field minimum in a region")
     .def("minimum",
-         [](const Class &self, Vector3<T> &_pMin)
+         [](const Class &self, Vector3<T> _pMin)
          {
            T result = self.Minimum(_pMin);
            return std::make_tuple(result, _pMin);
