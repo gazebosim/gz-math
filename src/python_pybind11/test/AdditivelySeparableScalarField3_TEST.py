@@ -18,7 +18,7 @@ import unittest
 
 from gz.math import AdditivelySeparableScalarField3d
 from gz.math import AdditivelySeparableScalarField3f
-from gz.math import Intervald, Polynomial3d, Polynomial3f, Region3d
+from gz.math import Intervald, Polynomial3d, Polynomial3f, Region3d, Region3f
 from gz.math import Vector3d, Vector3f, Vector4d, Vector4f
 
 
@@ -61,6 +61,28 @@ class TestAdditivelySeparableScalarField3(unittest.TestCase):
         self.assertTrue(math.isnan(point.x()))
         self.assertTrue(math.isnan(point.y()))
         self.assertTrue(math.isnan(point.z()))
+
+        # The input point is not modified
+        start = Vector3d(1., 2., 3.)
+        self.field.minimum(start)
+        self.field.minimum(region, start)
+        self.assertEqual(start, Vector3d(1., 2., 3.))
+
+        polynomial = Polynomial3f(Vector4f(0., 1., 1., 1.))
+        field = AdditivelySeparableScalarField3f(
+            1. / 3., polynomial, polynomial, polynomial)
+        self.assertAlmostEqual(field.minimum(), 0.75, places=5)
+        start = Vector3f(1., 2., 3.)
+        value, point = field.minimum(start)
+        self.assertAlmostEqual(value, 0.75, places=5)
+        self.assertEqual(point, Vector3f.ONE * -0.5)
+        self.assertEqual(start, Vector3f(1., 2., 3.))
+        regionf = Region3f.closed(1., 1., 1., 2., 2., 2.)
+        self.assertAlmostEqual(field.minimum(regionf), 3., places=5)
+        value, point = field.minimum(regionf, Vector3f.NAN)
+        self.assertAlmostEqual(value, 3., places=5)
+        self.assertEqual(point, Vector3f.ONE)
+        self.assertTrue(math.isnan(field.minimum(Region3f())))
 
     def test_copy_and_string(self):
         expected = "[(x^2 + x + 1) + (y^2 + y + 1) + (z^2 + z + 1)]"
