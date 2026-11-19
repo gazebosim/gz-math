@@ -35,6 +35,7 @@ set(BINDINGS_MODULE_NAME "math${PROJECT_VERSION_MAJOR}")
 # Split from main extension and converted to pybind11
 pybind11_add_module(${BINDINGS_MODULE_NAME} MODULE
   src/_gz_math_pybind11.cc
+  src/AdditivelySeparableScalarField3.cc
   src/Angle.cc
   src/AxisAlignedBox.cc
   src/Capsule.cc
@@ -58,6 +59,7 @@ pybind11_add_module(${BINDINGS_MODULE_NAME} MODULE
   src/MecanumDriveOdometry.cc
   src/MovingWindowFilter.cc
   src/PID.cc
+  src/PiecewiseScalarField3.cc
   src/Polynomial3.cc
   src/Pose3.cc
   src/Quaternion.cc
@@ -148,6 +150,7 @@ configure_build_install_location(${BINDINGS_MODULE_NAME})
 if (BUILD_TESTING)
   # Add the Python tests
   set(python_tests
+    AdditivelySeparableScalarField3_TEST
     Angle_TEST
     AxisAlignedBox_TEST
     Box_TEST
@@ -175,6 +178,7 @@ if (BUILD_TESTING)
     MovingWindowFilter_TEST
     OrientedBox_TEST
     PID_TEST
+    PiecewiseScalarField3_TEST
     Plane_TEST
     Polynomial3_TEST
     Pose3_TEST
