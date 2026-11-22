@@ -1,0 +1,17 @@
+[project]
+name = "gz-math-windows-ci"
+version = "0.1.0"
+description = "conda-forge dependencies for building and testing gz-math on Windows."
+channels = ["conda-forge"]
+platforms = ["win-64"]
+
+[dependencies]
+gz-cmake = "4.*"
+gz-utils = "3.*"
+eigen = "3.4.0.*"
+python = "3.12.*"
+
+[build-dependencies]
+cmake = "3.28.3.*"
+ninja = "*"
+pkg-config = "*"
