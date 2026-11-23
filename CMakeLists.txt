@@ -14,10 +14,15 @@ find_package(gz-cmake REQUIRED)
 #============================================================================
 # Configure the project
 #============================================================================
-set(CMAKE_CXX_STANDARD 17)
+if(NOT DEFINED CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 17)
+endif()
+if(CMAKE_CXX_STANDARD LESS 17)
+  message(FATAL_ERROR "${PROJECT_NAME} requires C++17 or newer")
+endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-gz_configure_project(VERSION_SUFFIX pre1)
+gz_configure_project(VERSION_SUFFIX pre2)
 
 #============================================================================
 # Set project-specific options
@@ -99,7 +104,7 @@ if (SKIP_PYBIND11)
 else()
   find_package(Python3 REQUIRED
     COMPONENTS Interpreter
-    OPTIONAL_COMPONENTS Development
+    OPTIONAL_COMPONENTS Development.Module
   )
 endif()
 

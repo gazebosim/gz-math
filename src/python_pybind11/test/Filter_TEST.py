@@ -14,8 +14,12 @@
 
 import unittest
 from gz.math import BiQuadd
+from gz.math import BiQuadf
+from gz.math import BiQuadi
 from gz.math import BiQuadVector3
 from gz.math import OnePoled
+from gz.math import OnePolef
+from gz.math import OnePolei
 from gz.math import OnePoleQuaternion
 from gz.math import OnePoleVector3
 from gz.math import Quaterniond
@@ -51,6 +55,9 @@ class TestFilter(unittest.TestCase):
                                Quaterniond(0.98841, 0.0286272,
                                            0.0885614, 0.119929))
 
+        filter_a.set(Quaterniond(0.707, 0, 0.707, 0))
+        self.assertAlmostEqual(filter_a.value(), Quaterniond(0.707, 0, 0.707, 0))
+
     def test_one_pole_vector3(self):
         filter_a = OnePoleVector3()
         self.assertAlmostEqual(filter_a.value(), Vector3d(0, 0, 0))
@@ -64,6 +71,9 @@ class TestFilter(unittest.TestCase):
         self.assertAlmostEqual(filter_b.process(Vector3d(0.1, 0.2, 0.3)),
                                Vector3d(0.089113, 0.178226, 0.267339))
 
+        filter_a.set(Vector3d(1, 2, 3))
+        self.assertEqual(filter_a.value(), Vector3d(1, 2, 3))
+
     def test_biquad(self):
         filter_a = BiQuadd()
         self.assertAlmostEqual(filter_a.value(), 0.0, delta=1e-10)
@@ -74,6 +84,8 @@ class TestFilter(unittest.TestCase):
 
         filter_a.fc(0.3, 1.4, 0.1)
         self.assertAlmostEqual(filter_a.process(10.25), 0.96057152402651302)
+        self.assertAlmostEqual(filter_a.process(5.0), 2.2809792005709335)
+        self.assertAlmostEqual(filter_a.process(2.0), 2.2786852100645718)
 
         filter_b = BiQuadd(4.3, 10.6)
         self.assertAlmostEqual(filter_b.value(), 0.0, delta=1e-10)
@@ -93,6 +105,37 @@ class TestFilter(unittest.TestCase):
         self.assertEqual(filter_b.process(Vector3d(0.1, 20.3, 33.45)),
                          Vector3d(0.031748, 6.44475, 10.6196))
 
+        filter_a.set(Vector3d(4, 5, 6))
+        self.assertEqual(filter_a.value(), Vector3d(4, 5, 6))
+
+        filter_a.fc(0.5, 2.0)
+        self.assertEqual(filter_a.process(Vector3d(1.0, 2.0, 3.0)),
+                         Vector3d(3.25, 4.25, 5.25))
+
+        filter_a.fc(0.5, 2.0, 0.2)
+        self.assertEqual(filter_a.process(Vector3d(1.0, 2.0, 3.0)),
+                         Vector3d(19.0 / 7.0, 26.0 / 7.0, 33.0 / 7.0))
+
+    def test_template_types(self):
+        filter_f = OnePolef(0.6, 1.4)
+        self.assertAlmostEqual(filter_f.process(2.5), 2.330771, delta=1e-5)
+        filter_f.set(1.5)
+        self.assertAlmostEqual(filter_f.value(), 1.5)
+
+        filter_i = OnePolei(1, 2)
+        filter_i.set(10)
+        self.assertEqual(filter_i.value(), 10)
+
+        biquad_f = BiQuadf(4.3, 10.6)
+        self.assertAlmostEqual(biquad_f.value(), 0.0, delta=1e-6)
+        biquad_f.set(3.5)
+        self.assertAlmostEqual(biquad_f.value(), 3.5)
+
+        biquad_i = BiQuadi(1, 2)
+        biquad_i.set(20)
+        self.assertEqual(biquad_i.value(), 20)
+
 
 if __name__ == '__main__':
     unittest.main()
+
