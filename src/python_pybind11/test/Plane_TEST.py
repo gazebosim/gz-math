@@ -119,6 +119,14 @@ class TestPlane(unittest.TestCase):
 
     def test_intersection(self):
         plane = Planed(Vector3d(0.5, 0, 1), 1)
+
+        # Match the C++ API: point and gradient are required, while tolerance
+        # remains optional.
+        with self.assertRaises(TypeError):
+            plane.intersection()
+        with self.assertRaises(TypeError):
+            plane.intersection(Vector3d())
+
         intersect = plane.intersection(Vector3d(0, 0, 0), Vector3d(1, 0, 1))
         self.assertTrue(intersect is not None)
         self.assertAlmostEqual(intersect.dot(plane.normal()), plane.offset(), 1e-6)
