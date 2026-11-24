@@ -76,22 +76,28 @@ void helpDefineMathLine2(py::module &m, const std::string &typestr)
     .def("collinear",
          py::overload_cast<const gz::math::Vector2<T>&, double>(
          &Class::Collinear, py::const_),
-         py::arg("_pt") = gz::math::Vector2<T>::Zero,
+         py::arg("_pt"),
          py::arg("_epsilon") = 1e-6,
          "Check if the given point is collinear with this line.")
     .def("collinear",
          py::overload_cast<const Class&, double>(&Class::Collinear, py::const_),
-         py::arg("_pt") = Class(0, 0, 0, 0), py::arg("_epsilon") = 1e-6,
+         py::arg("_line"),
+         py::arg("_epsilon") = 1e-6,
          "Check if the given point is collinear with this line.")
     .def("parallel",
          &Class::Parallel,
-         py::arg("_line") = Class(0, 0, 0, 0), py::arg("_epsilon") = 1e-6,
+         py::arg("_line"),
+         py::arg("_epsilon") = 1e-6,
          "Check if the given line is parallel with this line.")
     .def("on_segment",
          &Class::OnSegment,
+         py::arg("_pt"),
+         py::arg("_epsilon") = 1e-6,
          "Return whether the given point is on this line segment.")
     .def("within",
          &Class::Within,
+         py::arg("_pt"),
+         py::arg("_epsilon") = 1e-6,
          "Check if the given point is between the start and end "
          "points of the line segment. This does not imply that the point is "
          "on the segment.")
@@ -101,13 +107,14 @@ void helpDefineMathLine2(py::module &m, const std::string &typestr)
            gz::math::Vector2<T>&,
            double>(
              &Class::Intersect, py::const_),
-         py::arg("_line") = Class(0, 0, 0, 0),
-         py::arg("_pt") = gz::math::Vector2<T>::Zero,
+         py::arg("_line"),
+         py::arg("_pt"),
          py::arg("_epsilon") = 1e-6,
          "Check if this line intersects the given line segment.")
     .def("intersect",
          py::overload_cast<const Class&, double>(&Class::Intersect, py::const_),
-         py::arg("_line") = Class(0, 0, 0, 0), py::arg("_epsilon") = 1e-6,
+         py::arg("_line"),
+         py::arg("_epsilon") = 1e-6,
          "Check if this line intersects the given line segment.")
     .def("length",
          &Class::Length,

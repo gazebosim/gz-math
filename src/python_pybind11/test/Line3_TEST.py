@@ -141,6 +141,11 @@ class TestLine3d(unittest.TestCase):
 
     def test_within(self):
         line = Line3d(0, 0, 0, 1, 1, 1)
+        # Match C++ API: point argument is required,
+        # while epsilon remains optional.
+        with self.assertRaises(TypeError):
+            line.within()
+
         self.assertTrue(line.within(Vector3d(0, 0, 0)))
         self.assertTrue(line.within(Vector3d(1, 1, 1)))
         self.assertTrue(line.within(Vector3d(0.5, 0.5, 0.5)))
@@ -151,6 +156,10 @@ class TestLine3d(unittest.TestCase):
 
     def test_distance(self):
         line = Line3d(0, 0, 0, 0, 1, 0)
+        # Match C++ API: point or line/result arguments are required.
+        with self.assertRaises(TypeError):
+            line.distance()
+
         result = Line3d()
 
         self.assertTrue(line.distance(Line3d(1, 0.5, 0, -1, 0.5, 0), result))
@@ -202,6 +211,11 @@ class TestLine3d(unittest.TestCase):
 
     def test_interesct(self):
         line = Line3d(0, 0, 0, 0, 1, 0)
+        # Match C++ API: line argument is required,
+        # while epsilon remains optional.
+        with self.assertRaises(TypeError):
+            line.intersect()
+
         pt = Vector3d()
 
         self.assertTrue(line.intersect(Line3d(1, 0.5, 0, -1, 0.5, 0)))
@@ -246,6 +260,11 @@ class TestLine3d(unittest.TestCase):
 
     def test_parallel(self):
         line = Line3d(0, 0, 0, 0, 1, 0)
+        # Match C++ API: line argument is required,
+        # while epsilon remains optional.
+        with self.assertRaises(TypeError):
+            line.parallel()
+
         self.assertTrue(line.parallel(Line3d(1, 0, 0, 1, 1, 0)))
         self.assertTrue(line.parallel(Line3d(1, 1, 0, 1, 0, 0)))
         self.assertTrue(line.parallel(Line3d(0, 0, 0, 0, 10, 0)))
@@ -257,6 +276,11 @@ class TestLine3d(unittest.TestCase):
 
     def test_coplanar(self):
         line = Line3d(0, 0, 0, 0, 1, 0)
+        # Match C++ API: line argument is required,
+        # while epsilon remains optional.
+        with self.assertRaises(TypeError):
+            line.coplanar()
+
         self.assertTrue(line.coplanar(Line3d(1, 0, 0, 1, 1, 0)))
         self.assertTrue(line.coplanar(Line3d(0, 0, 0, 0, 10, 0)))
         self.assertTrue(line.coplanar(Line3d(-100, 100, 20, -100, 200, 20)))

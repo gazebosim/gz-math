@@ -103,6 +103,7 @@ void helpDefineMathLine3(py::module &m, const std::string &typestr)
     .def("distance",
          py::overload_cast<const gz::math::Vector3<T>&>(
            &Class::Distance),
+         py::arg("_pt"),
          "Calculate shortest distance between line and point")
     .def("intersect",
          py::overload_cast<
@@ -110,25 +111,28 @@ void helpDefineMathLine3(py::module &m, const std::string &typestr)
            gz::math::Vector3<T>&,
            double>(
              &Class::Intersect, py::const_),
-         py::arg("_line") = Class(0, 0, 0, 0),
-         py::arg("_pt") = gz::math::Vector3<T>::Zero,
+         py::arg("_line"),
+         py::arg("_pt"),
          py::arg("_epsilon") = 1e-6,
          "Check if this line intersects the given line segment.")
     .def("intersect",
          py::overload_cast<const Class&, double>(&Class::Intersect, py::const_),
-         py::arg("_line") = Class(), py::arg("_epsilon") = 1e-6,
+         py::arg("_line"),
+         py::arg("_epsilon") = 1e-6,
          "Check if this line intersects the given line segment.")
     .def("coplanar",
          &Class::Coplanar,
-         py::arg("_line") = Class(), py::arg("_epsilon") = 1e-6,
-         "Check if the given point is collinear with this line.")
+         py::arg("_line"),
+         py::arg("_epsilon") = 1e-6,
+         "Check if this line and the given line are coplanar.")
     .def("parallel",
          &Class::Parallel,
-         py::arg("_line") = Class(), py::arg("_epsilon") = 1e-6,
+         py::arg("_line"),
+         py::arg("_epsilon") = 1e-6,
          "Check if the given line is parallel with this line.")
     .def("within",
          &Class::Within,
-         py::arg("_pt") = gz::math::Vector3<T>::Zero,
+         py::arg("_pt"),
          py::arg("_epsilon") = 1e-6,
          "Check if the given point is between the start and end "
          "points of the line segment.")
