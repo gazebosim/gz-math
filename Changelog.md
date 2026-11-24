@@ -1,5 +1,44 @@
 ## Gazebo Math 8.x
 
+### Gazebo Math 8.5.0 (2026-11-23)
+
+1. Add PiecewiseScalarField3 Python bindings (backport #876)
+    * [Pull request #876](https://github.com/gazebosim/gz-math/pull/876)
+    * [Pull request #879](https://github.com/gazebosim/gz-math/pull/879)
+
+1. bazel: set size = small for all tests (#799)
+    * [Pull request #799](https://github.com/gazebosim/gz-math/pull/799)
+    * [Pull request #802](https://github.com/gazebosim/gz-math/pull/802)
+
+1. Update maintainers
+    * [Pull request #872](https://github.com/gazebosim/gz-math/pull/872)
+
+1. Filter: increase test coverage (#816)
+    * [Pull request #816](https://github.com/gazebosim/gz-math/pull/816)
+    * [Pull request #863](https://github.com/gazebosim/gz-math/pull/863)
+
+1. Use the SPDX identifier Apache-2.0 in the license declaration
+    * [Pull request #854](https://github.com/gazebosim/gz-math/pull/854)
+
+1. Fix volumeBelow and CenterOfVolumeBelow instability (#847)
+    * [Pull request #847](https://github.com/gazebosim/gz-math/pull/847)
+    * [Pull request #851](https://github.com/gazebosim/gz-math/pull/851)
+
+1. Update BCR maintainers
+    * [Pull request #846](https://github.com/gazebosim/gz-math/pull/846)
+
+1. Change Bazel to use Clang for layering checks (backport #839)
+    * [Pull request #839](https://github.com/gazebosim/gz-math/pull/839)
+    * [Pull request #845](https://github.com/gazebosim/gz-math/pull/845)
+
+1. cmake: Search Development.Module Python component to compile Python bindings
+    * [Pull request #840](https://github.com/gazebosim/gz-math/pull/840)
+
+1. Line3: increase test coverage (backport #813) (backport #821)
+    * [Pull request #813](https://github.com/gazebosim/gz-math/pull/813)
+    * [Pull request #821](https://github.com/gazebosim/gz-math/pull/821)
+    * [Pull request #837](https://github.com/gazebosim/gz-math/pull/837)
+
 ### Gazebo Math 8.4.0 (2026-08-25)
 
 1. Line2 updates:
